@@ -21,7 +21,7 @@ import com.xaf.form.field.*;
 import com.xaf.db.*;
 import com.xaf.sql.*;
 
-public class QueryResultsListValue extends ListSource
+public class QueryResultsListValue extends ListSource implements SingleValueSource
 {
 	private String stmtMgrName;
 	private String dataSourceId;
@@ -134,5 +134,73 @@ public class QueryResultsListValue extends ListSource
 				return new String[] { e.toString() };
 			}
 		}
+	}
+
+	/* implemenations for SingleValueSource interface */
+	public String getValue(ValueContext vc)
+	{
+		return (String) getObjectValue(vc);
+	}
+
+	public Object getObjectValue(ValueContext vc)
+	{
+		ResultSet rs = null;
+		try
+		{
+			return StatementManager.getResultSetSingleColumn(getResultSet(vc));
+		}
+		catch(Exception e)
+		{
+			return e.toString();
+		}
+		finally
+		{
+			try
+			{
+				if(rs != null)
+					rs.close();
+			}
+			catch(Exception e)
+			{
+				return e.toString();
+			}
+		}
+	}
+
+	public int getIntValue(ValueContext vc)
+	{
+		return ((Integer) getObjectValue(vc)).intValue();
+	}
+
+	public double getDoubleValue(ValueContext vc)
+	{
+		return ((Double) getObjectValue(vc)).doubleValue();
+	}
+
+	public String getValueOrBlank(ValueContext vc)
+	{
+		String value = getValue(vc);
+		return value == null ? "" : value;
+	}
+
+	public boolean supportsSetValue()
+	{
+		return false;
+	}
+
+	public void setValue(ValueContext vc, Object value)
+	{
+	}
+
+	public void setValue(ValueContext vc, ResultSet rs, int storeType) throws SQLException
+	{
+	}
+
+	public void setValue(ValueContext vc, ResultSetMetaData rsmd, Object[][] data, int storeType) throws SQLException
+	{
+	}
+
+	public void setValue(ValueContext vc, String value)
+	{
 	}
 }
