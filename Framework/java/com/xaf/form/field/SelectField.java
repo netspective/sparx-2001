@@ -271,8 +271,36 @@ public class SelectField extends DialogField
 			"</TABLE>";
 	}
 
+	public String getHiddenControlHtml(DialogContext dc)
+	{
+        SelectChoicesList choices = null;
+		if(listSource != null)
+        {
+            choices = listSource.getSelectChoices(dc);
+    		choices.calcSelections(dc, this);
+        }
+        else
+            choices = EMPTY_CHOICES;
+
+		String id = getId();
+		Iterator i = choices.getIterator();
+		StringBuffer html = new StringBuffer();
+
+		while(i.hasNext())
+		{
+			SelectChoice choice = (SelectChoice) i.next();
+			if(choice.selected)
+				html.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'>");
+		}
+
+		return html.toString();
+	}
+
 	public String getControlHtml(DialogContext dc)
 	{
+		if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+			return getHiddenControlHtml(dc);
+
         SelectChoicesList choices = null;
 		if(listSource != null)
         {

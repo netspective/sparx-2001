@@ -499,13 +499,16 @@ public class DialogField
 	public final boolean persistValue() { return (flags & FLDFLAG_PERSIST) == 0 ? false : true; }
 	public final boolean showCaptionAsChild() { return (flags & FLDFLAG_SHOWCAPTIONASCHILD) == 0 ? false : true; }
 
+	public String getHiddenControlHtml(DialogContext dc)
+	{
+		String value = dc.getValue(this);
+		return "<input type='hidden' name='"+ getId() +"' value='" + (value != null ? value : "") + "'>";
+	}
+
 	public String getControlHtml(DialogContext dc)
 	{
 		if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
-		{
-			String value = dc.getValue(this);
-		    return "<input type='hidden' name='"+ getId() +"' value='" + (value != null ? value : "") + "'>";
-		}
+			return getHiddenControlHtml(dc);
 
 		if(children == null)
 			return null;

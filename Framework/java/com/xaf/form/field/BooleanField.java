@@ -81,6 +81,9 @@ public class BooleanField extends DialogField
 
 	public String getControlHtml(DialogContext dc)
 	{
+		if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+			return getHiddenControlHtml(dc);
+
 		boolean value = false;
 		String strValue = dc.getValue(this);
 		if(strValue != null)

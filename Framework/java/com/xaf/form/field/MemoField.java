@@ -87,6 +87,9 @@ public class MemoField extends DialogField
 
 	public String getControlHtml(DialogContext dc)
 	{
+		if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+			return getHiddenControlHtml(dc);
+
 		String value = dc.getValue(this);
 		String id = getId();
 		if(isReadOnly(dc))
