@@ -3,55 +3,55 @@
  *
  * Netspective Corporation permits redistribution, modification and use
  * of this file in source and binary form ("The Software") under the
- * Netspective Source License ("NSL" or "The License"). The following 
- * conditions are provided as a summary of the NSL but the NSL remains the 
+ * Netspective Source License ("NSL" or "The License"). The following
+ * conditions are provided as a summary of the NSL but the NSL remains the
  * canonical license and must be accepted before using The Software. Any use of
- * The Software indicates agreement with the NSL. 
+ * The Software indicates agreement with the NSL.
  *
  * 1. Each copy or derived work of The Software must preserve the copyright
  *    notice and this notice unmodified.
  *
- * 2. Redistribution of The Software is allowed in object code form only 
- *    (as Java .class files or a .jar file containing the .class files) and only 
- *    as part of an application that uses The Software as part of its primary 
- *    functionality. No distribution of the package is allowed as part of a software 
- *    development kit, other library, or development tool without written consent of 
- *    Netspective Corporation. Any modified form of The Software is bound by 
+ * 2. Redistribution of The Software is allowed in object code form only
+ *    (as Java .class files or a .jar file containing the .class files) and only
+ *    as part of an application that uses The Software as part of its primary
+ *    functionality. No distribution of the package is allowed as part of a software
+ *    development kit, other library, or development tool without written consent of
+ *    Netspective Corporation. Any modified form of The Software is bound by
  *    these same restrictions.
- * 
- * 3. Redistributions of The Software in any form must include an unmodified copy of 
+ *
+ * 3. Redistributions of The Software in any form must include an unmodified copy of
  *    The License, normally in a plain ASCII text file unless otherwise agreed to,
  *    in writing, by Netspective Corporation.
  *
- * 4. The names "Sparx" and "Netspective" are trademarks of Netspective 
- *    Corporation and may not be used to endorse products derived from The 
- *    Software without without written consent of Netspective Corporation. "Sparx" 
- *    and "Netspective" may not appear in the names of products derived from The 
+ * 4. The names "Sparx" and "Netspective" are trademarks of Netspective
+ *    Corporation and may not be used to endorse products derived from The
+ *    Software without without written consent of Netspective Corporation. "Sparx"
+ *    and "Netspective" may not appear in the names of products derived from The
  *    Software without written consent of Netspective Corporation.
  *
- * 5. Please attribute functionality to Sparx where possible. We suggest using the 
+ * 5. Please attribute functionality to Sparx where possible. We suggest using the
  *    "powered by Sparx" button or creating a "powered by Sparx(tm)" link to
  *    http://www.netspective.com for each application using Sparx.
  *
- * The Software is provided "AS IS," without a warranty of any kind. 
+ * The Software is provided "AS IS," without a warranty of any kind.
  * ALL EXPRESS OR IMPLIED REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
  * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
  * OR NON-INFRINGEMENT, ARE HEREBY DISCLAIMED.
  *
  * NETSPECTIVE CORPORATION AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING 
+ * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING
  * THE SOFTWARE. IN NO EVENT WILL NETSPECTIVE OR ITS LICENSORS BE LIABLE
  * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
  * CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
  * REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
  * INABILITY TO USE THE SOFTWARE, EVEN IF HE HAS BEEN ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGES.      
+ * OF SUCH DAMAGES.
  *
  * @author Shahid N. Shah
  */
- 
+
 /**
- * $Id: PageTag.java,v 1.9 2002-12-30 21:23:59 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.10 2002-12-31 19:55:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -93,13 +93,13 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public static final String ATTRVALUE_YES = "yes";
     public static final String ATTRVALUE_NO = "no";
     static public final String PAGE_SECURITY_MESSAGE_ATTRNAME = "security-message";
+    static public final String PAGE_LOGIN_DIALOG_CLASS_CONFIG_PROP_NAME = "com.netspective.sparx.xaf.taglib.PageTag.login-dialog-class";
+    static public final String PAGE_LOGIN_DIALOG_SKIN_CONFIG_PROP_NAME = "com.netspective.sparx.xaf.taglib.PageTag.login-dialog-skin";
     static public final String PAGE_DEFAULT_LOGIN_DIALOG_CLASS = "com.netspective.sparx.xaf.security.LoginDialog";
 
     static private LoginDialog loginDialog;
     static private NavigationPathSkin navSkin;
 
-    private String title;
-    private String heading;
     private String[] permissions;
     private boolean popup;
     private boolean secure = true;
@@ -112,24 +112,12 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public void release()
     {
         super.release();
-        title = null;
-        heading = null;
         permissions = null;
         popup = false;
         secure = true;
         nc = null;
         navSkinName = null;
         navId = null;
-    }
-
-    public final String getTitle()
-    {
-        return title;
-    }
-
-    public final String getHeading()
-    {
-        return heading;
     }
 
     public final boolean isPopup()
@@ -140,16 +128,6 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public final boolean secure()
     {
         return secure;
-    }
-
-    public void setTitle(String value)
-    {
-        title = value;
-    }
-
-    public void setHeading(String value)
-    {
-        heading = value;
     }
 
     public void setPopup(boolean value)
@@ -213,9 +191,12 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
     protected boolean doLogin(javax.servlet.ServletContext servletContext, javax.servlet.Servlet page, javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse resp) throws java.io.IOException, JspException
     {
+        ValueContext vc = null;
         if(loginDialog == null)
         {
-            String className = getLoginDialogClassName();
+            vc = new ServletValueContext(servletContext, page, req, resp);
+            Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(servletContext);
+            String className = config.getTextValue(vc, PAGE_LOGIN_DIALOG_CLASS_CONFIG_PROP_NAME, getLoginDialogClassName());
             try
             {
                 Class loginDialogClass = Class.forName(className);
@@ -239,7 +220,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         String logout = req.getParameter("_logout");
         if(logout != null)
         {
-            ValueContext vc = new ServletValueContext(servletContext, page, req, resp);
+            if(vc == null) vc = new ServletValueContext(servletContext, page, req, resp);
             loginDialog.logout(vc);
 
             /** If the logout parameter included a non-zero length value, then
@@ -441,7 +422,6 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         out.println("<html>");
         out.println("	<head>");
         out.println("		<meta http-equiv='content-type' content='text/html;charset=ISO-8859-1'>");
-        out.println("		<title>"+ getTitle() +"</title>");
         if(styleSheet != null)
             out.println("		<link rel='stylesheet' href='"+ styleSheet +"'>");
         out.println("	</head>");
