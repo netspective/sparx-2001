@@ -446,6 +446,7 @@
 		</xsd:choice>
 		<xsd:attribute name="name" type="xsd:string" use="optional" value="default"/>
 		<xsd:attribute name="heading" type="single-value-source" use="optional"/>
+		<xsd:attribute name="first-row" type="report-first-row-enum" use="optional" value="data"/>
 	</xsd:complexType>
 	<xsd:complexType name="field.compositeType">
 		<xsd:annotation>
@@ -538,6 +539,9 @@
 		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional" value="and"/>
 	</xsd:complexType>
 	<xsd:complexType name="statementType" mixed="true">
+		<xsd:annotation>
+			<xsd:documentation>Statement tag</xsd:documentation>
+		</xsd:annotation>
 		<xsd:choice>
 			<xsd:element name="params" minOccurs="0">
 				<xsd:complexType>
@@ -550,6 +554,9 @@
 		</xsd:choice>
 	</xsd:complexType>
 	<xsd:complexType name="execute-tasksType">
+		<xsd:annotation>
+			<xsd:documentation>Execute tags</xsd:documentation>
+		</xsd:annotation>
 		<xsd:choice>
 			<xsd:element name="exec-statement" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
@@ -580,10 +587,22 @@
 		</xsd:choice>
 	</xsd:complexType>
 	<xsd:simpleType name="exec-dml-command-enum">
+		<xsd:annotation>
+			<xsd:documentation>Commands allowed in <exec-dml> tag</xsd:documentation>
+		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="insert"/>
 			<xsd:enumeration value="update"/>
 			<xsd:enumeration value="remove"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-first-row-enum">
+		<xsd:annotation>
+			<xsd:documentation>Values for the "first-row" attribute in <report> tag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="data"/>
+			<xsd:enumeration value="column-headings"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>
