@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.19 2003-02-03 04:24:28 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.20 2003-02-08 03:13:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -1240,7 +1240,7 @@ public class NavigationPath
             for(int i = 0; i < childrenList.size(); i++)
             {
                 NavigationPath child = (NavigationPath) childrenList.get(i);
-                if(! child.flagIsSet(NAVGPATHFLAG_REJECT_FOCUS))
+                if(! child.flagIsSet(NAVGPATHFLAG_REJECT_FOCUS | NAVGPATHFLAG_HIDDEN | NAVGPATHFLAG_INVISIBLE))
                     return child;
                 else
                     return child.getNextPath();
@@ -1268,7 +1268,7 @@ public class NavigationPath
             for(int i = thisIndex + 1; i < siblings.size(); i++)
             {
                 NavigationPath sibling = (NavigationPath) siblings.get(i);
-                if(! sibling.flagIsSet(NAVGPATHFLAG_REJECT_FOCUS))
+                if(! sibling.flagIsSet(NAVGPATHFLAG_REJECT_FOCUS | NAVGPATHFLAG_HIDDEN | NAVGPATHFLAG_INVISIBLE))
                     return sibling;
                 else
                     return sibling.getNextPath();
