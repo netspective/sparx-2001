@@ -53,17 +53,320 @@
             <listitem>Phone Number</listitem>
         </itemizedlist>
         All available fields can be seen in &explorer-name;:
-        
+        </para>        
             <mediaobject>
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-fields.jpg" format="JPEG"/>
             </imageobject>
             </mediaobject>                
-        
+        <para>
         Every type of field available has its own both client-side and server-side validation
         features. For example, an integer field allows only numerical values into the field and
         a social security number field only allows dashes and numeric digits.
         </para>
+        
+        <section>
+            <title>Example 1</title>
+            <para>
+            The following is an example of a dialog containing general fields such as text, static, integer,
+            float and specialized fields such as social security number and zip code.
+            <programlisting>
+            <![CDATA[
+<dialog  name="Test1" heading="Test Fields" retain-params="*">
+    <field.separator heading="Text Fields"/>
+    <field.text name="text_field_hidden" hidden="yes" default='request:id'/>
+    <field.static name="static_field" default='Static Field'/>
+    <field.text name="text_field_required" caption="Text Required" 
+        hint="Text field required" required="yes"/>
+    <field.text name="text_field" caption="Text" hint="Text field optional" 
+        max-length="5" uppercase="yes"/>
+    <field.text name="text_field_email" caption="Text Email" 
+        hint="Text field with regular expression checking"
+        validate-pattern="/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/"
+        validate-msg="Invalid email format."/>
+    <field.email name="email_field" caption="Email"/>
+    <field.ssn name="ssn_field" caption="SSN"/>
+
+    <field.separator heading="Numeric Fields"/>
+    <field.integer name="integer_field" caption="Integer Field" hint="Integer field"/>
+    <field.float name="float_field" caption="Float Field" hint="Float field"/>
+    <field.zip name="zip_field" caption="Zip Field" hint="Zip code field"/>
+    <director submit-caption="Submit"/>
+</dialog>        
+        ]]>
+            </programlisting>
+            The above example contains multiple fields of various types and some of the attributes available for
+            the different types. The attribute <sgmltag class="attribute">retain-params</sgmltag> of the 
+            <sgmltag class="element">dialog</sgmltag> tag is useful for retaining field values(whether they were
+            entered by the user or from value sources) as the dialog goes through its different stages before execution.
+            The default values for the dialog fields can be empty or they can be specified in the 
+            XML file. The attribute <sgmltag class="attribute">default</sgmltag> is available for specifying
+            the default value and it can either be a static value or it can be a value source. In the example above, the hidden
+            text field called <emphasis>text_field_hidden</emphasis> gets its value from a request parameter
+            value source while the static field called <emphasis>static_field</emphasis> gets its value
+            as a plain string. Most dialog fields have an attribute called <sgmltag class="attribute">hint</sgmltag> which
+            is used to display a helpful hint for the user on what to enter into the field.
+
+            The following is a screenshot of how the actual dialog looks like:
+            </para>
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/dialogs/test1.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>            
+
+            </section>
+        <section>
+            <title>Example 2</title>
+            <para>          
+            The following is a definition for a dialog which contains a memo field, several versions
+            of the date and time field, and several versions of the boolean field:
+            <programlisting>
+            <![CDATA[            
+<dialog name="Test2" heading="Test Fields" retain-params="*">
+    <field.separator name="Memo" heading="Memo"/>
+    <field.memo name="memo_field_01" caption="Memo Field"
+        max-length="5"
+        hint="Max length is 5 characters"/>
+    <field.separator name="date_time_section" heading="Date and Time Fields"/>
+    <field.duration name="duration" caption="Duration Field"
+        hint="Format is MM/dd/yyyy"/>
+    <field.date name="date_field_strict" caption="Date (Strict Year)"
+        format="MM-dd-yyyy"
+        default="today"
+        hint="Format is MM-dd-yyyy"/>
+    <field.date name="date_field_nonstrict" caption="Date (Non-Strict Year)"
+        format="MM/dd/yyyy"
+        strict-year="no"
+        default="today+1"
+        hint="Format is MM/dd/yyyy"/>
+    <field.time name="time_field" caption="Time"
+        initial-focus="yes"
+        default="now"
+        hint="Format is HH:mm"/>
+    <field.separator heading="Boolean Fields"/>
+    <field.boolean name="bool_field_radio" caption="Boolean Field (Radio)" style="radio"/>
+    <field.boolean name="bool_field_alone" caption="Boolean Field (Alone)" style="checkalone"/>
+    <field.boolean name="bool_field_combo" caption="Boolean Field (Combo)" style="combo"/>
+    <director submit-caption="Submit"/>     
+</dialog>
+            ]]>
+            </programlisting>
+            <variablelist>
+                <varlistentry>
+                    <term> <sgmltag class="element">field.memo</sgmltag> </term>
+                    <listitem>
+                        <para>
+                        The <sgmltag class="element">field.memo</sgmltag> is based on the HTML TEXTAREA element
+                        and the attribute <sgmltag class="attribute">max-length</sgmltag> is used to enforce 
+                        the maximum number of characters allowed in the memo field. Javascript client-side validations
+                        are done to enforce the maximum number of characters allowed.
+                        </para>
+                    </listitem>
+                </varlistentry>            
+                <varlistentry>
+                    <term> <sgmltag class="element">field.duration</sgmltag> </term>
+                    <listitem>
+                        <para>
+                        The duration field, <sgmltag class="element">field.duration</sgmltag>, is used to
+                        allow entry of  a begin date and an end date. It has client-side validations to make sure
+                        that the date values are valid and that beginning date field is before the end date field.
+                        </para>
+                    </listitem>
+                </varlistentry>           
+                <varlistentry>
+                    <term> <sgmltag class="element">field.date</sgmltag> </term>
+                    <listitem>
+                        <para>
+                        By default date fields, <sgmltag class="element">field.date</sgmltag> do not allow 2-digit years 
+                        and this can be changed by setting the attribute <sgmltag class="attribute">strict-year="no"</sgmltag>. 
+                        Also the format of a date field can be specified by setting the attribute
+                        <sgmltag class="attribute">format</sgmltag>. The value for <sgmltag class="attribute">format</sgmltag>
+                        is based on the <classname>java.text.SimpleDateFormat</classname>'s pattern strings. The date field
+                        also has a built-n client-side formatting feature which will automatically format the user 
+                        entered value: user enters 11021999 and it gets displayed as 11/02/1999. The default value
+                        of the date field accepts special strings such as "<emphasis>today</emphasis>" and "<emphasis>now</emphasis>"
+                        and interprets them as present date. Any numerical operation defined after the special string
+                        is used to recalculate the default date(for example, "<emphasis>today+1</emphasis>" will
+                        display tomorrow's date)
+                        </para>
+                    </listitem>
+                </varlistentry>           
+                <varlistentry>
+                    <term> <sgmltag class="element">field.time</sgmltag> </term>
+                    <listitem>
+                        <para>
+                        The time field, <sgmltag class="element">field.time</sgmltag>, is used to
+                        allow entry of  a time value. It has client-side validations to make sure
+                        that the time entered is valid. It also accepts the special string
+                        "<emphasis>now</emphasis>" as a default value. 
+                        </para>
+                    </listitem>
+                </varlistentry>   
+                <varlistentry>
+                    <term> <sgmltag class="element">field.boolean</sgmltag> </term>
+                    <listitem>
+                        <para>
+                        The boolean field, <sgmltag class="element">field.boolean</sgmltag>, represents
+                        different HTML elements: a single checkbox, a Yes/No select list, and a Yes/No radio buttons.
+                        These different elements are represented by the <sgmltag class="attribute">style</sgmltag>
+                        attribute with the following values respectively: <emphasis>radio</emphasis>, 
+                        <emphasis>checkalone</emphasis>, and <emphasis>combo</emphasis>. A "No" selection
+                        submits a value of 0 and a "Yes" selection submits a value of 1.                        
+                        </para>
+                    </listitem>
+                </varlistentry>   
+            </variablelist>                
+            
+            The XML definition above is shown as:
+            </para>
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/dialogs/test2.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>               
+        </section>
+        <section>
+            <title>Example 3</title>
+            <para>          
+                The following is a XML definition example to show the different styles available for 
+                select fields:
+                <programlisting>
+                <![CDATA[
+<dialog name="Test3" heading="Test Fields" retain-params="*">
+    <field.separator heading="Select Fields" />
+    <field.select name="sel_field_combo" read-only="no" caption="Select Field (Combo)"
+        style="combo" choices="Choice 1=A;Choice 2=B;Choice 3=C" prepend-blank="yes" append-blank="yes"
+        />
+    <field.select name="sel_field_radio" read-only="no" caption="Select Field (Radio)"
+        style="radio" choices="Choice 1=A;Choice 2=B;Choice 3=C" default="A"/>
+    <field.select name="sel_field_list" read-only="no" caption="Select Field (List)"
+        style="list" size="5" choices="Choice 1=A;Choice 2=B;Choice 3=C" default="A"/>
+    <field.select name="sel_field_multilist" read-only="no" caption="Select Field (MultiList)"
+        style="multilist" size="5" choices="Choice 1=A;Choice 2=B;Choice 3=C"
+        default="A"/>
+    <field.select name="sel_field_multicheck" read-only="no" caption="Select Field (MultiCheck)"
+        style="multicheck" choices="Choice 1=A;Choice 2=B;Choice 3=C" default="B"/>
+    <field.select name="sel_field_multidual" read-only="no" caption="Select Field (MultiDual)"
+        style="multidual" choices="Choice 1=A;Choice 2=B;Choice 3=C" caption-left="Left Caption"
+        caption-right="Right Caption" multi-width="100"
+        default="A"/>
+     <director submit-caption="Submit"/>
+</dialog>            
+                ]]>
+                </programlisting>
+                The XML tag, <sgmltag class="element">field.select</sgmltag>, is based upon the
+                SELECT HTML element. It can be used as a list capable of allowing the user to choose
+                one selection or multiple selections based on the configuration. There are six styles
+                of selection list available(<emphasis>combo</emphasis>, <emphasis>radio</emphasis>, <emphasis>list</emphasis>, 
+                <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and <emphasis>multidual</emphasis>)
+                and they can be defined using the <sgmltag class="attribute">style</sgmltag>
+                attribute. The <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and 
+                <emphasis>multidual</emphasis> styles allow a selection of more than one option.
+            </para>
+            <para>
+                The choices available for a selection are defined by the <sgmltag class="attribute">choices</sgmltag>
+                attribute. The syntax for the choices is <emphasis>choice_1=value_1;choice_2=value_2;...</emphasis>
+                where the <emphasis>choice_x</emphasis> is the displayed choice and the <emphasis>value_x</emphasis>
+                is the actual value that is submitted. 
+                
+                There is another way to define the choices available for a selection and it is by using 
+                a value source called <emphasis>query</emphasis>. This way builds the option list from
+                the result of a static query(the query must be defined in <filename class="conf">WEB-INF/ui/statement.xml</filename>).
+                For example, the following SQL can be used as <emphasis>choices="query:test.user_list</emphasis>
+                attribute setting:
+                <programlisting>
+                <![CDATA[ 
+<sql-statements package="test">               
+    <statement name="user_list">
+        select
+            name,
+            id
+        from User
+    </statement>
+</sql-statements>
+                ]]>
+                </programlisting>
+                The above SQL's <emphasis>name</emphasis> and <emphasis>id</emphasis> result
+                will be used to construct a choice list with the <emphasis>name</emphasis> entry
+                being the displayed string and the corrsponding <emphasis>id</emphasis> being the
+                submitted value.
+                
+                
+                
+                There are two other attributes that effect the display
+                of the choices for selection and they are <sgmltag class="attribute">prepend-blank</sgmltag>
+                and <sgmltag class="attribute">append-blank</sgmltag>. The functionality of these two attributes
+                is to prepend a blank to the choice list and to append a blank to the choice list respectively.
+                The following is a screenshot of the dialog defined above:
+            </para>
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/dialogs/test3.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>    
+            <para>
+            </para>                
+        </section>
+        <section>
+            <title>Example 4</title>
+            <para>    
+            &product-name; provides a dynamic field displaying and hiding functionality which is 
+            defined by the <sgmltag class="element">conditional </sgmltag> XML element. The following
+            is an example dialog definition:
+            <programlisting>
+            <![CDATA[ 
+        <dialog name="Test6" heading="Test Conditionals" loop="yes">
+            <field.select name="sel_field_list" caption="Select Field (Combo)" style="combo" 
+                size="5" choices="-;Choice 1=A;Choice 2=B;Choice 3=C"/>
+            <field.text name="text_field" caption="Hidden Text" default="Here I am!">
+                <conditional action="display" partner="sel_field_list" 
+                 js-expr="control.selectedIndex != 0"/>
+            </field.text>
+            <field.boolean name="checkbox_field" caption="Checkbox" style="checkalone" />
+            <field.static name="static_field2" default="Checkbox checked!">
+                <conditional action="display" partner="checkbox_field" 
+                 js-expr="control.checked == true"/>
+            </field.static>
+        </dialog>          
+            ]]>
+            </programlisting>
+            In the above example, the text field named <emphasis>text_field</emphasis> is dependent upon the select field
+            named <emphasis>sel_field_list</emphasis>. This is done by adding the <sgmltag class="element">conditional </sgmltag>
+            element as a child node to the text field and setting the attribute <sgmltag class="attribute">partner</sgmltag>
+            to the name of the select field. The condition for displaying the text field is created by setting the
+             <sgmltag class="attribute">js-expr</sgmltag>(Javascript expression) attribute. In the definition above, 
+             the text field named <emphasis>text_field</emphasis> will only be displayed if the selected option of the
+             <emphasis>sel_field_list</emphasis> is not the first option.
+             </para>
+             
+             <para>
+             The second conditional field of the dialog is a static field named <emphasis>static_field</emphasis>
+             and its' display status is dependent upon the <emphasis>checkbox_field</emphasis> being "checked". The
+             following is a screen shot of the initial stage of the dialog:             
+            </para>
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/dialogs/test6_1.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>  
+            <para>
+            The following is a screen shot of the dialog after the select field's selection has been changed:
+            </para>
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/dialogs/test6_2.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>              
+            <para>
+            The following is a screen shot of the dialog after the checkbox has been checked:
+            </para>  
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/dialogs/test6_3.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>                 
+        </section>
     </section>
 
     <section>
