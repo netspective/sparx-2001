@@ -126,6 +126,22 @@ public class ConfigurationManager extends XmlSource
 					defaultConfig.importFromXml(configElem, this);
 				}
 			}
+            else if(nodeName.equals("register-value-source"))
+            {
+                Element typeElem = (Element) node;
+                String className = typeElem.getAttribute("class");
+                try
+                {
+                    Class cls = Class.forName(className);
+                    ValueSourceFactory.addValueSourceClass(typeElem.getAttribute("name"), cls);
+                }
+                catch(ClassNotFoundException e)
+                {
+                    errors.add("Value Source class '"+className+"' not found: " + e.toString());
+                }
+            }
 		}
+
+        addMetaInformation();
 	}
 }

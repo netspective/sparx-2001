@@ -13,7 +13,17 @@
 <xsl:param name="framework.shared.images-url"/>
 <xsl:param name="framework.ace.images-root-url"/>
 
-<xsl:template match="xaf/config-items">
+<xsl:template match="xaf">
+	<xsl:for-each select="errors">
+		<div class="page_source"><b>Errors</b></div>
+		<ol>
+		<xsl:for-each select="error">
+			<li><xsl:value-of select="."/></li>
+		</xsl:for-each>
+		</ol>
+	</xsl:for-each>
+
+	<xsl:for-each select="config-items">
 	<div class="page_source">
 		Source: <xsl:value-of select="@source-file"/>
 		(Allow reload: <xsl:value-of select="@allow-reload"/>)
@@ -56,6 +66,7 @@
 		</xsl:for-each>
 	</table>	
 	</div>	
+	</xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>

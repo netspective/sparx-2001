@@ -61,6 +61,21 @@ public class AppConfigurationPage extends AceServletPage
 		configItemsElem.setAttribute("source-file", manager.getSourceDocument().getFile().getAbsolutePath());
 		configItemsElem.setAttribute("allow-reload", manager.getAllowReload() ? "Yes" : "No");
 
+        List errors = manager.getErrors();
+        if(errors.size() > 0)
+		{
+			Element errorsElem = configDoc.createElement("errors");
+	    	configRootElem.appendChild(errorsElem);
+
+			for(Iterator ei = errors.iterator(); ei.hasNext(); )
+			{
+				Element errorElem = configDoc.createElement("error");
+				Text errorText = configDoc.createTextNode((String) ei.next());
+				errorElem.appendChild(errorText);
+				errorsElem.appendChild(errorElem);
+			}
+		}
+
 		Configuration defaultConfig = manager.getDefaultConfiguration();
 		for(Iterator i = defaultConfig.entrySet().iterator(); i.hasNext(); )
 		{
