@@ -39,8 +39,15 @@ public class BinaryOpComparison implements SqlComparison
 
 	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond)
 	{
+        String retString = "";
 		statement.addParam(cond.getValue());
-		return cond.getField().getWhereClauseExpr() + " "+ sqlExpr +" ?";
+        String bindExpression = cond.getBindExpression();
+
+        if (bindExpression != null && bindExpression.length() > 0)
+            retString = cond.getField().getWhereClauseExpr() + " "+ sqlExpr + " " + bindExpression;
+        else
+            retString = cond.getField().getWhereClauseExpr() + " "+ sqlExpr +" ?";
+		return retString;
 	}
 
 }
