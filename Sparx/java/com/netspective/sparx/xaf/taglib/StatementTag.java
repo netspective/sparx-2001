@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTag.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: StatementTag.java,v 1.2 2002-09-03 22:29:20 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -70,6 +70,7 @@ import com.netspective.sparx.xaf.report.ReportContextListener;
 import com.netspective.sparx.xaf.task.Task;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
+import com.netspective.sparx.xaf.sql.StatementDialog;
 
 public class StatementTag extends javax.servlet.jsp.tagext.TagSupport
 {
@@ -118,6 +119,17 @@ public class StatementTag extends javax.servlet.jsp.tagext.TagSupport
         task.setReport(value);
     }
 
+    public void setPageable(String value)
+    {
+        task.setPageableReport(value);
+    }
+
+    public void setRowsPerPage(String value)
+    {
+        if (value != null && value.length() > 0)
+            task.setRowsPerPage(Integer.parseInt(value));
+    }
+
     public void setSkin(String value)
     {
         task.setSkin(value);
@@ -146,6 +158,7 @@ public class StatementTag extends javax.servlet.jsp.tagext.TagSupport
     public int doEndTag() throws javax.servlet.jsp.JspException
     {
         javax.servlet.ServletRequest req = pageContext.getRequest();
+        javax.servlet.ServletContext context = pageContext.getServletContext();
         if(listenerAttrName != null)
         {
             com.netspective.sparx.xaf.report.ReportContextListener listener = (com.netspective.sparx.xaf.report.ReportContextListener) req.getAttribute(listenerAttrName);
@@ -159,6 +172,7 @@ public class StatementTag extends javax.servlet.jsp.tagext.TagSupport
         try
         {
             task.execute(tc);
+
             if(tc.hasError())
             {
                 if(!com.netspective.sparx.util.config.ConfigurationManagerFactory.isProductionEnvironment(pageContext.getServletContext()))

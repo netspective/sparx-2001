@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetNavigatorButtonsField.java,v 1.2 2002-08-24 05:34:54 shahid.shah Exp $
+ * $Id: ResultSetNavigatorButtonsField.java,v 1.3 2002-09-03 22:29:19 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -65,12 +65,19 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xaf.sql.ResultSetScrollState;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
 public class ResultSetNavigatorButtonsField extends DialogField
 {
+    static public final String RSNAV_BUTTONNAME_NEXT = Dialog.PARAMNAME_CONTROLPREFIX + "rs_nav_next";
+    static public final String RSNAV_BUTTONNAME_PREV = Dialog.PARAMNAME_CONTROLPREFIX + "rs_nav_prev";
+    static public final String RSNAV_BUTTONNAME_FIRST = Dialog.PARAMNAME_CONTROLPREFIX + "rs_nav_first";
+    static public final String RSNAV_BUTTONNAME_LAST = Dialog.PARAMNAME_CONTROLPREFIX + "rs_nav_last";
+
     static public SingleValueSource SUBMIT_CAPTION = new StaticValue(" OK ");
     static public SingleValueSource FIRST_CAPTION = new StaticValue(" First ");
     static public SingleValueSource PREV_CAPTION = new StaticValue(" Previous ");
@@ -138,7 +145,7 @@ public class ResultSetNavigatorButtonsField extends DialogField
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
         String attrs = dc.getSkin().getDefaultControlAttrs();
-        QuerySelectScrollState state = (QuerySelectScrollState) dc.getRequest().getAttribute(dc.getTransactionId() + "_state");
+        ResultSetScrollState state = (ResultSetScrollState) dc.getRequest().getAttribute(dc.getTransactionId() + "_state");
         if(state == null)
         {
             writer.write("<input type='submit' name='" + dc.getDialog().getResetContextParamName() + "' value='" + submitCaption.getValue(dc) + "' " + attrs + "> ");
@@ -161,17 +168,17 @@ public class ResultSetNavigatorButtonsField extends DialogField
             }
             writer.write("</nobr>&nbsp;&nbsp;");
             if(activePage > 1)
-                writer.write("<input type='submit' name='rs_nav_first' value='" + firstCaption.getValue(dc) + "' " + attrs + "> ");
+                writer.write("<input type='submit' name='"+ RSNAV_BUTTONNAME_FIRST +"' value='" + firstCaption.getValue(dc) + "' " + attrs + "> ");
 
             if(activePage > 2)
-                writer.write("<input type='submit' name='rs_nav_prev' value='" + prevCaption.getValue(dc) + "' " + attrs + "> ");
+                writer.write("<input type='submit' name='"+ RSNAV_BUTTONNAME_PREV + "' value='" + prevCaption.getValue(dc) + "' " + attrs + "> ");
 
             boolean hasMoreRows = false;
             try
             {
                 if(state.hasMoreRows())
                 {
-                    writer.write("<input type='submit' name='rs_nav_next' value='" + nextCaption.getValue(dc) + "' " + attrs + "> ");
+                    writer.write("<input type='submit' name='"+ RSNAV_BUTTONNAME_NEXT +"' value='" + nextCaption.getValue(dc) + "' " + attrs + "> ");
                     hasMoreRows = true;
                 }
             }
@@ -183,7 +190,7 @@ public class ResultSetNavigatorButtonsField extends DialogField
             if(isScrollable)
             {
                 if(activePage < lastPage)
-                    writer.write("<input type='submit' name='rs_nav_last' value='" + lastCaption.getValue(dc) + "' " + attrs + "> ");
+                    writer.write("<input type='submit' name='"+ RSNAV_BUTTONNAME_LAST +"' value='" + lastCaption.getValue(dc) + "' " + attrs + "> ");
                 writer.write("&nbsp;&nbsp;<nobr>");
                 writer.write(NumberFormat.getNumberInstance().format(state.getTotalRows()));
                 writer.write(" total rows</nobr>");

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.6 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.7 2002-09-03 22:29:19 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -489,13 +489,13 @@ public class QueryBuilderDialog extends Dialog
             String stateReqAttrName = transactionId + "_state";
             request.setAttribute(stateReqAttrName, state);
 
-            if(request.getParameter("rs_nav_next") != null)
+            if (request.getParameter(ResultSetNavigatorButtonsField.RSNAV_BUTTONNAME_NEXT) != null)
                 state.setPageDelta(1);
-            else if(request.getParameter("rs_nav_prev") != null)
+            else if (request.getParameter(ResultSetNavigatorButtonsField.RSNAV_BUTTONNAME_PREV) != null)
                 state.setPageDelta(-1);
-            else if(request.getParameter("rs_nav_last") != null)
+            else if (request.getParameter(ResultSetNavigatorButtonsField.RSNAV_BUTTONNAME_LAST) != null)
                 state.setPage(state.getTotalPages());
-            else if(request.getParameter("rs_nav_first") != null)
+            else if (request.getParameter(ResultSetNavigatorButtonsField.RSNAV_BUTTONNAME_FIRST) != null)
                 state.setPage(1);
 
             if(destination == ReportDestination.DEST_BROWSER_MULTI_PAGE || destination == ReportDestination.DEST_BROWSER_SINGLE_PAGE)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.9 2002-08-24 05:37:09 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.10 2002-09-03 22:29:19 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -362,7 +362,7 @@ public class StatementManager extends XmlSource
         addMetaInformation();
     }
 
-    static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params) throws NamingException, SQLException
+    static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params, boolean scrollable) throws NamingException, SQLException
     {
         if(dataSourceId == null)
         {
@@ -376,8 +376,19 @@ public class StatementManager extends XmlSource
             logEntry.registerGetConnectionBegin();
             Connection conn = dc.getConnection(vc, dataSourceId);
             logEntry.registerGetConnectionEnd(conn);
-
-            PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
+            PreparedStatement stmt = null;
+            String sql = si.getSql(vc);
+            if (scrollable)
+            {
+                int rsType = dc.getScrollableResultSetType(conn);
+                stmt = (rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
+                        conn.prepareStatement(sql) :
+                        conn.prepareStatement(sql, rsType, ResultSet.CONCUR_READ_ONLY));
+            }
+            else
+            {
+                stmt = conn.prepareStatement(sql);
+            }
 
             logEntry.registerBindParamsBegin();
             if(params != null)
@@ -403,6 +414,11 @@ public class StatementManager extends XmlSource
         {
             logEntry.finalize(vc);
         }
+    }
+
+    static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params) throws NamingException, SQLException
+    {
+        return execute(dc, vc, dataSourceId, si, params, false);
     }
 
     static public ResultInfo execute(ConnectionContext cc, ValueContext vc, StatementInfo si, Object[] params) throws NamingException, SQLException

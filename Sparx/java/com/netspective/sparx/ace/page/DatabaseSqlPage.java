@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.2 2002-09-03 22:29:19 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -62,6 +62,7 @@ import java.io.StringWriter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xif.db.DatabaseContext;
@@ -71,6 +72,9 @@ import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
+import com.netspective.sparx.xaf.task.sql.StatementTask;
+import com.netspective.sparx.xaf.task.TaskContext;
+import com.netspective.sparx.xaf.task.TaskExecuteException;
 
 public class DatabaseSqlPage extends AceServletPage
 {
@@ -109,6 +113,29 @@ public class DatabaseSqlPage extends AceServletPage
         }
     }
 
+    public void handleTestStatementPageable(PageContext pc, String stmtId) throws ServletException, IOException, TaskExecuteException
+    {
+        StatementTask task = new StatementTask();
+        task.setPageableReport(true);
+        task.setStmtName(stmtId);
+        String rows = pc.getRequest().getParameter("rows");
+        if (rows != null && rows.length() > 0)
+            task.setRowsPerPage(Integer.parseInt(rows));
+
+        TaskContext tc = new TaskContext(pc);
+        task.execute(tc);
+        PrintWriter out = pc.getResponse().getWriter();
+        if(tc.hasError())
+        {
+            out.write(tc.getErrorMessage());
+        }
+        else if(tc.hasResultMessage())
+        {
+            out.write(tc.getResultMessage());
+        }
+
+    }
+
     public void handleTestStatement(PageContext pc, String stmtId) throws ServletException, IOException
     {
         ServletContext context = pc.getServletContext();
@@ -118,6 +145,19 @@ public class DatabaseSqlPage extends AceServletPage
         DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
 
         out.write("<h1>SQL: " + stmtId + "</h1>");
+        if ("yes".equals(pc.getRequest().getParameter("pageable")))
+        {
+            try
+            {
+                this.handleTestStatementPageable(pc, stmtId);
+            }
+            catch (TaskExecuteException e)
+            {
+                throw new ServletException(e);
+            }
+            return;
+        }
+
         try
         {
             StatementInfo si = manager.getStatement(stmtId);

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: TaskContext.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: TaskContext.java,v 1.2 2002-09-03 22:29:20 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.task;
@@ -68,6 +68,7 @@ import javax.servlet.ServletResponse;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.util.value.ServletValueContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class TaskContext extends ServletValueContext
 {
@@ -100,6 +101,11 @@ public class TaskContext extends ServletValueContext
         {
             transactionId = "No MessageDigest Algorithm found!";
         }
+    }
+
+    public TaskContext(ValueContext vc)
+    {
+        this(vc.getServletContext(), vc.getServlet(), vc.getRequest(), vc.getResponse());
     }
 
     public TaskContext(DialogContext dc)

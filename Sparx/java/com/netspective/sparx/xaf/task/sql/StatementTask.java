@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.3 2002-08-24 05:38:31 shahid.shah Exp $
+ * $Id: StatementTask.java,v 1.4 2002-09-03 22:29:20 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -78,10 +78,13 @@ import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import com.netspective.sparx.xaf.sql.ResultInfo;
+import com.netspective.sparx.xaf.sql.StatementDialog;
 import com.netspective.sparx.xaf.task.BasicTask;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.TaskInitializeException;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.util.value.DialogFieldValue;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.StaticValue;
@@ -90,6 +93,7 @@ import com.netspective.sparx.util.value.ValueSourceFactory;
 public class StatementTask extends BasicTask
 {
     static public final String DEFAULT_REPORTSKINID = "report";
+    public static final int DEFAULT_ROWS_PER_PAGE = 10;
 
     private StatementInfo statementInfo;
     private String stmtName;
@@ -101,7 +105,9 @@ public class StatementTask extends BasicTask
     private SingleValueSource storeValueSource;
     private SingleValueSource reportDestValueSource;
     private boolean produceReport = true;
+    private boolean pageableReport = false;
     private int storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWMAP;
+    private int rowsPerPage = DEFAULT_ROWS_PER_PAGE;
 
     public StatementTask()
     {
@@ -121,6 +127,7 @@ public class StatementTask extends BasicTask
         storeValueSource = null;
         reportDestValueSource = null;
         produceReport = true;
+        pageableReport = false;
         storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWMAP;
     }
 
@@ -223,6 +230,43 @@ public class StatementTask extends BasicTask
         }
         storeValueType = -1;
     }
+    /**
+     * Whether or not the report should be pageable
+     *
+     * @return boolean True if the report is pageable
+     */
+    public boolean isPageable()
+    {
+        return this.pageableReport;
+    }
+
+    public void setPageableReport(boolean pageableReport)
+    {
+        this.pageableReport = pageableReport;
+    }
+
+    public void setPageableReport(String value)
+    {
+        if (value.equalsIgnoreCase("yes"))
+            setPageableReport(true);
+        else
+            setPageableReport(false);
+    }
+
+    public void setRowsPerPage(int rowsPerPage)
+    {
+        this.rowsPerPage = rowsPerPage;
+    }
+
+    /**
+     * Returns the number of rows to display per page if the report is pageable
+     *
+     * @return int number of rows per page
+     */
+    public int getRowsPerPage()
+    {
+        return this.rowsPerPage;
+    }
 
     public void initialize(Element elem) throws TaskInitializeException
     {
@@ -264,6 +308,17 @@ public class StatementTask extends BasicTask
         }
 
         setReportDestId(elem.getAttribute("destination"));
+
+        if (elem.getAttribute("pageable").equals("yes"))
+        {
+            this.pageableReport = true;
+            String rowStr = elem.getAttribute("rows");
+            if (rowStr != null && rowStr.length() > 0)
+            {
+                this.rowsPerPage = Integer.parseInt(rowStr);
+            }
+        }
+
     }
 
     public void execute(TaskContext tc) throws TaskExecuteException
@@ -347,7 +402,18 @@ public class StatementTask extends BasicTask
                 out = new StringWriter();
             String dataSourceId = this.getDataSource() != null ? this.getDataSource().getValue(tc) : null;
 
-            if(produceReport && storeValueSource == null)
+            if (produceReport && this.pageableReport)
+            {
+                // Special Case: This static query must produce a report that is pageable
+                StatementDialog stmtDialog = new StatementDialog(stmtManager.getStatement(stmtName), getReport(), getSkin() != null ? getSkin().getValue(tc) : null);
+                stmtDialog.setRowsPerPage(getRowsPerPage());
+                DialogSkin skin = com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin();
+                DialogContext dc = stmtDialog.createContext(context, (javax.servlet.Servlet) tc.getServlet(),
+                        (javax.servlet.http.HttpServletRequest) tc.getRequest(),
+                        (javax.servlet.http.HttpServletResponse) tc.getResponse(), skin);
+                stmtDialog.renderHtml(out, dc, false);
+            }
+            else if(produceReport && storeValueSource == null)
             {
                 if(statementInfo != null)
                     stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, statementInfo, null, reportId);
