@@ -16,6 +16,8 @@ import java.sql.*;
 import org.w3c.dom.*;
 
 import com.xaf.report.*;
+import com.xaf.value.SingleValueSource;
+import com.xaf.value.ValueSourceFactory;
 
 public class GeneralColumn implements ReportColumn
 {
@@ -32,7 +34,7 @@ public class GeneralColumn implements ReportColumn
 	private int colIndexInArray;
     private int colIndexInResultSet;
 	private String heading;
-	private String url;
+	private SingleValueSource urlValueSource;
     private String calcCmd;
     private Format formatter;
     private String outputPattern;
@@ -74,11 +76,11 @@ public class GeneralColumn implements ReportColumn
 	public final String getHeading() { return heading; }
 	public final void setHeading(String value) { heading = value; }
 
-	public final String getUrl() { return url; }
+	public final SingleValueSource getUrl() { return urlValueSource; }
 	public final void setUrl(String value)
     {
-        url = value;
-        if(url != null)
+        urlValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+        if(urlValueSource != null)
             setFlag(COLFLAG_WRAPURL);
         else
             clearFlag(COLFLAG_WRAPURL);
@@ -169,7 +171,7 @@ public class GeneralColumn implements ReportColumn
 		flags = rc.getFlags();
 
 		setHeading(rc.getHeading());
-		setUrl(rc.getUrl());
+		this.urlValueSource = rc.getUrl();
 		setAlignStyle(rc.getAlignStyle());
 		setWidth(rc.getWidth());
 		setCalcCmd(rc.getCalcCmd());

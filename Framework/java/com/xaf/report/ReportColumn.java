@@ -15,6 +15,7 @@ import java.text.*;
 import java.sql.*;
 
 import org.w3c.dom.*;
+import com.xaf.value.SingleValueSource;
 
 public interface ReportColumn
 {
@@ -42,7 +43,7 @@ public interface ReportColumn
 	public String getHeading();
 	public void setHeading(String value);
 
-	public String getUrl();
+	public SingleValueSource getUrl();
 	public void setUrl(String value);
 
 	public int getWidth();

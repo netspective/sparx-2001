@@ -54,7 +54,7 @@ public class ReportContext implements ValueContext
 					outputFormat = column.resolvePattern(column.getOutput());
 
 				if(flagIsSet(ReportColumn.COLFLAG_WRAPURL))
-					url = column.resolvePattern(column.getUrl());
+					url = column.resolvePattern(column.getUrl().getValue(ReportContext.this));
 			}
 
 			heading = column.getHeading();
