@@ -79,7 +79,7 @@ Build targets:
         <!-- Compile the Ant utility classes -->
         <javac srcdir="com/netspective/sparx" destdir="${build.classes.dir}" 
             includes="util/ClassPath.java,util/ant/GenerateBuildLogClassTask.java"
-            debug="${debug}" optimize="${optimize}" deprecation="off"
+            debug="${debug}" optimize="${optimize}" deprecation="on"
             classpathref="project.class.path"
             />
 
@@ -90,7 +90,7 @@ Build targets:
         <!-- Compile the BuildConfiguration and other Ant utility class -->
         <javac srcdir="com/netspective/sparx" destdir="${build.classes.dir}"
             includes="BuildLog.java,BuildConfiguration.java,util/ant/BuildConfigurationTask.java,util/ant/ClassPathTask.java"
-            debug="${debug}" optimize="${optimize}" deprecation="off"/>
+            debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
         <!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
         <taskdef name="config" classname="com.netspective.sparx.util.ant.BuildConfigurationTask" classpath="${build.classes.dir}" classpathref="project.class.path"/>
@@ -122,7 +122,7 @@ Build targets:
         <javac srcdir="." destdir="${build.classes.dir}"
             debug="${debug}"
             optimize="${optimize}"
-            deprecation="on"
+            deprecation="off"
             classpathref="project.class.path">
         </javac>
 
