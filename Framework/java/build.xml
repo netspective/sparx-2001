@@ -86,7 +86,7 @@ Build targets:
     </target>
 
     <!-- ============================= Build XAF ========================= -->
-    <target name="compile">
+    <target name="compile" depends="init">
 
         <!-- Compile XAF components -->
         <javac srcdir="." destdir="${build.classes.dir}"
@@ -118,7 +118,7 @@ Build targets:
 
     <!-- ============================= JavaDoc XAF ========================= -->
     <!-- Add XAF internal javadoc -->
-    <target name="javadoc">
+    <target name="javadoc" depends="init">
         <mkdir dir="${javadoc.dir}" />
         <javadoc packagenames="com.xaf.*"
              classpath="${CLASSPATH}"
@@ -141,7 +141,7 @@ Build targets:
 
     <!-- ============================= JavaDoc XAF ========================= -->
 
-    <target name="web-shared">
+    <target name="web-shared" depends="init">
     	<!-- store two copies of the ZIP file:
     	     1) a zip file with web-shared as the path prefix
     	     2) a zip file with web-shared-[version] as the path prefix
@@ -155,7 +155,7 @@ Build targets:
     </target>
 
     <!-- ==================== Administrative targets  ======================= -->
-    <target name="clean">
+    <target name="clean" depends="init">
         <delete dir="${build.dir}"/>
     </target>
 
@@ -170,6 +170,8 @@ Build targets:
         <echo message="  xaf                  Clean, compile and then create JAR"/>
         <echo message="  clean                Clean build and jar directories"/>
         <echo message="  jar                  Create JAR"/>
+        <echo message="  javadoc              Create JavaDoc for Classes"/>
         <echo message="  compile              Compile XAF"/>
+        <echo message="  web-shared           Create a ZIP file of the web-shared directory"/>
     </target>
 </project>
