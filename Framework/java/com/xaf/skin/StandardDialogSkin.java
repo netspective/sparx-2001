@@ -74,10 +74,10 @@ public class StandardDialogSkin implements DialogSkin
 				boolean showCaption = field.showCaptionAsChild();
 				if(showCaption)
 				{
-					String caption = field.getCaption();
+					String caption = field.getCaption(dc);
 					if(caption != DialogField.CUSTOM_CAPTION)
                     {
-						html.append("<nobr>" + (field.isRequired(dc) ? "<b>" + field.getCaption() + "</b>" : field.getCaption()));
+						html.append("<nobr>" + (field.isRequired(dc) ? "<b>" + caption + "</b>" : caption));
                         if(captionSuffix != null)
                             html.append(captionSuffix);
                     }
@@ -127,19 +127,21 @@ public class StandardDialogSkin implements DialogSkin
 		{
 			String hRowAttr = " id='" + GRIDHEADROW_PREFIX + compositeField.getQualifiedName() + "' ";
 			StringBuffer headerHtml = new StringBuffer("\n<tr "+hRowAttr+">");
+			int fieldNum = 0;
+			String[] fieldCaptions = gridField.getCaptions(dc);
 			while(i.hasNext())
 			{
 				DialogField field = (DialogField) i.next();
 				if(field.isVisible(dc))
 				{
-					String caption = field.getCaption();
+					String caption = fieldNum < fieldCaptions.length ? fieldCaptions[fieldNum] : field.getCaption(dc);
 
 					headerHtml.append("<td><font ");
 					headerHtml.append(gridCaptionFontAttrs);
 					headerHtml.append(">");
 					if(caption != null && caption != DialogField.CUSTOM_CAPTION)
 					{
-						headerHtml.append(field.isRequired(dc) ? "<b>" + field.getCaption() + "</b>" : field.getCaption());
+						headerHtml.append(field.isRequired(dc) ? "<b>" + caption + "</b>" : caption);
 					}
 					headerHtml.append("</font></td>");
 
@@ -147,6 +149,7 @@ public class StandardDialogSkin implements DialogSkin
 					appendGridControlBasics(dc, field, rowHtml);
 					rowHtml.append("</td>");
 				}
+				fieldNum++;
 			}
 
 			headerHtml.append("</tr>");
@@ -250,7 +253,7 @@ public class StandardDialogSkin implements DialogSkin
 	{
 		String fieldClassName = field.getClass().getName();
 		String js =
-			"field = new DialogField(\"" + fieldClassName + "\", \""+ field.getId() + "\", \"" + field.getSimpleName() + "\", \"" + field.getQualifiedName() + "\", \"" + field.getCaption() + "\", " + field.getFlags() +");\n" +
+			"field = new DialogField(\"" + fieldClassName + "\", \""+ field.getId() + "\", \"" + field.getSimpleName() + "\", \"" + field.getQualifiedName() + "\", \"" + field.getCaption(dc) + "\", " + field.getFlags() +");\n" +
 			"dialog.registerField(field);\n";
 
 		if(field instanceof SelectField)
@@ -299,7 +302,7 @@ public class StandardDialogSkin implements DialogSkin
 		}
 
 		String name = field.getQualifiedName();
-		String caption = field.getCaption();
+		String caption = field.getCaption(dc);
 		ArrayList fieldChildren = field.getChildren();
 		if(caption != null && fieldChildren != null && caption.equals(DialogField.GENERATE_CAPTION))
 		{
@@ -308,7 +311,7 @@ public class StandardDialogSkin implements DialogSkin
 			while(c.hasNext())
 			{
 				DialogField childField = (DialogField) c.next();
-				String childCaption = childField.getCaption();
+				String childCaption = childField.getCaption(dc);
 				if(childCaption != null && childCaption != DialogField.CUSTOM_CAPTION)
 				{
 					if(generated.length() > 0)

@@ -172,7 +172,7 @@ public class SelectField extends DialogField
 				String value = dc.getValue(this);
 				if(isRequired(dc) && (value == null || value.length() == 0))
 				{
-					invalidate(dc, getCaption() + " is required.");
+					invalidate(dc, getCaption(dc) + " is required.");
 					return false;
 				}
 				break;
@@ -183,7 +183,7 @@ public class SelectField extends DialogField
 				String[] values = dc.getValues(this);
 				if(isRequired(dc) && (values == null || values.length == 0))
 				{
-					invalidate(dc, getCaption() + " is required.");
+					invalidate(dc, getCaption(dc) + " is required.");
 					return false;
 				}
 				break;
@@ -205,7 +205,7 @@ public class SelectField extends DialogField
 				if((values != null && values.length == 0 && defaultValue != null) ||
 					(values == null && defaultValue != null))
 				{
-					SelectChoicesList list = defaultValue.getSelectChoices(dc, null);
+					SelectChoicesList list = defaultValue.getSelectChoices(dc);
 					dc.setValues(this, list.getValues());
 				}
 			}
@@ -268,7 +268,7 @@ public class SelectField extends DialogField
         SelectChoicesList choices = null;
 		if(listSource != null)
         {
-            choices = listSource.getSelectChoices(dc, null);
+            choices = listSource.getSelectChoices(dc);
     		choices.calcSelections(dc, this);
         }
         else

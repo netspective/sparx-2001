@@ -79,7 +79,7 @@ public class MemoField extends DialogField
 		String value = dc.getValue(this);
 		if(isRequired(dc) && (value == null || value.length() == 0))
 		{
-			invalidate(dc, getCaption() + " is required.");
+			invalidate(dc, getCaption(dc) + " is required.");
 			return false;
 		}
 		return true;

@@ -77,7 +77,7 @@ public class IntegerField extends TextField
 			}
 			if(value.intValue() < minValue || value.intValue() > maxValue)
 			{
-				invalidate(dc, getCaption() + " needs to be between " + minValue + " and " + maxValue + ".");
+				invalidate(dc, getCaption(dc) + " needs to be between " + minValue + " and " + maxValue + ".");
 				return false;
 			}
 			return true;

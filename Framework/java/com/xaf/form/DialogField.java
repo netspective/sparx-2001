@@ -34,7 +34,7 @@ public class DialogField
 	private String id;
 	private String simpleName;
 	private String qualifiedName;
-	private String caption;
+	private SingleValueSource caption;
 	private String cookieName;
 	private String errorMessage;
 	private SingleValueSource defaultValue;
@@ -57,7 +57,7 @@ public class DialogField
 	{
 		this();
 		setSimpleName(aName);
-		caption = aCaption;
+		caption = aCaption != null ? ValueSourceFactory.getSingleOrStaticValueSource(aCaption) : null;
 	}
 
 	public void importFromXml(Element elem)
@@ -66,16 +66,20 @@ public class DialogField
 		if(simpleName.length() == 0) simpleName = null;
 		setSimpleName(simpleName);
 
-		caption = elem.getAttribute("caption");
-		if(caption.length() == 0) caption = null;
+		String captionStr = elem.getAttribute("caption");
+		if(captionStr.length() > 0)
+			caption = ValueSourceFactory.getSingleOrStaticValueSource(captionStr);
 
-		String defaultv = elem.getAttribute("default");
-		if(defaultv.length() > 0)
+		if(! (this instanceof com.xaf.form.field.SelectField))
 		{
-			defaultValue = ValueSourceFactory.getSingleOrStaticValueSource(defaultv);
+			String defaultv = elem.getAttribute("default");
+			if(defaultv.length() > 0)
+			{
+				defaultValue = ValueSourceFactory.getSingleOrStaticValueSource(defaultv);
+			}
+			else
+				defaultValue = null;
 		}
-		else
-			defaultValue = null;
 
         hint = elem.getAttribute("hint");
         if(hint.length() == 0) hint = null;
@@ -270,8 +274,9 @@ public class DialogField
 	public final String getCookieName() { return "DLG_" + parent.getSimpleName() + "_FLD_" + (cookieName.length() > 0 ? cookieName : simpleName); }
 	public void setCookieName(String name) { cookieName = name; }
 
-	public String getCaption() { return caption; }
-	public void setCaption(String newCaption) { caption = newCaption; }
+	public SingleValueSource getCaptionSource() { return caption; }
+	public String getCaption(DialogContext dc) { return caption != null ? caption.getValue(dc) : null; }
+	public void setCaption(SingleValueSource value) { caption = value; }
 
 	public final String getHint() { return hint; }
 	public void setHint(String value) { hint = value; }

@@ -136,22 +136,22 @@ public class DateTimeField extends TextField
 		long flags = getFlags();
 		if((flags & FLDFLAG_FUTUREONLY) != 0 && value.before(now))
 		{
-			invalidate(dc, getCaption() + " must be in the future.");
+			invalidate(dc, getCaption(dc) + " must be in the future.");
 			return false;
 		}
 		if((flags & FLDFLAG_PASTONLY) != 0 && value.after(now))
 		{
-			invalidate(dc, getCaption() + " must be in the past.");
+			invalidate(dc, getCaption(dc) + " must be in the past.");
 			return false;
 		}
 		if(preDate != null && value.after(preDate))
 		{
-			invalidate(dc, getCaption() + " must be after " + preDate + ".");
+			invalidate(dc, getCaption(dc) + " must be after " + preDate + ".");
 			return false;
 		}
 		if(postDate != null && value.before(postDate))
 		{
-			invalidate(dc, getCaption() + " must be before " + postDate + ".");
+			invalidate(dc, getCaption(dc) + " must be before " + postDate + ".");
 			return false;
 		}
 

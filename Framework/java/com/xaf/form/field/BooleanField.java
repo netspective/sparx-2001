@@ -38,12 +38,12 @@ public class BooleanField extends DialogField
 	public final int getChoices() { return choices; }
 	public void setChoices(int value) { choices = value; }
 
-	public String getCaption()
+	public String getCaption(DialogContext dc)
 	{
 		if(style == BOOLSTYLE_CHECK)
 			return DialogField.CUSTOM_CAPTION;
 		else
-			return super.getCaption();
+			return super.getCaption(dc);
 	}
 
 	public void importFromXml(Element elem)
@@ -99,7 +99,7 @@ public class BooleanField extends DialogField
 					"<nobr><input type='radio' name='"+ id +"' id='"+ id +"1' value='1' "+ (value ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + "1'>" + trueText + "</label></nobr>";
 
 			case BOOLSTYLE_CHECK:
-				return "<nobr><input type='checkbox' name='"+ id +"' id='"+ id +"' value='1' "+ (value ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + "'>" + super.getCaption() + "</label></nobr>";
+				return "<nobr><input type='checkbox' name='"+ id +"' id='"+ id +"' value='1' "+ (value ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + "'>" + super.getCaption(dc) + "</label></nobr>";
 
 			case BOOLSTYLE_CHECKALONE:
 				return "<input type='checkbox' name='"+ id +"' value='1' "+ (value ? "checked " : "") + defaultControlAttrs + "> ";

@@ -20,6 +20,19 @@ public class SelectChoicesList
 		valueMap.clear();
 	}
 
+	public String[] getCaptions()
+	{
+		String[] result = new String[valueList.size()];
+		int vIndex = 0;
+		for(Iterator i = valueList.iterator(); i.hasNext(); )
+		{
+			SelectChoice choice = (SelectChoice) i.next();
+			result[vIndex] = choice.getCaption();
+			vIndex++;
+		}
+		return result;
+	}
+
 	public String[] getValues()
 	{
 		String[] result = new String[valueList.size()];

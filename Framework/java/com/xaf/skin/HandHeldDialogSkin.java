@@ -69,10 +69,10 @@ public class HandHeldDialogSkin implements DialogSkin
 				boolean showCaption = field.showCaptionAsChild();
 				if(showCaption)
 				{
-					String caption = field.getCaption();
+					String caption = field.getCaption(dc);
 					if(caption != DialogField.CUSTOM_CAPTION)
                     {
-						html.append("<nobr>" + (field.isRequired(dc) ? "<b>" + field.getCaption() + "</b>" : field.getCaption()));
+						html.append("<nobr>" + (field.isRequired(dc) ? "<b>" + caption + "</b>" : caption));
                         if(captionSuffix != null)
                             html.append(captionSuffix);
                     }
@@ -98,7 +98,7 @@ public class HandHeldDialogSkin implements DialogSkin
 		}
 
 		String name = field.getQualifiedName();
-		String caption = field.getCaption();
+		String caption = field.getCaption(dc);
 		ArrayList fieldChildren = field.getChildren();
 		if(caption != null && fieldChildren != null && caption.equals(DialogField.GENERATE_CAPTION))
 		{
@@ -107,7 +107,7 @@ public class HandHeldDialogSkin implements DialogSkin
 			while(c.hasNext())
 			{
 				DialogField childField = (DialogField) c.next();
-				String childCaption = childField.getCaption();
+				String childCaption = childField.getCaption(dc);
 				if(childCaption != null && childCaption != DialogField.CUSTOM_CAPTION)
 				{
 					if(generated.length() > 0)
