@@ -16,6 +16,9 @@ import java.util.*;
 import javax.servlet.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.*;
 import org.apache.xpath.objects.*;
@@ -30,6 +33,7 @@ public class XmlSource
 		protected File source;
 		protected long lastModified;
 		protected SourceInfo parent;
+        protected List preProcessors;
 
 		SourceInfo(SourceInfo includedFrom, File file)
 		{
@@ -41,9 +45,28 @@ public class XmlSource
 		public File getFile() { return source; }
 		public SourceInfo getParent() { return parent; }
 
+        public List getPreProcessors() { return preProcessors; }
+        public void addPreProcessor(SourceInfo value)
+        {
+            if(preProcessors == null) preProcessors = new ArrayList();
+            preProcessors.add(value);
+        }
+
 		public boolean sourceChanged()
 		{
-			return source.lastModified() > this.lastModified;
+			if(source.lastModified() > this.lastModified)
+                return true;
+
+            if(preProcessors != null)
+            {
+                for(int i = 0; i < preProcessors.size(); i++)
+                {
+                    if(((SourceInfo) preProcessors.get(i)).sourceChanged())
+                        return true;
+                }
+            }
+
+            return false;
 		}
 	}
 
@@ -476,6 +499,20 @@ public class XmlSource
 			if(si.getParent() != null)
 				fileElem.setAttribute("included-from", si.getParent().getFile().getName());
 			filesElem.appendChild(fileElem);
+
+            List preProcessors = si.getPreProcessors();
+            if(preProcessors != null)
+            {
+                for(int i = 0; i < preProcessors.size(); i++)
+                {
+                    SourceInfo psi = (SourceInfo) preProcessors.get(i);
+                    fileElem = xmlDoc.createElement("source-file");
+                    fileElem.setAttribute("abs-path", psi.getFile().getAbsolutePath());
+                    if(psi.getParent() != null)
+                        fileElem.setAttribute("included-from", psi.getParent().getFile().getName());
+                    filesElem.appendChild(fileElem);
+                }
+            }
 		}
 
 		if(errors.size() > 0)
@@ -495,6 +532,29 @@ public class XmlSource
 
 	public void catalogNodes()
 	{
+	}
+
+    /**
+     * Given the current xmlDoc that was already read in, send it through the transformation stylesheet and assign
+     * the value back to xmlDoc.
+     */
+    public void preProcess(File styleSheet)
+	{
+		try
+		{
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer(new StreamSource(styleSheet));
+
+            DOMResult result = new javax.xml.transform.dom.DOMResult();
+			transformer.transform(new DOMSource(xmlDoc), result);
+            xmlDoc = (Document) result.getNode();
+		}
+		catch(Exception e)
+		{
+            //StringWriter stack = new StringWriter();
+            //e.printStackTrace(new PrintWriter(stack));
+			addError("Failed to pre-process using style-sheet " + styleSheet.getAbsolutePath() + ": " + e.toString());
+		}
 	}
 
 	public Document loadXML(File file)
@@ -562,6 +622,27 @@ public class XmlSource
 			}
 		}
 
+        /*
+		   find all of the <pre-process stylesheet="xyz"> elements and "pre-process" using XSLT stylesheets
+		*/
+
+		NodeList preProcessors = rootElem.getElementsByTagName("pre-process");
+		if(preProcessors != null && preProcessors.getLength() > 0)
+		{
+            for(int n = 0; n < preProcessors.getLength(); n++)
+			{
+				Element preProcessor = (Element) preProcessors.item(n);
+                String ppFileAttr = preProcessor.getAttribute("style-sheet");
+                if(ppFileAttr.length() == 0)
+                {
+                    addError("No style-sheet attribute provided for pre-process element");
+                    continue;
+                }
+				File ppFile = new File(file.getParentFile(), ppFileAttr);
+                docSource.addPreProcessor(new SourceInfo(docSource, ppFile));
+                preProcess(ppFile);
+			}
+        }
 		return doc;
  	}
 
