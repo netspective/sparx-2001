@@ -16,125 +16,104 @@
 
 <xsl:template match="xaf">
 	<xsl:choose>
-		<xsl:when test="$detail-type = 'statement' and $detail-name">
+		<xsl:when test="$detail-type = 'describe' and $detail-name">
 			<xsl:apply-templates select="sql-statements/statement[@qualified-name = $detail-name]" mode="detail"/>
 		</xsl:when>
-		<xsl:when test="$detail-type = 'query-defn' and $detail-name">
-			<xsl:apply-templates select="query-defn[@id = $detail-name]" mode="detail"/>
-		</xsl:when>
 		<xsl:otherwise>
-			<table class="heading" border="0" cellspacing="0" cellpadding='5'>
-			<tr class="heading">
-				<td class="heading">
-				<img border="0">
-					<xsl:attribute name="src"><xsl:value-of select="$sql-images-root-url"/>/table-icon.gif</xsl:attribute>
-				</img>
-				&#160;<xsl:value-of select="$page-heading"/>
-				</td>
-				<td align="right">
-				</td>
-			</tr>
-			<tr class="heading_rule"><td height="1" colspan="2"></td></tr>
-			</table>
-			<table>
-				<tr>
-					<td>
-					<h1>Statements</h1>
-					<table cellspacing="0" cellpadding="2">
-					<tr bgcolor="beige">
-						<th>ID</th>
-						<th>Package</th>
-						<th>Name</th>
-						<th>Parameters</th>
-						<th title="Number of times query was executed">Executed</th>
-						<th title="Average time (in milliseconds) query took to run">Avg</th>
-						<th title="Maximum time (in milliseconds) query took to run">Max</th>
-						<th title="Average time (in milliseconds) query took to connect to db">Conn</th>
-						<th title="Average time (in milliseconds) query took to bind parameters">Bind</th>
-						<th title="Average time (in milliseconds) query took to execute SQL">SQL</th>
-						<th title="Number of times query failed to run">Failed</th>
+			<div class="content">
+				<div class="content_head">Statements</div>
+				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+					<tr class="data_table_header">
+						<th class="data_table">Actions</th>
+						<th class="data_table">ID</th>
+						<th class="data_table">Parameters</th>
+						<th class="data_table" title="Number of times query was executed">Executed</th>
+						<th class="data_table" title="Average time (in milliseconds) query took to run">Avg</th>
+						<th class="data_table" title="Maximum time (in milliseconds) query took to run">Max</th>
+						<th class="data_table" title="Average time (in milliseconds) query took to connect to db">Conn</th>
+						<th class="data_table" title="Average time (in milliseconds) query took to bind parameters">Bind</th>
+						<th class="data_table" title="Average time (in milliseconds) query took to execute SQL">SQL</th>
+						<th class="data_table" title="Number of times query failed to run">Failed</th>
 					</tr>
-					<tr><td colspan="11"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 					<xsl:apply-templates select="sql-statements/statement" mode="toc">
 						<xsl:sort select="@qualified-name"/>
 					</xsl:apply-templates>
-					</table>
+				</table>
 					
-					<h1>Query Definitions</h1>
-					<table cellspacing="0" cellpadding="2">
-					<tr bgcolor="beige">
-						<th>ID</th>
-						<th>Fields</th>
-						<th>Joins</th>
-						<th>Selects</th>
-						<th>Dialogs</th>
-						<th></th>
+				<div class="content_head">Source Files</div>
+				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+				<tr class="data_table_header">
+					<th class="data_table">File</th>
+					<th class="data_table">Included-from</th>
+				</tr>
+				<xsl:for-each select="meta-info/source-files/source-file">
+					<tr class="data_table">
+						<td class="data_table">
+						<a class="data_table">
+						<xsl:attribute name="href"><xsl:value-of select="@abs-path"/></xsl:attribute>
+						<xsl:value-of select="@abs-path"/>
+						</a>
+						</td>
+						<td class="data_table">
+							<xsl:value-of select="@included-from"/>
+							<xsl:if test="not(@included-from)">&#160;</xsl:if>
+						</td>
 					</tr>
-					<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-					<xsl:apply-templates select="query-defn" mode="toc">
-						<xsl:sort select="@id"/>
-					</xsl:apply-templates>
-					</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<p/><br/>
-						<h1>Source Files</h1>
-						<ol>
-						<xsl:for-each select="meta-info/source-files/source-file">
-							<li>
-								<a>
-								<xsl:attribute name="href"><xsl:value-of select="@abs-path"/></xsl:attribute>
-								<xsl:value-of select="@abs-path"/>
-								</a>
-								<xsl:if test="@included-from">
-									(from <xsl:value-of select="@included-from"/>)
-								</xsl:if>
-							</li>
-						</xsl:for-each>
-						</ol>
+				</xsl:for-each>
+				</table>
 
-						<p/>
-						<xsl:if test="meta-info/errors">
-							<h1>Schema Errors</h1>
-							<ol>
-							<xsl:for-each select="meta-info/errors/error">
-								<li><xsl:value-of select="."/></li>
-							</xsl:for-each>
-							</ol>
-						</xsl:if>
-					</td>
-				</tr>
-			</table>
+				<p/>
+				<xsl:if test="meta-info/errors">
+					<div class="content_head">Errors</div>
+					<ol>
+					<xsl:for-each select="meta-info/errors/error">
+						<li><xsl:value-of select="."/></li>
+					</xsl:for-each>
+					</ol>
+				</xsl:if>
+			</div>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
 
+<xsl:template name="blank-if-zero">
+	<xsl:param name="value"/>
+	<xsl:if test="$value > 0">
+		<xsl:value-of select="$value"/>
+	</xsl:if>
+	<xsl:if test="$value = 0">
+		&#160;
+	</xsl:if>
+</xsl:template>
+
 <xsl:template match="statement" mode="toc">
 	<xsl:param name="pcount"><xsl:value-of select="count(params/*)"/></xsl:param>
-	<tr>
-		<td><a><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/', 'statement', '/', @qualified-name)"/></xsl:attribute><xsl:value-of select="@qualified-name"/></a></td>
-		<td><xsl:value-of select="@package"/></td>
-		<td><a target="ace-sql-test"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/test/statement/', @qualified-name)"/></xsl:attribute><xsl:value-of select="@name"/></a></td>
-		<td align="right">
+	<tr class="data_table">
+		<td class="data_table">
+			<a title="Click here to see test statement">
+				<xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/test/',@qualified-name)"/></xsl:attribute>
+				<xsl:attribute name="target"><xsl:value-of select="concat('statement.',@qualified-name)"/></xsl:attribute>
+				<img border="0">
+					<xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/exec_sql.gif</xsl:attribute>
+				</img>
+			</a>
+			<img border="0"><xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/spacer.gif</xsl:attribute></img>
+			<a title="Click here to review functional specifications"><xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/describe/',@qualified-name)"/></xsl:attribute><img border="0"><xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/describe_sql.gif</xsl:attribute></img></a>
+		</td>
+		<td class="data_table"><b><a class="data_table" title="Click here to review functional specifications"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/', 'describe', '/', @qualified-name)"/></xsl:attribute><xsl:value-of select="@qualified-name"/></a></b></td>
+		<td class="data_table" align="right">
 			<font color="red">
-			<xsl:if test="$pcount > 0">
-				<font color="green">
-				<xsl:value-of select="$pcount"/>
-				</font>
-			</xsl:if>
+			<xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="$pcount"/></xsl:call-template>
 			</font>
 		</td>		
-		<td align="right"><xsl:value-of select="@stat-total-executions"/></td>
-		<td align="right"><xsl:value-of select="@stat-total-avg-time"/></td>
-		<td align="right"><xsl:value-of select="@stat-total-max-time"/></td>
-		<td align="right"><xsl:value-of select="@stat-connection-avg-time"/></td>
-		<td align="right"><xsl:value-of select="@stat-bind-params-avg-time"/></td>
-		<td align="right"><xsl:value-of select="@stat-sql-exec-avg-time"/></td>
-		<td align="right"><xsl:value-of select="@stat-total-failed"/></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-executions"/></xsl:call-template></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-avg-time"/></xsl:call-template></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-max-time"/></xsl:call-template></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-connection-avg-time"/></xsl:call-template></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-bind-params-avg-time"/></xsl:call-template></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-sql-exec-avg-time"/></xsl:call-template></td>
+		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-failed"/></xsl:call-template></td>
 	</tr>
-	<tr><td colspan="11"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 </xsl:template>
 
 <xsl:template match="statement" mode="toc-select">
@@ -149,10 +128,8 @@
 	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
 	<tr class="heading">
 		<td class="heading">
-		<img border="0">
-			<xsl:attribute name="src"><xsl:value-of select="$sql-images-root-url"/>/table-icon.gif</xsl:attribute>
-		</img>
-		&#160;Statement <font color="black"><xsl:value-of select="@qualified-name"/></font>
+		<img border="0"><xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/describe_sql.gif</xsl:attribute></img>
+		<font color="navy">Statement</font>&#160;<xsl:value-of select="@qualified-name"/>
 		</td>
 		<td align="right">
 			Statements:
@@ -218,167 +195,6 @@
 
 	</td></tr>
 	</table>	
-</xsl:template>
-
-<xsl:template match="query-defn" mode="toc">
-	<tr>
-		<td><a><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/', 'query-defn', '/', @id)"/></xsl:attribute><xsl:value-of select="@id"/></a></td>
-		<td align="right"><xsl:value-of select="count(field)"/></td>
-		<td align="right"><xsl:value-of select="count(join)"/></td>
-		<td align="right"><xsl:value-of select="count(select)"/></td>
-		<td align="right"><xsl:value-of select="count(select-dialog)"/></td>
-		<td><a target="ace-query-defn-test"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/test/query-defn/', @id)"/></xsl:attribute>Test</a></td>
-	</tr>
-	<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-</xsl:template>
-
-<xsl:template match="query-defn" mode="toc-select">
-	<option>
-		<xsl:if test="@id = $detail-name"><xsl:attribute name="selected">yes</xsl:attribute></xsl:if>
-		<xsl:attribute name="value"><xsl:value-of select="concat($root-url,'/','query-defn','/',@id)"/>
-		</xsl:attribute><xsl:value-of select="@id"/>
-	</option>
-</xsl:template>
-
-<xsl:template match="query-defn" mode="detail">
-	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
-	<tr class="heading">
-		<td class="heading">
-		<img border="0">
-			<xsl:attribute name="src"><xsl:value-of select="$sql-images-root-url"/>/table-icon.gif</xsl:attribute>
-		</img>
-		&#160;Query Definition <font color="black"><xsl:value-of select="@id"/></font>
-		</td>
-		<td align="right">
-			Query Definitions:
-			<select onchange="window.location.href = this.options[this.selectedIndex].value">
-				<xsl:apply-templates select="/xaf/query-defn" mode="toc-select">
-					<xsl:sort select="@id"/>
-				</xsl:apply-templates>
-			</select>
-		</td>
-	</tr>
-	<tr class="heading_rule"><td height="1" colspan="2"></td></tr>
-	<tr><td colspan="2">
-	<h1>Fields</h1>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>ID</th>
-			<th>Caption</th>
-			<th>Join</th>
-			<th>Column</th>
-			<th>Column-expr</th>
-			<th>Where-expr</th>
-			<th>Order-by-expr</th>
-		</tr>
-		<tr><td colspan="7"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		<xsl:for-each select="field">
-			<tr>
-			<td><font color="green"><xsl:value-of select="@id"/></font></td>
-			<td><font color="blue"><xsl:value-of select="@caption"/></font></td>
-			<td><font color="red"><xsl:value-of select="@join"/></font></td>
-			<td><xsl:value-of select="@column"/></td>
-			<td><xsl:value-of select="@column-expr"/></td>
-			<td><xsl:value-of select="@where-expr"/></td>
-			<td><xsl:value-of select="@order-by-expr"/></td>
-			</tr>
-			<tr><td colspan="7"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		</xsl:for-each>
-	</table>
-
-	<h1>Joins</h1>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>ID</th>
-			<th>Table</th>
-			<th>Condition</th>
-			<th>Auto-Inc</th>
-			<th>Weight</th>
-		</tr>
-		<tr><td colspan="5"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		<xsl:for-each select="join">
-			<tr>
-			<td><font color="green"><xsl:value-of select="@id"/></font></td>
-			<td><xsl:value-of select="@table"/></td>
-			<td><xsl:value-of select="@condition"/></td>
-			<td><xsl:value-of select="@auto-include"/></td>
-			<td><xsl:value-of select="@weight"/></td>
-			</tr>
-			<tr><td colspan="5"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		</xsl:for-each>
-	</table>
-
-	<h1>Selects</h1>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>ID</th>
-			<th>Caption</th>
-			<th>Items</th>
-			<th>Distinct</th>
-		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		<xsl:for-each select="select">
-			<tr valign="top">
-			<td><font color="green"><xsl:value-of select="@id"/></font></td>
-			<td><font color="blue"><xsl:value-of select="@caption"/></font></td>
-			<td><xsl:apply-templates select="." mode="detail"/></td>
-			<td><xsl:value-of select="@distinct"/></td>
-			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		</xsl:for-each>
-	</table>
-
-	<h1>Select Dialogs</h1>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>Name</th>
-			<th>Heading</th>
-			<th>Select</th>
-			<td></td>
-		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		<xsl:for-each select="select-dialog">
-			<tr valign="top">
-			<td><font color="green"><xsl:value-of select="@name"/></font></td>
-			<td><font color="blue"><xsl:value-of select="@heading"/></font></td>
-			<td>
-				<xsl:choose>
-					<xsl:when test="select">
-						<xsl:apply-templates select="select" mode="detail"/>
-					</xsl:when>
-					<xsl:otherwise>
-					</xsl:otherwise>
-				</xsl:choose>
-			</td>
-			<td><a target="ace-query-defn-test"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/test/query-defn-dlg/', ../@id, '/', @name)"/></xsl:attribute>Test</a></td>
-			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		</xsl:for-each>
-	</table>
-	</td></tr>
-	</table>
-</xsl:template>
-
-<xsl:template match="select" mode="detail">
-	<xsl:for-each select="display">
-		Display <b><xsl:value-of select="@field"/></b><br/>
-	</xsl:for-each>
-	<xsl:for-each select="condition">
-		Condition 
-		<b>
-		<xsl:value-of select="@field"/>&#160;
-		<xsl:value-of select="@comparison"/>&#160;
-		<xsl:value-of select="@value"/>&#160;
-		<xsl:value-of select="@connector"/>
-		</b><br/>
-	</xsl:for-each>
-	<xsl:for-each select="where-expr">
-		<xsl:value-of select="@value"/>&#160;
-		<xsl:value-of select="@connector"/>
-	</xsl:for-each>
-	<xsl:for-each select="order-by">
-		Order-by <b><xsl:value-of select="@field"/></b><br/>
-	</xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>

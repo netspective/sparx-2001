@@ -24,12 +24,12 @@
 				<div class="content_head">Dialogs</div>
 				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
 				<tr class="data_table_header">
+					<th class="data_table">Actions</th>
 					<th class="data_table">ID</th>
 					<th class="data_table">Heading</th>
-					<th class="data_table">Package</th>
-					<th class="data_table">Name</th>
 					<th class="data_table" title="Retain Request Parameters">Retain</th>
 					<th class="data_table">Fields</th>
+					<th class="data_table">Tasks</th>
 				</tr>
 				<xsl:apply-templates select="dialogs/dialog" mode="toc">
 					<xsl:sort select="@qualified-name"/>
@@ -94,12 +94,22 @@
 
 <xsl:template match="dialog" mode="toc">
 	<tr class="data_table">
-		<td class="data_table"><a class="data_table" title="Click here to review functional specifications"><xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/describe/',@qualified-name)"/></xsl:attribute><xsl:value-of select="@qualified-name"/></a></td>
+		<td class="data_table">
+			<a title="Click here to see dialog sample">
+				<xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/test/',@qualified-name)"/></xsl:attribute>
+				<xsl:attribute name="target"><xsl:value-of select="concat('dialog.', @qualified-name)"/></xsl:attribute>
+				<img border="0">
+					<xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/exec_dialog.gif</xsl:attribute>
+				</img>
+			</a>
+			<img border="0"><xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/spacer.gif</xsl:attribute></img>
+			<a title="Click here to review functional specifications"><xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/describe/',@qualified-name)"/></xsl:attribute><img border="0"><xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/describe_dialog.gif</xsl:attribute></img></a>
+		</td>
+		<td class="data_table"><b><a class="data_table" title="Click here to review functional specifications"><xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/describe/',@qualified-name)"/></xsl:attribute><xsl:value-of select="@qualified-name"/></a></b></td>
 		<td class="data_table"><font color="green"><xsl:value-of select="@heading"/></font></td>
-		<td class="data_table"><xsl:value-of select="@package"/></td>
-		<td class="data_table"><a class="data_table" title="Click here to see dialog sample" target="ace-dialog-test"><xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/test/',@qualified-name)"/></xsl:attribute><xsl:value-of select="@name"/></a></td>
 		<td class="data_table"><font color="red"><xsl:value-of select="@retain-params"/><xsl:if test="not(@retain-params)">&#160;</xsl:if></font></td>
 		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(*)"/></font></td>
+		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(execute-tasks/*)"/></font></td>
 	</tr>
 </xsl:template>
 
@@ -152,7 +162,10 @@
 <xsl:template match="dialog" mode="detail">
 	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
 	<tr class="heading">
-		<td class="heading"><font color="black">Dialog</font>&#160;<xsl:value-of select="@qualified-name"/></td>
+		<td class="heading">
+			<img border="0"><xsl:attribute name="src"><xsl:value-of select="$framework.ace.images-root-url"/>/icons/describe_dialog.gif</xsl:attribute></img>
+			&#160;<font color="navy">Dialog</font>&#160;<xsl:value-of select="@qualified-name"/>
+		</td>
 		<td class="page_menu" align="right">
 			Dialogs:
 			<select onchange="window.location.href = this.options[this.selectedIndex].value">
