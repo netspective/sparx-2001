@@ -46,8 +46,15 @@
 						<th>Package</th>
 						<th>Name</th>
 						<th>Parameters</th>
+						<th title="Number of times query was executed">Executed</th>
+						<th title="Average time (in milliseconds) query took to run">Avg</th>
+						<th title="Maximum time (in milliseconds) query took to run">Max</th>
+						<th title="Average time (in milliseconds) query took to connect to db">Conn</th>
+						<th title="Average time (in milliseconds) query took to bind parameters">Bind</th>
+						<th title="Average time (in milliseconds) query took to execute SQL">SQL</th>
+						<th title="Number of times query failed to run">Failed</th>
 					</tr>
-					<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+					<tr><td colspan="11"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 					<xsl:apply-templates select="sql-statements/statement" mode="toc">
 						<xsl:sort select="@qualified-name"/>
 					</xsl:apply-templates>
@@ -119,8 +126,15 @@
 			</xsl:if>
 			</font>
 		</td>		
+		<td align="right"><xsl:value-of select="@stat-total-executions"/></td>
+		<td align="right"><xsl:value-of select="@stat-total-avg-time"/></td>
+		<td align="right"><xsl:value-of select="@stat-total-max-time"/></td>
+		<td align="right"><xsl:value-of select="@stat-connection-avg-time"/></td>
+		<td align="right"><xsl:value-of select="@stat-bind-params-avg-time"/></td>
+		<td align="right"><xsl:value-of select="@stat-sql-exec-avg-time"/></td>
+		<td align="right"><xsl:value-of select="@stat-total-failed"/></td>
 	</tr>
-	<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="11"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 </xsl:template>
 
 <xsl:template match="statement" mode="toc-select">
@@ -180,8 +194,26 @@
 	</xsl:for-each>
 	</ol>
 	</xsl:if>
-	</td></tr>
+	<h1>Execution Log</h1>
+	<table>
+		<tr>
+			<td>Conn</td>
+			<td>Bind</td>
+			<td>SQL</td>
+			<td>Total</td>
+		</tr>
+		<xsl:for-each select="exec-log/*">
+		<tr>
+			<td align="right"><xsl:value-of select="@conn-time"/></td>
+			<td align="right"><xsl:value-of select="@bind-time"/></td>
+			<td align="right"><xsl:value-of select="@sql-time"/></td>
+			<td align="right"><xsl:value-of select="@total-time"/></td>
+		</tr>
+		</xsl:for-each>
 	</table>
+
+	</td></tr>
+	</table>	
 </xsl:template>
 
 <xsl:template match="query-defn" mode="toc">

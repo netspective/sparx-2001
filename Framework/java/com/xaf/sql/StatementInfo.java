@@ -30,6 +30,7 @@ public class StatementInfo
 	private StatementParameter[] parameters;
 	private Element defaultReportElem;
 	private Map reportElems;
+	private StatementExecutionLog execLog = new StatementExecutionLog();
 
 	public StatementInfo()
 	{
@@ -43,6 +44,8 @@ public class StatementInfo
 	public final Element getReportElement(String name) { return name == null ? defaultReportElem : (Element) reportElems.get(name); }
 	public final String getDataSourceId() { return dataSourceId; }
     public final StatementParameter[] getParams() { return parameters; }
+	public final StatementExecutionLog getExecutionLog() { return execLog; }
+	public final StatementExecutionLogEntry createNewExecLogEntry(Object source) { return execLog.createNewEntry(source, this); }
 
     public final String getSql(ValueContext vc)
 	{

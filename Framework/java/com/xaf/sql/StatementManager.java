@@ -51,16 +51,19 @@ public class StatementManager extends XmlSource
 	{
 		protected ResultSet rs;
 		protected StatementInfo si;
+		protected StatementExecutionLogEntry logEntry;
 
-		ResultInfo(StatementInfo si, ResultSet rs)
+		ResultInfo(StatementInfo si, ResultSet rs, StatementExecutionLogEntry logEntry)
 		{
 			this.si = si;
 			this.rs = rs;
+			this.logEntry = logEntry;
 		}
 
 		public ResultSet getResultSet() { return rs; }
 		public String getSQL(ValueContext vc) { return si.getSql(vc); }
 		public Element getStmtElement() { return si.getStatementElement(); }
+		public StatementExecutionLogEntry getLogEntry() { return logEntry; }
 	}
 
 	private String defaultStyleSheet = null;
@@ -103,6 +106,58 @@ public class StatementManager extends XmlSource
 	{
 		reload();
 		return (QueryDefinition) queryDefns.get(name);
+	}
+
+	public void updateExecutionStatistics()
+	{
+		for(Iterator i = statements.values().iterator(); i.hasNext(); )
+		{
+			StatementInfo si = (StatementInfo) i.next();
+			StatementExecutionLog execLog = si.getExecutionLog();
+			StatementExecutionLog.StatementExecutionStatistics stats = execLog.getStatistics();
+			Element elem = si.getStatementElement();
+
+			elem.setAttribute("stat-total-executions", Long.toString(stats.totalExecutions));
+			elem.setAttribute("stat-total-failed", Long.toString(stats.totalFailed));
+			elem.setAttribute("stat-total-avg-time", Long.toString(stats.averageTotalExecTime));
+			elem.setAttribute("stat-total-max-time", Long.toString(stats.maxTotalExecTime));
+
+			elem.setAttribute("stat-connection-avg-time", Long.toString(stats.averageConnectionEstablishTime));
+			elem.setAttribute("stat-connection-max-time", Long.toString(stats.maxConnectionEstablishTime));
+
+			elem.setAttribute("stat-bind-params-avg-time", Long.toString(stats.averageBindParamsTime));
+			elem.setAttribute("stat-bind-params-max-time", Long.toString(stats.maxBindParamsTime));
+
+			elem.setAttribute("stat-sql-exec-avg-time", Long.toString(stats.averageSqlExecTime));
+			elem.setAttribute("stat-sql-exec-max-time", Long.toString(stats.maxSqlExecTime));
+
+			NodeList execLogsNodes = elem.getElementsByTagName("exec-log");
+			if(execLogsNodes.getLength() > 0)
+			{
+				Node execLogElem = execLogsNodes.item(0);
+				execLogElem.getParentNode().removeChild(execLogElem);
+			}
+
+			Element execLogElem = xmlDoc.createElement("exec-log");
+			elem.appendChild(execLogElem);
+			for(Iterator l = execLog.iterator(); l.hasNext(); )
+			{
+				StatementExecutionLogEntry entry = (StatementExecutionLogEntry) l.next();
+				Element execLogEntryElem = xmlDoc.createElement("entry");
+				execLogElem.appendChild(execLogEntryElem);
+
+				if(! entry.wasSuccessful())
+				{
+					execLogEntryElem.setAttribute("total-time", "FAILED");
+					continue;
+				}
+
+				execLogEntryElem.setAttribute("total-time", Long.toString(entry.getTotalExecutionTime()));
+				execLogEntryElem.setAttribute("conn-time", Long.toString(entry.getConnectionEstablishTime()));
+				execLogEntryElem.setAttribute("bind-time", Long.toString(entry.getBindParamsBindTime()));
+				execLogEntryElem.setAttribute("sql-time", Long.toString(entry.getSqlExecTime()));
+			}
+		}
 	}
 
 	public void catalogNodes()
@@ -219,9 +274,15 @@ public class StatementManager extends XmlSource
 		if(dataSourceId == null)
 			dataSourceId = si.getDataSourceId();
 
+		StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(null);
+
+		logEntry.registerGetConnectionBegin();
 		Connection conn = dc.getConnection(vc, dataSourceId);
+		logEntry.registerGetConnectionEnd(conn);
+
         PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
 
+		logEntry.registerBindParamsBegin();
         if(params != null)
         {
             for(int i = 0; i < params.length; i++)
@@ -229,10 +290,16 @@ public class StatementManager extends XmlSource
         }
         else
             si.applyParams(dc, vc, stmt);
+		logEntry.registerBindParamsEnd();
 
+		logEntry.registerExecSqlBegin();
         if(stmt.execute())
-            return new ResultInfo(si, stmt.getResultSet());
+		{
+			logEntry.registerExecSqlEndSuccess();
+            return new ResultInfo(si, stmt.getResultSet(), logEntry);
+		}
 
+		logEntry.registerExecSqlEndFailed();
 		return null;
 	}
 
