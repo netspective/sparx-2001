@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.3 2002-02-10 16:31:23 snshah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.4 2002-03-23 21:43:36 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -61,6 +61,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -88,10 +89,13 @@ import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.ResultInfo;
+import com.netspective.sparx.xaf.sql.ResultSetScrollState;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.QueryDefnSelectsListValue;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+
+import com.caucho.server.http.HttpRequest;
 
 public class QueryBuilderDialog extends Dialog
 {
@@ -401,18 +405,25 @@ public class QueryBuilderDialog extends Dialog
         dc.setValue("sort_order", resortBy);
     }
 
-
     public void executeHtml(Writer writer, DialogContext dc, int destination) throws IOException
     {
         String transactionId = dc.getTransactionId();
         HttpSession session = dc.getSession();
+        HttpRequest request = (HttpRequest) dc.getRequest();
         QuerySelectScrollState state = (QuerySelectScrollState) session.getAttribute(transactionId);
 
+        boolean keepScrollState = true;
         int pageSize = -1;
         if(destination == ReportDestination.DEST_BROWSER_SINGLE_PAGE)
+        {
             pageSize = MAX_ROWS_IN_SINGLE_BROWSER_PAGE;
+            keepScrollState = false;
+        }
         else if(destination == ReportDestination.DEST_FILE_DOWNLOAD || destination == ReportDestination.DEST_FILE_EMAIL)
+        {
             pageSize = Integer.MAX_VALUE;
+            keepScrollState = false;
+        }
 
         try
         {
@@ -445,11 +456,14 @@ public class QueryBuilderDialog extends Dialog
                 String rowsPerPageStr = dc.getValue("rows_per_page");
                 if(rowsPerPageStr == null || rowsPerPageStr.length() == 0)
                     rowsPerPageStr = dc.getValue("output.rows_per_page");
-                state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize);
+                state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize, ResultSetScrollState.SCROLLTYPE_USERESULTSET);
                 if(state.isValid())
                 {
-                    session.setAttribute(transactionId, state);
-                    session.setAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME, state);
+                    if(keepScrollState)
+                    {
+                        session.setAttribute(transactionId, state);
+                        session.setAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME, state);
+                    }
                 }
                 else
                 {
@@ -457,15 +471,17 @@ public class QueryBuilderDialog extends Dialog
                     return;
                 }
             }
-            dc.getRequest().setAttribute(transactionId + "_state", state);
 
-            if(dc.getRequest().getParameter("rs_nav_next") != null)
+            String stateReqAttrName = transactionId + "_state";
+            request.setAttribute(stateReqAttrName, state);
+
+            if(request.getParameter("rs_nav_next") != null)
                 state.setPageDelta(1);
-            else if(dc.getRequest().getParameter("rs_nav_prev") != null)
+            else if(request.getParameter("rs_nav_prev") != null)
                 state.setPageDelta(-1);
-            else if(dc.getRequest().getParameter("rs_nav_last") != null)
+            else if(request.getParameter("rs_nav_last") != null)
                 state.setPage(state.getTotalPages());
-            else if(dc.getRequest().getParameter("rs_nav_first") != null)
+            else if(request.getParameter("rs_nav_first") != null)
                 state.setPage(1);
 
             if(destination == ReportDestination.DEST_BROWSER_MULTI_PAGE || destination == ReportDestination.DEST_BROWSER_SINGLE_PAGE)
@@ -478,6 +494,13 @@ public class QueryBuilderDialog extends Dialog
                 state.produceReport(reportDest.getWriter(), dc);
                 reportDest.getWriter().close();
                 writer.write(reportDest.getUserMessage());
+            }
+
+            if(! keepScrollState)
+            {
+                request.removeAttribute(stateReqAttrName);
+                state.close();
+                state = null;
             }
         }
         catch(Exception e)
@@ -613,6 +636,22 @@ public class QueryBuilderDialog extends Dialog
                 {
                     writer.write(getLoopSeparator());
                     dc.getSkin().renderHtml(writer, dc);
+                }
+                else
+                {
+                    String transactionId = dc.getTransactionId();
+                    HttpSession session = dc.getSession();
+                    session.removeAttribute(transactionId);
+                    session.removeAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+
+                    try
+                    {
+                        state.close();
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new IOException(e.toString());
+                    }
                 }
             }
         }

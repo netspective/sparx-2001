@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LoginDialog.java,v 1.2 2002-02-01 04:02:12 thua Exp $
+ * $Id: LoginDialog.java,v 1.3 2002-03-23 21:43:36 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -344,7 +344,7 @@ public class LoginDialog extends Dialog
         {
             // clean up any connections still held open by query select dialogs
             QuerySelectScrollState activeState = (QuerySelectScrollState) session.getAttribute(QueryBuilderDialog.QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
-            if(activeState != null && !flagIsSet(QueryBuilderDialog.QBDLGFLAG_ALLOW_MULTIPLE_QSSS))
+            if(activeState != null)
             {
                 activeState.close();
                 session.removeAttribute(QueryBuilderDialog.QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetScrollState.java,v 1.3 2002-02-07 01:09:10 snshah Exp $
+ * $Id: ResultSetScrollState.java,v 1.4 2002-03-23 21:43:36 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -60,9 +60,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 public class ResultSetScrollState
 {
+    public final static int SCROLLTYPE_USERESULTSET  = 0;
+    public final static int SCROLLTYPE_NONSCROLLABLE = 1;
+
+    private Date lastAccessed;
     private ResultInfo resultInfo;
     private boolean resultSetScrollable;
     private int rowsPerPage;         // used for both scrollable and non-scrollable result sets
@@ -74,13 +79,22 @@ public class ResultSetScrollState
     private int rowsProcessed;       // used only for non-scrollable
     private boolean reachedEndOnce;  // used only for non-scrollable
 
-    public ResultSetScrollState(ResultInfo ri, int rowsPerPage) throws SQLException
+    public ResultSetScrollState(ResultInfo ri, int rowsPerPage, int scrollType) throws SQLException
     {
         ResultSet rs = ri.getResultSet();
 
+        switch(scrollType)
+        {
+            case SCROLLTYPE_USERESULTSET:
+                this.resultSetScrollable = rs != null ? (rs.getType() != ResultSet.TYPE_FORWARD_ONLY) : false;
+                break;
+
+            case SCROLLTYPE_NONSCROLLABLE:
+                this.resultSetScrollable = false;
+        }
+
         this.resultInfo = ri;
         this.rowsPerPage = rowsPerPage;
-        this.resultSetScrollable = rs != null ? (rs.getType() != ResultSet.TYPE_FORWARD_ONLY) : false;
         this.totalRows = -1;
         this.totalPages = -1;
         this.activePage = 1;
@@ -100,6 +114,28 @@ public class ResultSetScrollState
 
             rs.first();
         }
+
+        recordActivity();
+    }
+
+    public final Date getLastAccessed()
+    {
+        return lastAccessed;
+    }
+
+    public final void recordActivity()
+    {
+        lastAccessed = new Date();
+    }
+
+    /**
+     * Return true if this scroll state was accessed within the timeout period, false if "inactive" based on timeout.
+     * @param timeout number of milliseconds to use as timeout value
+     */
+    public final boolean isActive(int timeout)
+    {
+        Date current = new Date();
+        return (current.getTime() - lastAccessed.getTime()) < timeout;
     }
 
     public final ResultSet getResultSet()
@@ -164,6 +200,8 @@ public class ResultSetScrollState
 
     public void scrollToActivePage() throws SQLException
     {
+        recordActivity();
+
         activePageRowStart = ((activePage - 1) * rowsPerPage) + 1;
         ResultSet resultSet = resultInfo.getResultSet();
         resultSet.absolute(activePageRowStart);
@@ -172,6 +210,8 @@ public class ResultSetScrollState
 
     public void scrollToActivePage(ResultInfo ri) throws SQLException
     {
+        recordActivity();
+
         if(resultSetScrollable)
             throw new RuntimeException("No need to call scrollToActivePage(ResultSet rs) for scrollable cursors. Call scrollToActivePage() instead.");
 
@@ -195,6 +235,8 @@ public class ResultSetScrollState
 
     public void setPage(int newPage)
     {
+        recordActivity();
+
         activePage = newPage;
         if(activePage < 1)
             activePage = 1;

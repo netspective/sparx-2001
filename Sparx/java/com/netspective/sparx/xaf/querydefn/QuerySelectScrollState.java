@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
+ * $Id: QuerySelectScrollState.java,v 1.3 2002-03-23 21:43:36 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -93,9 +93,9 @@ public class QuerySelectScrollState extends ResultSetScrollState
     private QueryDefinition.QueryFieldSortInfo sortFieldInfo;
     private int primaryOrderByColIndex = -1;
 
-    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage) throws NamingException, SQLException
+    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage, int scrollType) throws NamingException, SQLException
     {
-        super(select.execute(dc, vc), rowsPerPage);
+        super(select.execute(dc, vc), rowsPerPage, scrollType);
 
         try
         {
