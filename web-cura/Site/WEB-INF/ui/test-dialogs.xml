@@ -11,7 +11,7 @@
 			<field.email name="email_field" caption="Email"/>
 			<director submit-caption="Submit"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_01_B" heading="Test Numeric Fields" retain-params="*">
 			<field.separator heading="Numeric Fields"/>
 			<field.integer name="integer_field" caption="Integer Field" hint="Integer field"/>
@@ -23,7 +23,7 @@
 			<field.ssn name="ssn_field" caption="SSN" strip-dashes="yes" default="999999999"/>
 			<director submit-caption="Submit"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_02" heading="Test Memo, Date/Time, Boolean Fields" retain-params="*">
 			<field.separator name="Memo" heading="Memo"/>
 			<field.memo name="memo_field_01" caption="Memo Field" default="A fox jumped over the fence" max-length="10" hint="Max length is 5 characters"/>
@@ -41,21 +41,21 @@
 			<field.boolean name="bool_field_combo" caption="Boolean Field (Combo)" style="combo"/>
 			<director submit-caption="Submit"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_03" heading="Test Select Fields" retain-params="*">
 			<field.separator heading="Select Fields"/>
-			<field.select name="sel_field_combo" caption="Select Field (Combo)" style="combo" choices="Choice 1=A'S;Choice 2=B;Choice 3=C" 
+			<field.select name="sel_field_combo" caption="Select Field (Combo)" style="combo" choices="Choice 1=A'S;Choice 2=B;Choice 3=C"
 				default="A'S" hidden="yes" prepend-blank="yes" append-blank="yes"/>
 			<field.select name="sel_field_radio" caption="Select Field (Radio)" style="radio" required="yes" choices="Choice 1=A;Choice 2=B;Choice 3=C"/>
 			<field.select name="sel_field_list" caption="Select Field (List)" style="list" size="5" default="A" choices="Choice 1=A;Choice 2=B;Choice 3=C"/>
-			<field.select name="sel_field_multilist" caption="Select Field (MultiList)" style="multilist" size="5" default="B" 
+			<field.select name="sel_field_multilist" caption="Select Field (MultiList)" style="multilist" size="5" default="B"
 				choices="Choice 1=A;Choice 2=B;Choice 3=C"/>
 			<field.select name="sel_field_multicheck" caption="Select Field (MultiCheck)" style="multicheck" choices="Choice 1=A;Choice 2=B;Choice 3=C"/>
-			<field.select name="sel_field_multidual" caption="Select Field (MultiDual)" style="multidual" choices="Choice 1=A;Choice 2=B;Choice 3=C" 
+			<field.select name="sel_field_multidual" caption="Select Field (MultiDual)" style="multidual" choices="Choice 1=A;Choice 2=B;Choice 3=C"
 				caption-left="Left Caption" caption-right="Right Caption" multi-width="100"/>
 			<director submit-caption="Submit"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_04" heading="Test Report Field" loop="yes" retain-params="*">
 			<field.report name="report_field">
 				<statement name="list">
@@ -69,7 +69,7 @@
 				</statement>
 			</field.report>
 		</dialog>
-		
+
 		<dialog name="DialogTest_05" heading="Test Grid and Composite" retain-params="*">
 			<field.separator heading="Column 1"/>
 			<field.grid name="grid_field" col-break="after">
@@ -83,7 +83,7 @@
 			<field.separator heading="Column 2"/>
 			<field.static name="static_field_02" default="Static Field after column break"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_06" heading="Test Conditionals" loop="yes">
 			<field.select name="sel_field_list" caption="Select Field (Combo)" style="combo" size="5" choices="-;Choice 1=A;Choice 2=B;Choice 3=C"/>
 			<field.text name="static_field" default="Here I am!">
@@ -94,20 +94,20 @@
 				<conditional action="display" partner="checkbox_field" js-expr="control.checked == true"/>
 			</field.static>
 		</dialog>
-		
+
 		<dialog name="DialogTest_07" heading="Test Popup" loop="yes">
 			<field.text name="sel_field_list" caption="Select Field" style="combo" choices="-;Choice 1=A;Choice 2=B;Choice 3=C"/>
 			<field.text name="text_field" caption="Text Field" read-only="browser" default="None at this moment" hint="Click on the icon to select a value">
 				<popup action="/test/testPopup.html" fill="text_field"/>
 			</field.text>
 		</dialog>
-		
+
 		<dialog name="DialogTest_08" heading="Test Dialog-SQL" retain-params="*">
 			<field.ssn name="ssn_field" caption="SSN"/>
 			<field.date name="date_field" caption="Date" format="MM-dd-yyyy" default="today"/>
 			<field.phone name="phone_field" caption="Phone" strip-brackets="yes" format-type="bracket"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_09" heading="Test Hidden Fields" retain-params="*">
 			<field.static name="static_field" caption="Static Field" default="Static Field's entry"/>
 			<field.text name="text_field" caption="Text Field" default="Text Field's entry"/>
@@ -115,7 +115,7 @@
 			<field.text name="text_field_hidden" caption="Text Field Hidden" hidden="yes" default="Hidden Text Field's entry"/>
 			<field.select name="select_field_hidden" hidden="yes" style="combo" choices="Choice 1=Choice 1's hidden value;Choice 2=Choice 2's hidden value;Choice 3=Choice 3's hidden value" default="Choice 1's hidden value" prepend-blank="yes" append-blank="yes"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_10" heading="Test Data Command and Conditionals" loop="yes">
 			<field.boolean name="checkbox_field" caption="Checkbox" style="checkalone"/>
 			<field.static name="static_field2" default="Checkbox checked!">
@@ -132,7 +132,7 @@
 				<conditional action="apply-flag" flag="invisible" data-cmd="edit"/>
 			</field.static>
 		</dialog>
-		
+
 		<dialog name="DialogTest_11" heading="Test Select Fields w/ seperator" retain-params="*">
 			<field.separator heading="Select Fields"/>
 			<field.select name="sel_field_combo" caption="Select Field (Combo)" style="combo" choices="Choice 1=A'S;Choice 2=B;Choice 3=C" default="A'S" hidden="no" prepend-blank="yes" append-blank="yes"/>
@@ -143,7 +143,7 @@
 			<field.select name="sel_field_multidual" caption="Select Field (MultiDual)" style="multidual" choices="Choice 1=A;Choice 2=B;Choice 3=C" caption-left="Left Caption" caption-right="Right Caption" multi-width="100"/>
 			<director submit-caption="Submit"/>
 		</dialog>
-		
+
 		<dialog name="DialogTest_12" heading="Test Custom Javascript" retain-params="*">
 			<client-js href="create-app-url:/resources/scripts/eimo.js"/>
 			<field.float name="float_field" caption="Float">
@@ -163,7 +163,7 @@
 				<client-js event="value-changed" type="override" js-expr="return true;"/>
 			</field.ssn>
 		</dialog>
-		
+
 		<dialog name="DialogTest_13" heading="Test Request, Request Attribute , and Form Value Sources" retain-params="*">
 			<field.text name="text_field" caption="Text Field (formOrRequestAttr)"/>
 		</dialog>
@@ -174,6 +174,26 @@
 			<field.select name="select_field_02" caption="Radio Field showing Query Rows" style="radio" choices="query:org.classification" hint="The parameters are specified inside the SQL XML"/>
 			<field.select name="select_field_03" caption="Checkbox Field showing Query Rows" style="multicheck" choices="query:org.classification"/>
 			<field.select name="select_field_04" caption="Listbox Field showing Query Rows" style="multilist" choices="query:org.classification"/>
+		</dialog>
+
+		<dialog name="DialogTest_15" heading="Test Pending Data" retain-params="*">
+			<field.separator heading="Text Fields"/>
+			<field.text name="text_field_hidden" hidden="yes" default="request:id"/>
+			<field.static name="static_field" caption="Test " default="Static Field's Value"/>
+			<field.text name="text_field_required" caption="Text Required" hint="Text field required" required="yes"/>
+			<field.text name="text_field" caption="Text" hint="Text field optional" default="Sponsor's name" max-length="5" uppercase="yes"/>
+			<field.text name="text_field_email" caption="Text Email" hint="Text field with regular expression checking" validate-pattern="/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/" validate-msg="Invalid email format."/>
+			<field.email name="email_field" caption="Email"/>
+			<field.separator heading="Numeric Fields"/>
+			<field.integer name="integer_field" caption="Integer Field" hint="Integer field"/>
+			<field.float name="float_field" caption="Float Field" hint="Float field"/>
+			<field.currency name="currency_field" caption="Currency" decimal="2" type="US" default="123.45" negative="after"/>
+			<field.phone name="phone_field1" caption="Phone Field (dash format)" strip-brackets="yes" format-type="dash" hint="Phone field" default="8001234567"/>
+			<field.phone name="phone_field2" caption="Phone Field (bracket format)" strip-brackets="yes" format-type="bracket" hint="Phone field" default="8001234567"/>
+			<field.zip name="zip_field" caption="Zip Field" hint="Zip code field" default="12345"/>
+			<field.ssn name="ssn_field" caption="SSN" strip-dashes="yes" default="999999999"/>
+
+			<director submit-caption="Submit" pending-caption=" Pending "/>
 		</dialog>
 	</dialogs>
 </xaf>
