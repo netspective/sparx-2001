@@ -58,7 +58,7 @@ function Dialog_finalizeContents()
 {
 	var dialogFields = this.fields;
 	for(var i = 0; i < dialogFields.length; i++)
-		dialogFields[i].finalizeContents();
+		dialogFields[i].finalizeContents(this);
 }
 
 function Dialog_isValid()
@@ -163,14 +163,14 @@ function DialogField_getControl()
 	return document.all.item(this.controlId);
 }
 
-function DialogField_finalizeContents()
+function DialogField_finalizeContents(dialog)
 {
 
 	if(this.style != null && this.style == SELECTSTYLE_MULTIDUAL)
 		this.requiresPreSubmit = true;
 		
 	if(this.dependentConditions.length > 0)
-		this.evaluateConditionals(this);
+		this.evaluateConditionals(dialog);
 
 	if((this.flags & FLDFLAG_INITIAL_FOCUS) != 0)
 	{
