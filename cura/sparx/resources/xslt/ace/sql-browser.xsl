@@ -54,7 +54,7 @@
 						</tr>
 					</xsl:for-each>
 				</table>
-						
+
 				<div class="content_head">Source Files</div>
 				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
 				<tr class="data_table_header">
@@ -121,7 +121,7 @@
 			<font color="red">
 			<xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="$pcount"/></xsl:call-template>
 			</font>
-		</td>		
+		</td>
 		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-executions"/></xsl:call-template></td>
 		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-avg-time"/></xsl:call-template></td>
 		<td class="data_table" align="right"><xsl:call-template name="blank-if-zero"><xsl:with-param name="value" select="@stat-total-max-time"/></xsl:call-template></td>
@@ -135,7 +135,7 @@
 <xsl:template match="statement" mode="toc-select">
 	<option>
 		<xsl:if test="@qualified-name = $detail-name"><xsl:attribute name="selected">yes</xsl:attribute></xsl:if>
-		<xsl:attribute name="value"><xsl:value-of select="concat($root-url,'/','statement','/',@qualified-name)"/>
+		<xsl:attribute name="value"><xsl:value-of select="concat($root-url,'/describe/',@qualified-name)"/>
 		</xsl:attribute><xsl:value-of select="@qualified-name"/>
 	</option>
 </xsl:template>
@@ -158,15 +158,12 @@
 	</tr>
 	<tr class="heading_rule"><td height="1" colspan="2"></td></tr>
 	<tr><td colspan="2">
-	<h1>Statement Attributes</h1>
-	<table>
-		<xsl:for-each select="@*">
-			<tr>
-				<td class="param_name"><xsl:value-of select="name()"/>:</td>
-				<td class="param_value"><xsl:value-of select="."/></td>
-			</tr>
-		</xsl:for-each>
-	</table>
+    <h1>Test this SQL Statement</h1>
+    <ul>
+        <li>by <a href="{concat($root-url,'/test/',@qualified-name)}" target="{concat('statement.', @qualified-name)}">supplying parameters</a> in a dialog with pageable results</li>
+        <li>by using parameters supplied in the XML and <a href="{concat($root-url,'/test/',@qualified-name,'?ui=no&amp;pageable=yes')}" target="{concat('statement.', @qualified-name)}">with</a> pageable results</li>
+        <li>by using parameters supplied in the XML but <a href="{concat($root-url,'/test/',@qualified-name,'?ui=no')}" target="{concat('statement.', @qualified-name)}">without</a> pageable results</li>
+    </ul>
 	<h1>SQL</h1>
 	<pre>
 		<xsl:value-of select="text()"/>
@@ -177,9 +174,9 @@
 	<xsl:for-each select="params/param">
 		<li>
 			<xsl:if test="@name">
-			<b><xsl:value-of select="@name"/></b>: 
+			<b><xsl:value-of select="@name"/></b>:
 			</xsl:if>
-			<xsl:value-of select="@value"/> 
+			<xsl:value-of select="@value"/>
 			<xsl:if test="@type">
 			[<xsl:value-of select="@type"/> ]
 			</xsl:if>
@@ -187,30 +184,47 @@
 	</xsl:for-each>
 	</ol>
 	</xsl:if>
-	<h1>Execution Log</h1>
-	<table>
-		<tr>
-			<th>Source</th>
-			<th>Run</th>
-			<th>Conn</th>
-			<th>Bind</th>
-			<th>SQL</th>
-			<th>Total</th>
-		</tr>
-		<xsl:for-each select="exec-log/*">
-		<tr>
-			<td><font color="green"><xsl:value-of select="@src"/></font></td>
-			<td><font color="red"><xsl:value-of select="@init-date"/></font></td>
-			<td align="right"><xsl:value-of select="@conn-time"/></td>
-			<td align="right"><xsl:value-of select="@bind-time"/></td>
-			<td align="right"><xsl:value-of select="@sql-time"/></td>
-			<td align="right"><xsl:value-of select="@total-time"/></td>
-		</tr>
-		</xsl:for-each>
-	</table>
-
+    <table>
+        <tr valign="top">
+            <td>
+                <h1>Execution Log</h1>
+                <table>
+                    <tr>
+                        <th>Source</th>
+                        <th>Run</th>
+                        <th>Conn</th>
+                        <th>Bind</th>
+                        <th>SQL</th>
+                        <th>Total</th>
+                    </tr>
+                    <xsl:for-each select="exec-log/*">
+                    <tr>
+                        <td><font color="green"><xsl:value-of select="@src"/></font></td>
+                        <td><font color="red"><xsl:value-of select="@init-date"/></font></td>
+                        <td align="right"><xsl:value-of select="@conn-time"/></td>
+                        <td align="right"><xsl:value-of select="@bind-time"/></td>
+                        <td align="right"><xsl:value-of select="@sql-time"/></td>
+                        <td align="right"><xsl:value-of select="@total-time"/></td>
+                    </tr>
+                    </xsl:for-each>
+                </table>
+            </td>
+            <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
+            <td bgcolor="#EEEEEE">
+                <h1>Statement Attributes</h1>
+                <table>
+                    <xsl:for-each select="@*">
+                        <tr>
+                            <td class="param_name"><xsl:value-of select="name()"/>:</td>
+                            <td class="param_value"><xsl:value-of select="."/></td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+            </td>
+        </tr>
+    </table>
 	</td></tr>
-	</table>	
+	</table>
 </xsl:template>
 
 </xsl:stylesheet>
