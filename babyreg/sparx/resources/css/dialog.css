@@ -1,0 +1,13 @@
+.required 
+{
+	font-family: tahoma,arial;
+	font-size: 8pt;
+	background-image: url(/web-babyreg/sparx/resources/images/dialog/required-field.gif);
+	background-position: top right; 
+	background-repeat: no-repeat; 
+}
+.dialog_control
+{
+	font-family: tahoma,arial;
+	font-size: 8pt;
+}

@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<xaf>
+	<!-- when no <param> tags provided, params will be passed in manually in Java code -->
+	<sql-statements package="Gift">
+		<statement name="getGiftPicture">
+				select name, caption
+				from gift, category
+				where id = ?
+                AND category.id = gift.category_id
+		</statement>
+
+		<statement name="YourGiftList">
+			select 'Remove' as remove, gift.name, category.caption, gift.id, status.caption, gift.price, gift.description, gift.picture_path, gift.url
+			from gift, category, status, user
+			where status.id = 1
+			AND gift.category_id = category.id
+			AND user.id = gift.user_id
+			AND user.id = ?
+			ORDER BY category.caption
+			<params>
+				<param value="session:person-id"/>
+			</params>
+			<report heading="Your Gift List">
+				<column index="0" url="create-app-url:/EditMyGiftList.jsp?id=${3}&amp;data_cmd=delete&amp;user_id=${session:person-id}" heading="Remove from List"/>
+				<column index="1" heading="Gift Name"/>
+				<column index="2" heading="Category"/>
+				<column index="3" display="no"/>
+				<column index="4" heading="Status"/>
+				<column index="5" heading="Estimated Price"/>
+				<column index="6" heading="Description" width="35"/>
+				<column index="7" heading="Picture" output="&lt;img src='/babyreg/resources/images/${.}.jpg'&gt;"/>
+				<column index="8" display="no"/>
+			</report>
+		</statement>
+
+        <!-- Not used for now because DML equivalent in Dialog -->
+		<statement name="InsertIntoMyGiftList">
+			update gift
+			set user_id = ?, status_id = 1 where id = ?
+			<params>
+				<param value="session:person-id"/>
+				<param value="request:id"/>
+			</params>
+		</statement>
+
+		<statement name="RemoveFromMyGiftList">
+			update gift
+			set user_id = -1, status_id = 2 where id = ?
+			<params>
+				<param value="request:id"/>
+			</params>
+		</statement>
+
+		<statement name="GiftsToPick">
+			select 'Pick' as pick, gift.name, gift.id, category.id, category.caption, status.caption, gift.price, gift.description, gift.picture_path, gift.url
+			from gift, category, status
+			where gift.category_id = category.id
+			AND status.id = gift.status_id
+			AND gift.status_id > 1
+			ORDER BY category.caption
+			<report heading="Pick a Gift">
+				<column index="0" url="create-app-url:/EditMyGiftList.jsp?id=${2}&amp;user_id=${session:person-id}&amp;data_cmd=add&amp;_d_exec=yes" heading="Pick Gift"/>
+				<column index="1" heading="Gift Name"/>
+				<column index="2" display="no" heading="Gift Id"/>
+				<column index="3" display="no" heading="Category Id"/>
+				<column index="4" heading="Category"/>
+				<column index="5" heading="Status"/>
+				<column index="6" heading="Estimated Price" format="$##0.00"/>
+				<column index="7" heading="Description" width="10"/>
+				<column index="8" heading="Picture" output="&lt;img src='/babyreg/resources/images/${.}.jpg'&gt;"/>
+				<column index="9" display="no" heading="URL"/>
+			</report>
+		</statement>
+
+		<statement name="GiftsPicked">
+			select gift.name, gift.id, category.id, category.caption, status.caption, user.first_name, user.last_name, relationship.caption, gift.description, gift.picture_path
+			from gift, category, status, user, relationship
+			where gift.category_id = category.id
+			AND status.id = gift.status_id
+			AND gift.status_id &lt;= 1
+			AND gift.user_id = user.id
+			AND user.relationship_id = relationship.id
+			ORDER BY category.caption
+			<report heading="Gifts Already Picked">
+				<column index="0" heading="Gift Name"/>
+				<column index="1" display="no"/>
+				<column index="2" display="no"/>
+				<column index="3" heading="Category"/>
+				<column index="4" heading="Status"/>
+				<column index="5" heading="Who"/>
+				<column index="6" heading="Picked it"/>
+				<column index="7" heading="Relationship"/>
+				<column index="8" heading="Description"/>
+				<column index="9" heading="Picture" output="&lt;img src='/babyreg/resources/images/${.}.jpg'&gt;"/>
+			</report>
+		</statement>
+
+        <statement name="GiftDetail">
+           select name, category_id, status_id, user_id, begin_age_range as "age_range.begin",
+                   end_age_range "age_range.end", unit_age_range "age_range.unit", price, brand, reference, description, url, picture_path
+            from gift where id=?
+           <params>
+               <param value="request:id"/>
+           </params>
+        </statement>
+
+        <statement name="PickedGiftDetail">
+           select name, category.caption as category, status.caption as status, begin_age_range as "age_range.begin",
+                  end_age_range as "age_range.end", unit_age_range as "age_range.unit", price, brand, description, picture_path
+           from gift, category, status
+           where id=?
+           AND category.id = gift.category_id
+           AND status.id = gift.status_id
+           <params>
+               <param value="request:id"/>
+           </params>
+		</statement>
+
+	</sql-statements>
+    <sql-statements package="User">
+      <statement name="sharedPassword">
+         select first_name
+         from user, relationship
+         where user.relationship_id = relationship.id AND
+         (relationship.caption = 'Mom' OR relationship.caption = 'Dad')
+      </statement>
+      <statement name="UserDetail">
+         select id, first_name, middle_name, last_name, relationship_id, email_addr, phone
+         from user
+         where user.id = ?
+         <params>
+            <param value="request:id"/>
+         </params>
+      </statement>
+      <statement name="user_list">
+				select user.id, 'Edit' as Edit, 'Delete' as Delete, first_name, middle_name, last_name, caption, email_addr, phone
+				from relationship, user
+				where user.relationship_id = relationship.id AND
+				user.id >= 0
+				<report heading="User List">
+				<column index="0" display="no"/>
+				<column index="1" url="create-app-url:/AdminEditUser.jsp?id=${0}&amp;data_cmd=edit"/>
+				<column index="2" url="create-app-url:/AdminEditUser.jsp?id=${0}&amp;data_cmd=delete"/>
+				<column index="3" heading="First Name"/>
+				<column index="4" heading="Middle Name"/>
+				<column index="5" heading="Last Name"/>
+				<column index="6" heading="Relationship"/>
+				<column index="7" heading="E-Mail"/>
+				<column index="8" heading="Phone"/>
+			</report>
+		</statement>
+        <statement name="realtionships_allowed">
+				select caption, id
+				from relationship
+				where caption != 'Dad'
+				AND caption != 'Mom'
+				AND id != -1
+		</statement>
+		<statement name="login">
+				select id
+				from user
+				where first_name = ?
+				AND last_name = ?
+		</statement>
+		<statement name="user_relationship">
+				select relationship.id
+				from relationship, user
+				where user.relationship_id = relationship.id
+				AND user.id = ?
+		</statement>
+		<statement name="combo_user_list">
+				select first_name, id from user
+		</statement>
+        <statement name="adminRelationships">
+				select id
+                from relationship
+                where caption = 'Dad'
+				OR caption = 'Mom'
+		</statement>
+    </sql-statements>
+	<query-defn id="itemList">
+		<!-- Fields -->
+		<field id="name" caption="Gift Name" join="gift" column="name"/>
+		<field id="gift_id" caption="Gift ID" join="gift" column="id">
+			<report display="no"/>
+		</field>
+		<field id="s_category" caption="Category" join="category" column="caption"/>
+		<field id="category_id" caption="Category" join="gift" column="category_id"/>
+		<field id="status_id" caption="Status" join="gift" column="status_id"/>
+		<field id="s_status" caption="Status" join="status" column="caption"/>
+		<field id="user_id" caption="User ID" join="status" column="caption"/>
+		<field id="user_fname" caption="Who" join="user" column="first_name"/>
+		<field id="user_mname" caption="Picked" join="user" column="middle_name"/>
+		<field id="user_lname" caption="It" join="user" column="last_name"/>
+        <field id="picture_path" caption="Picture" join="gift" column="picture_path"/>
+		<field id="update" caption="Update" column="'Update'">
+			<report heading="Update" url="create-app-url:/AdminGiftDetail.jsp?data_cmd=edit&amp;id=${2}&amp;s_category=${form:s_category}&amp;s_status=${form:s_status}"/>
+		</field>
+        <field id="delete" caption="Delete" column="'Delete'">
+			<report heading="Delete" url="create-app-url:/AdminGiftDetail.jsp?data_cmd=delete&amp;id=${2}&amp;s_category=${form:s_category}&amp;s_status=${form:s_status}"/>
+		</field>
+		<field id="add_to_list" caption="Add to Gift List" column="'Add'">
+			<report heading="Add To List" url="create-app-url:/MyGiftList.jsp?id=${1}&amp;user_id=${session:person-id}"/>
+		</field>
+		<!-- Joins -->
+		<join id="gift" table="gift" auto-include="yes"/>
+		<join id="status" table="status" condition="gift.status_id = status.id" auto-include="yes"/>
+		<join id="user" table="user" condition="gift.user_id = user.id" auto-include="yes"/>
+		<join id="category" table="category" condition="gift.category_id = category.id" auto-include="yes"/>
+		<select-dialog name="List" show-criteria="yes" show-output-dests="no" always-show-rs-nav="no" heading="View Items">
+			<field.select caption="Gift Category" name="s_category" choices="schema-enum:Category" prepend-blank="yes"/>
+			<field.select caption="Gift Status" name="s_status" choices="schema-enum:Status" prepend-blank="yes"/>
+			<select heading="GIFTS">
+				<display field="update"/>
+                <display field="delete"/>
+				<display field="gift_id"/>
+				<display field="name"/>
+				<display field="s_category"/>
+				<display field="s_status"/>
+				<display field="user_fname"/>
+				<display field="user_mname"/>
+				<display field="user_lname"/>
+                <display field="picture_path"/>
+				<condition field="category_id" allow-null="no" comparison="equals" value="form:s_category" connector="and"/>
+				<condition field="status_id" allow-null="no" comparison="equals" value="form:s_status"/>
+			</select>
+		</select-dialog>
+		<select-dialog name="PickingList" allow-debug="yes" show-output-dests="no" hide-readonly-hints="yes" heading="View Items" loop="append">
+			<field.select caption="Gift Category" name="s_category" choices="schema-enum:Category" prepend-blank="yes"/>
+			<select heading="Pick a Gift">
+				<display field="add_to_list"/>
+				<display field="gift_id"/>
+				<display field="name"/>
+				<display field="s_category"/>
+				<display field="s_status"/>
+				<condition field="category_id" allow-null="no" comparison="equals" value="form:s_category"/>
+				<where-expr value="gift.status_id > 1"/>
+			</select>
+			<director cancel-url="index.jsp" submit-caption="Search"/>
+		</select-dialog>
+	</query-defn>
+</xaf>

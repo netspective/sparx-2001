@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+
+<!--
+**********************************************************************
+* Sparx global framework configuration properites. You should not    *
+* modify this file for each application - it will be overridden if   *
+* Sparx is ugpraded. If you need your own parameters, use the file   *
+* called app-config.xml (which is specific to each application).     *
+* You can use the Application's build script with the target         *
+* 'upgrade-sparx' to automatically get the latest copy of this file. *
+********************************************************************** -->
+
+<xaf>
+    <configuration>
+        <!--
+        **********************************************************************
+        * Required configuration parameters - these parameters setup the     *
+        * evaluation of the remainder of the properties in this file.        *
+        ********************************************************************** -->
+        
+        <property name="app.site-root-path" value="${servlet-context-path:/}"/>
+        <property name="app.web-inf-root-path" value="${app.site-root-path}/WEB-INF"/>
+
+        <property name="sparx.shared.root-path" value="${app.site-root-path}/sparx"/>
+        <property name="sparx.shared.root-url" value="${create-app-url:/sparx}"/>
+
+        <!--
+        **********************************************************************
+        * Sparx factory system properties                                    *
+        ********************************************************************** -->
+        <system-property name="javax.xml.parsers.DocumentBuilderFactory" 
+                         value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+        <system-property name="javax.xml.transform.TransformerFactory" 
+                         value="org.apache.xalan.processor.TransformerFactoryImpl"/>
+        <system-property name="com.netspective.sparx.xif.db.DatabaseContext.class" 
+                         value="com.netspective.sparx.xif.db.context.BasicDatabaseContext"/>
+
+        <!--
+        **********************************************************************
+        * Sparx shared components properites                                 *
+        ********************************************************************** -->
+        <property name="sparx.shared.resources-path" value="${sparx.shared.root-path}/resources"/>
+        <property name="sparx.shared.resources-url" value="${sparx.shared.root-url}/resources"/>
+        <property name="sparx.shared.css-path" value="${sparx.shared.resources-path}/css"/>
+        <property name="sparx.shared.css-url" value="${sparx.shared.resources-url}/css"/>
+        <property name="sparx.shared.images-path" value="${sparx.shared.resources-path}/images"/>
+        <property name="sparx.shared.images-url" value="${sparx.shared.resources-url}/images"/>
+        <property name="sparx.shared.scripts-path" value="${sparx.shared.resources-path}/scripts"/>
+        <property name="sparx.shared.scripts-url" value="${sparx.shared.resources-url}/scripts"/>
+        <property name="sparx.shared.xslt-path" value="${sparx.shared.resources-path}/xslt"/>
+        <property name="sparx.shared.xslt-url" value="${sparx.shared.resources-url}/xslt"/>
+        <property name="sparx.shared.dialog.field.popup-image-src" 
+                  value="${sparx.shared.images-url}/dialog/magnifying-glass-sm.gif"/>
+        <property name="sparx.shared.dialog.field.calendar.js-src" 
+                  value="${sparx.shared.resources-url}/scripts/calendar.js"/>
+        <property name="sparx.shared.dialog.field.calendar.image-url" 
+                  value="${sparx.shared.images-url}/navigate/calendar.gif"/>
+        <property name="sparx.shared.report.row-sep-img-src" 
+                  value="${sparx.shared.images-url}/design/bar.gif"/>
+        <property name="sparx.shared.report.sort-ascending-img-src" 
+                  value="${sparx.shared.images-url}/navigate/triangle-up-blue.gif"/>
+        <property name="sparx.shared.report.sort-descending-img-src" 
+                  value="${sparx.shared.images-url}/navigate/triangle-down-blue.gif"/>
+
+        <!--
+        **********************************************************************
+        * Sparx ACE configuration properites                                 *
+        ********************************************************************** -->
+        <property name="sparx.ace.root-url" value="${create-app-url:/ace}"/>
+        <property name="sparx.ace.xslt-path" value="${sparx.shared.xslt-path}/ace"/>
+        <property name="sparx.ace.xslt-url" value="${sparx.shared.xslt-url}/ace"/>
+        <property name="sparx.ace.images-root-url" value="${sparx.shared.images-url}/ace"/>
+        <property name="sparx.ace.acl-browser-xsl" value="${sparx.ace.xslt-path}/acl-browser.xsl"/>
+        <property name="sparx.ace.config-browser-xsl" value="${sparx.ace.xslt-path}/config-browser.xsl"/>
+        <property name="sparx.ace.docs-browser-xsl" value="${sparx.ace.xslt-path}/docs-browser.xsl"/>
+        <property name="sparx.ace.metrics-browser-xsl" value="${sparx.ace.xslt-path}/metrics-browser.xsl"/>
+        <property name="sparx.ace.properties-browser-xsl" value="${sparx.ace.xslt-path}/properties-browser.xsl"/>
+        <property name="sparx.ace.query-defn-browser-xsl" value="${sparx.ace.xslt-path}/query-defn-browser.xsl"/>
+        <property name="sparx.ace.schema-browser-xsl" value="${sparx.ace.xslt-path}/schema-browser.xsl"/>
+        <property name="sparx.ace.sql-browser-xsl" value="${sparx.ace.xslt-path}/sql-browser.xsl"/>
+        <property name="sparx.ace.ui-browser-xsl" value="${sparx.ace.xslt-path}/dialogs-browser.xsl"/>
+        <properties name="sparx.ace.transform">
+            <property name="dml" value="${sparx.ace.xslt-path}/article-transform.xsl"/>
+            <property name="tpml" value="${sparx.ace.xslt-path}/test-plan-transform.xsl"/>
+        </properties>
+        <properties name="sparx.ace.bookmarks">
+            <property name="project,Application" value="${app.site-root-path}"/>
+            <property name="sparx,Sparx" value="http://developer.netspective.com"/>
+        </properties>
+        <property name="sparx.ace.login.dialog-class" value="com.netspective.sparx.ace.LoginDialog"/>
+        <property name="sparx.ace.login.user-id.cookie-name" value="sparx-ace-user-id"/>
+        <property name="sparx.ace.login.user.session-attr-name" value="ace-authenticated-user"/>
+        <property name="sparx.ace.login.user-name" value="ace"/>
+        <property name="sparx.ace.login.user-password" value="ace"/>
+        <property name="sparx.ace.metrics.filesys.ignore-case" value="yes"/>
+        <property name="sparx.ace.metrics.filesys.code-extensions" value="asp,java,js,jsp,sql,xml,xsl"/>
+        <properties name="sparx.ace.monitor.logs">
+            <property name="sparx.debug.page" value="style-text"/>
+            <property name="sparx.debug.security" value="style-text"/>
+            <property name="sparx.debug.sql" value="style-text"/>
+            <property name="sparx.monitor.page" 
+                      value="style-tab,Date,Host,NDC,Object,Object-id,Render-time,Source"/>
+            <property name="sparx.monitor.security" 
+                      value="style-tab,Date,Host,NDC,Activity,App User,User Org,Remote User,Remote Host,Remote Addr,Permissions,Roles"/>
+            <property name="sparx.monitor.sql" 
+                      value="style-tab,Date,Host,NDC,SQL Statement,Ok,Conn,Bind,SQL,Total,Source"/>
+        </properties>
+
+    </configuration>
+    
+    <include file="app-config.xml"/>
+        
+</xaf>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO8859_1"?>
+<!DOCTYPE weblogic-application PUBLIC '-//BEA Systems, Inc.//DTD WebLogic Application 7.0.0//EN' 'http://www.beasys.com/j2ee/dtds/weblogic-application_1_0.dtd'>
+<weblogic-application>
+  <ejb>
+  </ejb>
+
+  <xml>
+    <parser-factory>
+    </parser-factory>
+
+  </xml>
+
+  <security>
+  </security>
+
+</weblogic-application>

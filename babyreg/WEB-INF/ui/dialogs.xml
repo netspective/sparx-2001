@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<xaf>
+	<register-field tag-name="field.image" class="app.field.ImageField"/>
+	<dialogs package="Gift">
+		<dialog name="DetailGift" heading="Gift Detail Screen" retain-params="*" loop="append">
+			<field.text name="name" caption="Gift Name" required="yes">
+				<client-js event="lose-focus" type="extends" js-expr="var name = getControl(activeDialog,'_dc.name');
+                                                                      var picture = getControl(activeDialog,'_dc.picture_path');
+                                                                      var category = getControl(activeDialog,'_dc.category_id');
+                                                                      var newPicture = category.options[category.selectedIndex].text + '/' + name.value;
+                                                                      var objNewOpt = new Option();
+                                                                      objNewOpt.value = newPicture;
+                                                                      objNewOpt.text = 'Picture';
+                                                                      picture.options[1] = objNewOpt;
+                                                                 "/>
+			</field.text>
+			<field.select name="category_id" caption="Category" choices="schema-enum:Category">
+				<client-js event="lose-focus" type="extends" js-expr="var name = getControl(activeDialog,'_dc.name');
+                                                                      var picture = getControl(activeDialog,'_dc.picture_path');
+                                                                      var category = getControl(activeDialog,'_dc.category_id');
+                                                                      var newPicture = category.options[category.selectedIndex].text + '/' + name.value;
+                                                                      var objNewOpt = new Option();
+                                                                      objNewOpt.value = newPicture;
+                                                                      objNewOpt.text = 'Picture';
+                                                                      picture.options[1] = objNewOpt;
+                                                                 "/>
+			</field.select>
+			<field.select name="status_id" caption="Status" choices="schema-enum:Status"/>
+			<field.select name="user_id" caption="Who Picked it" choices="query:User.combo_user_list"/>
+			<field.separator/>
+            <field.composite name="age_range" caption="Age Range" show-child-caption="yes" required="yes">
+               <field.text name="begin" caption="From" size="2" max-length="2"/>
+               <field.text name="end" caption="To" size="2" max-length="2"/>
+               <field.select name="unit" choices="schema-enum:Age_Range_Unit"/>
+            </field.composite>
+			<field.text name="price" caption="Price"/>
+			<field.text name="brand" caption="Brand"/>
+			<field.text name="reference" caption="Reference"/>
+			<field.memo name="description" caption="Description"/>
+			<field.text name="url" caption="URL to get Picture"/>
+			<field.select name="picture_path" caption="Picture" choices="picture:*"/>
+			<populate-tasks data-cmd="edit,delete">
+				<exec-statement name="Gift.GiftDetail" report="none" store-type="row-fields" store="form:"/>
+			</populate-tasks>
+			<execute-tasks data-cmd="edit">
+				<exec-transaction command="begin"/>
+				<exec-dml command="update" table="gift" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form:age_range.unit" fields="name,category_id,status_id,user_id,picture_path,price,brand,url,description" where="id = ?" where-bind="request:id"/>
+				<exec-transaction command="end"/>
+                <exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes&amp;_dc.output.destination=1"/>
+			</execute-tasks>
+			<execute-tasks data-cmd="add">
+				<exec-transaction command="begin"/>
+				<exec-dml command="insert" table="gift" auto-inc="id,gift_id_seq" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form:age_range.unit" fields="name,category_id,status_id,user_id,picture_path,price,brand,url,description"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes&amp;_dc.output.destination=1"/>
+			</execute-tasks>
+            <execute-tasks data-cmd="delete">
+				<exec-transaction command="begin"/>
+				<exec-dml command="delete" table="gift" where="id = ?" where-bind="request:id"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes&amp;_dc.output.destination=1"/>
+			</execute-tasks>
+            <director cancel-url="flow-control:AdminGiftList.jsp?s_category,s_status"/>
+
+			<!-- TODO: Figure out how to take care of Cancel since we have to go to 2 different places
+                       depending on the data-cmd.  Option 1. Create a value source-->
+		</dialog>
+		<dialog name="Suggestion" heading="Making a suggestion" retain-params="*">
+			<field.text name="name" caption="Gift Name" required="yes"/>
+			<field.select name="category_id" caption="Category" choices="schema-enum:Category" required="yes"/>
+			<field.text name="status_id" hidden="yes" caption="Status" default="4"/>
+			<field.text name="user_id" hidden="yes" caption="Who Picked it" default="-1"/>
+			<field.composite name="age_range" caption="Age Range" show-child-caption="yes">
+               <field.text name="begin" caption="From" size="3"/>
+               <field.text name="end" caption="To" size="3"/>
+               <field.select name="unit" choices="schema-enum:Age_Range_Unit"/>
+            </field.composite>
+			<field.text name="price" caption="Estimated Price" size="8"/>
+			<field.text name="brand" caption="Brand"/>
+			<field.text name="reference" caption="Reference"/>
+			<field.memo name="description" caption="Description" wrap="hard"/>
+			<field.text name="url" caption="URL to get Picture"/>
+			<field.text name="picture" hidden="yes" default="no_picture"/>
+			<execute-tasks>
+				<exec-transaction command="begin"/>
+				<exec-statement name="Gift.GiftDetail" report="none" store-type="row-fields" store="form:*"/>
+				<exec-transaction command="end"/>
+			</execute-tasks>
+		</dialog>
+		<dialog name="NewGift" heading="What did you get me?" retain-params="*">
+			<field.text name="name" caption="Gift Name" required="yes"/>
+			<field.select name="category_id" caption="Category" choices="schema-enum:Category" required="yes"/>
+			<field.text name="status_id" caption="Status" default="0" hidden="yes"/>
+			<field.text name="user_id" caption="Who Picked it" default="session:person-id" hidden="yes"/>
+			<field.composite name="age_range" caption="Age Range" show-child-caption="yes">
+               <field.text name="begin" caption="From" size="3"/>
+               <field.text name="end" caption="To" size="3"/>
+               <field.select name="unit" choices="schema-enum:Age_Range_Unit"/>
+            </field.composite>
+			<field.text name="price" caption="Estimated Price" size="3"/>
+			<field.text name="brand" caption="Brand"/>
+            <field.text name="reference" caption="Reference"/>
+			<field.memo name="description" caption="Description"/>
+            <field.text name="url" caption="URL to get Picture"/>
+			<field.text name="picture" hidden="yes" default="no_picture"/>
+			<execute-tasks>
+				<exec-transaction command="begin"/>
+				<exec-dml command="insert" table="gift" auto-inc="id,gift_id_seq" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form=age_range.unit" fields="name,category_id,status_id,user_id,price,brand,reference,url,description,picture_path"/>
+				<exec-transaction command="end"/>
+			</execute-tasks>
+		</dialog>
+		<dialog name="YourGiftList" heading="The Gifts you have picked" retain-params="*">
+			<field.static name="name" caption="Gift Name"/>
+			<field.static name="category" caption="Category"/>
+			<field.static name="status" caption="Status"/>
+            <field.composite name="age_range" caption="Age Range" show-child-caption="yes">
+               <field.static name="begin" caption="From" size="3"/>
+               <field.static name="end" caption="To" size="3"/>
+               <field.select name="unit" choices="schema-enum:Age_Range_Unit"/>
+            </field.composite>
+			<field.static name="price" caption="Estimated Price" size="8"/>
+			<field.static name="brand" caption="Brand"/>
+			<field.static name="description" caption="Description" wrap="hard"/>
+			<field.separator name="separator"/>
+			<field.image name="picture_path"/>
+			<populate-tasks dta-cmd="add,delete">
+				<exec-statement name="Gift.PickedGiftDetail" report="none" store-type="row-fields" store="form:*"/>
+			</populate-tasks>
+			<execute-tasks data-cmd="delete">
+				<exec-transaction command="begin"/>
+				<exec-dml command="update" table="gift" columns="status_id=string:2,user_id=string:-1" where="id = ?" where-bind="request:id"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="YourGiftList.jsp"/>
+			</execute-tasks>
+			<execute-tasks data-cmd="add">
+				<exec-transaction command="begin"/>
+				<exec-dml command="update" table="gift" columns="status_id=string:1,user_id=session:person-id" where="id = ?" where-bind="request:id"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="YourGiftList.jsp"/>
+			</execute-tasks>
+		</dialog>
+	</dialogs>
+	<dialogs package="User">
+		<dialog name="NewUserRegistration" heading="New User Registration">
+			<field.text name="id" hidden="yes"/>
+			<field.text name="first_name" caption="First Name" required="yes"/>
+			<field.text name="middle_name" caption="Middle Name"/>
+			<field.text name="last_name" caption="Last Name" required="yes"/>
+			<field.text name="email_addr" caption="E-mail"/>
+			<field.text name="phone" caption="Contact Phone Number"/>
+			<field.select name="relationship_id" required="yes" caption="Relationship" choices="query:User.realtionships_allowed"/>
+			<populate-tasks data-cmd="edit,delete">
+				<exec-statement name="User.UserDetail" report="none" store-type="row-fields" store="form:*"/>
+			</populate-tasks>
+			<execute-tasks data-cmd="add">
+				<exec-transaction command="begin"/>
+				<exec-dml command="insert" table="user" auto-inc="id,user_id_seq" fields="first_name,middle_name,last_name,email_addr,phone,relationship_id"/>
+				<exec-transaction command="end"/>
+                <exec-redirect url="config-expr:${create-app-url:/index.jsp}?_dc.user_fname=${form:first_name}&amp;_dc.user_lname=${form:last_name}&amp;_d_exec=yes"/>
+			</execute-tasks>
+		</dialog>
+        <dialog name="UserEdit" heading="Edit User">
+			<field.text name="id" hidden="yes"/>
+			<field.text name="first_name" caption="First Name" required="yes"/>
+			<field.text name="middle_name" caption="Middle Name"/>
+			<field.text name="last_name" caption="Last Name" required="yes"/>
+			<field.text name="email_addr" caption="E-mail"/>
+			<field.text name="phone" caption="Contact Phone Number"/>
+			<field.select name="relationship_id" caption="Relationship" choices="schema-enum:Relationship"/>
+			<populate-tasks data-cmd="edit,delete">
+				<exec-statement name="User.UserDetail" report="none" store-type="row-fields" store="form:*"/>
+			</populate-tasks>
+			<execute-tasks data-cmd="add">
+				<exec-transaction command="begin"/>
+				<exec-dml command="insert" table="user" auto-inc="id,user_id_seq" fields="first_name,middle_name,last_name,email_addr,phone,relationship_id"/>
+				<exec-transaction command="end"/>
+                <exec-redirect url="config-expr:${create-app-url:/AdminUserList.jsp}"/>
+			</execute-tasks>
+			<execute-tasks data-cmd="edit">
+				<exec-transaction command="begin"/>
+				<exec-dml command="update" table="User" fields="first_name,middle_name,last_name,email_addr,phone,relationship_id" where="id = ?" where-bind="form:id"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminUserList.jsp}"/>
+			</execute-tasks>
+			<execute-tasks data-cmd="delete">
+				<exec-transaction command="begin"/>
+				<exec-dml command="delete" table="User" where="id = ?" where-bind="form:id"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminUserList.jsp}"/>
+			</execute-tasks>
+		</dialog>
+	</dialogs>
+</xaf>
