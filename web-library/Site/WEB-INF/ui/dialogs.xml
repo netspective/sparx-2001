@@ -8,16 +8,6 @@
 			<field.text caption="Author" name="bookAuthor" required="yes"/>
 			<field.select caption="Genre" choices="schema-enum:Book_Type" name="bookType" prepend-blank="yes" required="yes"/>
 			<field.text caption="ISBN" name="bookISBN" max-length="10" required="yes"  validate-msg="Please enter an ISBN of the form X-XXXX-XXXX-X i.e. with dashes, not spaces.  Thank you." validate-pattern="/^\d+$/"/>
-<!--
-			<field.report caption="List of Types" name="types" style="multicheck">
-				<statement>
-					select 0 as "checkbox", id, caption, abbrev from Book_Type
-	                    		<report>
-						<column type="checkbox" align="center" field-name="bookSelected_" field-value="bookSelected_${1}"/>
-					</report>
-				</statement>
-			</field.report>
--->
 		</dialog>
 	</dialogs>
 </xaf>

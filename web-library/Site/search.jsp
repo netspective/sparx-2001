@@ -2,5 +2,5 @@
 <%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
 
 <app:page title="The Sparx Collection" heading="Search Books">
-	<xaf:dialog name="library.bookInfo"/>
+	<xaf:query-select-dialog source="searchBooks" name="searchDialog"/>
 </app:page>

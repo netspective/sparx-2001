@@ -43,11 +43,47 @@
 			</params>
 
 			<report>
-				<column heading=" " index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
+				<column heading="Action" index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
 				<column heading="Name" index="1"/>
 				<column heading="Genre" index="2"/>
 				<column heading="Author" index="3"/>
 			</report>
 		</statement>
 	</sql-statements>
+
+	<query-defn id="searchBooks">
+		<field id="book_id" caption="Book ID" join="Book_Info" column="id">
+			<report heading="ID"/>
+		</field>
+		
+		<field id="book_genre" caption="Genre" join="Book_Type" column="caption"/>
+		<field id="book_name" caption="Name" join="Book_Info" column="name"/>
+		<field id="book_author" caption="Author" join="Book_Info" column="author"/>
+		<field id="book_isbn" caption="ISBN" join="Book_Info" column="ISBN"/>
+		
+		<join id="Book_Info" table="Book_Info" auto-include="yes"/>
+		<join id="Book_Type" table="Book_Type" condition="Book_Info.type = Book_Type.id"/>
+		
+		<select-dialog name="searchDialog" heading="Search Books" allow-debug="yes" show-output-dests="yes">
+			<!-- field.text query-field="book_id"/ -->
+			<field.select query-field="book_genre" choices="schema-enum:Book_Type"/>
+			<!--field.text query-field="book_name"/>
+			<field.text query-field="book_author"/>
+			<field.text query-field="book_isbn"/ -->
+			
+			<select heading="Book Search Results">
+				<display field="book_id"/>
+				<display field="book_genre"/>
+				<display field="book_name"/>
+				<display field="book_author"/>
+				<display field="book_isbn"/>
+				
+				<!-- condition field="book_id" allow-null="no" comparison="starts-with" value="form:book_id" connector="and" />
+				<condition field="book_genre" allow-null="no" comparison="equals" value="form:book_genre" connector="and" />
+				<condition field="book_name" allow-null="no" comparison="contains" value="form:book_name" connector="and" />
+				<condition field="book_author" allow-null="no" comparison="contains" value="form:book_author" connector="and" />
+				<condition field="book_isbn" allow-null="no" comparison="starts-with" value="form:book_isbn" connector="and" / -->
+			</select>
+		</select-dialog>
+	</query-defn>
 </xaf>

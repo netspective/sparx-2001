@@ -1,7 +1,7 @@
 /*
  * Description: library.BookInfo
- * @author ThuA
- * @created Dec 27, 2001 3:22:08 PM
+ * @author SJaveed
+ * @created April 24, 2002
  * @version
  */
 package library;
@@ -113,7 +113,7 @@ public class BookInfo   extends Dialog
 
 		// What to do if the dialog is in delete mode ...
         if (dc.deletingData()) {
-			boolean status = processEditAction(writer, dc);
+			boolean status = processDeleteAction(writer, dc);
         }
 
 		try	{
