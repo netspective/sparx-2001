@@ -224,8 +224,9 @@
 			<th>Column</th>
 			<th>Column-expr</th>
 			<th>Where-expr</th>
+			<th>Order-by-expr</th>
 		</tr>
-		<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		<tr><td colspan="7"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="field">
 			<tr>
 			<td><font color="green"><xsl:value-of select="@id"/></font></td>
@@ -234,8 +235,9 @@
 			<td><xsl:value-of select="@column"/></td>
 			<td><xsl:value-of select="@column-expr"/></td>
 			<td><xsl:value-of select="@where-expr"/></td>
+			<td><xsl:value-of select="@order-by-expr"/></td>
 			</tr>
-			<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+			<tr><td colspan="7"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
 

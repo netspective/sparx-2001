@@ -70,6 +70,7 @@
 									<xsd:attribute name="column" type="xsd:string" use="optional"/>
 									<xsd:attribute name="column-expr" type="xsd:string" use="optional"/>
 									<xsd:attribute name="where-expr" type="xsd:string" use="optional"/>
+									<xsd:attribute name="oder-by-expr" type="xsd:string" use="optional"/>
 								</xsd:complexType>
 							</xsd:element>
 							<xsd:element name="join" minOccurs="0" maxOccurs="unbounded">
