@@ -3,7 +3,7 @@
 <xaf>
 	<access-control name="default">
 		<permission name="app">
-			<!--generate-permissions name="dialog" class="com.xaf.form.DialogManagerFactory"/-->
+			<!--generate-permissions name="dialog" class="com.netspective.sparx.xaf.form.DialogManagerFactory"/-->
             <permission name="orders">
                 <permission name="order_list"/>
                 <permission name="create_order"/>

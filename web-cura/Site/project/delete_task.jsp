@@ -3,10 +3,10 @@
 
 <%
     String heading = "Project: " + request.getParameter("project_name");
-    request.setAttribute("data_cmd", "edit");
+    //request.setAttribute("data_cmd", "edit");
 %>
 <app:page title="Add Project Member" heading="<%= heading %>">
 
-    <xaf:dialog name="project.person_registeration" />
+    <xaf:dialog name="project.delete_task" />
 
 </app:page>

@@ -7,10 +7,10 @@ import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
-import com.xaf.form.*;
-import com.xaf.navigate.*;
-import com.xaf.security.*;
-import com.xaf.skin.*;
+import com.netspective.sparx.xaf.form.*;
+import com.netspective.sparx.xaf.navigate.*;
+import com.netspective.sparx.xaf.security.*;
+import com.netspective.sparx.xaf.skin.*;
 
 public class AnchorTag extends TagSupport
 {

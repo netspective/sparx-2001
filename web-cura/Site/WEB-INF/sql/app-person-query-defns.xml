@@ -5,7 +5,7 @@
 
 		<!-- Fields -->
 		<field id="person_id" caption="Contact ID" join="person" column="person_id">
-			<report heading="ID" url="create-app-url:/contact/home.jsp?person_id=${.}&amp;person_name=%{4}" align="right"/>
+			<report heading="ID" url="create-app-url:/contact/home.jsp?person_id=${.}&amp;person_name=%{4}" align="left"/>
 		</field>
 		<field id="name_prefix" caption="Prefix" join="person" column="name_prefix">
 			<report heading="Prefix" />
@@ -51,10 +51,13 @@
 			<field.text query-field="name_last"/>
 			<field.text query-field="name_first"/>
 			<field.select query-field="gender" choices="query:person.gender-list" prepend-blank="yes"/>
-			<field.select name="sort_order"
+			<field.select query-field="org_id" choices="query:person.active-org-memberships-name-id"  default="session:organization" prepend-blank="yes"/>
+            <field.select name="sort_order"
 					caption="Sort By"
 					style="combo"
-					choices="Last Name=name_last;Gender=gender;SSN=ssn"/>
+					choices="Last Name=name_last;Gender=gender;SSN=ssn"
+                    default="name_last"/>
+
 			<select heading="Contact Search Results">
 				<display field="person_id"/>
                 <display field="name_prefix"/>
@@ -63,6 +66,7 @@
                 <display field="complete_name"/>
 				<display field="gender_name"/>
 				<display field="ssn"/>
+
 				<order-by field="form:sort_order"/>
 
 				<condition field="person_id" allow-null="no" comparison="starts-with" value="form:person_id" connector="and" />
@@ -70,6 +74,7 @@
 				<condition field="name_first" allow-null="no" comparison="starts-with" value="form:name_first" connector="and" bind-expr="upper(?)"/>
 				<condition field="gender" allow-null="no" comparison="equals" value="form:gender" connector="and"/>
                 <condition field="ssn" allow-null="no" comparison="equals" value="form:ssn" connector="and"/>
+                <condition field="org_id" allow-null="no" comparison="equals" value="form:org_id" connector="and" />
 			</select>
 			<director cancel-url="index.jsp" submit-caption="Search"/>
 		</select-dialog>

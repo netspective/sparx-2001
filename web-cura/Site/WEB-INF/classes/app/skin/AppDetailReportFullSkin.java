@@ -8,7 +8,7 @@
  */
 package app.skin;
 
-import com.xaf.skin.HtmlSingleRowReportSkin;
+import com.netspective.sparx.xaf.skin.HtmlSingleRowReportSkin;
 
 public class AppDetailReportFullSkin extends HtmlSingleRowReportSkin
 {

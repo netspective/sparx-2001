@@ -65,5 +65,39 @@
                 choices="query:org.selected-org-person-list" default="query:project.member-persons">
             </field.select>
         </dialog>
+
+        <dialog name="delete_task" heading="Delete Project Task(s)" retain-params="*" class="app.form.DeleteTaskDialog">
+            <field.integer name="project_id" hidden="yes" default="request:project_id"/>
+            <field.text name="project_name" caption="Project" hidden="yes" default="request:project_name"/>
+            <field.report name="task_id" required="yes" style="multicheck">
+                <statement>
+                    select
+                        0 as "checkbox",
+                        task.task_id ,
+                        task.task_summary,
+                        task_status.caption
+                    from
+                        task, task_type, task_status, project
+                    where
+                        task.owner_project_id = ?   and
+                        task.owner_project_id = project.project_id and
+                        task.task_type = task_type.id and
+                        task.task_status = task_status.id
+                    <params>
+                        <param value="request:project_id" />
+                    </params>
+                    <report>
+                        <banner>
+                            <item caption="Please select the task(s) to delete"/>
+                        </banner>
+                        <column type="checkbox" field-name="checkbox" field-value="${1}"/>
+                        <column heading="Task ID" align="left"/>
+                        <column heading="Summary"/>
+                        <column heading="Status"/>
+                    </report>
+                </statement>
+            </field.report>
+        </dialog>
+
     </dialogs>
 </xaf>

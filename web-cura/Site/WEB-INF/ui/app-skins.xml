@@ -3,7 +3,7 @@
 <xaf>
     <dialog-skin name="default">
         <outer-table-attrs>
-            cellspacing='0' cellpadding='1' border='0' bgcolor='#3D6A26'
+            width='100%' cellspacing='0' cellpadding='1' border='0' bgcolor='#3D6A26'
         </outer-table-attrs>
         <inner-table-attrs>
             width='100%' cellspacing='0' cellpadding='3' border='0' bgcolor='#F4FAF1'
@@ -27,7 +27,7 @@
             face='Trebuchet MS,Arial' style='font-size: 10px'
         </control-area-font-attrs>
         <control-area-style-attrs>
-            style='font-size: 10px; background-color: #F4FAF1'
+            style='font-family: Trebuchet MS, Arial' font-size: 12px; background-color: #F4FAF1'
         </control-area-style-attrs>
         <hint-font-attrs>
             color='navy' face='Arial' style='font-size: 10px'

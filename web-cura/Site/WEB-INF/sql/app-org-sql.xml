@@ -40,7 +40,7 @@
 				<param value="request:org_id"/>
 			</params>
 			<report heading="Overview">
-				<banner>
+				<banner style="horizontal">
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
                 </banner>
@@ -86,7 +86,7 @@
                 <param value="request:org_id"/>
             </params>
             <report heading="Organization Members">
-                <banner>
+                <banner  style="horizontal">
                     <item caption="Import" url="config-expr:member.jsp?cmd=edit&amp;org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
                     <item caption="Edit" url="config-expr:member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
                 </banner>

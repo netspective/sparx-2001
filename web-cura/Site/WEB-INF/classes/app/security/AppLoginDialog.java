@@ -5,15 +5,15 @@ import java.util.*;
 import java.sql.*;
 import javax.servlet.http.*;
 
-import com.xaf.db.*;
-import com.xaf.form.*;
-import com.xaf.security.*;
-import com.xaf.skin.*;
-import com.xaf.sql.*;
-import com.xaf.value.*;
-import com.xaf.config.ConfigurationManager;
-import com.xaf.config.ConfigurationManagerFactory;
-import com.xaf.config.Configuration;
+import com.netspective.sparx.xif.db.*;
+import com.netspective.sparx.xaf.form.*;
+import com.netspective.sparx.xaf.security.*;
+import com.netspective.sparx.xaf.skin.*;
+import com.netspective.sparx.xaf.sql.*;
+import com.netspective.sparx.util.value.*;
+import com.netspective.sparx.util.config.ConfigurationManager;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.config.Configuration;
 
 public class AppLoginDialog extends LoginDialog
 {
@@ -32,7 +32,7 @@ public class AppLoginDialog extends LoginDialog
 		return skin;
 	}
 
-	public void producePage(DialogContext dc, Writer writer) throws IOException
+    public void producePage(Writer writer, DialogContext dc) throws IOException
 	{
 		String resourcesUrl = ((HttpServletRequest) dc.getRequest()).getContextPath() + "/resources";
 
@@ -44,7 +44,7 @@ public class AppLoginDialog extends LoginDialog
         writer.write("  <table width='400' cellpadding='0' cellspacing='0'>");
         writer.write("  <tr><td align='center' style='background: #0000A0'><img src='"+ resourcesUrl +"/images/design/logo-main.gif' border='0'></td</tr>");
 		writer.write("	<tr><td align='center' style='background: #0000A0'>");
-		writer.write(       getHtml(dc, true));
+        renderHtml(writer, dc, true);
         writer.write("  </td></tr>");
         writer.write("	<tr><td align='center' style='background: #0000A0'>&nbsp;");
         writer.write("  </td></tr>");

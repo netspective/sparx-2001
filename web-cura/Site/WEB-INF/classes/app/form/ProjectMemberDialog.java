@@ -8,9 +8,9 @@
  */
 package app.form;
 
-import com.xaf.form.DialogContext;
-import com.xaf.form.Dialog;
-import com.xaf.db.ConnectionContext;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xif.dal.ConnectionContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +23,7 @@ import dal.domain.rows.ProjectPersonRelationRows;
 import dal.domain.row.ProjectPersonRelationRow;
 
 import java.sql.SQLException;
+import java.io.Writer;
 
 public class ProjectMemberDialog extends Dialog
 {
@@ -30,7 +31,7 @@ public class ProjectMemberDialog extends Dialog
      *  This is where you perform all your actions. Whatever you return as the function result will be shown
      * in the HTML
      */
-    public String execute(DialogContext dc)
+    public void execute(Writer writer,  DialogContext dc)
     {
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
@@ -46,12 +47,10 @@ public class ProjectMemberDialog extends Dialog
         catch (NamingException e)
         {
             e.printStackTrace();
-            return "Failed to add project member. Error: " + e.toString();
         }
         catch (SQLException e)
         {
             e.printStackTrace();
-            return "Failed to add project member. Error: " + e.toString();
         }
 
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
@@ -64,10 +63,8 @@ public class ProjectMemberDialog extends Dialog
         catch (Exception e)
         {
             e.printStackTrace();
-            return "Failed to create response URL.";
         }
 
-        return "";
     }
 
     /**

@@ -1,6 +1,6 @@
 package app.skin;
 
-import com.xaf.skin.HtmlReportSkin;
+import com.netspective.sparx.xaf.skin.HtmlReportSkin;
 
 public class AppReportSkin   extends HtmlReportSkin
 {

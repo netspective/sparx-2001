@@ -1,4 +1,4 @@
-<jsp:directive.page import="com.xaf.db.*,dal.*,dal.domain.*,dal.domain.row.*,dal.domain.rows.*,dal.table.*"/>
+<jsp:directive.page import="com.netspective.sparx.xif.db.*,dal.*,dal.domain.*,dal.domain.row.*,dal.domain.rows.*,dal.table.*"/>
 
 <pre>
 <% 

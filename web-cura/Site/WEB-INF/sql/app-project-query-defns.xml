@@ -23,7 +23,7 @@
         <field id="person_last_name" caption="Contact Last Name" join="person" column="name_last">
             <report heading="Last Name"/>
         </field>
-        <field id="organization_id" caption="Organization" join="org" column="org_id">
+        <field id="org_id" caption="Organization" join="org" column="org_id">
             <report heading="Organization"/>
         </field>
 
@@ -39,11 +39,12 @@
 			<field.text query-field="project_id"/>
 			<field.text query-field="project_name"/>
 			<field.text query-field="person_last_name"/>
-			<field.select query-field="organization_id" choices="query:person.active-org-memberships-name-id"  default="session:organization" prepend-blank="yes"/>
+			<field.select query-field="org_id" choices="query:person.active-org-memberships-name-id"  default="session:organization" prepend-blank="yes"/>
 			<field.select name="sort_order"
 					caption="Sort By"
 					style="combo"
-					choices="Project Name=project_name;Project ID=project_id"/>
+					choices="Project Name=project_name;Project ID=project_id"
+                    default="project_id"/>
 			<select heading="Project Search Results">
 				<display field="project_id" />
                 <display field="project_name"/>
@@ -53,7 +54,7 @@
 
 				<condition field="person_last_name" allow-null="no" comparison="starts-with" value="form:person_last_name" connector="and" />
 				<condition field="project_name" allow-null="no" comparison="starts-with" value="form:project_name" connector="and" bind-expr="upper(?)"/>
-				<condition field="organization_id" allow-null="no" comparison="equals" value="form:organization_id" connector="and" />
+				<condition field="org_id" allow-null="no" comparison="equals" value="form:org_id" connector="and" />
 			</select>
 			<director cancel-url="index.jsp" submit-caption="Search"/>
 		</select-dialog>

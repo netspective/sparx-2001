@@ -28,6 +28,7 @@
                 task_id,
                 task_type.caption,
                 task_summary,
+                task.parent_task_id,
                 task_status.caption,
                 task_priority.caption
             from
@@ -38,7 +39,90 @@
                 task.task_status = task_status.id and
                 task.task_type = task_type.id
             <report heading="Overview">
-				<banner>
+				<banner style="horizontal">
+                    <item caption="Edit"  url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
+                </banner>
+                <column heading="Task ID" align="left"/>
+                <column heading="Type" />
+                <column heading="Summary" />
+                <column heading="Parent Task" align="left"/>
+                <column heading="Status" />
+                <column heading="Priority" />
+            </report>
+            <params>
+                <param value="request:task_id"/>
+            </params>
+        </statement>
+        <statement name="assigned-members">
+            select
+                person.person_id,
+                person.complete_sortable_name,
+                org.org_name
+            from
+                task, taskperson_relation, person,
+                org, personorg_relationship
+            where
+                taskperson_relation.parent_id = task.task_id and
+                person.person_id = taskperson_relation.rel_person_id and
+                person.person_id = personorg_relationship.parent_id   and
+                personorg_relationship.rel_org_id = org.org_id and
+                task.task_id = ?
+            order by person.complete_sortable_name
+            <params>
+                <param value="request:task_id"/>
+            </params>
+            <report heading="Assigned Member(s)">
+				<banner style="horizontal">
+                    <item caption="Add" url="config-expr:member.jsp?project_id=${request:project_id}&amp;task_id=${request:task_id}&amp;task_summary=${request:task_summary}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Name" align="left" url="create-app-url:/person/home.jsp?cmd=dialog,task.registration,edit&amp;person_id=${0}"/>
+                <column heading="Organization" align="left"/>
+            </report>
+        </statement>
+        <statement name="parent-task-list">
+            select
+                task_summary,
+                task_id
+            from
+                task
+            where
+                parent_task_id is null and
+                owner_project_id = ?
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+        <statement name="parent-task-list-by-org">
+            select
+                task_summary,
+                task_id
+            from
+                task
+            where
+                parent_task_id is null and
+                owner_org_id = ?
+            <params>
+                <param value="session:organization"/>
+            </params>
+        </statement>
+        <statement name="child-task-list-report">
+            select
+                task_id,
+                task_type.caption,
+                task_summary,
+                task_status.caption,
+                task_priority.caption
+            from
+                task, task_priority, task_status, task_type
+            where
+                task.parent_task_id = ?  and
+                task.priority_id = task_priority.id and
+                task.task_status = task_status.id and
+                task.task_type = task_type.id
+            <report heading="Child Task(s)">
+				<banner style="horizontal">
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
                 </banner>
@@ -52,18 +136,6 @@
                 <param value="request:task_id"/>
             </params>
         </statement>
-        <statement name="assigned-members">
-            <report heading="Overview">
-				<banner>
-                    <item caption="Add" url="config-expr:assign.jsp?task_id=${request:task_id}"/>
-                </banner>
-                <column heading="ID" align="left"/>
-                <column heading="Last Name" align="left"/>
-                <column heading="First Name" align="left"/>
-            </report>
-            <params>
-                <param value="request:task_id"/>
-            </params>
-        </statement>
+
     </sql-statements>
 </xaf>

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<schema name="task">
+
+	<table name="Task_Relationship_Type" abbrev="TskRelTy" type="Relationship_Type">
+		<enum>Parent of Task (parent_id is child, task_id is parent)</enum>
+		<enum>Sibling of Task (parent_id and task_id are siblings)</enum>
+		<enum>Child of Task (parent_id is parent, task_id is child)</enum>
+	</table>
+
+	<table name="Task" type="Default">
+		<column name="task_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="owner_project_id" lookupref="Project.project_id" descr="Source Project ID (NULL if belongs to an org or person)"/>
+		<column name="owner_org_id" lookupref="Org.org_id" descr="If this task belongs to a specific org, this is the ID of the org (NULL if belongs to a project or person)"/>
+		<column name="owner_person_id" lookupref="Person.person_id" descr="If this task belongs to a specific person, this is the ID (NULL if belongs to an org or person)"/>
+		<column name="task_type" lookupref="Task_Type" descr="The type of task"/>
+		<column name="task_summary" type="text" size="512" descr="Summary of the task"/>
+		<column name="parent_task_id" selfref="Task.task_id" descr="Parent task (NULL if this is not a sub-task)"/>
+		<column name="priority_id" lookupref="Task_Priority" descr="The priority of the task"/>
+		<column name="impact_id" lookupref="Task_Impact" descr="The impact of the task"/>
+		<column name="task_status" lookupref="Task_Status" descr="The active status of this task"/>
+		<column name="task_resolution" lookupref="Task_Resolution" descr="The resolution status of this task"/>
+		<column name="task_descr" type="text" size="4000" descr="Description of the task"/>
+        <column name="start_date" type="date" descr="Task start date"/>
+        <column name="end_date" type="date" descr="Task end date"/>
+	</table>
+
+    <table name="Task_Priority" abbrev="TskPrt" type="Enumeration">
+        <enum id="0" abbrev="L">Low</enum>
+        <enum id="1" abbrev="M">Medium</enum>
+        <enum id="2" abbrev="H">High</enum>
+    </table>
+
+	<table name="TaskPerson_Relation" abbrev="TskPerRel" type="Person_Relationship">
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Relationship_Status</param>
+		<param name="relationship-type-enum">TaskPerson_Relation_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+	</table>
+
+    <table name="TaskPerson_Relation_Type" abbrev="TskPerRelTy" type="Relationship_Type">
+        <enum id="0">Coordinator/Owner</enum>
+        <enum id="1">Member</enum>
+    </table>
+
+    <table name="Task_Relationship_Status" abbrev="TskRelSt" type="Relationship_Status"/>
+
+	<table name="Task_Dependency" abbrev="TskDep" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="dependency_type" lookupref="Task_Dependency_Type" descr="The type of dependency"/>
+		<column name="parent_id" parentref="Task.task_id" descr="Parent task"/>
+		<column name="dependent_id" lookupref="Task.task_id" descr="Dependent task"/>
+	</table>
+
+	<table name="Task_Event" abbrev="TskEvt" type="Event">
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Event_Status</param>
+		<param name="event-type-enum">Task_Event_Type</param>
+	</table>
+
+    <table name="Task_Event_Type" abbrev="TskEvtTy" type="Event_Type"/>
+
+    <table name="Task_Event_Status" abbrev="TskEvtSt" type="Event_Status"/>
+
+	<table name="Task_Flag" abbrev="TskFlg" type="Flag">
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Flag_Status</param>
+		<param name="flag-type-enum">Task_Flag_Type</param>
+	</table>
+
+    <table name="Task_Flag_Type" abbrev="TskFlgTy" type="Flag_Type"/>
+
+    <table name="Task_Flag_Status" abbrev="TskFlgSt" type="Flag_Status"/>
+
+    <table name="Task_Impact" abbrev="TskImpt" type="Enumeration">
+        <enum id="0" abbrev="N">None</enum>
+        <enum id="1" abbrev="I">Important</enum>
+    </table>
+
+    <table name="Task_Status" abbrev="TskSt" type="Status"/>
+    <table name="Task_Resolution" abbrev="TskRes" type="Enumeration">
+        <enum id="0" abbrev="N">Incomplete</enum>
+        <enum id="1" abbrev="I">Complete</enum>
+    </table>
+
+	<table name="Task_Relationship" abbrev="TskRel" type="Task_Relationship">
+		<description>The relationship between two tasks.</description>
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Relationship_Status</param>
+		<param name="relationship-type-enum">Task_Relationship_Type</param>
+	</table>
+</schema>

@@ -1,4 +1,4 @@
-<jsp:directive.page language="java" import="com.xaf.navigate.*"/>
+<jsp:directive.page language="java" import="com.netspective.sparx.xaf.navigate.*"/>
 <jsp:directive.taglib prefix="app" uri="/WEB-INF/tld/page.tld"/>
 
 <jsp:scriptlet>

@@ -6,11 +6,11 @@
  */
 package app.form;
 
-import com.xaf.form.DialogContext;
-import com.xaf.form.Dialog;
-import com.xaf.security.AuthenticatedUser;
-import com.xaf.db.ConnectionContext;
-import com.xaf.db.DatabaseContextFactory;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xaf.security.AuthenticatedUser;
+import com.netspective.sparx.xif.dal.ConnectionContext;
+import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import dal.domain.Project;
 import dal.domain.rows.ProjectOrgRelationRows;
 import dal.domain.row.ProjectRow;
@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Iterator;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.io.Writer;
 
 public class ProjectDialog extends Dialog
 {
@@ -69,7 +70,7 @@ public class ProjectDialog extends Dialog
      *  This is where you perform all your actions. Whatever you return as the function result will be shown
      * in the HTML
      */
-    public String execute(DialogContext dc)
+    public void execute(Writer writer, DialogContext dc)
     {
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
@@ -90,8 +91,6 @@ public class ProjectDialog extends Dialog
         {
             // dialog is in the delete data command mode
             this.processDeleteData(dc);
-
-            return "";
         }
 
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
@@ -104,10 +103,7 @@ public class ProjectDialog extends Dialog
         catch (Exception e)
         {
             e.printStackTrace();
-            return "Failed to create response URL.";
         }
-
-        return "";
     }
 
     /**
@@ -197,7 +193,7 @@ public class ProjectDialog extends Dialog
     {
         HttpSession session = dc.getSession();
         AuthenticatedUser user =
-                (AuthenticatedUser) session.getAttribute(com.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
+                (AuthenticatedUser) session.getAttribute(com.netspective.sparx.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
         Map personMap = (Map) user.getAttribute("registration");
         BigDecimal personId = (BigDecimal) personMap.get("person_id");
 		// the getValue() method retrieves the dialog field values according

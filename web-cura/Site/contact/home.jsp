@@ -1,5 +1,5 @@
 <%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
-<%@ taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"%>
+<%@ taglib prefix="xaf" uri="/WEB-INF/tld/sparx.tld"%>
 
 <%
  String heading = request.getParameter("person_name");

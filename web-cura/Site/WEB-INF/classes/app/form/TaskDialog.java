@@ -6,17 +6,18 @@
  */
 package app.form;
 
-import com.xaf.form.Dialog;
-import com.xaf.form.DialogContext;
-import com.xaf.security.AuthenticatedUser;
-import com.xaf.db.ConnectionContext;
-import com.xaf.db.DatabaseContextFactory;
+import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.security.AuthenticatedUser;
+import com.netspective.sparx.xif.dal.ConnectionContext;
+import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.math.BigDecimal;
+import java.io.Writer;
 
 import dal.table.TaskTable;
 import dal.domain.row.TaskRow;
@@ -61,7 +62,7 @@ public class TaskDialog extends Dialog
      *  This is where you perform all your actions. Whatever you return as the function result will be shown
      * in the HTML
      */
-    public String execute(DialogContext dc)
+    public void execute(Writer writer, DialogContext dc)
     {
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
@@ -79,7 +80,15 @@ public class TaskDialog extends Dialog
             this.processEditData(dc);
         }
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-        String url = request.getContextPath() + "/task/home.jsp?task_id=" + request.getAttribute("task_id");
+        String url = "";
+        if (request.getAttribute("project_id") != null)
+        {
+            url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id");
+        }
+        else
+        {
+            url = request.getContextPath() + "/task/home.jsp?task_id=" + request.getAttribute("task_id");
+        }
         try
         {
             ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
@@ -87,10 +96,7 @@ public class TaskDialog extends Dialog
         catch (Exception e)
         {
             e.printStackTrace();
-            return "Failed to create response URL.";
         }
-
-        return "";
     }
 
     /**
@@ -134,7 +140,7 @@ public class TaskDialog extends Dialog
     {
         HttpSession session = dc.getSession();
         AuthenticatedUser user =
-                (AuthenticatedUser) session.getAttribute(com.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
+                (AuthenticatedUser) session.getAttribute(com.netspective.sparx.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
         Map personMap = (Map) user.getAttribute("registration");
         BigDecimal personId = (BigDecimal) personMap.get("person_id");
 
@@ -153,7 +159,15 @@ public class TaskDialog extends Dialog
             taskTable.insert(cc, taskRow);
             cc.endTransaction();
 
-            dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
+            if (rc.getOwnerProjectIdRequestParam() != null)
+            {
+                dc.getRequest().setAttribute("project_name","");
+                dc.getRequest().setAttribute("project_id", rc.getOwnerProjectIdRequestParam());
+            }
+            else
+            {
+                dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
+            }
         }
         catch (Exception e)
         {

@@ -33,7 +33,8 @@
 			<field.select name="sort_order"
 					caption="Sort By"
 					style="combo"
-					choices="Name=org_name;Abbreviation=org_abbrev"/>
+					choices="Name=org_name;Abbreviation=org_abbrev"
+                    default="org_name"/>
 			<select heading="Account Search Results">
 				<display field="org_id"/>
 				<display field="org_code"/>

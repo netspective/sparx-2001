@@ -6,12 +6,12 @@
  */
 package app.form;
 
-import com.xaf.form.DialogContext;
-import com.xaf.task.TaskExecuteException;
-import com.xaf.sql.StatementManager;
-import com.xaf.sql.StatementNotFoundException;
-import com.xaf.db.DatabaseContext;
-import com.xaf.db.DatabaseContextFactory;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.task.TaskExecuteException;
+import com.netspective.sparx.xaf.sql.StatementManager;
+import com.netspective.sparx.xaf.sql.StatementNotFoundException;
+import com.netspective.sparx.xif.db.DatabaseContext;
+import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +21,9 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.io.Writer;
 
-public class PersonDialog   extends com.xaf.form.Dialog
+public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
 {
     public static final int CONTACT_METHOD_TYPE_ADDRESS = 0;
     public static final int CONTACT_METHOD_TYPE_PHONE = 1;
@@ -73,7 +74,7 @@ public class PersonDialog   extends com.xaf.form.Dialog
      *  This is where you perform all your actions. Whatever you return as the function result will be shown
      * in the HTML
      */
-    public String execute(DialogContext dc)
+    public void execute(Writer writer, DialogContext dc)
     {
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
@@ -99,10 +100,7 @@ public class PersonDialog   extends com.xaf.form.Dialog
         catch (Exception e)
         {
             e.printStackTrace();
-            return "Failed to create response URL.";
         }
-
-        return "";
     }
 
     /**

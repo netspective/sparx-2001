@@ -27,7 +27,7 @@
                 project.project_status = project_status.id
 
             <report heading="Overview">
-				<banner>
+				<banner style="horizontal">
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;project_id=${request:project_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;project_id=${request:project_id}"/>
                 </banner>
@@ -46,6 +46,7 @@
 
         <statement name="member-persons">
             select
+                person.complete_sortable_name,
                 person.person_id
             from
                 person, projectperson_relation, org, personorg_relationship
@@ -82,7 +83,7 @@
                 <param value="session:organization"/>
             </params>
             <report heading="Project Members">
-				<banner>
+				<banner style="horizontal">
                     <item caption="Edit" url="config-expr:member.jsp?project_id=${request:project_id}&amp;project_name=${request:project_name}"/>
                 </banner>
                 <column display="no"/>
@@ -99,20 +100,22 @@
                 task.task_summary,
                 task_status.caption
             from
-                task, task_type, task_status
+                task, task_type, task_status, project
             where
                 task.owner_project_id = ?   and
-                task.task_id = task_type.id and
+                task.owner_project_id = project.project_id and
+                task.task_type = task_type.id and
                 task.task_status = task_status.id
             <params>
                 <param value="request:project_id"/>
             </params>
             <report heading="Project Tasks">
-				<banner>
-                    <item caption="Add" url="config-expr:${create-app-url:/task/create.jsp}?project_id=${request:project_id}&amp;task_type=1"/>
+				<banner style="horizontal">
+                    <item caption="Add" url="config-expr:${create-app-url:/task/create.jsp}?project_id=${request:project_id}&amp;project_name=${request:project_name}&amp;task_type=1"/>
+                    <item caption="Delete" url="config-expr:${create-app-url:/project/delete_task.jsp}?project_id=${request:project_id}&amp;project_name=${request:project_name}"/>
                 </banner>
-                <column heading="Task ID" align="center" display="yes"/>
-                <column heading="Name" align="left" url="create-app-url:/task/home.jsp?task_id=${0}&amp;task_summary=%{1}"/>
+                <column heading="Task ID" align="left" display="yes"/>
+                <column heading="Name" align="left" url="create-app-url:/task/home.jsp?project_id=${request:project_id}&amp;task_id=${0}&amp;task_summary=%{1}"/>
                 <column heading="Status" align="left"/>
             </report>
         </statement>
