@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: XmlSource.java,v 1.11 2002-12-30 15:59:56 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.12 2002-12-30 18:04:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -88,6 +88,10 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.xpath.XPathAPI;
 import org.apache.oro.text.regex.*;
 import org.apache.oro.text.perl.Perl5Util;
+import org.apache.commons.jexl.Expression;
+import org.apache.commons.jexl.ExpressionFactory;
+import org.apache.commons.jexl.JexlContext;
+import org.apache.commons.jexl.JexlHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
@@ -775,40 +779,6 @@ public class XmlSource
         }
     }
 
-    public void replaceNodeMacros(Node inNode, Set nodeNames, Hashtable params)
-    {
-        if(params == null || params.size() == 0)
-            return;
-
-        Enumeration e = params.keys();
-        while(e.hasMoreElements())
-        {
-            String paramName = (String) e.nextElement();
-            String paramRepl = "$" + paramName + "$";
-            String paramValue = (String) params.get(paramName);
-            if(paramValue == null)
-                continue;
-
-            NamedNodeMap attrs = inNode.getAttributes();
-            if(attrs != null && attrs.getLength() > 0)
-            {
-                for(int i = 0; i < attrs.getLength(); i++)
-                {
-                    Node attr = attrs.item(i);
-                    if(nodeNames.contains(attr.getNodeName()))
-                        replaceNodeValue(attr, paramRepl, paramValue);
-                }
-            }
-            NodeList children = inNode.getChildNodes();
-            for(int c = 0; c < children.getLength(); c++)
-            {
-                Node node = children.item(c);
-                if(node.getNodeType() == Node.ELEMENT_NODE && nodeNames.contains(node.getNodeName()))
-                    replaceNodeValue(node.getFirstChild(), paramRepl, paramValue);
-            }
-        }
-    }
-
     public void addMetaInfoOptions()
     {
         if(xmlDoc == null || metaInfoElem == null)
@@ -1215,5 +1185,97 @@ public class XmlSource
     public Metric getMetrics(Metric root)
     {
         return null;
+    }
+
+    public String replaceExpressions(String original, Map variables)
+    {
+        if(original.indexOf("${") == -1)
+            return original;
+
+        StringBuffer sb = new StringBuffer();
+        int prev = 0;
+
+        int pos;
+        while((pos = original.indexOf("$", prev)) >= 0)
+        {
+            if(pos > 0)
+            {
+                sb.append(original.substring(prev, pos));
+            }
+            if(pos == (original.length() - 1))
+            {
+                sb.append('$');
+                prev = pos + 1;
+            }
+            else if(original.charAt(pos + 1) != '{')
+            {
+                sb.append(original.charAt(pos + 1));
+                prev = pos + 2;
+            }
+            else
+            {
+                int endName = original.indexOf('}', pos);
+                if(endName < 0)
+                {
+                    throw new RuntimeException("Syntax error in prop: " + original);
+                }
+
+                String javaExprStr = original.substring(pos + 2, endName);
+                try
+                {
+                    Expression expression = ExpressionFactory.createExpression(javaExprStr);
+                    JexlContext jexlContext = JexlHelper.createContext();
+                    jexlContext.setVars(variables);
+                    String result = expression.evaluate(jexlContext).toString();
+                    sb.append(result);
+                }
+                catch (Exception e)
+                {
+                    sb.append("${" + javaExprStr + "}");
+                    addError("Unable to evaluate expression '"+ javaExprStr +"': " + e.getMessage());
+                }
+
+                prev = endName + 1;
+            }
+        }
+
+        if(prev < original.length()) sb.append(original.substring(prev));
+        return sb.toString();
+    }
+
+    public void replaceNodeMacros(Node inNode, Set nodeNames, Map variables)
+    {
+        if(!variables.containsKey("this"))
+            variables.put("this", inNode);
+
+        NamedNodeMap attrs = inNode.getAttributes();
+        if(attrs != null && attrs.getLength() > 0)
+        {
+            for(int i = 0; i < attrs.getLength(); i++)
+            {
+                Node attr = attrs.item(i);
+                if(nodeNames.contains(attr.getNodeName()))
+                {
+                    String nodeValue = attr.getNodeValue();
+                    String replaced = replaceExpressions(nodeValue, variables);
+                    if(nodeValue != replaced)
+                        attr.setNodeValue(replaced);
+                }
+            }
+        }
+
+        NodeList children = inNode.getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
+        {
+            Node node = children.item(c);
+            if(node.getNodeType() == Node.ELEMENT_NODE && nodeNames.contains(node.getNodeName()))
+            {
+                Text textNode = (Text) node.getFirstChild();
+                String nodeValue = textNode.getNodeValue();
+                String replaced = replaceExpressions(nodeValue, variables);
+                if(nodeValue != replaced)
+                    textNode.setNodeValue(replaced);
+            }
+        }
     }
 }
