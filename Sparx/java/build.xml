@@ -301,6 +301,14 @@ Build targets:
 
     <target name="sparx" depends="init,compile,jar,javadoc,web-shared,clean"/>
 
+    <target name="change-log" depends="init">
+        <cvschangelog dir=".." destfile="change-log.xml"/>
+        <style in="change-log.xml" out="change-log.html" style="${web-shared.dir}/resources/xslt/change-log.xsl">
+            <param name="title" expression="Sparx ChangeLog"/>
+            <param name="module" expression="Sparx"/>
+        </style>
+    </target>
+
     <!-- =============================== Help =============================== -->
     <target name="targets">
         <echo message=""/>
@@ -312,6 +320,7 @@ Build targets:
         <echo message="  jar           Create JAR"/>
         <echo message="  javadoc       Create JavaDoc for Classes"/>
         <echo message="  compile       Compile Sparx"/>
+        <echo message="  change-log    Generate change-log.html"/>
         <echo message="  web-shared    Create a ZIP file of the web-shared directory"/>
         <echo message="  kit-eval      Create a ZIP file of the Sparx Evaluation Kit with only binaries and no samples"/>
         <echo message="  kit-eval-full Create a ZIP file of the Sparx Evaluation Kit"/>
