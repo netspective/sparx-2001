@@ -75,7 +75,7 @@ public class AppServerCategory extends Category {
   protected String server;
 
   /** An identifier for this particular version/release. */
-  protected String version;
+  protected String version = com.xaf.BuildConfiguration.getVersionAndBuildShort();
 
   /** A reference to the factory to create <code>AppServerCategory</code>
       instances.  */

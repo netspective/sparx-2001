@@ -658,7 +658,7 @@ public class StandardDialogSkin implements DialogSkin
 			"</script>\n"+
 			(appendPostScript != null ? appendPostScript : EMPTY);
 
-		com.xaf.log.LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getDialog().getName(), startTime);
+		com.xaf.log.LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getLogId(), startTime);
 		return html;
 	}
 

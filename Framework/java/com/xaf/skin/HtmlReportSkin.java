@@ -128,7 +128,7 @@ public class HtmlReportSkin implements ReportSkin
             writer.write("</td></tr></table>");
         }
 
-		com.xaf.log.LogManager.recordAccess((javax.servlet.http.HttpServletRequest) rc.getRequest(), null, this.getClass().getName(), rc.getReport().getName(), startTime);
+		com.xaf.log.LogManager.recordAccess((javax.servlet.http.HttpServletRequest) rc.getRequest(), null, this.getClass().getName(), rc.getLogId(), startTime);
     }
 
 	public void produceReport(Writer writer, ReportContext rc, ResultSet rs) throws SQLException, IOException

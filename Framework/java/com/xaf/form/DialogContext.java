@@ -7,6 +7,7 @@ import javax.servlet.http.*;
 import java.security.*;
 
 import com.xaf.db.*;
+import com.xaf.log.*;
 import com.xaf.value.*;
 
 public final class DialogContext extends Hashtable implements ValueContext
@@ -98,6 +99,11 @@ public final class DialogContext extends Hashtable implements ValueContext
 
 	public DialogContext(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
 	{
+		AppServerCategory monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
+		long startTime = 0;
+		if(monitorLog.isInfoEnabled())
+			startTime = new Date().getTime();
+
         aRequest.setAttribute(DIALOG_CONTEXT_ATTR_NAME, this);
 
 		request = aRequest;
@@ -176,6 +182,17 @@ public final class DialogContext extends Hashtable implements ValueContext
 			if(qName != null)
 				put(qName, new DialogFieldState(director, dataCmd));
 		}
+
+		LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
+	}
+
+	/**
+	 * Returns a string useful for displaying a unique Id for this DialogContext
+	 * in a log or monitor file.
+	 */
+	public String getLogId()
+	{
+		return dialog.getName() + " (" + transactionId + ")";
 	}
 
 	public List getListeners() { return listeners; }

@@ -8,7 +8,7 @@ public class BuildConfiguration
 	public static final int releaseNumber = 1;
 	public static final int versionMajor = 2;
 	public static final int versionMinor = 8;
-	public static final int buildNumber = 4;
+	public static final int buildNumber = 5;
 
 	static public final String getBuildPathPrefix()
 	{
@@ -33,5 +33,10 @@ public class BuildConfiguration
 	static public final String getProductBuild()
 	{
 		return productName + " Version " + getVersion() + " Build " + buildNumber;
+	}
+
+	static public final String getVersionAndBuildShort()
+	{
+		return "v" + getVersion() + "b" + buildNumber;
 	}
 }

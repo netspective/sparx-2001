@@ -59,7 +59,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 	private VirtualPath pagesPath = new VirtualPath();
 
 	protected AppServerCategory debugLog;
-	protected AppServerCategory traceLog;
 	protected AppServerCategory monitorLog;
 
 	protected ConfigurationManager manager;
@@ -73,11 +72,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		return debugLog;
 	}
 
-	public AppServerCategory getTraceLog()
-	{
-		return traceLog;
-	}
-
 	public AppServerCategory getMonitorLog()
 	{
 		return monitorLog;
@@ -86,7 +80,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 	public void createLogs()
 	{
 		debugLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_PAGE);
-		traceLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.TRACE_PAGE);
 		monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
 	}
 
@@ -290,9 +283,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		if(loginDialog == null)
 			return false;
 
-		if(traceLog.isInfoEnabled())
-			traceLog.info("enter PageControllerServlet.doLogin()");
-
 		String logout = req.getParameter(logoutParamName);
 		if(logout != null)
 		{
@@ -347,9 +337,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 
 		org.apache.log4j.NDC.push(req.getSession(true).getId());
 
-		if(traceLog.isInfoEnabled())
-			traceLog.info("enter PageControllerServlet.doGet()");
-
 		String rediscover = req.getParameter(rediscoverParamName);
 		if(rediscover != null)
 			discoverPages(req, resp);
@@ -359,19 +346,24 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		PageContext pc = new PageContext(this, req, resp);
 		VirtualPath.FindResults activePathResults = pc.getActivePath();
 		VirtualPath activePath = activePathResults.getMatchedPath();
+		ServletPage page = null;
 		if(activePath != null)
 		{
-			ServletPage page = activePath.getPage();
+			page = activePath.getPage();
 			if(page == null)
 			{
 				resp.getWriter().print("Found a path object for '"+ activePath.getAbsolutePath() +"' but could not find a ServletPage.");
-				return;
+				org.apache.log4j.NDC.pop();
+ 				return;
 			}
 
 			if(page.requireLogin(pc))
 			{
 				if(doLogin(req, resp))
+				{
+					org.apache.log4j.NDC.pop();
 	        		return;
+				}
 			}
 
 			page.handlePage(pc);
@@ -381,23 +373,13 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 			resp.getWriter().print("Unable to find a ServletPage to match this URL path.");
 		}
 
-		LogManager.recordAccess(req, monitorLog, "page", req.getRequestURI(), startTime);
-
-		if(traceLog.isDebugEnabled())
-			traceLog.debug("exit PageControllerServlet.doGet()");
+		LogManager.recordAccess(req, monitorLog, page != null ? page.getClass().getName() : this.getClass().getName(), req.getRequestURI(), startTime);
 		org.apache.log4j.NDC.pop();
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-		if(traceLog.isInfoEnabled())
-		{
-			traceLog.info("enter PageControllerServlet.doPost()");
-	    	doGet(req, resp);
-		    traceLog.info("exit PageControllerServlet.doPost()");
-		}
-		else
-	    	doGet(req, resp);
+    	doGet(req, resp);
     }
 
 }

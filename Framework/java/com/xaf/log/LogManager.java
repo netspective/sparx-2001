@@ -15,8 +15,6 @@ public class LogManager
 	public static final String MONITOR_SECURITY = "xaf.monitor.security";
 	public static final String MONITOR_SQL      = "xaf.monitor.sql";
 
-	public static final String TRACE_PAGE       = "xaf.trace.page";
-
 	public static void recordAccess(HttpServletRequest req, AppServerCategory cat, String objName, String id, long startTime)
 	{
 		if(cat == null) cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);

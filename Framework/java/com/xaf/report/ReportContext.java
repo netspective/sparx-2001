@@ -135,6 +135,18 @@ public class ReportContext implements ValueContext
         }
     }
 
+	/**
+	 * Returns a string useful for displaying a unique Id for this DialogContext
+	 * in a log or monitor file.
+	 */
+	public String getLogId()
+	{
+		String result = reportDefn.toString();
+		if(result == null)
+			return Integer.toString(reportDefn.getColumns().size());
+		return result;
+	}
+
 	public ReportContext(ValueContext vc, Report reportDefn, ReportSkin skin)
 	{
 		this(vc.getServletContext(), vc.getServlet(), vc.getRequest(), vc.getResponse(), reportDefn, skin);
