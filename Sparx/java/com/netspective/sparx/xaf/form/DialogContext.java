@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.22 2002-10-13 20:44:15 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.23 2002-10-16 14:19:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -459,25 +459,30 @@ public class DialogContext extends ServletValueContext
 
     public void performDefaultRedirect(Writer writer) throws IOException
     {
-        String redirect = request.getParameter(DEFAULT_REDIRECT_PARAM_NAME);
-        if(redirect == null)
+        String redirectToUrl = request.getParameter(DEFAULT_REDIRECT_PARAM_NAME);
+        if(redirectToUrl == null)
         {
-            redirect = request.getParameter(dialog.getPostExecuteRedirectUrlParamName());
-            if(redirect == null)
-                redirect = getNextActionUrl(getOriginalReferer());
+            redirectToUrl = request.getParameter(dialog.getPostExecuteRedirectUrlParamName());
+            if(redirectToUrl == null)
+                redirectToUrl = getNextActionUrl(getOriginalReferer());
         }
-        HttpServletResponse response = (HttpServletResponse) getResponse();
 
-        if(redirectDisabled)
+        if(redirectDisabled || redirectToUrl == null)
         {
-            writer.write("<p><b>Redirect is disabled</b>. Would have redirected to <code>"+ redirect +"</code>.</p>");
+            writer.write("<p><b>Redirect is disabled</b>.");
+            writer.write("<br><code>redirect</code> URL parameter is <code>"+ request.getParameter(DEFAULT_REDIRECT_PARAM_NAME) +"</code>");
+            writer.write("<br><code>redirect</code> form field is <code>"+ request.getParameter(dialog.getPostExecuteRedirectUrlParamName()) +"</code>");
+            writer.write("<br><code>getNextActionUrl</code> method result is <code>"+ getNextActionUrl(null) +"</code>");
+            writer.write("<br><code>original referer</code> url is <code>"+ getOriginalReferer() +"</code>");
+            writer.write("<p><font color=red>Would have redirected to <code>"+ redirectToUrl +"</code>.</font>");
             return;
         }
 
+        HttpServletResponse response = (HttpServletResponse) getResponse();
         if(response.isCommitted())
-            skin.renderRedirectHtml(writer, this, redirect);
+            skin.renderRedirectHtml(writer, this, redirectToUrl);
         else
-            ((HttpServletResponse) response).sendRedirect(redirect);
+            ((HttpServletResponse) response).sendRedirect(redirectToUrl);
     }
 
     /**
@@ -1251,12 +1256,15 @@ public class DialogContext extends ServletValueContext
     {
         StringBuffer hiddens = new StringBuffer();
         hiddens.append("<input type='hidden' name='" + dialog.getOriginalRefererParamName() + "' value='" + originalReferer + "'>\n");
-        hiddens.append("<input type='hidden' name='" + dialog.getPostExecuteRedirectUrlParamName() + "' value='" + (runSequence > 1 ? request.getParameter(dialog.getPostExecuteRedirectUrlParamName()) : request.getParameter(DialogContext.DEFAULT_REDIRECT_PARAM_NAME)) + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getTransactionIdParamName() + "' value='" + transactionId + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getRunSequenceParamName() + "' value='" + (runSequence + 1) + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getExecuteSequenceParamName() + "' value='" + execSequence + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getActiveModeParamName() + "' value='" + nextMode + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.PARAMNAME_DIALOGQNAME + "' value='" + (runSequence > 1 ? request.getParameter(Dialog.PARAMNAME_DIALOGQNAME) : request.getParameter(DialogManager.REQPARAMNAME_DIALOG)) + "'>\n");
+
+        String redirectUrlParamValue = (runSequence > 1 ? request.getParameter(dialog.getPostExecuteRedirectUrlParamName()) : request.getParameter(DialogContext.DEFAULT_REDIRECT_PARAM_NAME));
+        if(redirectUrlParamValue != null)
+            hiddens.append("<input type='hidden' name='" + dialog.getPostExecuteRedirectUrlParamName() + "' value='" + redirectUrlParamValue + "'>\n");
 
         if(dataCmdStr != null)
             hiddens.append("<input type='hidden' name='" + dialog.getDataCmdParamName() + "' value='" + dataCmdStr + "'>\n");
