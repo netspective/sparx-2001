@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Row.java,v 1.3 2002-08-29 03:36:43 shahid.shah Exp $
+ * $Id: Row.java,v 1.4 2002-10-08 11:10:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -201,6 +201,13 @@ public interface Row
      * if the value should be replaced.
      */
     public boolean populateDataForXmlNodeName(String nodeName, String value, boolean append) throws ParseException;
+
+    /**
+     * Set the column identified by an XML nodeName to the given expression. XML node names may
+     * be different than the actual column names so it's the responsibility of the row to
+     * set it's appropriate data. This is typically called by Schema.importFromXml().
+     */
+    public boolean populateSqlExprForXmlNodeName(String nodeName, String expr) throws ParseException;
 
     /**
      * Return true if the given node name is valid XML node name for a child table/row

@@ -103,6 +103,33 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 			return (EnumeratedItem) abbrevsMap.get(abbrev.toUpperCase());
 		}
 
+        /**
+         * Take a string that might be an id, caption, or abbreviation and try to locate the EnumeratedItem for
+         * that string. First, the string is parsed as an integer -- if an integer is found, it is verified to
+         * ensure that it's valid. If the string is not an integer, it is checked as a caption. If it is not a valid
+         * caption, it is checked to against the list of valid abbreviations. If the string turns out not to be a
+         * valid id, caption, or abbreviation then null is returned.
+         */
+		public static EnumeratedItem parseItem(String idOrCaptionOrAbbrev)
+		{
+            try
+            {
+                int id = Integer.parseInt(idOrCaptionOrAbbrev);
+                return getEnum(id);
+            }
+            catch(NumberFormatException nfe)
+            {
+                EnumeratedItem item = getItemByCaption(idOrCaptionOrAbbrev);
+                if(item != null)
+                    return item;
+                item = getItemByAbbrev(idOrCaptionOrAbbrev);
+                if(item != null)
+                    return item;
+            }
+
+			return null;
+		}
+
 		private int id;
 		private Integer idObject;
 		private String caption;

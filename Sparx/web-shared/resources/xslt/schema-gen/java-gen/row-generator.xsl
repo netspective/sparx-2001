@@ -251,12 +251,39 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 				return true;
 			}
 	</xsl:when>
+    <xsl:when test="@_gen-ref-table-is-enum = 'yes'">
+			if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName)) {
+                <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem enum = <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem.parseItem(value);
+                if(enum != null)
+                {
+                    set<xsl:value-of select="@_gen-method-name"/>(enum.getId());
+                    return true;
+                }
+                else
+                    throw new ParseException("<xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem was unable to parse '"+ value +"'", 0);
+			}
+    </xsl:when>
 	<xsl:otherwise>			if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName)) {
 				set<xsl:value-of select="@_gen-method-name"/>(table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(value));
 				return true;
 			}
 	</xsl:otherwise>
 </xsl:choose>
+</xsl:for-each>
+		return false;
+    }
+
+    public boolean populateSqlExprForXmlNodeName(String nodeName, String expr) throws ParseException
+    {
+<xsl:for-each select="column">
+<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
+<xsl:variable name="java-type-init-cap"><xsl:value-of select="@_gen-java-type-init-cap"/></xsl:variable>
+<xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
+        if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName))
+        {
+			set<xsl:value-of select="@_gen-method-name"/>SqlExpr(expr);
+			return true;
+		}
 </xsl:for-each>
 		return false;
     }
@@ -273,7 +300,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:for-each>
 		return false;
     }
-    
+
     public Row createChildRowForXmlNodeName(String nodeName)
     {
     	if(! isParentRow()) return null;

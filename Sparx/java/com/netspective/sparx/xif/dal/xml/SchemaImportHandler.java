@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaImportHandler.java,v 1.2 2002-08-30 00:30:12 shahid.shah Exp $
+ * $Id: SchemaImportHandler.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
@@ -79,12 +79,16 @@ import com.netspective.sparx.xif.dal.TableImportStatistic;
  */
 public class SchemaImportHandler implements ContentHandler
 {
+    static public final String ATTRNAME_SQL_EXPR = "_sql-expr";
+    static public final String ATTRNAME_FORMAT   = "_format";
+
     private class NodeStackEntry
     {
         private String qName;
         private int depth;
         private Row row;
         private String rowColumnName;
+        private boolean isSqlExpr;
         private boolean written;
 
         public NodeStackEntry(String qName, int depth)
@@ -105,9 +109,21 @@ public class SchemaImportHandler implements ContentHandler
             this.rowColumnName = activeRowColName;
         }
 
+        public NodeStackEntry(String qName, Row row, String activeRowColName, int depth, boolean isSqlExpr)
+        {
+            this(qName, row, depth);
+            this.rowColumnName = activeRowColName;
+            this.isSqlExpr = isSqlExpr;
+        }
+
         public boolean isColumnEntry()
         {
             return rowColumnName != null ? true : false;
+        }
+
+        public boolean isSqlExpression()
+        {
+            return isSqlExpr;
         }
 
         public void write() throws NamingException, SQLException
@@ -149,7 +165,10 @@ public class SchemaImportHandler implements ContentHandler
             String text = new String(buf, start, end);
             if (text == null || text.trim().length() == 0)
                 return;
-            entry.row.populateDataForXmlNodeName(entry.rowColumnName, text, true);
+            if(entry.isSqlExpression())
+                entry.row.populateSqlExprForXmlNodeName(entry.rowColumnName, text);
+            else
+                entry.row.populateDataForXmlNodeName(entry.rowColumnName, text, true);
         }
         catch (ParseException exc)
         {
@@ -197,8 +216,11 @@ public class SchemaImportHandler implements ContentHandler
                     for (int i = 0; i < attributes.getLength(); i++)
                     {
                         String attrName = attributes.getQName(i);
-                        if(! childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
-                            parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                        if(! attrName.equals(ATTRNAME_SQL_EXPR))
+                        {
+                            if(! childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
+                                parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                        }
                     }
                 }
             }
@@ -217,14 +239,19 @@ public class SchemaImportHandler implements ContentHandler
                         for (int i = 0; i < attributes.getLength(); i++)
                         {
                             String attrName = attributes.getQName(i);
-                            if(!childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
-                                parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                            if(! attrName.equals(ATTRNAME_SQL_EXPR))
+                            {
+                                if(!childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
+                                    parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                            }
                         }
                     }
                     else
                     {
                         if(entry.row.isValidXmlNodeNameForColumn(qName))
-                            nodeStack.push(new NodeStackEntry(qName, entry.row, qName, depth));
+                            nodeStack.push("yes".equals(attributes.getValue(ATTRNAME_SQL_EXPR)) ?
+                                            new NodeStackEntry(qName, entry.row, qName, depth, true) :
+                                            new NodeStackEntry(qName, entry.row, qName, depth));
                         else
                         {
                             nodeStack.push(new NodeStackEntry(qName, depth));

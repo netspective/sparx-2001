@@ -16,7 +16,7 @@ import com.netspective.sparx.xif.dal.*;
 
 /**
  * The class that contains all of the table definitions for the Schema. This class
- * defines a static variable called &lt;code&gt;instance&lt;/code&gt; that is automatically initialized 
+ * defines a static variable called &lt;code&gt;instance&lt;/code&gt; that is automatically initialized
  * at startup. Using this instance, the developer has complete access to all of the
  * tables, columns, row types, rows types, and domains contained in the schema.
  * &lt;p&gt;
@@ -27,7 +27,7 @@ import com.netspective.sparx.xif.dal.*;
  * 	PersonTable personTable = <xsl:value-of select="$class-name"/>.instance.getPersonTable();
  *	PersonAddressTable personAddressTable = <xsl:value-of select="$class-name"/>.instance.getPersonAddressTable();
  *	ConnectionContext cc = ConnectionContext.getConnectionContext(
- *		DatabaseContextFactory.getSystemContext(), dataSourceId, 
+ *		DatabaseContextFactory.getSystemContext(), dataSourceId,
  *		ConnectionContext.CONNCTXTYPE_AUTO);
  *
  *	// Create a new person record and insert it into the database:
@@ -35,16 +35,16 @@ import com.netspective.sparx.xif.dal.*;
  *	personRow.setNameFirst("First Name");
  *	personRow.setNameLast("Last Name");
  *	personTable.insert(cc, personRow);
- *	
+ *
  *	// assuming the the person_id column is an auto-inc, the DAL will automatically
  *	// provide a real ID after the insert
  *	long personIdLong = personRow.getPersonIdLong();
  *	Long personId = personRow.getPersonId();
  *
- *	// If we had any default values assigned by the database or triggers changed values, 
+ *	// If we had any default values assigned by the database or triggers changed values,
  *	// get the latest values from the database using the existing primary key
  *	personTable.refreshData(cc, personRow);
- *   	
+ *
  *	// Update the person record using the existing primary key automatically:
  *	personRow.setNameFirst("A new First Name");
  *	personRow.setNameMiddle("A new Middle Name");
@@ -55,7 +55,7 @@ import com.netspective.sparx.xif.dal.*;
  *	personTable.update(cc, personRow, "person_id = ?", personId);
  *	personTable.update(cc, personRow, "person_id = ?", new Object[personId]);
  *
- *	// since we're getting the personAddress row from an existing personRow, the join 
+ *	// since we're getting the personAddress row from an existing personRow, the join
  *	//   to the above personRow record is automatic (based on parent/child key)
  *	PersonAddressRow personAddressRow = personRow.createPersonAddressRow();
  *	personAddressRow.setAddressName("Home");
@@ -71,7 +71,7 @@ import com.netspective.sparx.xif.dal.*;
  *	// Now delete children and then the primary record
  *	personAddressTable.deletePersonAddressRowsUsingParentId(cc, personId);
  *	personTable.delete(cc, personRow);
- * 
+ *
  *	// Or, we can delete the person record using the existing primary key manually:
  *	personTable.delete(cc, personRow, "person_id = ?", personId);
  *	personTable.delete(cc, personRow, "person_id = ?", new Object[personId]);
@@ -85,7 +85,7 @@ public class <xsl:value-of select="$class-name"/> extends AbstractSchema
 <xsl:for-each select="table">	/** The <xsl:value-of select="@name"/> table definition **/
 	protected <xsl:value-of select="@_gen-table-class-name"/><xsl:value-of select="' '"/><xsl:value-of select="@_gen-table-member-name"/>;
 </xsl:for-each>
-	
+
 	public <xsl:value-of select="$class-name"/>()
 	{
 		super();
@@ -94,9 +94,15 @@ public class <xsl:value-of select="$class-name"/> extends AbstractSchema
 
 	public void initializeDefn()
 	{
-<xsl:for-each select="table">	
+<xsl:for-each select="datatype">
+<xsl:if test="@_gen-data-type-class-name">
+<xsl:text>		</xsl:text>registerColumnClass("<xsl:value-of select="@name"/>", <xsl:value-of select="@_gen-data-type-class-name"/>.class);
+<xsl:text>		</xsl:text>registerColumnClass("<xsl:value-of select="@_gen-data-type-name"/>", <xsl:value-of select="@_gen-data-type-class-name"/>.class);
+</xsl:if>
+</xsl:for-each>
+<xsl:for-each select="table">
 <xsl:text>		</xsl:text><xsl:value-of select="@_gen-table-member-name"/> = new <xsl:value-of select="@_gen-table-class-name"/>(this);
-</xsl:for-each>	
+</xsl:for-each>
 		finalizeDefn();
 	}
 

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportData.java,v 1.2 2002-09-04 16:33:25 shahid.shah Exp $
+ * $Id: DatabaseImportData.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -70,6 +70,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletContext;
@@ -124,6 +128,41 @@ public class DatabaseImportData extends AceServletPage
         out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
     }
 
+    public void echoDateFormat(Schema schema, Writer out, String dataType, String caption) throws IOException
+    {
+        Class colClass = schema.getColumnClass(dataType);
+        if(colClass != null)
+        {
+            DateFormat format = null;
+            try
+            {
+                Method method = colClass.getMethod("getDefaultDateFormat", null);
+                format = (DateFormat) method.invoke(null, null);
+            }
+            catch (NoSuchMethodException e)
+            {
+            }
+            catch (SecurityException e)
+            {
+            }
+            catch (IllegalAccessException e)
+            {
+            }
+            catch (IllegalArgumentException e)
+            {
+            }
+            catch (InvocationTargetException e)
+            {
+            }
+            out.write("<br>"+ caption +": " + colClass.getName() + "(");
+            out.write("DateFormat class is " + (format != null ? format.getClass().getName() : "null"));
+            out.write(", pattern is "+ (format != null ? (format instanceof SimpleDateFormat ? ("'" + ((SimpleDateFormat) format).toLocalizedPattern() + "'") : "unkown") : "unknown"));
+            out.write(")");
+        }
+        else
+            out.write("<br>"+ caption +": None");
+    }
+
     public void handlePageBody(PageContext pc) throws ServletException, IOException
     {
         PrintWriter out = pc.getResponse().getWriter();
@@ -147,7 +186,7 @@ public class DatabaseImportData extends AceServletPage
 
         out.write("<table class='data_table'>");
         out.write("<tr class='data_table'><td class='data_table' align=right>Source File:</td><td class='data_table'><font color='green'>"+ sourceFile +"</font></td></tr>");
-        out.write("<tr class='data_table'><td class='data_table' align=right>Schema Class:</td><td class='data_table'><font color='green'>"+ schemaClass.getName() +" ("+ ClassPath.getClassFileName(schemaClass.getName()) +")");
+        out.write("<tr class='data_table'><td class='data_table' align=right valign='top'>Schema Class:</td><td class='data_table'><font color='green'>"+ schemaClass.getName() +" ("+ ClassPath.getClassFileName(schemaClass.getName()) +")");
 
         Schema schema = null;
         try
@@ -156,9 +195,17 @@ public class DatabaseImportData extends AceServletPage
         }
         catch(Exception e)
         {
-            printStackTrace(out, e , "<br>");
+            printStackTrace(out, e, "<br>");
             schema = null;
         }
+
+        if(schema != null)
+        {
+            echoDateFormat(schema, out, "date", "Date Column");
+            echoDateFormat(schema, out, "time", "Time Column");
+            echoDateFormat(schema, out, "stamp", "Stamp Column");
+        }
+
         out.write("</font></td></tr>");
 
         if(schema != null)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractSchema.java,v 1.2 2002-08-29 03:38:29 shahid.shah Exp $
+ * $Id: AbstractSchema.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -84,11 +84,27 @@ import com.netspective.sparx.xif.dal.xml.SchemaImportHandler;
 
 public abstract class AbstractSchema implements Schema
 {
+    private Map columnsByTypeNameMap = new HashMap();
     private Map tablesByNameMap = new HashMap();
     private Map tablesByXmlNodeNameMap = new HashMap();
 
     public AbstractSchema()
     {
+    }
+
+    public void registerColumnClass(String dataTypeName, Class colClass)
+    {
+        columnsByTypeNameMap.put(dataTypeName, colClass);
+    }
+
+    public Class getColumnClass(String dataTypeName)
+    {
+        return (Class) columnsByTypeNameMap.get(dataTypeName);
+    }
+
+    public Map getColumnClassesMap()
+    {
+        return columnsByTypeNameMap;
     }
 
     public AbstractSchema(List tables)

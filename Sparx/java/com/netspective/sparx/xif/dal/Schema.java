@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Schema.java,v 1.2 2002-08-29 03:38:29 shahid.shah Exp $
+ * $Id: Schema.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -67,6 +67,12 @@ public interface Schema
     public void initializeDefn();
 
     public void finalizeDefn();
+
+    public void registerColumnClass(String dataTypeName, Class colClass);
+
+    public Class getColumnClass(String dataTypeName);
+
+    public Map getColumnClassesMap();
 
     public void addTable(Table table);
 

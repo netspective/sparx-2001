@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.12 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.13 2002-10-08 11:10:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -1733,7 +1733,11 @@ public class SchemaDocument extends XmlSource
                 if(javaTypeInitCap != null)
                     dataTypesTransformer.setParameter("java-type-init-cap", javaTypeInitCap);
 
-                messages.add(new String("Applying stylesheet '"+ dataTypeFile +"' for tableType '"+ dataTypeName +"'"));
+                dataTypeElem.setAttribute("_gen-data-type-name", dataTypeName);
+                dataTypeElem.setAttribute("_gen-data-type-class-name", dataTypesPkg + "." + dataTypeName);
+                dataTypeElem.setAttribute("_gen-java-type-init-cap", javaTypeInitCap);
+
+                messages.add(new String("Applying stylesheet '"+ dataTypeFile +"' for dataType '"+ dataTypeName +"'"));
                 dataTypesTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(dataTypeElem),
                                 new javax.xml.transform.stream.StreamResult(dataTypeFile));
@@ -1941,6 +1945,8 @@ public class SchemaDocument extends XmlSource
                                     columnElem.setAttribute("_gen-ref-table-is-enum", "yes");
                                 columnElem.setAttribute("_gen-ref-table-name", refTableElem.getAttribute("_gen-table-name"));
                                 columnElem.setAttribute("_gen-ref-table-class-name", refTableElem.getAttribute("_gen-table-class-name"));
+                                columnElem.setAttribute("_gen-ref-table-member-name", refTableElem.getAttribute("_gen-table-member-name"));
+                                columnElem.setAttribute("_gen-ref-table-method-name", refTableElem.getAttribute("_gen-table-method-name"));
                             }
                         }
                     }
