@@ -21,7 +21,6 @@ public class ImageField extends DialogField
 	{
 		String resourcesUrl = ((HttpServletRequest) dc.getRequest()).getContextPath() + "/resources";
 		String value = dc.getValue(this);
-		//return "<input type='hidden' name='"+ getId() +"' value=\"" + (value != null ? value : "") + "\"><img src='"+ value +"'>";
-		writer.write("<center><img src='"+ resourcesUrl +"/images/"+ value +".jpg'></center>");
+        writer.write("<input type='hidden' name='"+ getId() +"' value=\"" + (value != null ? value : "no_picture") + "\"><center><img src='"+ resourcesUrl +"/images/"+ value +".jpg'></center>");
 	}
 }
