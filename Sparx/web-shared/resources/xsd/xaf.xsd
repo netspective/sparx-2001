@@ -1215,6 +1215,11 @@
 				<xsd:documentation>Allows for generic data formatting. The expression may be a simple string or may contain ${xx} macros where ${xx} will be replaced with the data contained in the column with index xx, ${.} will be replaced with the value of the active column (the column being defined), and the ${#} macro will be replaced with the current row number (starting with row 1). If a ${abc:xyz} macro is found, it will be treated as a single value source (abc:xyz).</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
+		<xsd:attribute name="word-wrap" type="yes-no" use="optional" default="yes">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not a word wrapping should be allowed inside this column; the actual behavior of this attribute is dependent upon which skin is being used but in most cases (like HTML) a simple NOBR is added.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
 		<xsd:attribute name="col-break" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>Specifies whether or not a column break should be added; the actual behavior of this attribute is dependent upon which skin is being used.</xsd:documentation>
