@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SeparatorField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: SeparatorField.java,v 1.2 2003-02-03 00:40:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -68,6 +68,7 @@ public class SeparatorField extends DialogField
 {
     static public final long FLDFLAG_HIDERULE = DialogField.FLDFLAG_STARTCUSTOM;
     protected String heading;
+    protected String bannerText;
 
     public SeparatorField()
     {
@@ -96,6 +97,16 @@ public class SeparatorField extends DialogField
         heading = value;
     }
 
+    public String getBannerText()
+    {
+        return bannerText;
+    }
+
+    public void setBannerText(String bannerText)
+    {
+        this.bannerText = bannerText;
+    }
+
     public void importFromXml(Element elem)
     {
         super.importFromXml(elem);
@@ -105,6 +116,9 @@ public class SeparatorField extends DialogField
 
         if(elem.getAttribute("rule").equals("no"))
             setFlag(FLDFLAG_HIDERULE);
+
+        bannerText = elem.getFirstChild().getNodeValue();
+        if(bannerText.length() == 0) bannerText = null;
     }
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
