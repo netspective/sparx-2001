@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogDirector.java,v 1.4 2002-10-13 18:45:11 shahid.shah Exp $
+ * $Id: DialogDirector.java,v 1.5 2002-11-11 15:02:23 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -246,10 +246,13 @@ public class DialogDirector extends DialogField
         if(nextActionsField != null && nextActionsField.isVisible(dc))
         {
             String caption = nextActionsField.getCaption(dc);
-            if(caption != null)
+            if(caption != null && !nextActionsField.isInputHidden(dc))
                 writer.write(caption);
+
             nextActionsField.renderControlHtml(writer, dc);
-            writer.write("&nbsp;&nbsp;");
+
+            if(caption != null && !nextActionsField.isInputHidden(dc))
+                writer.write("&nbsp;&nbsp;");
         }
 
         writer.write("<input type='submit' value='");
