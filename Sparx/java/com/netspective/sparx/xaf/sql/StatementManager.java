@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementManager.java,v 1.2 2002-02-01 04:02:12 thua Exp $
+ * $Id: StatementManager.java,v 1.3 2002-02-06 20:26:19 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -117,14 +117,18 @@ public class StatementManager extends XmlSource
 
     static public class ResultInfo
     {
-        protected ResultSet rs;
-        protected StatementInfo si;
-        protected StatementExecutionLogEntry logEntry;
+        private Connection conn;
+        private Statement stmt;
+        private ResultSet rs;
+        private StatementInfo si;
+        private StatementExecutionLogEntry logEntry;
 
-        ResultInfo(StatementInfo si, ResultSet rs, StatementExecutionLogEntry logEntry)
+        ResultInfo(Connection conn, StatementInfo si, Statement stmt, StatementExecutionLogEntry logEntry) throws SQLException
         {
+            this.conn = conn;
             this.si = si;
-            this.rs = rs;
+            this.stmt = stmt;
+            this.rs = stmt.getResultSet();
             this.logEntry = logEntry;
         }
 
@@ -150,8 +154,6 @@ public class StatementManager extends XmlSource
 
         public void close() throws SQLException
         {
-            Statement stmt = rs.getStatement();
-            Connection conn = stmt.getConnection();
             rs.close();
             rs = null;
             stmt.close();
@@ -411,7 +413,7 @@ public class StatementManager extends XmlSource
             {
                 logEntry.registerExecSqlEndSuccess();
                 //logEntry.finalize(vc); -- this will be done in the "finally" block??
-                return new ResultInfo(si, stmt.getResultSet(), logEntry);
+                return new ResultInfo(conn, si, stmt, logEntry);
             }
             logEntry.registerExecSqlEndFailed();
         }
