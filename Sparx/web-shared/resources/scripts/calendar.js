@@ -90,15 +90,18 @@ calDateFormat    = "MM/DD/yyyy";
 topBackground    = "white";         // BG COLOR OF THE TOP FRAME
 bottomBackground = "white";         // BG COLOR OF THE BOTTOM FRAME
 tableBGColor     = "black";         // BG COLOR OF THE BOTTOM FRAME'S TABLE
-cellColor        = "cornsilk";     // TABLE CELL BG COLOR OF THE DATE CELLS IN THE BOTTOM FRAME
-headingCellColor = "bisque";         // TABLE CELL BG COLOR OF THE WEEKDAY ABBREVIATIONS
-headingTextColor = "black";         // TEXT COLOR OF THE WEEKDAY ABBREVIATIONS
-dateColor        = "blue";          // TEXT COLOR OF THE LISTED DATES (1-28+)
-focusColor       = "red";       // TEXT COLOR OF THE SELECTED DATE (OR CURRENT DATE)
-hoverColor       = "green";       // TEXT COLOR OF A LINK WHEN YOU HOVER OVER IT
+cellColor        = "lightyellow";     // TABLE CELL BG COLOR OF THE DATE CELLS IN THE BOTTOM FRAME
+headingCellColor = "#6699CC";         // TABLE CELL BG COLOR OF THE WEEKDAY ABBREVIATIONS
+headingTextColor = "yellow";         // TEXT COLOR OF THE WEEKDAY ABBREVIATIONS
+dateColor        = "black";          // TEXT COLOR OF THE LISTED DATES (1-28+)
+focusColor       = "green";       // TEXT COLOR OF THE SELECTED DATE (OR CURRENT DATE)
+hoverColor       = "red";       // TEXT COLOR OF A LINK WHEN YOU HOVER OVER IT
 fontStyle        = "bold 8pt tahoma";           // TEXT STYLE FOR DATES
 headingFontStyle = "bold 8pt tahoma";      // TEXT STYLE FOR WEEKDAY ABBREVIATIONS
-
+selectFontStyle  = "8pt; tahoma";           // font style for the month drop list and year input field
+buttonBGColor    = "#6AA5BC";              // background color for buttons
+buttonTextColor  = "black";                // text color for buttons
+fontSize         = "8pt";                  // font size for buttons
 // FORMATTING PREFERENCES
 bottomBorder  = true;        // TRUE/FALSE (WHETHER TO DISPLAY BOTTOM CALENDAR BORDER)
 tableBorder   = 0;            // SIZE OF CALENDAR TABLE BORDER (BOTTOM FRAME) 0=none
@@ -167,7 +170,6 @@ function setInitialDate() {
 
 // POPUP A WINDOW WITH THE CALENDAR IN IT
 function showCalendar(dateField) {
-
 	// SET INITIAL VALUE OF THE DATE FIELD AND CREATE TOP AND BOTTOM FRAMES
 	setDateField(dateField);
 
@@ -193,7 +195,8 @@ function buildTopCalFrame() {
     var calDoc =
         "<HTML>" +
         "<HEAD>" +
-        "<style> #Font1 {font-size: 8pt; font-family: Tahoma; font-weight: bold; color: darkblue; }  </style>" +
+        "<style> #Font1 {font-size: 8pt; font-family: Tahoma; font-weight: bold; color: " 
+                        + buttonTextColor + "; background-color: " + buttonBGColor + "; }  </style>" +
         "</HEAD>" +
         "<BODY BGCOLOR='" + topBackground + "'>" +
         "<FORM NAME='calControl' onSubmit='return false;'>" +
@@ -629,9 +632,12 @@ function buildCalParts() {
         "<!--" +
         "TD.heading { text-decoration: none; color:" + headingTextColor + "; font: " + headingFontStyle + "; }" +
         "A.focusDay:link { color: " + focusColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+        "A.focusDay:visited { color: " + focusColor + "; text-decoration: none; font: " + fontStyle + "; }" +
         "A.focusDay:hover { color: " + focusColor + "; }" +
         "A.weekday:link { color: " + dateColor + "; text-decoration: none; font: " + fontStyle + "; }" +
+        "A.weekday:visited { color: " + dateColor + "; text-decoration: none; font: " + fontStyle + "; }" +
         "A.weekday:hover { color: " + hoverColor + "; }" +
+        ".button{font-size: " + fontSize + "; font: " + fontStyle + "; color: " + buttonTextColor + "; background-color: " + buttonBGColor + ";}" +
         "-->" +
         "</STYLE>" +
         "</HEAD>" +
@@ -836,6 +842,9 @@ function returnDate(inDay)
 
     // GIVE FOCUS BACK TO THE DATE FIELD
     calDateField.focus();
+
+    // CAUSE THE onChange EVENT TO FIRE BECAUSE FIELD VALUE HAS BEEN UDPATED
+    calDateField.onchange();
 
     // CLOSE THE CALENDAR WINDOW
     newWin.close();
