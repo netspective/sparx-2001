@@ -163,16 +163,16 @@ public class BookInfo   extends Dialog
 			}
 
 	        boolean successful = bkInfoTable.executeDml(cc, bkInfoRow, dml, null);
-	        row.afterInsert(cc);
+	        bkInfoRow.afterInsert(cc);
 
-        cc.returnConnection();
-        return successful;
+       		cc.returnConnection();
+        	status = successful;
 
 
 			writer.write (bkInfoRow.toString() + "<br>");
 			writer.write (dml.toString() + "<br>");
 
-			status = bkInfoTbl.insert(cc, bkInfoRow);
+//			status = bkInfoTbl.insert(cc, bkInfoRow);
 			cc.commitTransaction();
 		} catch (NamingException ne) {
 			ne.printStackTrace();
