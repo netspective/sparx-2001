@@ -51,26 +51,26 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.1 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
 
-import com.netspective.sparx.xaf.security.AuthenticatedUser;
+import com.netspective.sparx.xaf.navigate.NavigationPage;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
 import com.netspective.sparx.xaf.navigate.NavigationTree;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
-import com.netspective.sparx.xaf.navigate.NavigationPage;
-
+import com.netspective.sparx.xaf.security.AuthenticatedUser;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import org.w3c.dom.Element;
 
 import javax.servlet.Servlet;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
 public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 {
@@ -192,8 +192,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         if (popup) result.setPopup(true);
 
         // associate a theme with this context
-        ThemeFactory tf = ThemeFactory.getInstance(result);
-        theme = tf.getCurrentTheme();
+        theme = SkinFactory.getInstance().getCurrentTheme(result);
         return result;
     }
 
@@ -248,22 +247,29 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     "/spacer.gif\" alt=\"\" " +
                     "height=\"100%\" width=\"100%\" border=\"0\"></td>\n");
             writer.write("				<td nowrap><span class=\"active-user-heading\">&nbsp;User&nbsp;</span></td>\n");
-            writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/person/summary.jsp?person_id=" + personId + "\">" +
+            writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/person/summary.jsp?person_id=" + personId + "\">&nbsp;&nbsp;" +
                     personName.toUpperCase() + "</a></td>\n");
             writer.write("			</tr>\n");
             writer.write("		</table>\n");
             writer.write("	</td>\n");
             writer.write("	<td><img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"100%\" width=\"20\" border=\"0\"></td>\n");
             writer.write("	<td width=\"100%\">\n");
-            writer.write("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
-            writer.write("			<tr>\n");
-            writer.write("				<td class=\"active-user-anchor\"><img class=\"active-user-anchor\" src=\"" +
-                    getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"100%\" width=\"100%\" border=\"0\"></td>\n");
-            writer.write("				<td nowrap><span class=\"active-user-heading\">&nbsp;Org&nbsp;</span></td>\n");
-            writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" +
-                    orgId + "\">" + (orgName != null ? orgName.toUpperCase() : "") + "</a></td>\n");
-            writer.write("			</tr>\n");
-            writer.write("		</table>\n");
+            if (orgName != null)
+            {
+                writer.write("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
+                writer.write("			<tr>\n");
+                writer.write("				<td class=\"active-user-anchor\"><img class=\"active-user-anchor\" src=\"" +
+                        getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"100%\" width=\"100%\" border=\"0\"></td>\n");
+                writer.write("				<td nowrap><span class=\"active-user-heading\">&nbsp;Org&nbsp;</span></td>\n");
+                writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" + orgId + "\">" +
+                        orgName.toUpperCase() + "</a></td>\n");
+                writer.write("			</tr>\n");
+                writer.write("		</table>\n");
+            }
+            else
+            {
+                writer.write("<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"1\" width=\"100%\" border=\"0\">");
+            }
             writer.write("	</td>\n");
             writer.write("	<td nowrap width=\"50\" >\n");
             writer.write("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
@@ -330,21 +336,51 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("			</table>\n");
         writer.write("		</td>\n");
         writer.write("		<td class=\"masthead-right\" align=\"right\" valign=\"bottom\" width=\"100%\">" +
-                "<img class=\"masthead-right-table\" src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" width=\"100%\" height=\"32\"></td>\n");
+                "<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" width=\"100%\" height=\"32\"></td>\n");
         writer.write("	</tr>\n");
         writer.write("</table>\n");
     }
 
+    /**
+     * Generates the level two HTML
+     * @param writer
+     * @param nc
+     * @throws IOException
+     */
     public void renderPageMenusLevelTwo(Writer writer, NavigationPathContext nc) throws IOException
     {
-        writer.write("<!-- Function Tabs Begins -->");
+        writer.write("<!-- Level Two Begins -->");
         NavigationPath activePath = nc.getActivePath();
         switch (activePath.getLevel())
         {
             case 1:
                 List activePathChildren = activePath.getChildrenList();
                 if (activePath.getMaxLevel() > 1 && activePathChildren.size() > 0)
+                {
                     levelTwoStyle.renderHtml(writer, (NavigationPath) activePath.getChildrenList().get(0), nc);
+                }
+                else
+                {
+                    // even if there are no level two menu items display the level two background bar
+                    writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" height=\"10\">");
+                    writer.write("	<tr>");
+                    writer.write("	<td class=\"menu-level-2-table\" align=\"left\" valign=\"middle\">");
+                    writer.write("	</td>");
+                    writer.write("	</tr>");
+                    writer.write("</table>");
+                    /*
+                    writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+                    writer.write("  	<tr>");
+                    writer.write("	<td class=\"menu-level-3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
+                            "<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" width=\"150\" height=\"12\" border=\"0\"></td>");
+                    writer.write("	<td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
+                            "width=\"12\" height=\"12\" border=\"0\"></td>");
+                    writer.write("	<td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/body/spacer-big.gif\" " +
+                            "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
+                    writer.write("	</tr>");
+                    writer.write("</table>");
+                    */
+                }
                 break;
 
             case 2:
@@ -355,8 +391,9 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             case 4:
                 levelTwoStyle.renderHtml(writer, (NavigationPath) activePath.getAncestorsList().get(2), nc);
                 break;
+
         }
-        writer.write("<!-- Function Tabs Ends -->");
+        writer.write("<!-- Level Two Ends -->");
     }
 
     public void renderPageMenusLevelThree(Writer writer, NavigationPathContext nc) throws IOException

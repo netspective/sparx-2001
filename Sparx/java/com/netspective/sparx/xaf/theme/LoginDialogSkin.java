@@ -1,13 +1,12 @@
 package com.netspective.sparx.xaf.theme;
 
-import com.netspective.sparx.xaf.form.DialogSkin;
-import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.skin.StandardDialogSkin;
 import com.netspective.sparx.util.config.Configuration;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 
 /**
  * @author Aye Thu
@@ -24,8 +23,7 @@ public class LoginDialogSkin extends ThemeDialogSkin
     public void renderContentsHtml(Writer writer, DialogContext dc, Configuration appConfig, String dialogName, String actionURL, String encType, String heading, int dlgTableColSpan, StringBuffer errorMsgsHtml, StringBuffer fieldsHtml) throws IOException
     {
         // associate a theme with this context
-        ThemeFactory tf = ThemeFactory.getInstance(dc);
-        Theme theme = tf.getCurrentTheme();
+        Theme theme = SkinFactory.getInstance().getCurrentTheme(dc);
         String imgPath = theme.getCurrentStyle().getImagePath();
 
         writer.write("        <table class=\"color-input-panel-border\" width=\"50%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");

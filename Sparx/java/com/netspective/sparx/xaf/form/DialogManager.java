@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogManager.java,v 1.9 2003-02-03 00:35:58 shahid.shah Exp $
+ * $Id: DialogManager.java,v 1.10 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -558,7 +558,7 @@ public class DialogManager extends XmlSource
                 if(skin != null)
                 {
                     skin.importFromXml(skinElem);
-                    SkinFactory.addDialogSkin(skinElem.getAttribute("name"), skin);
+                    SkinFactory.getInstance().addDialogSkin(skinElem.getAttribute("name"), skin);
                 }
             }
             else if(nodeName.equals("register-field"))

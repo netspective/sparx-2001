@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.12 2003-02-24 03:48:44 aye.thu Exp $
+ * $Id: DatabaseSqlPage.java,v 1.13 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -148,7 +148,8 @@ public class DatabaseSqlPage extends AceServletPage
             StatementDialog dialog = si.getDialog();
             if(dialog != null)
             {
-                DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin(context));
+                DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(),
+                        (HttpServletResponse) nc.getResponse(), SkinFactory.getInstance().getDialogSkin(nc));
                 dialog.prepareContext(dc);
                 dialog.renderHtml(writer, dc, true);
                 writer.write("<p>");
@@ -235,7 +236,7 @@ public class DatabaseSqlPage extends AceServletPage
                 }
             }
             else
-                manager.produceReport(out, dbc, nc, null, SkinFactory.getReportSkin(context, "report"), stmtId, null, null, null);
+                manager.produceReport(out, dbc, nc, null, SkinFactory.getInstance().getReportSkin(nc, "report"), stmtId, null, null, null);
         }
         catch(Exception e)
         {

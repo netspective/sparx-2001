@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryDefinitionDialogComponentCommand.java,v 1.5 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: QueryDefinitionDialogComponentCommand.java,v 1.6 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -204,7 +204,7 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
         }
 
         com.netspective.sparx.xaf.form.DialogSkin skin =
-                dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context, dialogSkinName);
+                dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc) : com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc, dialogSkinName);
         if(skin == null)
         {
             out.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");

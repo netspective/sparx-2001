@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.7 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: NavigationTreeManager.java,v 1.8 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -137,7 +137,7 @@ public class NavigationTreeManager extends XmlSource
             while (it.hasNext())
             {
                 str = (String) it.next();
-                SkinFactory.addNavigationSkin(servletContext, str, (String)navigationSkinClasses.get(str));
+                SkinFactory.getInstance().addNavigationSkin(str, (String)navigationSkinClasses.get(str));
             }
         }
         catch (ClassNotFoundException e)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementComponentCommand.java,v 1.6 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: StatementComponentCommand.java,v 1.7 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -250,7 +250,7 @@ public class StatementComponentCommand extends AbstractComponentCommand
             // Special Case: This static query must produce a report that is pageable
             StatementDialog stmtDialog = new StatementDialog(manager.getStatement(vc.getServletContext(), null, statementName), reportId, skinName, urlFormats);
             stmtDialog.setRowsPerPage(rowsPerPage);
-            DialogSkin dialogSkin = com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin();
+            DialogSkin dialogSkin = com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin();
             DialogContext dc = stmtDialog.createContext(context, vc.getServlet(),
                     (javax.servlet.http.HttpServletRequest) vc.getRequest(),
                     (javax.servlet.http.HttpServletResponse) vc.getResponse(), dialogSkin);
@@ -259,7 +259,7 @@ public class StatementComponentCommand extends AbstractComponentCommand
         }
         else
         {
-            ReportSkin skin = skinName != null ? SkinFactory.getReportSkin(context, skinName) : SkinFactory.getDefaultReportSkin(context);
+            ReportSkin skin = skinName != null ? SkinFactory.getInstance().getReportSkin(vc, skinName) : SkinFactory.getInstance().getDefaultReportSkin(vc);
             DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), context);
             try
             {
@@ -296,7 +296,7 @@ public class StatementComponentCommand extends AbstractComponentCommand
 
         public String[] getEnums()
         {
-            return (String[]) SkinFactory.getReportSkins().keySet().toArray(new String[SkinFactory.getNavigationSkins().keySet().size()]);
+            return (String[]) SkinFactory.getInstance().getReportSkins().keySet().toArray(new String[SkinFactory.getInstance().getNavigationSkins().keySet().size()]);
         }
     }
 }

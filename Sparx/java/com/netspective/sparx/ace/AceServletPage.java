@@ -51,17 +51,27 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.13 2003-02-24 03:48:44 aye.thu Exp $
+ * $Id: AceServletPage.java,v 1.14 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace;
 
-import java.io.*;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
+import com.netspective.sparx.util.config.Configuration;
+import com.netspective.sparx.util.config.Property;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.html.Component;
+import com.netspective.sparx.xaf.html.component.HierarchicalMenu;
+import com.netspective.sparx.xaf.navigate.NavigationPage;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.page.PageControllerServlet;
+import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.theme.Theme;
+import com.netspective.sparx.xaf.theme.ThemeStyle;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Transformer;
@@ -69,24 +79,16 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
-import com.netspective.sparx.util.config.Configuration;
-import com.netspective.sparx.util.config.Property;
-import com.netspective.sparx.util.value.ValueContext;
-import com.netspective.sparx.xaf.html.Component;
-import com.netspective.sparx.xaf.html.component.HierarchicalMenu;
-import com.netspective.sparx.xaf.page.PageControllerServlet;
-import com.netspective.sparx.xaf.navigate.NavigationPage;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
-import com.netspective.sparx.xaf.navigate.NavigationPageException;
-import com.netspective.sparx.xaf.theme.ThemeFactory;
-import com.netspective.sparx.xaf.theme.Theme;
-import com.netspective.sparx.xaf.theme.ThemeStyle;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 public class AceServletPage extends NavigationPage
 {
@@ -260,8 +262,8 @@ public class AceServletPage extends NavigationPage
         out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
         out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
 
-        ThemeFactory tf = ThemeFactory.getInstance(nc);
-        Theme theme = tf.getCurrentTheme();
+        SkinFactory tf = SkinFactory.getInstance();
+        Theme theme = tf.getCurrentTheme(nc);
         if (theme != null)
         {
             // get all the CSS files associated with this theme/style combination

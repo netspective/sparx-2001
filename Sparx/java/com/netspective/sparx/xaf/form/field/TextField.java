@@ -51,26 +51,25 @@
  */
 
 /**
- * $Id: TextField.java,v 1.12 2003-02-24 03:46:03 aye.thu Exp $
+ * $Id: TextField.java,v 1.13 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
 
-import java.io.IOException;
-import java.io.Writer;
-
+import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
+import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.theme.Theme;
+import com.netspective.sparx.xaf.theme.ThemeStyle;
 import org.apache.oro.text.perl.MalformedPerl5PatternException;
 import org.apache.oro.text.perl.Perl5Util;
 import org.w3c.dom.Element;
 
-import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
-import com.netspective.sparx.xaf.form.DialogField;
-import com.netspective.sparx.xaf.theme.ThemeFactory;
-import com.netspective.sparx.xaf.theme.Theme;
-import com.netspective.sparx.xaf.theme.ThemeStyle;
-import com.netspective.sparx.util.value.SingleValueSource;
-import com.netspective.sparx.util.log.LogManager;
+import java.io.IOException;
+import java.io.Writer;
 
 public class TextField extends DialogField
 {
@@ -351,8 +350,8 @@ public class TextField extends DialogField
 
         String className = "";
         String requiredClass = null;
-        ThemeFactory tf = ThemeFactory.getInstance(dc);
-        Theme theme = tf.getCurrentTheme();
+        SkinFactory tf = SkinFactory.getInstance();
+        Theme theme = tf.getCurrentTheme(dc);
         if (theme != null)
         {
             ThemeStyle style = theme.getCurrentStyle();

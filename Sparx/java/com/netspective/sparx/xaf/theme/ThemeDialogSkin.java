@@ -1,24 +1,25 @@
 package com.netspective.sparx.xaf.theme;
 
-import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.DialogField;
-import com.netspective.sparx.xaf.form.Dialog;
-import com.netspective.sparx.xaf.form.DialogDirector;
-import com.netspective.sparx.xaf.form.field.SeparatorField;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
-import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogDirector;
+import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.field.SeparatorField;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Writer;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Aye Thu
@@ -303,9 +304,7 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
         String hint = field.getHint(dc);
         if(hint != null && !(field.isReadOnly(dc) && dc.getDialog().flagIsSet(Dialog.DLGFLAG_HIDE_READONLY_HINTS)))
         {
-            messagesHtml.append("<br><font " + hintFontAttrs + ">");
             messagesHtml.append(hint);
-            messagesHtml.append("</font>");
         }
         boolean haveErrors = false;
         if(name != null)
@@ -338,15 +337,26 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
         if(caption == null)
         {
             if (field instanceof SeparatorField)
-                fieldsHtml.append("<tr" + rowAttr + "><td class=\"dialog-fields-separator\" colspan='2'>" + controlHtml + messagesHtml + "</td></tr>\n");
+
+                fieldsHtml.append("<tr" + rowAttr + "><td class=\"dialog-fields-separator\" colspan='2'>" + controlHtml + "</td></tr>\n");
             else
-                fieldsHtml.append("<tr" + rowAttr + "><td colspan='2'>" + controlHtml + messagesHtml + "</td></tr>\n");
+                fieldsHtml.append("<tr" + rowAttr + "><td colspan='2'>" + controlHtml + "</td></tr>\n");
+            if (messagesHtml != null && messagesHtml.length() > 0)
+            {
+                fieldsHtml.append("<tr><td class=\"dialog-fields-hint-table\" align=\"left\" valign=\"top\" nowrap colspan=\"2\" width=\"50%\">" +
+                    "<span class=\"dialog-fields-hint\">&nbsp;&nbsp;&nbsp;"+  messagesHtml + "</span></td></tr>\n");
+            }
         }
         else
         {
             fieldsHtml.append(
                     "<tr><td " + captionClass + ">" + caption + "</td>" +
-                    "<td "+ controlAreaClass + " width='100%'>" + controlHtml + messagesHtml + "</td></tr>\n");
+                    "<td "+ controlAreaClass + " width='100%'>" + controlHtml + "</td></tr>\n");
+            if (messagesHtml != null && messagesHtml.length() > 0)
+            {
+                fieldsHtml.append("<tr><td>&nbsp;</td><td class=\"dialog-fields-hint-table\" align=\"left\" valign=\"top\" nowrap width=\"50%\">" +
+                    "<span class=\"dialog-fields-hint\">&nbsp;&nbsp;&nbsp;"+  messagesHtml + "</span></td></tr>\n");
+            }
         }
 
         if(field.getSimpleName() != null)
@@ -431,8 +441,7 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
      */
     public void renderTab(Writer writer, DialogContext dc, String heading) throws IOException
     {
-        ThemeFactory tf = ThemeFactory.getInstance(dc);
-        Theme theme = tf.getCurrentTheme();
+        Theme theme = SkinFactory.getInstance().getCurrentTheme(dc);
         if (theme == null)
             throw new RuntimeException("There is no default theme defined. ");
         String imgPath = ((HttpServletRequest)dc.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();

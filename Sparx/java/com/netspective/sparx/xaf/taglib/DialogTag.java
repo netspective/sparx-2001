@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogTag.java,v 1.4 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: DialogTag.java,v 1.5 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -139,7 +139,7 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
             ValueContext vc = new ServletValueContext(context, (javax.servlet.Servlet) pageContext.getPage(),
                     pageContext.getRequest(), pageContext.getResponse());
             com.netspective.sparx.xaf.form.DialogSkin skin =
-                    skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context) : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context, skinName);
+                    skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc) : com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc, skinName);
             if(skin == null)
             {
                 out.write("DialogSkin '" + skinName + "' not found in skin factory.");

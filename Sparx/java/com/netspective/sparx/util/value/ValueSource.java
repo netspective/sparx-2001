@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSource.java,v 1.4 2002-12-31 19:33:31 shahid.shah Exp $
+ * $Id: ValueSource.java,v 1.5 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -200,7 +200,7 @@ abstract public class ValueSource implements SingleValueSource
 
     public ReportContext getReportContext(ValueContext vc, ReportSkin skin)
     {
-        return new ReportContext(vc, getReport(), skin == null ? SkinFactory.getDefaultReportSkin() : skin);
+        return new ReportContext(vc, getReport(), skin == null ? SkinFactory.getInstance().getDefaultReportSkin(vc) : skin);
     }
 
     // TODO: needs to be optimized to not grab the entire list each time -- very important performance issue for queries and the like

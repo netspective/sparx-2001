@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectChoicesList.java,v 1.3 2002-12-31 19:45:30 shahid.shah Exp $
+ * $Id: SelectChoicesList.java,v 1.4 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -203,7 +203,7 @@ public class SelectChoicesList
 
     public ReportContext getReportContext(ValueContext vc, Report report, ReportSkin skin)
     {
-        return new ReportContext(vc, report, skin == null ? SkinFactory.getDefaultReportSkin() : skin);
+        return new ReportContext(vc, report, skin == null ? SkinFactory.getInstance().getDefaultReportSkin(vc) : skin);
     }
 
     public void renderChoicesHtml(Writer writer, ReportContext rc, String[] urlFormats, boolean isPopup) throws IOException

@@ -51,22 +51,22 @@
  */
 
 /**
- * $Id: RecordViewerReportSkin.java,v 1.1 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: RecordViewerReportSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
 
-import java.io.Writer;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.xaf.report.Report;
 import com.netspective.sparx.xaf.report.ReportBanner;
 import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportFrame;
-import com.netspective.sparx.xaf.report.Report;
-import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
 
 public class RecordViewerReportSkin extends com.netspective.sparx.xaf.theme.HtmlReportSkin
 {
@@ -86,8 +86,7 @@ public class RecordViewerReportSkin extends com.netspective.sparx.xaf.theme.Html
         {
             if (imgPath == null)
             {
-                ThemeFactory tf = ThemeFactory.getInstance(rc);
-                Theme theme = tf.getCurrentTheme();
+                Theme theme = SkinFactory.getInstance().getCurrentTheme(rc);
                 imgPath = ((HttpServletRequest)rc.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();
             }
             SingleValueSource addRecordCaption = frame.getRecordAddCaption();
@@ -193,8 +192,7 @@ public class RecordViewerReportSkin extends com.netspective.sparx.xaf.theme.Html
         SingleValueSource editRecordUrl = getReportFrame(rc).getRecordEditUrlFormat();
         if(editRecordUrl != null)
         {
-            ThemeFactory tf = ThemeFactory.getInstance(rc);
-            Theme theme = tf.getCurrentTheme();
+            Theme theme = SkinFactory.getInstance().getCurrentTheme(rc);
             String imgPath = ((HttpServletRequest)rc.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();
 
             Report defn = rc.getReport();

@@ -8,6 +8,11 @@
 
 <xaf>
     <configuration>
+        <property name="app.shared.root-url" value="${create-app-url:/resources}"/>
+        <property name="app.shared.root-path" value="${app.site-root-path}/resources"/>
+
+        <property name="app.ui.theme" value="sparx"/>
+        <property name="app.ui.theme.style" value="default"/>
 
         <property name="app.site-temp-path" value="${app.site-root-path}/temp"/>
         <property name="app.documents-root-path" value="${app.web-inf-root-path}/documents"/>

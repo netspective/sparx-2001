@@ -84,7 +84,7 @@ public class StatementScrollState extends ResultSetScrollState
             throws NamingException, SQLException
     {
         super(si.execute(dbContext, dc, datasourceId, null, scrollType == ResultSetScrollState.SCROLLTYPE_USERESULTSET ? true : false), rowsPerPage, scrollType);
-        this.skin = SkinFactory.getReportSkin(dc.getServletContext(), skinName == null ? "report" : skinName);
+        this.skin = SkinFactory.getInstance().getReportSkin(dc, skinName == null ? "report" : skinName);
         this.stmtInfo = si;
         this.datasourceId = datasourceId;
         this.urlFormats = urlFormats;

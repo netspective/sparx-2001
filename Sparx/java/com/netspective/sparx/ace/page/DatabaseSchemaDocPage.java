@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.7 2002-12-29 17:08:25 shahid.shah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.8 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -149,7 +149,7 @@ public class DatabaseSchemaDocPage extends AceServletPage
         QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
         dialog.renderHtml(
             nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(),
-            (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
+            (HttpServletResponse) nc.getResponse(), SkinFactory.getInstance().getDialogSkin(nc));
         out.write("</center>");
     }
 

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppFactoryPage.java,v 1.4 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: AppFactoryPage.java,v 1.5 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -162,7 +162,7 @@ public class AppFactoryPage extends AceServletPage
                 break;
 
             case FACTORY_SKIN:
-                SkinFactory.createCatalog(rootElem);
+                SkinFactory.getInstance().createCatalog(rootElem);
                 break;
 
             case FACTORY_SQL_COMPARE:

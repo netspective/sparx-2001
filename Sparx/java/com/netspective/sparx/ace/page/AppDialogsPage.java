@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.9 2003-01-01 19:24:42 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.10 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -107,7 +107,8 @@ public class AppDialogsPage extends AceServletPage
             dialog = new DialogBeanGenerateClassDialog();
 
         PrintWriter out = nc.getResponse().getWriter();
-        DialogContext dc = dialog.createContext(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
+        DialogContext dc = dialog.createContext(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(),
+                (HttpServletResponse) nc.getResponse(), SkinFactory.getInstance().getDialogSkin(nc));
         dialog.prepareContext(dc);
         if(!dc.inExecuteMode())
         {

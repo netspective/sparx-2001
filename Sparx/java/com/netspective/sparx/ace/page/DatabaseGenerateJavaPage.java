@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseGenerateJavaPage.java,v 1.3 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: DatabaseGenerateJavaPage.java,v 1.4 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -100,7 +100,8 @@ public class DatabaseGenerateJavaPage extends AceServletPage
             dialog = new DatabaseGenerateJavaDialog();
 
         out.write("<p><center>");
-        dialog.renderHtml(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
+        dialog.renderHtml(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(),
+                (HttpServletResponse) nc.getResponse(), SkinFactory.getInstance().getDialogSkin(nc));
         out.write("</center>");
     }
 }

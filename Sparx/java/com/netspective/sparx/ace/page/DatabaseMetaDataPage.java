@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseMetaDataPage.java,v 1.5 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: DatabaseMetaDataPage.java,v 1.6 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -108,7 +108,8 @@ public class DatabaseMetaDataPage extends AceServletPage
 
         ServletContext context = nc.getServletContext();
 
-        DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
+        DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(),
+                (HttpServletResponse) nc.getResponse(), SkinFactory.getInstance().getDialogSkin(nc));
         dialog.prepareContext(dc);
         if(!dc.inExecuteMode())
         {

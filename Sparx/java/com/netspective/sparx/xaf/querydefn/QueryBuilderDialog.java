@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.12 2003-01-21 04:11:32 shahid.shah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.13 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -643,17 +643,17 @@ public class QueryBuilderDialog extends Dialog
         {
             case OUTPUTSTYLE_HTML:
                 String reportSkinName = dc.getValue(QBDIALOG_REPORT_SKIN_FIELD_NAME);
-                ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinName);
+                ReportSkin reportSkin = SkinFactory.getInstance().getReportSkin(dc, reportSkinName);
                 if(reportSkin == null) throw new RuntimeException("ReportSkin '"+ reportSkinName +"' could not be found.");
                 executeHtml(writer, dc, outputDest, reportSkin);
                 break;
 
             case OUTPUTSTYLE_TEXT_CSV:
-                executeText(writer, dc, outputDest, SkinFactory.getReportSkin("text-csv"));
+                executeText(writer, dc, outputDest, SkinFactory.getInstance().getReportSkin(dc, "text-csv"));
                 break;
 
             case OUTPUTSTYLE_TEXT_TAB:
-                executeText(writer, dc, outputDest, SkinFactory.getReportSkin("text-tab"));
+                executeText(writer, dc, outputDest, SkinFactory.getInstance().getReportSkin(dc, "text-tab"));
                 break;
 
             default:

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseQueryDefnPage.java,v 1.7 2002-12-29 17:08:25 shahid.shah Exp $
+ * $Id: DatabaseQueryDefnPage.java,v 1.8 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -140,7 +140,8 @@ public class DatabaseQueryDefnPage extends AceServletPage
         }
 
         QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
-        dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
+        dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(),
+                SkinFactory.getInstance().getDialogSkin(nc));
     }
 
     public void handleTestQueryDefnSelectDialog(NavigationPathContext nc, String queryDefnId, String dialogId) throws NavigationPageException, IOException
@@ -154,6 +155,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
 
         QueryDefinition queryDefn = manager.getQueryDefn(nc.getServletContext(), null, queryDefnId);
         QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogId);
-        dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
+        dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(),
+                SkinFactory.getInstance().getDialogSkin(nc));
     }
 }

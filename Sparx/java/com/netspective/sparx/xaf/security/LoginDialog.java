@@ -51,39 +51,37 @@
  */
  
 /**
- * $Id: LoginDialog.java,v 1.6 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: LoginDialog.java,v 1.7 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.security;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.BitSet;
-import java.util.Map;
-import java.util.Iterator;
-import java.sql.SQLException;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogDirector;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.field.TextField;
-import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.querydefn.QuerySelectScrollState;
 import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
-import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.querydefn.QuerySelectScrollState;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.theme.Theme;
 import com.netspective.sparx.xaf.theme.ThemeStyle;
-import com.netspective.sparx.util.value.ValueContext;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.SQLException;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.Map;
 
 public class LoginDialog extends Dialog
 {
@@ -109,7 +107,7 @@ public class LoginDialog extends Dialog
 
     public DialogSkin getSkin()
     {
-        return SkinFactory.getDialogSkin();
+        return SkinFactory.getInstance().getDialogSkin();
     }
 
     public TextField getUserIdField()
@@ -221,8 +219,7 @@ public class LoginDialog extends Dialog
     public void producePage(Writer writer, DialogContext dc) throws IOException
     {
         // associate a theme with this context
-        ThemeFactory tf = ThemeFactory.getInstance(dc);
-        theme = tf.getCurrentTheme();
+        theme = SkinFactory.getInstance().getCurrentTheme(dc);
         if (theme != null)
         {
             // get all the CSS files associated with this theme/style combination

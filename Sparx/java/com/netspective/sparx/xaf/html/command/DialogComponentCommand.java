@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogComponentCommand.java,v 1.4 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: DialogComponentCommand.java,v 1.5 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -206,8 +206,9 @@ public class DialogComponentCommand extends AbstractComponentCommand
             return;
         }
 
+        com.netspective.sparx.xaf.skin.SkinFactory skinFactory = SkinFactory.getInstance();
         com.netspective.sparx.xaf.form.DialogSkin skin =
-                skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context) : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context, skinName);
+                skinName == null ? skinFactory.getDialogSkin(vc) : skinFactory.getDialogSkin(vc, skinName);
         if(skin == null)
         {
             writer.write("DialogSkin '" + skinName + "' not found in skin factory.");
@@ -257,7 +258,7 @@ public class DialogComponentCommand extends AbstractComponentCommand
 
         public String[] getEnums()
         {
-            return (String[]) SkinFactory.getDialogSkins().keySet().toArray(new String[SkinFactory.getNavigationSkins().keySet().size()]);
+            return (String[]) SkinFactory.getInstance().getDialogSkins().keySet().toArray(new String[SkinFactory.getInstance().getNavigationSkins().keySet().size()]);
         }
     }
 }

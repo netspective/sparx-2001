@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DebugField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DebugField.java,v 1.2 2003-02-26 07:54:13 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -103,7 +103,7 @@ public class DebugField extends DialogField
             columns.add(new GeneralColumn(8, "Populate tasks"));
             columns.add(new GeneralColumn(9, "Execute tasks"));
 
-            reportSkin = SkinFactory.getReportSkin("detail");
+            reportSkin = SkinFactory.getInstance().getReportSkin(dc, "detail");
         }
 
         Object[][] data = new Object[][]

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectDialogTag.java,v 1.4 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: QuerySelectDialogTag.java,v 1.5 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -135,7 +135,7 @@ public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
                     pageContext.getRequest(), pageContext.getResponse());
 
             com.netspective.sparx.xaf.form.DialogSkin skin =
-                    dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context, dialogSkinName);
+                    dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc) : com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc, dialogSkinName);
             if(skin == null)
             {
                 out.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");

@@ -51,25 +51,22 @@
  */
 
 /**
- * $Id: PanelTag.java,v 1.2 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: PanelTag.java,v 1.3 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
 
-import java.io.IOException;
-
-import javax.servlet.jsp.tagext.TagSupport;
-import javax.servlet.jsp.JspException;
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletRequest;
-
+import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
-import com.netspective.sparx.util.value.ServletValueContext;
-import com.netspective.sparx.xaf.report.ReportFrame;
-import com.netspective.sparx.xaf.report.ReportBanner;
-import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.theme.Theme;
+
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
+import java.io.IOException;
 
 public class PanelTag extends TagSupport
 {
@@ -164,8 +161,7 @@ public class PanelTag extends TagSupport
             String frameHdTabImgSrc = frameHdTabImgSrcValueSource.getValue(svc);
             String frameHdSpacerImgSrc = frameHdSpacerImgSrcValueSource.getValue(svc);
 
-            ThemeFactory tf = ThemeFactory.getInstance(svc);
-            theme = tf.getCurrentTheme();
+            theme = SkinFactory.getInstance().getCurrentTheme(svc);
 
             if (theme != null)
             {

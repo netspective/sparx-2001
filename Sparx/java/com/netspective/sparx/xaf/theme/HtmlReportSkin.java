@@ -51,18 +51,15 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.1 2003-02-24 03:47:31 aye.thu Exp $
+ * $Id: HtmlReportSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
+import com.netspective.sparx.util.config.Configuration;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.xaf.report.Report;
 import com.netspective.sparx.xaf.report.ReportBanner;
 import com.netspective.sparx.xaf.report.ReportColumn;
@@ -71,13 +68,16 @@ import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportFrame;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
-import com.netspective.sparx.util.value.SingleValueSource;
-import com.netspective.sparx.util.value.ValueSourceFactory;
-import com.netspective.sparx.util.config.ConfigurationManagerFactory;
-import com.netspective.sparx.util.config.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class HtmlReportSkin implements ReportSkin
 {
@@ -171,8 +171,7 @@ public class HtmlReportSkin implements ReportSkin
         {
             if (imgPath == null)
             {
-                ThemeFactory tf = ThemeFactory.getInstance(rc);
-                Theme theme = tf.getCurrentTheme();
+                Theme theme = SkinFactory.getInstance().getCurrentTheme(rc);
                 imgPath = ((HttpServletRequest)rc.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();
             }
 
@@ -252,8 +251,7 @@ public class HtmlReportSkin implements ReportSkin
         ReportFrame frame = getReportFrame(rc);
         ReportBanner banner = getReportBanner(rc);
 
-        ThemeFactory tf = ThemeFactory.getInstance(rc);
-        Theme theme = tf.getCurrentTheme();
+        Theme theme = SkinFactory.getInstance().getCurrentTheme(rc);
         String imgPath = ((HttpServletRequest)rc.getRequest()).getContextPath() +  theme.getCurrentStyle().getImagePath();
 
         writer.write("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" nowrap ");

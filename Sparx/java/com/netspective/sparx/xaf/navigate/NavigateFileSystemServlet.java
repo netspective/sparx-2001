@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigateFileSystemServlet.java,v 1.4 2002-08-26 14:44:21 shahid.shah Exp $
+ * $Id: NavigateFileSystemServlet.java,v 1.5 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -248,7 +248,8 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 
         if(!loginDialog.accessAllowed(servletContext, req, resp))
         {
-            DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, SkinFactory.getDialogSkin());
+            ValueContext vc = new ServletValueContext(servletContext, this, req, resp);
+            DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, SkinFactory.getInstance().getDialogSkin(vc));
             loginDialog.prepareContext(dc);
             if(dc.inExecuteMode())
             {

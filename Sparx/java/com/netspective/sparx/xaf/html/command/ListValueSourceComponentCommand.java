@@ -225,7 +225,8 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
                     if(actualInstance != null)
                     {
                         if(actualInstance instanceof ListValueSource)
-                            ((ListValueSource) actualInstance).renderItemsHtml(vc, writer, urlFormats, skinName != null ? SkinFactory.getReportSkin(skinName) : null, isPopup);
+                            ((ListValueSource) actualInstance).renderItemsHtml(vc, writer, urlFormats,
+                                    skinName != null ? SkinFactory.getInstance().getReportSkin(vc, skinName) : null, isPopup);
                         else
                             writer.write("ListValueSource reference '"+ valueSourceSpec +"' is a "+ actualInstance+ ", not a ListValueSource in " + this.getClass().getName() +".handleValueSource().");
                     }
@@ -236,7 +237,8 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
 
             case LVSTYPE_INSTANCE:
                 if(valueSourceInstance != null)
-                    valueSourceInstance.renderItemsHtml(vc, writer, urlFormats, skinName != null ? SkinFactory.getReportSkin(skinName) : null, isPopup);
+                    valueSourceInstance.renderItemsHtml(vc, writer, urlFormats,
+                            skinName != null ? SkinFactory.getInstance().getReportSkin(vc, skinName) : null, isPopup);
                 else
                     writer.write("ListValueSource instance '"+ valueSourceSpec +"' not found in "+ this.getClass().getName() +".handleValueSource().");
                 break;

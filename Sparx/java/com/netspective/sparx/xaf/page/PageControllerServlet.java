@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.15 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: PageControllerServlet.java,v 1.16 2003-02-26 07:54:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -340,7 +340,8 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         ServletContext servletContext = getServletContext();
         if(!loginDialog.accessAllowed(servletContext, req, resp))
         {
-            DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getDialogSkin(servletContext, loginDialogSkinName));
+            DialogContext dc = loginDialog.createContext(servletContext, this, req, resp,
+                    loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getInstance().getDialogSkin(vc, loginDialogSkinName));
             loginDialog.prepareContext(dc);
             if(dc.inExecuteMode())
             {

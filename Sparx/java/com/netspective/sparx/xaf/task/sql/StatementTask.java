@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.12 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: StatementTask.java,v 1.13 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -403,7 +403,7 @@ public class StatementTask extends BasicTask
 
         Writer out = null;
         ReportDestination reportDest = null;
-        ReportSkin reportSkin = SkinFactory.getReportSkin(context, skinValueSource.getValue(tc));
+        ReportSkin reportSkin = SkinFactory.getInstance().getReportSkin(tc, skinValueSource.getValue(tc));
         if(reportSkin == null)
         {
             tc.addErrorMessage("ReportSkin '" + skinValueSource.getId() + "' not found.", false);
@@ -426,7 +426,7 @@ public class StatementTask extends BasicTask
                 // Special Case: This static query must produce a report that is pageable
                 StatementDialog stmtDialog = new StatementDialog(stmtManager.getStatement(tc.getServletContext(), null, stmtName), getReport(), getSkin() != null ? getSkin().getValue(tc) : null, null);
                 stmtDialog.setRowsPerPage(getRowsPerPage());
-                DialogSkin skin = com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin();
+                DialogSkin skin = com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin();
                 DialogContext dc = stmtDialog.createContext(context, tc.getServlet(),
                         (javax.servlet.http.HttpServletRequest) tc.getRequest(),
                         (javax.servlet.http.HttpServletResponse) tc.getResponse(), skin);

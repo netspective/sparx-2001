@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.15 2002-12-29 17:08:25 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.16 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -498,7 +498,7 @@ public class StatementManager extends XmlSource
                 String className = typeElem.getAttribute("class");
                 try
                 {
-                    SkinFactory.addReportSkin(typeElem.getAttribute("name"), className);
+                    SkinFactory.getInstance().addReportSkin(typeElem.getAttribute("name"), className);
                 }
                 catch(IllegalAccessException e)
                 {

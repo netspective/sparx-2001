@@ -51,20 +51,20 @@
  */
 
 /**
- * $Id: RecordEditorReportSkin.java,v 1.1 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: RecordEditorReportSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
 
-import java.io.Writer;
-import java.io.IOException;
-
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.xaf.report.Report;
 import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportFrame;
-import com.netspective.sparx.xaf.report.Report;
-import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.Writer;
 
 public class RecordEditorReportSkin extends com.netspective.sparx.xaf.theme.HtmlReportSkin
 {
@@ -98,8 +98,7 @@ public class RecordEditorReportSkin extends com.netspective.sparx.xaf.theme.Html
         {
             if (imgPath == null)
             {
-                ThemeFactory tf = ThemeFactory.getInstance(rc);
-                Theme theme = tf.getCurrentTheme();
+                Theme theme = SkinFactory.getInstance().getCurrentTheme(rc);
                 imgPath = ((HttpServletRequest)rc.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();
             }
 
@@ -139,8 +138,7 @@ public class RecordEditorReportSkin extends com.netspective.sparx.xaf.theme.Html
         {
             if (imgPath == null)
             {
-                ThemeFactory tf = ThemeFactory.getInstance(rc);
-                Theme theme = tf.getCurrentTheme();
+                Theme theme = SkinFactory.getInstance().getCurrentTheme(rc);
                 imgPath = ((HttpServletRequest)rc.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();
             }
 
