@@ -2,10 +2,16 @@ var DIALOGFIELD_PREFIX = '_dc';
 var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
-var ALLOW_CLIENT_VALIDATION = true;
+var FIELDNAME_IGNORE_VALIDATION = DIALOGFIELD_PREFIX + ".ignore_val";
 
+var ALLOW_CLIENT_VALIDATION        = true;
 var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
 var ENABLE_KEYPRESS_FILTERS        = true;
+
+function setAllowValidation(value)
+{
+    ALLOW_CLIENT_VALIDATION = value;
+}
 
 // **************************************************************************
 // BrowserCheck class
@@ -30,15 +36,14 @@ function BrowserCheck()
 var browser = new BrowserCheck() //Making browsercheck object
 
 // Get the dialog field control for IE4
-function getControl(dialog, id)
+function getControl_IE4(dialog, id)
 {    
     return document.all.item(id);
 }
 
 // Get the dialog field control for DOM browsers such as IE5, IE6 and NS6
 function getControl_Dom(dialog, id)
-{   
-    
+{
     if (id.substring(0,3) == DIALOGFIELD_PREFIX)
         return document.getElementById(dialog.name).elements[id];
     else
@@ -51,6 +56,23 @@ function getControl_NS4(dialog, id)
     // a dialog field because the ID starts with a PREFIX
     if (id.substring(0,3) == DIALOGFIELD_PREFIX)
         return document.forms[dialog.name].elements[id];
+}
+
+// based on which browser is currently running, get the control using the appropriate function
+function getControl(dialog, id)
+{
+    if (browser.ie5 || browser.ie6 || browser.ns6)
+    {
+        return getControl_Dom(dialog, id);
+    }
+    else if (browser.ns4)
+    {
+        return getControl_NS4(dialog, id);
+    }
+    else if (browser.ie4)
+    {
+        return getControl_IE4(dialog, id);
+    }
 }
 
 //****************************************************************************
@@ -92,6 +114,7 @@ function Dialog(name)
     this.finalizeContents = Dialog_finalizeContents;
     this.isValid = Dialog_isValid;
     this.getFieldControl = Dialog_getFieldControl;
+    this.allowValidation = Dialog_allowValidation;
 }
 
 function Dialog_registerField(field)
@@ -113,6 +136,11 @@ function Dialog_finalizeContents()
         dialogFields[i].finalizeContents(this);
 }
 
+function Dialog_allowValidation()
+{
+    return ALLOW_CLIENT_VALIDATION;
+}
+
 function Dialog_isValid()
 {
     var dialogFields = this.fields;
@@ -123,7 +151,7 @@ function Dialog_isValid()
             field.doPreSubmit();
     }
     
-    if(! ALLOW_CLIENT_VALIDATION)
+    if(! this.allowValidation())
         return true;
     
     var isValid = true;
@@ -225,9 +253,9 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
     }
     else if (browser.ie4)
     {        
-        this.getControl = DialogField_getControl;
-        this.getControlByQualifiedName = DialogField_getControlByQualifiedName;
-        this.getFieldAreaElem = DialogField_getFieldAreaElem;
+        this.getControl = DialogField_getControl_IE4;
+        this.getControlByQualifiedName = DialogField_getControlByQualifiedName_IE4;
+        this.getFieldAreaElem = DialogField_getFieldAreaElem_IE4;
     }
     
     this.evaluateConditionals = DialogField_evaluateConditionals;
@@ -248,9 +276,9 @@ function DialogField_isRequired()
 /**
  * Get the dialog field control  using its ID for IE4
  */
-function DialogField_getControl(dialog)
+function DialogField_getControl_IE4(dialog)
 {
-    return getControl(dialog, this.controlId);
+    return getControl_IE4(dialog, this.controlId);
 }
 
 /**
@@ -272,9 +300,9 @@ function DialogField_getControl_NS4(dialog)
 /**
  * Get the dialog field control  using its qualified name for IE4
  */
-function DialogField_getControlByQualifiedName(dialog)
+function DialogField_getControlByQualifiedName_IE4(dialog)
 {    
-    return getControl(dialog, this.qualifiedName);
+    return getControl_IE4(dialog, this.qualifiedName);
 }
 
 /**
@@ -470,14 +498,14 @@ function DialogField_focusNext(dialog)
  * Gets the control of the table row where the dialog field belongs to for IE 4
  * This does not get the control of the dialog field(INPUT)!
  */
-function DialogField_getFieldAreaElem(dialog)
+function DialogField_getFieldAreaElem_IE4(dialog)
 {
     var fieldAreaId = FIELDROW_PREFIX + this.name;
-    var fieldAreaElem = getControl(dialog, fieldAreaId);  
+    var fieldAreaElem = getControl_IE4(dialog, fieldAreaId);
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
         fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
-        fieldAreaElem = getControl(dialog, fieldAreaId);
+        fieldAreaElem = getControl_IE4(dialog, fieldAreaId);
     }    
     return fieldAreaElem;
 }
@@ -529,7 +557,6 @@ function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
                 control.checked = isChecked;
         }
     }
-    
 }
 
 //****************************************************************************
@@ -691,9 +718,13 @@ function SimpleSort(objSelect)
 //****************************************************************************
 // Event handlers
 //****************************************************************************
+
 function controlOnClick(control, event)
-{            
-    field = activeDialog.fieldsById[control.name];    
+{
+    if(control.name == FIELDNAME_IGNORE_VALIDATION)
+        setAllowValidation(false);
+
+    field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
     
     if (field.customHandlers.click != null)
@@ -873,6 +904,7 @@ function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 //****************************************************************************
 // Field-specific validation and keypress filtering functions
 //****************************************************************************
+
 function CurrencyField_onKeyPress(field, control, event)
 {
     return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE], event);
