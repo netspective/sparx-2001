@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.15 2003-01-29 01:41:15 shahid.shah Exp $
+ * $Id: NavigationPath.java,v 1.16 2003-01-29 04:31:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -68,6 +68,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.apache.oro.text.perl.Perl5Util;
 
 import com.netspective.sparx.util.value.*;
 import com.netspective.sparx.util.ClassPath;
@@ -82,6 +83,8 @@ public class NavigationPath
     static public final long NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS = NAVGPATHFLAG_INITIAL_FOCUS * 2;
     static public final long FLDFLAG_STARTCUSTOM = NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS * 2;
 
+    static public final String THIS_NAV_ID_REPLACE_EXPR = "{NAV_ID}";
+    static public final String PARENT_NAV_ID_REPLACE_EXPR = "{PARENT_NAV_ID}";
     static public final String PATH_SEPARATOR = "/";
     static private int pathNumber = 0;
 
@@ -583,8 +586,17 @@ public class NavigationPath
                 String url = childElem.getAttribute("url");
                 if (url == null || url.length() == 0)
                 {
-                    url = "config-expr:${create-app-url:" + controller.getUrl() + id + "}" + (controller.getRetainParamsSource() != null || controller.getRetainParamsSource().length() > 0 ? "?" + controller.getRetainParamsSource() : "");
+                    url = "config-expr:${create-app-url:" + controller.getUrl() + id + "}" + (controller.getRetainParamsSource() != null && controller.getRetainParamsSource().length() > 0 ? "?" + controller.getRetainParamsSource() : "");
                     childElem.setAttribute("url", id);
+                }
+                else
+                {
+                    // replace {NAV_ID} with current navigation id (convenience method)
+                    if(url.indexOf(THIS_NAV_ID_REPLACE_EXPR) > 0)
+                    {
+                        Perl5Util p5Util = new Perl5Util();
+                        url = p5Util.substitute("s#"+ THIS_NAV_ID_REPLACE_EXPR +"#"+ id +"#g", url);
+                    }
                 }
                 childPath.setUrl(url);
 

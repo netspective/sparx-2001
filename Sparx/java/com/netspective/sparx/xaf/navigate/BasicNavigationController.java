@@ -10,67 +10,81 @@ package com.netspective.sparx.xaf.navigate;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
+
 import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.util.value.ConfigurationExprValue;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSource;
 
-public class BasicNavigationController implements NavigationController {
+public class BasicNavigationController implements NavigationController
+{
 
     String url;
     ConfigurationExprValue retainParams = new ConfigurationExprValue();
     String retainParamsSource;
     String name;
 
-    public BasicNavigationController() {
+    public BasicNavigationController()
+    {
 
     }
 
-    public BasicNavigationController(String name, String url, String retainParams) {
+    public BasicNavigationController(String name, String url, String retainParams)
+    {
         this.name = name;
         this.url = url;
         this.retainParamsSource = retainParams;
         this.retainParams.initializeSource(retainParams);
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getUrl() {
+    public String getUrl()
+    {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(String url)
+    {
         this.url = url;
     }
 
-    public String getRetainParamsValue(ValueContext vc) {
-        return retainParams.getValue(vc);
+    public String getRetainParamsValue(ValueContext vc)
+    {
+        return retainParamsSource != null ? retainParams.getValue(vc) : null;
     }
 
-    public void setRetainParamsSource(String retainParams) {
+    public void setRetainParamsSource(String retainParams)
+    {
         this.retainParamsSource = retainParams;
         this.retainParams.initializeSource(retainParams);
     }
 
-    public ValueSource getRetainParams() {
+    public ValueSource getRetainParams()
+    {
         return retainParams;
     }
 
-    public void setRetainParams(ValueSource retainParams) {
+    public void setRetainParams(ValueSource retainParams)
+    {
         this.retainParams = (ConfigurationExprValue) retainParams;
     }
 
-    public String getRetainParamsSource() {
+    public String getRetainParamsSource()
+    {
         return this.retainParamsSource;
     }
 
-    public void importFromXml(Element node) {
+    public void importFromXml(Element node)
+    {
 
         String name = node.getAttribute("name");
         setName(name);
@@ -79,7 +93,8 @@ public class BasicNavigationController implements NavigationController {
         setUrl(url);
 
         String retainParams = node.getAttribute("retain-params");
-        if (retainParams != null && retainParams.length() > 0) {
+        if (retainParams != null && retainParams.length() > 0)
+        {
             setRetainParamsSource(retainParams);
 
         }

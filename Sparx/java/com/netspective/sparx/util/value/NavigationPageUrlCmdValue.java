@@ -51,17 +51,10 @@
  */
 
 /**
- * $Id: NavigationPageUrlCmdValue.java,v 1.2 2003-01-24 12:59:13 roque.hernandez Exp $
+ * $Id: NavigationPageUrlCmdValue.java,v 1.3 2003-01-29 04:31:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
-
-import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
-import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.StringTokenizer;
 
 public class NavigationPageUrlCmdValue extends NavigationPageUrlValue
 {
@@ -109,9 +102,8 @@ public class NavigationPageUrlCmdValue extends NavigationPageUrlValue
     {
         String url = super.getValue(vc);
 
-        if (cmd != null && cmd.length() > 0){
-                url = (url == null ? "cmd=" + cmd : url + "&cmd=" + cmd);
-        }
+        if (cmd != null && cmd.length() > 0)
+            url = (url.indexOf('?') > 0 ? "&" : "?") + "cmd=" + cmd;
 
         return url;
 
