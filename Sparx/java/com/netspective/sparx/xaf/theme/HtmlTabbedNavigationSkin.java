@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.5 2003-03-14 06:56:50 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.6 2003-03-15 04:30:15 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -651,7 +651,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     if (tabElement.isInActivePath(nc))
                     {
                         buffer.append("                <td class=\"menu-level-1-active-start\" valign=\"bottom\" nowrap>" +
-                                "<span class=\"menu-level-1\">&nbsp;&nbsp;&nbsp;</span></td>");
+                                "<span class=\"menu-level-1\">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>");
                         buffer.append("                    <td class=\"menu-level-1-table-active\" valign=\"bottom\" nowrap>");
                         buffer.append("<a class=\"menu-level-1-active\"" +
                                 " href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
@@ -670,7 +670,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     if (tabElement.isInActivePath(nc))
                     {
                             buffer.append("                    <td class=\"menu-level-1-active-end\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
-                                "&nbsp;</span></td>\n");
+                                "&nbsp;&nbsp;&nbsp;&nbsp;</span></td>\n");
 
                         buffer.append("                    <td class=\"menu-level-1-table-active\" valign=\"bottom\" nowrap>");
                         buffer.append("<a class=\"menu-level-1-active\"" +
@@ -689,6 +689,8 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             }
         }
         buffer.append("              <td class=\"menu-level-1-end\" valign=\"bottom\" nowrap><span>&nbsp;&nbsp;</span></td>");
+        buffer.append("              <td class=\"menu-level-1-fill\" width=\"100%\" valign=\"bottom\" nowrap>" +
+                "<span>&nbsp;&nbsp;</span></td>");
         buffer.append("               </tr>\n");
         buffer.append("           </table>\n");
 
