@@ -100,9 +100,15 @@ public class ValueSourceFactory
 
 	public static SingleValueSource getSingleOrStaticValueSource(String source)
 	{
-		SingleValueSource result = getSingleValueSource(source);
-		if(result == null)
-			result = new StaticValue(source);
+                SingleValueSource result;
+                if (source.startsWith("\\") && source.length() > 2)
+                  result = new StaticValue(source.substring(2));
+                else
+                {
+                    result = getSingleValueSource(source);
+                    if(result == null)
+                            result = new StaticValue(source);
+                }
 		return result;
 	}
 
