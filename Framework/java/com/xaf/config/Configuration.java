@@ -99,9 +99,8 @@ public class Configuration extends HashMap
         return ri;
     }
 
-	public String getValue(ValueContext vc, String name)
+	public String getValue(ValueContext vc, Property property, String defaultValue)
 	{
-		Property property = (Property) get(name);
 		if(property != null)
 		{
 		    String value = property.getValue(vc);
@@ -119,7 +118,23 @@ public class Configuration extends HashMap
 				return value;
 		}
 		else
-			return null;
+			return defaultValue;
+	}
+
+	public String getValue(ValueContext vc, String name, String defaultValue)
+	{
+		return getValue(vc, (Property) get(name), defaultValue);
+	}
+
+	public String getValue(ValueContext vc, String name)
+	{
+		return getValue(vc, (Property) get(name), null);
+	}
+
+	public Collection getValues(ValueContext vc, String name)
+	{
+		PropertiesCollection property = (PropertiesCollection) get(name);
+		return property.getCollection();
 	}
 
 	public void importFromXml(Element elem, ConfigurationManager manager)
@@ -152,6 +167,21 @@ public class Configuration extends HashMap
 				else
 				{
 					manager.addError("Unknown property type '"+propType+"'");
+				}
+			}
+			else if(childName.equals("properties"))
+			{
+				Element propertiesElem = (Element) childNode;
+				String propType = propertiesElem.getAttribute("type");
+				if(propType.length() == 0 || propType.equals("list"))
+				{
+					PropertiesCollection propColl = new PropertiesList();
+					propColl.importFromXml(propertiesElem, manager, this);
+					put(propColl.getName(), propColl);
+				}
+				else
+				{
+					manager.addError("Unknown properties type '"+propType+"'");
 				}
 			}
 		}
