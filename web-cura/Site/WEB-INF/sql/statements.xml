@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <xaf>
+    <include file="test_statements.xml"/>
 	<!-- when no <param> tags provided, params will be passed in manually in Java code -->
 
 	<sql-statements package="security">
@@ -58,8 +59,10 @@
 				<param value="request:org_id"/>
 			</params>
 			<report heading="Overview">
-				<banner-item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
-				<banner-item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                </banner>
 			</report>
 		</statement>
 
@@ -107,7 +110,7 @@
 		<join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)" imply-join="org_industry_enum"/>
 		<join id="org_industry_enum" table="org_industry_enum" condition="org_industry.org_industry = org_industry_enum.id (+)" imply-join="org_industry_enum"/>
 
-		<select-dialog name="org_search" allow-debug="yes" show-output-dests="no" hide-readonly-hints="yes" heading="Search Accounts">
+		<select-dialog name="org_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Accounts">
 			<field.text query-field="org_code"/>
 			<field.text query-field="org_name"/>
 			<field.text query-field="org_abbrev"/>

@@ -1,6 +1,72 @@
 <?xml version="1.0"?>
 <xaf>
 	<include file="test_dialogs.xml"/>
+    <dialog-skin name="TestSkin">
+        <outer-table-attrs>
+            cellspacing='5' cellpadding='5' border='5'
+        </outer-table-attrs>
+        <frame-head-row-attrs>
+            bgcolor='#6495ed'
+        </frame-head-row-attrs>
+        <caption-cell-attrs>
+            style='font-family: Andale Mono'
+        </caption-cell-attrs>
+    </dialog-skin>
+
+    <dialog-skin name="default">
+        <outer-table-attrs>
+            cellspacing='0' cellpadding='1' border='0' bgcolor='#3D6A26'
+        </outer-table-attrs>
+        <inner-table-attrs>
+            width='100%' cellspacing='0' cellpadding='3' border='0' bgcolor='#F4FAF1'
+        </inner-table-attrs>
+        <frame-head-row-attrs>
+            bgcolor='#AFD997' colspan='2'
+        </frame-head-row-attrs>
+        <frame-head-font-attrs>
+            face='Arial' color='#ffffff' style='font-size: 12px'
+        </frame-head-font-attrs>
+        <caption-cell-attrs>
+            align='right'  valign='top'
+        </caption-cell-attrs>
+        <caption-font-attrs>
+            face='Verdana, Arial' style='font-size: 11px'
+        </caption-font-attrs>
+        <separator-font-attrs>
+            face='Trebuchet MS' color='#6495ed' style='font-size: 12px'
+        </separator-font-attrs>
+        <control-area-font-attrs>
+            face='Trebuchet MS,Arial' style='font-size: 12px'
+        </control-area-font-attrs>
+        <control-area-style-attrs>
+            style='font-size: 12px; background-color: #F4F8FA'
+        </control-area-style-attrs>
+        <hint-font-attrs>
+            color='navy' face='Arial' style='font-size: 10px'
+        </hint-font-attrs>
+        <field-row-error-attrs>
+            bgcolor='#c4d6ec'
+        </field-row-error-attrs>
+        <grid-caption-font-attrs>
+            face="Trebuchet MS,Arial" style='color: #0000CC; font-size: 12px; font-weight: bold'
+        </grid-caption-font-attrs>
+        <!-- grid-row-caption-font-attrs>
+            size='+4'
+        </grid-row-caption-font-attrs -->
+        <grid-cell-attrs>
+            align='left'
+        </grid-cell-attrs>
+        <grid-caption-cell-attrs>
+            align='center' style='background-color: #c4d6ec'
+        </grid-caption-cell-attrs>
+        <grid-table-attrs>
+            cellpadding='3' cellspacing='0' border='0'
+        </grid-table-attrs>
+        <!-- include-pre-script src="/test/script.js"/ -->
+        <!-- include-post-script src="/test/script-post.js"/ -->
+        <!-- prepend-pre-script> value = "this"; </prepend-pre-script -->
+        <!--append-post-script> alert(activeDialog);   </append-post-script -->
+    </dialog-skin>
 
 	<dialogs package="org">
 		<dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">

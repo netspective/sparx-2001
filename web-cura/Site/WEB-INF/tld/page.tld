@@ -1,14 +1,17 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+        PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+    "http://java.sun.com/j2ee/dtd/web-jsptaglibrary_1_2.dtd">
 
 <taglib>
-	<tlibversion>1.0</tlibversion>
-	<jspversion>1.1</jspversion>
-	<shortname>app</shortname>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <short-name>app</short-name>
 	<uri>http://xaf.org/xaf-page.tld</uri>
 
 	<tag>
 		<name>page</name>
-		<tagclass>app.PageTag</tagclass>
+		<tag-class>com.netspective.product.cura.tag.PageTag</tag-class>
 
 		<attribute>
 			<name>title</name>
@@ -28,7 +31,7 @@
 
 	<tag>
 		<name>link</name>
-		<tagclass>app.AnchorTag</tagclass>
+		<tag-class>app.AnchorTag</tag-class>
 
 		<attribute>
 			<name>url</name>

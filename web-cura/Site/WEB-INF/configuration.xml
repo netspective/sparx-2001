@@ -2,7 +2,7 @@
 
 <xaf>
     <configuration>
-        <property name="system.projects-root" value="C:/Projects"/>
+        <property name="system.projects-root" value="D:/Projects"/>
         <property name="framework.root-path" value="${system.projects-root}/Framework"/>
         <property name="app.project-root" value="${system.projects-root}/web-cura"/>
 
@@ -73,7 +73,7 @@
         <property name="app.navigate.root-path" value="${servlet-context-path:/}" final="yes"/>
         <property name="app.navigate.root-url" value="${create-app-url:/}"/>
         <property name="app.navigate.skin-jsp" value="navigate-skin.jsp"/>
-		<property name="app.navigate.login.dialog-class" value="com.xaf.security.LoginDialog"/>
+		<property name="app.navigate.login.dialog-class" value="com.netspective.product.cura.security.AppLoginDialog"/>
         <property name="app.navigate.login.user-id.cookie-name" value="xaf_user_id_02"/>
         <property name="app.navigate.login.user.session-attr-name" value="authenticated-user"/>
 
@@ -86,8 +86,12 @@
         <property name="app.security.root-path" value="${app.web-inf-root-path}/security"/>
         <property name="app.security.acl-file" value="${app.security.root-path}/access-control.xml"/>
 
-        <property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/>
+        <!-- property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/ -->
+        <property name="app.schema.source-path" value="D:\Projects\web-cura\Database\schema-src"/>
         <property name="app.schema.source-file" value="${app.schema.source-path}/schema.xml"/>
+
+        <property name="app.xml.root-path" value="${app.web-inf-root-path}/xml"/>
+        <property name="app.xml.main-menu" value="${app.xml.root-path}/main_menu.xml"/>
 
         <system-property name="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
         <system-property name="com.netspective.sparx.DatabaseContext.class" value="com.xaf.db.BasicDatabaseContext"/>
