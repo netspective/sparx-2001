@@ -55,7 +55,8 @@ public class DebugField extends DialogField
 		try
 		{
 			StringWriter writer = new StringWriter();
-			report.produceReport(writer, data, reportSkin);
+			ReportContext rc = new ReportContext(dc, report, reportSkin);
+			rc.produceReport(writer, data);
 			return writer.toString();
 		}
 		catch(IOException e)

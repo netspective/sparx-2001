@@ -1,5 +1,6 @@
 package com.xaf.form;
 
+import java.lang.reflect.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -50,9 +51,11 @@ public final class DialogContext extends Hashtable implements ValueContext
 	static public final int STATECALCSTAGE_INITIAL = 0;
 	static public final int STATECALCSTAGE_FINAL   = 1;
 
+	private CallbackManager callbacks;
 	private String transactionId;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private Servlet servlet;
 	private ServletContext servletContext;
 	private Dialog dialog;
 	private DialogSkin skin;
@@ -64,13 +67,15 @@ public final class DialogContext extends Hashtable implements ValueContext
 	private String originalReferer;
 	private DatabaseContext dbContext;
 
-	public DialogContext(HttpServletRequest aRequest, HttpServletResponse aResponse, ServletContext aContext, Dialog aDialog, DialogSkin aSkin)
+	public DialogContext(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
 	{
         aRequest.setAttribute(DIALOG_CONTEXT_ATTR_NAME, this);
 
 		request = aRequest;
 		response = aResponse;
+		servlet = aServlet;
 		servletContext = aContext;
+
 		dialog = aDialog;
 		skin = aSkin;
 		activeMode = DIALOGMODE_UNKNOWN;
@@ -117,6 +122,24 @@ public final class DialogContext extends Hashtable implements ValueContext
 			if(qName != null)
 				put(qName, new DialogFieldState(director));
 		}
+	}
+
+	public CallbackManager getCallbacks()
+	{
+		return callbacks;
+	}
+
+	public CallbackInfo getCallbackMethod(String callbackId)
+	{
+		if(callbacks == null)
+			return null;
+		return callbacks.getCallbackMethod(callbackId);
+	}
+
+	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes)
+	{
+		if(callbacks == null) callbacks = new CallbackManager();
+		callbacks.setCallbackMethod(callbackId, owner, methodName, paramTypes);
 	}
 
 	public void createStateFields(List fields)
@@ -216,8 +239,10 @@ public final class DialogContext extends Hashtable implements ValueContext
 	public final String getOriginalReferer() { return originalReferer; }
 	public final Dialog getDialog() { return dialog; }
 	public final ServletContext getServletContext() { return servletContext; }
-	public final HttpServletRequest getRequest() { return request; }
-	public final HttpServletResponse getResponse() { return response; }
+	public final Servlet getServlet() { return servlet; }
+	public final ServletRequest getRequest() { return request; }
+	public final ServletResponse getResponse() { return response; }
+	public final HttpSession getSession() { return request.getSession(true); }
 	public final DialogSkin getSkin() { return skin; }
 
 	public final DatabaseContext getDatabaseContext() { return dbContext; }

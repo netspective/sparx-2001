@@ -9,12 +9,18 @@ package com.xaf.value;
  * @version 1.0
  */
 
+import java.util.*;
+import java.lang.reflect.*;
 import javax.servlet.*;
-import javax.servlet.http.*;
 
 public interface ValueContext
 {
-	public HttpServletRequest getRequest();
-	public HttpServletResponse getResponse();
+	public Servlet getServlet();
+	public ServletRequest getRequest();
+	public ServletResponse getResponse();
 	public ServletContext getServletContext();
+
+	public CallbackManager getCallbacks();
+	public CallbackInfo getCallbackMethod(String callbackId);
+	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes);
 }

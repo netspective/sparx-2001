@@ -1,5 +1,6 @@
 package com.xaf.value;
 
+import javax.servlet.http.*;
 import com.xaf.db.*;
 import com.xaf.form.*;
 
@@ -12,12 +13,12 @@ public class SessionAttributeValue extends ValueSource
 
     public String getValue(ValueContext vc)
     {
-		return (String) vc.getRequest().getSession().getAttribute(valueKey);
+		return (String) ((HttpServletRequest) vc.getRequest()).getSession().getAttribute(valueKey);
     }
 
 	public Object getObjectValue(ValueContext vc)
     {
-        return vc.getRequest().getSession().getAttribute(valueKey);
+        return ((HttpServletRequest) vc.getRequest()).getSession().getAttribute(valueKey);
     }
 
 	public boolean supportsSetValue()
@@ -28,8 +29,8 @@ public class SessionAttributeValue extends ValueSource
 	public void setValue(ValueContext vc, Object value)
 	{
 		if(value == null)
-			vc.getRequest().getSession().removeAttribute(valueKey);
+			((HttpServletRequest) vc.getRequest()).getSession().removeAttribute(valueKey);
 		else
-			vc.getRequest().getSession().setAttribute(valueKey, value);
+			((HttpServletRequest) vc.getRequest()).getSession().setAttribute(valueKey, value);
 	}
 }

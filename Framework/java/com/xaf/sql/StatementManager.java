@@ -606,7 +606,10 @@ public class StatementManager extends XmlSource
 		}
 
         rd.initialize(rs, reportElem);
-        rd.produceReport(writer, rs, skin);
+
+		ReportContext rc = new ReportContext(vc, rd, skin);
+        rc.produceReport(writer, rs);
+
 		rs.close();
 	}
 
@@ -642,7 +645,10 @@ public class StatementManager extends XmlSource
 		}
 
         rd.initialize(rs, reportElem);
-        rd.produceReport(writer, data, skin);
+
+		ReportContext rc = new ReportContext(vc, rd, skin);
+        rc.produceReport(writer, data);
+
 		rs.close();
 	}
 }

@@ -321,9 +321,9 @@ public class Dialog
 			return dc.getSkin().getHtml(dc);
 	}
 
-	public String getHtml(HttpServletRequest request, HttpServletResponse response, ServletContext context, DialogSkin skin)
+	public String getHtml(ServletContext context, Servlet servlet, HttpServletRequest request, HttpServletResponse response, DialogSkin skin)
 	{
-		DialogContext dc = new DialogContext(request, response, context, this, skin);
+		DialogContext dc = new DialogContext(context, servlet, request, response, this, skin);
 		return getHtml(dc, false);
 	}
 

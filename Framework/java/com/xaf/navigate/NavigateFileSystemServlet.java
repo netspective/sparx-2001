@@ -39,7 +39,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 		if(appConfig == null)
 			throw new ServletException("Unable to obtain the default Configuration");
 
-		ValueContext vc = new ServletValueContext(null, null, context);
+		ValueContext vc = new ServletValueContext(context, null, null, null);
 		skinJspPageName = appConfig.getValue(vc, "app.navigate.skin-jsp");
 		rootURL = appConfig.getValue(vc, "app.navigate.root-url");
 		rootPath = appConfig.getValue(vc, "app.navigate.root-path");
@@ -124,7 +124,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 		ServletContext servletContext = getServletContext();
 		if(! loginDialog.accessAllowed(req, resp, servletContext))
 		{
-			DialogContext dc = new DialogContext(req, resp, servletContext, loginDialog, SkinFactory.getDialogSkin());
+			DialogContext dc = new DialogContext(servletContext, this, req, resp, loginDialog, SkinFactory.getDialogSkin());
 			loginDialog.prepareContext(dc);
 		    if(dc.inExecuteMode())
 			{

@@ -53,7 +53,7 @@ public class LoginDialog extends Dialog
 	{
 		Cookie cookie = new Cookie(COOKIENAME_USERID, dc.getValue(FIELDNAME_USERID));
 		cookie.setPath("/");
-		dc.getResponse().addCookie(cookie);
+		((HttpServletResponse) dc.getResponse()).addCookie(cookie);
 		return null;
 	}
 }

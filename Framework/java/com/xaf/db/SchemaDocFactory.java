@@ -3,6 +3,7 @@ package com.xaf.db;
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;
+import javax.servlet.http.*;
 
 import com.xaf.config.*;
 import com.xaf.value.*;
@@ -30,7 +31,7 @@ public class SchemaDocFactory
 			return doc;
 
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
-		ValueContext vc = new ServletValueContext(null, null, context);
+		ValueContext vc = new ServletValueContext(context, null, null, null);
 		doc = getDoc(appConfig.getValue(vc, "app.schema.source-file"));
 		context.setAttribute(ATTRNAME_SCHEMADOC, doc);
 		return doc;

@@ -19,12 +19,6 @@ import com.xaf.report.*;
 
 public class GeneralColumn implements ReportColumn
 {
-	static public final long COLFLAG_INVISIBLE = 1;
-    static public final long COLFLAG_HASPLACEHOLDERS = COLFLAG_INVISIBLE * 2;
-    static public final long COLFLAG_HASOUTPUTPATTERN = COLFLAG_HASPLACEHOLDERS * 2;
-	static public final long COLFLAG_WRAPURL = COLFLAG_HASOUTPUTPATTERN * 2;
-	static public final long COLFLAG_CUSTOMSTART = COLFLAG_WRAPURL * 2;
-
 	static public final int ALIGN_LEFT   = 0;
 	static public final int ALIGN_CENTER = 1;
 	static public final int ALIGN_RIGHT  = 2;
@@ -210,7 +204,7 @@ public class GeneralColumn implements ReportColumn
 
 		value = elem.getAttribute("display");
 		if(value.length() > 0 && value.equals("no"))
-			setFlag(ReportColumn.COLFLAG_INVISIBLE);
+			setFlag(ReportColumn.COLFLAG_HIDDEN);
 
 		value = elem.getAttribute("calc");
 		if(value.length() > 0)
@@ -223,5 +217,9 @@ public class GeneralColumn implements ReportColumn
 		value = elem.getAttribute("output");
 		if(value.length() > 0)
 			setOutput(value);
+	}
+
+	public void finalizeContents(Report report)
+	{
 	}
 }

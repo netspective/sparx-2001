@@ -10,7 +10,7 @@ public class StandardServletSecurity implements ServletSecurity
 	{
 		Cookie cookie = new Cookie(COOKIENAME_USERID, dc.getValue("user_id"));
 		cookie.setPath("/");
-		dc.getResponse().addCookie(cookie);
+		((HttpServletResponse) dc.getResponse()).addCookie(cookie);
 		return true;
 	}
 

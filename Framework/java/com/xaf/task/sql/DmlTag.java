@@ -40,7 +40,7 @@ public class DmlTag extends TagSupport
 	public int doEndTag() throws JspException
 	{
 		JspWriter out = pageContext.getOut();
-		TaskContext tc = new TaskContext((HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), pageContext.getServletContext());
+		TaskContext tc = new TaskContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
 		try
 		{
 			task.execute(tc);

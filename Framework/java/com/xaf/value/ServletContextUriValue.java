@@ -35,7 +35,7 @@ public class ServletContextUriValue extends ValueSource
 
     public String getValue(ValueContext vc)
     {
-		HttpServletRequest request = vc.getRequest();
+		HttpServletRequest request = (HttpServletRequest) vc.getRequest();
 		if(request == null)
 			return "ValueContext.getRequest() is NULL in " + getId();
 

@@ -77,7 +77,7 @@ public class DialogTag extends TagSupport
 				return SKIP_BODY;
 			}
 
-			DialogContext dc = new DialogContext((HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), context, dialog, skin);
+			DialogContext dc = new DialogContext(context, (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), dialog, skin);
 			dialog.prepareContext(dc);
 
 		    // if the dialog class has not been overridden (base class) then

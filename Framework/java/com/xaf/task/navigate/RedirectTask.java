@@ -1,6 +1,8 @@
 package com.xaf.task.navigate;
 
 import java.io.*;
+import javax.servlet.http.*;
+
 import org.w3c.dom.*;
 
 import com.xaf.task.*;
@@ -30,7 +32,7 @@ public class RedirectTask extends AbstractTask
     {
 		try
 		{
-			tc.getResponse().sendRedirect(url.getValue(tc));
+			((HttpServletResponse) tc.getResponse()).sendRedirect(url.getValue(tc));
 			tc.setFlag(TaskContext.TCFLAG_HALTPROCESSING);
 		}
 		catch(IOException e)

@@ -135,7 +135,7 @@ public class QuerySelectDialog extends Dialog
 		}
 
 		String transactionId = dc.getTransactionId();
-		HttpSession session = dc.getRequest().getSession(true);
+		HttpSession session = dc.getSession();
 		QuerySelectScrollState state = (QuerySelectScrollState) session.getAttribute(transactionId);
 
 		try

@@ -1,8 +1,8 @@
 package com.xaf.task;
 
+import java.lang.reflect.*;
 import java.util.*;
 import javax.servlet.*;
-import javax.servlet.http.*;
 import java.security.*;
 
 import com.xaf.db.*;
@@ -16,23 +16,26 @@ public class TaskContext implements ValueContext
 	static public final long TCFLAG_HASRESULTMSG = TCFLAG_HASERROR * 2;
 
 	private static long taskContextNum = 0;
+	private CallbackManager callbacks;
 	private Task task;
 	private String transactionId;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
 	private ServletContext servletContext;
+	private Servlet servlet;
+	private ServletRequest request;
+	private ServletResponse response;
 	private DialogContext dialogContext;
 	private long resultCode;
 	private StringBuffer resultMessage = new StringBuffer();
 	private StringBuffer errorMessage = new StringBuffer();
 	private long flags;
 
-	public TaskContext(HttpServletRequest aRequest, HttpServletResponse aResponse, ServletContext aContext)
+	public TaskContext(ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse)
 	{
 		taskContextNum++;
+		servletContext = aContext;
+		servlet = aServlet;
 		request = aRequest;
 		response = aResponse;
-		servletContext = aContext;
 
 		try
 		{
@@ -48,9 +51,27 @@ public class TaskContext implements ValueContext
 
     public TaskContext(DialogContext dc)
     {
-		this(dc.getRequest(), dc.getResponse(), dc.getServletContext());
+		this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse());
 		dialogContext = dc;
     }
+
+	public CallbackManager getCallbacks()
+	{
+		return callbacks;
+	}
+
+	public CallbackInfo getCallbackMethod(String callbackId)
+	{
+		if(callbacks == null)
+			return null;
+		return callbacks.getCallbackMethod(callbackId);
+	}
+
+	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes)
+	{
+		if(callbacks == null) callbacks = new CallbackManager();
+		callbacks.setCallbackMethod(callbackId, owner, methodName, paramTypes);
+	}
 
 	public final String getTransactionId() { return transactionId; }
 
@@ -58,8 +79,9 @@ public class TaskContext implements ValueContext
 	public final Dialog getDialog() { return dialogContext != null ? dialogContext.getDialog() : null; }
 
 	public final ServletContext getServletContext() { return servletContext; }
-	public final HttpServletRequest getRequest() { return request; }
-	public final HttpServletResponse getResponse() { return response; }
+	public final Servlet getServlet() { return servlet; }
+	public final ServletRequest getRequest() { return request; }
+	public final ServletResponse getResponse() { return response; }
 
 	public final long getFlags() { return flags; }
 	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }
