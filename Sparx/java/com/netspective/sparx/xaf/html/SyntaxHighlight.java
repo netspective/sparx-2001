@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SyntaxHighlight.java,v 1.1 2002-09-16 02:07:42 shahid.shah Exp $
+ * $Id: SyntaxHighlight.java,v 1.2 2002-09-17 02:08:52 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -75,7 +75,7 @@ public class SyntaxHighlight
     static
     {
         register(
-                com.Ostermiller.Syntax.Lexer.HTMLLexer.class,
+                com.Ostermiller.Syntax.Lexer.HTMLLexer1.class,
                 new String[]{
                     "htm",
                     "html",

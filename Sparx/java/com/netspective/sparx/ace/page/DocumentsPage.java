@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DocumentsPage.java,v 1.7 2002-09-16 02:32:31 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.8 2002-09-17 02:08:52 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -97,22 +97,6 @@ public class DocumentsPage extends AceServletPage
     private FileSystemContext fsContext;
     private boolean transformersMapInitialized;
     private Map transformersMap;
-    /*
-    static private Map documentHandlerMap;
-
-    static
-    {
-        JavaContentHandler javaHandler = new JavaContentHandler();
-        XmlContentHandler xmlHandler = new XmlContentHandler();
-
-        documentHandlerMap = new HashMap();
-        documentHandlerMap.put("java", javaHandler);
-        documentHandlerMap.put("js", javaHandler);
-        documentHandlerMap.put("xml", xmlHandler);
-        documentHandlerMap.put("xsl", xmlHandler);
-        documentHandlerMap.put("jsp", xmlHandler);
-    }
-    */
 
     public DocumentsPage()
     {
