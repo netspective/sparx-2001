@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.19 2003-04-17 14:49:52 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.20 2003-04-18 00:13:00 aye.thu Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -286,7 +286,8 @@ var FLDFLAG_DOUBLEENTRY                        = FLDFLAG_READONLY_INVISIBLE_UNLE
 var FLDFLAG_SCANNABLE                          = FLDFLAG_DOUBLEENTRY * 2;
 var FLDFLAG_AUTOBLUR                           = FLDFLAG_SCANNABLE * 2;
 var FLDFLAG_SUBMIT_ONBLUR                      = FLDFLAG_AUTOBLUR * 2;
-var FLDFLAG_STARTCUSTOM                        = FLDFLAG_SUBMIT_ONBLUR * 2; // all DialogField "children" will use this
+var FLDFLAG_CREATEADJACENTAREA_HIDDEN          = FLDFLAG_SUBMIT_ONBLUR * 2;
+var FLDFLAG_STARTCUSTOM                        = FLDFLAG_CREATEADJACENT_HIDDEN * 2; // all DialogField "children" will use this
 
 // These constants MUST be kept identical to what is in com.netspective.sparx.form.field.SelectField
 var SELECTSTYLE_RADIO      = 0;
