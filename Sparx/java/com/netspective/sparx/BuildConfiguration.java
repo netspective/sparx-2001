@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BuildConfiguration.java,v 1.18 2002-03-23 21:47:29 snshah Exp $
+ * $Id: BuildConfiguration.java,v 1.19 2002-03-23 21:51:10 snshah Exp $
  */
 
 package com.netspective.sparx;
@@ -122,8 +122,8 @@ public class BuildConfiguration
     }
 
     /**
-     * Prints the absolute pathname of the class file containing the specified class name, as prescribed
-     * by the class path.
+     * Prints the absolute pathname of the class file containing the specified class name, as prescribed by
+     * the class path.
      *
      * @param className Name of the class.
      */
