@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.8 2003-01-26 21:32:18 roque.hernandez Exp $
+ * $Id: NavigationPathContext.java,v 1.9 2003-02-05 04:50:48 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -155,7 +155,13 @@ public class NavigationPathContext extends ServletValueContext
 
     public String getApplicationName(NavigationPathContext nc)
     {
-        return SchemaDocument.sqlIdentifierToText(nc.getServletContext().getServletContextName().substring(1), true);
+        String servletContextName = nc.getServletContext().getServletContextName();
+
+        if (servletContextName != null && servletContextName.length() > 1) {
+            return SchemaDocument.sqlIdentifierToText(nc.getServletContext().getServletContextName().substring(1), true);
+        } else {
+            return null;
+        }
     }
 
     public final NavigationPath.FindResults getActivePathFindResults()
