@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: RecordAddComponentCommand.java,v 1.1 2003-01-20 05:33:06 roque.hernandez Exp $
+ * $Id: RecordAddComponentCommand.java,v 1.2 2003-01-22 06:10:01 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -88,6 +88,11 @@ public class RecordAddComponentCommand extends StatementComponentCommand
                         new Documentation.Parameter("statement-name", true, null, null, "The fully qualified name of the statement (package-name.statement-name)."),
                         new Documentation.Parameter("dialog-name", false, null, null, "The fully qualified name of the dialog to show next to the statement (for data-editing)."),
                     });
+
+    public Documentation getDocumentation()
+    {
+        return DOCUMENTATION;
+    }
 
     public void setCommand(StringTokenizer params)
     {
