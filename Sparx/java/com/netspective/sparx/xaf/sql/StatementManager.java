@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.4 2002-02-07 01:09:10 snshah Exp $
+ * $Id: StatementManager.java,v 1.5 2002-07-03 17:11:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -81,6 +81,7 @@ import org.w3c.dom.NodeList;
 
 import com.netspective.sparx.util.metric.Metric;
 import com.netspective.sparx.xif.db.DatabaseContext;
+import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.xaf.report.ColumnDataCalculatorFactory;
 import com.netspective.sparx.xaf.report.Report;
 import com.netspective.sparx.xaf.report.ReportContext;
@@ -377,6 +378,45 @@ public class StatementManager extends XmlSource
             }
             else
                 si.applyParams(dc, vc, stmt);
+            logEntry.registerBindParamsEnd();
+
+            logEntry.registerExecSqlBegin();
+            if(stmt.execute())
+            {
+                logEntry.registerExecSqlEndSuccess();
+                //logEntry.finalize(vc); -- this will be done in the "finally" block??
+                return new ResultInfo(conn, si, stmt, logEntry);
+            }
+            logEntry.registerExecSqlEndFailed();
+        }
+        finally
+        {
+            logEntry.finalize(vc);
+        }
+
+        return null;
+    }
+
+    static public ResultInfo execute(ConnectionContext cc, ValueContext vc, StatementInfo si, Object[] params) throws NamingException, SQLException
+    {
+        StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(vc);
+
+        try
+        {
+            logEntry.registerGetConnectionBegin();
+            Connection conn = cc.getConnection();
+            logEntry.registerGetConnectionEnd(conn);
+
+            PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
+
+            logEntry.registerBindParamsBegin();
+            if(params != null)
+            {
+                for(int i = 0; i < params.length; i++)
+                    stmt.setObject(i + 1, params[i]);
+            }
+            else
+                si.applyParams(cc.getDatabaseContext(), vc, stmt);
             logEntry.registerBindParamsEnd();
 
             logEntry.registerExecSqlBegin();
