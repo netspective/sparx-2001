@@ -233,11 +233,16 @@ function DialogField_focusNext(dialog)
 		nextFieldControl = document.all.item(nextField.controlId);
 		if(nextFieldControl != null && nextFieldControl.length > 0)
 			nextFieldControl = nextFieldControl[0];
+			
+		if(nextField.typeName == "com.xaf.form.DialogDirector")
+			return false;
 
 		if(	(nextFieldControl != null && nextFieldControl.style.display == 'none') ||
 			(nextFieldAreaElem != null && nextFieldAreaElem.style.display == 'none') ||
 			nextField.typeName == "com.xaf.form.field.SeparatorField" ||
 			nextField.typeName == "com.xaf.form.field.StaticField" ||
+			nextField.typeName == "com.xaf.form.field.DurationField" || // duration is a composite
+			nextField.typeName == "com.xaf.form.DialogField" || // composites are of this type
 			(nextField.flags & FLDFLAG_INVISIBLE) != 0 ||
 			(nextField.flags & FLDFLAG_READONLY) != 0 ||
 			(nextField.flags & FLDFLAG_INPUT_HIDDEN) != 0)
@@ -255,7 +260,7 @@ function DialogField_focusNext(dialog)
 		}
 		else
 		{
-			alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ")")
+			alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ") ["+ nextField.typeName +"]")
 		}
 		return true;
 	}
