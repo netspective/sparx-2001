@@ -29,6 +29,9 @@ public class StandardDialogSkin implements DialogSkin
 	protected String fieldRowErrorAttrs;
 	protected String gridCaptionFontAttrs;      // grid column font attributes
     protected String gridRowCaptionFontAttrs;   // grid row font attributes
+    protected String gridCaptionCellAttrs;      // grid column display attributes
+    protected String gridTableAttrs;            // grid table display attribute
+    protected String gridCellAttrs;
 	protected String captionCellAttrs;
 	protected String captionFontAttrs;
 	protected String controlAreaFontAttrs;
@@ -61,8 +64,11 @@ public class StandardDialogSkin implements DialogSkin
 		fieldRowErrorAttrs = "bgcolor='beige' ";
 		captionCellAttrs = "align='right' ";
 		captionFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
+        gridCellAttrs = "align='center'";
+        gridTableAttrs = "cellpadding='2' cellspacing='0' border='0'";
 		gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
+        gridCaptionCellAttrs = "align='center'";
 		controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
         controlAreaStyleAttrs = "style=\"background-color: lightyellow\"";
 		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this, event)' onchange='controlOnChange(this, event)' " +
@@ -118,10 +124,16 @@ public class StandardDialogSkin implements DialogSkin
 				captionCellAttrs = nodeText;
 			else if(nodeName.equals("caption-font-attrs") && nodeText != null)
 				captionFontAttrs = nodeText;
+            else if (nodeName.equals("grid-table-attrs") && nodeText != null)
+				gridTableAttrs = nodeText;
 			else if(nodeName.equals("grid-caption-font-attrs") && nodeText != null)
 				gridCaptionFontAttrs = nodeText;
 			else if(nodeName.equals("grid-row-caption-font-attrs") && nodeText != null)
 				gridRowCaptionFontAttrs = nodeText;
+            else if(nodeName.equals("grid-caption-cell-attrs") && nodeText != null)
+                gridCaptionCellAttrs = nodeText;
+            else if(nodeName.equals("grid-cell-attrs") && nodeText != null)
+                gridCellAttrs = nodeText;
 			else if(nodeName.equals("control-area-font-attrs") && nodeText != null)
 				controlAreaFontAttrs = nodeText;
             else if(nodeName.equals("control-area-style-attrs") && nodeText != null)
@@ -269,7 +281,7 @@ public class StandardDialogSkin implements DialogSkin
 			int fieldNum = 0;
 			String[] fieldCaptions = gridField.getCaptions(dc);
             // save space in the header for the row captions
-			headerHtml.append("<td></td> ");
+			headerHtml.append("<td" + gridCaptionCellAttrs + ">&nbsp;</td> ");
             // append the row caption to the first row
             rowHtml.append("<td><font " + gridRowCaptionFontAttrs + ">");
             rowHtml.append(rowCaption);
@@ -281,7 +293,7 @@ public class StandardDialogSkin implements DialogSkin
 				{
 					String caption = fieldNum < fieldCaptions.length ? fieldCaptions[fieldNum] : field.getCaption(dc);
 
-					headerHtml.append("<td align='center'><font ");
+					headerHtml.append("<td " + gridCaptionCellAttrs + "><font ");
 					headerHtml.append(gridCaptionFontAttrs);
 					headerHtml.append(">");
 					if(caption != null && caption != DialogField.CUSTOM_CAPTION)
@@ -291,7 +303,7 @@ public class StandardDialogSkin implements DialogSkin
 					headerHtml.append("</font></td>");
 
 
-					rowHtml.append("<td align='center'>");
+					rowHtml.append("<td " + gridCellAttrs + ">");
 					appendGridControlBasics(dc, field, rowHtml);
 					rowHtml.append("</td>");
 				}
@@ -316,7 +328,7 @@ public class StandardDialogSkin implements DialogSkin
 				DialogField field = (DialogField) i.next();
 				if(field.isVisible(dc))
 				{
-					rowHtml.append("<td align='center'>");
+					rowHtml.append("<td " + gridCellAttrs + ">");
 					appendGridControlBasics(dc, field, rowHtml);
 					rowHtml.append("</td>");
 				}
@@ -328,7 +340,7 @@ public class StandardDialogSkin implements DialogSkin
 
 	public String getGridControlsHtml(DialogContext dc, GridField gridField)
 	{
-		StringBuffer html = new StringBuffer("\n<table border=0>");
+		StringBuffer html = new StringBuffer("\n<table " + gridTableAttrs + ">");
 
 		Iterator i = gridField.getChildren().iterator();
 		int row = 0;
@@ -531,7 +543,7 @@ public class StandardDialogSkin implements DialogSkin
 				appendFieldHtml(dc, field, fieldsHtml, fieldsJSDefn, fieldErrorMsgs);
 			}
 
-			if(director != null && director.isVisible(dc))
+			if(director != null && director.isVisible(dc) && dc.getDataCommand() != DialogContext.DATA_CMD_PRINT)
 				appendFieldHtml(dc, director, fieldsHtml, fieldsJSDefn, fieldErrorMsgs);
 		}
 		else
@@ -577,7 +589,7 @@ public class StandardDialogSkin implements DialogSkin
 			}
 			fieldsHtml.append("</tr>");
 
-			if(director != null && director.isVisible(dc))
+			if(director != null && director.isVisible(dc) && dc.getDataCommand() != DialogContext.DATA_CMD_PRINT)
 			{
 				fieldsHtml.append("<tr><td colspan='"+dlgTableColSpan+"'><font "+ controlAreaFontAttrs +">");
 				fieldsHtml.append(director.getControlHtml(dc));
