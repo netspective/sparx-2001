@@ -23,6 +23,12 @@ public class ContainsComparison extends BinaryOpComparison
 	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond)
 	{
 		statement.addParam(new ConcatValueSource(cond.getValue(), "%", "%"));
-		return cond.getField().getWhereClauseExpr() + " like ?";
+        String retString = "";
+        String bindExpression = cond.getBindExpression();
+        if (bindExpression != null && bindExpression.length() > 0)
+            retString = cond.getField().getWhereClauseExpr() + " like " + bindExpression;
+        else
+            retString = cond.getField().getWhereClauseExpr() + " like ?";
+		return retString;
 	}
 }
