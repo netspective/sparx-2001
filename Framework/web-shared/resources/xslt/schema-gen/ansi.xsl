@@ -264,19 +264,32 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:for-each select="$table/enum">
 		<xsl:text>insert into </xsl:text>
 		<xsl:value-of select="$table/@name"/>
-		<xsl:if test="@abbrev">
-			<xsl:text>(id, abbrev, caption) values (</xsl:text>
-			<xsl:value-of select="@id"/><xsl:text>, '</xsl:text>
-			<xsl:value-of select="@abbrev"/><xsl:text>', '</xsl:text>
-			<xsl:value-of select="."/><xsl:text>'</xsl:text>
-		</xsl:if>
-		<xsl:if test="not(@abbrev)">
-			<xsl:text>(id, caption) values (</xsl:text>
-			<xsl:value-of select="@id"/><xsl:text>, '</xsl:text>
-			<xsl:value-of select="."/><xsl:text>'</xsl:text>
-		</xsl:if>
+		<xsl:text>(</xsl:text>
+		<xsl:for-each select="@*">
+			<xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
+			<!-- if the attribute matches one of our column names, we want it -->
+			<xsl:if test="$table/column[@name = $attr-name]">
+				<xsl:value-of select="name()"/><xsl:text>, </xsl:text>
+			</xsl:if>
+		</xsl:for-each>
+		<xsl:text>caption) values (</xsl:text>
+		<xsl:for-each select="@*">
+			<xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
+			<!-- if the attribute matches one of our column names, we want it -->
+			<xsl:if test="$table/column[@name = $attr-name]">
+				<xsl:choose>
+					<xsl:when test="$table/column[@name = $attr-name]/@type = 'text'">
+						<xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>', </xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="."/><xsl:text>, </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:if>
+		</xsl:for-each>
+		<xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>'</xsl:text>
+		<xsl:text>)</xsl:text>
 	<!-- line break -->
-	<xsl:text>)</xsl:text>
 	<xsl:value-of select="$statement-terminator"/>
 	</xsl:for-each>
 </xsl:template>
