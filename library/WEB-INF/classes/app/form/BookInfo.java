@@ -84,32 +84,18 @@ public class BookInfo extends Dialog
         // to override
         // super.execute(writer, dc);
 
-        HttpServletRequest request = (HttpServletRequest) dc.getRequest();
-        String redirectURL = request.getContextPath() + "/index.jsp";
-        String executeStatus;
-
-        // What to do if the dialog is in add mode ...
         if (dc.addingData())
-        {
-            boolean status = processAddAction(writer, dc);
-        }
-
-        // What to do if the dialog is in edit mode ...
-        if (dc.editingData())
-        {
-            boolean status = processEditAction(writer, dc);
-        }
-
-        // What to do if the dialog is in delete mode ...
-        if (dc.deletingData())
-        {
-            boolean status = processDeleteAction(writer, dc);
-        }
+            processAddAction(writer, dc);
+        else if (dc.editingData())
+            processEditAction(writer, dc);
+        else if (dc.deletingData())
+            processDeleteAction(writer, dc);
 
 		// this is necessary to let the framework know we handled the execute
 		dc.setExecuteStageHandled(true);
 
-        ((HttpServletResponse) dc.getResponse()).sendRedirect(redirectURL);
+        // perform the default redirects (like using next actions, default referrer, etc)
+        handlePostExecute(writer, dc);
     }
 
     /**
