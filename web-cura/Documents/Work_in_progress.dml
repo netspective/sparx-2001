@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<article>
+	<project name="Sparx Test Application WIP">
+
+		<summary>
+			Sparx Test Application (CURA) Work in Progress
+		</summary>
+		<project-attribute name="Team Leader">Shahid N. Shah</project-attribute>
+		<project-attribute name="Chief Engineer">Aye Thu</project-attribute>
+		<project-attribute name="Last Update"/>
+		<project-attribute name="Resources"/>
+
+		<task>
+			<name>Project Management</name>
+			<task>
+				<name>Identify goals of the Project</name>
+				<resource>Shahid N. Shah</resource>
+			</task>
+		</task>
+
+		<task>
+			<name>Unit Test Migration</name>
+			<resource>Aye Thu</resource>
+			
+			<task><name>Data Source moves from eIMO to Cura (establish connection)</name></task>
+			<task><name>Create sample data for people, projects, and orgs</name></task>
+			<task><name>Migrate Dialogs unit tests code</name></task>
+			<task><name>Migrate SQL unit tests code</name></task>
+			<task><name>Migrate Query Defn unit tests code</name></task>
+			<task><name>Migrate Skins unit tests code</name></task>
+			<task><name>Migrate JSP unit tests code</name></task>
+		</task>
+
+		<task>
+			<name>Implement Cura</name>
+
+			<task>
+				<name>Create appealing UI, banner, menu system</name>
+			</task>
+			<task>
+				<name>Implement Person (Contact) Management</name>				
+				<task><name>Create Person Home Page</name></task>
+				<task><name>Add/Edit/Delete Person Registration</name></task>
+				<task><name>Add/Edit/Delete Person Relationships to Orgs, Projects</name></task>
+				<task><name>Add/Edit/Delete Person Addresses, Contact info</name></task>
+				<task><name>Add/Edit/Delete Person Tasks</name></task>
+			</task>
+			<task>
+				<name>Implement Organization (Org/Account) Management</name>
+				<task><name>Review Org Home Page</name></task>
+				<task><name>Review Add/Edit/Delete Org Registration</name></task>
+				<task><name>Add/Edit/Delete Org Relationships to People, Projects</name></task>
+				<task><name>Add/Edit/Delete Org Addresses, Contact info</name></task>
+				<task><name>Add/Edit/Delete Org Tasks</name></task>
+				<task><name>Add/Edit/Delete Org Type(s)</name></task>
+			</task>
+			<task>
+				<name>Implement Project Management</name>
+				<task><name>Create Project Home Page</name></task>
+				<task><name>Add/Edit/Delete Project Registration</name></task>
+				<task><name>Add/Edit/Delete Project Relationships to People, Orgs</name></task>
+			</task>
+			<task>
+				<name>Implement Task Management</name>
+				<task><name>Create Task Home Page</name></task>
+				<task><name>Add/Edit/Delete Task Registration</name></task>
+				<task><name>Add/Edit/Delete Task Relationships to Project, People, Orgs</name></task>
+			</task>
+			<task>
+				<name>Implement Artifact Management</name>
+				<task><name>Create Artifact Home Page</name></task>
+				<task><name>Add/Edit/Delete Artifact Registration</name></task>
+				<task><name>Add/Edit/Delete Artifact Relationships to Project, People, Orgs, Tasks</name></task>
+			</task>
+		</task>
+	</project>
+</article>
