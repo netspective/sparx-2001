@@ -12,6 +12,7 @@
 
 		<task>
 			<name>ACE</name>
+			<task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
 			<task><name>SchemaDoc (XML) area of ACE needs to be color-coordinated with remainder of ACE.</name></task>
 			<task><name>Allow dialog testing/execution to specify/select a skin.</name></task>
 			<task><name>Need to go through all the code to make sure all tags are documented (missing initial-focus, XML skins, field.report, DialogDirector additions, primary-key field attribute, &lt;access-control&gt; tag, reg exp validation, &lt;configuration&gt; tag, QueryBuilderDialog, and field.separator rule attributes).</name></task>
