@@ -18,3 +18,5 @@
 .dialog-select         { color: black; font-family: Tahoma; border: solid 1px #009 }
 .dialog-fields-hint-table { padding-left: 7px; width: auto; height: 12px }
 .dialog-fields-hint { color: #696969; font-size: 10px; font-family: Tahoma; background: url(../images/panel/input/hint-indicator.gif) no-repeat left top }
+
+.accesskey { text-decoration: underline;}
