@@ -2,13 +2,13 @@ package com.xaf;
 
 public class BuildConfiguration
 {
-	public static final String productName = "SparX";
+	public static final String productName = "Sparx";
 	public static final String productId   = "xaf";
 
 	public static final int releaseNumber = 1;
 	public static final int versionMajor = 2;
 	public static final int versionMinor = 4;
-	public static final int buildNumber = 33;
+	public static final int buildNumber = 39;
 
 	static public final String getBuildPathPrefix()
 	{

@@ -16,6 +16,7 @@ public class LoginDialog extends Dialog
 
 	private TextField userIdField;
 	private TextField passwordField;
+	private String loginImageSrc;
 	private String userNameCookieName;
 	private String userInfoSessionAttrName;
 
@@ -43,6 +44,9 @@ public class LoginDialog extends Dialog
 	public String getUserInfoSessionAttrName() { return userInfoSessionAttrName; }
 	public void setUserInfoSessionAttrName(String value) { userInfoSessionAttrName = value; }
 
+	public String getImageSrc() { return loginImageSrc; }
+	public void setImageSrc(String value) { loginImageSrc = value; }
+
 	public boolean accessAllowed(ServletContext context, HttpServletRequest request, HttpServletResponse response)
 	{
 		return request.getSession(true).getAttribute(userInfoSessionAttrName) != null;
@@ -50,7 +54,9 @@ public class LoginDialog extends Dialog
 
 	public void producePage(DialogContext dc, Writer writer) throws IOException
 	{
-		writer.write("&nbsp;<p>&nbsp;<p>&nbsp;<p><center><h1>Welcome to Sparx</h1>");
+		writer.write("&nbsp;<p>&nbsp;<p><center>");
+		if(loginImageSrc != null)
+		    writer.write("<img src='"+loginImageSrc+"'><p>");
 		writer.write(getHtml(dc, true));
 		writer.write("</center>");
 	}

@@ -15,9 +15,9 @@ import com.xaf.skin.*;
 
 public class AppInitParamsPage extends AceServletPage
 {
-	public final String getName() { return "init-params"; }
-	public final String getCaption(PageContext pc) { return "Init Params"; }
-	public final String getHeading(PageContext pc) { return "Application Init Parameters"; }
+	public final String getName() { return "servlet-context"; }
+	public final String getCaption(PageContext pc) { return "Servlet Context"; }
+	public final String getHeading(PageContext pc) { return "Application Servlet Context"; }
 
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
@@ -38,6 +38,7 @@ public class AppInitParamsPage extends AceServletPage
 		doc.appendChild(rootElem);
 
 		Element propertiesElem = doc.createElement("properties");
+		propertiesElem.setAttribute("name", "Init Parameters");
 		rootElem.appendChild(propertiesElem);
 
 		for(Enumeration e = context.getInitParameterNames(); e.hasMoreElements(); )
@@ -46,6 +47,29 @@ public class AppInitParamsPage extends AceServletPage
 			String paramName = (String) e.nextElement();
 			addText(propertyElem, "name", paramName);
 			addText(propertyElem, "value", context.getInitParameter(paramName));
+			propertiesElem.appendChild(propertyElem);
+		}
+
+		propertiesElem = doc.createElement("properties");
+		propertiesElem.setAttribute("name", "System Properties");
+		rootElem.appendChild(propertiesElem);
+
+		for(Enumeration e = System.getProperties().keys(); e.hasMoreElements(); )
+		{
+			Element propertyElem = doc.createElement("property");
+			String paramName = (String) e.nextElement();
+			addText(propertyElem, "name", paramName);
+			if(paramName.endsWith(".path"))
+			{
+				StringTokenizer st = new StringTokenizer(System.getProperty("java.class.path"), System.getProperty("path.separator"));
+				addText(propertyElem, "value", st.nextToken());
+				while(st.hasMoreTokens())
+				{
+					addText(propertyElem, "value-detail", st.nextToken());
+				}
+			}
+			else
+				addText(propertyElem, "value", System.getProperty(paramName));
 			propertiesElem.appendChild(propertyElem);
 		}
 

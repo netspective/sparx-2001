@@ -14,7 +14,14 @@
 <xsl:template match="xaf/properties">
 	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
 	<tr class="heading">
-		<td class="heading"><xsl:value-of select="$page-heading"/></td>
+		<td class="heading">
+			<xsl:if test="@name">
+				<xsl:value-of select="@name"/>
+			</xsl:if>
+			<xsl:if test="not(@name)">
+				<xsl:value-of select="$page-heading"/>
+			</xsl:if>
+		</td>
 	</tr>
 	<tr class="heading_rule">
 		<td height="1" ></td>
@@ -43,6 +50,7 @@
 			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
+	<p/>
 </xsl:template>
 
 <xsl:template match="xaf/factory">
@@ -53,7 +61,7 @@
 	<tr class="heading_rule">
 		<td height="2" ></td>
 	</tr>
-	<tr bgcolor="#EEEEEE">
+	<tr class="heading_detail">
 		<td><xsl:value-of select="@class"/></td>
 	</tr>
 	<tr class="heading_rule">

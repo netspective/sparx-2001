@@ -5,6 +5,7 @@ td { font-family: tahoma; font-size: 8pt; }
 
 table.heading { width: 100%; }
 tr.heading { background-color: #389cce; }
+tr.heading_detail { background-color: #EEEEEE; }
 tr.heading_rule { background-color: black; }
 td.heading { color: lightyellow; font-size: 14pt; font-weight: bold; font-family: arial,helvetica; }
 

@@ -40,6 +40,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 	private static final String CONFIGITEM_DISCOVER_ROOTPATH   = "discover.root-path";
 	private static final String CONFIGITEM_DISCOVER_ROOTPKG    = "discover.root-package";
 	private static final String CONFIGITEM_LOGIN_DIALOGCLASS   = "login.dialog-class";
+	private static final String CONFIGITEM_LOGIN_DIALOGIMAGE   = "login.dialog-image";
 	private static final String CONFIGITEM_LOGIN_DIALOGSKIN    = "login.dialog-skin-name";
 	private static final String CONFIGITEM_LOGIN_SESSATTR      = "login.user.session-attr-name";
 	private static final String CONFIGITEM_LOGOUT_PARAMNAME    = "logout.param-name";
@@ -119,6 +120,9 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 				loginDialog = (LoginDialog) loginDialogClass.newInstance();
 				if(loginDialogUserInfoAttrName != null)
 					loginDialog.setUserInfoSessionAttrName(loginDialogUserInfoAttrName);
+				String imageSrc = appConfig.getValue(vc, configItemsPrefix + CONFIGITEM_LOGIN_DIALOGIMAGE);
+				if(imageSrc != null)
+					loginDialog.setImageSrc(imageSrc);
 			}
 			catch(ClassNotFoundException e)
 			{
@@ -268,7 +272,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 			 *  a value in the logout parameter nor a configuration item was
 			 *  found, then the logout will redirect back to this servlet.
 			 */
-			if(logout.length() == 0)
+			if(logout.length() == 0 || logout.equals("1") || logout.equals("yes"))
 			{
 				String redirect = appConfig.getValue(vc, getConfigItemsPrefix() + CONFIGITEM_LOGOUT_REDIRECT);
 				if(redirect != null)

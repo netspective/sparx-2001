@@ -18,14 +18,14 @@ import com.xaf.value.*;
 
 public class AppComponentsExplorerServlet extends PageControllerServlet
 {
-	protected static final String CONFIGITEM_DEFAULT_PREFIX = "app.ace.controller.";
+	protected static final String CONFIGITEM_DEFAULT_PREFIX = "framework.ace.";
 	private Hashtable styleSheetParams = new Hashtable();
 	private Component menu;
 
     public void init(ServletConfig config) throws ServletException
 	{
         super.init(config);
-		menu = new HierarchicalMenu(100, 90, 22, getPagesPath(), getSharedScriptsRootURL());
+		menu = new HierarchicalMenu(85, 90, 22, getPagesPath(), getSharedScriptsRootURL());
 	}
 
 	public Component getMenuComponent()
@@ -52,9 +52,9 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		pagesPath.registerPage("/home", homePage);
 
 		pagesPath.registerPage("/application", new RedirectPage("application", "Application", null));
-		pagesPath.registerPage("/application/init-params", new AppInitParamsPage());
-		pagesPath.registerPage("/application/config", new AppConfigurationPage());
 		pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
+		pagesPath.registerPage("/application/servlet-context", new AppInitParamsPage());
+		pagesPath.registerPage("/application/config", new AppConfigurationPage());
 
 		pagesPath.registerPage("/application/factory", new AppFactoryPage());
 		pagesPath.registerPage("/application/factory/value-sources", new AppFactoryPage("value-sources", "Value Sources", AppFactoryPage.FACTORY_VALUESOURCE));

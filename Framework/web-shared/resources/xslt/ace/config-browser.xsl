@@ -19,10 +19,16 @@
 		<td class="heading"><xsl:value-of select="$page-heading"/></td>
 	</tr>
 	<tr class="heading_rule">
-		<td height="1" ></td>
+		<td height="2" ></td>
+	</tr>
+	<tr class="heading_detail">
+		<td>Source: <xsl:value-of select="@source-file"/></td>
+	</tr>
+	<tr class="heading_rule">
+		<td height="1"></td>
 	</tr>
 	</table>
-	<h1>Source: <xsl:value-of select="@source-file"/></h1>
+	<p/>
 	<table cellspacing="0" cellpadding="2">
 		<tr bgcolor="beige">
 			<th>Name</th>

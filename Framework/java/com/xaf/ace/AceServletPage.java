@@ -125,10 +125,10 @@ public class AceServletPage extends AbstractServletPage
 			PrintWriter out = pc.getResponse().getWriter();
 			out.print("<body><table width=100%><tr><td width=25><img src='");
 			out.print(sharedImagesRootURL);
-			out.print("/design/sparx-logo-sm.gif'></td>");
+			out.print("/ace/ace-logo.gif'></td>");
 			out.print("<td align=right><img src='");
 			out.print(sharedImagesRootURL);
-			out.print("/ace/ace-logo.gif'></td>");
+			out.print("/design/sparx-logo-sm.gif'></td>");
 			out.print("</tr></table>");
 		}
 		catch(IOException e)
