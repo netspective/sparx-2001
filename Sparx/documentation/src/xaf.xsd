@@ -61,14 +61,14 @@
 											<xsd:documentation>Specifies the single value source that will provide the heading for the dialog.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
-									<xsd:attribute name="class" type="java-class" use="optional" default="com.xaf.form.Dialog">
+									<xsd:attribute name="class" type="java-class" use="optional" default="com.netspective.sparx.xaf.form.Dialog">
 										<xsd:annotation>
-											<xsd:documentation>Specifies a subclass of com.xaf.form.Dialog to dynamically load and instantiate instead of the default java class. This attribute is very useful when you want to use XML for the dialog definition but want to alter the behavior of the Dialog processing or want to some specific validation not allowed by the default class.</xsd:documentation>
+											<xsd:documentation>Specifies a subclass of com.netspective.sparx.xaf.form.Dialog to dynamically load and instantiate instead of the default java class. This attribute is very useful when you want to use XML for the dialog definition but want to alter the behavior of the Dialog processing or want to some specific validation not allowed by the default class.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
-									<xsd:attribute name="director-class" type="java-class" use="optional" default="com.xaf.form.DialogDirector">
+									<xsd:attribute name="director-class" type="java-class" use="optional" default="com.netspective.sparx.xaf.form.DialogDirector">
 										<xsd:annotation>
-											<xsd:documentation>Specifies a subclass of com.xaf.form.DialogDirector to dynamically load and instantiate instead of the default java class used for dialog director. This is useful when you want more control over how submit and navigation buttons are created for the dialog.</xsd:documentation>
+											<xsd:documentation>Specifies a subclass of com.netspective.sparx.xaf.form.DialogDirector to dynamically load and instantiate instead of the default java class used for dialog director. This is useful when you want more control over how submit and navigation buttons are created for the dialog.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
 									<xsd:attribute name="loop" use="optional" default="append">
@@ -110,9 +110,9 @@
 											<xsd:documentation>The name of the skin.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
-									<xsd:attribute name="class" type="java-class" use="optional" default="com.xaf.skin.StandardDialogSkin">
+									<xsd:attribute name="class" type="java-class" use="optional" default="com.netspective.sparx.xaf.skin.StandardDialogSkin">
 										<xsd:annotation>
-											<xsd:documentation>The Java class that will be dynamically loaded when the given skin name is used. The class will be instantiated and the XML that is found in the dialog-skin element will be passed to the Java class's importFromXml method. The class provided must implement the com.xaf.form.DialogSkin interface.</xsd:documentation>
+											<xsd:documentation>The Java class that will be dynamically loaded when the given skin name is used. The class will be instantiated and the XML that is found in the dialog-skin element will be passed to the Java class's importFromXml method. The class provided must implement the com.netspective.sparx.xaf.form.DialogSkin interface.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
 								</xsd:complexType>
@@ -129,7 +129,7 @@
 									</xsd:attribute>
 									<xsd:attribute name="class" type="java-class" use="required">
 										<xsd:annotation>
-											<xsd:documentation>The Java class that will be dynamically loaded when the given tag-name is encountered. The class will be instantiated and the XML that is found in the field.xxx element will be passed to the Java class's importFromXml method. The class provided must extend the com.xaf.form.DialogField class.</xsd:documentation>
+											<xsd:documentation>The Java class that will be dynamically loaded when the given tag-name is encountered. The class will be instantiated and the XML that is found in the field.xxx element will be passed to the Java class's importFromXml method. The class provided must extend the com.netspective.sparx.xaf.form.DialogField class.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
 								</xsd:complexType>
@@ -1166,7 +1166,7 @@
 		</xsd:attribute>
 		<xsd:attribute name="type" type="report-column-type" use="optional" default="default">
 			<xsd:annotation>
-				<xsd:documentation>The type of data stored in a column. The value of this attribute should be an identifier that matches a registered column class (see com.xaf.report.ReportColumnFactory) or should be the name of a class that implements the com.xaf.report.ReportColumn interface.</xsd:documentation>
+				<xsd:documentation>The type of data stored in a column. The value of this attribute should be an identifier that matches a registered column class (see com.netspective.sparx.xaf.report.ReportColumnFactory) or should be the name of a class that implements the com.netspective.sparx.xaf.report.ReportColumn interface.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="heading" type="single-value-source" use="optional">
@@ -1208,12 +1208,12 @@
 		</xsd:attribute>
 		<xsd:attribute name="calc" type="report-column-calc" use="optional">
 			<xsd:annotation>
-				<xsd:documentation>Specifies how to summarize a column. The value of this attribute should be an identifier that matches a registered column data calculator class (see com.xaf.report.ColumnDataCalculatorFactory) or should be the name of a class that implements the com.xaf.report.ColumnDataCalculator interface.</xsd:documentation>
+				<xsd:documentation>Specifies how to summarize a column. The value of this attribute should be an identifier that matches a registered column data calculator class (see com.netspective.sparx.xaf.report.ColumnDataCalculatorFactory) or should be the name of a class that implements the com.netspective.sparx.xaf.report.ColumnDataCalculator interface.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="format" type="report-column-format" use="optional">
 			<xsd:annotation>
-				<xsd:documentation>Specifies how to format the data of a column. The value of this attribute should be an identifier that matches a registered column data formatter class (see com.xaf.report.ReportColumnFactory) or can be any format that will be interpreted by the appropriate column type class. For example, if the field is a numeric or decimal column then the format can be any java.text.DecimalFormat type specification.</xsd:documentation>
+				<xsd:documentation>Specifies how to format the data of a column. The value of this attribute should be an identifier that matches a registered column data formatter class (see com.netspective.sparx.xaf.report.ReportColumnFactory) or can be any format that will be interpreted by the appropriate column type class. For example, if the field is a numeric or decimal column then the format can be any java.text.DecimalFormat type specification.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="output" type="report-column-expr" use="optional" default="${.}">
