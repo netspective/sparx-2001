@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ComponentCommandFactory.java,v 1.1 2002-12-26 19:30:27 shahid.shah Exp $
+ * $Id: ComponentCommandFactory.java,v 1.2 2002-12-31 19:40:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -101,20 +101,25 @@ public class ComponentCommandFactory
     static public ComponentCommand getCommand(String name, String params)
     {
         Class ccClass = (Class) commandClasses.get(name);
-        try
+        if(ccClass != null)
         {
-            ComponentCommand command = (ComponentCommand) ccClass.newInstance();
-            command.setCommand(params);
-            return command;
+            try
+            {
+                ComponentCommand command = (ComponentCommand) ccClass.newInstance();
+                command.setCommand(params);
+                return command;
+            }
+            catch (InstantiationException e)
+            {
+                return null;
+            }
+            catch (IllegalAccessException e)
+            {
+                return null;
+            }
         }
-        catch (InstantiationException e)
-        {
+        else
             return null;
-        }
-        catch (IllegalAccessException e)
-        {
-            return null;
-        }
     }
 
     static public ComponentCommand getCommand(String name, StringTokenizer params)
