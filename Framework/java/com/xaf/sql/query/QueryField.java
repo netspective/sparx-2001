@@ -22,11 +22,11 @@ public class QueryField
 	private String selectClauseExpr;
 	private String selectClauseExprAndLabel;
 	private String whereClauseExpr;
+	private String orderByClauseExpr;
 	private String join;
 	private QueryJoin joinDefn;
 	private ReportColumn reportColumn;
     private boolean hideDisplay;
-
 
     public QueryField()
     {
@@ -46,6 +46,8 @@ public class QueryField
 	public String getSelectClauseExprAndLabel() { return hideDisplay ? null : selectClauseExprAndLabel; }
 	public String getSelectClauseExpr() { return hideDisplay ? null : selectClauseExpr; }
 	public String getWhereClauseExpr() { return whereClauseExpr; }
+	public String getOrderByClauseExpr() { return orderByClauseExpr; }
+
 	public QueryJoin getJoin() { return joinDefn; }
 
 	public void finalizeDefn(QueryDefinition queryDefn)
@@ -71,6 +73,8 @@ public class QueryField
             whereClauseExpr = qualifiedColName;
         if(selectClauseExprAndLabel == null)
             selectClauseExprAndLabel = selectClauseExpr + " as \"" + getColumnLabel() + "\"";
+		if(orderByClauseExpr == null)
+			orderByClauseExpr = selectClauseExpr;
 	}
 
 	public void importFromXml(Element elem)
@@ -86,6 +90,10 @@ public class QueryField
 		whereClauseExpr = elem.getAttribute("where-expr");
 		if(whereClauseExpr.length() == 0)
 			whereClauseExpr = null;
+
+		orderByClauseExpr = elem.getAttribute("order-by-expr");
+		if(orderByClauseExpr.length() == 0)
+			orderByClauseExpr = null;
 
 		caption = elem.getAttribute("caption");
         String allowDisplay = elem.getAttribute("allow-display");

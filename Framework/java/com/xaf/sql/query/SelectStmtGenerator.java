@@ -221,7 +221,7 @@ public class SelectStmtGenerator
 			sql.append("order by\n");
 			for(int ob = 0; ob < orderBysCount; ob++)
 			{
-				sql.append("  " + ((QueryField) orderBys.get(ob)).getQualifiedColName());
+				sql.append("  " + ((QueryField) orderBys.get(ob)).getOrderByClauseExpr());
 				if(ob != orderBysLast)
 					sql.append(", ");
 				sql.append("\n");
