@@ -69,7 +69,7 @@
             <property name="tpml" value="${sparx.ace.xslt-path}/test-plan-transform.xsl"/>
         </properties>
         <properties name="sparx.ace.bookmarks">
-            <property name="project,Application" value="${app.documents-root-path}"/>
+            <property name="project,Application" value="${app.site-root-path}"/>
             <property name="sparx,Sparx" value="http://developer.netspective.com"/>
         </properties>
         <property name="sparx.ace.login.dialog-class" value="com.netspective.sparx.ace.LoginDialog"/>
