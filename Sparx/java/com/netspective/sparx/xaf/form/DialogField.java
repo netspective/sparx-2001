@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogField.java,v 1.2 2002-02-10 11:22:15 snshah Exp $
+ * $Id: DialogField.java,v 1.3 2002-02-17 14:03:15 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -136,6 +136,24 @@ public class DialogField
         this();
         setSimpleName(aName);
         caption = aCaption != null ? ValueSourceFactory.getSingleOrStaticValueSource(aCaption) : null;
+    }
+
+    public boolean requiresMultiPartEncoding()
+    {
+        // if any child requires multi part encoding, then return true (this will take of things recursively)
+        if(children != null)
+        {
+            Iterator c = children.iterator();
+            while(c.hasNext())
+            {
+                DialogField field = (DialogField) c.next();
+                if(field.requiresMultiPartEncoding())
+                    return true;
+            }
+        }
+
+        // no child requires it and we don't require it by default, either
+        return false;
     }
 
     public boolean defaultIsListValueSource()

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: FileField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: FileField.java,v 1.2 2002-02-17 14:03:15 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -70,6 +70,11 @@ public class FileField extends TextField
     public FileField(String aName, String aCaption)
     {
         super(aName, aCaption);
+    }
+
+    public boolean requiresMultiPartEncoding()
+    {
+        return true;
     }
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.2 2002-02-08 21:44:39 snshah Exp $
+ * $Id: Dialog.java,v 1.3 2002-02-17 14:03:15 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -554,8 +554,6 @@ public class Dialog
 
     public void addField(DialogField field)
     {
-        if(field instanceof FileField)
-            setFlag(DLGFLAG_ENCTYPE_MULTIPART_FORMDATA);
         fields.add(field);
     }
 
@@ -580,6 +578,9 @@ public class Dialog
         {
             DialogField field = (DialogField) i.next();
             field.finalizeContents(this);
+
+            if(field.requiresMultiPartEncoding())
+                setFlag(DLGFLAG_ENCTYPE_MULTIPART_FORMDATA);
 
             if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE | DialogField.FLDFLAG_COLUMN_BREAK_AFTER))
             {
