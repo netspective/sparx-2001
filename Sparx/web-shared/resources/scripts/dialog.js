@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.23 2003-04-18 16:01:41 aye.thu Exp $
+ * $Id: dialog.js,v 1.24 2003-04-18 22:20:51 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -1935,6 +1935,11 @@ function scanField_changeDisplayValue(field, control)
 		var partnerField = dialog.fieldsByQualName[field.scanPartnerField];
 		var partnerControl = partnerField.getControl(dialog);
 		partnerControl.value = (field.isScanned) ? 'yes' : 'no';
+	}
+
+	if(field.isScanned && field.scanFieldCustomScript != "")
+	{
+		newValue = field.scanFieldCustomScript(newValue);
 	}
 
 	control.value = newValue;
