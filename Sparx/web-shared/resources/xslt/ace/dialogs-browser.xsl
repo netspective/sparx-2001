@@ -114,7 +114,7 @@
 <xsl:template match="dialog" mode="toc">
 	<tr class="data_table">
 		<td class="data_table">
-			<a title="Click here to see dialog sample">
+			<a title="Click here to test this dialog">
 				<xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/test/',@qualified-name)"/></xsl:attribute>
 				<xsl:attribute name="target"><xsl:value-of select="concat('dialog.', @qualified-name)"/></xsl:attribute>
 				<img border="0">
@@ -200,6 +200,9 @@
 	</tr>
 	<tr class="heading_rule"><td height="1" colspan="2"></td></tr>
 	<tr><td colspan="2">
+
+	<a href="{concat($root-url,'/test/',@qualified-name)}" target="{concat('dialog.', @qualified-name)}">Test this dialog</a>
+
 	<h1>Dialog Attributes</h1>
 	<table>
 		<xsl:for-each select="@*">
