@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: FileSystemEntry.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: FileSystemEntry.java,v 1.2 2002-04-28 10:10:00 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -77,7 +77,7 @@ public class FileSystemEntry extends File
     private String entryURI = ROOT_URI;
     private String contentType = DEFAULT_CONTENT_TYPE;
 
-    FileSystemEntry(FileSystemEntry aRootPath, String s)
+    public FileSystemEntry(FileSystemEntry aRootPath, String s)
     {
         super(s);
         rootPath = aRootPath;
