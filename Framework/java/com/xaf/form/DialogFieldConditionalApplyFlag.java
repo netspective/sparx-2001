@@ -11,6 +11,8 @@ import com.xaf.security.AccessControlList;
 import com.xaf.value.SingleValueSource;
 import com.xaf.value.ValueSourceFactory;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Title:        The Extensible Application Platform
  * Description:
@@ -25,7 +27,8 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
     private boolean clearFlag;
     private int dialogFieldFlag;
     private int dataCmd;
-    private String[] permissions;
+    private String[] hasPermissions;
+    private String[] lackPermissions;
     private SingleValueSource valueSource;
 
     public static Map dialogFieldNameValueMap = new HashMap();
@@ -44,6 +47,8 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
     public DialogFieldConditionalApplyFlag()
     {
 		super();
+        this.hasPermissions = null;
+        this.lackPermissions = null;
     }
 
     public DialogFieldConditionalApplyFlag(DialogField sourceField, int fieldFlag)
@@ -103,14 +108,24 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
             }
         }
 
-        String permissionsStr = elem.getAttribute("permissions");
+        String permissionsStr = elem.getAttribute("has-permission");
         if(permissionsStr.length() > 0)
         {
             List permsList = new ArrayList();
             StringTokenizer st = new StringTokenizer(permissionsStr, ",");
             while(st.hasMoreTokens())
                 permsList.add(st.nextToken());
-            setPermissions((String[]) permsList.toArray(new String[permsList.size()]));
+            this.setHasPermissions((String[]) permsList.toArray(new String[permsList.size()]));
+        }
+
+        permissionsStr = elem.getAttribute("lack-permission");
+        if(permissionsStr.length() > 0)
+        {
+            List permsList = new ArrayList();
+            StringTokenizer st = new StringTokenizer(permissionsStr, ",");
+            while(st.hasMoreTokens())
+                permsList.add(st.nextToken());
+            this.setLackPermissions((String[]) permsList.toArray(new String[permsList.size()]));
         }
 
         String valueAvailStr = elem.getAttribute("has-value");
@@ -133,14 +148,24 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
         dataCmd = DialogContext.getDataCmdIdForCmdText(dataCmdStr);
     }
 
-    public String[] getPermissions()
+    public String[] getHasPermissions()
     {
-        return permissions;
+        return hasPermissions;
     }
 
-    public void setPermissions(String[] permissions)
+    public void setHasPermissions(String[] permissions)
     {
-        this.permissions = permissions;
+        this.hasPermissions = permissions;
+    }
+
+    public String[] getLackPermissions()
+    {
+        return lackPermissions;
+    }
+
+    public void setLackPermissions(String[] lackPermissions)
+    {
+        this.lackPermissions = lackPermissions;
     }
 
     public void applyFlags(DialogContext dc)
@@ -153,11 +178,24 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
         if(status && dataCmd != DialogContext.DATA_CMD_NONE)
             status = dc.matchesDataCmdCondition(dataCmd);
 
-        if(status && permissions != null)
+        boolean hasPermissionFlg = true;
+        boolean lackPermissionFlg = false;
+        if(status && (this.hasPermissions != null || this.lackPermissions != null))
         {
-            AuthenticatedUser user = (AuthenticatedUser) dc.getRequest().getAttribute(LoginDialog.DEFAULT_ATTRNAME_USERINFO);
+            HttpServletRequest request = (HttpServletRequest) dc.getRequest();
+            AuthenticatedUser user = (AuthenticatedUser) request.getSession().getAttribute(LoginDialog.DEFAULT_ATTRNAME_USERINFO);
             AccessControlList acl = AccessControlListFactory.getACL(dc.getServletContext());
-            status = user.hasAnyPermission(acl, permissions);
+            if (this.hasPermissions != null)
+                hasPermissionFlg = user.hasAnyPermission(acl, this.hasPermissions);
+            if (this.lackPermissions != null)
+                lackPermissionFlg = user.hasAnyPermission(acl, this.lackPermissions);
+
+            // set 'status' to true only if the user lacks certain permissions and
+            // has certain permissions
+            if (lackPermissionFlg == false && hasPermissionFlg == true)
+                status = true;
+            else
+                status = false;
         }
 
         if(status && valueSource != null)

@@ -34,6 +34,8 @@ public class BooleanField extends DialogField
 		super(aName, aCaption);
 		style = aStyle;
 		choices = aChoices;
+        falseText = null;
+        trueText = null;
 	}
 
 	public final int getStyle() { return style; }
@@ -112,8 +114,17 @@ public class BooleanField extends DialogField
 		if(strValue != null)
 			value = new Integer(strValue).intValue() == 0 ? false : true;
 
-		String falseText = this.falseText.getValue(dc);
-		String trueText = this.trueText.getValue(dc);
+        String falseText = "";
+        String trueText = "";
+        if (this.falseText != null)
+            falseText = this.falseText.getValue(dc);
+        else
+            falseText = CHOICES_TEXT[(this.choices * 2) + 0];
+
+        if (this.trueText != null)
+            trueText = this.trueText.getValue(dc);
+        else
+            trueText = CHOICES_TEXT[(this.choices * 2) + 1];
 
 		if(isReadOnly(dc))
 		{
