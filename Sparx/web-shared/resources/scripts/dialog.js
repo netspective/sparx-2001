@@ -1133,6 +1133,7 @@ function DateField_onKeyPress(field, control, event)
 function SelectField_isValid(field, control)
 {
     var style = field.style;
+    
     if(field.isRequired())
     {
         if(style == SELECTSTYLE_RADIO)
@@ -1159,6 +1160,7 @@ function SelectField_isValid(field, control)
         }
         else if(style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
         {
+        
             var selectedCount = 0;
             var options = control.options;
             for(var o = 0; o < options.length; o++)
@@ -1186,6 +1188,22 @@ function SelectField_isValid(field, control)
                 return false;
             }
         }
+        else if(style == SELECTSTYLE_MULTIDUAL)
+        {
+        
+            var selectedCount = 0;
+            var options = control.options;
+            for(var o = 0; o < options.length; o++)
+            {
+                if(options[o].selected)
+                    selectedCount++;
+            }
+            if(selectedCount == 0)
+            {
+                field.alertRequired(control);
+                return false;
+            }
+        }        
     }
     
     return true;
