@@ -7,10 +7,10 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: app-build.xml,v 1.29 2002-12-23 05:08:17 shahid.shah Exp $
+$Id: app-build.xml,v 1.30 2002-12-26 21:25:19 shahbaz.javeed Exp $
 -->
 
-<project name="app" default="all">
+<project name="app" default="all-but-docs">
 
     <property environment="env"/>
 
