@@ -9,7 +9,9 @@ package com.xaf.sql.query;
  * @version 1.0
  */
 
+
 import java.util.*;
+import org.w3c.dom.*;
 import com.xaf.sql.query.comparison.*;
 
 public class SqlComparisonFactory
@@ -59,4 +61,25 @@ public class SqlComparisonFactory
 
 		return (SqlComparison) comparisonsMap.get(name);
 	}
+
+	public static void createCatalog(Element parent)
+	{
+		if(! defaultsAvailable) setupDefaults();
+
+		Document doc = parent.getOwnerDocument();
+		Element factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "SQL Comparisons");
+		factoryElem.setAttribute("class", SqlComparisonFactory.class.getName());
+		for(Iterator i = comparisonsMap.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("dialog-field");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((SqlComparison) entry.getValue()).getClass().getName());
+			factoryElem.appendChild(childElem);
+		}
+	}
+
 }

@@ -17,6 +17,7 @@ import com.xaf.form.*;
 import com.xaf.page.*;
 import com.xaf.report.*;
 import com.xaf.skin.*;
+import com.xaf.sql.query.*;
 import com.xaf.task.*;
 import com.xaf.value.*;
 
@@ -27,6 +28,7 @@ public class AppFactoryPage extends AceServletPage
 	static public final int FACTORY_REPORT_COMPS = 2;
 	static public final int FACTORY_TASK = 3;
 	static public final int FACTORY_SKIN = 4;
+	static public final int FACTORY_SQL_COMPARE = 5;
 
 	private String name;
 	private String caption;
@@ -90,6 +92,7 @@ public class AppFactoryPage extends AceServletPage
 
 			case FACTORY_REPORT_COMPS:
 				ReportColumnFactory.createCatalog(rootElem);
+				ColumnDataCalculatorFactory.createCatalog(rootElem);
 				break;
 
 			case FACTORY_TASK:
@@ -98,6 +101,10 @@ public class AppFactoryPage extends AceServletPage
 
 			case FACTORY_SKIN:
 				SkinFactory.createCatalog(rootElem);
+				break;
+
+			case FACTORY_SQL_COMPARE:
+				SqlComparisonFactory.createCatalog(rootElem);
 				break;
 		}
 

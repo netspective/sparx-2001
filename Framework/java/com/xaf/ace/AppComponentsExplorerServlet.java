@@ -62,6 +62,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		pagesPath.registerPage("/application/factory/report-comps", new AppFactoryPage("report-comps", "Report Components", AppFactoryPage.FACTORY_REPORT_COMPS));
 		pagesPath.registerPage("/application/factory/tasks", new AppFactoryPage("tasks", "Tasks", AppFactoryPage.FACTORY_TASK));
 		pagesPath.registerPage("/application/factory/skins", new AppFactoryPage("skins", "Skins", AppFactoryPage.FACTORY_SKIN));
+		pagesPath.registerPage("/application/factory/sql-comparisons", new AppFactoryPage("sql-comparisons", "SQL Comparisons", AppFactoryPage.FACTORY_SQL_COMPARE));
 
 		pagesPath.registerPage("/database", new DatabasePage());
 		pagesPath.registerPage("/database/sql", new DatabaseSqlPage());
