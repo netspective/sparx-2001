@@ -6,8 +6,12 @@
 <xsl:param name="detail-type"/>
 <xsl:param name="detail-name"/>
 <xsl:param name="sub-detail-name"/>
-<xsl:param name="images-root-url">/shared/resources/images</xsl:param>
-<xsl:param name="dbdd-images-root-url">/shared/resources/images/dbdd</xsl:param>
+
+<!-- all of the appConfig variables are passed in, so we can use them -->
+<xsl:param name="framework.shared.images-url"/>
+<xsl:param name="app.ace.images-root-url"/>
+
+<xsl:param name="dbdd-images-root-url"><xsl:value-of select="$framework.shared.images-url"/>/dbdd</xsl:param>
 
 <xsl:template match="schema">
 	<xsl:choose>
@@ -280,7 +284,7 @@
 		<th>References</th>
 		<th></th>
 	</tr>
-	<tr><td colspan="14"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="14"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	<xsl:for-each select="column">
 	<tr>
 		<xsl:if test="@primarykey='yes'">
@@ -368,7 +372,7 @@
 		</xsl:if>
 		<td colspan="12" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
 	</tr>
-	<tr><td colspan="14"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="14"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	</xsl:for-each>
 	</table>
 	</td></tr></table>

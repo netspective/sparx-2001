@@ -8,8 +8,9 @@
 <xsl:param name="detail-type"/>
 <xsl:param name="detail-name"/>
 <xsl:param name="sub-detail-name"/>
-<xsl:param name="images-root-url">/shared/resources/images</xsl:param>
-<xsl:param name="ace-images-root-url">/shared/resources/images/ace</xsl:param>
+
+<xsl:param name="framework.shared.images-url"/>
+<xsl:param name="app.ace.images-root-url"/>
 
 <xsl:template match="xaf">
 	<style>
@@ -19,9 +20,9 @@
 		td { font-family: tahoma; font-size: 8pt; }
 
 		table.heading { width: 100%; }
-		tr.heading { background-color: beige; }
+		tr.heading { background-color: #389cce; }
 		tr.heading_rule { background-color: black; }
-		td.heading { color: darkred; font-size: 14pt; font-weight: bold; font-family: arial,helvetica; }
+		td.heading { color: lightyellow; font-size: 14pt; font-weight: bold; font-family: arial,helvetica; }
 
 		td.param_name { font-weight: bold; text-align:right; }
 		td.param_value { color: green; }
@@ -54,37 +55,26 @@
 	</style>
 
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
-		<tr bgcolor="#E5E2C9">
+		<tr>
 			<td>
 			<img>
-				<xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/xaf-ace-logo.gif</xsl:attribute>
+				<xsl:attribute name="src"><xsl:value-of select="$app.ace.images-root-url"/>/xaf-ace-logo.gif</xsl:attribute>
 			</img>
 			</td>
 			<td align="right">
 			<img>
-				<xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/ace-logo.gif</xsl:attribute>
+				<xsl:attribute name="src"><xsl:value-of select="$app.ace.images-root-url"/>/ace-logo.gif</xsl:attribute>
 			</img>
 			</td>
 		</tr>
 		<tr bgcolor="white">
-			<td height="1" colspan="2"></td>
-		</tr>
-		<tr bgcolor="#653533">
 			<td height="3" colspan="2"></td>
 		</tr>
-		<tr bgcolor="#653533">
-			<td>&#160;
-				<a style="text-decoration:none; color: yellow">
-				<xsl:attribute name="href"><xsl:value-of select="$root-url"/></xsl:attribute>			
-				<img border="0">
-					<xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/home-sm.gif</xsl:attribute>
-				</img>
-					Application: <b><xsl:value-of select="context/app-path"/></b>
-				</a>				
-			</td>
-			<td align="right">
+		<tr>
+			<td colspan="2">
 				<table border="0" cellspacing="0" cellpadding="0">
 					<tr valign="top">
+						<td width="3"></td>
 						<xsl:apply-templates select="app-areas/app-area"/>
 					</tr>
 				</table>
@@ -112,26 +102,6 @@
 			</tr>
 		</xsl:for-each>
 	</table>
-	<h1>Configuration Properties</h1>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>Name</th>
-			<th>Value</th>
-			<th>Expression</th>
-			<th>Final</th>
-		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		<xsl:for-each select="context/config-items/*">
-			<xsl:sort select="name"/>
-			<tr>
-				<td><xsl:value-of select="name"/></td>
-				<td><font color="green"><xsl:value-of select="value"/></font></td>
-				<td><font color="red"><xsl:value-of select="expression"/></font></td>
-				<td><font color="red"><xsl:value-of select="final"/></font></td>
-			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-		</xsl:for-each>
-	</table>
 	<h1>Data Sources</h1>
 	<table>
 		<xsl:for-each select="context/data-sources/*">
@@ -156,14 +126,14 @@
 <xsl:template match="app-area">
 	<xsl:choose>	
 	<xsl:when test="@active = 'yes'">
-		<td bgcolor="beige" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/tab-top-left-corner.gif</xsl:attribute></img></td>
-		<td bgcolor="beige" height="16">&#160;&#160;<b><a style="text-decoration:none; color:black;"><xsl:attribute name="href"><xsl:value-of select="$root-url"/>/<xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a></b>&#160;&#160;</td>
-		<td bgcolor="beige" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/tab-top-right-corner.gif</xsl:attribute></img></td>	
+		<td bgcolor="#389cce" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$app.ace.images-root-url"/>/tab-top-left-corner.gif</xsl:attribute></img></td>
+		<td bgcolor="#389cce" height="16">&#160;&#160;<b><a style="text-decoration:none; color:yellow;"><xsl:attribute name="href"><xsl:value-of select="$root-url"/>/<xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a></b>&#160;&#160;</td>
+		<td bgcolor="#389cce" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$app.ace.images-root-url"/>/tab-top-right-corner.gif</xsl:attribute></img></td>	
 	</xsl:when>
 	<xsl:otherwise>
-		<td bgcolor="#B53533" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/tab-top-left-corner.gif</xsl:attribute></img></td>
-		<td bgcolor="#B53533" height="16">&#160;<a style="text-decoration:none; color: white;"><xsl:attribute name="href"><xsl:value-of select="$root-url"/>/<xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a>&#160;</td>
-		<td bgcolor="#B53533" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$ace-images-root-url"/>/tab-top-right-corner.gif</xsl:attribute></img></td>	
+		<td bgcolor="#E5E2C9" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$app.ace.images-root-url"/>/tab-top-left-corner.gif</xsl:attribute></img></td>
+		<td bgcolor="#E5E2C9" height="16">&#160;<a style="text-decoration:none; color: black;"><xsl:attribute name="href"><xsl:value-of select="$root-url"/>/<xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a>&#160;</td>
+		<td bgcolor="#E5E2C9" width="3" height="16"><img><xsl:attribute name="src"><xsl:value-of select="$app.ace.images-root-url"/>/tab-top-right-corner.gif</xsl:attribute></img></td>	
 	</xsl:otherwise>
 	</xsl:choose>
 	<td width="3"></td>

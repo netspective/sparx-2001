@@ -7,8 +7,12 @@
 <xsl:param name="detail-type"/>
 <xsl:param name="detail-name"/>
 <xsl:param name="sub-detail-name"/>
-<xsl:param name="images-root-url">/shared/resources/images</xsl:param>
-<xsl:param name="sql-images-root-url">/shared/resources/images/dbdd</xsl:param>
+
+<!-- all of the appConfig variables are passed in, so we can use them -->
+<xsl:param name="framework.shared.images-url"/>
+<xsl:param name="app.ace.images-root-url"/>
+
+<xsl:param name="sql-images-root-url"><xsl:value-of select="$framework.shared.images-url"/>/dbdd</xsl:param>
 
 <xsl:template match="xaf">
 	<xsl:choose>
@@ -43,7 +47,7 @@
 						<th>Name</th>
 						<th>Parameters</th>
 					</tr>
-					<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+					<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 					<xsl:apply-templates select="sql-statements/statement" mode="toc">
 						<xsl:sort select="@qualified-name"/>
 					</xsl:apply-templates>
@@ -59,7 +63,7 @@
 						<th>Dialogs</th>
 						<th></th>
 					</tr>
-					<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+					<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 					<xsl:apply-templates select="query-defn" mode="toc">
 						<xsl:sort select="@id"/>
 					</xsl:apply-templates>
@@ -107,7 +111,7 @@
 			</font>
 		</td>		
 	</tr>
-	<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 </xsl:template>
 
 <xsl:template match="statement" mode="toc-select">
@@ -180,7 +184,7 @@
 		<td align="right"><xsl:value-of select="count(select-dialog)"/></td>
 		<td><a target="ace-query-defn-test"><xsl:attribute name="href"><xsl:value-of select="concat($test-url, '/query-defn/', @id)"/></xsl:attribute>Test</a></td>
 	</tr>
-	<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 </xsl:template>
 
 <xsl:template match="query-defn" mode="toc-select">
@@ -221,7 +225,7 @@
 			<th>Column-expr</th>
 			<th>Where-expr</th>
 		</tr>
-		<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="field">
 			<tr>
 			<td><font color="green"><xsl:value-of select="@id"/></font></td>
@@ -231,7 +235,7 @@
 			<td><xsl:value-of select="@column-expr"/></td>
 			<td><xsl:value-of select="@where-expr"/></td>
 			</tr>
-			<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+			<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
 
@@ -244,7 +248,7 @@
 			<th>Auto-Inc</th>
 			<th>Weight</th>
 		</tr>
-		<tr><td colspan="5"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		<tr><td colspan="5"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="join">
 			<tr>
 			<td><font color="green"><xsl:value-of select="@id"/></font></td>
@@ -253,7 +257,7 @@
 			<td><xsl:value-of select="@auto-include"/></td>
 			<td><xsl:value-of select="@weight"/></td>
 			</tr>
-			<tr><td colspan="5"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+			<tr><td colspan="5"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
 
@@ -265,7 +269,7 @@
 			<th>Items</th>
 			<th>Distinct</th>
 		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="select">
 			<tr valign="top">
 			<td><font color="green"><xsl:value-of select="@id"/></font></td>
@@ -273,7 +277,7 @@
 			<td><xsl:apply-templates select="." mode="detail"/></td>
 			<td><xsl:value-of select="@distinct"/></td>
 			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
 
@@ -285,7 +289,7 @@
 			<th>Select</th>
 			<td></td>
 		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="select-dialog">
 			<tr valign="top">
 			<td><font color="green"><xsl:value-of select="@name"/></font></td>
@@ -301,7 +305,7 @@
 			</td>
 			<td><a target="ace-query-defn-test"><xsl:attribute name="href"><xsl:value-of select="concat($test-url, '/query-defn-dlg/', ../@id, '/', @name)"/></xsl:attribute>Test</a></td>
 			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
 	</td></tr>
