@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Shahid N. Shah (Netspective Communications Corporation) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2000/10/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="xaf">
+		<xsd:annotation>
+			<xsd:documentation>eXtensible Application Framework root tag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element name="dialogs" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Group of related interactive UI forms</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="dialog" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Definition of a single interactive UI form</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:group ref="dialog-fields"/>
+										<xsd:element name="process-actions" minOccurs="0">
+											<xsd:complexType>
+												<xsd:choice>
+													<xsd:element name="exec-query" minOccurs="0" maxOccurs="unbounded"/>
+												</xsd:choice>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="director" minOccurs="0"/>
+									</xsd:choice>
+									<xsd:attribute name="name" type="xsd:string" use="required"/>
+									<xsd:attribute name="heading" type="single-value-source" use="optional"/>
+									<xsd:attribute name="loop" type="xsd:boolean" use="optional"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="register-field" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="tag-name" type="xsd:string" use="required"/>
+									<xsd:attribute name="class" type="java-class" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="register-skin" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="name" type="xsd:string" use="required"/>
+									<xsd:attribute name="class" type="java-class" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="package" type="xsd:string" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="sql-statements" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="statement" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>An SQL Statement along with its parameters and report definitions</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType mixed="true">
+									<xsd:choice>
+										<xsd:element name="params" minOccurs="0">
+											<xsd:complexType>
+												<xsd:choice>
+													<xsd:element name="param" maxOccurs="unbounded"/>
+												</xsd:choice>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded"/>
+									</xsd:choice>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="query-defn" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="field" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:element name="report" type="report-columnType" minOccurs="0"/>
+									</xsd:choice>
+									<xsd:attribute name="id" type="xsd:string" use="required"/>
+									<xsd:attribute name="caption" type="xsd:string" use="optional"/>
+									<xsd:attribute name="join" type="query-defn-join-id" use="optional"/>
+									<xsd:attribute name="column" type="xsd:string" use="optional"/>
+									<xsd:attribute name="column-expr" type="xsd:string" use="optional"/>
+									<xsd:attribute name="where-expr" type="xsd:string" use="optional"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="join" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="id" type="xsd:string" use="required"/>
+									<xsd:attribute name="table" type="xsd:string" use="required"/>
+									<xsd:attribute name="condition" type="xsd:string" use="optional"/>
+									<xsd:attribute name="auto-include" type="yes-no-enum" use="optional" value="no"/>
+									<xsd:attribute name="weight" type="xsd:integer" use="optional" value="0"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="select" type="query-defn-selectType" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element name="select-dialog" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:group ref="dialog-fields"/>
+										<xsd:element name="select" type="query-defn-selectType" minOccurs="0"/>
+									</xsd:choice>
+									<xsd:attribute name="name" type="xsd:string" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="default-condition" type="query-defn-conditionType" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:element name="default-where-expr" type="query-defn-where-exprType" minOccurs="0" maxOccurs="unbounded"/>
+						</xsd:choice>
+						<xsd:attribute name="id" type="xsd:string" use="required"/>
+						<xsd:attribute name="dbms" type="xsd:string" use="optional"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="register-report-skin" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType/>
+				</xsd:element>
+				<xsd:element name="include" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:attribute name="file" type="xsd:uriReference" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="java-class">
+		<xsd:annotation>
+			<xsd:documentation>The fully qualified name of a Java class</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:attributeGroup name="dialog-field">
+		<xsd:annotation>
+			<xsd:documentation>Basic attributes that can be set for all dialog fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="optional"/>
+		<xsd:attribute name="caption" type="xsd:string" use="optional"/>
+		<xsd:attribute name="default" type="single-value-source" use="optional"/>
+		<xsd:attribute name="hint" type="xsd:string" use="optional"/>
+		<xsd:attribute name="required" type="yes-no-enum" use="optional" value="no"/>
+		<xsd:attribute name="read-only" type="yes-no-enum" use="optional" value="no"/>
+		<xsd:attribute name="visible" type="yes-no-enum" use="optional" value="yes"/>
+		<xsd:attribute name="show-child-caption" type="yes-no-enum" use="optional" value="no"/>
+		<xsd:attribute name="create-adjacent-area" type="yes-no-enum" use="optional" value="no"/>
+		<xsd:attribute name="col-break" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="before"/>
+					<xsd:enumeration value="after"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="single-value-source">
+		<xsd:annotation>
+			<xsd:documentation>A string that references a SingleValueSource object</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\w+:.*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="list-value-source">
+		<xsd:annotation>
+			<xsd:documentation>A string that references a ListValueSource object</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\w+:.*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="yes-no-enum">
+		<xsd:annotation>
+			<xsd:documentation>A simple yes/no (boolean value)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="no"/>
+			<xsd:enumeration value="yes"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="dialog-field">
+		<xsd:annotation>
+			<xsd:documentation>A single dialog field</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="conditional" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="action" use="required">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="display"/>
+								<xsd:enumeration value="data"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="partner" type="dialog-field-name" use="required"/>
+					<xsd:attribute name="js-expr" type="javascript-expression" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="popup" minOccurs="0">
+				<xsd:complexType>
+					<xsd:attribute name="action" type="xsd:string" use="required"/>
+					<xsd:attribute name="fill" type="dialog-field-names" use="required"/>
+					<xsd:attribute name="img-src" type="xsd:uriReference" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attributeGroup ref="dialog-field"/>
+	</xsd:complexType>
+	<xsd:simpleType name="dialog-field-name">
+		<xsd:annotation>
+			<xsd:documentation>A reference to another field in the current dialog</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="dialog-field-names">
+		<xsd:annotation>
+			<xsd:documentation>A comma-separated list of names that refer to other fields in the current dialog</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="javascript-expression">
+		<xsd:annotation>
+			<xsd:documentation>A JavaScript expression</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:group name="dialog-fields">
+		<xsd:annotation>
+			<xsd:documentation>A group of dialog fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="field.text" type="field.textType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.memo" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="rows" type="xsd:int" use="optional" value="3"/>
+							<xsd:attribute name="cols" type="xsd:int" use="optional" value="40"/>
+							<xsd:attribute name="wrap" use="optional" value="soft">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="hard"/>
+										<xsd:enumeration value="soft"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.composite" type="field.compositeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.grid" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="field.composite" type="field.compositeType" maxOccurs="unbounded"/>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.static" type="field.textType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.date" type="field.datetimeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.time" type="field.datetimeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.datetime" type="field.datetimeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.duration" type="dialog-field" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.boolean" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="style" type="boolean-field-style-enum" use="optional" value="checkbox"/>
+							<xsd:attribute name="choices" use="optional" value="yesno">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="yesno"/>
+										<xsd:enumeration value="truefalse"/>
+										<xsd:enumeration value="onoff"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.integer" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType">
+							<xsd:attribute name="min" type="xsd:int" use="optional"/>
+							<xsd:attribute name="max" type="xsd:int" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.float" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType">
+							<xsd:attribute name="min" type="xsd:float" use="optional"/>
+							<xsd:attribute name="max" type="xsd:float" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.select" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="style" type="select-field-style-enum" use="optional" value="combo"/>
+							<xsd:attribute name="choices" type="list-value-source" use="optional"/>
+							<xsd:attribute name="prepend-blank" type="yes-no-enum" use="optional" value="no"/>
+							<xsd:attribute name="append-blank" type="yes-no-enum" use="optional" value="no"/>
+							<xsd:attribute name="caption-left" type="xsd:string" use="optional" value="Available"/>
+							<xsd:attribute name="caption-right" type="xsd:string" use="optional" value="Selected"/>
+							<xsd:attribute name="multi-width" type="xsd:int" use="optional" value="125"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.separator" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="heading" type="xsd:short" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.ssn" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="strip-dashes" type="yes-no-enum" use="optional" value="yes"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.phone" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="strip-brackets" type="yes-no-enum" use="optional" value="yes"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:complexType name="field.textType">
+		<xsd:annotation>
+			<xsd:documentation>The base complex type for all text fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="dialog-field">
+				<xsd:attribute name="size" type="xsd:int" use="optional" value="32"/>
+				<xsd:attribute name="max-length" type="xsd:int" use="optional" value="255"/>
+				<xsd:attribute name="uppercase" type="yes-no-enum" use="optional" value="no"/>
+				<xsd:attribute name="lowercase" type="yes-no-enum" use="optional" value="no"/>
+				<xsd:attribute name="trim" type="yes-no-enum" use="optional" value="no"/>
+				<xsd:attribute name="mask-entry" type="yes-no-enum" use="optional" value="no"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="field.datetimeType">
+		<xsd:annotation>
+			<xsd:documentation>The base complex type for all datetime fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="field.textType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:attributeGroup name="report-column">
+		<xsd:annotation>
+			<xsd:documentation>Attributes that are common to all report columns</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="heading" type="xsd:string" use="optional"/>
+		<xsd:attribute name="url" type="xsd:uriReference" use="optional"/>
+		<xsd:attribute name="align" use="optional" value="left">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="left"/>
+					<xsd:enumeration value="center"/>
+					<xsd:enumeration value="right"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="width" type="xsd:int" use="optional"/>
+		<xsd:attribute name="display" type="yes-no-enum" use="optional" value="yes"/>
+		<xsd:attribute name="calc" type="report-column-calc" use="optional"/>
+		<xsd:attribute name="format" type="report-column-format" use="optional"/>
+		<xsd:attribute name="output" type="report-column-output" use="optional"/>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="report-column-calc">
+		<xsd:annotation>
+			<xsd:documentation>Report column calculation command</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-column-format">
+		<xsd:annotation>
+			<xsd:documentation>Report column formatting command</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-column-output">
+		<xsd:annotation>
+			<xsd:documentation>Report column output pattern</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="select-field-style-enum">
+		<xsd:annotation>
+			<xsd:documentation>The choices for the field.select style attribute</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="radio"/>
+			<xsd:enumeration value="list"/>
+			<xsd:enumeration value="multicheck"/>
+			<xsd:enumeration value="multilist"/>
+			<xsd:enumeration value="multidual"/>
+			<xsd:enumeration value="combo"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="boolean-field-style-enum">
+		<xsd:annotation>
+			<xsd:documentation>The choices for the field.boolean style attribute</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="radio"/>
+			<xsd:enumeration value="checkbox"/>
+			<xsd:enumeration value="checkalone"/>
+			<xsd:enumeration value="combo"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="reportType">
+		<xsd:annotation>
+			<xsd:documentation>Report definition type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="column" type="report-columnType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="banner-item" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="caption" type="xsd:string" use="optional"/>
+					<xsd:attribute name="url" type="xsd:uriReference" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="optional" value="default"/>
+		<xsd:attribute name="heading" type="single-value-source" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="field.compositeType">
+		<xsd:annotation>
+			<xsd:documentation>Composite field type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:group ref="dialog-fields"/>
+		<xsd:attributeGroup ref="dialog-field"/>
+	</xsd:complexType>
+	<xsd:complexType name="report-columnType">
+		<xsd:annotation>
+			<xsd:documentation>Definition of a single report column</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="index" type="xsd:int" use="optional"/>
+		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attributeGroup ref="report-column"/>
+	</xsd:complexType>
+	<xsd:simpleType name="query-defn-join-id">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a join element in a query-defn</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="query-defn-field-id">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a field element in a query-defn</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="query-defn-conditionType">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition condition type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="field" type="query-defn-field-id" use="required"/>
+		<xsd:attribute name="comparison" type="query-defn-comparison-id" use="required"/>
+		<xsd:attribute name="value" type="single-value-source" use="required"/>
+		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional"/>
+	</xsd:complexType>
+	<xsd:simpleType name="query-defn-comparison-id">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a query definition comparison type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="equals"/>
+			<xsd:enumeration value="starts-with"/>
+			<xsd:enumeration value="contains"/>
+			<xsd:enumeration value="ends-with"/>
+			<xsd:enumeration value="greater-than"/>
+			<xsd:enumeration value="less-than"/>
+			<xsd:enumeration value="greater-than-equal"/>
+			<xsd:enumeration value="less-than-equal"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="query-defn-condition-connector-enum">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition condition connector enumeration</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="and"/>
+			<xsd:enumeration value="or"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="query-defn-selectType">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition select element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="display" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="field" type="query-defn-field-id" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="order-by" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="field" type="query-defn-field-id" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="condition" type="query-defn-conditionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="where-expr" type="query-defn-where-exprType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:choice>
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+		<xsd:attribute name="caption" type="xsd:string" use="required"/>
+		<xsd:attribute name="distinct" type="yes-no-enum" use="optional" value="yes"/>
+	</xsd:complexType>
+	<xsd:complexType name="query-defn-where-exprType">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition where expression element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="value" type="xsd:string" use="required"/>
+		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional" value="and"/>
+	</xsd:complexType>
+</xsd:schema>
