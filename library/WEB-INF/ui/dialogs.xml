@@ -8,6 +8,15 @@
 			<field.text caption="Author" name="bookAuthor" required="yes"/>
 			<field.select caption="Genre" choices="schema-enum:Book_Type" name="bookType" prepend-blank="yes" required="yes"/>
 			<field.text caption="ISBN" name="bookISBN" max-length="10" required="yes"  validate-msg="Please enter an ISBN of the form X-XXXX-XXXX-X i.e. with dashes, not spaces.  Thank you." validate-pattern="/^\d+$/"/>
+            <director>
+                <next-actions>
+                    <choices>
+                        <choice value="index.jsp">Choose next action</choice>
+                        <choice value="bookInfo.jsp?data_cmd=add">Add another book</choice>
+                        <choice value="index.jsp">Return to home</choice>
+                    </choices>
+                </next-actions>
+            </director>
 		</dialog>
 	</dialogs>
 </xaf>
