@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.16 2003-01-30 16:07:44 shahbaz.javeed Exp $
+ * $Id: DialogField.java,v 1.17 2003-02-13 21:34:50 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -103,7 +103,8 @@ public class DialogField
     static public final int FLDFLAG_IDENTIFIER = FLDFLAG_BROWSER_READONLY * 2;
     static public final int FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA = FLDFLAG_IDENTIFIER * 2;
     static public final int FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
-    static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2; // all DialogField "children" will use this
+		static public final int FLDFLAG_DOUBLEENTRY = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
+    static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_DOUBLEENTRY * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -301,6 +302,11 @@ public class DialogField
                     dalProperties.put(attr.getNodeName(), attr.getNodeValue());
             }
         }
+
+				if(elem.getAttribute("double-entry").equalsIgnoreCase("yes"))
+				{
+					setFlag(DialogField.FLDFLAG_DOUBLEENTRY);
+				}
 
         importChildrenFromXml(elem);
     }
@@ -920,7 +926,6 @@ public class DialogField
         if(this.clientJavascripts == null)
             this.clientJavascripts = new ArrayList();
         this.clientJavascripts.add(script);
-
     }
 
     /**
@@ -1003,7 +1008,30 @@ public class DialogField
                 field.finalizeContents(dialog);
             }
         }
+
+				if(flagIsSet(DialogField.FLDFLAG_DOUBLEENTRY))
+				{
+					this.setupDoubleEntry();
+				}
     }
+
+		private void setupDoubleEntry()
+		{
+			// if(this.getHint() == null) this.setHint("Double Entry");
+
+      this.setHint("Double Entry");
+			DialogFieldClientJavascript doubleEntryJS = new DialogFieldClientJavascript();
+			doubleEntryJS.setType("extends");
+			doubleEntryJS.setEvent("lose-focus");
+			doubleEntryJS.setScript("validateDoubleEntry(field, control)");
+			this.addClientJavascript(doubleEntryJS);
+
+			DialogFieldClientJavascript blankOnFocusJS = new DialogFieldClientJavascript();
+			blankOnFocusJS.setType("extends");
+			blankOnFocusJS.setEvent("get-focus");
+			blankOnFocusJS.setScript("control.value = ''");
+			this.addClientJavascript(blankOnFocusJS);
+		}
 
     public List getDependentConditions()
     {
