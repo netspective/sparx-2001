@@ -367,6 +367,8 @@ public class SelectField extends DialogField
 		if(listSource != null)
         {
             choices = listSource.getSelectChoices(dc);
+            if(choices == null)
+            	throw new RuntimeException("Choices is NULL in " + listSource.getClass().getName());
     		choices.calcSelections(dc, this);
         }
         else

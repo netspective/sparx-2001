@@ -19,11 +19,13 @@ public class ErrorListSource extends ListSource
     public ErrorListSource(Exception e)
     {
         errorMessage = e.toString();
+        initializeSource(errorMessage);
     }
 
     public ErrorListSource(String msg)
     {
         errorMessage = msg;
+        initializeSource(errorMessage);
     }
 
     public void initializeSource(String srcParams)
