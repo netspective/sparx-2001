@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Shahid N. Shah (Netspective Corporation) -->
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Aye-Theinga Thu (TMP) -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xsd:element name="xaf">
 		<xsd:annotation>
@@ -240,6 +240,12 @@
 					</xsd:attribute>
 					<xsd:attribute name="partner" type="dialog-field-name" use="required"/>
 					<xsd:attribute name="js-expr" type="javascript-expression" use="optional"/>
+					<xsd:attribute name="flag" type="xsd:string" use="optional"/>
+					<xsd:attribute name="data-cmd" type="dialog-data-cmds" use="optional"/>
+					<xsd:attribute name="has-permission" type="acl-permissions" use="optional"/>
+					<xsd:attribute name="lack-permission" type="acl-permissions" use="optional"/>
+					<xsd:attribute name="has-value" type="single-value-source" use="optional"/>
+					<xsd:attribute name="is-true" type="single-value-source" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="popup" minOccurs="0">
@@ -397,6 +403,19 @@
 					</xsd:complexContent>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="field.uri" type="field.textType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.currency" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType">
+							<xsd:attribute name="type" type="xsd:string" use="optional" default="US"/>
+							<xsd:attribute name="decimal" type="xsd:integer" use="optional" default="2"/>
+							<xsd:attribute name="negative" type="xsd:string" use="optional" default="before"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.file" type="field.textType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:choice>
 	</xsd:group>
 	<xsd:complexType name="field.textType">
@@ -414,6 +433,7 @@
 				<xsd:attribute name="validate-pattern" type="xsd:string" use="optional"/>
 				<xsd:attribute name="validate-msg" type="xsd:short" use="optional"/>
 				<xsd:attribute name="format-pattern" type="xsd:string" use="optional"/>
+				<xsd:attribute name="display-pattern" type="xsd:string" use="optional"/>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -424,10 +444,13 @@
 		<xsd:complexContent>
 			<xsd:extension base="field.textType">
 				<xsd:attribute name="min" type="xsd:string" use="optional"/>
+				<xsd:attribute name="min-value" type="xsd:string" use="optional"/>
 				<xsd:attribute name="max" type="xsd:string" use="optional"/>
+				<xsd:attribute name="max-value" type="xsd:string" use="optional"/>
 				<xsd:attribute name="future-only" type="yes-no-enum" use="optional" default="no"/>
 				<xsd:attribute name="past-only" type="yes-no-enum" use="optional" default="no"/>
 				<xsd:attribute name="strict-year" type="yes-no-enum" use="optional" default="yes"/>
+				<xsd:attribute name="strict-time" type="yes-no-enum" use="optional" default="no"/>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -687,6 +710,11 @@
 					<xsd:attribute name="insert-check" type="single-value-source" use="optional"/>
 					<xsd:attribute name="update-check" type="single-value-source" use="optional"/>
 					<xsd:attributeGroup ref="basic-task-attrs"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="exec-transaction" minOccurs="0">
+				<xsd:complexType>
+					<xsd:attribute name="command" type="xsd:string" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:choice>
