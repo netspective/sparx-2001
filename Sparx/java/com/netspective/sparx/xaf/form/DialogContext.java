@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.26 2002-11-30 16:44:23 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.27 2002-12-23 04:36:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -111,6 +111,7 @@ import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.sql.DmlTask;
 import com.netspective.sparx.xaf.task.sql.TransactionTask;
 import com.netspective.sparx.xif.dal.ConnectionContext;
+import com.netspective.sparx.xif.dal.Row;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
@@ -366,6 +367,7 @@ public class DialogContext extends ServletValueContext
     private String[] retainReqParams;
     private int errorsCount;
     private boolean redirectDisabled;
+    private Row lastRowManipulated;
 
     public DialogContext()
     {
@@ -462,6 +464,52 @@ public class DialogContext extends ServletValueContext
         }
 
         LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
+    }
+
+    /**
+     * Copy any request parameters or attributes that match field names in our dialog
+     */
+    public void populateValuesFromRequestParamsAndAttrs()
+    {
+        Map params = request.getParameterMap();
+        Iterator i = params.entrySet().iterator();
+        while(i.hasNext())
+        {
+            Map.Entry entry = (Map.Entry) i.next();
+            String name = (String) entry.getKey();
+            DialogFieldState state = (DialogFieldState) fieldStates.get(name);
+            if(state != null)
+            {
+                String[] values = (String[]) entry.getValue();
+                state.values = values;
+                state.value = values != null && values.length > 0 ? values[0] : null;
+            }
+        }
+
+        Enumeration e = request.getAttributeNames();
+        while(e.hasMoreElements())
+        {
+            String name = (String) e.nextElement();
+            DialogFieldState state = (DialogFieldState) fieldStates.get(name);
+            if(state != null)
+            {
+                Object value = request.getAttribute(name);
+                if(value instanceof String[])
+                    state.values = (String[]) value;
+                else
+                    state.value = value != null ? value.toString() : null;
+            }
+        }
+    }
+
+    public void setLastRowManipulated(Row row)
+    {
+        lastRowManipulated = row;
+    }
+
+    public Row getLastRowManipulated()
+    {
+        return lastRowManipulated;
     }
 
     public void persistValues()
