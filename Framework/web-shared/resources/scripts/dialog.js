@@ -519,6 +519,18 @@ function controlOnBlur(control)
 // Field-specific functions
 //****************************************************************************
 
+function MemoField_isValid(field, maxlimit) 
+{
+    if (field.value.length > maxlimit)
+    {
+        field.value = field.value.substring(0, maxlimit);
+        alert("Maximum number of characters allowed is " + maxlimit);
+        return false;
+    }
+    return true;
+}
+
+
 function SelectField_isValid(field, control)
 {
     var style = field.style;
