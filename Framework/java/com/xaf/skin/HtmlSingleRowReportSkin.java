@@ -11,6 +11,7 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
 {
 	protected int tableCols;
 	protected boolean horizontalLayout;
+    protected String breakFontAttrs = "face='verdana,arial,helvetica' size=2 color=navy";
 
     public HtmlSingleRowReportSkin(int tableCols, boolean horizontalLayout)
     {
@@ -38,12 +39,12 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
 			{
                 ReportColumn column = columns.getColumn(i);
 
-			if (column.getBreak()!=null)
-			{
-				dataTable.append("<td height='10'></td></tr><tr><td align='left' bgcolor='#FFFBA5' colspan='2'><table border=0 cellspacing=0>");
-				dataTable.append("<tr><td align='left'><font "+breakFontAttrs+">"+ column.getBreak() +"</a></font></td></tr>");
-				dataTable.append("</table></td></tr><tr height='2' bgcolor='#ABA61B'><td colspan='2'></td><tr>");
-			}
+                if (column.getBreak()!=null)
+                {
+                    dataTable.append("<td height='10'></td></tr><tr><td align='left' bgcolor='#FFFBA5' colspan='2'><table border=0 cellspacing=0>");
+                    dataTable.append("<tr><td align='left'><font "+breakFontAttrs+">"+ column.getBreak() +"</a></font></td></tr>");
+                    dataTable.append("</table></td></tr><tr height='2' bgcolor='#ABA61B'><td colspan='2'></td><tr>");
+                }
 
 				ReportContext.ColumnState state = states[i];
 
