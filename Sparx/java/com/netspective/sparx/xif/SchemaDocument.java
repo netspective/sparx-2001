@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.26 2003-01-20 21:57:40 shahbaz.javeed Exp $
+ * $Id: SchemaDocument.java,v 1.27 2003-01-21 17:58:36 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -868,8 +868,7 @@ public class SchemaDocument extends XmlSource
         String enumerationTable = null;
         enumerationTable = column.getAttribute("enumeration-table");
         if (null == enumerationTable) enumerationTable = "";
-        String enumerationTableItemClass = XmlSource.xmlTextToJavaIdentifier(enumerationTable, true);
-        enumerationTableItemClass += "Table.EnumeratedItem";
+        String enumerationTableItemClass = "app.dal.table." + XmlSource.xmlTextToJavaIdentifier(enumerationTable, true) + "Table.EnumeratedItem";
         column.setAttribute("_gen-enumeration-table-item-class", enumerationTableItemClass);
 
         for (int i = 0; i < colInfo.getLength(); i++)
@@ -907,13 +906,22 @@ public class SchemaDocument extends XmlSource
         }
 
         String tableAbbrev = table.getAttribute("abbrev");
+
+        if (null == tableAbbrev || 0 == tableAbbrev.length())
+        	tableAbbrev = table.getAttribute("name");
+
+       	String columnAbbrev = column.getAttribute("abbrev");
+
+       	if (null == columnAbbrev || 0 == columnAbbrev.length())
+       		columnAbbrev = column.getAttribute("name");
+
         String customSequence = column.getAttribute("sequence-name");
 
         // If we are given a custom sequence name, use it.  Otherwise generate it
-        if (0 == customSequence.length()) customSequence = (tableAbbrev + "_" + column.getAttribute("name") + "_SEQ").toUpperCase();
+        if (0 == customSequence.length()) customSequence = (tableAbbrev + "_" + columnAbbrev + "_SEQ").toUpperCase();
         column.setAttribute("_gen-sequence-name", customSequence);
 
-        if ("autoinc".equals(column.getAttribute("type")) || column.getAttribute("autoinc").equals("yes") || "autoinc".equals(generateId))
+        if ("autoinc".equals(column.getAttribute("type")) || "auto-inc".equals(column.getAttribute("type")) || column.getAttribute("autoinc").equals("yes") || "autoinc".equals(generateId))
             column.setAttribute("_gen-create-id", "autoinc");
 
         if ("guid".equals(column.getAttribute("type")) || column.getAttribute("guid").equals("yes") || "guid".equals(generateId) ||

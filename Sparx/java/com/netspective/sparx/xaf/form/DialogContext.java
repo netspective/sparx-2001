@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.30 2003-01-20 21:57:40 shahbaz.javeed Exp $
+ * $Id: DialogContext.java,v 1.31 2003-01-21 17:58:36 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1562,6 +1562,16 @@ public class DialogContext extends ServletValueContext
             return state.value;
     }
 
+    public String getValueAsTextSet(DialogField field)
+    {
+        return getValue(field);
+    }
+
+    public String getValueValueAsTextSet(String qualifiedName)
+    {
+        return getValue(qualifiedName);
+    }
+
     public String getValue(DialogField field, String defaultValue)
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
@@ -1584,6 +1594,16 @@ public class DialogContext extends ServletValueContext
             String value = state.value;
             return (value == null || value.length() == 0) ? defaultValue : value;
         }
+    }
+
+    public String getValueAsTextSet(DialogField field, String defaultValue)
+    {
+        return getValue(field, defaultValue);
+    }
+
+    public String getValueAsTextSet(String qualifiedName, String defaultValue)
+    {
+        return getValue(qualifiedName, defaultValue);
     }
 
     public Object getValueForSqlBindParam(DialogField field)
@@ -1658,6 +1678,16 @@ public class DialogContext extends ServletValueContext
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
         state.value = value;
+    }
+
+    public void setValueAsText(String qualifiedName, String value)
+    {
+        setValue(qualifiedName, value);
+    }
+
+    public void setValueAsText(DialogField field, String value)
+    {
+        setValue(field, value);
     }
 
     public void setAdjacentAreaValue(DialogField field, String value)
@@ -1739,6 +1769,36 @@ public class DialogContext extends ServletValueContext
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
         state.values = values;
+    }
+
+    public void setValuesAsTextSet(String qualifiedName, String values)
+    {
+        ArrayList textSetItem = new ArrayList();
+        StringTokenizer st = new StringTokenizer(values, ",");
+
+        while(st.hasMoreTokens())
+        {
+            textSetItem.add(st.nextToken().trim());
+        }
+
+        DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+        if(state != null)
+            state.values = (String[]) textSetItem.toArray();
+    }
+
+    public void setValuesAsTextSet(DialogField field, String values)
+    {
+        ArrayList textSetItem = new ArrayList();
+        StringTokenizer st = new StringTokenizer(values, ",");
+
+        while(st.hasMoreTokens())
+        {
+            textSetItem.add(st.nextToken().trim());
+        }
+
+        DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+        if(state != null)
+            state.values = (String[]) textSetItem.toArray();
     }
 
     public List getErrorMessages(DialogField field)

@@ -266,8 +266,8 @@
 
         <field.text size="20"/>
 
-        <table name="${parentColTable.getAttribute('abbrev')}_${parentColumn.getAttribute('name')}_Set">
-            <column name="system_id" type="auto-inc" descr="Unique record identifier"/>
+        <table name="${parentColTable.getAttribute('abbrev')}_${parentColumn.getAttribute('name')}_Set" abbrev="${parentColTable.getAttribute('abbrev')}${parentColumn.getAttribute('abbrev')}St">
+            <column name="system_id" type="auto-inc" primarykey="yes" abbrev="sysid" descr="Unique record identifier"/>
             <column name="parent_id" parentref="${this.getParentNode().getAttribute('_gen-parent-column-table-pri-key-ref')}" descr="The parent of this record"/>
             <column name="value_index" type="integer" descr="The ordinal value (index) of the text or null if not important"/>
             <column name="value_text" type="text" size="32" descr="The actual text value"/>
@@ -322,8 +322,8 @@
 
         <field.text size="20"/>
 
-        <table name="${parentColTable.getAttribute('abbrev')}_${parentColumn.getAttribute('name')}_Set">
-            <column name="system_id" type="auto-inc" descr="Unique record identifier"/>
+        <table name="${parentColTable.getAttribute('abbrev')}_${parentColumn.getAttribute('name')}_Set" abbrev="${parentColTable.getAttribute('abbrev')}${parentColumn.getAttribute('abbrev')}St">
+            <column name="system_id" type="auto-inc" primarykey="yes" abbrev="sysid" descr="Unique record identifier"/>
             <column name="parent_id" parentref="${this.getParentNode().getAttribute('_gen-parent-column-table-pri-key-ref')}" descr="The parent of this record"/>
             <column name="enum_index" type="integer" descr="The ordinal value (index) of the enumeration or null if not important"/>
             <column name="enum_value" lookupref="${this.getParentNode().getParentNode().getAttribute('enumeration-table')}" descr="The value of the enumeration item"/>
