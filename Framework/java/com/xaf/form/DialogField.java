@@ -620,4 +620,60 @@ public class DialogField
 		}
 	}
 
+    /**
+     * Produces JavaScript code to handle Client-side events for the dialog field
+     *
+     */
+    public String getJavaScriptDefn(DialogContext dc)
+	{
+		String fieldClassName = this.getClass().getName();
+		String js =
+			"field = new DialogField(\"" + fieldClassName + "\", \""+ this.getId() + "\", \"" + this.getSimpleName() + "\", \"" + this.getQualifiedName() + "\", \"" + this.getCaption(dc) + "\", " + this.getFlags() +");\n" +
+			"dialog.registerField(field);\n";
+
+        String customStr = this.getCustomJavaScriptDefn(dc);
+        if (customStr != null)
+            js += customStr;
+
+		ArrayList dependentConditions = this.getDependentConditions();
+		if(dependentConditions != null)
+		{
+			StringBuffer dcJs = new StringBuffer();
+			Iterator i = dependentConditions.iterator();
+			while(i.hasNext())
+			{
+				DialogFieldConditionalAction o = (DialogFieldConditionalAction) i.next();
+
+				if(o instanceof DialogFieldConditionalDisplay)
+				{
+					DialogFieldConditionalDisplay action = (DialogFieldConditionalDisplay) o;
+					dcJs.append("field.dependentConditions[field.dependentConditions.length] = new DialogFieldConditionalDisplay(\""+ action.getSourceField().getQualifiedName() +"\", \""+ action.getPartnerField().getQualifiedName() + "\", \""+ action.getExpression() + "\");\n");
+				}
+			}
+			js = js + dcJs.toString();
+		}
+
+		ArrayList children = this.getChildren();
+		if(children != null)
+		{
+			StringBuffer childJs = new StringBuffer();
+			Iterator i = children.iterator();
+			while(i.hasNext())
+			{
+				DialogField child = (DialogField) i.next();
+				childJs.append(child.getJavaScriptDefn(dc));
+			}
+			js = js + childJs.toString();
+		}
+
+		return js;
+	}
+
+    /**
+     * Empty method. Overwritten by extending classes needing to to extra Javascript definition.
+     */
+    public String getCustomJavaScriptDefn(DialogContext dc)
+    {
+        return "";
+    }
 }
