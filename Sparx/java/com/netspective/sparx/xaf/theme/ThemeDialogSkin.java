@@ -334,7 +334,6 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
 		String rowAttr = fieldRowAttrs + " id='" + FIELDROW_PREFIX + field.getQualifiedName() + "' ";
 		if (haveErrors)
 			rowAttr = rowAttr + fieldRowErrorAttrs;
-		String accessKeyString = "";
 
 		if (caption == null)
 		{
