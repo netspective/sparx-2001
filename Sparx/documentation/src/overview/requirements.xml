@@ -72,11 +72,11 @@
 
 	<section heading="Open-source (free) Libraries used by Sparx">
 	<ul>
-		<li><link http="jakarta.apache.org">Jakarta Ant 1.4.1</link> or above</li>
-		<li><link http="jakarta.apache.org">Jakarta Log4J 1.1</link> or above</li>
+		<li><link http="jakarta.apache.org">Jakarta Ant 1.5.0</link> or above</li>
+		<li><link http="jakarta.apache.org">Jakarta Log4J 1.2.6</link> or above</li>
 		<li><link http="jakarta.apache.org">Jakarta ORO 2.0</link> or above</li>
-		<li><link http="xml.apache.org">Apache Xerces 1.4</link> or above</li>
-		<li><link http="xml.apache.org">Apache Xalan 2.1</link> or above</li>
+		<li><link http="xml.apache.org">Apache Xerces 2.0</link> or above</li>
+		<li><link http="xml.apache.org">Apache Xalan 2.4</link> or above</li>
 	</ul>
 	</section>
 </page>
