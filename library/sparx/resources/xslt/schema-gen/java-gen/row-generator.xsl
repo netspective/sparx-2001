@@ -215,12 +215,12 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:choose>
 	<xsl:when test="$java-class-spec = 'java.lang.String'">
-			if(NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(columnName)) {
+			if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(columnName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(columnName)) {
 				set<xsl:value-of select="@_gen-method-name"/>(columnValue);
 				break;
 			}
 	</xsl:when>
-	<xsl:otherwise>			if(NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(columnName)) {
+	<xsl:otherwise>			if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(columnName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(columnName)) {
 				set<xsl:value-of select="@_gen-method-name"/>(table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(columnValue));
 				break;
 			}
@@ -228,6 +228,65 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:choose>
 </xsl:for-each>		}
 	}
+
+    public boolean isValidXmlNodeNameForColumn(String nodeName)
+    {
+<xsl:for-each select="column">		if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName)) return true;
+</xsl:for-each>
+    	return false;
+    }
+
+    public boolean populateDataForXmlNodeName(String nodeName, String value, boolean append) throws ParseException
+    {
+		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+<xsl:for-each select="column">
+<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
+<xsl:variable name="java-type-init-cap"><xsl:value-of select="@_gen-java-type-init-cap"/></xsl:variable>
+<xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
+<xsl:choose>
+	<xsl:when test="$java-class-spec = 'java.lang.String'">
+			if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName)) {
+				if(append) { String old = get<xsl:value-of select="@_gen-method-name"/>(); if (old != null) value = old + value; }
+				set<xsl:value-of select="@_gen-method-name"/>(value);
+				return true;
+			}
+	</xsl:when>
+	<xsl:otherwise>			if(COLNAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName) || NODENAME_<xsl:value-of select="@_gen-constant-name"/>.equals(nodeName)) {
+				set<xsl:value-of select="@_gen-method-name"/>(table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(value));
+				return true;
+			}
+	</xsl:otherwise>
+</xsl:choose>
+</xsl:for-each>
+		return false;
+    }
+
+    public boolean isValidXmlNodeNameForChildRow(String nodeName)
+    {
+    	if(! isParentRow()) return false;
+    	String tableNameForMapKey = AbstractTable.convertTableNameForMapKey(nodeName);
+
+		<xsl:value-of select="$schema-class-name"/> schema = (<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema();
+<xsl:for-each select="child-table[@child-col-_gen-method-name]">
+		if(tableNameForMapKey.equals(schema.get<xsl:value-of select="@_gen-table-name"/>().getNameForMapKey()) || nodeName.equals(schema.get<xsl:value-of select="@_gen-table-name"/>().getNameForXmlNode()))
+			return true;
+</xsl:for-each>
+		return false;
+    }
+    
+    public Row createChildRowForXmlNodeName(String nodeName)
+    {
+    	if(! isParentRow()) return null;
+    	String tableNameForMapKey = AbstractTable.convertTableNameForMapKey(nodeName);
+
+		<xsl:value-of select="$schema-class-name"/> schema = (<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema();
+<xsl:for-each select="child-table[@child-col-_gen-method-name]">
+		if(tableNameForMapKey.equals(schema.get<xsl:value-of select="@_gen-table-name"/>().getNameForMapKey()) || nodeName.equals(schema.get<xsl:value-of select="@_gen-table-name"/>().getNameForXmlNode()))
+			return create<xsl:value-of select="@_gen-row-name"/>();
+</xsl:for-each>
+		return null;
+    }
+
 
 	public void populateDataByNames(DialogContext dc, int valueHandling)
 	{
