@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AccessControlList.java,v 1.2 2002-09-28 04:19:57 shahid.shah Exp $
+ * $Id: AccessControlList.java,v 1.3 2002-11-30 16:39:44 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -74,6 +74,7 @@ import org.w3c.dom.NodeList;
 import com.netspective.sparx.util.factory.FactoryEvent;
 import com.netspective.sparx.util.factory.FactoryListener;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
 
 public class AccessControlList extends XmlSource implements FactoryListener
 {
@@ -292,7 +293,8 @@ public class AccessControlList extends XmlSource implements FactoryListener
                 }
 
                 accessControlElem.setAttribute("id", "0");
-                rootPerm = new ComponentPermission();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(accessControlElem.getAttribute("class"), ComponentPermission.class, true);
+                rootPerm = (ComponentPermission) instanceGen.getInstance();
                 rootPerm.importFromXml(this, null, accessControlElem);
                 rootPerm.finalizeXml(this, accessControlElem);
             }
