@@ -76,11 +76,11 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:for-each>
 
 <xsl:for-each select="column">	/** The &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column data **/
-	protected <xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
+	protected <xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/><xsl:value-of select="' '"/><xsl:value-of select="@_gen-member-name"/>;
 </xsl:for-each>
 
 <xsl:for-each select="child-table">	/** The children rows from <xsl:value-of select="@name"/> connected to this row by parent.<xsl:value-of select="@parent-col"/> = this.<xsl:value-of select="@child-col"/> (null if children not retrieved) **/
-	protected <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-rows-member-name"/>;
+	protected <xsl:value-of select="@_gen-rows-class-name"/><xsl:value-of select="' '"/><xsl:value-of select="@_gen-rows-member-name"/>;
 </xsl:for-each>
 
 	public <xsl:value-of select="$row-name"/>(<xsl:value-of select="@_gen-table-class-name"/> table)
@@ -153,7 +153,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:choose>
 	<xsl:when test="java-type">
-<xsl:text>	</xsl:text><xsl:value-of select="$java-class-spec"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>Value = new <xsl:value-of select="$java-class-spec"/>(rs.get<xsl:value-of select="$java-type-init-cap"/>(<xsl:value-of select="$result-set-index"/>));
+<xsl:text>	</xsl:text><xsl:value-of select="$java-class-spec"/><xsl:value-of select="' '"/><xsl:value-of select="@_gen-member-name"/>Value = new <xsl:value-of select="$java-class-spec"/>(rs.get<xsl:value-of select="$java-type-init-cap"/>(<xsl:value-of select="$result-set-index"/>));
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(rs.wasNull() ? null : <xsl:value-of select="@_gen-member-name"/>Value);
 	</xsl:when>
 	<xsl:when test="$java-class-spec = 'java.lang.String' ">
@@ -180,7 +180,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		</xsl:text>
 <xsl:choose>
 	<xsl:when test="java-type">
-<xsl:text>	</xsl:text><xsl:value-of select="$java-class-spec"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>Value = new <xsl:value-of select="$java-class-spec"/>(rs.get<xsl:value-of select="$java-type-init-cap"/>(colIndex.intValue()));
+<xsl:text>	</xsl:text><xsl:value-of select="$java-class-spec"/><xsl:value-of select="' '"/><xsl:value-of select="@_gen-member-name"/>Value = new <xsl:value-of select="$java-class-spec"/>(rs.get<xsl:value-of select="$java-type-init-cap"/>(colIndex.intValue()));
 <xsl:text>			</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(rs.wasNull() ? null : <xsl:value-of select="@_gen-member-name"/>Value);
 	</xsl:when>
 	<xsl:when test="$java-class-spec = 'java.lang.String' ">
@@ -423,7 +423,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:if>
 <xsl:for-each select="child-table[@child-col-_gen-method-name]"><xsl:variable name="parent-col"><xsl:value-of select="@parent-col"/></xsl:variable>
 	/** Create a <xsl:value-of select="@_gen-row-name"/> and automatically set the <xsl:value-of select="@name"/> <xsl:value-of select="@child-col"/> column to the current value of this table's <xsl:value-of select="@parent-col"/> column **/
-	public <xsl:value-of select="@_gen-row-class-name"/><xsl:text> </xsl:text>create<xsl:value-of select="@_gen-row-name"/>()
+	public <xsl:value-of select="@_gen-row-class-name"/><xsl:value-of select="' '"/>create<xsl:value-of select="@_gen-row-name"/>()
 	{
 		<xsl:value-of select="@_gen-table-class-name"/> table = ((<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema()).get<xsl:value-of select="@_gen-table-name"/>();
 		<xsl:value-of select="@_gen-row-class-name"/> row = table.create<xsl:value-of select="@_gen-row-name"/>();
@@ -432,13 +432,13 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	}
 
 	/** Returns the children rows from <xsl:value-of select="@name"/> connected to this row by <xsl:value-of select="@parent-col"/> = <xsl:value-of select="@child-col"/> that was retrieved by retrieveChildren() or get<xsl:value-of select="@_gen-rows-name"/>(ConnectionContext) (null otherwise) **/
-	public <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-rows-name"/>() throws NamingException, SQLException
+	public <xsl:value-of select="@_gen-rows-class-name"/><xsl:value-of select="' '"/>get<xsl:value-of select="@_gen-rows-name"/>() throws NamingException, SQLException
 	{
 		return <xsl:value-of select="@_gen-rows-member-name"/>;
 	}
 
 	/** Executes the SQL necessary to retrieve the children rows from <xsl:value-of select="@name"/> connected to this row by <xsl:value-of select="@parent-col"/> = <xsl:value-of select="@child-col"/> and saves the data into a member variable that can be retrieved by calling get<xsl:value-of select="@_gen-rows-name"/>() **/
-	public <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-rows-name"/>(ConnectionContext cc) throws NamingException, SQLException
+	public <xsl:value-of select="@_gen-rows-class-name"/><xsl:value-of select="' '"/>get<xsl:value-of select="@_gen-rows-name"/>(ConnectionContext cc) throws NamingException, SQLException
 	{
 		<xsl:value-of select="@_gen-table-class-name"/> table = ((<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema()).get<xsl:value-of select="@_gen-table-name"/>();
 		<xsl:value-of select="@_gen-rows-member-name"/> = table.get<xsl:value-of select="@_gen-rows-name"/>By<xsl:value-of select="@child-col-_gen-method-name"/>(cc, get<xsl:value-of select="../column[@name = $parent-col]/@_gen-method-name"/>());

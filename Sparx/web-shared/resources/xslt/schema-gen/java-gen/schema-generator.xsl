@@ -83,7 +83,7 @@ public class <xsl:value-of select="$class-name"/> extends AbstractSchema
 	public final static <xsl:value-of select="$class-name"/> instance = new <xsl:value-of select="$class-name"/>();
 
 <xsl:for-each select="table">	/** The <xsl:value-of select="@name"/> table definition **/
-	protected <xsl:value-of select="@_gen-table-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-table-member-name"/>;
+	protected <xsl:value-of select="@_gen-table-class-name"/><xsl:value-of select="' '"/><xsl:value-of select="@_gen-table-member-name"/>;
 </xsl:for-each>
 	
 	public <xsl:value-of select="$class-name"/>()
@@ -101,7 +101,7 @@ public class <xsl:value-of select="$class-name"/> extends AbstractSchema
 	}
 
 <xsl:for-each select="table">	/** Returns the <xsl:value-of select="@name"/> table definition **/
-	public <xsl:value-of select="@_gen-table-class-name"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-table-method-name"/>Table() { return <xsl:value-of select="@_gen-table-member-name"/>; }
+	public <xsl:value-of select="@_gen-table-class-name"/><xsl:value-of select="' '"/>get<xsl:value-of select="@_gen-table-method-name"/>Table() { return <xsl:value-of select="@_gen-table-member-name"/>; }
 </xsl:for-each>
 }
 </xsl:template>
