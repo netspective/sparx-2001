@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.8 2002-12-11 21:42:42 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.9 2002-12-15 17:42:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -86,6 +86,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.xpath.XPathAPI;
+import org.apache.oro.text.regex.*;
+import org.apache.oro.text.perl.Perl5Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
@@ -106,7 +108,7 @@ public class XmlSource
         protected SourceInfo parent;
         protected List preProcessors;
 
-        SourceInfo(SourceInfo includedFrom, File file)
+        public SourceInfo(SourceInfo includedFrom, File file)
         {
             source = file;
             lastModified = source.lastModified();
@@ -155,7 +157,7 @@ public class XmlSource
     protected boolean allowReload = true;
     protected ArrayList errors = new ArrayList();
     protected SourceInfo docSource;
-    protected Hashtable sourceFiles = new Hashtable();
+    protected Map sourceFiles = new HashMap();
     protected Document xmlDoc;
     protected Element metaInfoElem;
     protected Element metaInfoOptionsElem;
@@ -341,6 +343,74 @@ public class XmlSource
         return text.toString();
     }
 
+    /**
+     * This class accepts a list and a pattern and creates a second list with the items
+     * that match the pattern. If the pattern is "*" then all items are matched. If the pattern is a valid ORO Perl5
+     * regular expression, the expression is used to do the matching. If it's not "*" or a perl expression, then the
+     * simple pattern is returned if it's found in the list.
+     */
+    public static class StringListMatcher
+    {
+        private PatternCompiler compiler = new Perl5Compiler();
+        private PatternMatcher matcher = new Perl5Matcher();
+        private Pattern pattern;
+        private MalformedPatternException patternException;
+
+        private List source;
+        private List dest = new ArrayList();
+
+        public StringListMatcher(List source, String pattern)
+        {
+            this.source = source;
+
+            if(pattern.equals("*"))
+            {
+                dest.addAll(source);
+            }
+            else if(pattern.startsWith("/") && pattern.endsWith("/"))
+            {
+                String actualPattern = pattern.substring(1, pattern.length()-2);
+                try
+                {
+                    this.pattern = compiler.compile(actualPattern, Perl5Compiler.CASE_INSENSITIVE_MASK);
+                    for(int i = 0; i < source.size(); i++)
+                    {
+                        String item = (String) source.get(i);
+                        if(matcher.contains(item, this.pattern))
+                            dest.add(item);
+                    }
+                }
+                catch(MalformedPatternException e)
+                {
+                    patternException = e;
+                    dest.add(pattern);
+                }
+            }
+            else
+                dest.add(pattern);
+        }
+
+        public List getMatchedItems()
+        {
+            return dest;
+        }
+
+        public MalformedPatternException getPatternException()
+        {
+            return patternException;
+        }
+
+        public List getSource()
+        {
+            return source;
+        }
+
+        public Pattern getPattern()
+        {
+            return pattern;
+        }
+    }
+
     public Document getDocument()
     {
         reload();
@@ -467,9 +537,9 @@ public class XmlSource
 
         if(sourceFiles.size() > 1)
         {
-            for(Enumeration e = sourceFiles.elements(); e.hasMoreElements();)
+            for(Iterator i = sourceFiles.values().iterator(); i.hasNext(); )
             {
-                if(((SourceInfo) e.nextElement()).sourceChanged())
+                if(((SourceInfo) i.next()).sourceChanged())
                     return true;
             }
         }
@@ -506,20 +576,54 @@ public class XmlSource
         if(attrValue.length() > 0)
             return attrValue;
 
+        // we don't usually want the first value -- we want the last in case there is inheritance
+        String lastValue = null;
+
         NodeList children = elem.getChildNodes();
         for(int n = 0; n < children.getLength(); n++)
         {
             Node node = children.item(n);
             if(node.getNodeName().equals(nodeName))
-                return node.getFirstChild().getNodeValue();
+                lastValue = node.getFirstChild().getNodeValue();
         }
 
-        return null;
+        return lastValue;
     }
 
     public String ucfirst(String str)
     {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public void inheritElement(Element srcElement, Element destElem, Set excludeElems, String inheritedFromNote)
+    {
+        NamedNodeMap inhAttrs = srcElement.getAttributes();
+        for(int i = 0; i < inhAttrs.getLength(); i++)
+        {
+            Node attrNode = inhAttrs.item(i);
+            final String nodeName = attrNode.getNodeName();
+            if(! excludeElems.contains(nodeName) && destElem.getAttribute(nodeName).equals(""))
+                destElem.setAttribute(nodeName, attrNode.getNodeValue());
+        }
+
+        DocumentFragment inheritFragment = xmlDoc.createDocumentFragment();
+        NodeList inhChildren = srcElement.getChildNodes();
+        for(int i = inhChildren.getLength() - 1; i >= 0; i--)
+        {
+            Node childNode = inhChildren.item(i);
+
+            // only add if there isn't an attribute overriding this element
+            final String nodeName = childNode.getNodeName();
+            if(destElem.getAttribute(nodeName).length() == 0 && (! excludeElems.contains(nodeName)))
+            {
+                Node cloned = childNode.cloneNode(true);
+                if(inheritedFromNote != null && cloned.getNodeType() == Node.ELEMENT_NODE)
+                    ((Element) cloned).setAttribute("_inherited-from", inheritedFromNote);
+                inheritFragment.insertBefore(cloned, inheritFragment.getFirstChild());
+            }
+        }
+
+        destElem.insertBefore(inheritFragment, destElem.getFirstChild());
     }
 
     public void inheritNodes(Element element, Map sourcePool, String attrName, Set excludeElems)
@@ -565,32 +669,7 @@ public class XmlSource
                 extendsElem.appendChild(xmlDoc.createTextNode(inheritType));
                 element.appendChild(extendsElem);
 
-                NamedNodeMap inhAttrs = inheritFromElem.getAttributes();
-                for(int i = 0; i < inhAttrs.getLength(); i++)
-                {
-                    Node attrNode = inhAttrs.item(i);
-                    if(element.getAttribute(attrNode.getNodeName()).equals(""))
-                        element.setAttribute(attrNode.getNodeName(), attrNode.getNodeValue());
-                }
-
-                DocumentFragment inheritFragment = xmlDoc.createDocumentFragment();
-                NodeList inhChildren = inheritFromElem.getChildNodes();
-                for(int i = inhChildren.getLength() - 1; i >= 0; i--)
-                {
-                    Node childNode = inhChildren.item(i);
-
-                    // only add if there isn't an attribute overriding this element
-                    final String nodeName = childNode.getNodeName();
-                    if(element.getAttribute(nodeName).length() == 0 && (! excludeElems.contains(nodeName)))
-                    {
-                        Node cloned = childNode.cloneNode(true);
-                        if(cloned.getNodeType() == Node.ELEMENT_NODE)
-                            ((Element) cloned).setAttribute("_inherited-from", inheritType);
-                        inheritFragment.insertBefore(cloned, inheritFragment.getFirstChild());
-                    }
-                }
-
-                element.insertBefore(inheritFragment, element.getFirstChild());
+                inheritElement(inheritFromElem, element, excludeElems, inheritType);
             }
 
             // find the next one if we have more parents
@@ -666,6 +745,14 @@ public class XmlSource
 
     public void addMetaInformation()
     {
+        NodeList existing = xmlDoc.getDocumentElement().getElementsByTagName("meta-info");
+        if(existing.getLength() > 0)
+        {
+            xmlDoc.getDocumentElement().removeChild(existing.item(0));
+            metaInfoElem = null;
+            metaInfoOptionsElem = null;
+        }
+
         metaInfoElem = xmlDoc.createElement("meta-info");
         xmlDoc.getDocumentElement().appendChild(metaInfoElem);
 
