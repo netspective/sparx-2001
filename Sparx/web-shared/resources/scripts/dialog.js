@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.30 2003-05-01 19:49:55 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.31 2003-05-05 22:24:01 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -614,6 +614,8 @@ function DialogField_focusNext(dialog)
 				nextField.typeName == "com.netspective.sparx.xaf.form.field.DurationField" || // duration is a composite
 				nextField.typeName == "com.netspective.sparx.xaf.form.DialogField" || // composites are of this type
 				nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector" ||
+				nextField.typeName == "com.netspective.sparx.xaf.form.field.HtmlField" ||
+				nextField.typeName == "com.netspective.sparx.xaf.form.field.SelectField" ||
 				(nextField.flags & FLDFLAG_INVISIBLE) != 0 ||
 				(nextField.flags & FLDFLAG_READONLY) != 0 ||
 				(nextField.flags & FLDFLAG_INPUT_HIDDEN) != 0)
@@ -1435,6 +1437,14 @@ function SocialSecurityField_onKeyPress(field, control, event)
 	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE], event);
 }
 
+function SelectField_loseFocus(field, control)
+{
+	if(control.value == "")
+		return true;
+
+	return SelectField_isValid(field, control);
+}
+
 function SelectField_isValid(field, control)
 {
 	var style = field.style;
@@ -1550,7 +1560,7 @@ function SelectField_isValid(field, control)
 }
 
 addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, TextField_isValid, null, TextField_onFocus, TextField_valueChanged, null, null);
-addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, null, null, null, SelectField_isValid, null, null);
+addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, SelectField_isValid, null, null, SelectField_loseFocus, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.netspective.sparx.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
 addFieldType("com.netspective.sparx.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, null, null, DateField_valueChanged, DateField_onKeyPress, null);
