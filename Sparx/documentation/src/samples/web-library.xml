@@ -9,7 +9,7 @@
         types of data manipulation that developers need to take care of in every application.  In the end the goal is
         to show you just how much power can be wielded with just a few lines of XML and Java code when armed with the
         strength of Sparx.
-        <br/>App: <a target="web-library" href="http://developer.netspective.com:8089/library">http://developer.netspective.com:8089/library</a>
-        <br/>ACE: <a target="web-library-ace" href="http://developer.netspective.com:8089/library/ace?_dc.user_id=ace&amp;_dc.password=ace">http://developer.netspective.com:8089/library/ace</a> (username 'ace', password 'ace')
+        <br/>App: <a target="web-library" href="http://developer.netspective.com/samples/library">http://developer.netspective.com/samples/library</a>
+        <br/>ACE: <a target="web-library-ace" href="http://developer.netspective.com/samples/library/ace?_dc.user_id=ace&amp;_dc.password=ace">http://developer.netspective.com/samples/library/ace</a> (username 'ace', password 'ace')
     </summary>
 </page>
