@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogFieldFactory.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogFieldFactory.java,v 1.2 2002-01-28 09:29:43 thua Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -126,6 +126,7 @@ public class DialogFieldFactory implements Factory
         conditionalsClasses.put("data", DialogFieldConditionalData.class); // legacy
         conditionalsClasses.put("display-when-partner-not-null", DialogFieldConditionalData.class);
         conditionalsClasses.put("apply-flag", DialogFieldConditionalApplyFlag.class);
+        conditionalsClasses.put("set-value", DialogFieldConditionalApplyFlag.class);
     }
 
     public static Map getFieldClasses()

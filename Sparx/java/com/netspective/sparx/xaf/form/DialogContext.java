@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogContext.java,v 1.2 2002-01-28 09:29:43 thua Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -887,7 +887,9 @@ public class DialogContext extends ServletValueContext
     public void setValue(String qualifiedName, String value)
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
-        state.value = value;
+        // if dialog doesnt have a field with the passed in name, skip setting the value
+        if(state != null)
+            state.value = value;
     }
 
     public void setValue(DialogField field, String value)

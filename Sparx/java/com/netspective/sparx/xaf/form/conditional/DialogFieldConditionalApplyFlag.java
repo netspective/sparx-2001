@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldConditionalApplyFlag.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogFieldConditionalApplyFlag.java,v 1.2 2002-01-28 09:29:43 thua Exp $
  */
 
 package com.netspective.sparx.xaf.form.conditional;
@@ -76,6 +76,7 @@ import com.netspective.sparx.xaf.form.DialogFieldConditionalAction;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xaf.form.field.SelectField;
 
 /**
  * Title:        The Extensible Application Platform
@@ -94,6 +95,7 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
     private String[] hasPermissions;
     private String[] lackPermissions;
     private SingleValueSource valueSource;
+    private SingleValueSource conditionalValueSource;
 
     public static Map dialogFieldNameValueMap = new HashMap();
     public static boolean flagNameMapIsAvail = false;
@@ -154,9 +156,10 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
         String flagName = elem.getAttribute("flag");
         if(!flagNameMapIsAvail) setupDialogFieldNameValueMap();
         Integer fieldFlagValue = (Integer) dialogFieldNameValueMap.get(flagName);
-        if(fieldFlagValue == null)
-            sourceField.addErrorMessage("Conditional " + conditionalItem + " has has an invalid 'flag' attribute (" + flagName + ").");
-        else
+        //if(fieldFlagValue == null)
+        //    sourceField.addErrorMessage("Conditional " + conditionalItem + " has has an invalid 'flag' attribute (" + flagName + ").");
+        //else
+        if(fieldFlagValue != null)
             setDialogFieldFlag(fieldFlagValue.intValue());
 
         clearFlag = elem.getAttribute("clear").equals("yes");
@@ -199,6 +202,10 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
         if(valueAvailStr.length() > 0)
             valueSource = ValueSourceFactory.getSingleOrStaticValueSource(valueAvailStr);
 
+        // if the action is "set-value" then look for the value to set the field to
+        String valueStr = elem.getAttribute("value");
+        if (valueStr.length() > 0)
+            this.conditionalValueSource = ValueSourceFactory.getSingleOrStaticValueSource(valueStr);
         return true;
     }
 
@@ -283,8 +290,18 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
         }
 
         if(status && clearFlag)
+        {
             dc.clearFlag(getSourceField().getQualifiedName(), dialogFieldFlag);
+        }
         else if(status)
+        {
             dc.setFlag(getSourceField().getQualifiedName(), dialogFieldFlag);
+        }
+
+        if (status && conditionalValueSource != null)
+        {
+            DialogField df = getSourceField();
+            dc.setValue(df, valueSource.getObjectValue(dc).toString());
+        }
     }
 }
