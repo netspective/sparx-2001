@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.5 2002-12-26 19:39:49 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.6 2002-12-27 00:30:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -101,6 +101,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     private boolean ignoreLogin;
     private long startTime;
     private String navSkinName;
+    private String navId;
     private NavigationContext nc;
     private NavigationPage page;
 
@@ -114,6 +115,8 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         ignoreLogin= false;
         nc = null;
         page = null;
+        navSkinName = null;
+        navId = null;
     }
 
     public final String getTitle()
@@ -153,7 +156,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
     public void setPopup(String value)
     {
-        popup = value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false);
+        setPopup(value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false));
     }
 
     public void setIgnoreLogin(boolean value)
@@ -163,12 +166,17 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
     public void setIgnoreLogin(String value)
     {
-        popup = value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false);
+        setIgnoreLogin(value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false));
     }
 
     public void setNavSkin(String value)
     {
         navSkinName = value;
+    }
+
+    public void setNavId(String navId)
+    {
+        this.navId = navId;
     }
 
     public final String[] getPermissions()
@@ -346,23 +354,18 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 {
                     navSkin = navSkinName != null ? SkinFactory.getNavigationSkin(navSkinName) : SkinFactory.getNavigationSkin();
                     if(navSkin == null)
-                        throw new JspException("Navigation skin not found.");
+                    {
+                        out.print("<i><b>Navigation skin '"+ navSkinName +"' not found, please pass a valid navigation skin name using 'navSkin' attribute.</b></i><p>");
+                        if (handleDefaultBodyItem())
+                            return SKIP_BODY;
+                        else
+                            return EVAL_BODY_INCLUDE;
+                    }
                 }
 
-                nc = navTree.createContext(pageContext, navSkin, popup);
-                page = (NavigationPage) nc.getPage();
-
-                if (page == null)
-                    page = createDefaultPage();
-
-                if(page != null)
-                {
-                    page.setHeading(this.getHeading());
-                    page.setTitle(this.getTitle());
-                    page.handlePageBeforeBody(nc);
-                }
-                else
-                    out.print("No navigation page (or default) found.");
+                String navId = req.getPathInfo();
+                nc = navTree.createContext(pageContext, navId == null ? this.navId : navId, navSkin, popup);
+                navSkin.renderNavigation(out, navTree, nc);
             }
             else
                 out.print("NavigationTree navTree is null.");

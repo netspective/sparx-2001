@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.6 2002-12-26 19:23:41 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.7 2002-12-27 00:30:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -100,6 +100,8 @@ public class SkinFactory implements Factory
         addDialogSkin("default", new StylizedDialogSkin());
         addDialogSkin("standard", new StandardDialogSkin());
         addDialogSkin("hand-held", new HandHeldDialogSkin());
+
+        addNavigationSkin("default", new HtmlTabbedNavigationSkin());
     }
 
     public static void addReportSkin(String id, ReportSkin skin)
