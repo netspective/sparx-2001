@@ -258,26 +258,31 @@ public class QuerySelect
 		else
 		{
 			int paramsCount = bindParams.size();
-            int i=0;
-			while (i < paramsCount)
+            int index = 1;
+            // the 'paramsCount' does not represent the actual number of bind
+            // parameters. Each entry of paramCount might be a ListValueSource
+            // which will contain additional bind params.
+			for (int i=0; i < paramsCount;i++)
 			{
                 Object bindObj = bindParams.get(i);
                 if (bindObj instanceof ListValueSource)
                 {
-
                     // if its a ListValueSource, loop and get the values
                     String[] values = ((ListValueSource) bindObj).getValues(vc);
-			        for(int q = 0; q < values.length; q++)
+                    int q;
+			        for(q = 0; q < values.length; q++)
 			        {
-				        stmt.setString(i+q+1, values[q]);
+				        stmt.setString(index+q, values[q]);
 			        }
+                    index = index + q;
                 }
                 else
                 {
-    				stmt.setString(i+1, ((SingleValueSource) bindObj).getValue(vc));
+    				stmt.setString(index, ((SingleValueSource) bindObj).getValue(vc));
+                    index++;
                 }
 
-                i++;
+
 			}
 		}
 
