@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: popup.js,v 1.2 2002-08-25 16:03:52 shahid.shah Exp $
+ * $Id: popup.js,v 1.3 2002-12-26 19:43:21 shahid.shah Exp $
  */
 
 //****************************************************************************
@@ -67,6 +67,7 @@ function DialogFieldPopupWindowClass(windowName, features)
 }
 
 windowClasses["default"] = new DialogFieldPopupWindowClass("DefaultPopupWindow", "width=520,height=350,scrollbars,resizable");
+windowClasses["enum"] = new DialogFieldPopupWindowClass("EnumPopupWindow", "width=400,height=250,scrollbars,resizable");
 
 //****************************************************************************
 // PopulateControlInfo class
@@ -88,7 +89,7 @@ function PopulateControlInfo(sourceForm, sourceField, fieldName)
 		this.control = this.field.getControl(this.dialog);
 	else
 	{
-		this.control = this.field.getFieldAreaElement(this.dialog);//            document.all.item(fieldName);        
+		this.control = this.field.getFieldAreaElement(this.dialog);
 		if(this.control == null)
 			alert("In DialogFieldPopup for " + sourceForm + "." + sourceField + ", fill field '" + fieldName + "' could not be found.");
 	}
@@ -207,14 +208,6 @@ function DialogFieldPopup_doPopup()
 
 function chooseItem()
 {
-	// any number of values may be passed in, with each one being filled appropriately    
-	var popup = opener.activeDialogPopup;    
+	var popup = opener.activeDialogPopup;
     popup.populateControls(arguments);
-    
-	//var controls = popup.controlsInfo;
-	//for(var i = 0; i < arguments.length; i++)
-	//	controls[i].populateValue(this.dialog, arguments[i]);
-		
-	//if(popup.closeAfterSelect)
-	//	popup.popupWindow.close();
 }

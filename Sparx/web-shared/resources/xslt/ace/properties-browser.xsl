@@ -63,7 +63,7 @@
 	</div>
 </xsl:template>
 
-<xsl:template match="xaf/factory[not(value-source)]">
+<xsl:template match="xaf/factory[not(value-source) and not(component-command)]">
 	<div class="page_source">
 		Source: <xsl:value-of select="@class"/>
 	</div>
@@ -125,5 +125,36 @@
 	</table>
 	</div>
 </xsl:template>
+
+    <xsl:template match="xaf/factory[component-command]">
+        <div class="page_source">
+            Source: <xsl:value-of select="@class"/>
+        </div>
+
+        <div class="content">
+        <table class="data_table" cellspacing="0" cellpadding="2" border="0">
+            <tr class="data_table_header">
+                <th class="data_table">Name</th>
+                <th class="data_table">Usage</th>
+                <th class="data_table">Parameters</th>
+                <th class="data_table">Class</th>
+            </tr>
+            <xsl:for-each select="*">
+                <xsl:sort select="@name"/>
+                <tr valign="top" class="data_table">
+                    <td class="data_table"><xsl:value-of select="@name"/></td>
+                    <td class="data_table"><xsl:value-of select="@usage" disable-output-escaping="yes"/></td>
+                    <td class="data_table"><xsl:value-of select="@params" disable-output-escaping="yes"/></td>
+                    <td class="data_table">
+                        <font color="green"><xsl:value-of select="@class"/></font>
+                        <xsl:if test="descr">
+                            <br/><xsl:value-of select="descr" disable-output-escaping="yes"/>
+                        </xsl:if>
+                    </td>
+                </tr>
+            </xsl:for-each>
+        </table>
+        </div>
+    </xsl:template>
 
 </xsl:stylesheet>
