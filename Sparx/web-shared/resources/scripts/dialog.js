@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.18 2003-04-14 15:23:18 aye.thu Exp $
+ * $Id: dialog.js,v 1.19 2003-04-17 14:49:52 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -1037,6 +1037,10 @@ function submitOnblur(field, control)
 		var partnerControl = partnerField.getControl(dialog);
 
 		okToSubmit = (partnerControl.value == "") ? true : false;
+		if(okToSubmit && field.submitOnBlurCustomScript != "")
+		{
+			okToSubmit = field.submitOnBlurCustomScript(field, control);
+		}
 	}
 
 	if(okToSubmit)

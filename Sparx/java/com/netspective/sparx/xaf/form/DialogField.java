@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.21 2003-04-08 19:33:18 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.22 2003-04-17 14:49:52 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -152,6 +152,7 @@ public class DialogField
 		private int autoBlurLength;
 		private String autoBlurExcludeRegExp;
 		private String submitOnBlurPartnerField;
+		private String submitOnBlurCustomScript;
 
     /**
      * Creates a dialog field
@@ -377,6 +378,9 @@ public class DialogField
 	{
 		String partnerField = elem.getAttribute("partner");
 		submitOnBlurPartnerField = (partnerField == null || partnerField.length() == 0) ? "" : partnerField;
+
+		String customScript = elem.getAttribute("custom-script");
+		submitOnBlurCustomScript = (customScript == null || customScript.length() == 0) ? "" : customScript;
 	}
 
 	public void importAutoBlurFromXml(Element elem)
@@ -1618,6 +1622,7 @@ public class DialogField
 			{
 				sb.append("field.submitOnBlur = true;\n");
 				sb.append("field.submitOnBlurPartnerField ='" + submitOnBlurPartnerField + "';\n");
+				sb.append("field.submitOnBlurCustomScript = new Function(\"field\", \"control\", \"" + submitOnBlurCustomScript + "\");\n");
 			}
 
 			return sb.toString();
