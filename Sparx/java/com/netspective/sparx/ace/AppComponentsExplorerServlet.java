@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppComponentsExplorerServlet.java,v 1.3 2002-08-30 00:31:47 shahid.shah Exp $
+ * $Id: AppComponentsExplorerServlet.java,v 1.4 2002-12-26 19:19:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -67,25 +67,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.netspective.sparx.ace.page.AppAccessControlListPage;
-import com.netspective.sparx.ace.page.AppConfigurationPage;
-import com.netspective.sparx.ace.page.AppDialogsPage;
-import com.netspective.sparx.ace.page.AppFactoryPage;
-import com.netspective.sparx.ace.page.AppInitParamsPage;
-import com.netspective.sparx.ace.page.AppMetricsPage;
-import com.netspective.sparx.ace.page.DataSourcesPage;
-import com.netspective.sparx.ace.page.DatabaseGenerateDDLPage;
-import com.netspective.sparx.ace.page.DatabaseGenerateJavaPage;
-import com.netspective.sparx.ace.page.DatabaseMetaDataPage;
-import com.netspective.sparx.ace.page.DatabasePage;
-import com.netspective.sparx.ace.page.DatabaseQueryDefnPage;
-import com.netspective.sparx.ace.page.DatabaseSchemaDocPage;
-import com.netspective.sparx.ace.page.DatabaseSqlPage;
-import com.netspective.sparx.ace.page.DocumentsPage;
-import com.netspective.sparx.ace.page.HomePage;
-import com.netspective.sparx.ace.page.MonitorLogPage;
-import com.netspective.sparx.ace.page.SystemPropertiesPage;
-import com.netspective.sparx.ace.page.DatabaseImportData;
+import com.netspective.sparx.ace.page.*;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
 import com.netspective.sparx.xaf.html.Component;
@@ -152,6 +134,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 
         pagesPath.registerPage("/application", new RedirectPage("application", "Application", null));
         pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
+        pagesPath.registerPage("/application/navigation", new AppNavigationPage());
         pagesPath.registerPage("/application/config", new AppConfigurationPage());
         pagesPath.registerPage("/application/servlet-context", new AppInitParamsPage());
         pagesPath.registerPage("/application/acl", new AppAccessControlListPage());
@@ -165,6 +148,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
         pagesPath.registerPage("/application/factory/tasks", new AppFactoryPage("tasks", "Tasks", AppFactoryPage.FACTORY_TASK));
         pagesPath.registerPage("/application/factory/skins", new AppFactoryPage("skins", "Skins", AppFactoryPage.FACTORY_SKIN));
         pagesPath.registerPage("/application/factory/sql-comparisons", new AppFactoryPage("sql-comparisons", "SQL Comparisons", AppFactoryPage.FACTORY_SQL_COMPARE));
+        pagesPath.registerPage("/application/factory/component-commands", new AppFactoryPage("component-commands", "Component Commands", AppFactoryPage.FACTORY_COMPONENT_COMMANDS));
 
         pagesPath.registerPage("/database", new DatabasePage());
         pagesPath.registerPage("/database/sql", new DatabaseSqlPage());
