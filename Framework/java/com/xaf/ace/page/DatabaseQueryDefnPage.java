@@ -9,7 +9,6 @@ import org.w3c.dom.*;
 
 import com.xaf.ace.*;
 import com.xaf.db.*;
-import com.xaf.db.generate.*;
 import com.xaf.form.*;
 import com.xaf.config.*;
 import com.xaf.page.*;
