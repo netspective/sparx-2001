@@ -18,7 +18,7 @@ Setup instructions:
        * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
 -->
 
-<project name="app" default="generate-html">
+<project name="app" default="generate-all">
 
     <target name="init">
     	<tstamp/>
