@@ -5,25 +5,25 @@
         <title>Overview</title>
         <para>
         The first step in developing a web application is giving the user the ability to
-        enter data and retrieve data. Sparx's answer to this is the <emphasis>Dialog</emphasis> object; it is through the
-        Dialogs that a user can create new data, edit existing data, and remove data. A dialog
-        object provides a multitude of features that are built in: client-side/server-side
+        enter data and retrieve data. &product-name;'s answer to this is the <emphasis>Dialog</emphasis> object; it is through the
+        Dialogs that a user can create new data, edit existing data, and remove data. A &product-name; Dialog
+        object provides a multitude of features such as client-side/server-side
         data verifications and validations, dialog state tracking, and skin association.
         </para>
 
         <para>
         Defining the dialog in the  <filename class="conf">WEB-INF/ui/dialog.xml</filename>  is
-        the first step towards creating a dialog. Dialogs are defined with the <emphasis>&lt;dialog&gt;</emphasis> tag
-        and each dialog must belong to a package of dialogs represented by <emphasis>&lt;dialogs&gt;</emphasis> tag.
+        the first step towards creating a dialog. Dialogs are defined with the <emphasis role="bold">&lt;dialog&gt;</emphasis> tag
+        and each dialog must belong to a package of dialogs represented by <emphasis role="bold">&lt;dialogs&gt;</emphasis> tag.
         The following is a sample dialog entry from the <emphasis>web-cura</emphasis> sample application:
         <programlisting>
-            &lt;dialogs package="train"&gt;
-                &lt;dialog name="test" heading="Add Account"&gt;
-                    &lt;field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/&gt;
-                    &lt;field.select name="org_type" caption="Type" style="multidual" choices="query:org.enum-types-all"/&gt;
-                    &lt;field.integer name="employees" caption="Employees" min="10" max="20"/&gt;
-                &lt;/dialog&gt;
-            &lt;/dialogs>
+    &lt;dialogs package="train"&gt;
+        &lt;dialog name="test" heading="Add Account"&gt;
+            &lt;field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/&gt;
+            &lt;field.select name="org_type" caption="Type" style="multidual" choices="query:org.enum-types-all"/&gt;
+            &lt;field.integer name="employees" caption="Employees" min="10" max="20"/&gt;
+        &lt;/dialog&gt;
+    &lt;/dialogs&gt;
         </programlisting>
 
         </para>
@@ -32,10 +32,10 @@
     <section>
         <title>Data Fields</title>
         <para>
-        One can think of a dialog as a container/manager object consisting of data field objects which have their own
-        behaviors and properties. With these data fields XAF provides the flexibility to create customized forms for
+        One can think of a dialog as a container/manager object consisting of data fields which have their own
+        behaviors and properties. These data fields provide the flexibility to create customized forms for
         data processing and it also provides the ability to create new fields or modify existing ones. Currently the
-        following built-in general fields are available:
+        following general fields are available:
         <itemizedlist>
             <listitem>Text</listitem>
             <listitem>Integer</listitem>
@@ -52,9 +52,17 @@
             <listitem>Social Security Number</listitem>
             <listitem>Phone Number</listitem>
         </itemizedlist>
-
+        All available fields can be seen in &explorer-name;:
+        
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/dialogs/ace-fields.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>                
+        
         Every type of field available has its own both client-side and server-side validation
-        features.
+        features. For example, an integer field allows only numerical values into the field and
+        a social security number field only allows dashes and numeric digits.
         </para>
     </section>
 
@@ -66,8 +74,37 @@
     <section>
         <title>Look &amp; Feel: Skins</title>
         <para>
-        Skins provide consistency look and feel and allows the same code to run on a variety of
-        browsers and platforms (e.g. hand-helds).
+        Skins provide consistent look and feel and allows the same code to run on a variety of
+        browsers and platforms (e.g. hand-helds). Skins are defined in 
+        <filename class="conf">WEB-INF/ui/dialog.xml</filename> with the XML tag
+        <emphasis role="bold"> &lt;dialog-skin&gt;</emphasis>. The following is an example
+        of how a skin is defined:
+        <programlisting>
+        <![CDATA[
+    <dialog-skin name="TestSkin">
+        <outer-table-attrs>
+            cellspacing='5' cellpadding='5' border='5'
+        </outer-table-attrs>
+        <frame-head-row-attrs>
+            bgcolor='#6495ed'
+        </frame-head-row-attrs>
+        <caption-cell-attrs>
+            style='font-family: Andale Mono'
+        </caption-cell-attrs>
+        <include-pre-script src="/test/script.js"/>
+        <include-post-script src="/test/script-post.js"/>        
+        <append-post-script> alert(activeDialog);   </append-post-script>
+    </dialog-skin>
+        ]]>
+        </programlisting>
+        The created skin can be used by a dialog in a JSP:
+        <programlisting>
+            <![CDATA[
+     <xaf:dialog name="test.Test1" skin="TestSkin"/>
+            ]]>
+        </programlisting>  
+        Note: Refer to the <xref linkend="Using the dialog"/> section for the complete description on how
+        to use the <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> tag.
         </para>
     </section>
 
@@ -76,18 +113,157 @@
         <title>Testing the dialog</title>
         <section>
             <title>Unit Testing</title>
-
+            <para>
+            All dialogs defined in <filename class="conf">WEB-INF/ui/dialog.xml</filename>
+            are listed in &explorer-name; under 
+            <menuchoice role="bold">
+                <guimenu>Application</guimenu>  
+                <guimenuitem>Dialogs</guimenuitem>                
+            </menuchoice>    menu item.
+            </para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/dialogs/ace-dialogs.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>              
+            
+            <para>
+            Clicking on the Action(<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_dialog.gif" format="GIF"/>
+            </imageobject>) icon of any dialog displays a test page with the dialog in it.
+            Each dialog can be tested by entering values for the dialog and then pressing the OK button:
+            </para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/dialogs/ace-testdialog.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>              
+            
+            <para>            
+            This will display the entered values:
+            </para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/dialogs/ace-testresult.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>              
+            
+            <para>                                    
+            </para>
         </section>
-        <section>
-            <title>Integration Testing</title>
-
-        </section>
-
     </section>
 
-    <section>
+    <section id="Using the dialog" xreflabel="Using the dialog">
         <title>Using the dialog</title>
+        <para>
+            &product-name; provides convenient yet flexible ways to use and enhance the behavior of
+            Dialog objects. The most common usage of a dialog is to define the dialog in the
+            <filename class="conf">WEB-INF/ui/dialog.xml</filename> file and then to use the JSP
+            custom tag <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> to invoke the dialog. 
+            <programlisting>
+        <![CDATA[
+    <xaf:dialog name="test.Test1"/>
+        ]]>                
+            </programlisting>                
+            This utilizes the built-in functionality and behavior of a &product-name; dialog. The user does not
+            need to be concerned with various processes of a HTML form submittal such as
+            data validations, verifying the correct stage execution(blocking redundant submittals), and
+            processing the form's action.
 
+            The common way to define an action for a dialog is to insert the action items within the
+            dialog's start and end tags:
+            <programlisting>
+        <![CDATA[
+         <xaf:dialog name="test.Test1">
+            <xaf:query name="MyQuery" skin="report"/>        
+         </xaf:dialog>
+        ]]>                
+            </programlisting>
+            The above snippet of JSP code describes a dialog which will execute a SQL query when it is
+            submitted. Instead of a query, one can also write pure Java code:
+            <programlisting>
+        <![CDATA[
+     <xaf:dialog name="test.Test1">
+        <%
+            response.sendRedirect("/home");
+        %>
+     </xaf:dialog>
+    ]]>                
+            </programlisting>        
+            Everything within the dialog custom tags (HTML, Java code, custom tags) are considered the
+            action of the dialog.
+        </para>
+        <para>
+            Usually, the action of the dialog is defined outside of the 
+            definition of the dialog such as in the JSP but there is a way to define
+            an action for a dialog within the <filename class="conf">WEB-INF/ui/dialog.xml</filename>.
+            The following is an example:
+            <programlisting>
+    <![CDATA[
+
+    <dialog name="Test4" heading="Test Fields" loop="yes" retain-params="*">
+        <field.report name="report_field">
+            <statement name="list">
+                select 0 as "checkbox", userid as "ID", lname as "Name"
+                from users
+
+                <report skin="eimo-report">
+                    <column type="checkbox" align="center" field-name="my_name" field-value="my_name_row_${1}"/>
+                    <column heading="ID" output="abc% $ ${2}" format="%"/>
+                    <column heading="Last Name" url="create-app-url:/${2}" calc="count"/>
+                </report>
+            </statement>
+        </field.report>
+    </dialog>            
+    ]]>                
+            </programlisting>               
+        </para>
+        <section>
+            <title>Using listeners</title>
+            <para>
+            &product-name; provides a way to implement business logic into the behavior
+            of a dialog by providing a feature called <emphasis>Listeners</emphasis>.
+            A listener is a Java object which is invoked when state changes occur in a dialog. 
+            It contains various behavior methods such as execution, data
+            validation, and data population. All listeners must extend &framework-name;'s
+            listener class <classname>com.xaf.form.DefaultDialogContextListener</classname>. 
+            The following is an example of a listener used in a JSP:
+            <programlisting>
+    <![CDATA[
+    request.setAttribute
+    ("test-listener", new DefaultDialogContextListener()
+        {
+            public boolean isDialogValid(DialogContext dc, boolean fieldsAlreadyValidated)
+            {   
+                // insert code here to validate dialog
+            }
+        }
+    );
+    
+    <xaf:dialog name="Test.Test1" listener="test-listener"/>
+        
+    ]]>                       
+            </programlisting>
+            In the example above, the <emphasis>test-listener</emphasis>'s  <methodname>isDialogValid</methodname> method is
+            called when the dialog needs to check validity of data, before the dialog
+            has performed its own validation.
+            </para>
+        </section>
+        
+        <section>
+            <title>Defining a customized Java Dialog class</title>
+            <para>
+            There could be times when the total built-in behavior of a dialog does not satisfy the requirements
+            of a web application; thus &product-name; provides a way to create a dialog
+            object outside of the <filename class="conf">WEB-INF/ui/dialog.xml</filename> file. 
+            For example, a dialog named <emphasis>Test1</emphasis> belonging to a package named
+            <emphasis>Test</emphasis> can be created using a Java class 
+            named <classname>Test1</classname> also belonging to a package called <classname>Test</classname>. 
+            The <classname>Test1</classname> Java class must extend the &framework-name;'s dialog class called
+            <classname>com.xaf.form.Dialog</classname>. The behavior of the dialog can then be modified
+            by overwriting the methods available or introducing new methods.
+            The dialog can be then used in a JSP as if it is defined in the XML file.
+            </para>
+        </section>
     </section>
 
 </chapter>

@@ -3,90 +3,230 @@
     <section>
         <title>Overview</title>
         <para>
-            Sparx provides a centralized location to create and store all dynamic SQL statements
+            One of &product-name;'s powerful features is to generate dynamic SQL statements
+            based upon user input. The dynamic SQL generator can generate either
+            pageable reports with configurable rows per page or comma seperated
+            value(CSV) reports. All dynamic query configurations are stored 
             in a single repository: <filename class="conf">WEB-INF/ui/statement.xml</filename>.
         </para>
     </section>
 
     <section>
         <title>Creating a dynamic query</title>
-        <para>
-            Sparx provides a very powerful dynamic SQL query generator which can generate either
-            pageable reports with configurable rows per page or comma seperated
-            value(CSV) reports.
-        </para>
         <section>
             <title>Defining the query</title>
             <para>
             A dynamic query in Sparx is defined with the <emphasis role="bold">&lt;query-defn&gt;</emphasis>
             XML tag. Within this XML node,  column data fields, join tables and conditions,
-            dialog for the bind parameter values, conditions, and order fields are defined.
+            dialog for the bind parameter values, and "order by" fields are defined.
             The following is a sample dynamic query definition:
             <programlisting>
-                &lt;query-defn id="Organization"&gt;
+    &lt;query-defn id="Organization"&gt;
 
-                    &lt;!-- Fields --&gt;
-                    &lt;field id="org_id" caption="Account ID" join="org" column="org_id"&gt;
-                        &lt;report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}"/&gt;
-                    &lt;/field&gt;
-                    ...
-                    ...
-                    &lt;field id="org_code" caption="Account Code" join="org" column="org_code"&gt;
-                        &lt;report heading="Code"/&gt;
-                    &lt;/field&gt;
+        &lt;!-- Fields --&gt;
+        &lt;field id="org_id" caption="Account ID" join="org" column="org_id"&gt;
+            &lt;report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}"/&gt;
+        &lt;/field&gt;
+        ...
+        ...
+        &lt;field id="org_code" caption="Account Code" join="org" column="org_code"&gt;
+            &lt;report heading="Code"/&gt;
+        &lt;/field&gt;
 
-                    &lt;!-- Joins --&gt;
-                    &lt;join id="org" table="org" auto-include="yes"/&gt;
-                    &lt;join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)"/&gt;
+        &lt;!-- Joins --&gt;
+        &lt;join id="org" table="org" auto-include="yes"/&gt;
+        &lt;join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)"/&gt;
 
-                    &lt;select-dialog name="org_search" allow-debug="yes" show-output-dests="no" hide-readonly-hints="yes" heading="Search Accounts"&gt;
-                        &lt;field.text query-field="org_code"/&gt;
-                        ...
-                        ...
-                        &lt;select&gt;
-                            &lt;display field="org_id"/&gt;
-                            &lt;display field="org_code"/&gt;
-                            ...
-                            ...
-                            &lt;order-by field="form:sort_order"/&gt;
-
-                            &lt;condition field="org_name" allow-null="no" comparison="starts-with" value="form:org_name" connector="and" bind-expr="upper(?)"/&gt;
-                            &lt;condition field="org_abbrev" allow-null="no" comparison="starts-with" value="form:org_abbrev" connector="and" bind-expr="upper(?)"/&gt;
-                            &lt;condition field="org_industry" allow-null="no" comparison="equals" value="form:org_industry" connector="and"/&gt;
-                        &lt;/select>
-                        &lt;director cancel-url="index.jsp" submit-caption="Search"/&gt;
-                    &lt;/select-dialog&gt;
-
-                &lt;/query-defn&gt;
-            </programlisting>
-            </para>
-        </section>
-
-        <section>
-            <title>Defining the report</title>
-            <para>
+        &lt;select-dialog name="org_search" allow-debug="yes" show-output-dests="no" 
+            hide-readonly-hints="yes" 
+            heading="Search Accounts"&gt;
+            &lt;field.text query-field="org_code"/&gt;
             ...
+            ...
+            &lt;select&gt;
+                &lt;display field="org_id"/&gt;
+                &lt;display field="org_code"/&gt;
+                ...
+                ...
+                &lt;order-by field="form:sort_order"/&gt;
+
+                &lt;condition field="org_name" allow-null="no" 
+                    comparison="starts-with" 
+                    value="form:org_name" 
+                    connector="and" 
+                    bind-expr="upper(?)"/&gt;
+                &lt;condition field="org_abbrev" allow-null="no" 
+                    comparison="starts-with" 
+                    value="form:org_abbrev" 
+                    connector="and" 
+                    bind-expr="upper(?)"/&gt;
+                &lt;condition field="org_industry" allow-null="no" 
+                    comparison="equals" 
+                    value="form:org_industry" 
+                    connector="and"/&gt;
+            &lt;/select>
+            &lt;director cancel-url="index.jsp" submit-caption="Search"/&gt;
+        &lt;/select-dialog&gt;
+    &lt;/query-defn&gt;
+            </programlisting>
+
+            <variablelist>
+                <title>XML Tag Definitions</title>
+                <varlistentry>
+                    <term> <sgmltag class="element">field</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents database column names and column expressions used for generating the SQL.
+                        It is available for setting the report columns(represented by the 
+                        <sgmltag class="element">display</sgmltag> tag) and setting the 
+                        condition strings(represented by the <sgmltag class="element">condition</sgmltag> tag).
+                        The displayed report column value can be formatted using the 
+                        <sgmltag class="element">report</sgmltag> tag which can be used as a child node
+                        definition.
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">join</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents database tables that are included for the JOIN part of the SQL statement.
+                        Each element is only included as a join if the corresponding 
+                        <sgmltag class="element">field</sgmltag> element is being used or the attribute                        
+                        <sgmltag class="attribute">auto-include</sgmltag> is set to "yes".
+                        </para>
+                    </listitem>
+                </varlistentry>  
+                <varlistentry>
+                    <term><sgmltag class="element">select-dialog</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents a query definition dialog object containing fields for entering values of the
+                        bind parameters. When the <sgmltag class="attribute">allow-debug</sgmltag>
+                        attribute is set to "yes", the dialog object displays a debug check box. When
+                        this checkbox is checked and the dialog is submitted, the generated SQL 
+                        with its bind parameters will be displayed for debugging purposes 
+                        instead of execution of the generated SQL.
+                        </para>
+                    </listitem>
+                </varlistentry>                  
+                <varlistentry>
+                    <term><sgmltag class="element">select</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents the SQL query which is being generated. It contains entries for
+                        the report columns(<sgmltag class="element">display</sgmltag>), 
+                        order-by selections(<sgmltag class="element">order-by</sgmltag>), and 
+                        condition statements(<sgmltag class="element">condition</sgmltag>).
+                        </para>
+                    </listitem>
+                </varlistentry> 
+                <varlistentry>
+                    <term><sgmltag class="element">display</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents the SQL columns that are retrieved from the database.
+                        </para>
+                    </listitem>
+                </varlistentry>              
+                <varlistentry>
+                    <term><sgmltag class="element">order-by</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents the sort criteria.
+                        </para>
+                    </listitem>
+                </varlistentry>       
+                <varlistentry>
+                    <term><sgmltag class="element">condition</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents the selection criteria.
+                        </para>
+                    </listitem>
+                </varlistentry>                      
+                <varlistentry>
+                    <term><sgmltag class="element">director</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents the dialog director object which can be used to change
+                        the text of the action buttons and their respective URLs.
+                        </para>
+                    </listitem>
+                </varlistentry>                         
+            </variablelist>
             </para>
         </section>
-
     </section>
 
     <section>
-        <title>Testing the static query</title>
+        <title>Testing the dynamic query</title>
         <section>
             <title>Unit Testing</title>
-
+            <para>
+            All available dynamic query definitons can be viewed in &explorer-name; under the
+            <menuchoice role="bold">
+                <guimenu>Database</guimenu>  
+                <guimenuitem>
+                    SQL Query Definitions                    
+                </guimenuitem>
+            </menuchoice>                   
+            menu item:
+            </para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/statements/ace-querydefs.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>        
+            
+            <para>
+            By clicking on the name of the query definition, all the entries of the query 
+            definition can be viewed:
+            </para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/statements/ace-querydefs2.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>                  
+            <para>
+            Clicking on the Action(<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_dialog.gif" format="GIF"/>
+            </imageobject>) icon in the Select Table shown above displays the query
+            definition dialog represented by the <emphasis role="bold">&lt;select-dialog&gt;</emphasis> tag.
+            </para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/statements/ace-querydefs3.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>                              
+            <para>
+            The debug checkbox is very useful to debug the dynamic query which is being generated
+            according to the user's configuration.
+            </para>
         </section>
         <section>
             <title>Integration Testing</title>
-
+            <para>
+            The query definiton dialog can be used in a JSP using the custom tag 
+            <emphasis role="bold">&lt;xaf:query-select-dialog&gt;</emphasis>.
+            For example, the following entry displays a query definition dialog inside a JSP :
+            <programlisting>
+&lt;xaf:query-select-dialog source="Order" name="region_order_search"&gt;
+            </programlisting>
+            </para>
         </section>
 
     </section>
     <section>
         <title>Using the dynamic query</title>
         <para>
-        ...
+        A dynamic query statenment is generated from the query definition dialog and the resulting report
+        can be configured in different ways. 
+        The attribute <sgmltag class="attribute">show-output-dests</sgmltag> is used to give the user
+        several options: HTML output(pageable report and row count per page), CSV output format, 
+        tab delimited format.
+        
+        
+        
         </para>
     </section>
 

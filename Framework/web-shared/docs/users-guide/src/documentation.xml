@@ -36,9 +36,10 @@
 <!ENTITY appservers-dir-lit "&win32-default-drive;\utils\app-servers">
 <!ENTITY appservers-dir-ref "<emphasis>Application Servers</emphasis> directory">
 <!ENTITY resin-dir-ref "<emphasis>Resin Home</emphasis> directory">
-<!ENTITY product-name "Sparx">
+<!ENTITY product-name "<trademark>Sparx</trademark>">
 <!ENTITY framework-name "XAF">
 <!ENTITY explorer-name "ACE">
+<!ENTITY valuesource "Value Source">
 ]>
 
 <book>
