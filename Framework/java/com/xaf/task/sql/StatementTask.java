@@ -39,6 +39,7 @@ public class StatementTask extends AbstractTask
 
 	public void reset()
 	{
+		super.reset();
 		statementInfo = null;
 		stmtName = null;
 		stmtSourceId = null;
