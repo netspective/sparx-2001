@@ -2,13 +2,18 @@
 
 <project version="2">
   <component class="com.intellij.ant.AntConfiguration" />
-  <component class="com.intellij.ant.AntManager" />
+  <component class="com.intellij.ant.AntManager">
+    <option name="OPEN_IN_TEXT_VIEW" value="false" />
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+  </component>
   <component class="com.intellij.codeInsight.CodeInsightManager">
     <disable_hints />
   </component>
   <component class="com.intellij.compiler.Compiler">
     <option name="DEFAULT_COMPILER" value="Javac" />
     <option name="COMPILE_IN_BACKGROUND" value="false" />
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="HIDE_WARNINGS" value="false" />
     <excludeFromCompile>
       <directory path="C:/Utils/java/jdk1.3.1" includeSubdirectories="true" />
     </excludeFromCompile>
@@ -67,6 +72,7 @@
     <Diff>
       <option name="REVISION_TAG" value="HEAD" />
       <option name="DATE_TAG" value="" />
+      <option name="IGNORE_WHITESPACE" value="false" />
     </Diff>
     <Add>
       <option name="ADD_AS_BINARY" value="false" />
@@ -96,6 +102,10 @@
       <option name="QUIET_MODE" value="true" />
       <option name="ADDITIONAL_OPTIONS" value="" />
     </Log>
+    <Editors>
+      <option name="NON_RECURSIVE" value="false" />
+      <option name="FORCE_RECURSIVE" value="false" />
+    </Editors>
     <option name="CLIENT_PATH" value="C:/Program Files/WinCvs 1.2/cvs.exe" />
     <option name="EXTERNAL_DIFF_PATH" value="" />
     <option name="CVS_ENABLED" value="true" />
@@ -103,6 +113,8 @@
     <option name="WORKING_FILES_READONLY" value="false" />
     <option name="COMPRESSION_LEVEL" value="0" />
     <option name="ADDITIONAL_OPTIONS" value="" />
+    <option name="REUSE_LAST_LOG_MESSAGE" value="false" />
+    <option name="PUT_FOCUS_INTO_LOG_MESSAGE" value="false" />
     <option name="SHOW_PROJECT_ROOTS" value="true" />
     <option name="SHOW_UPDATE_OPTIONS" value="true" />
     <option name="SHOW_COMMIT_OPTIONS" value="true" />
@@ -112,16 +124,15 @@
     <option name="SHOW_EDIT_OPTIONS" value="true" />
     <option name="SHOW_UNEDIT_OPTIONS" value="true" />
     <option name="SHOW_REMOVE_OPTIONS" value="true" />
+    <option name="SHOW_LOG_OPTIONS" value="true" />
+    <option name="SHOW_EDITORS_OPTIONS" value="true" />
     <option name="HIDE_UNKNOWN_FILES" value="false" />
     <option name="HIDE_MISSING_FILES" value="false" />
     <option name="HIDE_UP_TO_DATE_FILES" value="false" />
   </component>
   <component class="com.intellij.cvsSupport.CvsManager">
     <expanded_paths>
-      <path value="C:/Projects/Framework/java/com" />
-      <path value="C:/Projects/Framework/java" />
       <path value="C:/Projects/Framework/java/com/xaf/ace" />
-      <path value="C:/Projects/Framework/java/com/xaf" />
     </expanded_paths>
   </component>
   <component class="com.intellij.debugger.Debugger">
@@ -198,13 +209,14 @@
   <component class="com.intellij.execution.RunManager">
     <option name="SHOW_SETTINGS_BEFORE_RUNNING" value="true" />
     <option name="COMPILE_BEFORE_RUNNING" value="true" />
-    <configuration name="&lt;default&gt;" type="Application" default="true" selected="false">
+    <activeType name="Application" />
+    <configuration name="&lt;template&gt;" type="Application" default="true" selected="false">
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
-    <configuration name="&lt;default&gt;" type="Applet" default="true" selected="false">
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
       <option name="MAIN_CLASS_NAME" />
       <option name="HTML_FILE_NAME" />
       <option name="HTML_USED" value="false" />
@@ -213,7 +225,13 @@
       <option name="POLICY_FILE" value="C:/Program Files/Idea\config\appletviewer.policy" />
       <option name="VM_PARAMETERS" />
     </configuration>
-    <configuration name="&lt;default&gt;" type="Remote" default="true" selected="true">
+    <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_RUNNER" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="Remote" default="true" selected="true">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
@@ -229,27 +247,53 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppAccessControlListPage.java" column="13" line="13" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/BuildConfiguration.java" column="44" line="13" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/config/ConfigurationManager.java" column="36" line="24" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogManager.java" column="0" line="288" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/xml/XmlSource.java" column="22" line="109" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppConfigurationPage.java" column="0" line="40" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/Column.java" column="30" line="28" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/sql/StatementManager.java" column="56" line="313" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/value/ServletValueContext.java" column="64" line="55" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/value/ValueContext.java" column="45" line="32" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/AbstractColumn.java" column="84" line="95" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/AbstractRow.java" column="53" line="70" />
+      <file_info url="file://C:/Projects/web-cura/Database/java/dal/domain/row/TaskDependencyRow.java" column="47" line="113" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/xml/XmlSource.java" column="0" line="405" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/SchemaDocument.java" column="70" line="648" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppDialogsPage.java" column="51" line="42" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogFieldClientJavascript.java" column="16" line="29" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/Dialog.java" column="56" line="143" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogField.java" column="16" line="350" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogFieldPopup.java" column="24" line="34" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/field/TextField.java" column="0" line="252" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/skin/StandardDialogSkin.java" column="0" line="414" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/config/Configuration.java" column="18" line="128" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogContext.java" column="91" line="200" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/field/DurationField.java" column="3" line="57" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/BuildConfiguration.java" column="71" line="7" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/field/DateTimeField.java" column="148" line="401" />
     </recent_files>
+    <open_files>
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogContext.java" column="91" line="200" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogField.java" column="16" line="350" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/Dialog.java" column="56" line="143" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/skin/StandardDialogSkin.java" column="0" line="414" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogFieldPopup.java" column="24" line="34" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/field/DateTimeField.java" column="148" line="401" />
+      <active_file url="file://C:/Projects/Framework/java/com/xaf/form/field/DateTimeField.java" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/config/Configuration.java" column="18" line="128" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/BuildConfiguration.java" column="71" line="7" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/field/DurationField.java" column="3" line="57" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/field/TextField.java" column="0" line="252" />
+    </open_files>
+  </component>
+  <component class="com.intellij.ide.hierarchy.HierarchyBrowserManager">
+    <option name="SHOW_PACKAGES" value="false" />
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="SORT_ALPHABETICALLY" value="false" />
   </component>
   <component class="com.intellij.ide.impl.ProjectWorkspace" />
   <component class="com.intellij.ide.navigator.impl.ProjectNavigatorSettings">
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace" />
       <expanded_node type="directory" url="file://C:/Projects/Framework/java/com" />
       <expanded_node type="directory" url="file://C:/Projects/Framework/java" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace/page" />
       <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/db" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/form/field" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/form" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false" />
   </component>
@@ -261,6 +305,7 @@
     <option name="SHOW_METHODS" value="true" />
     <option name="SHOW_FIELDS" value="true" />
   </component>
+  <component class="com.intellij.ide.util.PropertiesComponent" />
   <component class="com.intellij.javadoc.JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" />
@@ -295,10 +340,10 @@
     <root file="jar://C:/Utils/java/jakarta-ant-1.3/lib/ant.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/app-servers/resin-2.0.2/lib/jdbc2_0-stdext.jar!/">
+    <root file="jar://C:/Utils/app-servers/resin-2.0.4/lib/jdbc2_0-stdext.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/app-servers/resin-2.0.2/lib/jsdk23.jar!/">
+    <root file="jar://C:/Utils/app-servers/resin-2.0.4/lib/jsdk23.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
     <root file="file://$PROJECT_DIR$/classes">
@@ -317,16 +362,60 @@
       <property name="type" value="javadocPathEntry" />
     </root>
   </component>
-  <component class="com.intellij.usageTree.impl.RefactoringOptions">
-    <option name="EXPORT_FILE_NAME" />
+  <component class="com.intellij.usageView.impl.UsageViewSettings">
+    <option name="EXPORT_FILE_NAME" value="$PROJECT_DIR$/report.txt" />
     <option name="IS_EXPANDED" value="false" />
     <option name="IS_SHOW_PACKAGES" value="true" />
-    <option name="IS_SHOW_ACTION_INFO" value="true" />
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="IS_FILTER_DUPLICATED_LINE" value="false" />
   </component>
-  <component class="com.intellij.util.PropertiesComponent">
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="MemberChooser.sorted" value="false" />
+  <component class="com.intellij.vssSupport.VssConfiguration">
+    <CheckoutOptions>
+      <option name="COMMENT" value="" />
+      <option name="DO_NOT_GET_LATEST_VERSION" value="false" />
+      <option name="REPLACE_WRITABLE" value="false" />
+      <option name="RECURSIVE" value="false" />
+    </CheckoutOptions>
+    <CheckinOptions>
+      <option name="COMMENT" value="" />
+      <option name="KEEP_CHECKED_OUT" value="false" />
+      <option name="RECURSIVE" value="false" />
+    </CheckinOptions>
+    <AddOptions>
+      <option name="COMMENT" value="" />
+      <option name="STORE_ONLY_LATEST_VERSION" value="false" />
+      <option name="CHECK_OUT_IMMEDIATELY" value="false" />
+      <option name="FILE_TYPE" value="0" />
+    </AddOptions>
+    <UndocheckoutOptions>
+      <option name="MAKE_WRITABLE" value="false" />
+      <option name="REPLACE_LOCAL_COPY" value="0" />
+      <option name="RECURSIVE" value="false" />
+    </UndocheckoutOptions>
+    <DiffOptions>
+      <option name="IGNORE_WHITE_SPACE" value="false" />
+      <option name="IGNORE_CASE" value="false" />
+    </DiffOptions>
+    <GetOptions>
+      <option name="REPLACE_WRITABLE" value="0" />
+      <option name="MAKE_WRITABLE" value="false" />
+      <option name="RECURSIVE" value="false" />
+    </GetOptions>
+    <option name="ENABLED" value="false" />
+    <option name="CLIENT_PATH" value="" />
+    <option name="SRCSAFEINI_PATH" value="" />
+    <option name="USER_NAME" value="" />
+    <option name="PWD" value="" />
+    <option name="SHOW_CHECKOUT_OPTIONS" value="true" />
+    <option name="SHOW_CHECKIN_OPTIONS" value="true" />
+    <option name="SHOW_ADD_OPTIONS" value="true" />
+    <option name="SHOW_UNDOCHECKOUT_OPTIONS" value="true" />
+    <option name="SHOW_DIFF_OPTIONS" value="true" />
+    <option name="SHOW_GET_OPTIONS" value="true" />
+    <option name="USE_EXTERNAL_DIFF" value="false" />
+    <option name="EXTERNAL_DIFF_PATH" value="" />
+    <option name="REUSE_LAST_COMMENT" value="false" />
+    <option name="PUT_FOCUS_INTO_COMMENT" value="false" />
   </component>
 </project>
 

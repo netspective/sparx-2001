@@ -7,6 +7,9 @@ import java.text.*;
 import org.w3c.dom.*;
 import com.xaf.form.*;
 import com.xaf.value.SingleValueSource;
+import com.xaf.config.ConfigurationManager;
+import com.xaf.config.ConfigurationManagerFactory;
+import com.xaf.config.Configuration;
 
 public class DateTimeField extends TextField
 {
@@ -16,6 +19,7 @@ public class DateTimeField extends TextField
     static public final long FLDFLAG_MIN_LIMIT  = FLDFLAG_MAX_LIMIT * 2;
     static public final long FLDFLAG_STRICT_YEAR = FLDFLAG_MIN_LIMIT * 2;
     static public final long FLDFLAG_STRICT_TIME = FLDFLAG_STRICT_YEAR * 2;
+    static public final long FLDFLAG_POPUP_CALENDAR = FLDFLAG_STRICT_TIME * 2;
 
 	static public final int DTTYPE_DATEONLY = 0;
 	static public final int DTTYPE_TIMEONLY = 1;
@@ -156,7 +160,6 @@ public class DateTimeField extends TextField
             this.format.setLenient(false);
         }
 
-
         String maxDateTime = elem.getAttribute("max");
         if (maxDateTime == null || maxDateTime.length() == 0)
             maxDateTime = elem.getAttribute("max-value");
@@ -190,6 +193,9 @@ public class DateTimeField extends TextField
             clearFlag(FLDFLAG_STRICT_TIME);
         else
             setFlag(FLDFLAG_STRICT_TIME);
+
+        if(elem.getAttribute("popup-calendar").equalsIgnoreCase("yes"))
+            setFlag(FLDFLAG_POPUP_CALENDAR);
 	}
 
 	public boolean isValid(DialogContext dc)
@@ -288,7 +294,6 @@ public class DateTimeField extends TextField
                 buf.append("field.timeStrict = false;\n");
         }
 
-
         return buf.toString();
     }
 
@@ -385,6 +390,19 @@ public class DateTimeField extends TextField
         }
         return xlatedDate;
     }
+
+    public String getControlHtml(DialogContext dc)
+	{
+        String baseHtml = super.getControlHtml(dc);
+        if(flagIsSet(FLDFLAG_INPUT_HIDDEN) || ! flagIsSet(FLDFLAG_POPUP_CALENDAR))
+			return baseHtml;
+
+        Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
+        String calScriptUrl = config.getValue(dc, "framework.shared.dialog.field.calendar.js-src", "/shared/resources/scripts/calendar.js");
+        String calImageUrl = config.getValue(dc, "framework.shared.dialog.field.calendar.image-url", "/shared/resources/images/navigate/calendar.gif");
+
+        return baseHtml + "<script src='"+ calScriptUrl +"'></script> <a href='javascript:activeDialog.fieldsByQualName[\""+ this.getQualifiedName() +"\"].popupCalendar()'><img src='"+calImageUrl+"' title='Select from Calendar' border=0></a>";
+	}
 
     /**
 	 * Produces Java code when a custom DialogContext is created

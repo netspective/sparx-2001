@@ -75,6 +75,12 @@ public class DurationField extends DialogField
             this.endField.setMaxDateStr(this.endField.translateDateString(value));
         }
 
+        if(elem.getAttribute("popup-calendar").equalsIgnoreCase("yes"))
+        {
+            beginField.setFlag(DateTimeField.FLDFLAG_POPUP_CALENDAR);
+            endField.setFlag(DateTimeField.FLDFLAG_POPUP_CALENDAR);
+        }
+
 		addChildField(beginField);
 		addChildField(endField);
 	}

@@ -91,6 +91,7 @@ function Dialog(name)
     this.registerField = Dialog_registerField;
     this.finalizeContents = Dialog_finalizeContents;
     this.isValid = Dialog_isValid;
+    this.getFieldControl = Dialog_getFieldControl;
 }
 
 function Dialog_registerField(field)
@@ -137,6 +138,15 @@ function Dialog_isValid()
     }
 
     return isValid;
+}
+
+function Dialog_getFieldControl(qualifiedName)
+{
+	var field = this.fieldsByQualName[qualifiedName];
+	if(field != null)
+		return field.getControl(this);
+	else
+		return null;
 }
 
 var activeDialog = null;
@@ -1052,8 +1062,14 @@ function MemoField_onKeyPress(field, control, event)
     return true;
 }
 
+function DateField_popupCalendar()
+{
+	showCalendar(this.getControl(activeDialog), 0);
+}
+
 function DateField_finalizeDefn(dialog, field)
 {
+	field.popupCalendar = DateField_popupCalendar;
    	field.dateFmtIsKnownFormat = false;
    	field.dateItemDelim = null;
    	field.dateItemDelimKeyRange = null;

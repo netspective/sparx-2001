@@ -1141,6 +1141,11 @@
 						<xsd:documentation>Specifies whether strict time is required.</xsd:documentation>
 					</xsd:annotation>
 				</xsd:attribute>
+				<xsd:attribute name="popup-calendar" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether or not to display an icon to right of the field that will allow a calendar window to be popped up and allow a date selection to be made that will fill in the control.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
