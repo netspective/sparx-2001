@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogField.java,v 1.2 2002-02-10 11:22:15 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -920,8 +920,9 @@ public class DialogField
     public String getJavaScriptDefn(DialogContext dc)
     {
         String fieldClassName = this.getClass().getName();
+        String fieldQualfName = this.getQualifiedName();
         String js =
-                "field = new DialogField(\"" + fieldClassName + "\", \"" + this.getId() + "\", \"" + this.getSimpleName() + "\", \"" + this.getQualifiedName() + "\", \"" + this.getCaption(dc) + "\", " + this.getFlags() + ");\n" +
+                "field = new DialogField(\"" + fieldClassName + "\", \"" + this.getId() + "\", \"" + this.getSimpleName() + "\", \"" + fieldQualfName + "\", \"" + this.getCaption(dc) + "\", " + dc.getFieldFlags(fieldQualfName) + ");\n" +
                 "dialog.registerField(field);\n";
         String customStr = this.getEventJavaScriptFunctions(dc);
         customStr += this.getCustomJavaScriptDefn(dc);
