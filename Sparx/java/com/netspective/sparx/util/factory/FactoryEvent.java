@@ -51,33 +51,29 @@
  */
  
 /**
- * $Id: FactoryEvent.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: FactoryEvent.java,v 1.2 2002-12-15 17:47:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.factory;
 
 public class FactoryEvent
 {
-    private Class factoryClass;
-    private Object factory;
+    private Class factory;
+    private Object instance;
 
-    public FactoryEvent(Class factoryClass)
-    {
-        this.factoryClass = factoryClass;
-    }
-
-    public FactoryEvent(Object factory)
+    public FactoryEvent(Class factory, Object instance)
     {
         this.factory = factory;
+        this.instance = instance;
     }
 
-    public Class getFactoryClass()
-    {
-        return factoryClass;
-    }
-
-    public Object getFactory()
+    public Class getFactory()
     {
         return factory;
+    }
+
+    public Object getInstance()
+    {
+        return instance;
     }
 }
