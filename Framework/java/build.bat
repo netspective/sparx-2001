@@ -3,33 +3,29 @@ echo Building XAF...
 echo.
 
 set SAVECP=%CLASSPATH%
-set SAVEANTHOME=%ANT_HOME%
-set SAVEJAVAHOME=%JAVA_HOME%
-set SAVERESINHOME=%RESIN_HOME%
+echo classpath at start is '%CLASSPATH%'
 
-if "%POOLMAN_HOME%" == "" set POOLMAN_HOME=C:\utils\java\Poolman-2.0.3
 if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\java\jdk1.3
 if "%ANT_HOME%" == "" set ANT_HOME=C:\utils\java\jakarta-ant-1.3
-if "%RESIN_HOME%" == "" set RESIN_HOME=c:\utils\resin-1.2.5
+if "%XERCES_JAR%" == "" set XERCES_JAR=C:\Utils\java\xerces-1_4_1\xerces.jar
+if "%XALAN_JAR%" == "" set XALAN_JAR=C:\Utils\java\xalan-j_2_1_0\bin\xalan.jar
 if "%OROMATCHER_JAR%" == "" set OROMATCHER_JAR=C:\utils\java\jakarta-oro-2.0.3\jakarta-oro-2.0.3.jar
 if "%LOG4J_JAR%" == "" set LOG4J_JAR=C:\utils\java\jakarta-log4j-1.1.2\dist\lib\log4j.jar
+if "%SERVLETAPI_JAR%" == "" set SERVLETAPI_JAR=C:\utils\resin-1.2.5\lib\jsdk22.jar
+if "%JDBC2X_JAR%" == "" set JDBC2X_JAR=C:\utils\resin-1.2.5\lib\jdbc2_0-stdext.jar
 
-REM === This automatically adds system classes to CLASSPATH ===
+REM === Automatically add system classes to CLASSPATH ===
 if exist "%JAVA_HOME%\lib\tools.jar" set CLASSPATH=%JAVA_HOME%\lib\tools.jar
 if exist "%JAVA_HOME%\lib\classes.zip" set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\lib\classes.zip
-set CLASSPATH=.;%CLASSPATH%;%ANT_HOME%\lib\ant.jar;%ANT_HOME%\lib\xerces.jar
+
+set CLASSPATH=%CLASSPATH%;%ANT_HOME%\lib\ant.jar;%XERCES_JAR%;%XALAN_JAR%;%OROMATCHER_JAR%;%LOG4J_JAR%;%SERVLETAPI_JAR%;%JDBC2X_JAR%
+echo classpath is now '%CLASSPATH%'
 
 echo Starting Ant...
-%ANT_HOME%\bin\ant -buildfile build.xml %1
+%ANT_HOME%\bin\ant -buildfile build.xml %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 goto end
 
-
 :end
-rem Cleanup environment variables
 set CLASSPATH=%SAVECP%
-echo classpath set to %CLASSPATH%
-set SAVECP=
-set ANT_HOME=%SAVEANTHOME%
-set JAVA_HOME=%SAVJAVAHOME%
-set RESIN_HOME=%SAVERESINHOME%
+echo classpath reset to '%CLASSPATH%'

@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ===================================================================
 
-Build file for SparX - for use with the Jakarta Ant java build tool
-
+Build file for Sparx - for use with the Jakarta Ant java build tool
 
 Setup instructions:
     Before running an Ant build, you must
      - set the JAVA_HOME environment variable to the JDK root directory
-     - set the RESIN_HOME environment variable to the Resin root directory
+     - set the ANT_HOME environment variable to the Ant root directory
+     - set CLASSPATH with all required libraries:
+       * Apache Xerces 1.4 or above (http://xml.apache.org)
+       * Apache Xalan 2.1 or above (http://xml.apache.org)
+       * Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)
+       * Jakarta Log4J 1.1 or above (http://jakarta.apache.org)
+       * Java Servlet API 2.2 or above (http://java.sun.com)
+       * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
 
 Build Instructions:
    To build, run
@@ -19,11 +25,6 @@ Build targets:
     - compile   compiles XAF in ../build/classes.
     - jar       jars XAF classes from ../build/classes into ../lib/xaf.jar.
     - xaf       creates ../lib/xaf.jar [the default target]
-
-
-Authors:
-    Aye Thu (with minor modifications by Shahid N. Shah)
-
 
 -->
 <project name="Sparx" default="xaf" basedir=".">
@@ -47,30 +48,12 @@ Authors:
 
 	    <property environment="env"/>
 
-	    <property name="resin.lib.dir" value="${env.RESIN_HOME}/lib"/>
-	    <property name="resin.jar" value="${resin.lib.dir}/resin.jar"/>
-	    <property name="jsdk22.jar" value="${resin.lib.dir}/jsdk22.jar"/>
-	    <property name="dom.jar" value="${resin.lib.dir}/dom.jar"/>
-	    <property name="sax.jar" value="${resin.lib.dir}/sax.jar"/>
-	    <property name="jaxp.jar" value="${resin.lib.dir}/jaxp.jar"/>
-	    <property name="jndi" value="${resin.lib.dir}/jndi.jar"/>
-	    <property name="jdbc-ext" value="${resin.lib.dir}/jdbc2_0-stdext.jar"/>
-
-        <!-- poolman settings -->
-        <property name="poolman.lib.dir" value="${env.POOLMAN_HOME}/lib"/>
-        <property name="poolman.jar" value="${poolman.lib.dir}/poolman.jar"/>
-        <property name="jta.jar" value="${poolman.lib.dir}/jta.jar"/>
-        <property name="jmxri.jar" value="${poolman.lib.dir}/jmxri.jar"/>
-        <property name="jmxtools.jar" value="${poolman.lib.dir}/jmxtools.jar"/>
-        <property name="jakarta-oro.jar" value="${env.OROMATCHER_JAR}"/>
-        <property name="jakarta-log4j.jar" value="${env.LOG4J_JAR}"/>
-
-	    <property name="xaf_classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi};${ant.jar};${poolman.jar};${jta.jar};${jmxri.jar};${jmxtools.jar};${jakarta-oro.jar};${jakarta-log4j.jar}"/>
-
+	    <property name="CLASSPATH" value="${env.CLASSPATH}"/>
+	    
 	    <!-- Compile the BuildConfiguration class -->
 	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"
 			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java"
-            classpath="${xaf_classpath}"
+            classpath="${CLASSPATH}"
 			debug="${debug}"
 			optimize="${optimize}"
 			deprecation="off"/>
@@ -98,7 +81,7 @@ Authors:
 
         <!-- Compile XAF components -->
         <javac srcdir="." destdir="${build.classes.dir}"
-            classpath="${xaf_classpath}"
+            classpath="${CLASSPATH}"
             debug="${debug}"
             optimize="${optimize}"
             deprecation="off" >
@@ -129,7 +112,7 @@ Authors:
     <target name="javadoc">
         <mkdir dir="${javadoc.dir}" />
         <javadoc packagenames="com.xaf.*"
-             classpath="${xaf_classpath}"
+             classpath="${CLASSPATH}"
              sourcepath="."
              destdir="${javadoc.dir}"
              author="true"
