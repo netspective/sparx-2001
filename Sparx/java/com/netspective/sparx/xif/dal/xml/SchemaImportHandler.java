@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaImportHandler.java,v 1.6 2002-12-23 05:07:02 shahid.shah Exp $
+ * $Id: SchemaImportHandler.java,v 1.7 2003-01-06 20:26:20 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
@@ -148,8 +148,13 @@ public class SchemaImportHandler implements ContentHandler
             if(idRef != null)
             {
                 Object id = idReferences.get(idRef);
-                if(idRef != null)
-                    row.populateDataForXmlNodeName(rowColumnName, id.toString(), false);
+                if(id != null)
+                {
+                    if(row != null)
+                        row.populateDataForXmlNodeName(rowColumnName, id.toString(), false);
+                    else
+                        parseContext.addError("IDREF '"+ idRef +"' found for '"+ rowColumnName +"' in table '"+ row.getTable().getName() +"' but there is no associated row.");
+                }
                 else
                     parseContext.addError("IDREF '"+ idRef +"' not found for column '"+ rowColumnName +"' in table '"+ row.getTable().getName() +"'.");
             }
