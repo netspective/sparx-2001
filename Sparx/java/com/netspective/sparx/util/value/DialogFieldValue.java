@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: DialogFieldValue.java,v 1.2 2002-02-05 00:00:41 thua Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -62,6 +62,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
@@ -98,7 +99,9 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
                 return dc.getValue(valueKey);
             }
             else
+            {
                 return vc.getRequest().getParameter(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+            }
         }
     }
 
@@ -113,7 +116,18 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
 
     public String[] getValues(ValueContext vc)
     {
-        return vc.getRequest().getParameterValues(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+        if (vc instanceof DialogContext)
+        {
+            String[] values =  ((DialogContext) vc).getValues(valueKey);
+            if (values != null)
+                return values;
+            else
+                return new String[] {((DialogContext) vc).getValue(valueKey)};
+        }
+        else
+        {
+            return vc.getRequest().getParameterValues(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+        }
     }
 
     public boolean supportsSetValue()
