@@ -51,14 +51,17 @@
  */
  
 /**
- * $Id: ServletContextPathValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: ServletContextPathValue.java,v 1.2 2002-08-08 14:42:22 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
+import java.io.File;
+
 public class ServletContextPathValue extends ValueSource
 {
     private boolean root;
+    private File simulatedPath;
 
     public ServletContextPathValue()
     {
@@ -70,13 +73,17 @@ public class ServletContextPathValue extends ValueSource
         super.initializeSource(srcParams);
         if(srcParams.equals("/"))
             root = true;
+
+        String simulatingProp = System.getProperty("com.netspective.sparx.util.value.ServletContextPathValue.simulate");
+        if(simulatingProp != null)
+            simulatedPath = new File(simulatingProp);
     }
 
     public String getValue(ValueContext vc)
     {
         if(root)
-            return vc.getServletContext().getRealPath(valueKey);
+            return simulatedPath == null ? vc.getServletContext().getRealPath(valueKey) : new File(simulatedPath, valueKey).getAbsolutePath();
         else
-            return vc.getServletContext().getRealPath(null);
+            return simulatedPath == null ? vc.getServletContext().getRealPath(null)  : simulatedPath.getAbsolutePath();
     }
 }

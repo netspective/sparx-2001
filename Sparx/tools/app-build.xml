@@ -28,7 +28,7 @@ Setup instructions:
 		<path id="sparx.home.path">
 			<pathelement location="${env.SPARX_HOME}"/>
 		</path>
-		<path id="app.root.path">
+		<path id="app.WEB-INF.path">
 			<pathelement location="${basedir}"/>
 		</path>
 
@@ -40,9 +40,14 @@ Setup instructions:
 		<property name="sparx.shared.resources.templates.dir" value="${sparx.shared.dir}/resources/templates"/>
 		<property name="sparx.shared.resources.templates.WEB-INF.dir" value="${sparx.shared.dir}/resources/templates/WEB-INF"/>
 
-		<pathconvert targetos="unix" property="app.root.dir" refid="app.root.path"/>
-		<property name="app.site.root.dir" value="${app.root.dir}/Site"/>
-		<property name="app.WEB-INF.dir" value="${app.site.root.dir}/WEB-INF"/>
+		<pathconvert targetos="unix" property="app.WEB-INF.dir" refid="app.WEB-INF.path"/>
+
+		<path id="app.root.dir.temp">
+			<pathelement location="${app.WEB-INF.dir}/.."/>
+		</path>
+		<pathconvert targetos="unix" property="app.root.dir" refid="app.root.dir.temp"/>
+
+		<property name="app.lib.dir" value="${app.WEB-INF.dir}/lib"/>
 		<property name="app.config.file" value="${app.WEB-INF.dir}/configuration.xml"/>
 
 		<!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
@@ -53,9 +58,9 @@ Setup instructions:
     <target name="init" depends="global">
     	<tstamp/>
 
-    	<echo message="Running build in ${app.root.dir}"/>
+    	<echo message="Running build in ${app.WEB-INF.dir}"/>
 		<echo message="Sparx source is in ${sparx.java.dir}"/>
-		<echo message="Application Site root is ${app.site.root.dir}"/>
+		<echo message="Application Site root is ${app.root.dir}"/>
 
 		<!-- define all the tasks that will be used in this file -->
 		<taskdef name="config" classname="com.netspective.sparx.util.ant.ImportConfigurationTask"/>
@@ -66,19 +71,18 @@ Setup instructions:
 		<!-- read all of the configuration.xml entries into config.* entries -->
 		<config file="${app.config.file}" prefix="config." debug="no"/>
 
-		<echo message="Application WEB-INF is ${config.app.web-inf-root-path}"/>
+		<echo message="Simulated application WEB-INF is ${config.app.web-inf-root-path}"/>
 
 		<property name="app.classes.dir" value="${config.app.web-inf-root-path}/classes"/>
 		<property name="app.lib.dir" value="${config.app.web-inf-root-path}/lib"/>
 		<property name="resin.work.dir" value="${config.app.web-inf-root-path}/work"/>
 		<property name="java.dal.stylesheet.root.dir" value="${config.sparx.shared.xslt-path}/schema-gen/java-gen"/>
 
-		<property name="app.documents.root.dir" value="${config.app.project-root}/Documents"/>
-		<property name="app.javadoc.root.dir" value="${app.documents.root.dir}/javadoc"/>
+		<property name="app.javadoc.root.dir" value="${config.app.documents-root-path}/javadoc"/>
 
 		<available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
-		<property name="app.java.dal.dir" value="${config.app.database-root-path}/java"/>
-		<property name="app.java.dal.jar" value="${config.app.database-root-path}/dal.jar"/>
+		<property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
+		<property name="app.java.dal.jar" value="${config.app.schema.root-path}/dal.jar"/>
 		<property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
 
 		<available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
@@ -103,52 +107,48 @@ Setup instructions:
     -->
 
     <target name="setup-sparx-structure" depends="global">
-    	<mkdir dir="Database"/>
-    	<mkdir dir="Database/schema"/>
-    	<mkdir dir="Database/schema-src"/>
-		<copy file="${sparx.shared.resources.templates.dir}/Database/schema-src/datatypes.xml" todir="Database/schema-src"/>
+		<mkdir dir="${app.root.dir}/sparx/resources"/>
+    	<mkdir dir="${app.WEB-INF.dir}"/>
+    	<mkdir dir="${app.WEB-INF.dir}/classes"/>
+    	<mkdir dir="${app.WEB-INF.dir}/documents"/>
+    	<mkdir dir="${app.WEB-INF.dir}/lib"/>
+    	<mkdir dir="${app.WEB-INF.dir}/schema"/>
+    	<mkdir dir="${app.WEB-INF.dir}/schema/ddl"/>
+    	<mkdir dir="${app.WEB-INF.dir}/security"/>
+    	<mkdir dir="${app.WEB-INF.dir}/sql"/>
+    	<mkdir dir="${app.WEB-INF.dir}/tld"/>
+    	<mkdir dir="${app.WEB-INF.dir}/ui"/>
 
-    	<mkdir dir="Documents"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml" todir="${app.WEB-INF.dir}"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/resin.web.xml" todir="${app.WEB-INF.dir}"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="${app.WEB-INF.dir}"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="${app.WEB-INF.dir}/sql"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="${app.WEB-INF.dir}/security"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
 
-    	<mkdir dir="Site"/>
-	<mkdir dir="Site/sparx/resources"/>
-    	<mkdir dir="Site/WEB-INF"/>
-    	<mkdir dir="Site/WEB-INF/classes"/>
-    	<mkdir dir="Site/WEB-INF/lib"/>
-    	<mkdir dir="Site/WEB-INF/tld"/>
-    	<mkdir dir="Site/WEB-INF/security"/>
-    	<mkdir dir="Site/WEB-INF/sql"/>
-    	<mkdir dir="Site/WEB-INF/ui"/>
-
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml" todir="Site/WEB-INF"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/resin.web.xml" todir="Site/WEB-INF"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="Site/WEB-INF"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="Site/WEB-INF/web.xml"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="Site/WEB-INF/classes"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="Site/WEB-INF/tld"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="Site/WEB-INF/tld"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="Site/WEB-INF/security"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="Site/WEB-INF/ui"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="Site/WEB-INF/sql"/>
-
-		<copy todir="${app.site.root.dir}/sparx/resources">
+		<copy todir="${app.root.dir}/sparx/resources">
 			<fileset dir="${sparx.shared.resources.dir}"/>
 		</copy>
     </target>
 
     <target name="setup-sparx-libs" depends="global">
-		<copy file="${sparx.lib.dir}/sparx.jar" todir="Site/WEB-INF/lib"/>
-		<copy file="${sparx.lib.dir}/redist/bsf.jar" todir="Site/WEB-INF/lib"/>
-		<copy file="${sparx.lib.dir}/redist/log4j.jar" todir="Site/WEB-INF/lib"/>
-		<copy file="${sparx.lib.dir}/redist/js.jar" todir="Site/WEB-INF/lib"/>
-		<copy file="${sparx.lib.dir}/redist/oro.jar" todir="Site/WEB-INF/lib"/>
-		<copy file="${sparx.lib.dir}/redist/xalan.jar" todir="Site/WEB-INF/lib"/>
-		<copy file="${sparx.lib.dir}/redist/xerces.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/sparx.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/bsf.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/log4j.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/js.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/oro.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/xalan.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/xerces.jar" todir="${app.lib.dir}"/>
     </target>
     
     <target name="copy-sparx-resources" depends="global">
-    		<mkdir dir="${app.site.root.dir}/sparx/resources"/>
-		<copy todir="${app.site.root.dir}/sparx/resources">
+    	<mkdir dir="${app.root.dir}/sparx/resources"/>
+		<copy todir="${app.root.dir}/sparx/resources">
 			<fileset dir="${sparx.shared.resources.dir}"/>
 		</copy>
     </target>    
@@ -173,26 +173,11 @@ Setup instructions:
 		<copy file="${sparx.default.log4j.properties.file}" tofile="${app.log4j.properties.file}" overwrite="yes"/>
 		<replace file="${app.log4j.properties.file}" token="{APP_LOG_PATH}" value="${app.log.dir}"/>
 		<mkdir dir="${app.log.dir}"/>
-
-    	<!-- Setup Sparx Configuration file (backup current, copy default, replace variables) -->
-		<property name="sparx.default.config.file" value="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml"/>
-
-		<echo message="Backing up ${app.config.file} to ${app.config.file}.orig"/>
-		<copy file="${app.config.file}" tofile="${app.config.file}.orig" overwrite="yes"/>
-
-		<echo message="Copying Sparx default configuration file ${sparx.default.config.file} to ${app.config.file}"/>
-		<copy file="${sparx.default.config.file}" tofile="${app.config.file}" overwrite="yes"/>
-
-		<echo message="Setting 'sparx.home' property in ${app.config.file} to ${sparx.home}"/>
-		<replace file="${app.config.file}" token="name=&quot;sparx.home&quot; value=&quot;{SPARX_HOME}&quot;" value="name=&quot;sparx.home&quot; value=&quot;${sparx.home}&quot;"/>
-
-		<echo message="Setting 'app.project-root' property in ${app.config.file} to ${app.root.dir}"/>
-		<replace file="${app.config.file}" token="name=&quot;app.project-root&quot; value=&quot;{APP_HOME}&quot;" value="name=&quot;app.project-root&quot; value=&quot;${app.root.dir}&quot;"/>
     </target>
 
     <target name="start-sparx-app" depends="setup-sparx-structure,setup-sparx-libs,setup-sparx">
-    	<echo message="All Sparx files copied. Please review Site/WEB-INF to create a valid web.xml file for your application server."/>
-    	<echo message="Required libraries copied into Site/WEB-INF/lib, please confirm that you want them in that location."/>
+    	<echo message="All Sparx files copied. Please review ${app.WEB-INF.dir} to create a valid web.xml file for your application server."/>
+    	<echo message="Required libraries copied into ${app.lib.dir}, please confirm that you want them in that location."/>
     </target>
 
     <target name="migrate-xaf12-sparx20" depends="global,setup-sparx">

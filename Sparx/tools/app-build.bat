@@ -14,21 +14,14 @@ set APP_BUILD_FILE=%SPARX_HOME%\tools\app-build.xml
 
 
 REM **************************************************************************
-REM ** It's important to set the Application's root directory so that the   **
-REM ** build file can use APP_ROOT/Site/WEB-INF/classes to locate and       **
-REM ** compile the application's java classes and to do automatic setup of  **
-REM ** configuration files using the target 'setup-sparx'. If you are using **
-REM ** Windows 2000, XP, or NT you do not need to set APP_ROOT, it will be  **
-REM ** set to the current working directory automatically.                  **
-REM **                                                                      **
-REM ** NOTE: The command "for %%D in (.) do set APP_ROOT" will only work in **
+REM ** NOTE: The command "for %%D in (.) do set BASEDIR" will only work in **
 REM ** Windows NT/2k/XP. If you are not running under Windows NT/2k/XP then **
 REM ** you need to replace the line with with                               **
-REM **    set APP_ROOT=[your path name]                                     **
+REM **    set BASEDIR=[your path name]                                     **
 REM **************************************************************************
 
-for %%D in (.) do set APP_ROOT=%%~fD
-set APP_CLASSES=%APP_ROOT%\Site\WEB-INF\classes
+for %%D in (.) do set BASEDIR=%%~fD
+set APP_CLASSES=%BASEDIR%\classes
 
 
 REM **************************************************************************
@@ -61,4 +54,4 @@ REM **************************************************************************
 REM ** Now that all the variables are set, execute Ant                      **
 REM **************************************************************************
 
-java -classpath %USE_CLASS_PATH% org.apache.tools.ant.Main -Dbasedir=%APP_ROOT% -buildfile %APP_BUILD_FILE% %1 %2 %3 %4 %5
+java -classpath %USE_CLASS_PATH% org.apache.tools.ant.Main -Dbasedir=%BASEDIR% -buildfile %APP_BUILD_FILE% %1 %2 %3 %4 %5

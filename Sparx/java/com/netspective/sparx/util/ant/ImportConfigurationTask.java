@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ImportConfigurationTask.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: ImportConfigurationTask.java,v 1.2 2002-08-08 14:42:22 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -59,6 +59,7 @@ package com.netspective.sparx.util.ant;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -95,6 +96,11 @@ public class ImportConfigurationTask extends Task
 
     public void execute() throws BuildException
     {
+        // because there's no "servlet context" available from Ant (command line) we need to simulate it so that if the
+        // configuration items refer to the value source servlet-context-path the variables should still work
+        File simulatedPath = new File(project.getProperty("app.root.dir"));
+        System.setProperty("com.netspective.sparx.util.value.ServletContextPathValue.simulate", simulatedPath.getAbsolutePath());
+
         ConfigurationManager manager = ConfigurationManagerFactory.getManager(file);
 
         List errors = manager.getErrors();
