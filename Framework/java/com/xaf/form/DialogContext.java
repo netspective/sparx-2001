@@ -357,7 +357,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 					String paramName = retainParams[i];
 					hiddens.append("<input type='hidden' name='");
 					hiddens.append(paramName);
-					hiddens.append(" value='");
+					hiddens.append("' value='");
 					hiddens.append(request.getParameter(paramName));
 					hiddens.append("'>\n");
 				}
