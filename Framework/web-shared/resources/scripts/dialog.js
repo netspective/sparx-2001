@@ -3,7 +3,7 @@ var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
 var ALLOW_CLIENT_VALIDATION = true;
-var TRANSLATE_ENTER_KEY_TO_TAB_KEY = true;
+var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
 
 //****************************************************************************
 // FieldType class
