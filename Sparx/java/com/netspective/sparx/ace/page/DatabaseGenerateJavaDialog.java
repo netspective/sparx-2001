@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateJavaDialog.java,v 1.3 2002-08-09 11:53:45 shahid.shah Exp $
+ * $Id: DatabaseGenerateJavaDialog.java,v 1.4 2002-08-09 21:28:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -61,6 +61,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -254,6 +255,15 @@ public class DatabaseGenerateJavaDialog extends Dialog
         }
         catch(TransformerException e)
         {
+            List messages = orGenerator.getMessages();
+            if(messages.size() > 0)
+            {
+                output.append("<ol>");
+                for(int i = 0; i < messages.size(); i++)
+                    output.append("<li>"+ messages.get(i));
+                output.append("</ol>");
+            }
+
             StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
             output.append("<pre>" + e.toString() + stack.toString() + "</pre>");

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GenerateJavaDALTask.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: GenerateJavaDALTask.java,v 1.2 2002-08-09 21:28:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -227,6 +227,13 @@ public class GenerateJavaDALTask extends Task
         }
         catch(Exception e)
         {
+            List messages = orGenerator.getMessages();
+            if(messages.size() > 0)
+            {
+                for(int i = 0; i < messages.size(); i++)
+                    log((String) messages.get(i));
+            }
+
             throw new BuildException(e);
         }
     }

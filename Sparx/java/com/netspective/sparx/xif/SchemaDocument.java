@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.9 2002-04-17 15:17:39 jruss Exp $
+ * $Id: SchemaDocument.java,v 1.10 2002-08-09 21:28:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -1465,8 +1465,15 @@ public class SchemaDocument extends XmlSource
         private int tableTypesGeneratedCount;
         private int tablesGeneratedCount;
 
+        private List messages = new ArrayList();
+
         public ObjectRelationalGenerator()
         {
+        }
+
+        public List getMessages()
+        {
+            return messages;
         }
 
         public String getDestRoot()
@@ -1687,6 +1694,7 @@ public class SchemaDocument extends XmlSource
                 if(javaTypeInitCap != null)
                     dataTypesTransformer.setParameter("java-type-init-cap", javaTypeInitCap);
 
+                messages.add(new String("Applying stylesheet '"+ dataTypeFile +"' for tableType '"+ dataTypeName +"'"));
                 dataTypesTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(dataTypeElem),
                                 new javax.xml.transform.stream.StreamResult(dataTypeFile));
@@ -1734,6 +1742,7 @@ public class SchemaDocument extends XmlSource
                     }
                 }
 
+                messages.add(new String("Applying stylesheet '"+ tableTypeFile +"' for tableType '"+ tableTypeClassName +"'"));
                 tableTypesTransformer.setParameter("package-name", tableTypesPkg);
                 tableTypesTransformer.setParameter("table-type-name", tableTypeClassName);
                 tableTypesTransformer.setParameter("table-type-class-name", tableTypesPkg + "." + tableTypeClassName);
@@ -1928,20 +1937,24 @@ public class SchemaDocument extends XmlSource
                 String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
                 String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
 
+                messages.add(new String("Applying stylesheet '"+ tableFile +"' for table '"+ tableClassName +"'"));
                 tablesTransformer.setParameter("table-name", tableClassName);
                 tablesTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(tableFile));
                 tablesGeneratedCount++;
 
+                messages.add(new String("Applying stylesheet '"+ domainFile +"' for domain '"+ domainName +"'"));
                 domainsTransformer.setParameter("domain-name", domainName);
                 domainsTransformer.setParameter("domain-class-name", domainsPkg + "." + domainName);
                 domainsTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(domainFile));
 
+                messages.add(new String("Applying stylesheet '"+ rowFile +"' for row '"+ rowName +"'"));
                 rowsTransformer.setParameter("row-name", rowName);
                 rowsTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(rowFile));
 
+                messages.add(new String("Applying stylesheet '"+ rowListFile +"' for rowList '"+ rowName +"'"));
                 rowsListTransformer.setParameter("row-name", rowName);
                 rowsListTransformer.setParameter("rows-name", rowListName);
                 rowsListTransformer.transform
@@ -1961,6 +1974,7 @@ public class SchemaDocument extends XmlSource
             schemaTransformer.setParameter("class-name", schemaClassName);
             String schemaFile = schemaDir.getAbsolutePath() + "/" + schemaClassName + ".java";
 
+            messages.add(new String("Applying stylesheet '"+ schemaFile +"' to schema"));
             schemaTransformer.transform
                     (new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()), new javax.xml.transform.stream.StreamResult(schemaFile));
         }
@@ -1970,6 +1984,8 @@ public class SchemaDocument extends XmlSource
             Map dataTypesClassMap = new HashMap();
             Map tableTypesClassMap = new HashMap();
             new File(destRoot).mkdirs();
+
+            messages.clear();
 
             createDataTypesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
             createTableTypesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
