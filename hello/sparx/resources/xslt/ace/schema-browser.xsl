@@ -9,7 +9,8 @@
 
 <!-- all of the appConfig variables are passed in, so we can use them -->
 <xsl:param name="sparx.shared.images-url"/>
-<xsl:param name="app.ace.images-root-url"/>
+<xsl:param name="sparx.ace.images-root-url"/>
+<xsl:param name="app.dal.schema.class-name"/>
 
 <xsl:param name="dbdd-images-root-url"><xsl:value-of select="$sparx.shared.images-url"/>/dbdd</xsl:param>
 
@@ -220,6 +221,12 @@
 	</table>
 	<table cellspacing="10"><tr><td>
 	<table>
+		<tr>
+			<td class="table_info_caption">Actions:</td>
+			<td class="table_description">
+                <a href="{concat($root-url, '/query/', $app.dal.schema.class-name, '/', @name)}"><img src="{concat($sparx.ace.images-root-url, '/icons/exec_query_defn.gif')}" border="0"/> Execute Query Definition</a>
+			</td>
+		</tr>
 		<tr valign="top">
 			<td class="table_info_caption">Description:</td>
 			<td class="table_description">
