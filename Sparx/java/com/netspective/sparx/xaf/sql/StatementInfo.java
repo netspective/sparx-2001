@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.8 2002-12-26 19:26:33 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.9 2002-12-30 16:00:47 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -214,32 +214,9 @@ public class StatementInfo
 
     private void setSql(String sql)
     {
-        this.sql = sql;
+        this.sql = XmlSource.getUnindentedText(sql);
         if(sql.indexOf(REPLACEMENT_PREFIX) != -1)
             sqlIsDynamic = true;
-
-        /*
-         * if the entire SQL string is indented, find out how far the first line is indented
-         */
-        StringBuffer replStr = new StringBuffer();
-        for(int i = 0; i < sql.length(); i++)
-        {
-            char ch = sql.charAt(i);
-            if(Character.isWhitespace(ch))
-                replStr.append(ch);
-            else
-                break;
-        }
-
-        /*
-         * If the first line is indented, unindent all the lines the distance of just the first line
-         */
-        Perl5Util perlUtil = new Perl5Util();
-
-        if(replStr.length() > 0)
-            this.sql = perlUtil.substitute("s/" + replStr + "/\n/g", sql);
-
-        this.sql = this.sql.trim();
 
         if(stmtElem != null)
         {
