@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.10 2002-04-12 12:30:05 snshah Exp $
+ * $Id: DialogContext.java,v 1.11 2002-04-12 12:34:35 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -211,7 +211,7 @@ public class DialogContext extends ServletValueContext
                 for(int i = 0; i < values.length; i++)
                 {
                     Element valueElem = doc.createElement("value");
-                    valueElem.appendChild(doc.createTextNode(DialogField.escapeHTML(values[i])));
+                    valueElem.appendChild(doc.createTextNode(values[i]));
                     valuesElem.appendChild(valueElem);
                 }
                 fieldElem.appendChild(valuesElem);
@@ -221,7 +221,7 @@ public class DialogContext extends ServletValueContext
             {
                 fieldElem.setAttribute("value-type", "string");
                 Element valueElem = doc.createElement("value");
-                valueElem.appendChild(doc.createTextNode(DialogField.escapeHTML(value)));
+                valueElem.appendChild(doc.createTextNode(value));
                 fieldElem.appendChild(valueElem);
                 parent.appendChild(fieldElem);
             }

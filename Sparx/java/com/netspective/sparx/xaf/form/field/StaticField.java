@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StaticField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: StaticField.java,v 1.2 2002-04-12 12:30:06 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -75,6 +75,10 @@ public class StaticField extends TextField
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
         String value = dc.getValue(this);
-        writer.write("<input type='hidden' name='" + getId() + "' value=\"" + (value != null ? value : "") + "\"><span id='" + getQualifiedName() + "'>" + value + "</span>");
+        if(value == null)
+            value = "";
+        else
+            value = escapeHTML(value);
+        writer.write("<input type='hidden' name='" + getId() + "' value=\"" + value + "\"><span id='" + getQualifiedName() + "'>" + value + "</span>");
     }
 }

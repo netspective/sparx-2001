@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.2 2002-03-26 17:57:52 eoliphan Exp $
+ * $Id: TextField.java,v 1.3 2002-04-12 12:30:06 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -308,7 +308,10 @@ public class TextField extends DialogField
         }
 
         String value = dc.getValue(this);
-        if(value == null) value = "";
+        if(value == null)
+            value = "";
+        else
+            value = escapeHTML(value);
 
         String readonlyStyle = dc.getSkin().getControlAreaStyleAttrs();
         if(isReadOnly(dc))

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: MemoField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: MemoField.java,v 1.2 2002-04-12 12:30:06 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -206,15 +206,15 @@ public class MemoField extends DialogField
         String id = getId();
         if(isReadOnly(dc))
         {
-            String valueStr = value != null ? value : "";
-            writer.write("<input type='hidden' name='" + id + "' value='" + valueStr + "'>" + valueStr);
+            String valueStr = value != null ? escapeHTML(value) : "";
+            writer.write("<input type='hidden' name='" + id + "' value=\"" + valueStr + "\">" + valueStr);
         }
         else
         {
             writer.write(
                     "<textarea maxlength=\"" + maxLength + "\" name=\"" + id + "\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
                     WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? "class='required'" : "") + dc.getSkin().getDefaultControlAttrs() +
-                    ">" + (value != null ? value : "") + "</textarea>");
+                    ">" + (value != null ? escapeHTML(value) : "") + "</textarea>");
         }
     }
 
