@@ -11,7 +11,7 @@
   <property category="runtime.0" name="appserver.servername" value="ejbcontainer" />
   <property category="runtime.0" name="appserver.vmparameters" value="" />
   <property category="runtime.0" name="jsprunner.docbase" value="." />
-  <property category="runtime.0" name="jsprunner.jspfile" value="C%|/Program Files/Borland/JBuilder4/bin" />
+  <property category="runtime.0" name="jsprunner.jspfile" value="../../../../../Program Files/Borland/JBuilder4/bin" />
   <property category="sys" name="AuthorLabel" value="@author" />
   <property category="sys" name="BackupPath" value="../../bak/XAF" />
   <property category="sys" name="BeansInstantiate" value="false" />
@@ -31,7 +31,7 @@
   <property category="sys" name="InstanceVisibility" value="0" />
   <property category="sys" name="JDK" value="java 1.3.0-C" />
   <property category="sys" name="LastTag" value="0" />
-  <property category="sys" name="Libraries" value="Servlet;Resin;Jakarta Ant;Jakarta ORO Matcher" />
+  <property category="sys" name="Libraries" value="Servlet;Resin;Jakarta Ant;Jakarta ORO Matcher;Jakarta Log4j" />
   <property category="sys" name="MakeStable" value="0" />
   <property category="sys" name="OutPath" value="../../classes/XAF" />
   <property category="sys" name="ServletContentType" value="HTML" />
