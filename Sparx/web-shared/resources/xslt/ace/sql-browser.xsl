@@ -168,6 +168,12 @@
 	<pre>
 		<xsl:value-of select="sql-html" disable-output-escaping="yes"/>
 	</pre>
+    <xsl:if test="description">
+	<h1>Description</h1>
+	<p>
+        <xsl:value-of select="description" disable-output-escaping="yes"/>
+    </p>
+	</xsl:if>
 	<xsl:if test="params">
 	<h1>Bind Parameters</h1>
 	<ol>
