@@ -69,8 +69,38 @@
         <statement name="contact-list">
 			select
                 person.person_id,
-                person.name_last,
-                person.name_first
+                person.complete_sortable_name,
+                person.complete_name,
+                org.org_name
+			from
+                personorg_relationship por, person, org
+			where
+                por.rel_org_id = ? and
+                org.org_id = por.rel_org_id and
+                por.parent_id = person.person_id and
+                por.record_status_id = 1 and
+                por.rel_type = 0
+            order by
+                person.complete_sortable_name
+            <params>
+                <param value="request:org_id"/>
+            </params>
+            <report heading="Organization Members">
+                <banner>
+                    <item caption="Import" url="config-expr:member.jsp?cmd=edit&amp;org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                    <item caption="Edit" url="config-expr:member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Name" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{2}"/>
+                <column display="no"/>
+                <column heading="Organization"/>
+            </report>
+
+        </statement>
+        <statement name="selected-org-person-list">
+			select
+                person.complete_sortable_name,
+                person.person_id
 			from
                 personorg_relationship por, person
 			where
@@ -78,19 +108,13 @@
                 por.parent_id = person.person_id and
                 por.record_status_id = 1 and
                 por.rel_type = 0
+            order by
+                person.complete_sortable_name
             <params>
-                <param value="request:org_id"/>
+                <param value="session:organization"/>
             </params>
-            <report heading="Organization Members">
-                <banner>
-                    <item caption="Add" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
-                    <item caption="Remove" url=""/>
-                </banner>
-                <column heading="ID" align="center"/>
-                <column heading="Last Name" align="center"/>
-                <column heading="First Name" align="center"/>
-            </report>
-
         </statement>
+
 	</sql-statements>
+
 </xaf>

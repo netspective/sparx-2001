@@ -5,13 +5,13 @@
 
 		<!-- Fields -->
 		<field id="org_id" caption="Account ID" join="org" column="org_id">
-			<report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}" align="right"/>
+        	<report heading="ID"  align="right"/>
 		</field>
 		<field id="org_code" caption="Account Code" join="org" column="org_code">
 			<report heading="Code"/>
 		</field>
 		<field id="org_name" caption="Account Name" join="org" column="org_name" where-expr="upper(org.org_name)">
-			<report heading="Name"/>
+			<report heading="Name" url="create-app-url:/account/home.jsp?org_id=${0}&amp;org_name=%{.}"/>
 		</field>
 		<field id="org_abbrev" caption="Account Abbreviation" join="org" column="org_abbrev" where-expr="upper(org.org_abbrev)">
 			<report heading="Abbrev"/>

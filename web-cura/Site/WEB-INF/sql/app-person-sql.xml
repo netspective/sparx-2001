@@ -24,13 +24,13 @@
                 project_code,
                 project_name
             from
-                project, project_relation, person
+                project, projectperson_relation, person
             where
                 person.person_id = ? and
-                project_relation.parent_id = project.project_id and
-                person.person_id = project_relation.rel_person_id
+                projectperson_relation.parent_id = project.project_id and
+                person.person_id = projectperson_relation.rel_person_id
             <params>
-                <param value="request-attr:person_id"/>
+                <param value="session:person_id"/>
             </params>
             <report heading="My Active Projects">
                 <column heading="Code" align="center"/>
@@ -39,17 +39,18 @@
         </statement>
         <statement name="active-tasks">
             select
-                task_id,
-                priority_id,
-                task_status
+                task.task_id,
+                task.priority_id,
+                task.task_status
             from
-                task, task_relation, person
+                task, taskperson_relation, person
             where
                 person.person_id = ? and
-                task_relation.parent_id = task.task_id and
-                person.person_id = task_relation.rel_person_id
+                taskperson_relation.parent_id = task.task_id and
+                person.person_id = taskperson_relation.rel_person_id
+            order by task.priority_id
             <params>
-                <param value="request-attr:person_id"/>
+                <param value="session:person_id"/>
             </params>
             <report heading="My Active Tasks">
                 <column heading="ID" align="center"/>
@@ -93,7 +94,7 @@
 			and por.rel_org_id = org.org_id /* join to get org_name */
 
             <params>
-                <param value="request-attr:person_id"/>
+                <param value="session:person_id"/>
             </params>
 		</statement>
 

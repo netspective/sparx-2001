@@ -3,13 +3,24 @@
 <xaf>
     <dialogs package="project">
         <dialog name="registration" heading="create-data-cmd-heading:Project" retain-params="*" class="app.form.ProjectDialog">
-            <field.separator heading="Information"/>
             <field.integer name="project_id" caption="Project ID" read-only="browser">
                 <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
             </field.integer>
-            <field.text name="project_name" caption="Project Name"     max-length="255" required="yes"/>
+            <field.text name="project_name" caption="Project Name"     max-length="255" required="yes">
+                <conditional action="apply-flag" flag="browser-read-only" data-cmd="edit,delete"/>
+            </field.text>
             <field.text name="project_code" caption="Code"       max-length="64"/>
             <field.memo name="project_descr" caption="Description" required="yes"/>
+            <field.select name="project_status" caption="Status" required="yes" choices="query:project.status-list" />
+            <field.date name="start_date" caption="Start Date" required="yes" default="today" popup-calendar="yes"/>
+            <field.date name="target_end_date" caption="End Date (Target)" required="yes" popup-calendar="yes">
+                <conditional action="apply-flag" flag="browser-read-only" data-cmd="edit,delete"/>
+            </field.date>
+            <field.date name="actual_end_date" caption="Actual End Date" required="no" popup-calendar="yes">
+                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
+            </field.date>
+            <field.email name="notify_email" caption="Notify Email" />
+            <field.text name="organization" default="session:organization" hidden="yes"/>
         </dialog>
 
         <dialog name="org_relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*" >
@@ -45,11 +56,14 @@
             </execute-tasks>
         </dialog>
 
-        <dialog name="person_relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*">
-            <field.select name="person" style="multilist" caption="Member(s)" required="yes">
-
+        <dialog name="person_registeration" heading="Edit Project Member(s)" retain-params="*" class="app.form.ProjectMemberDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.integer name="project_id" hidden="yes" default="request:project_id"/>
+            <field.text name="project_name" caption="Project" read-only="browser" default="request:project_name"/>
+            <field.select name="rel_person_id" style="multidual" caption="Contacts" required="yes"
+                choices="query:org.selected-org-person-list" default="query:project.member-persons">
             </field.select>
-            <field.email name="notify_email" caption="Notify Email" />
         </dialog>
     </dialogs>
 </xaf>

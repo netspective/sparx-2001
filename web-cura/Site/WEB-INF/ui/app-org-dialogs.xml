@@ -45,5 +45,15 @@
 				<exec-redirect url="create-app-url:/account"/>
 			</execute-tasks>
 		</dialog>
+
+        <dialog name="person_registeration" heading="Edit Organization Member(s)" retain-params="*" class="app.form.AccountMemberDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.integer name="org_id" hidden="yes" default="request:org_id"/>
+            <field.text name="org_name" caption="Organization" read-only="browser" default="request:org_name"/>
+            <field.select name="rel_person_id" style="multidual" caption="Contacts" required="yes"
+                choices="query:org.selected-org-person-list" default="query:org.member-persons">
+            </field.select>
+        </dialog>
 	</dialogs>
 </xaf>

@@ -2,6 +2,13 @@
 
 <xaf>
 	<sql-statements package="task">
+        <statement name="type-list">
+            select
+                caption,
+                id
+            from
+                task_type
+        </statement>
         <statement name="priority-list">
             select
                 caption,
@@ -39,6 +46,19 @@
                 <column heading="Summary" align="left"/>
                 <column heading="Status" align="left"/>
                 <column heading="Priority" align="left"/>
+            </report>
+            <params>
+                <param value="request:task_id"/>
+            </params>
+        </statement>
+        <statement name="assigned-members">
+            <report heading="Overview">
+				<banner>
+                    <item caption="Add" url="config-expr:assign.jsp?task_id=${request:task_id}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Last Name" align="left"/>
+                <column heading="First Name" align="left"/>
             </report>
             <params>
                 <param value="request:task_id"/>
