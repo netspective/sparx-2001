@@ -55,6 +55,7 @@ public class XmlSource
 	protected Element metaInfoElem;
 	protected Element metaInfoOptionsElem;
 	protected Set inheritanceHistorySet = new HashSet();
+    protected Map templates = new HashMap();
 
 	public boolean getAllowReload() { return allowReload; }
 	public void setAllowReload(boolean value) { allowReload = value; }
@@ -156,6 +157,99 @@ public class XmlSource
 		reload();
 		return xmlDoc;
 	}
+
+    /**
+     * Given an element, see if the element is a <templates> element. If it is, then catalog all of
+     * the elements as templates that can be re-used at a later point.
+     */
+    public void catalogElement(Element elem)
+    {
+        if(! "templates".equals(elem.getNodeName()))
+            return;
+
+        String pkgName = elem.getAttribute("package");
+
+        NodeList children = elem.getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
+        {
+            Node child = children.item(c);
+            if(child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            Element childElem = (Element) child;
+            String templateName = childElem.getAttribute("id");
+            if(templateName.length() == 0)
+                templateName = childElem.getAttribute("name");
+
+            templates.put(pkgName.length() > 0 ? (pkgName + "." + templateName) : templateName, childElem);
+        }
+    }
+
+    /**
+     * Given an element, apply templates to the node. If there is an attribute called "template" then inherit that
+     * template first. Then, search through all of the nodes in the element and try to find all <include-template id="x">
+     * elements to copy the template elements at those locations. Also, go through each child to see if a tag name
+     * exists that matches a template name -- if it does, then "inherit" that template to replace the element at that
+     * location.
+     */
+    public void processTemplates(Element elem)
+    {
+        inheritNodes(elem, templates, "template");
+
+        NodeList includes = elem.getElementsByTagName("include-template");
+		if(includes != null && includes.getLength() > 0)
+        {
+            for(int n = 0; n < includes.getLength(); n++)
+            {
+                Element include = (Element) includes.item(n);
+                String templateName = include.getAttribute("id");
+                Element template = (Element) templates.get(templateName);
+
+                if(template != null)
+                {
+                    NodeList incChildren = template.getChildNodes();
+                    for(int c = 0; c < incChildren.getLength(); c++)
+                    {
+                        Node incCopy = xmlDoc.importNode(incChildren.item(c), true);
+                        if(incCopy.getNodeType() == Node.ELEMENT_NODE)
+                            ((Element) incCopy).setAttribute("_included-from-template", templateName);
+                        elem.insertBefore(incCopy, include);
+                    }
+                }
+            }
+        }
+
+        NodeList children = elem.getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
+        {
+            Node childNode = children.item(c);
+            if(childNode.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            String nodeName = childNode.getNodeName();
+            if(templates.containsKey(nodeName))
+            {
+                Element template = (Element) templates.get(nodeName);
+                Node incCopy = xmlDoc.importNode(template, true);
+                if(incCopy.getNodeType() == Node.ELEMENT_NODE)
+                    ((Element) incCopy).setAttribute("_included-from-template", nodeName);
+
+                // make sure that the child's attributes overwrite the attributes in the templates with the same name
+                NamedNodeMap attrsInChild = childNode.getAttributes();
+                for(int a = 0; a < attrsInChild.getLength(); a++)
+                {
+                    Node childAttr = attrsInChild.item(a);
+                    ((Element) incCopy).setAttribute(childAttr.getNodeName(), childAttr.getNodeValue());
+                }
+
+                // now do the actual replacement
+                inheritNodes((Element) incCopy, templates, "template");
+                elem.replaceChild(incCopy, childNode);
+            }
+            else
+                inheritNodes((Element) childNode, templates, "template");
+        }
+    }
 
 	public List getErrors() { return errors; }
 	public void addError(String msg) { errors.add(msg); }

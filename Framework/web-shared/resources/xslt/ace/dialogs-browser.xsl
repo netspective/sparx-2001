@@ -161,6 +161,7 @@
 					<font color="navy"><xsl:value-of select="."/></font><br/>
 				</xsl:if>
 			</xsl:for-each>
+			<xsl:value-of select="text()"/>
 		</td>
 	</tr>
 	<xsl:for-each select="*[not(starts-with(name(), 'field.'))]">

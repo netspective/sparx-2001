@@ -230,6 +230,7 @@ public class DialogManager extends XmlSource
 	    			if(scName.equals("dialog"))
 					{
 						Element dialogElem = (Element) dialogsChild;
+                        processTemplates(dialogElem);
 						DialogInfo di = new DialogInfo(stmtPkg, dialogElem);
 		    			dialogs.put(di.getLookupName(), di);
 					}
@@ -284,6 +285,10 @@ public class DialogManager extends XmlSource
                 {
                     errors.add("Field class '"+className+"' not found: " + e.toString());
                 }
+            }
+            else
+            {
+                catalogElement((Element) node);
             }
 		}
 
