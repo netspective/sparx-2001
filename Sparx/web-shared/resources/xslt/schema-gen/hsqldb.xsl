@@ -90,7 +90,7 @@
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
-	<xsl:text> </xsl:text>
+	<xsl:value-of select="' '"/>
 </xsl:template>
 <xsl:template name="column-sql-modifiers">
 	<xsl:param name="table"/>

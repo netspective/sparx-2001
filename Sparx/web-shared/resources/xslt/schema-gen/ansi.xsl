@@ -132,7 +132,7 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
-	<xsl:text>	</xsl:text>
+	<xsl:value-of select="'	'"/>
 	<xsl:value-of select="$column/@name"/>
 	<xsl:call-template name="column-sql-defn">
 		<xsl:with-param name="table" select="$table"/>
@@ -150,15 +150,15 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	</xsl:if>
 	<xsl:if test="not($column/@is-last)">,</xsl:if>
 <!-- line break -->
-<xsl:text>
-</xsl:text>
+<xsl:value-of select="'
+'"/>
 </xsl:template>
 
 <xsl:template name="column-sql-defn">
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
-	<xsl:text> </xsl:text>
+	<xsl:value-of select="' '"/>
 	<xsl:choose>
 		<xsl:when test="$column/sqldefn[@dbms = $dbms-id]">
 			<xsl:value-of select="$column/sqldefn[@dbms = $dbms-id]"/>
