@@ -104,10 +104,11 @@
 		<composite>
 			<column name="begin_$name$" type="integer"/>
 			<column name="end_$name$" type="integer"/>
-			<column name="unit_$name$" lookupref="Age_Range_Unit"/>
+			<column name="unit_$name$" lookupref="Age_Range_Unit" type="integer"/>
 		</composite>
 	</datatype>
 	<datatype name="longtext">
+		<java-class package="java.lang">String</java-class>
 		<sqldefn>varchar(%size%)</sqldefn>
 		<size>256</size>
 	</datatype>
