@@ -14,12 +14,17 @@ import com.xaf.value.*;
 
 public class Dialog
 {
+    // NOTE: when adding new flags, make sure to create them before the
+    // last DLGFLAG_CUSTOM_START entry. This is because QueryBuilderDialog
+    // extends this class and has additional flags that is based on the value
+    // of DLGFLAG_CUSTOM_START.
 	static public final int DLGFLAG_CONTENTS_FINALIZED        = 1;
 	static public final int DLGFLAG_RETAIN_ALL_REQUEST_PARAMS = DLGFLAG_CONTENTS_FINALIZED * 2;
 	static public final int DLGFLAG_LOOP_DATA_ENTRY           = DLGFLAG_RETAIN_ALL_REQUEST_PARAMS * 2;
 	static public final int DLGFLAG_APPEND_WHEN_LOOPING       = DLGFLAG_LOOP_DATA_ENTRY * 2;
-	static public final int DLGFLAG_CUSTOM_START              = DLGFLAG_APPEND_WHEN_LOOPING * 2;
-	static public final int DLGFLAG_HIDE_READONLY_HINTS       = DLGFLAG_CUSTOM_START * 2;
+   	static public final int DLGFLAG_HIDE_READONLY_HINTS       = DLGFLAG_APPEND_WHEN_LOOPING * 2;
+	static public final int DLGFLAG_CUSTOM_START              = DLGFLAG_HIDE_READONLY_HINTS * 2;
+
 
 	static public final String PARAMNAME_AUTOEXECUTE   = "_d_exec";
 	static public final String PARAMNAME_DIALOGPREFIX  = "_d.";
