@@ -10,6 +10,7 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 import com.xaf.ace.*;
+import com.xaf.config.*;
 import com.xaf.navigate.*;
 import com.xaf.page.*;
 
@@ -20,6 +21,8 @@ public class DocumentsPage extends AceServletPage
 	private String ref;
 	private boolean isFileRef;
 	private FileSystemContext fsContext;
+	private boolean transformersMapInitialized;
+	private Map transformersMap;
 
 	public DocumentsPage()
 	{
@@ -71,6 +74,28 @@ public class DocumentsPage extends AceServletPage
 
 	public void handlePage(PageContext pc) throws ServletException
 	{
+		if(! transformersMapInitialized)
+		{
+			transformersMapInitialized = true;
+			Configuration appConfig = ((AppComponentsExplorerServlet) pc.getServlet()).getAppConfig();
+			Collection transformers = appConfig.getValues(pc, ACE_CONFIG_ITEMS_PREFIX + "transform");
+			if(transformers != null)
+			{
+				transformersMap = new HashMap();
+				for(Iterator i = transformers.iterator(); i.hasNext(); )
+				{
+					Object entry = i.next();
+					if(entry instanceof Property)
+					{
+						Property extensionInfo = (Property) entry;
+						String fileExtn = extensionInfo.getName();
+						String styleSheetName = appConfig.getValue(pc, extensionInfo, null);
+						transformersMap.put(fileExtn, styleSheetName);
+					}
+				}
+			}
+		}
+
 		try
 		{
 			if(! isFileRef)
@@ -119,7 +144,21 @@ public class DocumentsPage extends AceServletPage
 			}
 			else
 			{
-				activeEntry.send((HttpServletResponse) pc.getResponse());
+				if(transformersMap != null)
+				{
+					String transformUsingStyleSheet = (String) transformersMap.get(activeEntry.getEntryType());
+					if(transformUsingStyleSheet != null)
+					{
+						handlePageMetaData(pc);
+						handlePageHeader(pc);
+						transform(pc, activeEntry.getAbsolutePath(), transformUsingStyleSheet);
+						handlePageFooter(pc);
+					}
+ 	    			else
+		    			activeEntry.send((HttpServletResponse) pc.getResponse());
+				}
+ 				else
+					activeEntry.send((HttpServletResponse) pc.getResponse());
 			}
 		}
 		catch(IOException e)

@@ -2,6 +2,7 @@ package com.xaf.ace;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.text.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -50,6 +51,11 @@ public class AceServletPage extends AbstractServletPage
 		AppComponentsExplorerServlet servlet = ((AppComponentsExplorerServlet) pc.getServlet());
 		Hashtable styleSheetParams = servlet.getStyleSheetParams();
 
+		/**
+		 * Add all of the entries from configuration.xml into the StyleSheet
+		 * parameters. This will allow stylesheets to use the configuration
+		 * properties as well.
+		 */
 		if(styleSheetParams.get("config-items-added") == null)
 		{
 			Configuration appConfig = ((PageControllerServlet) pc.getServlet()).getAppConfig();
@@ -116,8 +122,36 @@ public class AceServletPage extends AbstractServletPage
             e.printStackTrace(new PrintWriter(stack));
 			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
 		}
+	}
 
-		//out.write(Transform.nodeToString(styleSheet, doc, styleSheetParams));
+	public void transform(PageContext pc, String xmlSourceFile, String xsltSourceFile) throws IOException
+	{
+        PrintWriter out = pc.getResponse().getWriter();
+
+		try
+		{
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer(new StreamSource(xsltSourceFile));
+
+			File srcFile = new File(xmlSourceFile);
+			transformer.setParameter("file-date", DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(new Date(srcFile.lastModified())));
+
+			transformer.transform
+				(new javax.xml.transform.stream.StreamSource(xmlSourceFile),
+				 new javax.xml.transform.stream.StreamResult(out));
+		}
+		catch(TransformerConfigurationException e)
+		{
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
+		}
+		catch(TransformerException e)
+		{
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
+		}
 	}
 
 	public void handlePageMetaData(PageContext pc) throws ServletException, IOException
