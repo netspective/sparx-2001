@@ -17,9 +17,4 @@ public class RequirementTreeManager extends XmlSource
 	{
 		loadDocument(file);
 	}
-
-	public void catalogNodes()
-	{
-		super.catalogNodes();
-	}
 }

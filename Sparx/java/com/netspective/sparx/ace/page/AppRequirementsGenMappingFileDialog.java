@@ -4,6 +4,8 @@ import com.netspective.sparx.xaf.form.*;
 import com.netspective.sparx.xaf.form.field.TextField;
 import com.netspective.sparx.xaf.requirement.RequirementTreeManager;
 import com.netspective.sparx.xaf.requirement.RequirementTreeManagerFactory;
+import com.netspective.sparx.xaf.requirement.JavadocTreeManager;
+import com.netspective.sparx.xaf.requirement.JavadocTreeManagerFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
 import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
@@ -98,6 +100,7 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 		transformStatements(context, requirements, streamResult);
 		transformQueryDefs(context, requirements, streamResult);
 		transformDialogs(context, requirements, streamResult);
+		transformJavadocs(context, requirements, streamResult);
 
 		tmpWriter.close();
 
@@ -107,6 +110,7 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 		String line = null;
 		while((line = reader.readLine()) != null)
 		{
+			line = line.trim();
 			if(line.equals("&nbsp;") || line.length() == 0) continue;
 			bWriter.write(line);
 			bWriter.newLine();
@@ -118,6 +122,17 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 
 		writer.write("<h4 style='font-family:Verdana; font-size:9pt'>Generated <b style='color:darkred'>'"
 			+ outFileName + "'</b><br>@ " + format1.format(now) + "</h4>");
+	}
+
+	public void transformJavadocs(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException
+	{
+		JavadocTreeManager manager = JavadocTreeManagerFactory.getManager(context);
+		for (int i = 0; i < requirements.getLength(); i++)
+		{
+			Element requirement = (Element) requirements.item(i);
+			transform(npc, manager.getDocument(), "app.requirements.java.xsl", streamResult,
+				"java", requirement.getAttribute("label"));
+		}
 	}
 
 	public void transformDialogs(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException

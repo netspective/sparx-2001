@@ -5,6 +5,8 @@ import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.navigate.*;
 import com.netspective.sparx.xaf.requirement.RequirementTreeManager;
 import com.netspective.sparx.xaf.requirement.RequirementTreeManagerFactory;
+import com.netspective.sparx.xaf.requirement.JavadocTreeManager;
+import com.netspective.sparx.xaf.requirement.JavadocTreeManagerFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.form.DialogManager;
@@ -67,6 +69,7 @@ public class AppRequirementsPage extends AceServletPage
 				handleStatement(writer, nc);
 				handleQueryDef(writer, nc);
 				handleDialog(writer, nc);
+				handleJava(writer, nc);
 			}
 			else if (type.equals("generate-mapping"))
 			{
@@ -90,19 +93,26 @@ public class AppRequirementsPage extends AceServletPage
 			}
 			else if (type.equals("java"))
 			{
-				writer.write("<h4 style='color:red'>The Java Codes option is left as an exercise for studious pupils.</h4>");
+				handleJava(writer, nc);
 			}
 			else if (type.equals("plsql"))
 			{
-				writer.write("<h4 style='color:red'>The PL/SQL Codes option is left as an exercise for studious pupils.</h4>");
+				writer.write("<h4 style='color:red; font-family:Tahoma'>The PL/SQL Codes option is left as an exercise for studious pupils.</h4>");
 			}
 
 			return;
 		}
 
 		RequirementTreeManager reqManager = RequirementTreeManagerFactory.getManager(context);
-		Document requirementsDoc = reqManager.getDocument();
-		transform(nc, requirementsDoc, "app.requirements.xsl");
+		transform(nc, reqManager.getDocument(), "app.requirements.xsl");
+	}
+
+	public void handleJava(Writer writer, NavigationPathContext nc) throws IOException
+	{
+		ServletContext context = nc.getServletContext();
+		JavadocTreeManager manager = JavadocTreeManagerFactory.getManager(context);
+		manager.addMetaInfoOptions();
+		transform(nc, manager.getDocument(), "app.requirements.java.xsl");
 	}
 
 	public void handleGenerateMappingFile(Writer writer, NavigationPathContext nc) throws IOException
