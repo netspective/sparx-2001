@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: popup.js,v 1.5 2003-04-18 00:29:43 aye.thu Exp $
+ * $Id: popup.js,v 1.6 2003-04-23 21:06:22 aye.thu Exp $
  */
 
 //****************************************************************************
@@ -139,8 +139,22 @@ function PopulateControlInfo_populateValue(value)
 			this.adjacentArea.innerHTML = value;
 	    }
 		else if(this.field != null)
-		{                 
-			this.control.value = value;
+		{
+		    if (this.control.options)
+		    {
+		        // this is a select field
+		        var options = this.control.options;
+                for(var o = 0; o < options.length; o++)
+                {
+                    if(options[o].text == value)
+                    {
+                        options[o].selected = true;
+                        return;
+                    }
+                }
+		    }
+		    else
+			    this.control.value = value;
 			if((this.field.typeName == "com.netspective.sparx.xaf.form.field.StaticField") || (this.field.flags & FLDFLAG_READONLY != 0))
             {                                   
                 element = this.field.getControlByQualifiedName(this.dialog);                
