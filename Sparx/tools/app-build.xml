@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.21 2002-09-29 01:01:18 shahid.shah Exp $
+$Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -458,6 +458,7 @@ $Id: app-build.xml,v 1.21 2002-09-29 01:01:18 shahid.shah Exp $
         <delete dir="${app.java.dal.doc.dir}"/>
         <delete dir="${app.java.dcb.dir}"/>
         <delete dir="${app.java.dcb.doc.dir}"/>
+        <delete dir="${app.java.identifiers.doc.dir}"/>
         
         <delete dir="${resin.work.dir}"/>
         <delete dir="${config.app.site-temp-path}"/>
