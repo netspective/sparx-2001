@@ -3,55 +3,55 @@
  *
  * Netspective Corporation permits redistribution, modification and use
  * of this file in source and binary form ("The Software") under the
- * Netspective Source License ("NSL" or "The License"). The following 
- * conditions are provided as a summary of the NSL but the NSL remains the 
+ * Netspective Source License ("NSL" or "The License"). The following
+ * conditions are provided as a summary of the NSL but the NSL remains the
  * canonical license and must be accepted before using The Software. Any use of
- * The Software indicates agreement with the NSL. 
+ * The Software indicates agreement with the NSL.
  *
  * 1. Each copy or derived work of The Software must preserve the copyright
  *    notice and this notice unmodified.
  *
- * 2. Redistribution of The Software is allowed in object code form only 
- *    (as Java .class files or a .jar file containing the .class files) and only 
- *    as part of an application that uses The Software as part of its primary 
- *    functionality. No distribution of the package is allowed as part of a software 
- *    development kit, other library, or development tool without written consent of 
- *    Netspective Corporation. Any modified form of The Software is bound by 
+ * 2. Redistribution of The Software is allowed in object code form only
+ *    (as Java .class files or a .jar file containing the .class files) and only
+ *    as part of an application that uses The Software as part of its primary
+ *    functionality. No distribution of the package is allowed as part of a software
+ *    development kit, other library, or development tool without written consent of
+ *    Netspective Corporation. Any modified form of The Software is bound by
  *    these same restrictions.
- * 
- * 3. Redistributions of The Software in any form must include an unmodified copy of 
+ *
+ * 3. Redistributions of The Software in any form must include an unmodified copy of
  *    The License, normally in a plain ASCII text file unless otherwise agreed to,
  *    in writing, by Netspective Corporation.
  *
- * 4. The names "Sparx" and "Netspective" are trademarks of Netspective 
- *    Corporation and may not be used to endorse products derived from The 
- *    Software without without written consent of Netspective Corporation. "Sparx" 
- *    and "Netspective" may not appear in the names of products derived from The 
+ * 4. The names "Sparx" and "Netspective" are trademarks of Netspective
+ *    Corporation and may not be used to endorse products derived from The
+ *    Software without without written consent of Netspective Corporation. "Sparx"
+ *    and "Netspective" may not appear in the names of products derived from The
  *    Software without written consent of Netspective Corporation.
  *
- * 5. Please attribute functionality to Sparx where possible. We suggest using the 
+ * 5. Please attribute functionality to Sparx where possible. We suggest using the
  *    "powered by Sparx" button or creating a "powered by Sparx(tm)" link to
  *    http://www.netspective.com for each application using Sparx.
  *
- * The Software is provided "AS IS," without a warranty of any kind. 
+ * The Software is provided "AS IS," without a warranty of any kind.
  * ALL EXPRESS OR IMPLIED REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
  * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
  * OR NON-INFRINGEMENT, ARE HEREBY DISCLAIMED.
  *
  * NETSPECTIVE CORPORATION AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING 
+ * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING
  * THE SOFTWARE. IN NO EVENT WILL NETSPECTIVE OR ITS LICENSORS BE LIABLE
  * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
  * CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
  * REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
  * INABILITY TO USE THE SOFTWARE, EVEN IF HE HAS BEEN ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGES.      
+ * OF SUCH DAMAGES.
  *
  * @author Shahid N. Shah
  */
- 
+
 /**
- * $Id: BooleanField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: BooleanField.java,v 1.2 2002-05-01 14:09:31 jruss Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -84,6 +84,7 @@ public class BooleanField extends DialogField
     private int choices = CHOICES_YESNO;
     private SingleValueSource trueText;
     private SingleValueSource falseText;
+    private SingleValueSource noneText;
 
     public BooleanField()
     {
@@ -97,6 +98,7 @@ public class BooleanField extends DialogField
         choices = aChoices;
         falseText = null;
         trueText = null;
+        noneText = null;
     }
 
     public final int getStyle()
@@ -165,9 +167,11 @@ public class BooleanField extends DialogField
 
             String falseText = CHOICES_TEXT[(choices * 2) + 0];
             String trueText = CHOICES_TEXT[(choices * 2) + 1];
+            String noneText = "None";
 
             this.falseText = ValueSourceFactory.getSingleOrStaticValueSource(falseText);
             this.trueText = ValueSourceFactory.getSingleOrStaticValueSource(trueText);
+            this.noneText = ValueSourceFactory.getSingleOrStaticValueSource(noneText);
         }
 
         String falseText = elem.getAttribute("false");
@@ -177,6 +181,13 @@ public class BooleanField extends DialogField
         String trueText = elem.getAttribute("true");
         if(trueText.length() > 0)
             this.trueText = ValueSourceFactory.getSingleOrStaticValueSource(trueText);
+
+        String allowNeither = elem.getAttribute("allow-neither");
+        if(allowNeither.length() > 0 ) {
+                this.noneText = ValueSourceFactory.getSingleOrStaticValueSource(allowNeither);
+        } else {
+            this.noneText = null ;
+        }
     }
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
@@ -188,12 +199,15 @@ public class BooleanField extends DialogField
         }
 
         boolean value = false;
+        int index = -1;
         String strValue = dc.getValue(this);
         if(strValue != null)
+        {
             value = new Integer(strValue).intValue() == 0 ? false : true;
-
+        }
         String falseText = "";
         String trueText = "";
+        String noneText = "";
         if(this.falseText != null)
             falseText = this.falseText.getValue(dc);
         else
@@ -203,6 +217,11 @@ public class BooleanField extends DialogField
             trueText = this.trueText.getValue(dc);
         else
             trueText = CHOICES_TEXT[(this.choices * 2) + 1];
+
+        if(this.noneText != null)
+            noneText = this.noneText.getValue(dc);
+        else
+            noneText = "None";
 
         if(isReadOnly(dc))
         {
@@ -215,9 +234,21 @@ public class BooleanField extends DialogField
         switch(style)
         {
             case BOOLSTYLE_RADIO:
-                writer.write(
+                if (this.noneText != null)
+                {
+                    String[] val = { "" , "" , "" };
+                    setChecked (strValue, val);
+                    writer.write(
+                        "<nobr><input type='radio' name='" + id + "' id='" + id + "0' value='0' " + val[0] + defaultControlAttrs + "> <label for='" + id + "0'>" + falseText + "</label></nobr> " +
+                        "<nobr><input type='radio' name='" + id + "' id='" + id + "1' value='1' " + val[1] + defaultControlAttrs + "> <label for='" + id + "1'>" + trueText + "</label></nobr> " +
+                        "<nobr><input type='radio' name='" + id + "' id='" + id + "2' value='2' " + val[2] + defaultControlAttrs + "> <label for='" + id + "2'>" + noneText + "</label></nobr>");
+                }
+                else
+                {
+                    writer.write(
                         "<nobr><input type='radio' name='" + id + "' id='" + id + "0' value='0' " + (value ? "" : "checked ") + defaultControlAttrs + "> <label for='" + id + "0'>" + falseText + "</label></nobr> " +
                         "<nobr><input type='radio' name='" + id + "' id='" + id + "1' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> <label for='" + id + "1'>" + trueText + "</label></nobr>");
+                }
                 break;
 
             case BOOLSTYLE_CHECK:
@@ -241,7 +272,7 @@ public class BooleanField extends DialogField
         }
     }
 
-    /**
+   /**
      * Produces Java code when a custom DialogContext is created
      */
     public DialogContextMemberInfo getDialogContextMemberInfo()
@@ -256,5 +287,19 @@ public class BooleanField extends DialogField
         mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", value == true ? \"1\" : \"0\"); }\n");
 
         return mi;
+    }
+
+    private void setChecked (String strValue, String[] val)
+    {
+        int index;
+        if (strValue != null)
+        {
+            try
+            {
+                index = Integer.parseInt (strValue);
+                val[index] = " checked ";
+            }
+            catch (NumberFormatException e) { }
+        }
     }
 }
