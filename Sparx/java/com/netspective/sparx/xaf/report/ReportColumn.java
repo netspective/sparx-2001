@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportColumn.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: ReportColumn.java,v 1.2 2002-02-09 15:04:59 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -70,7 +70,8 @@ public interface ReportColumn
     static public final long COLFLAG_WRAPURL = COLFLAG_HASOUTPUTPATTERN * 2;
     static public final long COLFLAG_HAVEANCHORATTRS = COLFLAG_WRAPURL * 2;
     static public final long COLFLAG_HAVECONDITIONALS = COLFLAG_HAVEANCHORATTRS * 2;
-    static public final long COLFLAG_CUSTOMSTART = COLFLAG_HAVECONDITIONALS * 2;
+    static public final long COLFLAG_NOWORDBREAKS = COLFLAG_HAVECONDITIONALS * 2;
+    static public final long COLFLAG_CUSTOMSTART = COLFLAG_NOWORDBREAKS * 2;
 
     static public final int ALIGN_LEFT = 0;
     static public final int ALIGN_CENTER = 1;

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GeneralColumn.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: GeneralColumn.java,v 1.2 2002-02-09 15:04:59 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.report.column;
@@ -423,6 +423,12 @@ public class GeneralColumn implements ReportColumn
         value = elem.getAttribute("output");
         if(value.length() > 0)
             setOutput(value);
+
+        value = elem.getAttribute("word-wrap");
+        if(value.equals("no"))
+            setFlag(ReportColumn.COLFLAG_NOWORDBREAKS);
+        else
+            clearFlag(ReportColumn.COLFLAG_NOWORDBREAKS);
 
         importChildrenFromXml(elem);
     }

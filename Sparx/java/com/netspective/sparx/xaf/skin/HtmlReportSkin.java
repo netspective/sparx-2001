@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HtmlReportSkin.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: HtmlReportSkin.java,v 1.2 2002-02-09 15:05:00 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -342,9 +342,17 @@ public class HtmlReportSkin implements ReportSkin
                         state.getOutputFormat() :
                         column.getFormattedData(rc, rowNum, rowData, true);
 
-                String singleRow = "<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'><font " + dataFontAttrs + ">" +
+                String dataTagsBegin = "";
+                String dataTagsEnd = "";
+                if(column.flagIsSet(ReportColumn.COLFLAG_NOWORDBREAKS))
+                {
+                    dataTagsBegin = "<nobr>";
+                    dataTagsEnd = "</nobr>";
+                }
+
+                String singleRow = "<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'>"+ dataTagsBegin +"<font " + dataFontAttrs + ">" +
                         (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='" + state.getUrl() + "' " + state.getUrlAnchorAttrs() + ">" + data + "</a>" : data) +
-                        "</font></td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
+                        "</font>"+ dataTagsEnd +"</td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
 
                 //writer.write(MessageFormat.format(singleRow, rowData));
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
@@ -412,9 +420,17 @@ public class HtmlReportSkin implements ReportSkin
                         state.getOutputFormat() :
                         column.getFormattedData(rc, rowNum, rowData, true);
 
-                String singleRow = "<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'><font " + dataFontAttrs + ">" +
+                String dataTagsBegin = "";
+                String dataTagsEnd = "";
+                if(column.flagIsSet(ReportColumn.COLFLAG_NOWORDBREAKS))
+                {
+                    dataTagsBegin = "<nobr>";
+                    dataTagsEnd = "</nobr>";
+                }
+
+                String singleRow = "<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'>"+ dataTagsBegin +"<font " + dataFontAttrs + ">" +
                         (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='" + state.getUrl() + "'" + state.getUrlAnchorAttrs() + ">" + colData + "</a>" : colData) +
-                        "</font></td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
+                        "</font>"+ dataTagsEnd +"</td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
 
                 //writer.write(MessageFormat.format(singleRow, rowData));
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
