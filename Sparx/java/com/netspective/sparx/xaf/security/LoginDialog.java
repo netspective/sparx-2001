@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LoginDialog.java,v 1.4 2002-08-18 21:07:16 shahid.shah Exp $
+ * $Id: LoginDialog.java,v 1.5 2003-01-01 18:27:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -139,7 +139,7 @@ public class LoginDialog extends Dialog
     public TextField createUserIdField()
     {
         TextField result = new TextField("user_id", "User ID");
-        result.setFlag(DialogField.FLDFLAG_REQUIRED);
+        result.setFlag(DialogField.FLDFLAG_REQUIRED | DialogField.FLDFLAG_PERSIST);
         result.setFlag(DialogField.FLDFLAG_INITIAL_FOCUS);
         return result;
     }
