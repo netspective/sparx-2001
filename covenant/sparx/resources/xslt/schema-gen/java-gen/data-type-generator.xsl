@@ -45,7 +45,7 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
     <xsl:if test="validate[not(@_gen-is-duplicate)]/static-java-code">
     static
     {
-    <xsl:for-each select="validate/static-java-code">
+    <xsl:for-each select="validate[not(@_gen-is-duplicate)]/static-java-code">
         <xsl:value-of select="final-code"/>
     </xsl:for-each>
     }
@@ -65,6 +65,79 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 <xsl:if test="size">		setSize(<xsl:value-of select="size"/>);
 </xsl:if>	}
 
+    public DataValidationResult getValidationResult(Object _value)
+    {
+        <xsl:value-of select="$java-class-spec"/> value = (<xsl:value-of select="$java-class-spec"/>) _value;
+        BasicDataValidationResult bdvResult = new BasicDataValidationResult(this.getName());
+
+        if(isRequired() &amp;&amp; value == null)
+        {
+            bdvResult.addResultInfo(RULENAME_REQUIRED, false, getName() + " is required but has no value.");
+            return bdvResult;
+        }
+
+    <xsl:for-each select="validate[not(@_gen-is-duplicate) and (@event='universal' or not(@event))]/java-code">
+        <xsl:value-of select="final-code"/>
+    </xsl:for-each>
+
+        return bdvResult;
+    }
+
+    public DataValidationResult getInsertValidationResult(Object _value)
+    {
+        <xsl:value-of select="$java-class-spec"/> value = (<xsl:value-of select="$java-class-spec"/>) _value;
+        BasicDataValidationResult bdvResult = new BasicDataValidationResult(this.getName());
+
+        if(isRequired() &amp;&amp; value == null)
+        {
+            bdvResult.addResultInfo(RULENAME_REQUIRED, false, getName() + " is required but has no value.");
+            return bdvResult;
+        }
+
+    <xsl:for-each select="validate[not(@_gen-is-duplicate) and @event='insert']/java-code">
+        <xsl:value-of select="final-code"/>
+    </xsl:for-each>
+
+        return bdvResult;
+    }
+
+    public DataValidationResult getUpdateValidationResult(Object _value)
+    {
+        <xsl:value-of select="$java-class-spec"/> value = (<xsl:value-of select="$java-class-spec"/>) _value;
+        BasicDataValidationResult bdvResult = new BasicDataValidationResult(this.getName());
+
+        if(isRequired() &amp;&amp; value == null)
+        {
+            bdvResult.addResultInfo(RULENAME_REQUIRED, false, getName() + " is required but has no value.");
+            return bdvResult;
+        }
+
+    <xsl:for-each select="validate[not(@_gen-is-duplicate) and @event='update']/java-code">
+        <xsl:value-of select="final-code"/>
+    </xsl:for-each>
+
+        return bdvResult;
+    }
+
+    public DataValidationResult getDeleteValidationResult(Object _value)
+    {
+        <xsl:value-of select="$java-class-spec"/> value = (<xsl:value-of select="$java-class-spec"/>) _value;
+        BasicDataValidationResult bdvResult = new BasicDataValidationResult(this.getName());
+
+        if(isRequired() &amp;&amp; value == null)
+        {
+            bdvResult.addResultInfo(RULENAME_REQUIRED, false, getName() + " is required but has no value.");
+            return bdvResult;
+        }
+
+    <xsl:for-each select="validate[not(@_gen-is-duplicate) and @event='delete']/java-code">
+        <xsl:value-of select="final-code"/>
+    </xsl:for-each>
+
+        return bdvResult;
+    }
+
+/*
 	public BasicDataValidationResult getValidationResult(<xsl:value-of select="$java-class-spec"/> value)
 	{
 		BasicDataValidationResult bdvResult = new BasicDataValidationResult(this.getName());
@@ -81,6 +154,7 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 
 		return bdvResult;
 	}
+*/
 
 	public boolean isValid(<xsl:value-of select="$java-class-spec"/> value)
 	{

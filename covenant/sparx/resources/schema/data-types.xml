@@ -8,7 +8,7 @@
 		<sqldefn dbms="mssql">varchar(${size})</sqldefn>
 		<size>32</size>
 
-    	<validate type="max-length" length="getSize()"/>
+		<validate type="max-length" length="getSize()"/>
 
 		<field.text size="20"/>
 	</datatype>
@@ -98,7 +98,7 @@
         <validate type="max-length" length="100"/>
         <validate type="min-value" value="new Float(0.0)"/>
         <validate type="max-value" value="new Float(100.0)"/>
-        <validate type="min-length" length="20"/>
+        <!-- validate type="min-length" length="20"/ -->
 
 		<field.float size="16" min="0.0" max="100.0"/>
 	</datatype>
@@ -216,6 +216,9 @@
 		<copytype>guid-text</copytype>
 		<generate-id>guid32</generate-id>
 
+		<validate name="guid32-format-update" type="guid32-format" event="update"/>
+		<validate name="guid32-format-delete" type="guid32-format" event="delete"/>
+
 		<field.guid32/>
 
         <trigger type="dal-row-java" time="before" event="insert" use-db-policy="yes" use-dbms-id="yes" use-table-instance="yes">
@@ -331,7 +334,7 @@
         <java-code indent="        ">
         if(value != null)
         {
-            boolean valid = value.toString().length() &lt; ${rule.getAttribute("length")};
+            boolean valid = value.toString().length() &gt; ${rule.getAttribute("length")};
             bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : ("Length of '"+ value +"' is less than " + ${rule.getAttribute("length")}));
         }
         </java-code>
@@ -341,7 +344,7 @@
         <java-code indent="        ">
         if(value != null)
         {
-            boolean valid = value.toString().length() &gt; ${rule.getAttribute("length")};
+            boolean valid = value.toString().length() &lt; ${rule.getAttribute("length")};
             bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : ("Length of '"+ value +"' is greater than " + ${rule.getAttribute("length")}));
         }
         </java-code>
@@ -351,7 +354,7 @@
         <java-code indent="        ">
         if(value != null &amp;&amp; value instanceof Comparable)
         {
-            boolean valid = value.compareTo(${rule.getAttribute("value")}) &lt; 0;
+            boolean valid = value.compareTo(${rule.getAttribute("value")}) &gt; 0;
             bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : (value.toString() + " is less than " + ${rule.getAttribute("value")}));
         }
         </java-code>
@@ -361,7 +364,7 @@
         <java-code indent="        ">
         if(value != null &amp;&amp; value instanceof Comparable)
         {
-            boolean valid = value.compareTo(${rule.getAttribute("value")}) &gt; 0;
+            boolean valid = value.compareTo(${rule.getAttribute("value")}) &lt; 0;
             bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : (value.toString() + " is greater than " + ${rule.getAttribute("value")}));
         }
         </java-code>
