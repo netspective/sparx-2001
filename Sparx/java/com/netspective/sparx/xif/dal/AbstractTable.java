@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.5 2002-04-05 00:15:00 snshah Exp $
+ * $Id: AbstractTable.java,v 1.6 2002-04-19 10:45:59 jruss Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -393,8 +393,8 @@ public abstract class AbstractTable implements Table
             {
                 if(rs != null)
                 {
-                    rs.close();
                     rs.getStatement().close();
+                    rs.close();
                 }
             }
         }
@@ -438,8 +438,8 @@ public abstract class AbstractTable implements Table
             {
                 if(rs != null)
                 {
-                    rs.close();
                     rs.getStatement().close();
+                    rs.close();
                 }
             }
         }
@@ -483,8 +483,8 @@ public abstract class AbstractTable implements Table
             {
                 if(rs != null)
                 {
-                    rs.close();
                     rs.getStatement().close();
+                    rs.close();
                 }
             }
         }
