@@ -151,8 +151,7 @@
 				<!-- the main masthead row and search box -->
 				<tr bgcolor="{$masthead-bgcolor}" height="60">
 					<td width="150"><img src="{concat($images-dir, 'masthead/logo-top-left.gif')}"/></td>
-					<td><img src="{concat($images-dir, 'masthead/logo-top-middle.gif')}"/><img src="{concat($images-dir, 'masthead/logo-top-right.gif')}"/></td>
-					<td valign="center"><font face="Times" color="#DCDCDC"><i>Sparx Application Platform Developer's Guide</i></font></td>
+					<td align="right"><img src="{concat($images-dir, 'masthead/logo-top-right.gif')}"/></td>
 				</tr>
 			</table>
 
