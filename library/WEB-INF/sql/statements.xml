@@ -14,7 +14,7 @@
 				book_info,
 				book_type
 			where
-				book_info.type = book_type.id;
+				book_info.type = book_type.id
 			
 			<report>
 				<column align="center" heading="&amp;nbsp;" index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
@@ -36,7 +36,7 @@
 				book_type
 			where
 				book_info.type = book_type.id and
-				book_info.id = ?;
+				book_info.id = ?
 			
 			<params>
 				<param value="request:bookid"/>

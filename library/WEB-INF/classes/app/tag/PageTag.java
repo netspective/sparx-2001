@@ -116,7 +116,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 
             if(! validConnection())
             {
-                String webXml = req.getRealPath("/WEB-INF/web.xml");
+                String webXml = servletContext.getRealPath("/WEB-INF/web.xml");
                 out.println("<h1>Invalid Data Source</h1>");
                 out.println("<p align='left'>");
                 out.println("The most common solution to this problem is to make sure that the 'url' parameter for the JDBC data source is correctly pointing to the HSQL database file.");
@@ -125,7 +125,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
                 out.println("  &lt;res-ref-name>"+ DEFAULT_DS_NAME +"&lt;/res-ref-name>");
                 out.println("  &lt;res-type>javax.sql.DataSource&lt;/res-type>");
                 out.println("  &lt;init-param driver-name=\"org.hsqldb.jdbcDriver\"/>");
-                out.println("  &lt;init-param url=\"<font color=red>jdbc:hsqldb:"+ req.getRealPath("/WEB-INF/Database/library.hsqldb") +"</font>\"/>");
+                out.println("  &lt;init-param url=\"<font color=red>jdbc:hsqldb:"+ servletContext.getRealPath("/WEB-INF/Database/library.hsqldb") +"</font>\"/>");
                 out.println("  &lt;init-param user=\"sa\"/>");
                 out.println("  ...");
                 out.println("&lt;/resource-ref></code><p>");

@@ -44,6 +44,8 @@ public class BookInfo extends Dialog
         {
             BookInfoContext dcb = (BookInfoContext) dc;
             String bookId = dc.getRequest().getParameter("bookid");
+            if(bookId == null)
+            	throw new RuntimeException("'bookid' parameter is expected.");
 
             BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
 
@@ -103,6 +105,9 @@ public class BookInfo extends Dialog
         {
             boolean status = processDeleteAction(writer, dc);
         }
+
+		// this is necessary to let the framework know we handled the execute
+		dc.setExecuteStageHandled(true);
 
         ((HttpServletResponse) dc.getResponse()).sendRedirect(redirectURL);
     }
