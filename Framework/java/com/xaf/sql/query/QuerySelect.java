@@ -26,6 +26,7 @@ public class QuerySelect
 	private String caption;
 	private boolean distinctRows;
 	private boolean isDirty;
+    private boolean alwaysDirty;
 	private List reportFields = new ArrayList();
 	private List orderBy = new ArrayList();
 	private List conditions = new ArrayList();
@@ -54,12 +55,12 @@ public class QuerySelect
 
 	public List getBindParams() { return bindParams; }
     public String getErrorSql() { return selectSql; }
-	public String getSql()
+	public String getSql(ValueContext vc)
 	{
-		if(isDirty)
+		if(isDirty || alwaysDirty)
 		{
 			SelectStmtGenerator selectStmt = new SelectStmtGenerator(this);
-			selectSql = selectStmt.toString();
+			selectSql = selectStmt.toString(vc);
 			if(! selectStmt.isValid())
 				return null;
 
@@ -129,6 +130,9 @@ public class QuerySelect
 
 	public void addCondition(QueryCondition condition)
 	{
+        if(condition.removeIfValueIsNull())
+            alwaysDirty = true;
+
 		conditions.add(condition);
 		isDirty = true;
 	}
@@ -171,7 +175,7 @@ public class QuerySelect
 
 	public ResultSet execute(DatabaseContext dc, ValueContext vc, Object[] overrideParams) throws NamingException, SQLException
 	{
-		if(getSql() == null)
+		if(getSql(vc) == null)
 			return null;
 
 		int rsType = dc.getScrollableResultSetType();

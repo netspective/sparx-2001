@@ -24,6 +24,7 @@ public class QueryCondition
 	private SqlComparison comparison;
 	private SingleValueSource value;
 	private int connector = CONNECT_AND;
+    private boolean removeIfValueNull;
 
     public QueryCondition()
     {
@@ -47,6 +48,7 @@ public class QueryCondition
 	public SqlComparison getComparison() { return comparison; }
 	public SingleValueSource getValue() { return value; }
 	public String getConnectorSql() { return QueryCondition.CONNECTOR_SQL[connector]; }
+    public boolean removeIfValueIsNull() { return removeIfValueNull; }
 
 	public String getWhereCondExpr(SelectStmtGenerator stmt)
 	{
@@ -75,5 +77,7 @@ public class QueryCondition
 		else if("or".equals(connect))
 			connector = CONNECT_OR;
 
+        if(elem.getAttribute("allow-null").equals("no"))
+            removeIfValueNull = true;
 	}
 }

@@ -57,7 +57,7 @@ public class SelectStmtGenerator
 		bindParams.add(bindParam);
 	}
 
-	public String toString()
+	public String toString(ValueContext vc)
 	{
 		valid = false;
 		if(queryDefn == null)
@@ -102,6 +102,13 @@ public class SelectStmtGenerator
 		for(int c = 0; c < condCount; c++)
 		{
 			QueryCondition cond = (QueryCondition) conds.get(c);
+            if(cond.removeIfValueIsNull())
+            {
+                String value = cond.getValue().getValue(vc);
+                if(value == null || value.length() == 0)
+                    continue;
+            }
+
 			QueryField field = cond.getField();
 			if(field != null)
 				addJoin(field);
@@ -166,6 +173,12 @@ public class SelectStmtGenerator
 			for(int c = 0; c < condCount; c++)
 			{
 				QueryCondition cond = (QueryCondition) conds.get(c);
+                if(cond.removeIfValueIsNull())
+                {
+                    String value = cond.getValue().getValue(vc);
+                    if(value == null || value.length() == 0)
+                        continue;
+                }
 				addJoin(cond.getField());
 				sql.append("  (" + cond.getWhereCondExpr(this) + ")");
 				if(c != condLast)

@@ -207,7 +207,7 @@ public class QueryBuilderDialog extends Dialog
 		if(debugStr != null && debugStr.equals("1"))
 		{
 			QuerySelect select = createSelect(dc);
-            String sql = select.getSql();
+            String sql = select.getSql(dc);
             return "<p><pre><code>SQL:<p>" + sql + (sql == null ? "<p>" + select.getErrorSql() : "") + "</code></pre>";
 		}
 
@@ -255,7 +255,7 @@ public class QueryBuilderDialog extends Dialog
             e.printStackTrace(new PrintWriter(stack));
 
 			QuerySelect select = createSelect(dc);
-            String sql = select.getSql();
+            String sql = select.getSql(dc);
 			return e.toString() + "<p><pre><code>" + (sql + (sql == null ? "<p>" + select.getErrorSql() : "")) + "\n" + stack.toString() + "</code></pre>";
 		}
 	}

@@ -59,7 +59,7 @@ public class QuerySelectScrollState extends ResultSetScrollState
     }
 
 	public QuerySelect getSelect() { return select; }
-	public String getSelectSql() { return select.getSql(); }
+	public String getSelectSql() { return select.getSql(null); }
 	public String getErrorMsg() { return select.getErrorSql(); }
 	public boolean isValid() { return resultSetValid; }
 

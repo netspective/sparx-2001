@@ -127,7 +127,7 @@ public class QuerySelectDialog extends Dialog
         String debugStr = dc.getValue("options.debug");
 		if(debugStr != null && debugStr.equals("1"))
 		{
-            String sql = select.getSql();
+            String sql = select.getSql(dc);
             return "<p><pre><code>SQL:<p>" + sql + (sql == null ? "<p>" + select.getErrorSql() : "") + "</code></pre>";
 		}
 
@@ -171,7 +171,7 @@ public class QuerySelectDialog extends Dialog
             StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
 
-            String sql = select.getSql();
+            String sql = select.getSql(dc);
 			return e.toString() + "<p><pre><code>" + (sql + (sql == null ? "<p>" + select.getErrorSql() : "")) + "\n" + stack.toString() + "</code></pre>";
 		}
 	}
