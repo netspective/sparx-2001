@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.4 2002-03-26 17:57:52 eoliphan Exp $
+ * $Id: AbstractTable.java,v 1.5 2002-04-05 00:15:00 snshah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -369,10 +369,10 @@ public abstract class AbstractTable implements Table
         Connection conn = cc.getConnection();
         try
         {
-            PreparedStatement stmt = null;
+            ResultSet rs = null;
             try
             {
-                ResultSet rs = this.getResultset(conn, stmt, colNames, colValues, allowNull);
+                rs = this.getResultSet(conn, colNames, colValues, allowNull);
                 if(rs != null)
                 {
                     if(result == null) result = createRows();
@@ -384,14 +384,18 @@ public abstract class AbstractTable implements Table
             {
                 // rethrow the exception with the select SQL and bind parameter information added
                 e.printStackTrace();
-                if(stmt != null)
-                    throw new SQLException(e.toString() + stmt.toString());
+                if(rs != null)
+                    throw new SQLException(e.toString() + rs.getStatement().toString());
                 else
                     throw e;
             }
             finally
             {
-                if(stmt != null) stmt.close();
+                if(rs != null)
+                {
+                    rs.close();
+                    rs.getStatement().close();
+                }
             }
         }
         finally
@@ -410,10 +414,10 @@ public abstract class AbstractTable implements Table
         Connection conn = cc.getConnection();
         try
         {
-            PreparedStatement stmt = null;
+            ResultSet rs = null;
             try
             {
-                ResultSet rs = this.getResultset(conn, stmt, colNames, colValues);
+                rs = this.getResultSet(conn, colNames, colValues);
                 if(rs != null)
                 {
                     if(result == null) result = createRow();
@@ -425,14 +429,18 @@ public abstract class AbstractTable implements Table
             {
                 // rethrow the exception with the select SQL and bind parameter information added
                 e.printStackTrace();
-                if(stmt != null)
-                    throw new SQLException(e.toString() + stmt.toString());
+                if(rs != null)
+                    throw new SQLException(e.toString() + rs.getStatement().toString());
                 else
                     throw e;
             }
             finally
             {
-                if(stmt != null) stmt.close();
+                if(rs != null)
+                {
+                    rs.close();
+                    rs.getStatement().close();
+                }
             }
         }
         finally
@@ -451,10 +459,10 @@ public abstract class AbstractTable implements Table
         Connection conn = cc.getConnection();
         try
         {
-            PreparedStatement stmt = null;
+            ResultSet rs = null;
             try
             {
-                ResultSet rs = this.getResultset(conn, stmt, colNames, colValues, allowNull);
+                rs = this.getResultSet(conn, colNames, colValues, allowNull);
                 if(rs != null)
                 {
                     if(result == null) result = createRow();
@@ -466,14 +474,18 @@ public abstract class AbstractTable implements Table
             {
                 // rethrow the exception with the select SQL and bind parameter information added
                 e.printStackTrace();
-                if(stmt != null)
-                    throw new SQLException(e.toString() + stmt.toString());
+                if(rs != null)
+                    throw new SQLException(e.toString() + rs.getStatement().toString());
                 else
                     throw e;
             }
             finally
             {
-                if(stmt != null) stmt.close();
+                if(rs != null)
+                {
+                    rs.close();
+                    rs.getStatement().close();
+                }
             }
         }
         finally
@@ -492,7 +504,7 @@ public abstract class AbstractTable implements Table
      * @param allowNull Flag to indicate whether or not NULL values are allowed
      * @return ResultSet
      */
-    protected ResultSet getResultset(Connection conn, PreparedStatement stmt, String[] colNames, Object[] colValues, boolean allowNull) throws SQLException, NamingException
+    protected ResultSet getResultSet(Connection conn, String[] colNames, Object[] colValues, boolean allowNull) throws SQLException, NamingException
     {
         if(colNames == null || colNames.length == 0)
             return null;
@@ -502,7 +514,7 @@ public abstract class AbstractTable implements Table
             sqlString = this.createPreparedStatmentString(colNames, colValues);
         else
             sqlString = this.createPreparedStatmentString(colNames);
-        stmt = conn.prepareStatement(sqlString);
+        PreparedStatement stmt = conn.prepareStatement(sqlString);
         for(int k = 0; k < colValues.length; k++)
         {
             // NULL values are never bound so if they are in the list, its probably because
@@ -515,6 +527,8 @@ public abstract class AbstractTable implements Table
             ResultSet rs = stmt.getResultSet();
             return rs;
         }
+
+        stmt.close();
         return null;
     }
 
@@ -523,9 +537,9 @@ public abstract class AbstractTable implements Table
      * with FALSE passed in for allowNull parameter.
      *
      */
-    protected ResultSet getResultset(Connection conn, PreparedStatement stmt, String[] colNames, Object[] colValues) throws SQLException, NamingException
+    protected ResultSet getResultSet(Connection conn, String[] colNames, Object[] colValues) throws SQLException, NamingException
     {
-        return this.getResultset(conn, stmt, colNames, colValues, false);
+        return this.getResultSet(conn, colNames, colValues, false);
     }
 
     /**
