@@ -43,12 +43,14 @@ public class BookInfo extends Dialog
     /**
      * This is the class that you do your entire dialog validation with
      */
-    public boolean isValid(DialogContext dc) {
+    public boolean isValid(DialogContext dc)
+    {
         return super.isValid(dc);
     }
 
 
-    public void populateValues(DialogContext dc, int i) {
+    public void populateValues(DialogContext dc, int i)
+    {
         // make sure to call the parent method to ensure default behavior
         super.populateValues(dc, i);
 
@@ -58,7 +60,8 @@ public class BookInfo extends Dialog
             return;
 
         // now do the populating using DialogContext methods
-        if (dc.editingData() || dc.deletingData()) {
+        if (dc.editingData() || dc.deletingData())
+        {
 			BookInfoContext dcb = (BookInfoContext) dc;
             String bookId = dc.getRequest().getParameter("bookid");
 
@@ -89,11 +92,11 @@ public class BookInfo extends Dialog
      *  This is where you perform all your actions. Whatever you return as the function result will be shown
      * in the HTML
      */
-    public void execute(Writer writer, DialogContext dc)
+    public void execute(Writer writer, DialogContext dc) throws IOException
     {
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
-        // super.execute(dc);
+        // super.execute(writer, dc);
 
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
 		String redirectURL = request.getContextPath() + "/index.jsp";
@@ -114,74 +117,14 @@ public class BookInfo extends Dialog
 			boolean status = processDeleteAction(writer, dc);
         }
 
-		try	{
-			((HttpServletResponse)dc.getResponse()).sendRedirect(redirectURL);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		((HttpServletResponse) dc.getResponse()).sendRedirect(redirectURL);
     }
-
-    /**
-     * Process the delete action
-     */
-    protected boolean processDeleteAction(Writer writer, DialogContext dc) {
-		BookInfoContext dcb = (BookInfoContext) dc;
-		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
-		boolean status = false;
-		String bookId = dc.getRequest().getParameter("bookid");
-
-		try {
-			ConnectionContext cc = dcb.getConnectionContext();
-
-			// Create a new BookInfo record and insert it...
-			BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
-
-			status = bkInfoTbl.delete(cc, bkInfoRow);
-			cc.commitTransaction();
-		} catch (NamingException ne) {
-			ne.printStackTrace();
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
-
-		return status;
-    }
-
-    /**
-     * Process the update action
-     */
-	protected boolean processEditAction(Writer writer, DialogContext dc) {
-		BookInfoContext dcb = (BookInfoContext) dc;
-		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
-		boolean status = false;
-		String bookId = dc.getRequest().getParameter("bookid");
-
-		try {
-			ConnectionContext cc = dcb.getConnectionContext();
-
-			// Create a new BookInfo record and insert it...
-			BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
-			bkInfoRow.setId(dcb.getBookId());
-			bkInfoRow.setAuthor(dcb.getBookAuthor());
-			bkInfoRow.setName(dcb.getBookName());
-			bkInfoRow.setType(dcb.getBookTypeInt());
-			bkInfoRow.setIsbn(dcb.getBookISBN());
-
-			status = bkInfoTbl.update(cc, bkInfoRow);
-			cc.commitTransaction();
-		} catch (NamingException ne) {
-			ne.printStackTrace();
-		} catch (SQLException se) {
-			se.printStackTrace();
-		}
-
-		return status;
-	}
 
     /**
      * Process the new data
      */
-    protected boolean processAddAction(Writer writer, DialogContext dc) {
+    protected boolean processAddAction(Writer writer, DialogContext dc)
+    {
 		BookInfoContext dcb = (BookInfoContext) dc;
 		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
 		boolean status = false;
@@ -206,6 +149,62 @@ public class BookInfo extends Dialog
 			se.printStackTrace();
 		}
 
+		return status;
+    }
+
+    /**
+     * Process the update action
+     */
+	protected boolean processEditAction(Writer writer, DialogContext dc)
+	{
+		BookInfoContext dcb = (BookInfoContext) dc;
+		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
+		boolean status = false;
+		String bookId = dc.getRequest().getParameter("bookid");
+
+		try {
+			ConnectionContext cc = dcb.getConnectionContext();
+
+			BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
+			bkInfoRow.setId(dcb.getBookId());
+			bkInfoRow.setAuthor(dcb.getBookAuthor());
+			bkInfoRow.setName(dcb.getBookName());
+			bkInfoRow.setType(dcb.getBookTypeInt());
+			bkInfoRow.setIsbn(dcb.getBookISBN());
+
+			status = bkInfoTbl.update(cc, bkInfoRow);
+			cc.commitTransaction();
+		} catch (NamingException ne) {
+			ne.printStackTrace();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+
+		return status;
+	}
+
+    /**
+     * Process the delete action
+     */
+    protected boolean processDeleteAction(Writer writer, DialogContext dc)
+    {
+		BookInfoContext dcb = (BookInfoContext) dc;
+		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
+		boolean status = false;
+		String bookId = dc.getRequest().getParameter("bookid");
+
+		try {
+			ConnectionContext cc = dcb.getConnectionContext();
+
+			BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
+
+			status = bkInfoTbl.delete(cc, bkInfoRow);
+			cc.commitTransaction();
+		} catch (NamingException ne) {
+			ne.printStackTrace();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
 
 		return status;
     }

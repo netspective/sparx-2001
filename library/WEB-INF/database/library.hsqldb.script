@@ -7,12 +7,14 @@ CREATE USER SA PASSWORD "" ADMIN
 CREATE ALIAS DAYNAME FOR "org.hsqldb.Library.dayname"
 CREATE ALIAS SPACE FOR "org.hsqldb.Library.space"
 CREATE ALIAS SUBSTRING FOR "org.hsqldb.Library.substring"
+CREATE ALIAS HEXTORAW FOR "org.hsqldb.Library.hexToRaw"
 CREATE ALIAS SQRT FOR "java.lang.Math.sqrt"
-CREATE ALIAS ABS FOR "java.lang.Math.abs"
+CREATE ALIAS ABS FOR "org.hsqldb.Library.abs"
 CREATE ALIAS POWER FOR "java.lang.Math.pow"
 CREATE ALIAS CHAR FOR "org.hsqldb.Library.character"
 CREATE ALIAS CONCAT FOR "org.hsqldb.Library.concat"
 CREATE ALIAS PI FOR "org.hsqldb.Library.pi"
+CREATE ALIAS RAWTOHEX FOR "org.hsqldb.Library.rawToHex"
 CREATE ALIAS SECOND FOR "org.hsqldb.Library.second"
 CREATE ALIAS TRUNCATE FOR "org.hsqldb.Library.truncate"
 CREATE ALIAS MONTH FOR "org.hsqldb.Library.month"
@@ -83,7 +85,3 @@ INSERT INTO BOOK_INFO VALUES(NULL,'CLANCYT001','Clear and Present Danger',1,'Tom
 INSERT INTO BOOK_INFO VALUES(NULL,'CLARKEAC01','The Fountains of Paradise',0,'Arthur C. Clarke','0123456789')
 INSERT INTO BOOK_INFO VALUES(NULL,'CLARKEAC02','2001: A Space Odyssey',0,'Arthur C. Clarke','0192837456')
 INSERT INTO BOOK_INFO VALUES(NULL,'HERBERTF01','Dune',0,'Frank Herbert','1230984567')
-/*C1*/CONNECT USER sa PASSWORD ""
-/*C2*/CONNECT USER sa PASSWORD ""
-SET AUTOCOMMIT FALSE
-/*C3*/CONNECT USER sa PASSWORD ""
