@@ -1,5 +1,6 @@
 <!-- this include file assumes that site.jsp has already been included -->
 
+							<p><center><font size=2><%= com.netspective.sparx.BuildConfiguration.getProductBuild() %></font></center>
 							</td>
 							<td align="left" valign="top" width="19" height="100%" background="<%= sparxSampleImagesUrl %>/sample-apps-10.gif"><img src="<%= sparxSampleImagesUrl %>/sample-apps-spacer.gif" alt="" width="19" height="100%" border="0"></td>
 						</tr>

@@ -6,7 +6,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <%
-	String sparxSampleImagesUrl = request.getContextPath() + "/sparx/resources/images/samples";
+    com.netspective.sparx.util.config.Configuration sparxConfig = com.netspective.sparx.util.config.ConfigurationManagerFactory.getDefaultConfiguration(pageContext.getServletContext());
+    com.netspective.sparx.util.value.ServletValueContext svc = new com.netspective.sparx.util.value.ServletValueContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
+
+	String sparxACEUrl = sparxConfig.getTextValue(svc, "sparx.ace.root-url");
+    String sparxSampleImagesUrl = sparxConfig.getTextValue(svc, "sparx.shared.images-url") + "/samples";
+    
 %>	
 
 <html>
@@ -38,7 +43,7 @@
 													<td align="left" valign="top">
 														<table width="64" border="0" cellspacing="0" cellpadding="0">
 															<tr height="17">
-																<td align="center" valign="middle" bgcolor="white" height="17"><font size=1 face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular"><%= com.netspective.sparx.BuildConfiguration.getVersionAndBuild() %></font></td>
+																<td align="center" valign="middle" bgcolor="white" height="17"><font size=1 face="Arial,Helvetica,Geneva,Swiss,SunSans-Regular"><a href='<%= sparxACEUrl %>'>Admin Console (ACE)</a></font></td>
 															</tr>
 															<tr>
 																<td align="left" valign="top"><img src="<%= sparxSampleImagesUrl %>/sample-apps-07.gif" alt="" width="156" height="30" border="0"></td>

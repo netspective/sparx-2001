@@ -7,12 +7,30 @@
 			<br>Hello World
 		</font>
 		<p>
+		
+		<!-- create the dialog state machine and form HTML -->		
 		<sparx:dialog name="tutorial.hello_first"/>
-		<p>
-		<font size="2">
-		Click <a href="<%= request.getContextPath() + "/ace/documents/project?_dc.user_id=ace&_dc.password=ace" %>" target="hello-ace">here</a> to view the Sparx administration console (ACE) source browser for this app.<br>
-		Click <a href="index2.jsp">here</a> to try Sparx Hello World Tutorial II.
-		</font>
+		
+		<p>&nbsp;<p>
+		<table width='75%'>
+			<tr valign=top>
+				<td width='50%' align=center>
+					<sparx:panel heading="Browse Source" headingExtra="ACE User is 'ace', Password is 'ace'">
+						Try the Sparx <a href="<%= request.getContextPath() + "/ace?_dc.user_id=ace&_dc.password=ace" %>" target="hello-ace">administration console</a> (ACE).<br>
+						View the ACE <a href="<%= request.getContextPath() + "/ace/documents/project" %>" target="hello-files">files browser</a> for this app.<br>
+						View the <a href="<%= request.getContextPath() + "/ace/documents/project/WEB-INF/ui/dialogs.xml" %>" target="hello-form">Hello World Form XML</a>.<br>
+						View the <a href="<%= request.getContextPath() + "/ace/documents/project/WEB-INF/classes/app/form/HelloFirstDialog.java" %>" target="hello-java">Hello World Form Java Class</a>.<br>
+						View this <a href="<%= request.getContextPath() + "/ace/documents?browseDoc=" + application.getRealPath(request.getServletPath()) %>" target="hello-jsp">JSP file</a>.<br>
+					</sparx:panel>
+				</td>
+				<td width='50%' align=center>
+					<sparx:panel heading="See more examples">
+						Try the Sparx <a href="index2.jsp">Hello World Tutorial Part II</a>.<br>
+						Try the Sparx <a href="../library">Library Tutorial</a>.
+					</sparx:panel>
+				</td>
+			</tr>
+		</table>
 	</center>
 
 <jsp:directive.include file="/resources/include/site-footer.jsp"/>

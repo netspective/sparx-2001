@@ -4,7 +4,7 @@
  * @created Apr 11, 2002 15:16
  * @version
  */
-package tutorial.dialog;
+package app.form;
 
 import com.netspective.sparx.xaf.form.DialogContext;
 

@@ -467,7 +467,8 @@
 				<xsl:value-of select="$data-elem/text()"/>
        		</xsl:if>
         	<xsl:variable name="column-name" select="@name"/>
-        	<xsl:for-each select="$data-elem/@*">
+        	<!-- the for-each should be using select="$data-elem/@*" but Xalan doesn't work with that, so we're using @* since . is already the $data-elm -->
+        	<xsl:for-each select="@*">
         		<xsl:choose>
 					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
 					<xsl:otherwise>&#160;</xsl:otherwise>
