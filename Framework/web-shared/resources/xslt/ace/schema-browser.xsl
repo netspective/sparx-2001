@@ -32,10 +32,10 @@
 			{
 			<xsl:apply-templates select="table[@is-audit != 'yes']" mode="graphviz-node">
 				<xsl:sort select="@name"/>
-			</xsl:apply-templates>	
+			</xsl:apply-templates>
 			<xsl:apply-templates select="table[@is-audit != 'yes']" mode="graphviz-edge">
 				<xsl:sort select="@name"/>
-			</xsl:apply-templates>	
+			</xsl:apply-templates>
 			}
 			</code>
 		</xsl:when>
@@ -99,7 +99,7 @@
 						</li>
 					</xsl:for-each>
 					</ol>
-					
+
 					<p/>
 					<xsl:if test="meta-info/errors">
 						<h1>Schema Errors</h1>
@@ -182,9 +182,9 @@
 
 <!--
 	<xsl:param name="parent-table"/>
-	
+
 	<xsl:if test="@parent-col and $parent-table">
-		<xsl:value-of select="@name"/> -&gt; <xsl:value-of select="$parent-table"/> 
+		<xsl:value-of select="@name"/> -&gt; <xsl:value-of select="$parent-table"/>
 		<xsl:if test="@parent-col = @child-col">
 		[label="<xsl:value-of select="@child-col"/>"];
 		</xsl:if>
@@ -192,11 +192,11 @@
 		[label="<xsl:value-of select="@child-col"/>=<xsl:value-of select="@parent-col"/>"];
 		</xsl:if>
 	</xsl:if>
-	
+
 	<xsl:apply-templates select="table" mode="graphviz">
 		<xsl:with-param name="parent-table"><xsl:value-of select="@name"/></xsl:with-param>
 		<xsl:sort select="@name"/>
-	</xsl:apply-templates>	
+	</xsl:apply-templates>
 -->
 
 <xsl:template match="table-structure">
@@ -375,7 +375,29 @@
 	<tr><td colspan="14"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	</xsl:for-each>
 	</table>
-	
+
+	<xsl:if test="enum">
+	<p/><h1>Table Data</h1>
+	<table border="0" cellspacing="0">
+	<tr bgcolor="beige">
+		<th>Id</th>
+		<th>&#160;</th>
+		<th>Caption</th>
+		<th>&#160;</th>
+		<th>Abbrev</th>
+	</tr>
+	<xsl:for-each select="enum">
+	<tr>
+		<td align="right"><xsl:value-of select="@id"/></td>
+		<td></td>
+		<td><xsl:value-of select="."/></td>
+		<td></td>
+		<td><xsl:value-of select="@abbrev"/></td>
+	</tr>
+	</xsl:for-each>
+	</table>
+	</xsl:if>
+
 	<xsl:if test="index">
 	<p/><h1>Indexes</h1>
 	<table border="0" cellspacing="0">
@@ -397,7 +419,7 @@
 	</xsl:for-each>
 	</table>
 	</xsl:if>
-	
+
 	</td></tr></table>
 </xsl:template>
 
@@ -457,7 +479,7 @@
 			</td>
 		</tr>
 	</xsl:if>
-	</table>	
+	</table>
 	</td></tr></table>
 </xsl:template>
 
