@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.4 2002-02-11 23:48:05 snshah Exp $
+ * $Id: QuerySelect.java,v 1.5 2002-08-17 15:12:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -436,7 +436,7 @@ public class QuerySelect
         }
 
         if(stmt.execute())
-            return new ResultInfo(conn, stmt);
+            return new ResultInfo(vc, conn, stmt);
         else
             return null;
     }
