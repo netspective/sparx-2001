@@ -8,6 +8,7 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
 import com.xaf.security.*;
+import com.xaf.log.*;
 
 public class PageTag extends TagSupport
 {
@@ -16,6 +17,7 @@ public class PageTag extends TagSupport
 	private String title;
 	private String heading;
 	private String[] permissions;
+    private long startTime;
 
 	public void release()
 	{
@@ -85,4 +87,24 @@ public class PageTag extends TagSupport
 	{
 		return EVAL_PAGE;
 	}
+
+    /**
+     * Records the start time when the page is loaded
+     */
+    public void doPageBegin()
+    {
+        startTime = new Date().getTime();
+        HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
+        org.apache.log4j.NDC.push(request.getSession(true).getId());
+    }
+
+    /**
+     * Records the total time when the page is finished loading
+     */
+    public void doPageEnd()
+    {
+        HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
+        com.xaf.log.LogManager.recordAccess(request, null, pageContext.getPage().getClass().getName(), request.getRequestURI(), startTime);
+        org.apache.log4j.NDC.pop();
+    }
 }
