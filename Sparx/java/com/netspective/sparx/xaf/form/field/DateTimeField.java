@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DateTimeField.java,v 1.2 2002-01-28 10:06:46 jruss Exp $
+ * $Id: DateTimeField.java,v 1.3 2002-02-17 13:58:13 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -482,7 +482,7 @@ public class DateTimeField extends TextField
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
         super.renderControlHtml(writer, dc);
-        if(flagIsSet(FLDFLAG_INPUT_HIDDEN) || !flagIsSet(FLDFLAG_POPUP_CALENDAR))
+        if(flagIsSet(FLDFLAG_INPUT_HIDDEN | FLDFLAG_READONLY) || !flagIsSet(FLDFLAG_POPUP_CALENDAR))
             return;
 
         Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
