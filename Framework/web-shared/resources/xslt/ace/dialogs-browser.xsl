@@ -165,7 +165,7 @@
 		<td></td>
 		<td><xsl:value-of select="$indent"/><font color="green"><xsl:value-of select="$field/@name"/></font></td>
 		<td><xsl:value-of select="$indent"/><font color="navy"><xsl:value-of select="$field/@caption"/></font></td>
-		<td><xsl:value-of select="$field/name()"/></td>
+		<td><xsl:value-of select="$indent"/><xsl:value-of select="$field/name()"/></td>
 		<td><font color="navy"><xsl:value-of select="$field/@default"/></font></td>
 		<td>
 			<xsl:for-each select="$field/@*">
@@ -181,6 +181,7 @@
 		<xsl:call-template name="field-detail">
 			<xsl:with-param name="field" select="."/>
 			<xsl:with-param name="no-separator" select="'yes'"/>
+			<xsl:with-param name="indent" select="concat($indent, '&#160;&#160;&#160;&#160;')"/>
 		</xsl:call-template>
 	</xsl:for-each>
 	<xsl:if test="not($no-separator)">
@@ -234,12 +235,7 @@
 			<th>Options</th>
 		</tr>
 		<tr><td colspan="10"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-	<xsl:for-each select="*[starts-with(name(), 'field.')]">
-		<xsl:call-template name="field-detail">
-			<xsl:with-param name="field" select="."/>
-		</xsl:call-template>
-	</xsl:for-each>
-	<xsl:for-each select="*[not(starts-with(name(), 'field.'))]">
+	<xsl:for-each select="*">
 		<xsl:call-template name="field-detail">
 			<xsl:with-param name="field" select="."/>
 		</xsl:call-template>
