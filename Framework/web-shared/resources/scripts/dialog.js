@@ -735,8 +735,8 @@ function keypressAcceptRanges(field, control, acceptKeyRanges)
 	var event = window.event;
 	for (i in acceptKeyRanges)
 	{
-		var keyCodeValue = null;
-		if (event.keyCode)
+		var keyCodeValue = null;        
+        if (typeof event != "undefined" && event.keyCode)
 			keyCodeValue = event.keyCode;
 		else
 			keyCodeValue = event.which;
@@ -755,6 +755,35 @@ function keypressAcceptRanges(field, control, acceptKeyRanges)
 //****************************************************************************
 // Field-specific validation and keypress filtering functions
 //****************************************************************************
+function CurrencyField_onKeyPress(field, control)
+{
+    return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE]);
+}
+
+function CurrencyField_isValid(field, control)
+{
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
+    if (control.value.length > 0)
+    {    
+        var test = testCurrency(field, control);
+        if (test == false)
+        {
+            field.alertMessage(control, field.text_format_err_msg);
+            return false;
+        }
+    }
+    return true;
+}
+
+function CurrencyField_valueChanged(field, control)
+{
+    return formatCurrency(field, control);
+}
+
 function BooleanField_onClick(field, control)
 {
     if (control.type == 'checkbox' || control.type == 'radio')
@@ -1030,6 +1059,7 @@ addFieldType("com.xaf.form.field.IntegerField", null, IntegerField_isValid, null
 addFieldType("com.xaf.form.field.FloatField", null, FloatField_isValid, null, null, null, FloatField_onKeyPress);
 addFieldType("com.xaf.form.field.SocialSecurityField", null, SocialSecurityField_isValid, SocialSecurityField_valueChanged, null, null, null, null);
 addFieldType("com.xaf.form.field.PhoneField", null, PhoneField_isValid, PhoneField_valueChanged, null, null, null, null);
+addFieldType("com.xaf.form.field.CurrencyField", null, CurrencyField_isValid, CurrencyField_valueChanged, null, null, null, null);
 
 //****************************************************************************
 // Date Formatting
@@ -1050,6 +1080,53 @@ function padZeros(number, count)
     if (number.length > count)
         number = number.substring((number.length - count));
     return number;
+}
+
+function testCurrency(field, control)
+{
+    if (control.value == '')
+        return true;
+    var pattern = field.text_format_pattern;        
+    return pattern.test(control.value) ;        
+}
+
+function formatCurrency(field, control)
+{
+    var test = testCurrency(field, control);    
+    if (test == false)
+    {        
+        field.alertMessage(control, this.field.text_format_err_msg);    
+        return false;
+    }
+    else
+    {    
+        if (control.value != '')
+        {
+            value = control.value;
+            var pattern = field.text_format_pattern; 
+            if (pattern.exec(value))
+            {
+                match = pattern.exec(value)
+                if (field.negative_pos == "after")
+                {
+                    if (match[1] == "")
+                        match[1] = "$";
+                    if (match[3] == "")
+                        match[3] = ".00";
+                    control.value = match[1] + match[2] + match[3];
+                }
+                else if (field.negative_pos == "before")
+                {
+                    if (match[2] == "")
+                        match[2] = "$";
+                    if (match[4] == "")
+                        match[4] = ".00";
+                    control.value = match[1] + match[2] + match[3] + match[4]; 
+                }
+            }
+        }
+    }
+    return true;
 }
 
 function testPhone(field, control)

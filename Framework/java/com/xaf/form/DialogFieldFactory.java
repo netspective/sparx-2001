@@ -66,6 +66,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.report", ReportField.class);
         fieldClasses.put("field.zip", ZipField.class);
         fieldClasses.put("field.email", EmailField.class);
+        fieldClasses.put("field.currency", CurrencyField.class);
 
         conditionalsClasses.put("display", DialogFieldConditionalDisplay.class); // legacy
         conditionalsClasses.put("display-on-js-expr", DialogFieldConditionalDisplay.class);
