@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.6 2002-12-23 23:08:03 aye.thu Exp $
+ * $Id: QuerySelectScrollState.java,v 1.7 2002-12-30 17:46:46 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -127,23 +127,19 @@ public class QuerySelectScrollState extends ResultSetScrollState
             Element reportElem = select.getReportElement(reportId);
             this.reportDefn.initialize(rs, reportElem);
             ReportFrame frame = reportDefn.getFrame();
-            if (frame == null || frame.getHeading() == null)
+
+            // get the heading from the SELECT
+            String heading = select.getCaption();
+            if (heading != null && heading.length() > 0)
             {
-                // The frame is null only if there is no report element in the <select> definition
-                String heading = select.getCaption();
-                if (heading != null && heading.length() > 0)
-                {
-                    frame = new ReportFrame();
-                    frame.setHeading(heading);
-                    this.reportDefn.setFrame(frame);
-                }
+                // if the SELECT element has a heading attribute, overwrite the new REPORT element's
+                // heading. This is to support existing reporting mechanism. So, the existing mechanism
+                // overwrites the new REPORT element settings.
+                frame = new ReportFrame();
+                frame.setHeading(heading);
+                this.reportDefn.setFrame(frame);
             }
-            /*
-            if (reportDefn.getFrame() == null)
-                reportDefn.setFrame(select.getFrame());
-            if (reportDefn.getBanner() == null)
-                reportDefn.setBanner(select.getBanner());
-            */
+
             ReportColumnsList rcl = this.reportDefn.getColumns();
             List selectFields = select.getReportFields();
 
@@ -160,13 +156,15 @@ public class QuerySelectScrollState extends ResultSetScrollState
             {
                 ReportColumn col = rcl.getColumn(i);
                 QueryField field = (QueryField) selectFields.get(i);
-                if (col.getHeading() == null)
+                // check to see if there is a report setting associated with the field
+                ReportColumn rc = field.getReportColumn();
+                if (rc != null)
                 {
-                    // The report column heading is null. This means that there is no report element defined within the
-                    // <select> tag. So, go look for the report information in the field definition.
-                    ReportColumn rc = field.getReportColumn();
+                    // There is a report setting associated with the field, so use it instead of the report setting
+                    // associated with the report element. This is to support existing reporting mechanism. So, the existing mechanism
+                    // overwrites the new REPORT element settings.
                     if (rc != null)
-                        rcl.getColumn(i).importFromColumn(rc);
+                        col.importFromColumn(rc);
                 }
                 if (sortFieldInfo != null && field == sortFieldInfo.getField())
                     primaryOrderByColIndex = i;
