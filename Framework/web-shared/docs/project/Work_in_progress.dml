@@ -16,7 +16,9 @@
 			<task><name>Allow dialog testing/execution to specify/select a skin.</name></task>
 			<task><name>Need to go through all the code to make sure all tags are documented (missing initial-focus, XML skins, field.report, DialogDirector additions, primary-key field attribute, &lt;access-control&gt; tag, reg exp validation, &lt;configuration&gt; tag, QueryBuilderDialog, and field.separator rule attributes).</name></task>
 			<task><name>Add Database Explorer component to browse live databases (connected with SchemaDoc).</name></task>
-			<task><name>In Framework Documents need "active path" or "cookie crumbs" feature to indicate location of document.</name></task>
+			<task><name>Add table class generator support similar to <a href="http://www.jetools.com">JET Code Generator</a>.</name></task>
+			<task><name>When generating DDL, create interim XML document and use XSLT templates for generation of DDL (instead of Java classes).</name></task>
+			<task><name>In "Framework Documents" need "active path" or "cookie crumbs" feature to indicate location of document.</name></task>
 		</task>
 
 		<task>
@@ -42,20 +44,24 @@
 			<task><name>Allow navigator items to be shown/hidden dynamically.</name></task>
 			<task><name>Replace NULLs with blank or space in reports.</name></task>
 			<task><name>Remove all hard-coded instances of "/shared" in Framework code (use configuration instead).</name></task>
-			<task><name>Most of the &lt;field.*&gt; tags do not have client-side JavaScript validation (numeric, date/time, etc).</name></task>
+			<task><name>Most of the &lt;field.*&gt; tags need client-side JavaScript validation (numeric, date/time, etc).</name></task>
 		</task>
 
 		<task>
 			<name>Database Management</name>
 			<task><name>Add Statement.close() in addition to ResultSet.close() and Connection.close().</name></task>
-			<task><name>Add transaction support features to &lt;xaf:query&gt; and &lt;xaf:dml&gt;.</name></task>
+			<task><name>Add transaction support features to &lt;xaf:dml&gt;.</name></task>
 			<task><name>Add sequences, composite forgeign keys to SchemaDoc.</name></task>
 			<task><name>Create cacheable ResultSets with configurable timeouts.</name></task>
 			<task><name>Add support for <a href="http://sourceforge.net/projects/csvjdbc/">CVS JDBC</a> Driver.</name></task>
+			<task><name>Add support for <a href="http://jrf.sourceforge.net/">jRelationalFramework</a> for Java-based access to RDBMS tables</name></task>
 		</task>
 
 		<task>
 			<name>Architecture</name>
+			<task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of construction "source" references manually</name></task>
+			<task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE</name></task> 
+			<task><name>Integrate <a href="http://www.servlets.com/cos/index.html">O'Reilly Servlet Package</a> into XAF (for MultiPart parsing), ServletUtils, and ParameterParser</name></task>
 			<task><name>Add NDC for page logging in PageTag.java.</name></task>
 			<task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
 			<task><name>Add ability to turn off file-change scanning in XmlSource (production software shouldn't check for changed files).</name></task>
@@ -70,11 +76,13 @@
 			<task><name>Add <a href="http://freshmeat.net/releases/51516/">Java Exception Notification</a> into framework.</name></task>
 			<task><name>Integrate <a href="http://httpunit.sourceforge.net/">HTTPUnit</a> for doing black-box unit testing of HTML generators (skins).</name></task>
 			<task><name>Integrate <a href="http://httpunit.sourceforge.net/doc/servletunit-intro.html">ServletUnit</a> or <a href="http://jakarta.apache.org/commons/cactus/">Jakarta Cactus</a> for doing black-box and white-box unit testing of servlets.</name></task>
+			<task><name>Integrate <a href="http://www.vaegar.f9.co.uk/java2html.html">Java2HTML</a> to allow colorized Java code to be viewed through browser (in addition to JavaDoc)</name></task>
+			<task><name>Create Netspective Core library patterned after <a href="http://www.generationjava.com/java/GenJavaCore.shtml">GenerationJava Core Library</a>.</name></task>
 		</task>
 
 		<task>
 			<name>Security</name>
-			<task><name>Add basic User Management functionality to the Access Control framework.</name></task>
+			<task><name>Add basic User Management functionality to the Access Control framework. Use <a href="http://jakarta.apache.org/tomcat/tomcat-4.0-doc/config/realm.html">Realm</a> design pattern and find a way to use the HttpServletRequest.getUserPrincipal() and HttpServletRequest.isUserInRole() methods.</name></task>
 			<task><name>When sessions time-out, set a flag so that login dialogs can indicate a timeout to the end user. Also add session timing out as a separate activity in the security monitor log.</name></task>
 		</task>
 
