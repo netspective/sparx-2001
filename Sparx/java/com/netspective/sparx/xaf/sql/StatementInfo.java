@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.10 2002-12-30 21:18:14 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.11 2003-04-23 21:27:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -144,19 +144,25 @@ public class StatementInfo
             Report rd = si.createReport(reportElem);
             if(vc instanceof TaskContext)
                 rd.setCanvas(((TaskContext) vc).getCanvas());
-
-            rd.initialize(rs, reportElem);
-
-            ReportContext rc = new ReportContext(vc, rd, skin);
-            if(urlFormats != null)
+            try
             {
-                ReportContext.ColumnState[] state = rc.getStates();
-                for(int i = 0; i < urlFormats.length; i++)
-                    state[i].setUrl(urlFormats[i]);
+                rd.initialize(rs, reportElem);
+
+                ReportContext rc = new ReportContext(vc, rd, skin);
+                if(urlFormats != null)
+                {
+                    ReportContext.ColumnState[] state = rc.getStates();
+                    for(int i = 0; i < urlFormats.length; i++)
+                        state[i].setUrl(urlFormats[i]);
+                }
+
+                rc.produceReport(writer, rs);
+            }
+            finally
+            {
+                close();
             }
 
-            rc.produceReport(writer, rs);
-            close();
         }
 
         public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
@@ -165,23 +171,27 @@ public class StatementInfo
 
             // get the ResultSet into a matrix so that we can stash it away later
             // use the matrix to produce the report and do the storage so we don't have to run the query multiple times
+            try
+            {
+                Object[][] data = StatementManager.getResultSetRowsAsMatrix(rs);
+                vs.setValue(vc, rs.getMetaData(), data, storeType);
 
-            Object[][] data = StatementManager.getResultSetRowsAsMatrix(rs);
-            vs.setValue(vc, rs.getMetaData(), data, storeType);
+                Element reportElem = si.getReportElement(reportId);
+                if(reportElem == null && reportId != null)
+                    writer.write("Report id '" + reportId + "' not found for statement '" + si.getId() + "'");
+                Report rd = si.createReport(reportElem);
+                if(vc instanceof TaskContext)
+                    rd.setCanvas(((TaskContext) vc).getCanvas());
 
-            Element reportElem = si.getReportElement(reportId);
-            if(reportElem == null && reportId != null)
-                writer.write("Report id '" + reportId + "' not found for statement '" + si.getId() + "'");
+                rd.initialize(rs, reportElem);
 
-            Report rd = si.createReport(reportElem);
-            if(vc instanceof TaskContext)
-                rd.setCanvas(((TaskContext) vc).getCanvas());
-
-            rd.initialize(rs, reportElem);
-
-            ReportContext rc = new ReportContext(vc, rd, skin);
-            rc.produceReport(writer, data);
-            close();
+                ReportContext rc = new ReportContext(vc, rd, skin);
+                rc.produceReport(writer, data);
+            }
+            finally
+            {
+                close();
+            }
         }
     }
 
@@ -743,11 +753,19 @@ public class StatementInfo
 
     public ResultInfo executeAndStore(DatabaseContext dc, ValueContext vc, String dataSourceId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, null);
-        ResultSet rs = ri.getResultSet();
-        vs.setValue(vc, rs, storeType);
-        if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
-            ri.close();
+        ResultInfo ri = null;
+        try
+        {
+            ri = execute(dc, vc, dataSourceId, null);
+            ResultSet rs = ri.getResultSet();
+            vs.setValue(vc, rs, storeType);
+        }
+        finally
+        {
+            if(ri != null && storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
+                ri.close();
+        }
+
         return ri;
     }
 
