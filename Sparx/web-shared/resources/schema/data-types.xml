@@ -205,16 +205,18 @@
 		<sqldefn dbms="mssql">varchar(${size})</sqldefn>
 		<size>36</size>
 
-        <validate type="guid32-format"/>
+		<validate type="guid32-format"/>
 
-		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
+		<field.guid32>
+			<conditional action="apply-flag" flag="hidden" data-cmd="add"/>
+		</field.guid32>
 	</datatype>
 
 	<datatype name="guid32" type="guid-text">
 		<copytype>guid-text</copytype>
-        <generate-id>guid32</generate-id>
+		<generate-id>guid32</generate-id>
 
-		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
+		<field.guid32/>
 
         <trigger type="dal-row-java" time="before" event="insert" use-db-policy="yes" use-dbms-id="yes" use-table-instance="yes">
             if (databasePolicy.retainGUIDColInDml())

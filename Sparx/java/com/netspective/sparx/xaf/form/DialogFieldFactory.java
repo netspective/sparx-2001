@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogFieldFactory.java,v 1.5 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: DialogFieldFactory.java,v 1.6 2003-01-06 17:33:31 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -65,27 +65,7 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.util.log.LogManager;
-import com.netspective.sparx.xaf.form.field.BooleanField;
-import com.netspective.sparx.xaf.form.field.CurrencyField;
-import com.netspective.sparx.xaf.form.field.DateTimeField;
-import com.netspective.sparx.xaf.form.field.DebugField;
-import com.netspective.sparx.xaf.form.field.DurationField;
-import com.netspective.sparx.xaf.form.field.EmailField;
-import com.netspective.sparx.xaf.form.field.FileField;
-import com.netspective.sparx.xaf.form.field.FloatField;
-import com.netspective.sparx.xaf.form.field.GridField;
-import com.netspective.sparx.xaf.form.field.HtmlField;
-import com.netspective.sparx.xaf.form.field.IntegerField;
-import com.netspective.sparx.xaf.form.field.MemoField;
-import com.netspective.sparx.xaf.form.field.PhoneField;
-import com.netspective.sparx.xaf.form.field.ReportField;
-import com.netspective.sparx.xaf.form.field.SelectField;
-import com.netspective.sparx.xaf.form.field.SeparatorField;
-import com.netspective.sparx.xaf.form.field.SocialSecurityField;
-import com.netspective.sparx.xaf.form.field.StaticField;
-import com.netspective.sparx.xaf.form.field.TextField;
-import com.netspective.sparx.xaf.form.field.UriField;
-import com.netspective.sparx.xaf.form.field.ZipField;
+import com.netspective.sparx.xaf.form.field.*;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalApplyFlag;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalData;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalDisplay;
@@ -127,6 +107,7 @@ public class DialogFieldFactory implements Factory
         fieldClasses.put("field.file", FileField.class);
         fieldClasses.put("field.rs-navigator", ResultSetNavigatorButtonsField.class);
         fieldClasses.put("field.html", HtmlField.class);
+        fieldClasses.put("field.guid32", Guid32Field.class);
 
         conditionalsClasses.put("display", DialogFieldConditionalDisplay.class); // legacy
         conditionalsClasses.put("display-on-js-expr", DialogFieldConditionalDisplay.class);
