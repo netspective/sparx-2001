@@ -277,6 +277,9 @@ public class XmlSource
 
 	public void addMetaInfoOptions()
 	{
+		if(xmlDoc == null || metaInfoElem == null)
+			return;
+
 		if(metaInfoOptionsElem != null)
 		    metaInfoElem.removeChild(metaInfoOptionsElem);
 
