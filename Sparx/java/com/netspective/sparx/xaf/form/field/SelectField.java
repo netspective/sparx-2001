@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectField.java,v 1.2 2002-08-12 20:51:07 aye.thu Exp $
+ * $Id: SelectField.java,v 1.3 2002-12-31 19:46:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -60,6 +60,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -67,11 +69,12 @@ import org.w3c.dom.NodeList;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.DialogFieldPopup;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.StringsListValue;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
-public class SelectField extends DialogField
+public class SelectField extends TextField
 {
     static public final long FLDFLAG_SORTCHOICES = DialogField.FLDFLAG_STARTCUSTOM;
     static public final long FLDFLAG_PREPENDBLANK = FLDFLAG_SORTCHOICES * 2;
@@ -85,6 +88,7 @@ public class SelectField extends DialogField
     static public final int SELECTSTYLE_MULTICHECK = 3;
     static public final int SELECTSTYLE_MULTILIST = 4;
     static public final int SELECTSTYLE_MULTIDUAL = 5;
+    static public final int SELECTSTYLE_POPUP = 6;
 
     private ListValueSource listSource;
     private ListValueSource defaultValue;
@@ -95,10 +99,27 @@ public class SelectField extends DialogField
     private String multiDualCaptionRight = "Selected";
     private String radioCheckSeparator = "<br>";
 
+    public class SelectFieldPopup extends DialogFieldPopup
+    {
+        private String lvsSessionAttrName;
+
+        public SelectFieldPopup()
+        {
+            super("popup-url:cmd=lvs,reference;session:LVSPOPUP_"+ getQualifiedName()+";yes", new String[] { getQualifiedName(), getQualifiedName() + "_adjacent"});
+            lvsSessionAttrName = "LVSPOPUP_"+ getQualifiedName();
+        }
+
+        public void prepareForPopup(DialogContext dc)
+        {
+            ((HttpServletRequest) dc.getRequest()).getSession(true).setAttribute(lvsSessionAttrName, listSource);
+        }
+    }
+
     public SelectField()
     {
         super();
         style = SELECTSTYLE_COMBO;
+        super.setSize(8);
     }
 
     public SelectField(String aName, String aCaption, int aStyle)
@@ -137,16 +158,6 @@ public class SelectField extends DialogField
     public void setStyle(int value)
     {
         style = value;
-    }
-
-    public final int getSize()
-    {
-        return size;
-    }
-
-    public void setSize(int value)
-    {
-        size = value;
     }
 
     public final ListValueSource getDefaultListValue()
@@ -252,6 +263,8 @@ public class SelectField extends DialogField
                 style = SelectField.SELECTSTYLE_MULTILIST;
             else if(styleValue.equalsIgnoreCase("multidual"))
                 style = SelectField.SELECTSTYLE_MULTIDUAL;
+            else if(styleValue.equalsIgnoreCase("popup"))
+                style = SelectField.SELECTSTYLE_POPUP;
             else
                 style = SelectField.SELECTSTYLE_COMBO;
         }
@@ -298,19 +311,25 @@ public class SelectField extends DialogField
         if(blank.length() > 0 && blank.equals("yes"))
             setFlag(FLDFLAG_APPENDBLANK);
 
-        String sizeStr = elem.getAttribute("size");
-        if(sizeStr.length() != 0)
-            size = Integer.parseInt(sizeStr);
-
         String controlSep = elem.getAttribute("control-separator");
         if(controlSep.length() > 0)
             radioCheckSeparator = controlSep;
+
+        if(style == SELECTSTYLE_POPUP)
+        {
+            setFlag(FLDFLAG_CREATEADJACENTAREA);
+            setPopup(new SelectFieldPopup());
+        }
     }
 
     public boolean isValid(DialogContext dc)
     {
         switch(style)
         {
+            case SELECTSTYLE_POPUP:
+                // we're just going to let the super method take care of us
+                break;
+
             case SELECTSTYLE_COMBO:
             case SELECTSTYLE_LIST:
             case SELECTSTYLE_RADIO:
@@ -332,7 +351,6 @@ public class SelectField extends DialogField
                     return false;
                 }
                 break;
-
         }
 
         return super.isValid(dc);
@@ -359,7 +377,16 @@ public class SelectField extends DialogField
                 dc.setValues(this, values);
         }
         else
+        {
             super.populateValue(dc, formatType);
+            if(style == SELECTSTYLE_POPUP && listSource != null)
+            {
+                ((SelectFieldPopup) getPopup()).prepareForPopup(dc);
+                String adjacentText = listSource.getAdjacentCaptionForValue(dc, dc.getValue(getQualifiedName()));
+                if(adjacentText != null)
+                    dc.setAdjacentAreaValue(getQualifiedName(), adjacentText);
+            }
+        }
     }
 
     public String getMultiDualControlHtml(DialogContext dc, SelectChoicesList choices)
@@ -409,6 +436,12 @@ public class SelectField extends DialogField
                 "</TABLE>";
     }
 
+    public void renderPopupControlHtml(Writer writer, DialogContext dc) throws IOException
+    {
+        // as a popup, we're a simple text field so just use it's rendering method
+        super.renderControlHtml(writer, dc);
+    }
+
     public String getHiddenControlHtml(DialogContext dc, boolean showCaptions)
     {
         SelectChoicesList choices = null;
@@ -452,6 +485,13 @@ public class SelectField extends DialogField
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
+        // we do this first because popups don't want to pull in all the data at once like other select styles do
+        if(style == SELECTSTYLE_POPUP)
+        {
+            renderPopupControlHtml(writer, dc);
+            return;
+        }
+
         if(isInputHidden(dc))
         {
             writer.write(getHiddenControlHtml(dc, false));
