@@ -21,7 +21,7 @@
   <property category="sys" name="CompanyLabel" value="Company:" />
   <property category="sys" name="Copyright" value="Copyright (c) 2001" />
   <property category="sys" name="CopyrightLabel" value="Copyright:" />
-  <property category="sys" name="DefaultPackage" value="com.xaf.sql.query" />
+  <property category="sys" name="DefaultPackage" value="com.xaf.config" />
   <property category="sys" name="Description" value="" />
   <property category="sys" name="DescriptionLabel" value="Description:" />
   <property category="sys" name="DocPath" value="doc" />
@@ -36,19 +36,11 @@
   <property category="sys" name="OutPath" value="../../classes/XAF" />
   <property category="sys" name="ServletContentType" value="HTML" />
   <property category="sys" name="SourcePath" value="../../../java" />
-  <property category="sys" name="Title" value="The Extensible Application Platform" />
+  <property category="sys" name="Title" value="The eXtensible Application Framework" />
   <property category="sys" name="TitleLabel" value="Title:" />
   <property category="sys" name="Version" value="1.0" />
   <property category="sys" name="VersionLabel" value="@version" />
   <property category="sys" name="WorkingDirectory" value="." />
-  <node type="Folder" name="Additional Settings">
-    <file path="../../../java/com/xaf/navigate/NavigateFileSystemServlet.java">
-      <property category="servletrun" name="servlet.ContextRunDebug" value="true" />
-    </file>
-    <file path="../../../java/com/xaf/db/SchemaBrowserServlet.java">
-      <property category="servletrun" name="servlet.ContextRunDebug" value="true" />
-    </file>
-  </node>
   <file path="XAF.html" />
 </project>
 
