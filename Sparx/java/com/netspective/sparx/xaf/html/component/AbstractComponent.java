@@ -51,15 +51,16 @@
  */
  
 /**
- * $Id: AbstractComponent.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: AbstractComponent.java,v 1.1 2002-12-26 19:30:27 shahid.shah Exp $
  */
 
-package com.netspective.sparx.xaf.html;
+package com.netspective.sparx.xaf.html.component;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.html.Component;
 
 public class AbstractComponent implements Component
 {
@@ -67,8 +68,8 @@ public class AbstractComponent implements Component
     {
     }
 
-    public void printHtml(PageContext pc, Writer writer) throws IOException
+    public void renderHtml(ValueContext vc, Writer writer) throws IOException
     {
-        throw new RuntimeException("AbstractComponent.printHtml is an abstract method.");
+        throw new RuntimeException("AbstractComponent.renderHtml is an abstract method.");
     }
 }

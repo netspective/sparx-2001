@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Component.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: Component.java,v 1.2 2002-12-26 19:30:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -59,9 +59,9 @@ package com.netspective.sparx.xaf.html;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public interface Component
 {
-    public void printHtml(PageContext pc, Writer writer) throws IOException;
+    public void renderHtml(ValueContext vc, Writer writer) throws IOException;
 }
