@@ -20,7 +20,8 @@ public class DialogField
 	static public final int FLDFLAG_HAS_CONDITIONAL_DATA = FLDFLAG_INPUT_HIDDEN * 2;
 	static public final int FLDFLAG_COLUMN_BREAK_BEFORE  = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
 	static public final int FLDFLAG_COLUMN_BREAK_AFTER   = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
-	static public final int FLDFLAG_STARTCUSTOM          = FLDFLAG_COLUMN_BREAK_AFTER * 2; // all DialogField "children" will use this
+    static public final int FLDFLAG_BROWSER_READONLY     = FLDFLAG_COLUMN_BREAK_AFTER * 2;
+	static public final int FLDFLAG_STARTCUSTOM          = FLDFLAG_BROWSER_READONLY * 2; // all DialogField "children" will use this
 
 	static public int[] CHILD_CARRY_FLAGS = new int[] { FLDFLAG_REQUIRED, FLDFLAG_INVISIBLE, FLDFLAG_READONLY, FLDFLAG_PERSIST, FLDFLAG_CREATEADJACENTAREA, FLDFLAG_SHOWCAPTIONASCHILD  };
 
@@ -100,8 +101,15 @@ public class DialogField
 		if(elem.getAttribute("initial-focus").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_INITIAL_FOCUS);
 
-		if(elem.getAttribute("read-only").equalsIgnoreCase("yes"))
+        // 1. read-only flag of 'yes' will display the field value as a static string
+        // within SPAN tags and the INPUT will be hidden.
+        // 2. read-only flag of 'browser' will display the field value as
+        // an INPUT with readonly flag set.
+        String readonly = elem.getAttribute("read-only");
+		if(readonly.equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_READONLY);
+        else if (readonly.equalsIgnoreCase("browser"))
+        	setFlag(DialogField.FLDFLAG_BROWSER_READONLY);
 
 		if(elem.getAttribute("visible").equalsIgnoreCase("no"))
 			setFlag(DialogField.FLDFLAG_INVISIBLE);
@@ -505,6 +513,15 @@ public class DialogField
 		else
 			return flagIsSet(FLDFLAG_READONLY);
 	}
+
+    public final boolean isBrowserReadOnly(DialogContext dc)
+    {
+        String qName = getQualifiedName();
+		if(qName != null)
+		    return dc.flagIsSet(qName, FLDFLAG_BROWSER_READONLY);
+		else
+			return flagIsSet(FLDFLAG_BROWSER_READONLY);
+    }
 
 	public final boolean isInputHidden(DialogContext dc)
 	{
