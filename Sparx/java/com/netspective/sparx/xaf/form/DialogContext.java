@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.28 2002-12-31 19:37:51 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.29 2003-01-01 19:26:02 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -165,11 +165,14 @@ public class DialogContext extends ServletValueContext
             if(runSequence == 1 && ((flags & DialogField.FLDFLAG_PERSIST) != 0))
             {
                 Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-                for(int i =0; i < cookies.length; i++)
+                if(cookies != null)
                 {
-                    Cookie cookie = cookies[i];
-                    if(cookie.getName().equals(field.getCookieName()))
-                        value = URLDecoder.decode(cookie.getValue());
+                    for(int i =0; i < cookies.length; i++)
+                    {
+                        Cookie cookie = cookies[i];
+                        if(cookie.getName().equals(field.getCookieName()))
+                            value = URLDecoder.decode(cookie.getValue());
+                    }
                 }
             }
 
