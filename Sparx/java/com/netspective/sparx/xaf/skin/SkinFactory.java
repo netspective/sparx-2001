@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SkinFactory.java,v 1.12 2003-03-05 23:08:40 aye.thu Exp $
+ * $Id: SkinFactory.java,v 1.13 2003-06-03 14:10:40 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -121,7 +121,6 @@ public class SkinFactory implements Factory
             selectedTheme = System.getProperty("app.ui.theme");
             selectedStyle = System.getProperty("app.ui.theme.style");
             String appRootPath = System.getProperty("app.site-root-path");
-            System.out.println(selectedTheme + " " +  selectedStyle + " " + appRootPath);
             if (selectedTheme != null && selectedStyle != null && appRootPath != null)
             {
                 factory.discoverResources(appRootPath, "/sparx/resources/theme");
@@ -644,7 +643,6 @@ public class SkinFactory implements Factory
                     if (styleDir.isDirectory())
                     {
                         String styleName = styleDir.getName();
-                        System.out.println("STYLE Created: " + styleName);
                         newTheme.addStyle(styleName);
                         ThemeStyle style = newTheme.getStyle(styleName);
                         style.setImagePath(rootUrl + "/" + file.getName() + "/" + styleName + "/images");
@@ -658,7 +656,6 @@ public class SkinFactory implements Factory
                             Map cssResources = new HashMap();
                             cssResources = discoverThemeStyleResources(null, cssPath, "/", cssDir);
                             style.setCssResources(cssResources);
-                            System.out.println(cssPath + " " + cssResources);
                         }
 
                         File imgDir = new File(appRoot + imgPath);
