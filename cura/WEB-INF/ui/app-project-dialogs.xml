@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <dialogs package="project">
+        <dialog name="registration" heading="create-data-cmd-heading:Project" retain-params="*" class="app.form.ProjectDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.text name="org_id" default="request:org_id" hidden="yes"/>
+            <field.integer name="project_id" caption="Project ID" read-only="browser">
+                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
+            </field.integer>
+            <field.text name="project_name" caption="Project Name"  uppercase="yes"   max-length="255" required="yes">
+                <conditional action="apply-flag" flag="browser-read-only" data-cmd="edit,delete"/>
+            </field.text>
+            <field.text name="project_code" caption="Code" max-length="64"/>
+            <field.memo name="project_descr" caption="Description" required="yes"/>
+            <field.select name="project_status" caption="Status" required="yes" choices="query:project.status-list" />
+            <field.date name="start_date" caption="Start Date" required="yes" default="today" popup-calendar="yes"/>
+            <field.date name="target_end_date" caption="End Date (Target)" required="yes" popup-calendar="yes">
+                <conditional action="apply-flag" flag="browser-read-only" data-cmd="edit,delete"/>
+            </field.date>
+            <field.date name="actual_end_date" caption="Actual End Date" required="no" popup-calendar="yes">
+                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
+            </field.date>
+            <field.email name="notify_email" caption="Notify Email" />
+
+        </dialog>
+
+        <dialog name="org_relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*" >
+            <!-- field.report name="organization" required="yes" style="multicheck">
+                <statement>
+                    select
+                        org.org_id as "checkbox",
+                        org.org_id ,
+                        org.org_name
+                    from
+                        org, personorg_relationship por
+                    where
+                        por.parent_id = ?
+                        and por.record_status_id = 1
+                        and por.rel_type = 0
+                        and por.rel_org_id = org.org_id
+                    <params>
+                        <param value="request-attr:person_id" />
+                    </params>
+                    <report>
+                        <banner>
+                            <item caption="Please select the organization"/>
+                        </banner>
+                        <column type="checkbox" value="1"/>
+                        <column heading="ID"/>
+                        <column heading="Organization Name"/>
+                    </report>
+                </statement>
+            </field.report -->
+            <field.select name="org_id" caption="Organization(s)" choices="query:person.active-org-memberships" style="multidual"/>
+            <execute-tasks data-cmd="add">
+                <exec-redirect url="config-expr:${create-app-url:/project/member.jsp}?cmd=dialog,project.person_relation,add&amp;org_id=${form:checkbox}&amp;project_id=${request:project_id}"/>
+            </execute-tasks>
+        </dialog>
+
+        <dialog name="person_registeration" heading="Edit Project Member(s)" retain-params="*" class="app.form.ProjectMemberDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.integer name="project_id" hidden="yes" default="request:project_id"/>
+            <field.text name="project_name" caption="Project" read-only="browser" default="request:project_name"/>
+            <field.select name="rel_person_id" style="multidual" caption="Contacts" required="yes"
+                choices="query:project.org-person-list" default="query:project.member-persons">
+            </field.select>
+
+        </dialog>
+
+        <dialog name="delete_task" heading="Delete Project Task(s)" retain-params="*" class="app.form.DeleteTaskDialog">
+            <field.integer name="project_id" hidden="yes" default="request:project_id"/>
+            <field.text name="project_name" caption="Project" hidden="yes" default="request:project_name"/>
+            <field.report name="task_id" required="yes" style="multicheck">
+                <statement>
+                    select
+                        0 as "checkbox",
+                        task.task_id ,
+                        task.task_summary,
+                        task_status.caption
+                    from
+                        task, task_type, task_status, project
+                    where
+                        task.owner_project_id = ?   and
+                        task.owner_project_id = project.project_id and
+                        task.task_type = task_type.id and
+                        task.task_status = task_status.id
+                    <params>
+                        <param value="request:project_id" />
+                    </params>
+                    <report>
+                        <banner>
+                            <item caption="Please select the task(s) to delete"/>
+                        </banner>
+                        <column type="checkbox" field-name="checkbox" field-value="${1}"/>
+                        <column heading="Task ID" align="left"/>
+                        <column heading="Summary"/>
+                        <column heading="Status"/>
+                    </report>
+                </statement>
+            </field.report>
+        </dialog>
+
+    </dialogs>
+</xaf>

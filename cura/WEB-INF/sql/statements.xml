@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <include file="app-security-sql.xml"/>
+    <include file="app-person-sql.xml"/>
+    <include file="app-person-query-defns.xml"/>
+    <include file="app-org-sql.xml"/>
+    <include file="app-org-query-defns.xml"/>
+    <include file="app-project-sql.xml"/>
+    <include file="app-project-query-defns.xml"/>
+    <include file="app-task-query-defns.xml"/>
+    <include file="app-task-sql.xml"/>
+
+    <register-report-skin name="report" class="app.skin.AppReportSkin"/>
+    <register-report-skin name="detail" class="app.skin.AppDetailReportSkin"/>
+    <register-report-skin name="detail-full" class="app.skin.AppDetailReportFullSkin"/>
+</xaf>

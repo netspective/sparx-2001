@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="project">
+        <statement name="status-list">
+            select
+                caption,
+                id
+            from
+                project_status
+
+        </statement>
+
+        <statement name="information">
+            select
+                project_id,
+                project_name,
+                project_status.caption PROJECT_STATUS,
+                to_char(start_date, 'MM/DD/YYYY') START_DATE,
+                to_char(target_end_date, 'MM/DD/YYYY') TARGET_END_DATE,
+                to_char(actual_end_date, 'MM/DD/YYYY') ACTUAL_END_DATE,
+                project_descr
+            from
+                project, project_status
+            where
+                project_id = ? and
+                project.project_status = project_status.id
+
+            <report heading="Overview">
+				<banner style="horizontal">
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;project_id=${request:project_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;project_id=${request:project_id}"/>
+                </banner>
+                <column heading="ID" display="no"/>
+                <column heading="Name" />
+                <column heading="Status" />
+                <column heading="Start Date"/>
+                <column heading="Target End Date"/>
+                <column heading="Actual End Date" />
+                <column heading="Description" col-break="before"/>
+            </report>
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+
+        <statement name="member-persons">
+            select
+                person.complete_sortable_name,
+                person.person_id
+            from
+                person, projectperson_relation, org, personorg_relationship
+            where
+                projectperson_relation.parent_id = ? and
+                person.person_id = projectperson_relation.rel_person_id and
+                org.org_id = personorg_relationship.rel_org_id and
+                person.person_id = personorg_relationship.parent_id
+            <params>
+                <param value="request:project_id"/>
+            </params>
+
+        </statement>
+
+        <statement name="member-persons-report">
+            select
+                person.person_id,
+                person.complete_name,
+                person.complete_sortable_name,
+                projectperson_relation.rel_descr
+            from
+                person, projectperson_relation
+            where
+                projectperson_relation.parent_id = ? and
+                person.person_id = projectperson_relation.rel_person_id
+            order by
+                person.complete_sortable_name
+            <params>
+                <param value="request:project_id"/>
+            </params>
+            <report heading="Project Members">
+				<banner style="horizontal">
+                    <item caption="Edit" url="config-expr:member.jsp?project_id=${request:project_id}&amp;project_name=${request:project_name}"/>
+                </banner>
+                <column display="no"/>
+                <column display="no"/>
+                <column heading="Name" align="left" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{1}"/>
+                <column heading="Project Role" align="left"/>
+            </report>
+        </statement>
+
+        <statement name="member-tasks-report">
+            select
+                task.task_id,
+                task.task_summary,
+                task_status.caption
+            from
+                task, task_type, task_status, project
+            where
+                task.owner_project_id = ?   and
+                task.owner_project_id = project.project_id and
+                task.task_type = task_type.id and
+                task.task_status = task_status.id
+            <params>
+                <param value="request:project_id"/>
+            </params>
+            <report heading="Project Tasks">
+				<banner style="horizontal">
+                    <item caption="Add" url="config-expr:${create-app-url:/task/create.jsp}?project_id=${request:project_id}&amp;project_name=${request:project_name}&amp;task_type=1"/>
+                    <item caption="Delete" url="config-expr:${create-app-url:/project/delete_task.jsp}?project_id=${request:project_id}&amp;project_name=${request:project_name}"/>
+                </banner>
+                <column heading="Task ID" align="left" display="yes"/>
+                <column heading="Name" align="left" url="create-app-url:/task/home.jsp?project_id=${request:project_id}&amp;task_id=${0}&amp;task_summary=%{1}"/>
+                <column heading="Status" align="left"/>
+            </report>
+        </statement>
+
+        <statement name="member-tasks">
+            select
+                task.task_summary,
+                task.task_id
+            from
+                task, task_type, project
+            where
+                task.owner_project_id = ?   and
+                task.owner_project_id = project.project_id and
+                task.task_type = task_type.id and
+
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+
+		<statement name="available-orgs">
+			select
+                org.org_name,
+                org.org_id
+			from
+                org, personorg_relationship por
+			where
+                por.parent_id = ?
+                and por.record_status_id = 1  /* active status only */
+                and por.rel_type = 0       /* member of organization */
+                and por.rel_org_id = org.org_id /* join to get org_name */
+            <params>
+                <param value="request-attr:person_id"/>
+            </params>
+		</statement>
+        <statement name="org-person-list">
+			select
+                person.complete_sortable_name,
+                person.person_id
+			from
+                personorg_relationship por, person, projectorg_relation
+			where
+                por.parent_id = person.person_id and
+                projectorg_relation.parent_id = ? and
+                projectorg_relation.rel_org_id = por.rel_org_id
+
+            order by
+                person.complete_sortable_name
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+
+    </sql-statements>
+</xaf>

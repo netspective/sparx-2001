@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<schema name="db">
+
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+	<include file="enums.xml"/>
+
+	<include file="person.xml"/>
+	<include file="org.xml"/>
+    <include file="task.xml"/>
+	<include file="artifact.xml"/>
+
+	<table name="Project" abbrev="Prj" type="Default">
+		<column name="project_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="parent_id" selfref="Project.project_id" descr="Parent project (NULL if this is not a sub-project)"/>
+		<column name="project_code" type="text" size="64" unique="yes" descr="General project code"/>
+		<column name="project_name" type="text" size="256" descr="The name of the project"/>
+		<column name="project_descr" type="text" size="4000" descr="Project details"/>
+        <column name="project_status" lookupref="Project_Status" descr="The active status of this project"/>
+        <column name="start_date" type="date" descr="project start date"/>
+        <column name="target_end_date" type="date" descr="Project target end date"/>
+        <column name="actual_end_date" type="date" descr="Project actual end date"/>
+	</table>
+
+    <table name="Project_Status" abbrev="PrjSt" type="Status">
+        <enum>Not Defined</enum>
+        <enum>Proposed</enum>
+        <enum>In Planning</enum>
+        <enum>In Progress</enum>
+        <enum>On Hold</enum>
+        <enum>Complete</enum>
+    </table>
+
+	<table name="ProjectOrg_Relation_Type" abbrev="PrjOrgRelTy" type="Relationship_Type">
+        <!-- enums for Project/Org relationship -->
+        <enum id="1" abbrev="Owner">Owner</enum>
+        <enum id="2" abbrev="mainc">Main contractor</enum>
+        <enum id="3" abbrev="subc">Sub contractor</enum>
+	</table>
+
+	<table name="ProjectPerson_Relation_Type" abbrev="PrjPerRelTy" type="Relationship_Type">
+        <!-- enums for Project/Person relationship -->
+        <enum id="1" abbrev="LD">Lead</enum>
+        <enum id="2" abbrev="ENG">Member</enum>
+	</table>
+
+	<table name="Project_Relationship_Status" abbrev="PrjRelSt" type="Relationship_Status"/>
+
+	<table name="ProjectOrg_Relation" abbrev="PrjOrgRel" type="Org_Relationship">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Relationship_Status</param>
+		<param name="relationship-type-enum">ProjectOrg_Relation_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+	</table>
+
+	<table name="ProjectPerson_Relation" abbrev="PrjPerRel" type="Person_Relationship">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Relationship_Status</param>
+		<param name="relationship-type-enum">ProjectPerson_Relation_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+    </table>
+
+	<table name="Project_Event" abbrev="PrjEvt" type="Event">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Event_Status</param>
+		<param name="event-type-enum">Project_Event_Type</param>
+	</table>
+
+	<table name="Project_Flag_Type" abbrev="PrjFlTy" type="Flag_Type">
+	</table>
+
+	<table name="Project_Flag_Status" abbrev="PrjFlSt" type="Flag_Status"/>
+
+	<table name="Project_Flag" abbrev="PrjFlg" type="Flag">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Flag_Status</param>
+		<param name="flag-type-enum">Project_Flag_Type</param>
+	</table>
+
+</schema>

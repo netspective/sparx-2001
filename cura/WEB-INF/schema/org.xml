@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+
+<schema name="org">
+
+	<table name="Org_Ownership" abbrev="OOwnE" type="Enumeration">
+		<enum>Public</enum>
+		<enum>Private</enum>
+		<enum>Subsidiary</enum>
+		<enum>Other</enum>
+	</table>
+
+	<table name="Org_Type_Enum" abbrev="OTypE" type="Enumeration">
+		<enum>Company</enum>
+		<enum>Branch</enum>
+		<enum>Department</enum>
+	</table>
+
+	<table name="Org_Industry_Enum" abbrev="OIndE" type="Enumeration">
+		<enum>Agriculture</enum>
+		<enum>Apparel</enum>
+		<enum>Banking</enum>
+		<enum>Biotechnology</enum>
+		<enum>Communications</enum>
+		<enum>Construction</enum>
+		<enum>Consulting</enum>
+		<enum>Education</enum>
+		<enum>Electronics</enum>
+		<enum>Energy</enum>
+		<enum>Engineering</enum>
+		<enum>Entertainment</enum>
+		<enum>Environmental</enum>
+		<enum>Finance</enum>
+		<enum>Food and Beverage</enum>
+		<enum>Government</enum>
+		<enum>Healthcare</enum>
+		<enum>Hospitality</enum>
+		<enum>Insurance</enum>
+		<enum>Machinery</enum>
+		<enum>Manufacturing</enum>
+		<enum>Media</enum>
+		<enum>Not for Profit</enum>
+		<enum>Recreation</enum>
+		<enum>Retail</enum>
+		<enum>Shipping</enum>
+		<enum>Technology</enum>
+		<enum>Telecommunications</enum>
+		<enum>Transportation</enum>
+		<enum>Utilities</enum>
+		<enum>Other</enum>
+	</table>
+
+	<table name="Org" type="Default">
+		<description>An organization, such as a physician's private practice, a hospital, or an insurance company</description>
+		<column name="org_id" type="autoinc" primarykey="yes" descr="Unique organization record identification (in entire system) for internal use"/>
+		<column name="org_code" required="yes" type="text" size="64" descr="Unique org identification within owner organization (basically, an account number)"/>
+		<column name="org_name" type="text" size="128" required="yes" descr="Name of organization"/>
+		<column name="org_abbrev" type="text" size="24" descr="Abbreviated name of organization"/>
+		<column name="ownership" lookupref="Org_Ownership" descr="The type of ownership of the company"/>
+		<column name="ticker_symbol" type="text" size="24" descr="Ticker symbol if this is a public company"/>
+		<column name="sic_code" type="text" size="24" descr="Company's SIC code"/>
+		<column name="employees" type="integer" descr="A round figure describing number of employees"/>
+		<column name="time_zone" type="text" size="10" descr="Time zone that the organization operates in"/>
+	</table>
+
+	<table name="Org_Type" abbrev="OTyp" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique ID for each row"/>
+		<column name="org_id" parentref="Org.org_id" descr="The organization being described"/>
+		<column name="org_type" lookupref="Org_Type_Enum" descr="The type of organization"/>
+	</table>
+
+	<table name="Org_Industry" abbrev="OInd" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique ID for each row"/>
+		<column name="org_id" parentref="Org.org_id" descr="The organization being described"/>
+		<column name="org_industry" lookupref="Org_Industry_Enum" descr="The industry organization belongs in"/>
+	</table>
+
+	<table name="Org_Identifier_Type" abbrev="OIdTy" type="Enumeration">
+	</table>
+
+	<table name="Org_Identifier" abbrev="OrgID" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes"/>
+		<column name="org_id" parentref="Org.org_id"/>
+		<column name="id_type" lookupref="Org_Identifier_Type"/>
+		<column name="id" type="text" size="32"/>
+	</table>
+
+	<table name="Org_Relationship_Type" abbrev="ORelTy" type="Relationship_Type">
+		<enum>Our Firm</enum>
+		<enum>Client</enum>
+		<enum>Vendor</enum>
+		<enum>Partner</enum>
+        <enum id="1000">Ancestor of Org</enum>
+		<enum id="1010">Parent of Org</enum>
+		<enum id="1020">Sibling of Org</enum>
+		<enum id="1030">Child of Org</enum>
+        <enum id="1040">Descendent of Org</enum>
+	</table>
+
+	<table name="Org_Relationship_Status" abbrev="ORelSt" type="Relationship_Status"/>
+
+	<table name="Org_Relationship" abbrev="OrgRel" type="Org_Relationship">
+		<description>The relationship between two organizations.</description>
+		<param name="parent-ref">Org.org_id</param>
+		<param name="record-status-enum">Org_Relationship_Status</param>
+		<param name="relationship-type-enum">Org_Relationship_Type</param>
+	</table>
+
+	<table name="Org_Address" abbrev="OrgAdr" type="Physical_Address">
+		<param name="parentref">Org.org_id</param>
+	</table>
+
+	<table name="Org_Contact" abbrev="OrgCnt" type="Contact_Method">
+		<param name="parentref">Org.org_id</param>
+	</table>
+
+</schema>

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<query-defn id="Person">
+
+		<!-- Fields -->
+		<field id="person_id" caption="Contact ID" join="person" column="person_id">
+			<report heading="ID"  align="left"/>
+		</field>
+		<field id="name_prefix" caption="Prefix" join="person" column="name_prefix">
+			<report heading="Prefix" />
+		</field>
+		<field id="gender" caption="Gender" join="person" column="gender">
+			<report heading="Gender"/>
+		</field>
+        <field id="gender_name" caption="Gender Type" join="gender" column="caption">
+            <report heading="Gender"/>
+        </field>
+		<field id="name_last" caption="Last Name" join="person" column="name_last" where-expr="upper(person.name_last)">
+			<report heading="Last Name" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{4}"/>
+		</field>
+		<field id="name_first" caption="First Name" join="person" column="name_first" where-expr="upper(person.name_first)">
+			<report heading="First Name"/>
+		</field>
+		<field id="complete_name" caption="Full Name" join="person" column="complete_name" where-expr="upper(person.complete_name)">
+            <report heading="Full Name"  display="no" />
+		</field>
+		<field id="ssn" caption="SSN" join="person" column="ssn" column-expr="person.ssn">
+			<report heading="SSN"/>
+		</field>
+        <field id="dob" caption="Date of Birth" join="person" column="dob" where-expr="to_char(dob, 'MM/DD/YYYY')">
+            <report heading="Date of Birth"/>
+        </field>
+        <field id="marital_status" caption="Marital Status" join="person" column="marital_status" >
+            <report heading="Marital Status"/>
+        </field>
+        <field id="org_id" caption="Organization ID" join="org" column="org_id" where-expr="org.org_id">
+            <report heading="Organization ID"/>
+        </field>
+		<field id="org_name" caption="Organization Name" join="org" column="org_name" where-expr="upper(org.org_name)">
+			<report heading="Organization Name"/>
+		</field>
+
+		<!-- Joins -->
+		<join id="person" table="person" auto-include="yes"/>
+		<join id="org" table="org"  condition="org.org_id = personorg_relationship.rel_org_id" imply-join="personorg_relationship"/>
+        <join id="personorg_relationship" table="personorg_relationship" condition="personorg_relationship.parent_id = person.person_id"/>
+        <join id="gender" table="gender" condition="gender.id = person.gender" />
+
+		<select-dialog name="person_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Contacts">
+			<field.text query-field="person_id"/>
+			<field.text query-field="name_last"/>
+			<field.text query-field="name_first"/>
+			<field.select query-field="gender" choices="query:person.gender-list" prepend-blank="yes"/>
+			<field.select query-field="org_id" choices="query:person.active-org-memberships-name-id"  default="session:organization" prepend-blank="yes"/>
+            <field.select name="sort_order"
+					caption="Sort By"
+					style="combo"
+					choices="Last Name=name_last;Gender=gender;SSN=ssn"
+                    default="name_last"/>
+
+			<select heading="Contact Search Results">
+				<display field="person_id"/>
+                <display field="name_prefix"/>
+                <display field="name_last"/>
+                <display field="name_first"/>
+                <display field="complete_name"/>
+				<display field="gender_name"/>
+				<display field="ssn"/>
+
+				<order-by field="form:sort_order"/>
+
+				<condition field="person_id" allow-null="no" comparison="starts-with" value="form:person_id" connector="and" />
+				<condition field="name_last" allow-null="no" comparison="starts-with" value="form:name_last" connector="and" bind-expr="upper(?)"/>
+				<condition field="name_first" allow-null="no" comparison="starts-with" value="form:name_first" connector="and" bind-expr="upper(?)"/>
+				<condition field="gender" allow-null="no" comparison="equals" value="form:gender" connector="and"/>
+                <condition field="ssn" allow-null="no" comparison="equals" value="form:ssn" connector="and"/>
+                <condition field="org_id" allow-null="no" comparison="equals" value="form:org_id" connector="and" />
+			</select>
+			<director cancel-url="index.jsp" submit-caption="Search"/>
+		</select-dialog>
+    </query-defn>
+</xaf>

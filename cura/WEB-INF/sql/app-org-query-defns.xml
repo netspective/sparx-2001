@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<query-defn id="Organization">
+
+		<!-- Fields -->
+		<field id="org_id" caption="Account ID" join="org" column="org_id">
+        	<report heading="ID"  align="right" allow-sort="yes"/>
+		</field>
+		<field id="org_code" caption="Account Code" join="org" column="org_code">
+			<report heading="Code" allow-sort="yes"/>
+		</field>
+		<field id="org_name" caption="Account Name" join="org" column="org_name" where-expr="upper(org.org_name)">
+			<report heading="Name" url="create-app-url:/account/home.jsp?org_id=${0}&amp;org_name=%{.}" allow-sort="yes"/>
+		</field>
+		<field id="org_abbrev" caption="Account Abbreviation" join="org" column="org_abbrev" where-expr="upper(org.org_abbrev)">
+			<report heading="Abbrev" allow-sort="yes"/>
+		</field>
+		<field id="org_industry" caption="Account Industry" join="org_industry" column="org_industry" column-expr="org_industry_enum.caption">
+			<report heading="Industry"/>
+		</field>
+        <field id="rel_org_id" caption="Parent Organization" join="org_relationship"  column="rel_org_id">
+        </field>
+        <field id="rel_type" caption="Relationship Type" join="org_relationship"  column="rel_type">
+        </field>
+
+		<!-- Joins -->
+		<join id="org" table="org" auto-include="yes"/>
+        <join id="org_relationship" table="org_relationship" condition="org.org_id = org_relationship.parent_id"/>
+		<join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)" imply-join="org_industry_enum"/>
+		<join id="org_industry_enum" table="org_industry_enum" condition="org_industry.org_industry = org_industry_enum.id (+)" imply-join="org_industry_enum"/>
+
+		<select-dialog name="org_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Accounts">
+			<field.text query-field="org_code"/>
+			<field.text query-field="org_name"/>
+			<field.text query-field="org_abbrev"/>
+			<field.select query-field="org_industry" choices="schema-enum:Org_Industry_Enum" prepend-blank="yes"/>
+			<field.select name="sort_order"
+					caption="Sort By"
+					style="combo"
+					choices="Name=org_name;Abbreviation=org_abbrev"
+                    default="org_name"/>
+			<select heading="Account Search Results">
+				<display field="org_id"/>
+				<display field="org_code"/>
+				<display field="org_name"/>
+				<display field="org_abbrev"/>
+				<display field="org_industry"/>
+				<order-by field="form:sort_order"/>
+
+				<condition field="org_code" allow-null="no" comparison="in" value="strings:101;102" connector="and"/>
+				<!-- <condition field="org_code" allow-null="no" comparison="starts-with" value="form:org_code" connector="and" bind-expr="upper(?)"/> -->
+				<condition field="org_name" allow-null="no" comparison="starts-with" value="form:org_name" connector="and" bind-expr="upper(?)"/>
+				<condition field="org_abbrev" allow-null="no" comparison="starts-with" value="form:org_abbrev" connector="and" bind-expr="upper(?)"/>
+				<condition field="org_industry" allow-null="no" comparison="equals" value="form:org_industry" connector="and"/>
+			</select>
+			<director cancel-url="index.jsp" submit-caption="Search"/>
+		</select-dialog>
+
+	</query-defn>
+</xaf>

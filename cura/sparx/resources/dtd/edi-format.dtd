@@ -1,0 +1,44 @@
+<!ELEMENT message-format ( segment-group | segment )+ >
+<!ATTLIST message-format standard CDATA #REQUIRED>
+<!ATTLIST message-format version CDATA #REQUIRED>
+<!ATTLIST message-format release CDATA #REQUIRED>
+<!ATTLIST message-format name CDATA #REQUIRED>
+<!ATTLIST message-format description CDATA #IMPLIED>
+<!ATTLIST message-format repeat-min CDATA '0'>
+<!ATTLIST message-format repeat-max CDATA '1'>
+<!ATTLIST message-format hide-element CDATA #IMPLIED>
+<!ATTLIST message-format enable-miss-value CDATA #IMPLIED>
+<!ATTLIST message-format escape CDATA #IMPLIED>
+<!ELEMENT segment-group (segment-group | segment )+ >
+<!ATTLIST segment-group name CDATA #REQUIRED>
+<!ATTLIST segment-group id CDATA #REQUIRED>
+<!ATTLIST segment-group description CDATA #IMPLIED>
+<!ATTLIST segment-group repeat-min CDATA '0'>
+<!ATTLIST segment-group repeat-max CDATA '1'>
+<!ATTLIST segment-group hide-element CDATA #IMPLIED>
+<!ELEMENT segment (data-elem-group | data-elem )+ >
+<!ATTLIST segment name CDATA #REQUIRED>
+<!ATTLIST segment id CDATA #REQUIRED>
+<!ATTLIST segment description CDATA #IMPLIED>
+<!ATTLIST segment repeat-min CDATA '0'>
+<!ATTLIST segment repeat-max CDATA '1'>
+<!ATTLIST segment delimiter CDATA #IMPLIED>
+<!ATTLIST segment hide-element CDATA #IMPLIED>
+<!ELEMENT data-elem-group ( data-elem-group | data-elem )+ >
+<!ATTLIST data-elem-group name CDATA #REQUIRED>
+<!ATTLIST data-elem-group description CDATA #IMPLIED>
+<!ATTLIST data-elem-group repeat-min CDATA '0'>
+<!ATTLIST data-elem-group repeat-max CDATA '1'>
+<!ATTLIST data-elem-group delimiter CDATA #IMPLIED>
+<!ATTLIST data-elem-group hide-element CDATA #IMPLIED>
+<!ELEMENT data-elem EMPTY>
+<!ATTLIST data-elem name CDATA #REQUIRED>
+<!ATTLIST data-elem description CDATA #IMPLIED>
+<!ATTLIST data-elem type CDATA #IMPLIED>
+<!ATTLIST data-elem repeat-min CDATA '0'>
+<!ATTLIST data-elem repeat-max CDATA '1'>
+<!ATTLIST data-elem length-min CDATA '0'>
+<!ATTLIST data-elem length-max CDATA '0'>
+<!ATTLIST data-elem delimiter CDATA #IMPLIED>
+<!ATTLIST data-elem default CDATA #IMPLIED>
+<!ATTLIST data-elem hide-element CDATA #IMPLIED>

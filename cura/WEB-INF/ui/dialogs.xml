@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<include file="app-skins.xml"/>
+	<include file="app-dialogs.xml"/>
+	<include file="test-skins.xml"/>
+	<include file="test-dialogs.xml"/>	
+</xaf>

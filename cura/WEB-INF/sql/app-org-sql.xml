@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="org">
+
+		<statement name="name-only">
+			select org_name from org where org_id = ?
+			<params>
+				<param value="request:org_id"/>
+			</params>
+		</statement>
+
+        <statement name="name-id-list">
+            select
+                org_name,
+                org_id
+            from
+                org
+        </statement>
+
+       <statement name="parent-org">
+            select
+                org.org_name,
+                org.org_id
+
+            from
+                org,org_relationship
+            where
+                org_relationship.parent_id = ? and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type = 1000
+			<params>
+				<param value="request:org_id"/>
+			</params>
+        </statement>
+
+        <statement name="relationship-report">
+            select
+                org.org_id,
+                org.org_name,
+                org_relationship_type.caption
+            from
+                org,org_relationship, org_relationship_type
+            where
+                org_relationship.parent_id = ? and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type = org_relationship_type.id
+			<params>
+				<param value="request:org_id"/>
+			</params>
+            <report heading="Account Relationships">
+                <column heading="Account ID" align="left"/>
+                <column heading="Account Name" url="config-expr:home.jsp?org_id=${0}&amp;org_name=%{1}"/>
+                <column heading="Relationship"/>
+            </report>
+        </statement>
+
+        <statement name="ancestor-list">
+            select
+                org.org_id
+            from
+                org,org_relationship
+            where
+                org_relationship.parent_id = ? and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type = 1000
+			<params>
+				<param value="request:org_id"/>
+			</params>
+            <report heading="Account Relationships">
+                <column heading="Account ID"/>
+                <column heading="Account Name"/>
+                <column heading="Relationship"/>
+            </report>
+        </statement>
+
+		<statement name="registration">
+			select
+                org_name,
+				org_code,
+				org_abbrev ,
+				org_ownership.caption as "Ownership",
+				ticker_symbol,
+				sic_code ,
+				employees,
+				time_zone
+			from
+                org, org_ownership
+			where
+                org_id = ? and
+                org.ownership = org_ownership.id (+)
+			<params>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Overview">
+				<banner style="horizontal">
+                    <!--item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/-->
+                    <item caption="Edit" url="config-expr:edit.jsp?org_id=${request:org_id}&amp;${request:org_name}"/>
+                    <item caption="Delete" url="config-expr:delete.jsp?org_id=${request:org_id}&amp;${request:org_name}"/>
+                </banner>
+                <column heading="Name"/>
+                <column heading="Code"/>
+                <column heading="Abbreviation"/>
+                <column heading="Ownership"/>
+                <column heading="Symbol"/>
+                <column heading="SIC"/>
+                <column heading="Employees"/>
+                <column heading="Time Zone"/>
+			</report>
+		</statement>
+
+		<statement name="information">
+			select
+				org_code as "Code",
+                org_name as "Name",
+				org_abbrev as "Abbrev",
+				org_ownership.caption as "Ownership",
+				ticker_symbol as "Ticker",
+				sic_code as "SIC",
+				employees as "Employees",
+				time_zone as "Time Zone"
+			from
+                org, org_ownership
+			where
+                org_id = ? and
+                org.ownership = org_ownership.id (+)
+			<params>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Overview">
+				<banner style="horizontal">
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                </banner>
+                <column heading="Code"/>
+                <column heading="Name"/>
+                <column heading="Abbreviation"/>
+                <column heading="Ownership"/>
+			</report>
+		</statement>
+
+		<statement name="classification">
+			select 'Industry', ind_enum.caption
+			from org, org_industry ind, org_industry_enum ind_enum
+			where org.org_id = ?
+			and org.org_id = ind.org_id
+			and ind.org_industry = ind_enum.id
+			union
+			select 'Type', typ_enum.caption
+			from org, org_type typ, org_type_enum typ_enum
+			where org.org_id = ?
+			and org.org_id = typ.org_id
+			and typ.org_type = typ_enum.id
+			<params>
+				<param value="request:org_id"/>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Classification"/>
+		</statement>
+
+        <statement name="contact-list">
+			select
+                person.person_id,
+                person.complete_sortable_name,
+                person.complete_name,
+                org.org_name
+			from
+                personorg_relationship por, person, org
+			where
+                por.rel_org_id = ? and
+                org.org_id = por.rel_org_id and
+                por.parent_id = person.person_id
+            order by
+                person.complete_sortable_name
+            <params>
+                <param value="request:org_id"/>
+            </params>
+            <report heading="Account Contacts">
+                <banner  style="horizontal">
+                    <item caption="Import" url="config-expr:add_member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                    <item caption="Delete" url="config-expr:delete_member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Name" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{2}"/>
+                <column display="no"/>
+                <column heading="Organization" display="no"/>
+            </report>
+
+        </statement>
+        <statement name="selected-org-person-list">
+			select
+                person.complete_sortable_name,
+                person.person_id
+			from
+                personorg_relationship por, person
+			where
+                por.rel_org_id = ? and
+                por.parent_id = person.person_id and
+                por.record_status_id = 1 and
+                por.rel_type = 0
+            order by
+                person.complete_sortable_name
+            <params>
+                <param value="session:organization"/>
+            </params>
+        </statement>
+
+        <statement name="project-report">
+            select
+                Project.project_id,
+                Project.project_name,
+                Project_status.caption,
+                to_char(Project.start_date, 'MM/DD/YYYY'),
+                to_char(Project.target_end_date, 'MM/DD/YYYY')
+            from
+                ProjectOrg_Relation, Project, Project_status
+            where
+                ProjectOrg_Relation.rel_org_id = ? and
+                ProjectOrg_Relation.parent_id = Project.project_id and
+                Project.project_status = Project_Status.id
+            <params>
+                <param value="request:org_id"/>
+            </params>
+            <report heading="Projects">
+                <banner  style="horizontal">
+                    <item caption="Add" url="config-expr:${create-app-url:/project/create.jsp}?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Name" url="create-app-url:/project/home.jsp?project_id=${0}&amp;project_name=%{1}"/>
+                <column heading="Status" align="left"/>
+                <column heading="Start Date" align="left"/>
+                <column heading="Target End Date" align="left"/>
+            </report>
+        </statement>
+
+        <statement name="task-list">
+            select
+                task.task_summary,
+                task.task_id
+            from
+                task, task_type
+            where
+                task.owner_org_id = ?   and
+                task.task_type = task_type.id
+            <params>
+                <param value="session:organization"/>
+            </params>
+        </statement>
+
+	</sql-statements>
+
+</xaf>
