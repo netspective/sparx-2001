@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: RequestParameterValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: RequestParameterValue.java,v 1.2 2002-09-07 21:54:54 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -83,8 +83,11 @@ public class RequestParameterValue extends ValueSource implements ListValueSourc
     {
         SelectChoicesList choices = new SelectChoicesList();
         String[] values = getValues(vc);
-        for(int i = 0; i < values.length; i++)
-            choices.add(new SelectChoice(values[i]));
+        if(values != null)
+        {
+            for(int i = 0; i < values.length; i++)
+                choices.add(new SelectChoice(values[i]));
+        }
         return choices;
     }
 
