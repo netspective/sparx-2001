@@ -124,6 +124,19 @@
 					</xsd:complexType>
 				</xsd:element>
 				<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="property" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="name" type="xsd:string" use="required"/>
+									<xsd:attribute name="value" type="xsd:string" use="optional"/>
+									<xsd:attribute name="value-source" type="single-value-source" use="optional"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+					</xsd:complexType>
+				</xsd:element>
 			</xsd:choice>
 		</xsd:complexType>
 	</xsd:element>
