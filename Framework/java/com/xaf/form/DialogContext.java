@@ -3,8 +3,10 @@ package com.xaf.form;
 import java.lang.reflect.*;
 import java.util.*;
 import java.security.*;
+import java.sql.SQLException;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.naming.NamingException;
 
 import com.xaf.db.*;
 import com.xaf.log.*;
@@ -1012,4 +1014,27 @@ public class DialogContext extends ServletValueContext
 			    values.toString()+
 				"</table>";
 	}
+
+    /**
+     * Retrieves a connection context for the default data source
+     *
+     * @returns ConnectionContext
+     */
+    public ConnectionContext getConnectionContext() throws NamingException, SQLException
+    {
+        return this.getConnectionContext(this.getServletContext().getInitParameter("default-data-source"));
+    }
+
+    /**
+     * Retrieves a connection context
+     *
+     * @param dataSource data source name
+     * @returns ConnectionContext
+     */
+    public ConnectionContext getConnectionContext(String dataSource) throws NamingException, SQLException
+    {
+        return ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
+            dataSource, ConnectionContext.CONNCTXTYPE_TRANSACTION);
+    }
+
 }

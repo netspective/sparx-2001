@@ -94,6 +94,8 @@ public class DateTimeField extends TextField
 
     public Object getValueAsObject(String value)
     {
+        if (value == null || value.length() == 0)
+            return null;
         try
         {
             if (dataType == DTTYPE_TIMEONLY)
