@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.11 2002-12-29 17:08:25 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.12 2003-01-01 19:24:02 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -243,9 +243,6 @@ public class AceServletPage extends NavigationPage
 
     public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws IOException
     {
-        if(getTestCommandItem(nc) != null)
-            return;
-
         String sharedCssRootURL = ((PageControllerServlet) nc.getServlet()).getSharedCssRootURL();
 
         HierarchicalMenu.DrawContext dc = new HierarchicalMenu.DrawContext();
@@ -259,11 +256,15 @@ public class AceServletPage extends NavigationPage
         out.print("</title>\n");
         out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
         out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
-        for(int i = 0; i < menus.length; i++)
+
+        if(getTestCommandItem(nc) == null)
         {
-            dc.firstMenu = i == 0;
-            dc.lastMenu = i == (menus.length - 1);
-            menus[i].renderHtml(nc, out);
+            for(int i = 0; i < menus.length; i++)
+            {
+                dc.firstMenu = i == 0;
+                dc.lastMenu = i == (menus.length - 1);
+                menus[i].renderHtml(nc, out);
+            }
         }
         out.print("</head>\n\n");
     }
