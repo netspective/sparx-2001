@@ -12,18 +12,13 @@
                 </task>
 
                 <task>
-                    <name>Major</name>
-                    <task><name>Now that docs directory has been moved to documentation, ACE's tagdoc and Sparx documentation menu items are broken</name></task>
-                    <task><name>Applications need to be able aggregated into .ear or .jar files and still work (due to the XML files, that may not be the case right now).</name></task>
+                    <name>Minor</name>
+                    <task><name>Applications need to be able to be aggregated into .ear or .jar files and still work (due to the XML files, that may not be the case right now).</name></task>
                     <task><name>Implement e-mail feature in output types for Query Builder and Query Select Dialogs.</name></task>
                     <task><name>Implement file compression in output types for Query Builder and Query Select Dialogs.</name></task>
                     <task><name>Query defn auto sorting is not carrying/retaining parameters.</name></task>
-                </task>
-
-                <task>
-                    <name>Minor</name>
-                    <task><name>field.zip not validated on browser &lt;field.zip ...> fields do not get validated on the browser. The validation always happens on the server (where it works). Consistency with &lt;field.ssn>, &lt;field.phone> would demand a browser side validation for &lt;field.zip> also.</name></task>
-                    <task><name>Dialogs with File fields not processed outside of Servlet Dialogs with File fields not processed outside of Servlet. When subclassing the dialog, none of the validation or executes are handled within the class.</name></task>
+                    <task><name>&lt;field.zip ...> fields do not get validated on the browser. The validation always happens on the server (where it works). Consistency with &lt;field.ssn>, &lt;field.phone> would demand a browser side validation for &lt;field.zip> also.</name></task>
+                    <task><name>Dialogs with File fields not processed outside of Servlet Dialogs. When subclassing the dialog, none of the validation or executes are handled within the class.</name></task>
                     <task><name>Javascript function doesn't get executed when called in text fields (defined in dialog) on is-valid event using js-expr tag.</name></task>
                     <task><name>The executeAndGetSingleValue() method seems to be duplicated in each DatabasePolicy derivative.</name></task>
                 </task>
@@ -43,6 +38,7 @@
                     <task><name>Integrate <a href="http://httpunit.sourceforge.net/">HTTPUnit</a> for doing black-box unit testing of HTML generators (skins).</name></task>
                     <task><name>Integrate <a href="http://httpunit.sourceforge.net/doc/servletunit-intro.html">ServletUnit</a> or <a href="http://jakarta.apache.org/commons/cactus/">Jakarta Cactus</a> for doing black-box and white-box unit testing of servlets.</name></task>
                     <task><name>Integrate <a href="http://www.vaegar.f9.co.uk/java2html.html">Java2HTML</a> to allow colorized Java code to be viewed through browser (in addition to JavaDoc)</name></task>
+                    <task><name>Create debug mode in PageTag (or ACE) that would allow JSPs and other running code to track Sparx components (like in ASPire). Turning this mode on will show list of dialogs, statements, query defs, tables, etc being used on any particular page.</name></task>
 
                     <task>
                         <name>Logging</name>
@@ -72,6 +68,7 @@
                 <task>
                     <name>Application Components Explorer (ACE)</name>
                     <task><name>Add a dialog that connects to <a href="http://www.clarkware.com/software.html#JWhich">JWhich</a> to show where classes are coming from.</name></task>
+                    <task><name>Add <a href="http://www.kclee.com/clemens/java/javancss/">JavaNCSS</a> output to the Metrics page (for Java Source in addition to XML source).</name></task>
                     <task><name>Install <a href="http://www.clarkware.com/software/JDepend.html">JDepend</a> to augment the metrics page with even more data.</name></task>
                     <task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
                     <task><name>SchemaDoc (XML) area of ACE needs to be color-coordinated with remainder of ACE.</name></task>
@@ -85,6 +82,7 @@
                     <task><name>Allow multiple SchemaDoc files to be viewed in ACE without requiring changes to configuration.xml.</name></task>
                     <task><name>Automatically generate dialogs that will test SQL statements and parameters.</name></task>
                     <task><name>When documenting SQL statements, show &lt;report> tag documentation too.</name></task>
+                    <task><name>For all pages that show Java classes (DCB, dialog handlers, etc) link the class sources to new code documentation system with syntax highlighting.</name></task>
                 </task>
 
                 <task>
@@ -92,6 +90,7 @@
                     <task>
                         <name>Dialogs</name>
                         <task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
+                        <task><name>Add ability to replace value sources and include XHTML tags in field.html (right now it's a basic value string with escaped tags).</name></task>
                         <task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
                         <task><name>Implement client-side data persistence in fields using cookies (FLDFLAG_PERSIST).</name></task>
                         <task><name>Implement new field type &lt;field.schema&gt; to create fields directly from SchemaDoc.</name></task>
