@@ -23,6 +23,43 @@
         </ul>
     </summary>
 
+    <section heading="Tutorials and Documentation">
+        Sparx includes hundreds of pages of both online (HTML) and offline (PDF) documention. To get the most ouf the
+        sample applications described below, please review the documents described below and follow along with the 
+        samples either <link page="samples">online</link> or on your own servers. 
+        <p/>
+        <table class="data" cellspacing="0" cellpadding="3">
+            <tr class="data_head">
+                <th class="data"> </th>
+                <th class="data">Document</th>
+                <th class="data">Samples Covered</th>
+                <th class="data">Purpose</th>
+            </tr>
+            <tr class="data">
+                <th class="data"><image src="pdf-logo-sm.gif"/></th>
+                <td class="data"><a href="Sparx_Developers_Guide_Volume_I.pdf">Sparx Developers Guide Volume I</a></td>
+                <td class="data">Hello, Library</td>
+                <td class="data">
+                    Describes the two primary means for evaluating Sparx -- online and offline. Furthermore, it
+                    explains how to install Sparx onto your local servers and how to peruse the source code online.
+                    It then introduces Sparx by describing most of the functionality and walking the reader through the
+                    development of two full-scale sample applications <i>hello</i> and <i>library</i> (Hello World and
+                    the Sparx Library).
+                </td>
+            </tr>
+            <tr class="data">
+                <th class="data"><image src="pdf-logo-sm.gif"/></th>
+                <td class="data"><a href="Sparx_Developers_Guide_Volume_II.pdf">Sparx Developers Guide Volume II</a></td>
+                <td class="data">Cura</td>
+                <td class="data">
+                    Provides examples that demonstrate the advanced functions available in Sparx. This is primarily
+                    done by walking the reader through the implementation of a sophisticated project management application
+                    called <i>Cura</i>.
+                </td>
+            </tr>
+        </table>
+    </section>
+
     <section heading="Database Requirements">
         Our Developer Kit for evaluation is bundled with several sample applications. The two simpler sample applications,
         called <i>hello</i> and <i>library</i>, can be run using the bundled (free) Hypersonic SQL Java database.
@@ -34,48 +71,4 @@
         application server and a database server.
     </section>
 
-    <section heading="Tutorials and Documentation">
-        Sparx includes hundreds of pages of both online (HTML) and offline (PDF) documention. To get the most ouf the
-        sample applications described below, please review the documents described below and follow along. Click
-        <a href="Getting_Started_With_Sparx.pdf">here</a> to learn about how to review the source code for the sample
-        applications online if you have not downloaded the <link page="overview/eval-kit">Sparx Evaluation Kit</link>.
-        <p/>
-        <table class="data" cellspacing="0" cellpadding="3">
-            <tr class="data_head">
-                <th class="data"> </th>
-                <th class="data">Document</th>
-                <th class="data">Samples Covered</th>
-                <th class="data">Purpose</th>
-            </tr>
-            <tr class="data">
-                <th class="data"><image src="pdf-logo-sm.gif"/></th>
-                <td class="data"><a href="Getting_Started_With_Sparx.pdf">Getting Started with Sparx</a></td>
-                <td class="data">All</td>
-                <td class="data">
-                    Describes the two primary means for evaluating Sparx -- online and offline. Furthermore, it
-                    explains how to install Sparx onto your local servers and how to peruse the source code online.
-                </td>
-            </tr>
-            <tr class="data">
-                <th class="data"><image src="pdf-logo-sm.gif"/></th>
-                <td class="data"><a href="Sparx_Tutorial.pdf">Sparx Tutorial</a></td>
-                <td class="data">Hello, Library</td>
-                <td class="data">
-                    Introduces Sparx by describing most of the functionality and walking the reader through the
-                    development of two full-scale sample applications <i>hello</i> and <i>library</i> (Hello World and
-                    Sparx Collection).
-                </td>
-            </tr>
-            <tr class="data">
-                <th class="data"><image src="pdf-logo-sm.gif"/></th>
-                <td class="data"><a href="Advanced_Sparx_Tutorial.pdf">Advanced Sparx Tutorial</a></td>
-                <td class="data">Cura</td>
-                <td class="data">
-                    Provides examples that demonstrate the advanced functions available in Sparx. This is primarily
-                    done by walking the reader through the implementation of sophisticated project management application
-                    called <i>Cura</i>.
-                </td>
-            </tr>
-        </table>
-    </section>
 </page>
