@@ -563,78 +563,102 @@ public class SchemaDocument extends XmlSource
 			return new Reference(attrValue, refType);
 	}
 
+    public Reference getColumnRefInfo(Element tableElem, Element column)
+    {
+        Reference refInfo = getRefInfo(column, "lookupref", REFTYPE_LOOKUP);
+        if(refInfo == null)
+        {
+            refInfo = getRefInfo(column, "parentref", REFTYPE_PARENT);
+            if(refInfo != null)
+                tableElem.setAttribute("parent", refInfo.tableName);
+            else
+            {
+                refInfo = getRefInfo(column, "selfref", REFTYPE_SELF);
+                if(refInfo != null)
+                    refInfo.tableName = tableElem.getAttribute("name");
+                else
+                    refInfo = getRefInfo(column, "usetype", REFTYPE_USETYPE);
+            }
+        }
+
+        return refInfo;
+    }
+
+    public void resolveColumnReferences(Element tableElem, Element column)
+    {
+        // if references are already resolved, do nothing
+        if(column.getAttribute("reftype").length() > 0)
+            return;
+
+        Reference refInfo = getColumnRefInfo(tableElem, column);
+        if(refInfo == null)
+            return;
+
+        Element refTable = (Element) tableNodes.get(refInfo.tableName.toUpperCase());
+        if(refTable == null)
+        {
+            errors.add("Table '"+ refInfo.tableName +"' not found for "+ REFTYPE_NAMES[refInfo.type] +" reference '"+ refInfo.reference +"' (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
+            return;
+        }
+
+        column.setAttribute("reftype", REFTYPE_NAMES[refInfo.type]);
+        column.setAttribute("reftbl", refTable.getAttribute("name"));
+
+        // try and find the column that matches our reference's name
+        NodeList refTableColumns = refTable.getChildNodes();
+        for(int rc = 0; rc < refTableColumns.getLength(); rc++)
+        {
+            Node refTableColumnNode = refTableColumns.item(rc);
+            if(refTableColumnNode.getNodeName().equals("column"))
+            {
+                Element refColumnElem = (Element) refTableColumnNode;
+                String refColumnName = refColumnElem.getAttribute("name");
+                if(refColumnName.equalsIgnoreCase(refInfo.columnName))
+                {
+                    // if the column we're pointing is a reference too, then resolve it first
+                    resolveColumnReferences(refTable, refColumnElem);
+
+                    column.setAttribute("refcol", refColumnName);
+
+                    String copyType = findElementOrAttrValue(refColumnElem, "copytype");
+                    if(copyType != null && copyType.length() > 0)
+                        column.setAttribute("type", copyType);
+                    else
+                        column.setAttribute("type", refColumnElem.getAttribute("type"));
+
+                    if(column.getAttribute("type").length() == 0)
+                        errors.add("Column '" + refInfo.columnName + "' has no type in Table '"+ refInfo.tableName +"' for "+ REFTYPE_NAMES[refInfo.type] +" reference '"+ refInfo.reference +"' (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
+
+                    fixupColumnElement(column);
+
+                    Element refByElem = xmlDoc.createElement("referenced-by");
+                    refColumnElem.appendChild(refByElem);
+                    refByElem.setAttribute("type", REFTYPE_NAMES[refInfo.type]);
+                    refByElem.setAttribute("table", tableElem.getAttribute("name"));
+                    refByElem.setAttribute("column", column.getAttribute("name"));
+
+                    // we found our colum in the ref table, no need to do anything else
+                    return;
+                }
+            }
+        }
+
+        // if we get here, it means our column was not found
+        errors.add("Column '" + refInfo.columnName + "' not found in Table '"+ refInfo.tableName +"' for "+ REFTYPE_NAMES[refInfo.type] +" reference '"+ refInfo.reference +"' (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
+    }
+
     public void resolveTableReferences(Element tableElem)
     {
         NodeList children = tableElem.getChildNodes();
 
-        RESOLVE_REF_COLUMN:
         for(int n = 0; n < children.getLength(); n++)
         {
             Node node = children.item(n);
-            if(! node.getNodeName().equals("column"))
-                continue;
-
-            Element column = (Element) node;
-            Reference refInfo = getRefInfo(column, "lookupref", REFTYPE_LOOKUP);
-            if(refInfo == null)
+            if(node.getNodeName().equals("column"))
             {
-                refInfo = getRefInfo(column, "parentref", REFTYPE_PARENT);
-                if(refInfo != null)
-                    tableElem.setAttribute("parent", refInfo.tableName);
-                else
-                {
-                    refInfo = getRefInfo(column, "selfref", REFTYPE_SELF);
-                    if(refInfo != null)
-                        refInfo.tableName = tableElem.getAttribute("name");
-                    else
-                        refInfo = getRefInfo(column, "usetype", REFTYPE_USETYPE);
-                }
+                Element column = (Element) node;
+                resolveColumnReferences(tableElem, column);
             }
-
-            if(refInfo == null)
-                continue;
-
-            Element refTable = (Element) tableNodes.get(refInfo.tableName.toUpperCase());
-            if(refTable == null)
-            {
-                errors.add("Table '"+ refInfo.tableName +"' not found for "+ REFTYPE_NAMES[refInfo.type] +" reference '"+ refInfo.reference +"' (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
-                continue RESOLVE_REF_COLUMN;
-            }
-
-            column.setAttribute("reftype", REFTYPE_NAMES[refInfo.type]);
-            column.setAttribute("reftbl", refTable.getAttribute("name"));
-            NodeList refTableColumns = refTable.getChildNodes();
-            for(int rc = 0; rc < refTableColumns.getLength(); rc++)
-            {
-                Node refTableColumnNode = refTableColumns.item(rc);
-                if(refTableColumnNode.getNodeName().equals("column"))
-                {
-                    Element refColumnElem = (Element) refTableColumnNode;
-                    String refColumnName = refColumnElem.getAttribute("name");
-                    if(refColumnName.equalsIgnoreCase(refInfo.columnName))
-                    {
-                        column.setAttribute("refcol", refColumnName);
-
-                        String copyType = findElementOrAttrValue(refColumnElem, "copytype");
-                        if(copyType != null && copyType.length() > 0)
-                            column.setAttribute("type", copyType);
-                        else
-                            column.setAttribute("type", refColumnElem.getAttribute("type"));
-
-                        fixupColumnElement(column);
-
-                        Element refByElem = xmlDoc.createElement("referenced-by");
-                        refColumnElem.appendChild(refByElem);
-                        refByElem.setAttribute("type", REFTYPE_NAMES[refInfo.type]);
-                        refByElem.setAttribute("table", tableElem.getAttribute("name"));
-                        refByElem.setAttribute("column", column.getAttribute("name"));
-
-                        continue RESOLVE_REF_COLUMN;
-                    }
-                }
-            }
-
-            errors.add("Column '" + refInfo.columnName + "' not found in Table '"+ refInfo.tableName +"' for "+ REFTYPE_NAMES[refInfo.type] +" reference '"+ refInfo.reference +"' (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
         }
     }
 
