@@ -51,18 +51,19 @@
  */
 
 /**
- * $Id: SegmentContainer.java,v 1.1 2002-02-27 00:49:20 snshah Exp $
+ * $Id: SegmentContainer.java,v 1.2 2002-03-03 12:03:15 snshah Exp $
  */
 
 package com.netspective.junxion.edi.format.igml.util;
 
 import java.util.List;
 
-import com.netspective.junxion.edi.format.igml.SegmentRef;
+import com.netspective.junxion.edi.format.igml.*;
 
 public interface SegmentContainer
 {
     public void addSegmentRef(SegmentRef segmentRef);
-    public List getSegmentRefs();
-    public void setSegmentRefs(List segmentRefs);
+    public void addGroup(Group group);
+    public List getSegmentRefsAndGroups();
+    public void setSegmentRefsAndGroups(List segmentRefsAndGroups);
 }

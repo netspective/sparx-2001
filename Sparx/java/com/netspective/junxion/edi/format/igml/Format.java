@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Format.java,v 1.1 2002-02-27 00:49:19 snshah Exp $
+ * $Id: Format.java,v 1.2 2002-03-03 12:03:15 snshah Exp $
  */
 
 package com.netspective.junxion.edi.format.igml;
@@ -98,7 +98,7 @@ public class Format implements DataModel
 
         /* Parse the given file into the object model */
         Format format = new Format();
-        DataModelSchema.ParseContext pc = DataModelSchema.parse(format, new File("s:/Documents/EDI/IGML4010.xml"));
+        DataModelSchema.ParseContext pc = DataModelSchema.parse(format, new File("c:/Projects/Sparx/web-shared/resources/edi/formats/IGML/IGML4010.xml"));
         System.out.println(pc.getSyntaxErrors().size());
 
         System.out.println(format.getStandard());

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Group.java,v 1.1 2002-02-27 00:49:19 snshah Exp $
+ * $Id: Group.java,v 1.2 2002-03-03 12:03:15 snshah Exp $
  */
 
 package com.netspective.junxion.edi.format.igml;
@@ -61,7 +61,6 @@ import java.util.ArrayList;
 
 import com.netspective.junxion.edi.format.igml.util.SegmentContainer;
 import com.netspective.junxion.edi.format.igml.util.TextContainer;
-import com.netspective.junxion.edi.format.igml.util.GroupContainer;
 import com.netspective.junxion.edi.format.igml.util.TextList;
 import com.netspective.junxion.edi.format.igml.attributes.Requirement;
 import com.netspective.junxion.edi.format.igml.attributes.Usage;
@@ -69,7 +68,7 @@ import com.netspective.junxion.edi.format.igml.attributes.Usage;
 /**
  * Defines a loop or group of segments.
  */
-public class Group implements TextContainer, SegmentContainer, GroupContainer
+public class Group implements TextContainer, SegmentContainer
 {
     private String id;
     private String pos;
@@ -78,8 +77,7 @@ public class Group implements TextContainer, SegmentContainer, GroupContainer
     private int minUse;
     private int maxUse;
     private TextList texts = new TextList();
-    private List segmentRefs = new ArrayList();
-    private List groups = new ArrayList();
+    private List segmentRefsAndGroups = new ArrayList();
 
     public Group()
     {
@@ -165,31 +163,21 @@ public class Group implements TextContainer, SegmentContainer, GroupContainer
 
     public void addSegmentRef(SegmentRef segmentRef)
     {
-        segmentRefs.add(segmentRef);
-    }
-
-    public List getSegmentRefs()
-    {
-        return segmentRefs;
-    }
-
-    public void setSegmentRefs(List segmentRefs)
-    {
-        this.segmentRefs = segmentRefs;
+        segmentRefsAndGroups.add(segmentRef);
     }
 
     public void addGroup(Group group)
     {
-        groups.add(group);
+        segmentRefsAndGroups.add(group);
     }
 
-    public List getGroups()
+    public List getSegmentRefsAndGroups()
     {
-        return groups;
+        return segmentRefsAndGroups;
     }
 
-    public void setGroups(List groups)
+    public void setSegmentRefsAndGroups(List segmentRefsAndGroups)
     {
-        this.groups = groups;
+        this.segmentRefsAndGroups = segmentRefsAndGroups;
     }
 }

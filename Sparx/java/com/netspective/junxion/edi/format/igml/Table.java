@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Table.java,v 1.1 2002-02-27 00:49:19 snshah Exp $
+ * $Id: Table.java,v 1.2 2002-03-03 12:03:15 snshah Exp $
  */
 
 package com.netspective.junxion.edi.format.igml;
@@ -60,16 +60,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.netspective.junxion.edi.format.igml.util.SegmentContainer;
-import com.netspective.junxion.edi.format.igml.util.GroupContainer;
 
 /**
  * Used to group segments.  If Table is used, there are usually three: Heading, Detail, and Summary.
  */
-public class Table implements SegmentContainer, GroupContainer
+public class Table implements SegmentContainer
 {
     private int area;
-    private List segmentRefs = new ArrayList();
-    private List groups = new ArrayList();
+    private List segmentRefsAndGroups = new ArrayList();
 
     public Table()
     {
@@ -87,31 +85,21 @@ public class Table implements SegmentContainer, GroupContainer
 
     public void addSegmentRef(SegmentRef segmentRef)
     {
-        segmentRefs.add(segmentRef);
-    }
-
-    public List getSegmentRefs()
-    {
-        return segmentRefs;
-    }
-
-    public void setSegmentRefs(List segmentRefs)
-    {
-        this.segmentRefs = segmentRefs;
+        segmentRefsAndGroups.add(segmentRef);
     }
 
     public void addGroup(Group group)
     {
-        groups.add(group);
+        segmentRefsAndGroups.add(group);
     }
 
-    public List getGroups()
+    public List getSegmentRefsAndGroups()
     {
-        return groups;
+        return segmentRefsAndGroups;
     }
 
-    public void setGroups(List groups)
+    public void setSegmentRefsAndGroups(List segmentRefsAndGroups)
     {
-        this.groups = groups;
+        this.segmentRefsAndGroups = segmentRefsAndGroups;
     }
 }
