@@ -258,7 +258,7 @@
 	
 	<datatype name="lookup-with-freeform">
 		<composite>
-			<column name="${column.getAttribute(&quot;name&quot;)}_id" lookupref="${column.getAttribute(&quot;enumeration-table&quot;)}" default="${column.getAttribute(&quot;default&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)}">
+			<column name="${column.getAttribute(&quot;name&quot;)}_id" lookupref="${column.getAttribute(&quot;enumeration-table&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)}">
 				<field.select caption="${column.getAttribute(&quot;caption&quot;)}"/>
 			</column>
 			<column name="${column.getAttribute(&quot;name&quot;)}" type="text" size="${column.getAttribute(&quot;size&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)} (if 'Other' chosen above)">
