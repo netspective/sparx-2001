@@ -25,12 +25,12 @@ public class HomePage extends AceServletPage
 
 			out.print("<table cool border='0' cellpadding='0' cellspacing='0'>");
 			out.print("<tr height='304'>");
-			out.print("	<td width='3590' height='304' colspan='2' valign='top' align='left' xpos='0'><img src='"+ sharedImagesRootURL +"/ace/Homepage_07.gif' width='800' height='304' border='0'></td>");
+			out.print("	<td width='3590' height='304' colspan='2' valign='top' align='left' xpos='0'><img src='"+ sharedImagesRootURL +"/ace/home-main.gif' width='800' height='304' border='0'></td>");
 			out.print("	<td width='1' height='304'><spacer type='block' width='1' height='304'></td>");
 			out.print("</tr>");
 			out.print("<tr height='214'>");
 			out.print("	<td width='269' height='214' valign='top' align='left' xpos='0'>");
-			out.print("		<table border='0' cellpadding='0' cellspacing='0' width='269' height='214' background='"+ sharedImagesRootURL +"/ace/Homepage_08.gif' align='left'>");
+			out.print("		<table border='0' cellpadding='0' cellspacing='0' width='269' height='214' background='"+ sharedImagesRootURL +"/ace/home-bottom-left.gif' align='left'>");
 			out.print("			<tr>");
 			out.print("				<td valign='top' align='left'>");
 			out.print("					<div align='right'>");
@@ -78,7 +78,7 @@ public class HomePage extends AceServletPage
 			out.print("			</tr>");
 			out.print("		</table>");
 			out.print("	</td>");
-			out.print("	<td width='3321' height='214' valign='top' align='left' xpos='269'><img src='"+ sharedImagesRootURL +"/ace/Homepage_09.gif' width='531' height='214' border='0'></td>");
+			out.print("	<td width='3321' height='214' valign='top' align='left' xpos='269'><img src='"+ sharedImagesRootURL +"/ace/home-bottom-right.gif' width='531' height='214' border='0'></td>");
 			out.print("	<td width='1' height='214'><spacer type='block' width='1' height='214'></td>");
 			out.print("</tr>");
 			out.print("<tr height='8567'>");
