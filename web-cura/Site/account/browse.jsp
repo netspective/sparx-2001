@@ -1,5 +1,5 @@
-<jsp:directive.taglib prefix="app" uri="/WEB-INF/tld/page.tld"/>
-<jsp:directive.taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"/>
+<%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
+<%@ taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"%>
 
 <app:page title="Browse Accounts" heading="Browse Accounts">
 	
