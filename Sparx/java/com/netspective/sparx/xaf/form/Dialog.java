@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.14 2002-11-28 21:13:36 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.15 2002-12-15 17:45:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -189,6 +189,8 @@ public class Dialog
      * the dialog is being used in an application or ACE.
      */
     public static final String ENV_PARAMNAME = "dialog_environment";
+
+    public static final String FIELDNAME_SCHEMA_TABLECOL = "field.table-column";
 
     private ArrayList fields = new ArrayList();
     private int flags;
@@ -789,7 +791,7 @@ public class Dialog
     /**
      * Loops through each dialog field and finalize them.
      */
-    public void finalizeContents()
+    public void finalizeContents(ServletContext context)
     {
         Iterator i = fields.iterator();
         while(i.hasNext())
@@ -801,9 +803,7 @@ public class Dialog
                 setFlag(DLGFLAG_ENCTYPE_MULTIPART_FORMDATA);
 
             if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE | DialogField.FLDFLAG_COLUMN_BREAK_AFTER))
-            {
                 layoutColumnsCount++;
-            }
         }
         setFlag(DLGFLAG_CONTENTS_FINALIZED);
     }
@@ -968,6 +968,9 @@ public class Dialog
      */
     public DialogContext createContext(ServletContext context, Servlet servlet, HttpServletRequest request, HttpServletResponse response, DialogSkin skin)
     {
+        if(!flagIsSet(DLGFLAG_CONTENTS_FINALIZED))
+            finalizeContents(context);
+
         DialogContext dc = null;
         try
         {
@@ -989,8 +992,6 @@ public class Dialog
      */
     public void prepareContext(DialogContext dc)
     {
-        if(!flagIsSet(DLGFLAG_CONTENTS_FINALIZED))
-            finalizeContents();
         populateValues(dc, DialogField.DISPLAY_FORMAT);
         dc.calcState();
         // validated and the dialog is ready for execution
