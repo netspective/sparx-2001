@@ -34,20 +34,16 @@ public class PageTag extends TagSupport
 	public final String[] getPermissions() { return permissions; }
 	public void setPermission(String value)
 	{
-		if(value.indexOf(",") == -1)
+		if(value == null || value.length() == 0)
+			return;
+
+		List perms = new ArrayList();
+		StringTokenizer st = new StringTokenizer(value, ",");
+		while(st.hasMoreTokens())
 		{
-			permissions = new String[] { value };
+			perms.add(st.nextToken());
 		}
-		else
-		{
-			List perms = new ArrayList();
-			StringTokenizer st = new StringTokenizer(value, ",");
-			while(st.hasMoreTokens())
-			{
-				perms.add(st.nextToken());
-			}
-			permissions = (String[]) perms.toArray(new String[perms.size()]);
-		}
+		permissions = (String[]) perms.toArray(new String[perms.size()]);
 	}
 
 	public boolean hasPermission()
