@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: app-build.xml,v 1.28 2002-12-05 19:08:48 shahid.shah Exp $
+$Id: app-build.xml,v 1.29 2002-12-23 05:08:17 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -389,11 +389,16 @@ $Id: app-build.xml,v 1.28 2002-12-05 19:08:48 shahid.shah Exp $
             <include name="**/form/field/*.java"/>
         </javac>
         <!-- generate the dialog context beans files -->
-        <dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" debug="no"/>
+        <dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" schema="${config.app.schema.source-file}" debug="no"/>
 
         <property name="dcb.temp.build.dir" value="${app.java.dcb.dir}/build"/>
         <mkdir dir="${dcb.temp.build.dir}"/>
-        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}" classpathref="project.class.path"/>
+        <echo message="${app.lib.dir}/${app.java.dal.jar}"/>
+        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}" classpathref="project.class.path">
+            <classpath>
+            	<pathelement location="${app.lib.dir}/${app.java.dal.jar.name}"/>
+            </classpath>
+        </javac>
         <jar jarfile="${app.java.dcb.jar}" basedir="${dcb.temp.build.dir}">
             <include name="**"/>
         </jar>
