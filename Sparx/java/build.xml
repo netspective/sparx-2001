@@ -31,7 +31,7 @@ Build targets:
 <project name="Sparx" default="sparx">
 
     <property environment="env"/>
-    <property name="build.compiler" value="jikes"/>
+    <!-- <property name="build.compiler" value="jikes"/> -->
 
     <target name="check-java-home">
         <condition property="java.home.exists">
