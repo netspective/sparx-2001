@@ -48,21 +48,6 @@ public class LoginDialog extends Dialog
 		return request.getSession(true).getAttribute(userInfoSessionAttrName) != null;
 	}
 
-	public boolean isValid(DialogContext dc)
-	{
-		if(! super.isValid(dc))
-			return false;
-
-		String password = dc.getValue(passwordField);
-		if(! password.equals("sparx"))
-		{
-			passwordField.invalidate(dc, "Password is invalid. Should be 'sparx' :-).");
-			return false;
-		}
-
-		return true;
-	}
-
 	public void producePage(DialogContext dc, Writer writer) throws IOException
 	{
 		writer.write("&nbsp;<p>&nbsp;<p>&nbsp;<p><center><h1>Welcome to Sparx</h1>");
