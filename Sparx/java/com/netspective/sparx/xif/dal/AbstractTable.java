@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.7 2002-08-29 03:35:13 shahid.shah Exp $
+ * $Id: AbstractTable.java,v 1.8 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -69,6 +69,9 @@ import java.util.Map;
 import javax.naming.NamingException;
 
 import com.netspective.sparx.xaf.sql.DmlStatement;
+import com.netspective.sparx.xaf.querydefn.QueryDefinition;
+import com.netspective.sparx.xaf.querydefn.QueryField;
+import com.netspective.sparx.xaf.querydefn.QueryJoin;
 import com.netspective.sparx.util.xml.XmlSource;
 
 /**
@@ -93,6 +96,7 @@ public abstract class AbstractTable implements Table
     private Column[] requiredColumns;
     private Column[] sequencedColumns;
     private Column[] primaryKeys;
+    private QueryDefinition queryDefn;
 
     static public String convertTableNameForMapKey(String name)
     {
@@ -145,6 +149,8 @@ public abstract class AbstractTable implements Table
 
         if(requiredCols.size() > 0)
             requiredColumns = (Column[]) requiredCols.toArray(new Column[requiredCols.size()]);
+
+        generateQueryDefn();
     }
 
     public String getName()
@@ -225,6 +231,11 @@ public abstract class AbstractTable implements Table
     public Column[] getPrimaryKeyColumns()
     {
         return primaryKeys;
+    }
+
+    public QueryDefinition getQueryDefinition()
+    {
+        return queryDefn;
     }
 
     protected void setAllColumns(Column[] value)
@@ -813,5 +824,44 @@ public abstract class AbstractTable implements Table
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object whereCondBindParam) throws NamingException, SQLException
     {
         return delete(cc, row, whereCond, new Object[]{whereCondBindParam});
+    }
+
+    public QueryField generateQueryDefnField(QueryDefinition qd, Column column)
+    {
+        QueryField field = new QueryField();
+        field.setName(column.getName());
+        field.setCaption(column.getName());
+        field.setColumnName(column.getName());
+        field.setHideDisplay(false);
+        field.setJoin(getName()); // this assumes that generateDefaultJoin() will define an appropriate join with this name
+        // should add foreign key and child key joins as well
+        return field;
+    }
+
+    public QueryJoin generateDefaultJoin(QueryDefinition qd)
+    {
+        QueryJoin join = new QueryJoin();
+        join.setName(getName());
+        join.setTableName(getName());
+        return join;
+    }
+
+    /**
+     * After all the columns have been added and the table's definition is finalized in finalizeDefn() then
+     * genearate QueryDefnition object suitable for generating queries for this table.
+     */
+    public void generateQueryDefn()
+    {
+        queryDefn = new QueryDefinition(true);
+        queryDefn.setName(getClass().getName());
+        for(Iterator i = getColumnsList().iterator(); i.hasNext();)
+        {
+            Column column = (Column) i.next();
+            QueryField field = generateQueryDefnField(queryDefn, column);
+            queryDefn.defineField(field);
+        }
+        queryDefn.defineJoin(generateDefaultJoin(queryDefn));
+        // should add foreign key and child key joins as well
+        queryDefn.finalizeDefn();
     }
 }

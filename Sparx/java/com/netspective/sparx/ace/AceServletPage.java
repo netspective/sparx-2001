@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.2 2002-08-25 16:06:16 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.3 2002-08-31 00:18:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -85,6 +85,7 @@ import com.netspective.sparx.xaf.page.AbstractServletPage;
 import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.page.PageControllerServlet;
 import com.netspective.sparx.xaf.page.VirtualPath;
+import com.netspective.sparx.ace.page.DatabaseGenerateJavaDialog;
 
 public class AceServletPage extends AbstractServletPage
 {
@@ -134,6 +135,8 @@ public class AceServletPage extends AbstractServletPage
                     styleSheetParams.put(propName, appConfig.getTextValue(pc, propName));
                 }
             }
+            if(appConfig.getTextValue(pc, DatabaseGenerateJavaDialog.DAL_SCHEMA_CONFIG_PARAM_NAME, null) == null)
+                styleSheetParams.put(DatabaseGenerateJavaDialog.DAL_SCHEMA_CONFIG_PARAM_NAME, DatabaseGenerateJavaDialog.DAL_SCHEMA_DEFAULT_CLASS_NAME);
             styleSheetParams.put("config-items-added", new Boolean(true));
         }
 

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateJavaDialog.java,v 1.5 2002-08-18 20:58:26 shahid.shah Exp $
+ * $Id: DatabaseGenerateJavaDialog.java,v 1.6 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -80,6 +80,9 @@ import com.netspective.sparx.xif.SchemaDocument;
 
 public class DatabaseGenerateJavaDialog extends Dialog
 {
+    public final static String DAL_SCHEMA_CONFIG_PARAM_NAME  = "app.dal.schema.class-name";
+    public final static String DAL_SCHEMA_DEFAULT_CLASS_NAME = "app.dal.DataAccessLayer";
+
     protected FilesystemEntriesListValue generatorsList;
 
     protected TextField sourceFileField;
@@ -89,6 +92,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
     protected TextField tableTypesPkgField;
     protected TextField tablesPkgField;
     protected TextField domainsPkgField;
+    protected TextField listenersPkgField;
     protected TextField rowsPkgField;
     protected TextField rowsListPkgField;
     protected TextField schemaPkgField;
@@ -98,6 +102,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
     protected SelectField tableTypesGeneratorField;
     protected SelectField tablesGeneratorField;
     protected SelectField domainsGeneratorField;
+    protected SelectField listenersGeneratorField;
     protected SelectField rowsGeneratorField;
     protected SelectField rowsListGeneratorField;
     protected SelectField schemaGeneratorField;
@@ -140,6 +145,11 @@ public class DatabaseGenerateJavaDialog extends Dialog
         domainsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
         domainsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain"));
 
+        listenersPkgField = new TextField("listeners_pkg", "Listeners Package");
+        listenersPkgField.setSize(40);
+        listenersPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        listenersPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.listener"));
+
         rowsPkgField = new TextField("rows_pkg", "Rows Package");
         rowsPkgField.setSize(40);
         rowsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
@@ -173,6 +183,9 @@ public class DatabaseGenerateJavaDialog extends Dialog
         domainsGeneratorField = new SelectField("domains_gen", "Domains Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
         domainsGeneratorField.setDefaultValue(new StaticValue("domain-generator.xsl"));
 
+        listenersGeneratorField = new SelectField("listeners_gen", "Listeners Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
+        listenersGeneratorField.setDefaultValue(new StaticValue("listener-generator.xsl"));
+
         rowsGeneratorField = new SelectField("rows_gen", "Rows Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
         rowsGeneratorField.setDefaultValue(new StaticValue("row-generator.xsl"));
 
@@ -195,6 +208,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         addField(tableTypesPkgField);
         addField(tablesPkgField);
         addField(domainsPkgField);
+        addField(listenersPkgField);
         addField(rowsPkgField);
         addField(rowsListPkgField);
         addField(schemaPkgField);
@@ -204,6 +218,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         addField(tableTypesGeneratorField);
         addField(tablesGeneratorField);
         addField(domainsGeneratorField);
+        addField(listenersGeneratorField);
         addField(rowsGeneratorField);
         addField(rowsListGeneratorField);
         addField(schemaGeneratorField);
@@ -226,6 +241,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         orGenerator.setTableTypesPkg(dc.getValue("table_types_pkg"));
         orGenerator.setTablesPkg(dc.getValue("tables_pkg"));
         orGenerator.setDomainsPkg(dc.getValue("domains_pkg"));
+        orGenerator.setListenersPkg(dc.getValue("listeners_pkg"));
         orGenerator.setRowsPkg(dc.getValue("rows_pkg"));
         orGenerator.setRowsListPkg(dc.getValue("rows_list_pkg"));
         orGenerator.setSchemaPkg(dc.getValue("schema_pkg"));
@@ -235,6 +251,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         orGenerator.setTableTypesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("table_types_gen"));
         orGenerator.setTablesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("tables_gen"));
         orGenerator.setDomainsGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("domains_gen"));
+        orGenerator.setListenersGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("listeners_gen"));
         orGenerator.setRowsGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_gen"));
         orGenerator.setRowsListGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_list_gen"));
         orGenerator.setSchemaGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("schema_gen"));

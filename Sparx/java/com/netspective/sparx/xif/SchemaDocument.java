@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.11 2002-08-18 21:01:11 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.12 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -1465,6 +1465,7 @@ public class SchemaDocument extends XmlSource
         private String tableTypesPkg;
         private String tablesPkg;
         private String domainsPkg;
+        private String listenersPkg;
         private String rowsPkg;
         private String rowsListPkg;
         private String schemaPkg;
@@ -1474,6 +1475,7 @@ public class SchemaDocument extends XmlSource
         private String tableTypesGeneratorStyleSheet;
         private String tablesGeneratorStyleSheet;
         private String domainsGeneratorStyleSheet;
+        private String listenersGeneratorStyleSheet;
         private String rowsGeneratorStyleSheet;
         private String rowsListGeneratorStyleSheet;
         private String schemaGeneratorStyleSheet;
@@ -1541,6 +1543,16 @@ public class SchemaDocument extends XmlSource
         public void setDomainsPkg(String domainsPkg)
         {
             this.domainsPkg = domainsPkg;
+        }
+
+        public String getListenersPkg()
+        {
+            return listenersPkg;
+        }
+
+        public void setListenersPkg(String listenersPkg)
+        {
+            this.listenersPkg = listenersPkg;
         }
 
         public String getRowsPkg()
@@ -1621,6 +1633,16 @@ public class SchemaDocument extends XmlSource
         public void setDomainsGeneratorStyleSheet(String domainsGeneratorStyleSheet)
         {
             this.domainsGeneratorStyleSheet = domainsGeneratorStyleSheet;
+        }
+
+        public String getListenersGeneratorStyleSheet()
+        {
+            return listenersGeneratorStyleSheet;
+        }
+
+        public void setListenersGeneratorStyleSheet(String listenersGeneratorStyleSheet)
+        {
+            this.listenersGeneratorStyleSheet = listenersGeneratorStyleSheet;
         }
 
         public String getRowsGeneratorStyleSheet()
@@ -1779,6 +1801,10 @@ public class SchemaDocument extends XmlSource
             File domainsDir = new File(destRoot + "/" + domainsPkgDirName);
             domainsDir.mkdirs();
 
+            String listenersPkgDirName = listenersPkg.replace('.', '/');
+            File listenersDir = new File(destRoot + "/" + listenersPkgDirName);
+            listenersDir.mkdirs();
+
             String rowsPkgDirName = rowsPkg.replace('.', '/');
             File rowsDir = new File(destRoot + "/" + rowsPkgDirName);
             rowsDir.mkdirs();
@@ -1796,6 +1822,9 @@ public class SchemaDocument extends XmlSource
             Transformer domainsTransformer = tFactory.newTransformer(new StreamSource(domainsGeneratorStyleSheet));
             domainsTransformer.setParameter("schema-class-name", completeSchemaClassName);
             domainsTransformer.setParameter("package-name", domainsPkg);
+            Transformer listenersTransformer = tFactory.newTransformer(new StreamSource(listenersGeneratorStyleSheet));
+            listenersTransformer.setParameter("schema-class-name", completeSchemaClassName);
+            listenersTransformer.setParameter("package-name", listenersPkg);
             Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsGeneratorStyleSheet));
             rowsTransformer.setParameter("schema-class-name", completeSchemaClassName);
             rowsTransformer.setParameter("package-name", rowsPkg);
@@ -1814,6 +1843,8 @@ public class SchemaDocument extends XmlSource
                 String tableFile = tablesDir.getAbsolutePath() + "/" + tableClassName + ".java";
                 String domainName = tableNameAsJavaIdentfier;
                 String domainFile = domainsDir.getAbsolutePath() + "/" + domainName + ".java";
+                String listenerName = tableNameAsJavaIdentfier+ "Listener";
+                String listenerFile = domainsDir.getAbsolutePath() + "/" + listenerName + ".java";
                 String rowName = tableNameAsJavaIdentfier + "Row";
                 String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
                 String rowListName = tableNameAsJavaIdentfier + "Rows";
@@ -1870,6 +1901,10 @@ public class SchemaDocument extends XmlSource
                 tableElem.setAttribute("_gen-domain-class-name", domainsPkg + "." + domainName);
                 tableElem.setAttribute("_gen-domain-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
                 tableElem.setAttribute("_gen-domain-method-name", tableNameAsJavaIdentfier);
+                tableElem.setAttribute("_gen-listener-name", listenerName);
+                tableElem.setAttribute("_gen-listener-class-name", listenersPkg + "." + listenerName);
+                tableElem.setAttribute("_gen-listener-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
+                tableElem.setAttribute("_gen-listener-method-name", tableNameAsJavaIdentfier);
                 tableElem.setAttribute("_gen-table-name", tableClassName);
                 tableElem.setAttribute("_gen-table-class-name", tablesPkg + "." + tableClassName);
                 tableElem.setAttribute("_gen-table-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
@@ -1946,11 +1981,13 @@ public class SchemaDocument extends XmlSource
 
                 String tableClassName = tableElem.getAttribute("_gen-table-name");
                 String domainName = tableElem.getAttribute("_gen-domain-name");
+                String listenerName = tableElem.getAttribute("_gen-listener-name");
                 String rowName = tableElem.getAttribute("_gen-row-name");
                 String rowListName = tableElem.getAttribute("_gen-rows-name");
 
                 String tableFile = tablesDir.getAbsolutePath() + "/" + tableClassName + ".java";
                 String domainFile = domainsDir.getAbsolutePath() + "/" + domainName + ".java";
+                String listenerFile = listenersDir.getAbsolutePath() + "/" + listenerName + ".java";
                 String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
                 String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
 
@@ -1965,6 +2002,12 @@ public class SchemaDocument extends XmlSource
                 domainsTransformer.setParameter("domain-class-name", domainsPkg + "." + domainName);
                 domainsTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(domainFile));
+
+                messages.add(new String("Applying stylesheet '"+ listenerFile +"' for listener '"+ listenerName +"'"));
+                listenersTransformer.setParameter("listener-name", listenerName);
+                listenersTransformer.setParameter("listener-class-name", listenersPkg + "." + listenerName);
+                listenersTransformer.transform
+                        (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(listenerFile));
 
                 messages.add(new String("Applying stylesheet '"+ rowFile +"' for row '"+ rowName +"'"));
                 rowsTransformer.setParameter("row-name", rowName);

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.5 2002-03-25 13:00:53 snshah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.6 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -95,6 +95,7 @@ import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.QueryDefnSelectsListValue;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.QueryDefnFieldsListValue;
 
 public class QueryBuilderDialog extends Dialog
 {
@@ -152,7 +153,14 @@ public class QueryBuilderDialog extends Dialog
     public void addInputFields()
     {
         int lastConditionNum = maxConditions - 1;
-        ListValueSource fieldsList = ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
+        QueryDefnFieldsListValue fieldsList = null;
+        if(queryDefn.isDynamic())
+        {
+            fieldsList = new QueryDefnFieldsListValue();
+            fieldsList.setQueryDefn(queryDefn);
+        }
+        else
+            fieldsList = (QueryDefnFieldsListValue) ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
         ListValueSource compList = ValueSourceFactory.getListValueSource("sql-comparisons:all");
 
         DialogField hiddenName = new DialogField(QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME, null);
@@ -223,7 +231,14 @@ public class QueryBuilderDialog extends Dialog
 
     public void addDisplayOptionsFields()
     {
-        ListValueSource fieldsList = ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
+        QueryDefnFieldsListValue fieldsList = null;
+        if(queryDefn.isDynamic())
+        {
+            fieldsList = new QueryDefnFieldsListValue();
+            fieldsList.setQueryDefn(queryDefn);
+        }
+        else
+            fieldsList = (QueryDefnFieldsListValue) ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
         ListValueSource compList = ValueSourceFactory.getListValueSource("sql-comparisons:all");
 
         SelectField predefinedSels = null;

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryDefinition.java,v 1.2 2002-02-10 16:31:23 snshah Exp $
+ * $Id: QueryDefinition.java,v 1.3 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -105,6 +105,7 @@ public class QueryDefinition
         }
     }
 
+    private boolean isDynamic;
     private String name;
     private SingleValueSource dataSourceValueSource;
     private List fieldsList = new ArrayList();
@@ -125,9 +126,25 @@ public class QueryDefinition
         dataSourceValueSource = null;
     }
 
+    public QueryDefinition(boolean isDynamic)
+    {
+        this();
+        this.isDynamic = isDynamic;
+    }
+
+    public boolean isDynamic()
+    {
+        return isDynamic;
+    }
+
     public String getName()
     {
         return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public SingleValueSource getDataSource()
@@ -270,15 +287,14 @@ public class QueryDefinition
                 Element fieldElem = (Element) node;
                 QueryField field = new QueryField();
                 field.importFromXml(fieldElem);
-                fieldsList.add(field);
-                fieldsMap.put(field.getName(), field);
+                defineField(field);
             }
             else if(childName.equals("join"))
             {
                 Element joinElem = (Element) node;
                 QueryJoin join = new QueryJoin();
                 join.importFromXml(joinElem);
-                joins.put(join.getName(), join);
+                defineJoin(join);
             }
             else if(childName.equals("select"))
             {
@@ -298,6 +314,80 @@ public class QueryDefinition
             }
         }
 
+        finalizeDefn();
+
+        // now that we have all the fields and joins connected, define all
+        // conditions that are specified
+
+        if(condElems.size() > 0)
+        {
+            defaultConditions = new ArrayList();
+            for(Iterator i = condElems.iterator(); i.hasNext();)
+            {
+                QueryCondition cond = new QueryCondition();
+                cond.importFromXml(this, (Element) i.next());
+                defineDefaultCondition(cond);
+            }
+        }
+
+        if(whereExprElems.size() > 0)
+        {
+            defaultWhereExprs = new ArrayList();
+            for(Iterator i = whereExprElems.iterator(); i.hasNext();)
+            {
+                SqlWhereExpression expr = new SqlWhereExpression();
+                expr.importFromXml((Element) i.next());
+                defineWhereExpression(expr);
+            }
+        }
+
+        // now that we have all the fields and joins connected, define all
+        // selects that are specified
+
+        for(Iterator i = selectElems.iterator(); i.hasNext();)
+        {
+            QuerySelect select = new QuerySelect(this);
+            select.importFromXml((Element) i.next());
+            defineSelect(select);
+        }
+
+        // all the query-specific stuff is now known so try and create all the
+        // fixed-condition dialogs
+
+        for(Iterator i = selectDialogElems.iterator(); i.hasNext();)
+        {
+            QuerySelectDialog dialog = new QuerySelectDialog(this);
+            Element dialogElem = (Element) i.next();
+            xs.processTemplates(dialogElem);
+            dialog.importFromXml(null, dialogElem);
+            defineSelectDialog(dialog);
+        }
+    }
+
+    public void defineSelectDialog(QuerySelectDialog dialog)
+    {
+        selectDialogsList.add(dialog);
+        selectDialogsMap.put(dialog.getName(), dialog);
+    }
+
+    public void defineSelect(QuerySelect select)
+    {
+        selectsList.add(select);
+        selectsMap.put(select.getName(), select);
+    }
+
+    public void defineWhereExpression(SqlWhereExpression expr)
+    {
+        defaultWhereExprs.add(expr);
+    }
+
+    public void defineDefaultCondition(QueryCondition cond)
+    {
+        defaultConditions.add(cond);
+    }
+
+    public void finalizeDefn()
+    {
         // now that we have all the fields and joins, allow the fields and
         // joins to "connect" themselves
 
@@ -313,54 +403,16 @@ public class QueryDefinition
         {
             ((QueryField) i.next()).finalizeDefn(this);
         }
+    }
 
-        // now that we have all the fields and joins connected, define all
-        // conditions that are specified
+    public void defineJoin(QueryJoin join)
+    {
+        joins.put(join.getName(), join);
+    }
 
-        if(condElems.size() > 0)
-        {
-            defaultConditions = new ArrayList();
-            for(Iterator i = condElems.iterator(); i.hasNext();)
-            {
-                QueryCondition cond = new QueryCondition();
-                cond.importFromXml(this, (Element) i.next());
-                defaultConditions.add(cond);
-            }
-        }
-
-        if(whereExprElems.size() > 0)
-        {
-            defaultWhereExprs = new ArrayList();
-            for(Iterator i = whereExprElems.iterator(); i.hasNext();)
-            {
-                SqlWhereExpression expr = new SqlWhereExpression();
-                expr.importFromXml((Element) i.next());
-                defaultWhereExprs.add(expr);
-            }
-        }
-
-        // now that we have all the fields and joins connected, define all
-        // selects that are specified
-
-        for(Iterator i = selectElems.iterator(); i.hasNext();)
-        {
-            QuerySelect select = new QuerySelect(this);
-            select.importFromXml((Element) i.next());
-            selectsList.add(select);
-            selectsMap.put(select.getName(), select);
-        }
-
-        // all the query-specific stuff is now known so try and create all the
-        // fixed-condition dialogs
-
-        for(Iterator i = selectDialogElems.iterator(); i.hasNext();)
-        {
-            QuerySelectDialog dialog = new QuerySelectDialog(this);
-            Element dialogElem = (Element) i.next();
-            xs.processTemplates(dialogElem);
-            dialog.importFromXml(null, dialogElem);
-            selectDialogsList.add(dialog);
-            selectDialogsMap.put(dialog.getName(), dialog);
-        }
+    public void defineField(QueryField field)
+    {
+        fieldsList.add(field);
+        fieldsMap.put(field.getName(), field);
     }
 }

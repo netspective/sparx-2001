@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryJoin.java,v 1.2 2002-04-11 21:39:17 snshah Exp $
+ * $Id: QueryJoin.java,v 1.3 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -105,6 +105,46 @@ public class QueryJoin
     public boolean shouldAutoInclude()
     {
         return autoInclude;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setTableName(String tableName)
+    {
+        this.tableName = tableName;
+    }
+
+    public void setFromClauseExpr(String fromClauseExpr)
+    {
+        this.fromClauseExpr = fromClauseExpr;
+    }
+
+    public void setCriteria(String criteria)
+    {
+        this.criteria = criteria;
+    }
+
+    public void setRuleWeight(int ruleWeight)
+    {
+        this.ruleWeight = ruleWeight;
+    }
+
+    public void setAutoInclude(boolean autoInclude)
+    {
+        this.autoInclude = autoInclude;
+    }
+
+    public void setImplyJoinsStr(String implyJoinsStr)
+    {
+        this.implyJoinsStr = implyJoinsStr;
+    }
+
+    public void setImplyJoins(QueryJoin[] implyJoins)
+    {
+        this.implyJoins = implyJoins;
     }
 
     public void finalizeDefn(QueryDefinition queryDefn)

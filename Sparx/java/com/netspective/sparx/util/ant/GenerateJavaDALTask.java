@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GenerateJavaDALTask.java,v 1.3 2002-08-18 20:58:48 shahid.shah Exp $
+ * $Id: GenerateJavaDALTask.java,v 1.4 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -75,6 +75,7 @@ public class GenerateJavaDALTask extends Task
     private String tableTypesPkg = "app.dal.table.type";
     private String tablesPkg = "app.dal.table";
     private String domainsPkg = "app.dal.domain";
+    private String listenersPkg = "app.dal.listener";
     private String rowsPkg = "app.dal.domain.row";
     private String rowsListPkg = "app.dal.domain.rows";
     private String schemaPkg = "app.dal";
@@ -84,6 +85,7 @@ public class GenerateJavaDALTask extends Task
     private String tableTypesGeneratorStyleSheet = "table-type-generator.xsl";
     private String tablesGeneratorStyleSheet = "table-generator.xsl";
     private String domainsGeneratorStyleSheet = "domain-generator.xsl";
+    private String listenersGeneratorStyleSheet = "listener-generator.xsl";
     private String rowsGeneratorStyleSheet = "row-generator.xsl";
     private String rowsListGeneratorStyleSheet = "rows-generator.xsl";
     private String schemaGeneratorStyleSheet = "schema-generator.xsl";
@@ -203,6 +205,7 @@ public class GenerateJavaDALTask extends Task
         orGenerator.setTableTypesPkg(tableTypesPkg);
         orGenerator.setTablesPkg(tablesPkg);
         orGenerator.setDomainsPkg(domainsPkg);
+        orGenerator.setListenersPkg(listenersPkg);
         orGenerator.setRowsPkg(rowsPkg);
         orGenerator.setRowsListPkg(rowsListPkg);
         orGenerator.setSchemaPkg(schemaPkg);
@@ -212,6 +215,7 @@ public class GenerateJavaDALTask extends Task
         orGenerator.setTableTypesGeneratorStyleSheet(styleSheetRoot + "/" + tableTypesGeneratorStyleSheet);
         orGenerator.setTablesGeneratorStyleSheet(styleSheetRoot + "/" + tablesGeneratorStyleSheet);
         orGenerator.setDomainsGeneratorStyleSheet(styleSheetRoot + "/" + domainsGeneratorStyleSheet);
+        orGenerator.setListenersGeneratorStyleSheet(styleSheetRoot + "/" + listenersGeneratorStyleSheet);
         orGenerator.setRowsGeneratorStyleSheet(styleSheetRoot + "/" + rowsGeneratorStyleSheet);
         orGenerator.setRowsListGeneratorStyleSheet(styleSheetRoot + "/" + rowsListGeneratorStyleSheet);
         orGenerator.setSchemaGeneratorStyleSheet(styleSheetRoot + "/" + schemaGeneratorStyleSheet);

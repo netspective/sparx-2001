@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryField.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
+ * $Id: QueryField.java,v 1.3 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -153,6 +153,66 @@ public class QueryField
         return joinDefn;
     }
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setCaption(String caption)
+    {
+        this.caption = caption;
+    }
+
+    public void setColumnName(String columnName)
+    {
+        this.columnName = columnName;
+    }
+
+    public void setQualifiedColName(String qualifiedColName)
+    {
+        this.qualifiedColName = qualifiedColName;
+    }
+
+    public void setSelectClauseExpr(String selectClauseExpr)
+    {
+        this.selectClauseExpr = selectClauseExpr;
+    }
+
+    public void setSelectClauseExprAndLabel(String selectClauseExprAndLabel)
+    {
+        this.selectClauseExprAndLabel = selectClauseExprAndLabel;
+    }
+
+    public void setWhereClauseExpr(String whereClauseExpr)
+    {
+        this.whereClauseExpr = whereClauseExpr;
+    }
+
+    public void setOrderByClauseExpr(String orderByClauseExpr)
+    {
+        this.orderByClauseExpr = orderByClauseExpr;
+    }
+
+    public void setJoin(String join)
+    {
+        this.join = join;
+    }
+
+    public void setJoinDefn(QueryJoin joinDefn)
+    {
+        this.joinDefn = joinDefn;
+    }
+
+    public void setReportColumn(ReportColumn reportColumn)
+    {
+        this.reportColumn = reportColumn;
+    }
+
+    public void setHideDisplay(boolean hideDisplay)
+    {
+        this.hideDisplay = hideDisplay;
+    }
+
     public void finalizeDefn(QueryDefinition queryDefn)
     {
         if(join != null && join.length() > 0)
@@ -182,26 +242,26 @@ public class QueryField
 
     public void importFromXml(Element elem)
     {
-        name = elem.getAttribute("id");
-        join = elem.getAttribute("join");
+        setName(elem.getAttribute("id"));
+        setJoin(elem.getAttribute("join"));
 
-        columnName = elem.getAttribute("column");
-        selectClauseExpr = elem.getAttribute("column-expr");
-        if(selectClauseExpr.length() == 0)
-            selectClauseExpr = null;
+        setCaption(elem.getAttribute("caption"));
+        setColumnName(elem.getAttribute("column"));
 
-        whereClauseExpr = elem.getAttribute("where-expr");
-        if(whereClauseExpr.length() == 0)
-            whereClauseExpr = null;
+        String attrValue = elem.getAttribute("column-expr");
+        if(attrValue.length() > 0)
+            setSelectClauseExpr(attrValue);
 
-        orderByClauseExpr = elem.getAttribute("order-by-expr");
-        if(orderByClauseExpr.length() == 0)
-            orderByClauseExpr = null;
+        attrValue = elem.getAttribute("where-expr");
+        if(attrValue.length() > 0)
+            setWhereClauseExpr(attrValue);
 
-        caption = elem.getAttribute("caption");
+        attrValue = elem.getAttribute("order-by-expr");
+        if(attrValue.length() > 0)
+            setOrderByClauseExpr(attrValue);
+
         String allowDisplay = elem.getAttribute("allow-display");
-        if("no".equals(allowDisplay))
-            hideDisplay = true;
+        setHideDisplay("no".equals(allowDisplay));
 
         NodeList children = elem.getChildNodes();
         for(int n = 0; n < children.getLength(); n++)

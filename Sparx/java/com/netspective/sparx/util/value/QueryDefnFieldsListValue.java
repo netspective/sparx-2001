@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryDefnFieldsListValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: QueryDefnFieldsListValue.java,v 1.2 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -70,6 +70,7 @@ public class QueryDefnFieldsListValue extends ListSource
 {
     private String stmtMgrName;
     private String queryDefnName;
+    private QueryDefinition specificQueryDefn;
 
     public QueryDefnFieldsListValue()
     {
@@ -88,16 +89,25 @@ public class QueryDefnFieldsListValue extends ListSource
             queryDefnName = srcParams;
     }
 
+    public void setQueryDefn(QueryDefinition queryDefn)
+    {
+        this.specificQueryDefn = queryDefn;
+    }
+
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
+        QueryDefinition queryDefn = specificQueryDefn;
         SelectChoicesList choices = new SelectChoicesList();
         try
         {
-            StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
-            QueryDefinition queryDefn = stmtMgr.getQueryDefn(queryDefnName);
+            if(queryDefn == null)
+            {
+                StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
+                queryDefn = stmtMgr.getQueryDefn(queryDefnName);
+            }
 
             if(queryDefn == null)
-                choices.add(new SelectChoice("queryDefn '" + queryDefnName + "' not found"));
+                choices.add(new SelectChoice("Query Definition '" + queryDefnName + "' not found"));
             else
             {
                 List fields = queryDefn.getFieldsList();

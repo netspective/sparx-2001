@@ -51,22 +51,35 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.2 2002-08-31 00:18:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.xaf.page.VirtualPath;
+import com.netspective.sparx.xaf.querydefn.QueryDefinition;
+import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xif.SchemaDocument;
+import com.netspective.sparx.xif.dal.Schema;
+import com.netspective.sparx.xif.dal.Table;
 
 public class DatabaseSchemaDocPage extends AceServletPage
 {
+    private static Map schemaClasses = new HashMap();
+
     public final String getName()
     {
         return "schema-doc";
@@ -84,13 +97,89 @@ public class DatabaseSchemaDocPage extends AceServletPage
 
     public final String getHeading(PageContext pc)
     {
-        return "Database Schema (XML Source)";
+        VirtualPath.FindResults results = pc.getActivePath();
+        String[] unmatchedItems = results.unmatchedPathItems();
+        if(unmatchedItems != null && unmatchedItems[0].equals("query"))
+        {
+            if(unmatchedItems.length > 2)
+                return "Query " + unmatchedItems[2] + " Table";
+            else
+                return "Query -- Error";
+        }
+        else
+            return "Database Schema (XML Source)";
+    }
+
+    public void handleTableQueryDefn(PageContext pc, String[] params) throws IOException
+    {
+        Writer out = pc.getResponse().getWriter();
+        if(params.length < 3)
+        {
+            out.write("<p> DAL class and table name parameters is required.");
+            return;
+        }
+
+        String className = params[1];
+        String tableName = params[2];
+
+        Schema schema = (Schema) schemaClasses.get(className);
+        if(schema == null)
+        {
+            try
+            {
+                Class schemaClass = Class.forName(className);
+                schema = (Schema) schemaClass.newInstance();
+                schemaClasses.put(className, schema);
+            }
+            catch(ClassNotFoundException cnfe)
+            {
+                out.write("<p>Schema class '"+ className +"' not found.");
+                return;
+            }
+            catch(InstantiationException ie)
+            {
+                out.write("<p>Schema class '"+ className +"' could not be instantiated: "+ ie.getMessage());
+                return;
+            }
+            catch(IllegalAccessException iae)
+            {
+                out.write("<p>Schema class '"+ className +"' could not be instantiated: "+ iae.getMessage());
+                return;
+            }
+        }
+
+        Table table = schema.getTable(tableName);
+        if(table == null)
+        {
+            out.write("<p>Table '"+ tableName +"' not found in schema class "+ className);
+            return;
+        }
+
+        QueryDefinition queryDefn = table.getQueryDefinition();
+        if(queryDefn == null)
+        {
+            out.write("Default QueryDefinition not found in table '"+ tableName +"' of schema '"+ className +"'.");
+            return;
+        }
+
+        out.write("<p><center>");
+        QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
+        dialog.renderHtml(
+            pc.getServletContext(), pc.getServlet(), (HttpServletRequest) pc.getRequest(),
+            (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        out.write("</center>");
     }
 
     public void handlePageBody(PageContext pc) throws ServletException, IOException
     {
         SchemaDocument schema = SchemaDocFactory.getDoc(pc.getServletContext());
         schema.addMetaInfoOptions();
-        transform(pc, schema.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "schema-browser-xsl");
+
+        VirtualPath.FindResults results = pc.getActivePath();
+        String[] unmatchedItems = results.unmatchedPathItems();
+        if(unmatchedItems != null && unmatchedItems[0].equals("query"))
+            handleTableQueryDefn(pc, unmatchedItems);
+        else
+            transform(pc, schema.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "schema-browser-xsl");
     }
 }
