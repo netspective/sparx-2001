@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: MonitorLogPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: MonitorLogPage.java,v 1.2 2002-03-31 14:07:33 snshah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -216,7 +216,14 @@ public class MonitorLogPage extends AceServletPage
                 Appender appender = (Appender) appenders.nextElement();
                 if(appender instanceof FileAppender)
                 {
-                    logFile = new File(((FileAppender) appender).getFile());
+                    String fileName = ((FileAppender) appender).getFile();
+                    if(fileName == null)
+                    {
+                        out.write("<p>Log4J appender '" + appender.getName() +"' does not point to a valid file (please update log4j.properties).");
+                        return;
+                    }
+
+                    logFile = new File(fileName);
                     break;
                 }
             }
