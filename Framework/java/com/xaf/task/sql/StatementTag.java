@@ -34,6 +34,7 @@ public class StatementTag extends TagSupport
 	public void setReport(String value) { task.setReport(value); }
 	public void setSkin(String value) { task.setSkin(value); }
 	public void setStore(String value) { task.setStore(value); }
+	public void setDestination(String value) { task.setReportDestId(value); }
 	public void setStoreType(String value) { task.setStoreType(value); }
 
 	public int doStartTag() throws JspException

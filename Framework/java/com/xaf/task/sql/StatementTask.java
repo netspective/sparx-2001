@@ -26,9 +26,10 @@ public class StatementTask extends AbstractTask
 	private String stmtSourceId;
 	private String dataSourceId;
 	private String reportId;
-	private String reportSkinId = DEFAULT_REPORTSKINID;
 	private String storeValueName;
+	private SingleValueSource skinValueSource;
 	private SingleValueSource storeValueSource;
+	private SingleValueSource reportDestValueSource;
 	private boolean produceReport = true;
 	private int storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWMAP;
 
@@ -45,11 +46,21 @@ public class StatementTask extends AbstractTask
 		stmtSourceId = null;
 		dataSourceId = null;
 		reportId = null;
-		reportSkinId = DEFAULT_REPORTSKINID;
+		skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
 		storeValueName = null;
 		storeValueSource = null;
+		reportDestValueSource = null;
 		produceReport = true;
 		storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWMAP;
+	}
+
+	public SingleValueSource getReportDestSource() { return reportDestValueSource; }
+	public void setReportDestId(String value)
+	{
+		if(value == null || value.length() == 0)
+			reportDestValueSource = null;
+		else
+			reportDestValueSource = ValueSourceFactory.getSingleOrStaticValueSource(value);
 	}
 
 	public String getStmtName() { return stmtName; }
@@ -64,8 +75,8 @@ public class StatementTask extends AbstractTask
 	public String getReport() { return reportId; }
 	public void setReport(String value) { reportId = value; if("none".equals(value)) produceReport = false; }
 
-	public String getSkin() { return reportSkinId; }
-	public void setSkin(String value) { reportSkinId = value; }
+	public SingleValueSource getSkin() { return skinValueSource; }
+	public void setSkin(String value) { skinValueSource = ValueSourceFactory.getSingleOrStaticValueSource(value); }
 
 	public String getStore() { return storeValueName; }
 	public void setStore(String value) { storeValueName = value; }
@@ -117,8 +128,9 @@ public class StatementTask extends AbstractTask
         reportId = elem.getAttribute("report");
         if(reportId.length() == 0) reportId = null;
 
-        reportSkinId = elem.getAttribute("skin");
+        String reportSkinId = elem.getAttribute("skin");
         if(reportSkinId.length() == 0) reportSkinId = DEFAULT_REPORTSKINID;
+		setSkin(reportSkinId);
 
         storeValueName = elem.getAttribute("store");
         if(storeValueName.length() == 0) storeValueName = null;
@@ -130,6 +142,8 @@ public class StatementTask extends AbstractTask
 		{
             setStoreType(elem.getAttribute("store-type"));
 		}
+
+		setReportDestId(elem.getAttribute("destination"));
     }
 
     public void execute(TaskContext tc) throws TaskExecuteException
@@ -182,25 +196,40 @@ public class StatementTask extends AbstractTask
             return;
         }
 
-        StringWriter out = new StringWriter();
+		int reportDestId = ReportDestination.DEST_BROWSER_SINGLE_PAGE;
+		if(reportDestValueSource != null)
+		{
+			String reportDestName = reportDestValueSource.getValue(tc);
+			reportDestId = ReportDestination.getDestIdFromName(reportDestName);
+			if(reportDestId == -1 || reportDestId == ReportDestination.DEST_BROWSER_MULTI_PAGE)
+				throw new TaskExecuteException("ReportDestination '"+ reportDestName +"' not supported. Use 'browser', 'file' or 'email'");
+		}
+
+		Writer out = null;
+		ReportDestination reportDest = null;
+        ReportSkin reportSkin = SkinFactory.getReportSkin(skinValueSource.getValue(tc));
+        if(reportSkin == null)
+		{
+			tc.addErrorMessage("ReportSkin '"+skinValueSource.getId()+"' not found.", false);
+            return;
+		}
 
         try
         {
+			if(reportDestId == ReportDestination.DEST_FILE_DOWNLOAD || reportDestId == ReportDestination.DEST_FILE_EMAIL)
+			{
+				reportDest = new ReportDestination(reportDestId, tc, reportSkin);
+				out = reportDest.getWriter();
+			}
+			else
+				out = new StringWriter();
+
             if(produceReport && storeValueSource == null)
             {
-                ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinId);
-                if(reportSkin == null)
-				{
-					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.", false);
-                    return;
-				}
+                if(statementInfo != null)
+                    stmtManager.produceReport(out, dbContext, tc, reportSkin, statementInfo, null, reportId);
                 else
-                {
-                    if(statementInfo != null)
-                        stmtManager.produceReport(out, dbContext, tc, reportSkin, statementInfo, null, reportId);
-                    else
-                        stmtManager.produceReport(out, dbContext, tc, reportSkin, stmtName, null, reportId);
-                }
+                    stmtManager.produceReport(out, dbContext, tc, reportSkin, stmtName, null, reportId);
             }
             else if(!produceReport && storeValueSource != null)
             {
@@ -211,20 +240,13 @@ public class StatementTask extends AbstractTask
             }
             else if(produceReport && storeValueSource != null)
             {
-                ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinId);
-                if(reportSkin == null)
-				{
-					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.", false);
-                    return;
-				}
+                if(statementInfo != null)
+                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
                 else
-                {
-                    if(statementInfo != null)
-                        stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
-                    else
-                        stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
-                }
+                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
             }
+
+			out.close();
         }
         catch(IOException e)
         {
@@ -256,7 +278,9 @@ public class StatementTask extends AbstractTask
             throw new TaskExecuteException(e);
         }
 
-		tc.addResultMessage(out.toString());
+		if(reportDest != null)
+			tc.addResultMessage(reportDest.getUserMessage());
+		else
+			tc.addResultMessage(out.toString());
     }
-
 }

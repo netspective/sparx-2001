@@ -28,11 +28,6 @@ public class QueryBuilderDialog extends Dialog
 	static public final int OUTPUTSTYLE_TEXT_CSV = 1;
 	static public final int OUTPUTSTYLE_TEXT_TAB = 2;
 
-	static public final int OUTPUTDEST_BROWSER_MULTI_PAGE  = 0;
-	static public final int OUTPUTDEST_BROWSER_SINGLE_PAGE = 1;
-	static public final int OUTPUTDEST_FILE_DOWNLOAD       = 2;
-	static public final int OUTPUTDEST_FILE_EMAIL          = 3;
-
 	private int maxConditions;
 	private QueryDefinition queryDefn;
 
@@ -117,6 +112,8 @@ public class QueryBuilderDialog extends Dialog
 		SelectField outputStyle = new SelectField("style", "Style", SelectField.SELECTSTYLE_COMBO, "HTML=0;CSV Text File=1;Tab-delimited Text File=2");
 		outputStyle.setDefaultValue(new StaticValue("0"));
 		output.addChildField(outputStyle);
+
+		/* the numbers should match com.xaf.report.ReportDestination.DEST_* */
 
 		SelectField outputDest = new SelectField("destination", "Destination", SelectField.SELECTSTYLE_COMBO, "Browser (HTML) multiple pages=0;Browser (HTML) single page=1;Download File=2;E-mail as Attachment=3");
 		outputDest.setDefaultValue(new StaticValue("0"));
@@ -278,33 +275,6 @@ public class QueryBuilderDialog extends Dialog
 		return select;
 	}
 
-	protected static class DestinationInfo
-	{
-		protected String storePathName;
-		protected String downloadUrl;
-		protected File storePath;
-		protected File file;
-		protected Writer writer;
-
-		public DestinationInfo(DialogContext dc, ReportSkin skin) throws IOException
-		{
-			Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
-			storePathName = appConfig.getValue(dc, "app.report-file-store-path");
-			downloadUrl = appConfig.getValue(dc, "app.report-file-download-url");
-			if(storePathName == null || downloadUrl == null)
-				throw new RuntimeException("Configuration value 'app.report-file-store-path' and 'app.report-file-download-url' are required.");
-
-			storePath = new File(storePathName);
-			if(! storePath.exists())
-				storePath.mkdirs();
-
-			file = File.createTempFile("report_", skin != null ? skin.getFileExtension() : ".html", storePath);
-			file.deleteOnExit();
-
-			writer = new FileWriter(file);
-		}
-	}
-
 	public String executeHtml(DialogContext dc, int destination)
 	{
 		String transactionId = dc.getTransactionId();
@@ -312,9 +282,9 @@ public class QueryBuilderDialog extends Dialog
 		QuerySelectScrollState state = (QuerySelectScrollState) session.getAttribute(transactionId);
 
 		int pageSize = -1;
-		if(destination == OUTPUTDEST_BROWSER_SINGLE_PAGE)
+		if(destination == ReportDestination.DEST_BROWSER_SINGLE_PAGE)
 			pageSize = MAX_ROWS_IN_SINGLE_BROWSER_PAGE;
-		else if(destination == OUTPUTDEST_FILE_DOWNLOAD || destination == OUTPUTDEST_FILE_EMAIL)
+		else if(destination == ReportDestination.DEST_FILE_DOWNLOAD || destination == ReportDestination.DEST_FILE_EMAIL)
 			pageSize = Integer.MAX_VALUE;
 
 		try
@@ -347,7 +317,7 @@ public class QueryBuilderDialog extends Dialog
 			else if(dc.getRequest().getParameter("rs_nav_first") != null)
 				state.setPage(1);
 
-			if(destination == OUTPUTDEST_BROWSER_MULTI_PAGE || destination == OUTPUTDEST_BROWSER_SINGLE_PAGE)
+			if(destination == ReportDestination.DEST_BROWSER_MULTI_PAGE || destination == ReportDestination.DEST_BROWSER_SINGLE_PAGE)
 			{
 				StringWriter writer = new StringWriter();
 	    		state.produceReport(writer, dc);
@@ -355,14 +325,10 @@ public class QueryBuilderDialog extends Dialog
 			}
 			else
 			{
-				DestinationInfo destInfo = new DestinationInfo(dc, state.getSkin());
-	    		state.produceReport(destInfo.writer, dc);
-				destInfo.writer.close();
-
-				if(destination == OUTPUTDEST_FILE_DOWNLOAD)
-					return "Your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
-				else
-					return "E-mail not supported yet; however, your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
+				ReportDestination reportDest = new ReportDestination(destination, dc, state.getSkin());
+	    		state.produceReport(reportDest.getWriter(), dc);
+				reportDest.getWriter().close();
+				return reportDest.getUserMessage();
 			}
 		}
 		catch(Exception e)
@@ -399,7 +365,7 @@ public class QueryBuilderDialog extends Dialog
 				}
 
 				ReportContext rc = new ReportContext(dc, reportDefn, skin);
-				if(destination == OUTPUTDEST_BROWSER_MULTI_PAGE || destination == OUTPUTDEST_BROWSER_SINGLE_PAGE)
+				if(destination == ReportDestination.DEST_BROWSER_MULTI_PAGE || destination == ReportDestination.DEST_BROWSER_SINGLE_PAGE)
 				{
 					StringWriter writer = new StringWriter();
 					skin.produceReport(writer, rc, rs);
@@ -407,14 +373,10 @@ public class QueryBuilderDialog extends Dialog
 				}
 				else
 				{
-					DestinationInfo destInfo = new DestinationInfo(dc, skin);
-					skin.produceReport(destInfo.writer, rc, rs);
-					destInfo.writer.close();
-
-					if(destination == OUTPUTDEST_FILE_DOWNLOAD)
-						return "Your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
-					else
-						return "E-mail not supported yet; however, your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
+					ReportDestination reportDest = new ReportDestination(destination, dc, skin);
+					skin.produceReport(reportDest.getWriter(), rc, rs);
+					reportDest.getWriter().close();
+					return reportDest.getUserMessage();
 				}
 			}
 			else
@@ -446,7 +408,7 @@ public class QueryBuilderDialog extends Dialog
 		String outputDestStr = dc.getValue("output.destination");
 
 		int outputStyle = outputStyleStr != null ? Integer.parseInt(outputStyleStr) : OUTPUTSTYLE_HTML;
-		int outputDest = outputDestStr != null ? Integer.parseInt(outputDestStr) : OUTPUTDEST_BROWSER_MULTI_PAGE;
+		int outputDest = outputDestStr != null ? Integer.parseInt(outputDestStr) : ReportDestination.DEST_BROWSER_MULTI_PAGE;
 
 		switch(outputStyle)
 		{
