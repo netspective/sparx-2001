@@ -43,7 +43,8 @@
 
 		<!-- Joins -->
 		<join id="person" table="person" auto-include="yes"/>
-		<join id="org" table="org" condition="org.org_id = person.cr_org_id" />
+		<join id="org" table="org"  condition="org.org_id = personorg_relationship.rel_org_id" imply-join="personorg_relationship"/>
+        <join id="personorg_relationship" table="personorg_relationship" />
         <join id="gender" table="gender" condition="gender.id = person.gender" />
 
 		<select-dialog name="person_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Contacts">

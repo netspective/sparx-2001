@@ -19,9 +19,14 @@
 		<field id="org_industry" caption="Account Industry" join="org_industry" column="org_industry" column-expr="org_industry_enum.caption">
 			<report heading="Industry"/>
 		</field>
+        <field id="rel_org_id" caption="Parent Organization" join="org_relationship"  column="rel_org_id">
+        </field>
+        <field id="rel_type" caption="Relationship Type" join="org_relationship"  column="rel_type">
+        </field>
 
 		<!-- Joins -->
 		<join id="org" table="org" auto-include="yes"/>
+        <join id="org_relationship" table="org_relationship" condition="org.org_id = org_relationship.parent_id"/>
 		<join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)" imply-join="org_industry_enum"/>
 		<join id="org_industry_enum" table="org_industry_enum" condition="org_industry.org_industry = org_industry_enum.id (+)" imply-join="org_industry_enum"/>
 

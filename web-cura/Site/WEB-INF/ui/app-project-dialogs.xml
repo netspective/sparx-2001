@@ -6,10 +6,10 @@
             <field.integer name="project_id" caption="Project ID" read-only="browser">
                 <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
             </field.integer>
-            <field.text name="project_name" caption="Project Name"     max-length="255" required="yes">
+            <field.text name="project_name" caption="Project Name"  uppercase="yes"   max-length="255" required="yes">
                 <conditional action="apply-flag" flag="browser-read-only" data-cmd="edit,delete"/>
             </field.text>
-            <field.text name="project_code" caption="Code"       max-length="64"/>
+            <field.text name="project_code" caption="Code" max-length="64"/>
             <field.memo name="project_descr" caption="Description" required="yes"/>
             <field.select name="project_status" caption="Status" required="yes" choices="query:project.status-list" />
             <field.date name="start_date" caption="Start Date" required="yes" default="today" popup-calendar="yes"/>

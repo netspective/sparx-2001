@@ -3,6 +3,7 @@ package app.tag;
 import java.io.*;
 import java.util.*;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -130,6 +131,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
             int orgCount = memberOrgs.size();
             // get the current organization selected
             String currOrgId = (String)session.getAttribute("organization");
+            String currOrgName = (String)memberOrgs.get(currOrgId);
 
 
 			out.println("<html>");
@@ -155,16 +157,21 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 
             out.println("</tr>");
             out.println("<tr bgcolor='#4a74e7'>");
-            out.println("   <td style='font-family: Trebuchet MS, Arial; font-size: 8pt;height:21px' align='left'><b><font color='#FFFFFF'>" + personRegistration.get("complete_name") + "</b></font></td>");
+            out.println("   <td style='font-family: Trebuchet MS, Arial; font-size: 8pt;height:21px' align='left'>");
+            out.println("       <b><font color='#FFFFFF'>");
+            out.println("       " + personRegistration.get("complete_name") + " @ <a class='Menu' href='" + rootPath + "/account/home.jsp?org_id=" + currOrgId + "&org_name="+
+                    URLEncoder.encode(currOrgName) +"'>" + currOrgName  + "</a></b></font>");
+            out.println("   </td>");
             out.println("   <td align='right' style='font-family: Trebuchet MS, Arial; font-size: 8pt'><font color='white'>Organization: &nbsp; ") ;
             out.println("   <select name='active_org'  style='font-size: 7pt' onChange='goto_URL(this)'>");
+            out.println("       <option></option>");
             Iterator orgKeys = memberOrgs.keySet().iterator();
             while (orgKeys.hasNext())
             {
                 String orgId = (String)orgKeys.next();
-                if (currOrgId.equals(orgId))
-                    out.println("       <option  selected value='" + rootPath + "/index.jsp?organization="+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
-                else
+                //if (currOrgId.equals(orgId))
+                //    out.println("       <option  selected value='" + rootPath + "/index.jsp?organization="+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
+                //else
                     out.println("       <option  value='" + rootPath + "/index.jsp?organization="+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
             }
             out.println("   </select></font></td");
@@ -218,18 +225,25 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
             out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/task/index.jsp?_d_exec=1'>Tasks</a></font></b>");
             out.println("           </td></tr>");
 
+            out.println("           <tr><td>");
+            out.println("           <img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'");
+            out.println("           </td></tr>");
+
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "?_logout=yes'>Logout</a></font></b>");
+            out.println("           </td></tr>");
+
             out.println("       </table>");
             out.println("       </td>");
             out.println("       <td align='left'  valign='top'>");
-            out.println("       <table  width='100%' cellpadding='3' cellspacing='0'>");
-            out.println("           <tr><td align='left'><font face='tahoma' size=2>");
+            out.println("       <table  width='100%' cellpadding='1' cellspacing='0'>");
 			String heading = getHeading();
 			if(heading != null)
 			{
-				out.print("<h1>"+ heading +"</h1>");
+				out.print("<tr><td align='left' valign='middle' style='font-family: Trebuchet MS;font-size: 20pt'><img src='" +resourcesUrl + "/images/design/header_icon.jpg'/>"+ heading + "</td></tr>");
 			}
-
-		}
+            out.println("           <tr><td align='center' valign='top'><font face='tahoma' size=2>");
+        }
 		catch(Exception e)
 		{
             StringWriter stack = new StringWriter();

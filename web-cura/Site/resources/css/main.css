@@ -35,14 +35,6 @@ A.Menu:Link
     font-family: Trebuchet MS;
     Text-decoration: none
 }
-A.Menu:Hover
-{
-    font-size: 9pt;
-    //background: #0000A0;
-    color: yellow;
-    font-family: Trebuchet MS, Arial;
-    Text-decoration: underline
-}
 A.Menu:Visited
 {
     font-size: 8pt;
@@ -50,6 +42,15 @@ A.Menu:Visited
     font-family: Trebuchet MS;
     Text-decoration: none
 }
+A.Menu:Hover
+{
+    font-size: 9pt;
+    background: #0000A0;
+    color: yellow;
+    font-family: Trebuchet MS;
+    text-decoration: underline
+}
+
 .Font8pt
 {
 	font-size:8pt;
