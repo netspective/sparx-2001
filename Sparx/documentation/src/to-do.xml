@@ -83,6 +83,7 @@
                     <task><name>Automatically generate dialogs that will test SQL statements and parameters.</name></task>
                     <task><name>When documenting SQL statements, show &lt;report> tag documentation too.</name></task>
                     <task><name>For all pages that show Java classes (DCB, dialog handlers, etc) link the class sources to new code documentation system with syntax highlighting.</name></task>
+                    <task><name>Consider adding functionality from the <a href="http://www.altara.org/mars.html">Mars</a> network and application status monitor open source project into ACE.</name></task>
                 </task>
 
                 <task>
@@ -175,7 +176,7 @@
                         <task><name>Implement bulk upload/download via XML or delimited files.</name></task>
                     </task>
                 </task>
-                
+
                 <task>
                     <name>Legal</name>
                     <task><name>Add license agreements to all XSLT, javascript, and other "resource" files.</name></task>
