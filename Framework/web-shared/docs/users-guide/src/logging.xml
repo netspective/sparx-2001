@@ -10,19 +10,22 @@
         and production phases of a product. The main advantage of &framework-name;'s logging mechanism is that it takes away having
         to insert log statements into code for debugging it.
 
-        Each JSP file loading time can be
-        <quote>broken</quote> down to the dialog level to so that web developers can track
+        Each JSP file loading time can be  <quote>broken</quote> down to the dialog level to so that web developers can track
         exactly which part of the JSP is the cause of long page loads. For security reasons, JSP
         access logging can also include accessing user information such as permission/access level and machine name.
         Logged database connection times and SQL statement execution times provided by &framework-name; are also
-        crucial for developers who need to investigate database
-        performance issues. Also the logging behavior can be controlled by editing a configuration file,
-        without touching the application code.
+        crucial for developers who need to investigate database performance issues. 
+        </para>
+        <para>
+        The logging mechanism within &frame-work; is implmented by using the Apache Software Foundation - Jakarta Project's 
+        Log4J library. It is a open source project independently developed outside of &framework-name; and it 
+        allows the developer to control which log statements are output with arbitrary granularity. 
+        It is also fully configurable at runtime using external configuration files.
         </para>
     </section>
 
     <section>
-        <title>Configuration<title>
+        <title>Configuration</title>
         <para>
         The central configuration file for &framework-name; logging is called
         <filename class="conf">log4j.properties</filename> and it is required to be in
@@ -36,7 +39,28 @@
     <section>
         <title>SQL Logging</title>
         <para>
-
+        SQL logging is comprised of data that might be useful for debugging or reporting purposes.
+        There are two different log files containing logging information: 
+        <filename>sql-debug.log</filename> and <filename>sql-monitor.log</filename>. The debug
+        file contains entries such as actual SQL statements, the JSP page which the SQL was executed on,
+        bind parameter values, and date/timestamps. The monitor log file does not containg actual
+        SQL statements but it contains data such as SQL statement IDs, database connection times, statement
+        execution times, bind times, host Ids, and JSP names. These log files can be viewed in 
+        &explorer-name; by choosing the             
+            <menuchoice>
+                <guimenu>Application</guimenu>
+                <guimenuitem>Logs</guimenuitem>
+                <guisubmenu>xaf.debug.sql</guisubmenu>
+            </menuchoice>
+            and
+            <menuchoice>
+                <guimenu>Application</guimenu>
+                <guimenuitem>Logs</guimenuitem>
+                <guisubmenu>xaf.monitor.sql</guisubmenu>
+            </menuchoice>
+            menu items.
+        The log files are not displayed in their entirety in &explorer-name; but only the most recent
+        entries are displayed (the last 32 KB of the log file).
         </para>
     </section>
 
