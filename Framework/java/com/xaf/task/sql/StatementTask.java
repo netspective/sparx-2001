@@ -44,7 +44,7 @@ public class StatementTask extends AbstractTask
 		statementInfo = null;
 		stmtName = null;
 		stmtSourceId = null;
-		dataSourceIdValueSource = null;
+		dataSourceValueSource = null;
 		reportId = null;
 		skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
 		storeValueName = null;

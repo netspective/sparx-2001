@@ -277,7 +277,9 @@ public class StatementManager extends XmlSource
 	static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params) throws NamingException, SQLException
 	{
 		if(dataSourceId == null)
-			dataSourceId = si.getDataSourceId();
+        {
+            dataSourceId = si.getDataSource() != null ?si.getDataSource().getValue(vc) : null;
+        }
 
 		StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(vc);
 

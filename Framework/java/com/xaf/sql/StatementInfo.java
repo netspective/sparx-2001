@@ -23,7 +23,7 @@ public class StatementInfo
 
 	private String pkgName;
 	private String stmtName;
-	private String dataSourceId;
+	private SingleValueSource dataSourceValueSource;
 	private Element stmtElem;
 	private boolean sqlIsDynamic;
 	private String sql;
@@ -42,7 +42,11 @@ public class StatementInfo
 	public final Element getStatementElement() { return stmtElem; }
 	public final Map getReportElems() { return reportElems; }
 	public final Element getReportElement(String name) { return name == null ? defaultReportElem : (Element) reportElems.get(name); }
-	public final String getDataSourceId() { return dataSourceId; }
+	public final SingleValueSource getDataSource() { return dataSourceValueSource; }
+	public final void setDataSource(String value)
+    {
+        dataSourceValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
     public final StatementParameter[] getParams() { return parameters; }
 	public final StatementExecutionLog getExecutionLog() { return execLog; }
 	public final StatementExecutionLogEntry createNewExecLogEntry(ValueContext vc) { return execLog.createNewEntry(vc, this); }
@@ -158,13 +162,15 @@ public class StatementInfo
 
         ArrayList paramElems = new ArrayList();
 
-		dataSourceId = stmtElem.getAttribute("data-source");
-		if(dataSourceId.length() == 0)
+		String dataSourceId = stmtElem.getAttribute("data-src");
+		if(dataSourceId.length() == 0 && pkgDataSourceId != null)
 		{
-			dataSourceId = null;
-			if(pkgDataSourceId != null)
-				dataSourceId = pkgDataSourceId;
+			setDataSource(pkgDataSourceId);
 		}
+        else
+        {
+            setDataSource(dataSourceId);
+        }
 
 		NodeList stmtChildren = stmtElem.getChildNodes();
 		for(int ch = 0; ch < stmtChildren.getLength(); ch++)
