@@ -15,6 +15,7 @@ import java.sql.*;
 import java.text.*;
 
 import com.xaf.report.*;
+import com.xaf.sql.*;
 import com.xaf.value.*;
 
 public class HtmlReportSkin implements ReportSkin
@@ -43,6 +44,11 @@ public class HtmlReportSkin implements ReportSkin
     {
         setFlag(HTMLFLAG_SHOW_BANNER | HTMLFLAG_SHOW_HEAD_ROW | HTMLFLAG_SHOW_FOOT_ROW | HTMLFLAG_ADD_ROW_SEPARATORS);
     }
+
+	public String getFileExtension()
+	{
+		return ".html";
+	}
 
 	public final long getFlags() { return flags; }
 	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }
@@ -218,7 +224,9 @@ public class HtmlReportSkin implements ReportSkin
 		int rowsWritten = 0;
 		int dataColsCount = columns.size();
 		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1;
-		boolean paging = rc.scrollingResults();
+
+		ResultSetScrollState scrollState = rc.getScrollState();
+		boolean paging = scrollState != null;
 
         ResultSetMetaData rsmd = rs.getMetaData();
         int resultSetColsCount = rsmd.getColumnCount();
@@ -268,6 +276,14 @@ public class HtmlReportSkin implements ReportSkin
 		if(rowsWritten == 0)
 		{
             writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><font "+dataFontAttrs+">No data found.</font></td></tr>");
+			if(paging)
+				scrollState.setNoMoreRows();
+		}
+		else if(paging)
+		{
+			scrollState.accumulateRowsProcessed(rowsWritten);
+		    if(rowsWritten < scrollState.getRowsPerPage())
+				scrollState.setNoMoreRows();
 		}
     }
 
@@ -287,7 +303,9 @@ public class HtmlReportSkin implements ReportSkin
 		int rowsWritten = 0;
 		int dataColsCount = columns.size();
 		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1;
-		boolean paging = rc.scrollingResults();
+
+		ResultSetScrollState scrollState = rc.getScrollState();
+		boolean paging = scrollState != null;
 
         for(int row = startDataRow; row < data.length; row++)
         {
@@ -328,6 +346,14 @@ public class HtmlReportSkin implements ReportSkin
 		if(rowsWritten == 0)
 		{
             writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><font "+dataFontAttrs+">No data found.</font></td></tr>");
+			if(paging)
+				scrollState.setNoMoreRows();
+		}
+		else if(paging)
+		{
+			scrollState.accumulateRowsProcessed(rowsWritten);
+		    if(rowsWritten < scrollState.getRowsPerPage())
+				scrollState.setNoMoreRows();
 		}
     }
 

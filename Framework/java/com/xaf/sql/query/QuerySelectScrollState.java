@@ -71,7 +71,8 @@ public class QuerySelectScrollState extends ResultSetScrollState
 			scrollToActivePage();
 
 		ReportContext rc = new ReportContext(dc, reportDefn, skin);
-		rc.setResultsScrolling(0, getRowsPerPage());
+		//rc.setResultsScrolling(0, getRowsPerPage());
+		rc.setResultsScrolling(this);
 
 		skin.produceReport(writer, rc, getResultSet());
 	}

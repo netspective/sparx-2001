@@ -15,6 +15,8 @@ import java.sql.*;
 
 public interface ReportSkin
 {
+	public String getFileExtension();
+
 	public void produceReport(Writer writer, ReportContext rc, ResultSet rs) throws SQLException, IOException;
 	public void produceReport(Writer writer, ReportContext rc, Object[][] data) throws IOException;
 }

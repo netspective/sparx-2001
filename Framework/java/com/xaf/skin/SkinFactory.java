@@ -38,6 +38,8 @@ public class SkinFactory
 		addReportSkin("component", new HtmlComponentSkin());
 		addReportSkin("detail", new HtmlSingleRowReportSkin(1, true));
 		addReportSkin("detail-2col", new HtmlSingleRowReportSkin(2, true));
+		addReportSkin("text-csv", new TextReportSkin(".csv", ",", "\"", true));
+		addReportSkin("text-tab", new TextReportSkin(".txt", "  ", null, true));
 		haveReportSkinsDefaults = true;
 	}
 

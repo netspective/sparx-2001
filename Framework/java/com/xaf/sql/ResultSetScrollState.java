@@ -16,11 +16,14 @@ public class ResultSetScrollState
 {
 	private ResultSet resultSet;
 	private boolean resultSetScrollable;
-	private int rowsPerPage;
-	private int activePage;
-	private int activePageRowStart;
-	private int totalPages;
-	private int totalRows;
+	private int rowsPerPage;         // used for both scrollable and non-scrollable result sets
+	private int activePage;          // used for both scrollable and non-scrollable
+	private int activePageRowStart;  // used for both scrollable and non-scrollable
+	private int totalPages;          // used only for scrollable
+	private int totalRows;           // used only for scrollable
+	private boolean haveMoreRows;    // used only for non-scrollable
+	private int rowsProcessed;       // used only for non-scrollable
+	private boolean reachedEndOnce;  // used only for non-scrollable
 
     public ResultSetScrollState(ResultSet rs, int rowsPerPage) throws SQLException
     {
@@ -31,6 +34,9 @@ public class ResultSetScrollState
 		this.totalPages = -1;
 		this.activePage = 1;
 		this.activePageRowStart = 1;
+		this.rowsProcessed = 0;
+		this.haveMoreRows = true;
+		this.reachedEndOnce = false;
 
 		if(resultSetScrollable && resultSet != null)
 		{
@@ -51,8 +57,28 @@ public class ResultSetScrollState
 	public final int getRowsPerPage() { return rowsPerPage; }
 	public final int getTotalRows() { return totalRows; }
 	public final int getTotalPages() { return totalPages; }
-	public final boolean hasMoreRows() throws SQLException { return ! resultSet.isAfterLast(); }
+	public final int getRowsProcessed() { return rowsProcessed; }
 	public final boolean isScrollable() { return resultSetScrollable; }
+
+	public final void accumulateRowsProcessed(int rowsProcessed)
+	{
+		if(! resultSetScrollable && ! reachedEndOnce)
+			this.rowsProcessed += rowsProcessed;
+	}
+
+	public final void setNoMoreRows()
+	{
+		if(! resultSetScrollable)
+		{
+			haveMoreRows = false;
+			reachedEndOnce = true;
+		}
+	}
+
+	public final boolean hasMoreRows() throws SQLException
+	{
+		return resultSetScrollable ? (! resultSet.isAfterLast()) : haveMoreRows;
+	}
 
 	public void scrollToActivePage() throws SQLException
 	{
@@ -67,7 +93,8 @@ public class ResultSetScrollState
 			throw new RuntimeException("No need to call scrollToActivePage(ResultSet rs) for scrollable cursors. Call scrollToActivePage() instead.");
 
 		resultSet = rs;
-		activePageRowStart = ((activePage - 1) * rowsPerPage) + 1;
+		activePageRowStart = ((activePage - 1) * rowsPerPage);
+		haveMoreRows = true;
 
 		if(activePageRowStart > 1)
 		{

@@ -33,7 +33,7 @@ public class ResultSetNavigatorButtonsField extends DialogField
 		String attrs = dc.getSkin().getDefaultControlAttrs();
 		QuerySelectScrollState state = (QuerySelectScrollState)	dc.getRequest().getAttribute(dc.getTransactionId() + "_state");
 		if(state == null)
-			return "QuerySelectScrollState not found.";
+	   		return "<input type='submit' name='"+ dc.getDialog().getResetContextParamName() +"' value=' OK ' " + attrs + "> ";
 
 		boolean isScrollable = state.isScrollable();
         int activePage = state.getActivePage();
@@ -51,25 +51,45 @@ public class ResultSetNavigatorButtonsField extends DialogField
 		if(activePage > 1)
 			html.append("<input type='submit' name='rs_nav_first' value=' First ' " + attrs + "> ");
 
-        if(activePage > 1)
+        if(activePage > 2)
     		html.append("<input type='submit' name='rs_nav_prev' value=' Prev ' " + attrs + "> ");
 
+		boolean hasMoreRows = false;
         try
         {
-            if(state.hasMoreRows() || (isScrollable && activePage < lastPage))
+            if(state.hasMoreRows())
+			{
                 html.append("<input type='submit' name='rs_nav_next' value=' Next ' " + attrs + "> ");
+				hasMoreRows = true;
+			}
         }
         catch(SQLException e)
         {
+			html.append(e.toString());
         }
 
-		if(isScrollable && activePage < lastPage)
+		if(isScrollable)
 		{
-			html.append("<input type='submit' name='rs_nav_last' value=' Last ' " + attrs + "> ");
+			if(activePage < lastPage)
+				html.append("<input type='submit' name='rs_nav_last' value=' Last ' " + attrs + "> ");
+			html.append("&nbsp;&nbsp;<nobr>");
+	    	html.append(NumberFormat.getNumberInstance().format(state.getTotalRows()));
+			html.append(" total rows</nobr>");
 		}
-		html.append("&nbsp;&nbsp;<nobr>");
-		html.append(NumberFormat.getNumberInstance().format(state.getTotalRows()));
-		html.append(" total rows</nobr>");
+		else if(hasMoreRows)
+		{
+			html.append("&nbsp;&nbsp;<nobr>");
+	    	html.append(NumberFormat.getNumberInstance().format(state.getRowsProcessed()));
+			html.append(" rows so far</nobr>");
+		}
+		else
+		{
+			html.append("&nbsp;&nbsp;<nobr>");
+	    	html.append(NumberFormat.getNumberInstance().format(state.getRowsProcessed()));
+			html.append(" total rows</nobr>");
+		}
+
+   		html.append("&nbsp;&nbsp;<input type='submit' name='"+ dc.getDialog().getResetContextParamName() +"' value=' Done ' " + attrs + "> ");
 		html.append("</center>");
 
 		return html.toString();

@@ -20,6 +20,7 @@ import javax.servlet.http.*;
 
 import com.xaf.form.*;
 import com.xaf.report.column.*;
+import com.xaf.sql.*;
 import com.xaf.value.*;
 
 public class ReportContext implements ValueContext
@@ -94,7 +95,8 @@ public class ReportContext implements ValueContext
 	private ServletRequest request;
 	private ServletResponse response;
 	private ReportSkin skin;
-	private int pageSize, rowCurrent, rowStart, rowEnd, rowsTotal;
+	private ResultSetScrollState scrollState;
+	private int rowCurrent, rowStart, rowEnd;
 
     public NumberFormat generalNumberFmt;
 
@@ -109,8 +111,6 @@ public class ReportContext implements ValueContext
         this.generalNumberFmt = NumberFormat.getNumberInstance();
 		this.rowStart = 0;
 		this.rowEnd = 0;
-		this.pageSize = 0;
-		this.rowsTotal = 0;
 		this.rowCurrent = 0;
 		this.visibleColsCount = -1; // calculate on first-call (could change)
 
@@ -146,12 +146,13 @@ public class ReportContext implements ValueContext
 		listeners.add(listener);
 	}
 
-	public final void setResultsScrolling(int rowStart, int pageSize)
+	public final void setResultsScrolling(ResultSetScrollState scrollState)
 	{
-		this.rowCurrent = rowStart;
-		this.rowStart = rowStart;
-		this.rowEnd = rowStart + pageSize;
-		this.pageSize = pageSize;
+		this.scrollState = scrollState;
+		this.rowCurrent = 0; // rowStart;
+		this.rowStart = 0; // rowStart;
+		this.rowEnd = rowStart + scrollState.getRowsPerPage(); //rowStart + pageSize;
+		//this.pageSize = scrollState.getRowsPerPage(); //pageSize;
 	}
 
     public final Report getReport() { return reportDefn; }
@@ -185,7 +186,7 @@ public class ReportContext implements ValueContext
     public final ColumnDataCalculator getCalc(int col) { return states[col].calc; }
     public final int getCalcsCount() { return calcsCount; }
 
-	public final boolean scrollingResults() { return pageSize > 0; }
+	public final ResultSetScrollState getScrollState() { return scrollState; }
 	public final boolean endOfPage() { rowCurrent++; return rowCurrent >= rowEnd; }
 	public final int getRowStart() { return rowStart; }
 	public final int getRowEnd() { return rowEnd; }

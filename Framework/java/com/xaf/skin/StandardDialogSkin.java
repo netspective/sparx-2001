@@ -195,7 +195,7 @@ public class StandardDialogSkin implements DialogSkin
 				if(showCaption)
 				{
 					String caption = field.getCaption(dc);
-					if(caption != DialogField.CUSTOM_CAPTION)
+					if(caption != DialogField.CUSTOM_CAPTION && caption != null)
                     {
 						html.append("<nobr>" + (field.isRequired(dc) ? "<b>" + caption + "</b>" : caption));
                         if(captionSuffix != null)
