@@ -31,6 +31,8 @@ public class DmlTag extends TagSupport
 	public void setWhere(String value) { task.setWhere(value); }
 	public void setColumns(String value) { task.setColumns(value); }
     public void setContext(String value) { task.setDialogContextAttrName(value); }
+    public void setInsertchk(String value) { task.setInsertCheckValueSource(value); }
+    public void setUpdatechk(String value) { task.setUpdateCheckValueSource(value); }
 
 	public int doStartTag() throws JspException
 	{

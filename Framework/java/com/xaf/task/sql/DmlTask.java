@@ -23,12 +23,15 @@ public class DmlTask extends AbstractTask
 	public final int DMLCMD_INSERT = 1;
 	public final int DMLCMD_UPDATE = 2;
 	public final int DMLCMD_REMOVE = 3;
+	public final int DMLCMD_INSERT_OR_UPDATE = 4;
 
     private int command;
 	private String tableName;
 	private String dataSourceId;
     private String fields;
     private String transaction;
+	private SingleValueSource insertCheckValueSource;
+	private SingleValueSource updateCheckValueSource;
     private String whereCond;
     private String columns;
     private String dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
@@ -48,6 +51,8 @@ public class DmlTask extends AbstractTask
         transaction = null;
         whereCond = null;
         columns = null;
+		insertCheckValueSource = null;
+		updateCheckValueSource = null;
         dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
     }
 
@@ -59,6 +64,8 @@ public class DmlTask extends AbstractTask
 			setCommand(DMLCMD_INSERT);
         else if("update".equals(value))
 			setCommand(DMLCMD_UPDATE);
+		else if("insert-or-update".equals(value))
+			setCommand(DMLCMD_INSERT_OR_UPDATE);
         else if("remove".equals(value))
 			setCommand(DMLCMD_REMOVE);
 		else
@@ -86,6 +93,14 @@ public class DmlTask extends AbstractTask
     public String getDialogContextAttrName() { return dialogContextAttr; }
     public void setDialogContextAttrName(String value) { dialogContextAttr = (value != null && value.length() > 0) ? value : null; }
 
+	public SingleValueSource getInsertCheckValueSource() { return insertCheckValueSource; }
+	public void setInsertCheckValueSource(SingleValueSource value) { insertCheckValueSource = value; }
+	public void setInsertCheckValueSource(String value) { insertCheckValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null; }
+
+	public SingleValueSource getUpdateCheckValueSource() { return updateCheckValueSource; }
+	public void setUpdateCheckValueSource(SingleValueSource value) { updateCheckValueSource = value; }
+	public void setUpdateCheckValueSource(String value) { updateCheckValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null; }
+
     public void initialize(Element elem) throws TaskInitializeException
     {
 		super.initialize(elem);
@@ -98,6 +113,8 @@ public class DmlTask extends AbstractTask
 		setFields(elem.getAttribute("fields"));
 		setColumns(elem.getAttribute("columns"));
 		setDialogContextAttrName(elem.getAttribute("dialog-context-attr"));
+		setInsertCheckValueSource(elem.getAttribute("insert-check"));
+		setUpdateCheckValueSource(elem.getAttribute("update-check"));
     }
 
     public void populateFieldsDmlItems(TaskContext tc, List columnNames, List columnValues)
@@ -208,11 +225,70 @@ public class DmlTask extends AbstractTask
                 columnsAndValues[columnIndex+1] = columnValues.get(i);
             }
 
-			switch(command)
+			int tempCmd = command;
+			if(command == DMLCMD_INSERT_OR_UPDATE)
+			{
+				/**
+				 * In this case we will see if a user has provided us a single-value source
+				 * for checking inserts or updates. If a value source is provided for inserts
+				 * that means that we'll be looking for a value to be returned; if the value
+				 * is null or zero, it means that the record should be updated. Non-null and
+				 * anything other than zero would mean it should be inserted.
+				 */
+				if(insertCheckValueSource != null)
+				{
+					Object value = insertCheckValueSource.getValue(tc);
+					if(value == null)
+						tempCmd = DMLCMD_UPDATE;
+					else
+					{
+						int intValue = Integer.parseInt(value.toString());
+						if(intValue == 0)
+							tempCmd = DMLCMD_UPDATE;
+						else
+							tempCmd = DMLCMD_INSERT;
+					}
+					if(flagIsSet(TASKFLAG_DEBUG))
+					{
+						tc.addResultMessage("<p><pre>");
+						tc.addResultMessage("checking insert-or-update -- insertchk '"+ insertCheckValueSource.getId() +"' = "+ value + "<p>");
+					}
+				}
+				else if(updateCheckValueSource != null)
+				{
+					Object value = updateCheckValueSource.getValue(tc);
+					if(value == null)
+						tempCmd = DMLCMD_INSERT;
+					else
+					{
+						int intValue = Integer.parseInt(value.toString());
+						if(intValue == 0)
+							tempCmd = DMLCMD_INSERT;
+						else
+							tempCmd = DMLCMD_UPDATE;
+					}
+
+					if(flagIsSet(TASKFLAG_DEBUG))
+					{
+						tc.addResultMessage("<p><pre>");
+						tc.addResultMessage("checking insert-or-update -- updatechk '"+ updateCheckValueSource.getId() +"' = "+ value + "<p>");
+					}
+
+				}
+				else
+				{
+					throw new TaskExecuteException("Either insert-check or update-check value source must be provided.");
+				}
+			}
+
+			switch(tempCmd)
 			{
 				case DMLCMD_INSERT:
 	                dml = Generator.createInsertStmt(tableName, columnsAndValues);
 					break;
+
+				case DMLCMD_INSERT_OR_UPDATE:
+					throw new TaskExecuteException("Should never get here!.");
 
 				case DMLCMD_UPDATE:
 					if(whereCond == null)

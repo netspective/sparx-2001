@@ -589,6 +589,8 @@
 					<xsd:attribute name="fields" type="xsd:string" use="optional"/>
 					<xsd:attribute name="columns" type="xsd:string" use="optional"/>
 					<xsd:attribute name="dialog-context-attr" type="xsd:string" use="optional"/>
+					<xsd:attribute name="insert-check" type="single-value-source" use="optional"/>
+					<xsd:attribute name="update-check" type="single-value-source" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:choice>
@@ -601,6 +603,7 @@
 			<xsd:enumeration value="insert"/>
 			<xsd:enumeration value="update"/>
 			<xsd:enumeration value="remove"/>
+			<xsd:enumeration value="insert-or-update"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="report-first-row-enum">
