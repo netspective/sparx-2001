@@ -81,8 +81,9 @@ public class QueryColumnsListValue extends ListSource
 			{
 				if(rs != null)
                 {
+                    Connection con = rs.getStatement().getConnection();
 					rs.close();
-                    rs.getStatement().getConnection().close();
+                    con.close();
                 }
 			}
 			catch(Exception e)
@@ -115,8 +116,9 @@ public class QueryColumnsListValue extends ListSource
 			{
 				if(rs != null)
                 {
+                    Connection con = rs.getStatement().getConnection();
 					rs.close();
-                    rs.getStatement().getConnection().close();
+                    con.close();
                 }
 
 			}

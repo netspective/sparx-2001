@@ -97,8 +97,9 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 			{
 				if(rs != null)
                 {
+                    Connection con = rs.getStatement().getConnection();
 					rs.close();
-                    rs.getStatement().getConnection().close();
+                    con.close();
                 }
 
 			}
@@ -132,8 +133,9 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 			{
 				if(rs != null)
                 {
+                    Connection con = rs.getStatement().getConnection();
 					rs.close();
-                    rs.getStatement().getConnection().close();
+                    con.close();
                 }
 
 			}
@@ -167,8 +169,9 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 			{
 				if(rs != null)
                 {
+                    Connection con = rs.getStatement().getConnection();
 					rs.close();
-                    rs.getStatement().getConnection().close();
+                    con.close();
                 }
 
 			}
