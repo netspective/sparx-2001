@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseContextFactory.java,v 1.4 2002-07-06 14:42:41 shahid.shah Exp $
+ * $Id: DatabaseContextFactory.java,v 1.5 2002-09-02 23:00:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -78,7 +78,31 @@ import com.netspective.sparx.xif.db.policy.HSqlDbDatabasePolicy;
 import com.netspective.sparx.xif.db.context.BasicDatabaseContext;
 
 /**
- * Provides a factory pattern for constructing DatabaseContext instances.
+ * Provides a factory pattern for constructing DatabaseContext instances. There are a number of rules that are followed
+ * to help make the selection of a DatabaseContext as extensible as possible. Here are the rules:
+ * <ol>
+ *      <li>
+ *          If there is a ServletContext attribute named "DatabaseContext", then the value of that attribute
+ *          specifies an actual instance of a class that will be used as the DatabaseContext. This is a dynamic check
+ *          which means that each time getContext is called, the ServletContext attribute will be checked.
+ *      </li>
+ *      <li>
+ *          If a system property named com.netspective.sparx.xif.db.DatabaseContext.class is found, then the value of
+ *          this system property is the name of a class that will be dynamically loaded to provide the default
+ *          DatabaseContext instance. Once this property is found, the value of the class is cached and not checked
+ *          again until the servlet is restarted.
+ *      </li>
+ *      <li>
+ *          If a class called app.db.context.AppDatabaseContext is found in the classpath, then that class is used to instantiate
+ *          a new object that will provide the default DatabaseContext instance. Once this property is found, the class
+ *          is cached and not checked again until the servlet is restarted.
+ *      </li>
+ *      <li>
+ *          If no ServletContext attribute is found, no 'com.netspective.sparx.xif.db.DatabaseContext.class' system
+ *          property is found, and no class called app.db.context.AppDatabaseContext is found in the classpath, then the default
+ *          DatabaseContext class that is used is BasicDatabaseContext. Errors for ClassNotFound are sent to STDERR.
+ *      </li>
+ * </ol>
  *
  * @author Shahid N. Shah
  * @version 1.0
@@ -86,8 +110,31 @@ import com.netspective.sparx.xif.db.context.BasicDatabaseContext;
 
 public class DatabaseContextFactory implements Factory
 {
+    /**
+     * If the DatabaseContext is stored in a ServletContext atttibute, then this is the
+     * preferred name of the attribute.
+     */
+    public static final String DBCONTEXT_SERVLETCONTEXT_ATTR_NAME = "DatabaseContext";
+
+    /**
+     * If a class by the name of CUSTOM_CONTEXT_CLASS is found in the classpath, it will be used as the default
+     * DatabaseContext class instead of BasicDatabaseContext.
+     */
+    public static final String CUSTOM_CONTEXT_CLASS = "app.db.context.AppDatabaseContext";
+
+    /**
+     * If a system property named CONTEXTNAME_PROPNAME is found, it will be used to specify the DatabaseContext class
+     */
     public static final String CONTEXTNAME_PROPNAME = "com.netspective.sparx.xif.db.DatabaseContext.class";
+
+    /**
+     * Once a DatabaseContext class has been instantiated, it is cached in the useContext variable.
+     */
     private static DatabaseContext useContext = null;
+
+    /**
+     * A map with a list of all the DatabasePolicy objects
+     */
     private static Map databasePolicies = new HashMap();
 
     static
@@ -122,12 +169,6 @@ public class DatabaseContextFactory implements Factory
         else
             return policy;
     }
-
-    /**
-     * If the DatabaseContext is stored in a ServletContext atttibute, then this is the
-     * preferred name of the attribute.
-     */
-    static public final String DBCONTEXT_SERVLETCONTEXT_ATTR_NAME = "DatabaseContext";
 
     public static void addText(Document doc, Element parent, String elemName, String text)
     {
@@ -171,22 +212,23 @@ public class DatabaseContextFactory implements Factory
             return useContext;
 
         /**
-         * if we haven't figured out our "default" connection manager,
-         * try and figure it out now. Basically, we'll try and instantiate
-         * the poolman context and if it's not found we'll use the Basic
-         * one (which relies on JNDI and the web application server).
+         * if we haven't figured out our "default" connection manager, try and figure it out now -- use the rules
+         * specified in the class documentation.
          */
 
         DatabaseContext dc = null;
+        String contextClassName = System.getProperty(CONTEXTNAME_PROPNAME, CUSTOM_CONTEXT_CLASS);
         try
         {
-            String contextName = System.getProperty(CONTEXTNAME_PROPNAME, BasicDatabaseContext.class.getName());
-            dc = (DatabaseContext) Class.forName(contextName).newInstance();
+            dc = (DatabaseContext) Class.forName(contextClassName).newInstance();
         }
         catch(ClassNotFoundException e)
         {
             dc = new BasicDatabaseContext();
-            e.printStackTrace();
+
+            // if the CUSTOM_CONTEXT_CLASS is not found, it's NOT really an error so don't print a message
+            if(! contextClassName.equals(CUSTOM_CONTEXT_CLASS))
+                e.printStackTrace();
         }
         catch(IllegalAccessException e)
         {
