@@ -116,7 +116,7 @@ public class TextReportSkin implements ReportSkin
 			{
 				ReportColumn rcd = columns.getColumn(i);
 				if(! states[i].isHidden())
-					writeText(writer, rcd.getHeading(), i < lastDataCol);
+					writeText(writer, rcd.getHeading().getValue(rc), i < lastDataCol);
 			}
 		}
 		else
