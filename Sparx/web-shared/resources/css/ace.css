@@ -63,3 +63,5 @@ a.table_struct:hover { text-decoration: underline; }
 .bodysubject { color: #191970; font-variant: small-caps; font-weight: bold; font-size: 10pt; font-family: Verdana; text-align: left; letter-spacing: 200%; border-bottom: 4pt solid #696969 }
 .bodycopyEmphasis { color: #4169e1; font-style: italic; font-size: 10pt; font-family: Verdana; text-align: left }
 .subHeads   { color: white; font-weight: 800; font-size: 25px; font-family: Verdana; text-decoration: none; text-align: left }
+
+pre { font-family: lucida console, courier, fixed; font-size: 8pt; }
