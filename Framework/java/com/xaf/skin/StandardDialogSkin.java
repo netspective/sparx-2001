@@ -407,7 +407,7 @@ public class StandardDialogSkin implements DialogSkin
 
 		String name = field.getQualifiedName();
 		String caption = field.getCaption(dc);
-		ArrayList fieldChildren = field.getChildren();
+		List fieldChildren = field.getChildren();
 		if(caption != null && fieldChildren != null && caption.equals(DialogField.GENERATE_CAPTION))
 		{
 			StringBuffer generated = new StringBuffer();
@@ -496,7 +496,7 @@ public class StandardDialogSkin implements DialogSkin
 	{
 		long startTime = new Date().getTime();
 
-        List fieldErrorMsgs = dc.getErrorsCount() > 0 ? new ArrayList() : null;
+        List fieldErrorMsgs = new ArrayList();
         List dlgErrorMsgs = dc.getErrorMessages();
         if(dlgErrorMsgs != null)
             fieldErrorMsgs.addAll(dlgErrorMsgs);
@@ -593,7 +593,7 @@ public class StandardDialogSkin implements DialogSkin
 		String sharedScriptsUrl = appConfig.getValue(dc, "framework.shared.scripts-url");
 
         StringBuffer errorMsgsHtml = new StringBuffer();
-        if(fieldErrorMsgs != null)
+        if(fieldErrorMsgs.size() > 0)
         {
             errorMsgsHtml.append("<tr><td colspan='"+dlgTableColSpan+"'><ul type=square><font "+ controlAreaFontAttrs +"><font "+ errorMsgHdFontAttrs +"><b>"+ errorMsgHdText +"</b></font>\n");
             for(int i = 0; i < fieldErrorMsgs.size(); i++)

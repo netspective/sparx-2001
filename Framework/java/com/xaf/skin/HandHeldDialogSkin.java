@@ -106,7 +106,7 @@ public class HandHeldDialogSkin implements DialogSkin
 
 		String name = field.getQualifiedName();
 		String caption = field.getCaption(dc);
-		ArrayList fieldChildren = field.getChildren();
+		List fieldChildren = field.getChildren();
 		if(caption != null && fieldChildren != null && caption.equals(DialogField.GENERATE_CAPTION))
 		{
 			StringBuffer generated = new StringBuffer();
