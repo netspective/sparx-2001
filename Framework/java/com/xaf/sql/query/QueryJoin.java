@@ -20,6 +20,8 @@ public class QueryJoin
 	private String criteria;
 	private int ruleWeight;
 	private boolean autoInclude;
+    private String implyJoinsStr;
+    private QueryJoin[] implyJoins;
 
     public QueryJoin()
     {
@@ -29,6 +31,7 @@ public class QueryJoin
 	public String getTableName() { return tableName; }
 	public String getCriteria() { return criteria; }
 	public String getFromClauseExpr() { return fromClauseExpr; }
+    public QueryJoin[] getImpliedJoins() { return implyJoins; }
 	public boolean shouldAutoInclude() { return autoInclude; }
 
 	public void finalizeDefn(QueryDefinition queryDefn)
@@ -37,6 +40,28 @@ public class QueryJoin
 			fromClauseExpr = tableName;
 		else
 			fromClauseExpr = tableName + " " + name;
+
+        if(implyJoinsStr != null)
+        {
+            StringTokenizer st = new StringTokenizer(implyJoinsStr, ",");
+            List implyJoinsList = new ArrayList();
+            while(st.hasMoreTokens())
+            {
+                String join = st.nextToken();
+                QueryJoin joinDefn = queryDefn.getJoin(join);
+                if(joinDefn == null)
+                {
+                    queryDefn.addError("field-join", "join '"+ join +"' not found in imply-joins for join '"+ name +"'");
+                }
+                else
+                {
+                    implyJoinsList.add(joinDefn);
+                }
+            }
+            implyJoins = (QueryJoin[]) implyJoinsList.toArray(new QueryJoin[implyJoinsList.size()]);
+        }
+        else
+            implyJoins = null;
 	}
 
 	public void importFromXml(Element elem)
@@ -55,5 +80,9 @@ public class QueryJoin
 		value = elem.getAttribute("weight");
 		if(value.length() > 0)
 			ruleWeight = Integer.parseInt(value);
+
+        implyJoinsStr = elem.getAttribute("imply-join");
+		if(implyJoinsStr.length() == 0)
+            implyJoinsStr = null;
 	}
 }

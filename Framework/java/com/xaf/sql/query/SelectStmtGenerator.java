@@ -17,7 +17,7 @@ public class SelectStmtGenerator
 {
 	private QueryDefinition queryDefn;
 	private QuerySelect select;
-	private HashSet joins = new HashSet();
+	private Set joins = new HashSet();
 	private List selectClause = new ArrayList();
 	private List fromClause = new ArrayList();
 	private List whereJoinClause = new ArrayList();
@@ -53,14 +53,21 @@ public class SelectStmtGenerator
      */
     public void addJoin(QueryJoin join)
     {
-        if(join != null && ! joins.contains(join))
-		{
-			fromClause.add(join.getFromClauseExpr());
-			String whereCriteria = join.getCriteria();
-			if(whereCriteria != null)
-				whereJoinClause.add(whereCriteria);
-			joins.add(join);
-		}
+        if(join == null || joins.contains(join))
+            return;
+
+        fromClause.add(join.getFromClauseExpr());
+        String whereCriteria = join.getCriteria();
+        if(whereCriteria != null)
+            whereJoinClause.add(whereCriteria);
+        joins.add(join);
+
+        QueryJoin[] impliedJoins = join.getImpliedJoins();
+        if(impliedJoins != null && impliedJoins.length > 0)
+        {
+            for(int i = 0; i < impliedJoins.length; i++)
+                addJoin(impliedJoins[i]);
+        }
     }
 
 	public void addParam(SingleValueSource bindParam)
