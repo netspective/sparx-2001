@@ -128,7 +128,7 @@ public class QuerySelectDialog extends Dialog
 		if(debugStr != null && debugStr.equals("1"))
 		{
             String sql = select.getSql(dc);
-            return "<p><pre><code>SQL:<p>" + sql + (sql == null ? "<p>" + select.getErrorSql() : "") + "</code></pre>";
+            return "<p><pre><code>SQL:<p>" + sql + (sql == null ? "<p>" + select.getErrorSql() : select.getBindParamsDebugHtml(dc)) + "</code></pre>";
 		}
 
 		String transactionId = dc.getTransactionId();

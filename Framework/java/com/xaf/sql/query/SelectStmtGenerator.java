@@ -228,30 +228,6 @@ public class SelectStmtGenerator
 			}
 		}
 
-		/*
-		int bindCount = bindParams.size();
-		int bindLast = bindCount-1;
-		if(bindCount > 0)
-		{
-			sql.append("bind \n");
-			for(int bp = 0; bp < bindCount; bp++)
-			{
-				Object bindParam = bindParams.get(bp);
-				if(bindParam instanceof BindParameter)
-				{
-					sql.append("  (BindParameter) '" + ((BindParameter) bindParam).getValue(null) + "'");
-				}
-				else
-				{
-					sql.append("  (SingleValueSource) '" + ((SingleValueSource) bindParam).getValue((DatabaseContext) null) + "'");
-				}
-				if(bp != bindLast)
-					sql.append(", ");
-				sql.append("\n");
-			}
-		}
-		*/
-
 		valid = true;
 		return sql.toString();
 	}

@@ -70,6 +70,29 @@ public class QuerySelect
 		return selectSql;
 	}
 
+    public String getBindParamsDebugHtml(ValueContext vc)
+    {
+        StringBuffer result = new StringBuffer();
+		result.append("<p><br>BIND PARAMETERS:<ol>");
+
+		int bindCount = bindParams.size();
+		if(bindCount > 0)
+		{
+            for(int i = 0; i < bindCount; i++)
+            {
+                SingleValueSource vs = (SingleValueSource) bindParams.get(i);
+                result.append("<li><code><b>");
+                result.append(vs.getId());
+                result.append("</b> = ");
+                result.append(vs.getValue(vc));
+                result.append("</code></li>");
+            }
+		}
+
+        result.append("</ol>");
+        return result.toString();
+    }
+
 	public void addError(String group, String message)
 	{
 		if(errors == null) errors = new ArrayList();
