@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.13 2002-11-30 16:44:23 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.14 2002-12-26 19:26:07 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -64,26 +64,29 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import com.netspective.sparx.util.metric.Metric;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.dal.ConnectionContext;
+import com.netspective.sparx.xif.SchemaDocument;
+import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xaf.report.ColumnDataCalculatorFactory;
 import com.netspective.sparx.xaf.report.Report;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
+import com.netspective.sparx.xaf.querydefn.SqlComparisonFactory;
+import com.netspective.sparx.xaf.querydefn.SqlComparison;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.xml.XmlSource;
@@ -122,24 +125,133 @@ public class StatementManager extends XmlSource
 
     static private Map dynamicSql = new HashMap();
 
+    public class TableStatementReference
+    {
+        private Element pkgElem;
+        private Element defnElem;
+
+        public TableStatementReference(Element pkgElem, Element defnElem)
+        {
+            this.pkgElem = pkgElem;
+            this.defnElem = defnElem;
+        }
+
+        public void resolveTableStatement(XmlSource xmlSource, ServletContext context, SchemaDocument defaultSchemaDoc)
+        {
+            final String schemaFileName = defnElem.getAttribute("schema");
+
+            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? (defaultSchemaDoc != null ? defaultSchemaDoc : SchemaDocFactory.getDoc(context)) : SchemaDocFactory.getDoc(schemaFileName);
+            if(schemaDoc == null)
+                addError("Schema '"+ schemaFileName +"' not found");
+            else
+            {
+                if(dependentSchemaDocs == null)
+                    dependentSchemaDocs = new HashSet();
+                dependentSchemaDocs.add(schemaDoc);
+
+                String tableNamePattern = defnElem.getAttribute("table");
+                if(tableNamePattern.length() == 0) tableNamePattern = defnElem.getAttribute("tables");
+
+                List namesOfTablesWithStatements = schemaDoc.getNamesOfTablesWithStatementDefns();
+                if(namesOfTablesWithStatements != null)
+                {
+                    StringListMatcher matcher = new StringListMatcher(namesOfTablesWithStatements, tableNamePattern);
+                    List matchedTableNames = matcher.getMatchedItems();
+                    for(int i = 0; i < matchedTableNames.size(); i++)
+                    {
+                        String matchedTableName = (String) matchedTableNames.get(i);
+                        Map tableStatementDefinitions = schemaDoc.getTableStatementDefns(matchedTableName);
+                        if(tableStatementDefinitions != null)
+                        {
+                            Iterator defns = tableStatementDefinitions.entrySet().iterator();
+                            while(defns.hasNext())
+                            {
+                                Map.Entry entry = (Map.Entry) defns.next();
+                                SchemaDocument.TableStatementDefinition defn = (SchemaDocument.TableStatementDefinition) entry.getValue();
+                                Element actualStmtElem = defn.createStatementElement(pkgElem, defnElem);
+                                actualStmtElem.setAttribute("table", matchedTableName);
+                                String stmtPkg = pkgElem.getAttribute("package");
+                                if(defnElem.getAttribute("prefix-table").equals("yes"))
+                                    stmtPkg = stmtPkg + "." + defn.getTable().getAttribute("name");
+                                String stmtPkgDataSrc = pkgElem.getAttribute("data-source");
+                                if(stmtPkgDataSrc.length() == 0)
+                                    stmtPkgDataSrc = null;
+                                createStatementInfo(actualStmtElem, stmtPkg, stmtPkgDataSrc);
+                            }
+                        }
+                        else
+                            addError("Table statements for table '"+ matchedTableName +"' not found in schema '"+ schemaFileName +"'");
+                    }
+                }
+            }
+        }
+    }
+
     private Map statements = new HashMap();
     private Map queryDefns = new HashMap();
     private Map reports = new HashMap();
+    private Set dependentSchemaDocs;
+    private boolean finalized;
+    private Set finalizeTableStatements;
 
     public StatementManager(File file)
     {
         loadDocument(file);
     }
 
-    public StatementInfo getStatement(String stmtId)
+    public boolean sourceChanged()
+    {
+        if(super.sourceChanged())
+            return true;
+
+        if(dependentSchemaDocs == null)
+            return false;
+
+        Iterator i = dependentSchemaDocs.iterator();
+        while (i.hasNext())
+        {
+            SchemaDocument schemaDocument = (SchemaDocument) i.next();
+            if(schemaDocument.sourceChanged())
+                return true;
+        }
+
+        return false;
+    }
+
+    public Document getDocument(ServletContext context, SchemaDocument defaultSchemaDoc)
+    {
+        Document result = getDocument();
+        finalizeStatements(context, defaultSchemaDoc);
+        return result;
+    }
+
+    private void finalizeStatements(ServletContext context, SchemaDocument defaultSchemaDoc)
+    {
+        if(finalizeTableStatements != null)
+        {
+            Iterator i = finalizeTableStatements.iterator();
+            while (i.hasNext())
+            {
+                TableStatementReference tableDialogReference = (TableStatementReference) i.next();
+                tableDialogReference.resolveTableStatement(this, context, defaultSchemaDoc);
+            }
+            finalizeTableStatements = null;
+            addMetaInformation();
+        }
+        finalized = true;
+    }
+
+    public StatementInfo getStatement(ServletContext context, SchemaDocument defaultSchemaDoc, String stmtId)
     {
         reload();
+        if(!finalized) finalizeStatements(context, defaultSchemaDoc);
         return (StatementInfo) statements.get(stmtId);
     }
 
-    public Map getStatements()
+    public Map getStatements(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         reload();
+        if(!finalized) finalizeStatements(context, defaultSchemaDoc);
         return statements;
     }
 
@@ -223,6 +335,8 @@ public class StatementManager extends XmlSource
     {
         statements.clear();
         queryDefns.clear();
+        dependentSchemaDocs = null;
+        finalizeTableStatements = null;
 
         if(SQL_TYPES_MAP.size() == 0)
         {
@@ -262,17 +376,12 @@ public class StatementManager extends XmlSource
                         continue;
                     String childName = stmtsChild.getNodeName();
                     if(childName.equals("statement"))
+                        createStatementInfo((Element) stmtsChild, stmtPkg, stmtPkgDataSrc);
+                    else if(childName.equals("table-statement") || childName.equals("table-statements"))
                     {
-                        Element stmtElem = (Element) stmtsChild;
-                        ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(stmtElem.getAttribute("class"), StatementInfo.class, true);
-                        StatementInfo si = (StatementInfo) instanceGen.getInstance();
-                        processTemplates(stmtElem);
-                        si.importFromXml(this, stmtElem, stmtPkg, stmtPkgDataSrc);
-
-                        String statementId = si.getId();
-                        statements.put(statementId, si);
-                        stmtElem.setAttribute("qualified-name", si.getId());
-                        stmtElem.setAttribute("package", stmtPkg);
+                        if(finalizeTableStatements == null)
+                            finalizeTableStatements = new HashSet();
+                        finalizeTableStatements.add(new TableStatementReference(statementsElem, (Element) stmtsChild));
                     }
                 }
             }
@@ -326,6 +435,12 @@ public class StatementManager extends XmlSource
                     errors.add("ColumnDataCalculator class '" + className + "' not found: " + e.toString());
                 }
             }
+            else if(nodeName.equals("register-sql-comparison"))
+            {
+                Element typeElem = (Element) node;
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(typeElem.getAttribute("class"), SqlComparison.class, true);
+                SqlComparisonFactory.addComparison((SqlComparison) instanceGen.getInstance(), new String[] { typeElem.getAttribute("name") });
+            }
             else
             {
                 catalogElement((Element) node);
@@ -335,9 +450,21 @@ public class StatementManager extends XmlSource
         addMetaInformation();
     }
 
+    private StatementInfo createStatementInfo(Element stmtElem, String stmtPkg, String stmtPkgDataSrc)
+    {
+        ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(stmtElem.getAttribute("class"), StatementInfo.class, true);
+        StatementInfo si = (StatementInfo) instanceGen.getInstance();
+        si.importFromXml(this, stmtElem, stmtPkg, stmtPkgDataSrc);
+
+        String statementId = si.getId();
+        statements.put(statementId, si);
+        return si;
+    }
+
     public StatementInfo.ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         reload();
+        if(!finalized) finalizeStatements(vc.getServletContext(), null);
 
         StatementInfo si = (StatementInfo) statements.get(statementId);
         if(si == null)
@@ -349,6 +476,7 @@ public class StatementManager extends XmlSource
     public StatementInfo.ResultInfo execute(ConnectionContext cc, ValueContext vc, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         reload();
+        if(!finalized) finalizeStatements(vc.getServletContext(), null);
 
         StatementInfo si = (StatementInfo) statements.get(statementId);
         if(si == null)
@@ -562,11 +690,11 @@ public class StatementManager extends XmlSource
             return null;
     }
 
-    public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+    public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId, String[] urlFormats) throws StatementNotFoundException, NamingException, SQLException, IOException
     {
         StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         if(ri != null)
-            ri.produceReport(writer, dc, vc, skin, params, reportId);
+            ri.produceReport(writer, dc, vc, skin, params, reportId, urlFormats);
     }
 
     public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
