@@ -520,7 +520,7 @@ function DialogField_getFieldAreaElem_IE4(dialog)
     var fieldAreaElem = getControl_IE4(dialog, fieldAreaId);
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
-        fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
+        fieldAreaId = GRIDFIELDROW_PREFIX + this.qualifiedName;
         fieldAreaElem = getControl_IE4(dialog, fieldAreaId);
     }    
     return fieldAreaElem;
@@ -536,7 +536,7 @@ function DialogField_getFieldAreaElem_Dom(dialog)
     var fieldAreaElem = getControl_Dom(dialog, fieldAreaId);  
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
-        fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
+        fieldAreaId = GRIDFIELDROW_PREFIX + this.qualifiedName;
         fieldAreaElem = getControl_Dom(dialog, fieldAreaId);   
     }        
     return fieldAreaElem;
@@ -552,7 +552,7 @@ function DialogField_getFieldAreaElem_NS4(dialog)
     var fieldAreaElem = getControl_NS4(dialog, fieldAreaId);  
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
-        fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
+        fieldAreaId = GRIDFIELDROW_PREFIX + this.qualifiedName;
         fieldAreaElem = getControl_NS4(dialog, fieldAreaId);
     }    
     return fieldAreaElem;
