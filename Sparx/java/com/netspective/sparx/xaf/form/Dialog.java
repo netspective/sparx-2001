@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.4 2002-07-12 21:19:59 aye.thu Exp $
+ * $Id: Dialog.java,v 1.5 2002-08-17 15:13:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -73,6 +73,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.apache.log4j.Category;
 
 import com.netspective.sparx.xaf.form.field.FileField;
 import com.netspective.sparx.xaf.form.field.SelectField;
@@ -84,6 +85,8 @@ import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.LogManager;
 
 /**
  * The <code>Dialog</code> object contains the dialog/form's structural information, field types, rules, and
@@ -787,6 +790,13 @@ public class Dialog
             TaskContext tc = new TaskContext(dc);
 
             int numTasksExecuted = 0;
+            Category cat = AppServerCategory.getInstance(LogManager.DEBUG_PAGE);
+            if(cat.isDebugEnabled())
+            {
+                cat.debug("Current data-cmd is " + dc.getDataCommandText(false));
+                cat.debug(executeTasks.getDebugHtml(tc));
+            }
+
             if(executeTasks.allowExecute(tc))
             {
                 try
