@@ -404,7 +404,7 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
 
         if(heading != null)
         {
-            String sep = "<a name=\"" + URLEncoder.encode(heading) + "\">" + heading + "</a>";
+            String sep = "<a class=\"dialog-fields-separator-link\" name=\"" + URLEncoder.encode(heading) + "\">" + heading + "</a>";
             if(field.getBannerText() != null)
             {
                 sep += "<br><font " + separatorBannerTextFontAttrs + ">";

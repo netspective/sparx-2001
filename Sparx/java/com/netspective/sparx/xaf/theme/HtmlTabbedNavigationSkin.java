@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.4 2003-03-12 06:33:45 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.5 2003-03-14 06:56:50 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -252,17 +252,26 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             {
                 writer.write("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
                 writer.write("			<tr>\n");
-                writer.write("				<td class=\"active-user-anchor\"><img class=\"active-user-anchor\" src=\"" +
+                writer.write("				<td class=\"active-user-anchor\"><img class=\"active-user-anchor\" src=\"" + nc.getRootUrl() +
                         getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"100%\" width=\"100%\" border=\"0\"></td>\n");
                 writer.write("				<td nowrap><span class=\"active-user-heading\">&nbsp;Org&nbsp;</span></td>\n");
-                writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" + orgId + "\">" +
+                writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" + orgId + "\">&nbsp;&nbsp;" +
                         orgName.toUpperCase() + "</a></td>\n");
                 writer.write("			</tr>\n");
                 writer.write("		</table>\n");
             }
             else
             {
-                writer.write("<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"1\" width=\"100%\" border=\"0\">");
+                //writer.write("<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"1\" width=\"100%\" border=\"0\">");
+                writer.write("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
+                writer.write("			<tr>\n");
+                writer.write("				<td class=\"active-user-anchor\"><img class=\"active-user-anchor\" src=\"" +  nc.getRootUrl() +
+                        getThemeImagePath() + "/spacer.gif\" alt=\"\" height=\"100%\" width=\"100%\" border=\"0\"></td>\n");
+                writer.write("				<td nowrap><span class=\"active-user-heading\">&nbsp;Org&nbsp;</span></td>\n");
+                writer.write("				<td nowrap><a class=\"active-user\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" + orgId + "\">&nbsp;&nbsp;" +
+                         "TEST ORG</a></td>\n");
+                writer.write("			</tr>\n");
+                writer.write("		</table>\n");
             }
             writer.write("	</td>\n");
             writer.write("	<td nowrap width=\"50\" >\n");
@@ -364,7 +373,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() +
                             getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
                             "width=\"12\" height=\"12\" border=\"0\"></td>");
-                    writer.write("      <td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() +
+                    writer.write("      <td align=\"left\" valign=\"top\" width=\"100%\"><img src=\"" + nc.getRootUrl() +
                             getThemeImagePath() + "/body/spacer-big.gif\" " +
                             "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
                     writer.write("  </tr>");
@@ -385,7 +394,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() +
                             getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
                             "width=\"12\" height=\"12\" border=\"0\"></td>");
-                    writer.write("      <td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() +
+                    writer.write("      <td align=\"left\" valign=\"top\" width=\"100%\"><img src=\"" + nc.getRootUrl() +
                             getThemeImagePath() + "/body/spacer-big.gif\" " +
                             "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
                     writer.write("  </tr>");
@@ -403,7 +412,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() +
                             getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
                             "width=\"12\" height=\"12\" border=\"0\"></td>");
-                    writer.write("      <td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() +
+                    writer.write("      <td align=\"left\" valign=\"top\" width=\"100%\"><img src=\"" + nc.getRootUrl() +
                             getThemeImagePath() + "/body/spacer-big.gif\" " +
                             "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
                     writer.write("  </tr>");
