@@ -35,6 +35,7 @@ public class ValueSourceFactory
         srcClasses.put("create-app-url", ServletContextUriValue.class);
         srcClasses.put("config", ConfigurationValue.class);
         srcClasses.put("config-expr", ConfigurationExprValue.class);
+        srcClasses.put("filesystem-entries", FilesystemEntriesListValue.class);
         srcClasses.put("custom-sql", CustomSqlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
         defaultsAvailable = true;
     }

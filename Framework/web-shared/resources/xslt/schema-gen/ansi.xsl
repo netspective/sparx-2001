@@ -3,13 +3,14 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="text"/>
 
-<xsl:param name="generate"/>
-<xsl:param name="table-name"/>
 <xsl:param name="generate-drop-table"/>
 <xsl:param name="generate-drop-seq"/>
-<xsl:param name="generate-seq">yes</xsl:param>
 
-<xsl:param name="app.database-root-path"/>
+<!-- these can be overriden in the child stylesheets (for specific databases) -->
+
+<xsl:variable name="dbms-id">ansi</xsl:variable>
+<xsl:variable name="generate-constraints">yes</xsl:variable>
+<xsl:variable name="generate-seq">yes</xsl:variable>
 
 <xsl:template match="schema">
 	<xsl:for-each select="table">
@@ -19,30 +20,35 @@
 				<xsl:with-param name="table" select="."/>
 			</xsl:call-template>
 		</xsl:if>
-		<!-- This only supports primary keys with single columns -->
-		<xsl:for-each select="column[not(@default) and (@required='yes' or @primarykey='yes')]">
-			<xsl:call-template name="required">
-				<xsl:with-param name="table" select="$table"/>
-				<xsl:with-param name="column" select="."/>
-			</xsl:call-template>
-		</xsl:for-each>
-		<!-- This only supports primary keys with single columns -->
-		<xsl:for-each select="column[@primarykey='yes']">
-			<xsl:call-template name="pkey-ref">
-				<xsl:with-param name="table" select="$table"/>
-				<xsl:with-param name="column" select="."/>
-			</xsl:call-template>
-		</xsl:for-each>
+		
+		<xsl:if test="$generate-constraints = 'yes'">
+			<!-- This only supports primary keys with single columns -->
+			<xsl:for-each select="column[not(@default) and (@required='yes' or @primarykey='yes')]">
+				<xsl:call-template name="required">
+					<xsl:with-param name="table" select="$table"/>
+					<xsl:with-param name="column" select="."/>
+				</xsl:call-template>
+			</xsl:for-each>
+			<!-- This only supports primary keys with single columns -->
+			<xsl:for-each select="column[@primarykey='yes']">
+				<xsl:call-template name="pkey-ref">
+					<xsl:with-param name="table" select="$table"/>
+					<xsl:with-param name="column" select="."/>
+				</xsl:call-template>
+			</xsl:for-each>
+		</xsl:if>
 	</xsl:for-each>
-	<xsl:for-each select="table">
-		<xsl:variable name="table" select="."/>
-		<xsl:for-each select="column[@reftype]">
-			<xsl:call-template name="fkey-ref">
-				<xsl:with-param name="table" select="$table"/>
-				<xsl:with-param name="column" select="."/>
-			</xsl:call-template>
+	<xsl:if test="$generate-constraints = 'yes'">
+		<xsl:for-each select="table">
+			<xsl:variable name="table" select="."/>
+			<xsl:for-each select="column[@reftype]">
+				<xsl:call-template name="fkey-ref">
+					<xsl:with-param name="table" select="$table"/>
+					<xsl:with-param name="column" select="."/>
+				</xsl:call-template>
+			</xsl:for-each>
 		</xsl:for-each>
-	</xsl:for-each>
+	</xsl:if>
 	<xsl:for-each select="table[enum]">
 		<xsl:call-template name="enum-data">
 			<xsl:with-param name="table" select="."/>
@@ -64,7 +70,14 @@ drop table <xsl:value-of select="$table/@name"/>;
 	</xsl:call-template>
 </xsl:for-each>
 </xsl:if>
-create table <xsl:value-of select="$table/@name"/>
+
+<xsl:variable name="table-modifiers">
+	<xsl:call-template name="table-modifiers">
+		<xsl:with-param name="table" select="$table"/>
+	</xsl:call-template>
+</xsl:variable>
+
+create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$table/@name"/>
 (
 <xsl:for-each select="$table/column">
 	<xsl:call-template name="column-definition">
@@ -78,6 +91,9 @@ create table <xsl:value-of select="$table/@name"/>
 		<xsl:with-param name="index" select="."/>
 	</xsl:call-template>
 </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="table-modifiers">
 </xsl:template>
 
 <xsl:template name="sequence-definition">
@@ -111,6 +127,10 @@ create table <xsl:value-of select="$table/@name"/>
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="$column"/>
 	</xsl:call-template>
+	<xsl:call-template name="column-sql-modifiers">
+		<xsl:with-param name="table" select="$table"/>
+		<xsl:with-param name="column" select="$column"/>
+	</xsl:call-template>
 	<xsl:if test="$column/@default">
 		<xsl:call-template name="column-default">
 			<xsl:with-param name="table" select="$table"/>
@@ -128,7 +148,28 @@ create table <xsl:value-of select="$table/@name"/>
 	<xsl:param name="column"/>
 
 	<xsl:text> </xsl:text>
-	<xsl:value-of select="$column/sqldefn"/>
+	<xsl:choose>
+		<xsl:when test="$column/sqldefn[@dbms = $dbms-id]">
+			<xsl:value-of select="$column/sqldefn[@dbms = $dbms-id]"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$column/sqldefn[@dbms = 'ansi']"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+
+<xsl:template name="column-sql-modifiers">
+	<xsl:param name="table"/>
+	<xsl:param name="column"/>
+
+	<xsl:if test="$generate-constraints != 'yes'">		
+		<xsl:if test="@primarykey='yes'">
+			<xsl:text> PRIMARY KEY</xsl:text>
+		</xsl:if>
+		<xsl:if test="@required='yes'">
+			<xsl:text> NOT NULL</xsl:text>
+		</xsl:if>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template name="column-default">
@@ -211,7 +252,6 @@ create table <xsl:value-of select="$table/@name"/>
 	<xsl:text>));
 </xsl:text>
 </xsl:template>
-
 
 <xsl:template name="enum-data">
 	<xsl:param name="table"/>

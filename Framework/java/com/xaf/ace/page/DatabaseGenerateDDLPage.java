@@ -23,35 +23,14 @@ public class DatabaseGenerateDDLPage extends AceServletPage
 
 	private DatabaseGenerateDDLDialog dialog;
 
-	public SchemaDocument getSchemaDocument(PageContext pc)
-	{
-		Configuration appConfig = ((PageControllerServlet) pc.getServlet()).getAppConfig();
-		return SchemaDocFactory.getDoc(appConfig.getValue(pc, "app.schema.source-file"));
-	}
-
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
         PrintWriter out = pc.getResponse().getWriter();
 		if(dialog == null)
 			dialog = new DatabaseGenerateDDLDialog();
 
-		ServletContext context = pc.getServletContext();
-		SchemaDocument schema = getSchemaDocument(pc);
-
-		DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
-		dialog.prepareContext(dc);
-		if(! dc.inExecuteMode())
-		{
-			out.write("&nbsp;<p><center>");
-			out.write(dialog.getHtml(dc, true));
-			out.write("</center>");
-			return;
-		}
-
-		String outputPath = dc.getValue("output_path");
-		this.transform(pc, getSchemaDocument(pc).getDocument(), "framework.ace.schema-generator-xsl", outputPath);
-
-		if(outputPath != null)
-			out.write("<p>Saved generated schema in <a href='" + outputPath + "'>"+ outputPath +"</a>");
+        out.write("<p><center>");
+        out.write(dialog.getHtml(pc.getServletContext(), pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin()));
+        out.write("</center>");
     }
 }

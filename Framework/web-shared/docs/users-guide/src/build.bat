@@ -16,9 +16,9 @@ set XEP_HOME=c:\utils\java\xep-2.50
 set CLASSPATH=%XERCES_JAR%;%XALAN_JAR%;%FOP_HOME%\build\fop.jar;%FOP_HOME%\lib\batik.jar;%FOP_HOME%\lib\jimi-1.0.jar;%JFOR_HOME%\jfor-0.5.jar
 echo classpath is now '%CLASSPATH%'
 
-echo Building Documentation (PDF)...
-java org.apache.xalan.xslt.Process -IN %XML_SOURCE_FILE% -XSL %DOCBOOK_XSL_HOME%\fo\docbook.xsl -OUT ..\sparx.fo
-java org.apache.fop.apps.Fop -fo ..\sparx.fo -pdf ..\sparx.pdf
+rem echo Building Documentation (PDF)...
+rem java org.apache.xalan.xslt.Process -IN %XML_SOURCE_FILE% -XSL %DOCBOOK_XSL_HOME%\fo\docbook.xsl -OUT ..\sparx.fo
+rem java org.apache.fop.apps.Fop -fo ..\sparx.fo -pdf ..\sparx.pdf
 rem %XEP_HOME%\run ..\sparx.fo
 
 rem echo Building Documentation (RTF)...

@@ -150,7 +150,7 @@ public class SchemaDocument extends XmlSource
         inheritNodes(column, dataTypeNodes);
 
         NodeList colInfo = column.getChildNodes();
-        Element sqlDefnElem = null;
+        ArrayList sqlDefnElems = new ArrayList();
         String size = null;
 
         size = column.getAttribute("size");
@@ -168,13 +168,16 @@ public class SchemaDocument extends XmlSource
                 fixupTableElement((Element) childNode);
 			}
             else if(nodeName.equals("sqldefn"))
-                sqlDefnElem = (Element) childNode;
+                sqlDefnElems.add(childNode);
             else if (size == null && nodeName.equals("size"))
                 size = childNode.getFirstChild().getNodeValue();
         }
 
-        if(sqlDefnElem != null && size != null)
-            replaceNodeValue(sqlDefnElem.getFirstChild(), "%size%", size);
+        if(size != null && sqlDefnElems.size() > 0)
+        {
+            for(int i = 0; i < sqlDefnElems.size(); i++)
+                replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "%size%", size);
+        }
     }
 
 	public String getPrimaryKey(Element table)
