@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<library>
+  <!--JBuilder Library Definition File-->
+  <fullname>Sparx Library</fullname>
+  <class>
+    <path>[../../../../Utils/app-servers/resin-2.0.2/lib/jdbc2_0-stdext.jar]</path>
+    <path>[../../../../Utils/app-servers/resin-2.0.2/lib/jsdk23.jar]</path>
+    <path>[../../../../Utils/java/jakarta-ant-1.3/lib/ant.jar]</path>
+    <path>[../../../../Utils/java/jakarta-log4j-1.1.2/dist/lib/log4j.jar]</path>
+    <path>[../../../../Utils/java/jakarta-oro-2.0.3/jakarta-oro-2.0.3.jar]</path>
+    <path>[../../../../Utils/java/xalan-j_2_1_0/bin/xalan.jar]</path>
+    <path>[../../../../Utils/java/xerces-1_4_1/xerces.jar]</path>
+  </class>
+</library>
+
