@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.8 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.9 2002-10-10 22:39:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -118,6 +118,54 @@ public class QueryBuilderDialog extends Dialog
     private int maxConditions;
     private QueryDefinition queryDefn;
 
+    public static class ConditionField extends DialogField
+    {
+        SelectField queryFieldsSelect;
+        SelectField compareSelect;
+        TextField valueText;
+
+        public ConditionField(int index, int lastConditionNum, QueryDefnFieldsListValue fieldsList, ListValueSource compList)
+        {
+            super("condition_" + index, null);
+
+            queryFieldsSelect =
+                    new SelectField("field", null, SelectField.SELECTSTYLE_COMBO, fieldsList);
+
+            compareSelect =
+                    new SelectField("compare", null, SelectField.SELECTSTYLE_COMBO, compList);
+
+            valueText = new TextField("value", null);
+
+            addChildField(queryFieldsSelect);
+            addChildField(compareSelect);
+            addChildField(valueText);
+
+            if(index != lastConditionNum)
+            {
+                SelectField joinSelect =
+                        new SelectField("join", null, SelectField.SELECTSTYLE_COMBO, " ;and;or");
+                addChildField(joinSelect);
+            }
+
+            if(index > 0)
+            {
+                addConditionalAction(new DialogFieldConditionalDisplay(this, "condition_" + (index - 1) + ".join", "control.value != ' '"));
+            }
+        }
+
+        public boolean isVisible(DialogContext dc)
+        {
+            if(! super.isVisible(dc))
+                return false;
+
+            DialogContext.DialogFieldState state = dc.getFieldState(getQualifiedName());
+            if(state.flagIsSet(FLDFLAG_INVISIBLE))
+                return false;
+
+            return dc.inExecuteMode() ? dc.hasValue(valueText) : true;
+        }
+    }
+
     public QueryBuilderDialog()
     {
         setName("queryDialog");
@@ -128,7 +176,7 @@ public class QueryBuilderDialog extends Dialog
     {
         setName("queryDialog");
         setQueryDefn(queryDefn);
-        setFlag(QBDLGFLAG_ALLOW_DEBUG | QBDLGFLAG_ALWAYS_SHOW_RSNAV);
+        setFlag(QBDLGFLAG_ALLOW_DEBUG | DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA | QBDLGFLAG_ALWAYS_SHOW_RSNAV);
         setMaxConditions(5);
         setLoopEntries(true);
     }
@@ -169,33 +217,7 @@ public class QueryBuilderDialog extends Dialog
         addField(new SeparatorField("conditions_separator", "Conditions"));
         for(int i = 0; i < maxConditions; i++)
         {
-            SelectField queryFieldsSelect =
-                    new SelectField("field", null, SelectField.SELECTSTYLE_COMBO, fieldsList);
-
-            SelectField compareSelect =
-                    new SelectField("compare", null, SelectField.SELECTSTYLE_COMBO, compList);
-
-            TextField valueText = new TextField("value", null);
-
-            DialogField condition = new DialogField();
-            condition.setSimpleName("condition_" + i);
-            condition.addChildField(queryFieldsSelect);
-            condition.addChildField(compareSelect);
-            condition.addChildField(valueText);
-
-            if(i != lastConditionNum)
-            {
-                SelectField joinSelect =
-                        new SelectField("join", null, SelectField.SELECTSTYLE_COMBO, " ;and;or");
-                condition.addChildField(joinSelect);
-            }
-
-            if(i > 0)
-            {
-                condition.addConditionalAction(new DialogFieldConditionalDisplay(condition, "condition_" + (i - 1) + ".join", "control.value != ' '"));
-            }
-
-            addField(condition);
+            addField(new ConditionField(i, lastConditionNum, fieldsList, compList));
         }
     }
 
