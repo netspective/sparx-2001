@@ -21,13 +21,29 @@ Setup instructions:
 <project name="app" default="all" basedir="${basedir}">
 
 	<target name="global">
+		<!-- read environment variables into the namespace 'env.*' -->
 		<property environment="env"/>
-		<property name="sparx.home" value="${env.SPARX_HOME}"/>
+
+		<!-- setup the important paths so that we can do path conversations -->
+		<path id="sparx.home.path">
+			<pathelement location="${env.SPARX_HOME}"/>
+		</path>
+		<path id="app.root.path">
+			<pathelement location="${basedir}"/>
+		</path>
+
+		<pathconvert targetos="unix" property="sparx.home" refid="sparx.home.path"/>
 		<property name="sparx.lib.dir" value="${sparx.home}/lib"/>
 		<property name="sparx.java.dir" value="${sparx.home}/java"/>
 		<property name="sparx.shared.dir" value="${sparx.home}/web-shared"/>
-		<property name="app.WEB-INF" value="${basedir}/Site/WEB-INF"/>
-		<property name="app.config.file" value="${app.WEB-INF}/configuration.xml"/>
+		<property name="sparx.shared.resources.dir" value="${sparx.shared.dir}/resources"/>
+		<property name="sparx.shared.resources.templates.dir" value="${sparx.shared.dir}/resources/templates"/>
+		<property name="sparx.shared.resources.templates.WEB-INF.dir" value="${sparx.shared.dir}/resources/templates/WEB-INF"/>
+
+		<pathconvert targetos="unix" property="app.root.dir" refid="app.root.path"/>
+		<property name="app.site.root.dir" value="${app.root.dir}/Site"/>
+		<property name="app.WEB-INF.dir" value="${app.site.root.dir}/WEB-INF"/>
+		<property name="app.config.file" value="${app.WEB-INF.dir}/configuration.xml"/>
 
 		<!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
 		<taskdef name="sparx" classname="com.netspective.sparx.util.ant.BuildConfigurationTask"/>
@@ -37,8 +53,9 @@ Setup instructions:
     <target name="init" depends="global">
     	<tstamp/>
 
-    	<echo message="Running build in ${basedir}"/>
+    	<echo message="Running build in ${app.root.dir}"/>
 		<echo message="Sparx source is in ${sparx.java.dir}"/>
+		<echo message="Application Site root is ${app.site.root.dir}"/>
 
 		<!-- define all the tasks that will be used in this file -->
 		<taskdef name="config" classname="com.netspective.sparx.util.ant.ImportConfigurationTask"/>
@@ -49,6 +66,7 @@ Setup instructions:
 		<!-- read all of the configuration.xml entries into config.* entries -->
 		<config file="${app.config.file}" prefix="config." debug="no"/>
 
+		<echo message="Application WEB-INF is ${config.app.web-inf-root-path}"/>
 
 		<property name="app.classes.dir" value="${config.app.web-inf-root-path}/classes"/>
 		<property name="app.lib.dir" value="${config.app.web-inf-root-path}/lib"/>
@@ -58,16 +76,23 @@ Setup instructions:
 		<property name="app.documents.root.dir" value="${config.app.project-root}/Documents"/>
 		<property name="app.javadoc.root.dir" value="${app.documents.root.dir}/javadoc"/>
 
+		<available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
 		<property name="app.java.dal.dir" value="${config.app.database-root-path}/java"/>
 		<property name="app.java.dal.jar" value="${config.app.database-root-path}/dal.jar"/>
 		<property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
 
+		<available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
 		<property name="app.java.dcb.package" value="dialog.context"/>
 		<property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
 		<property name="app.java.dcb.jar" value="${app.java.dcb.dir}/dcb.jar"/>
 		<property name="app.java.dcb.doc.dir" value="${app.javadoc.root.dir}/dcb"/>
 
+		<available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
 		<property name="app.java.classpath" value="${app.classes.dir}:${app.lib.dir}/dal.jar:${app.lib.dir}/dcb.jar"/>
+
+		<echo message="app.classes.dir-exists = ${app.classes.dir-exists}"/>
+		<echo message="app.schema.source-file-exists = ${app.schema.source-file-exists}"/>
+		<echo message="app.ui.source-file-exists = ${app.ui.source-file-exists}"/>
 
 		<!-- show all the active classpaths -->
 		<cp listall="yes"/>
@@ -77,18 +102,56 @@ Setup instructions:
     ============================= Setup Sparx stuff for app =======================
     -->
 
+    <target name="setup-sparx-structure" depends="global">
+    	<mkdir dir="Database"/>
+    	<mkdir dir="Database/schema"/>
+    	<mkdir dir="Database/schema-src"/>
+		<copy file="${sparx.shared.resources.templates.dir}/Database/schema-src/datatypes.xml" todir="Database/schema-src"/>
+
+    	<mkdir dir="Documents"/>
+
+    	<mkdir dir="Site"/>
+    	<mkdir dir="Site/WEB-INF"/>
+    	<mkdir dir="Site/WEB-INF/classes"/>
+    	<mkdir dir="Site/WEB-INF/lib"/>
+    	<mkdir dir="Site/WEB-INF/tld"/>
+    	<mkdir dir="Site/WEB-INF/security"/>
+    	<mkdir dir="Site/WEB-INF/sql"/>
+    	<mkdir dir="Site/WEB-INF/ui"/>
+
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml" todir="Site/WEB-INF"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/resin.web.xml" todir="Site/WEB-INF"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="Site/WEB-INF"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="Site/WEB-INF/classes"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="Site/WEB-INF/tld"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="Site/WEB-INF/tld"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="Site/WEB-INF/security"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="Site/WEB-INF/ui"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="Site/WEB-INF/sql"/>
+    </target>
+
+    <target name="setup-sparx-libs" depends="global">
+		<copy file="${sparx.lib.dir}/sparx.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/redist/bsf.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/redist/log4j.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/redist/js.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/redist/oro.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/redist/xalan.jar" todir="Site/WEB-INF/lib"/>
+		<copy file="${sparx.lib.dir}/redist/xerces.jar" todir="Site/WEB-INF/lib"/>
+    </target>
+
     <target name="setup-sparx" depends="global">
     	<!-- Setup Sparx TagLib Descriptor File (sparx.tld) -->
-		<property name="sparx.default.taglib-descriptor.file" value="${sparx.shared.dir}/resources/templates/config/sparx.tld"/>
-		<property name="app.taglib-descriptor.file" value="${app.WEB-INF}/tld/sparx.tld"/>
+		<property name="sparx.default.taglib-descriptor.file" value="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld"/>
+		<property name="app.taglib-descriptor.file" value="${app.WEB-INF.dir}/tld/sparx.tld"/>
 
 		<echo message="Copying Sparx default taglib descriptor file ${sparx.default.taglib-descriptor.file} to ${app.taglib-descriptor.file}"/>
 		<copy file="${sparx.default.taglib-descriptor.file}" tofile="${app.taglib-descriptor.file}" overwrite="yes"/>
 
     	<!-- Setup Sparx Log4J Properties file (backup current, copy default, replace variables)  -->
-		<property name="sparx.default.log4j.properties.file" value="${sparx.shared.dir}/resources/templates/config/log4j.properties"/>
-		<property name="app.log4j.properties.file" value="${app.WEB-INF}/classes/log4j.properties"/>
-		<property name="app.log.dir" value="${app.WEB-INF}/log"/>
+		<property name="sparx.default.log4j.properties.file" value="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties"/>
+		<property name="app.log4j.properties.file" value="${app.WEB-INF.dir}/classes/log4j.properties"/>
+		<property name="app.log.dir" value="${app.WEB-INF.dir}/log"/>
 
 		<echo message="Backing up ${app.log4j.properties.file} to ${app.log4j.properties.file}.orig"/>
 		<copy file="${app.log4j.properties.file}" tofile="${app.log4j.properties.file}.orig" overwrite="yes"/>
@@ -99,7 +162,7 @@ Setup instructions:
 		<mkdir dir="${app.log.dir}"/>
 
     	<!-- Setup Sparx Configuration file (backup current, copy default, replace variables) -->
-		<property name="sparx.default.config.file" value="${sparx.shared.dir}/resources/templates/config/configuration.xml"/>
+		<property name="sparx.default.config.file" value="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml"/>
 
 		<echo message="Backing up ${app.config.file} to ${app.config.file}.orig"/>
 		<copy file="${app.config.file}" tofile="${app.config.file}.orig" overwrite="yes"/>
@@ -110,41 +173,46 @@ Setup instructions:
 		<echo message="Setting 'sparx.home' property in ${app.config.file} to ${sparx.home}"/>
 		<replace file="${app.config.file}" token="name=&quot;sparx.home&quot; value=&quot;{SPARX_HOME}&quot;" value="name=&quot;sparx.home&quot; value=&quot;${sparx.home}&quot;"/>
 
-		<echo message="Setting 'app.project-root' property in ${app.config.file} to ${basedir}"/>
-		<replace file="${app.config.file}" token="name=&quot;app.project-root&quot; value=&quot;{APP_HOME}&quot;" value="name=&quot;app.project-root&quot; value=&quot;${basedir}&quot;"/>
+		<echo message="Setting 'app.project-root' property in ${app.config.file} to ${app.root.dir}"/>
+		<replace file="${app.config.file}" token="name=&quot;app.project-root&quot; value=&quot;{APP_HOME}&quot;" value="name=&quot;app.project-root&quot; value=&quot;${app.root.dir}&quot;"/>
+    </target>
+
+    <target name="start-sparx-app" depends="setup-sparx-structure,setup-sparx-libs,setup-sparx">
+    	<echo message="All Sparx files copied. Please review Site/WEB-INF to create a valid web.xml file for your application server."/>
+    	<echo message="Required libraries copied into Site/WEB-INF/lib, please confirm that you want them in that location."/>
     </target>
 
     <target name="migrate-xaf12-sparx20" depends="global,setup-sparx">
     	<echo message="Replacing references to 'xaf.tld' with 'sparx.tld'."/>
-    	<replace dir="${basedir}" token="xaf.tld" value="sparx.tld" summary="yes"/>
-		<delete file="${app.WEB-INF}/tld/xaf.tld" quiet="yes"/>
+    	<replace dir="${app.root.dir}" token="xaf.tld" value="sparx.tld" summary="yes"/>
+		<delete file="${app.WEB-INF.dir}/tld/xaf.tld" quiet="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.log' with 'com.netspective.sparx.util.log'."/>
-    	<replace dir="${basedir}" token="com.xaf.log" value="com.netspective.sparx.log" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.log" value="com.netspective.sparx.log" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.ace' with 'com.netspective.sparx.ace'."/>
-    	<replace dir="${basedir}" token="com.xaf.ace" value="com.netspective.sparx.ace" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.ace" value="com.netspective.sparx.ace" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.config' with 'com.netspective.sparx.util.config'."/>
-    	<replace dir="${basedir}" token="com.xaf.config" value="com.netspective.sparx.util.config" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.config" value="com.netspective.sparx.util.config" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.value' with 'com.netspective.sparx.util.value'."/>
-    	<replace dir="${basedir}" token="com.xaf.value" value="com.netspective.sparx.util.value" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.value" value="com.netspective.sparx.util.value" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.navigate.taglib' with 'com.netspective.sparx.xaf.taglib'."/>
-    	<replace dir="${basedir}" token="com.xaf.navigate.taglib" value="com.netspective.sparx.xaf.taglib" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.navigate.taglib" value="com.netspective.sparx.xaf.taglib" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.db.schema' with 'com.netspective.sparx.xif.dal'."/>
-    	<replace dir="${basedir}" token="com.xaf.db.schema" value="com.netspective.sparx.dal" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.db.schema" value="com.netspective.sparx.dal" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.db.ConnectionContext' with 'com.netspective.sparx.xif.dal.ConnectionContext'."/>
-    	<replace dir="${basedir}" token="com.xaf.db.ConnectionContext" value="com.netspective.sparx.xif.dal.ConnectionContext" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.db.ConnectionContext" value="com.netspective.sparx.xif.dal.ConnectionContext" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf.db' with 'com.netspective.sparx.xif.db'."/>
-    	<replace dir="${basedir}" token="com.xaf.db" value="com.netspective.sparx.xif.db" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf.db" value="com.netspective.sparx.xif.db" summary="yes"/>
 
     	<echo message="Replacing references to 'com.xaf' with 'com.netspective.sparx.xaf'."/>
-    	<replace dir="${basedir}" token="com.xaf" value="com.netspective.sparx.xaf" summary="yes"/>
+    	<replace dir="${app.root.dir}" token="com.xaf" value="com.netspective.sparx.xaf" summary="yes"/>
 
     	<echo message="********************** MIGRATION NOTE *************************"/>
     	<echo message="** [signature change] Please be sure to update your AppLoginDialog.java in WEB-INF/classes and replace producePage(DialogContext, Writer) with producePage(Writer, DialogContext)"/>
@@ -157,7 +225,7 @@ Setup instructions:
     ============================= Compile application =======================
     -->
 
-    <target name="compile" depends="init">
+    <target name="compile" depends="init" if="app.classes.dir-exists">
 	    <javac srcdir="${app.classes.dir}" classpath="${app.java.classpath}" deprecation="on"/>
     </target>
 
@@ -165,7 +233,7 @@ Setup instructions:
     ============================= Generate Database Items =======================
     -->
 
-    <target name="dal" depends="init">
+    <target name="dal" depends="init" if="app.schema.source-file-exists">
         <!-- generate the data access layer java files -->
     	<delete dir="${app.java.dal.dir}"/>
     	<dal schema="${config.app.schema.source-file}" dest="${app.java.dal.dir}" stylesheetroot="${java.dal.stylesheet.root.dir}"/>
@@ -183,7 +251,7 @@ Setup instructions:
     	<echo message="The Data Access Library JAR file is in ${app.lib.dir}"/>
     </target>
 
-    <target name="dal-doc" depends="dal">
+    <target name="dal-doc" depends="dal" if="app.schema.source-file-exists">
         <mkdir dir="${app.java.dal.doc.dir}" />
         <javadoc packagenames="dal.*,com.netspective.sparx.xif.db.*,com.netspective.sparx.xif.dal.*,com.netspective.sparx.xaf.form.DialogContext,com.netspective.sparx.xaf.sql.DmlStatement"
              destdir="${app.java.dal.doc.dir}"
@@ -204,7 +272,7 @@ Setup instructions:
     ============================= Generate UI Items ================================
     -->
 
-    <target name="dcb" depends="init">
+    <target name="dcb" depends="init" if="app.ui.source-file-exists">
         <!-- generate the dialog context beans files -->
     	<dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" debug="no"/>
 
@@ -222,7 +290,7 @@ Setup instructions:
     	<echo message="The Dialog Context Beans JAR file is in ${app.lib.dir}"/>
     </target>
 
-    <target name="dcb-doc" depends="dcb">
+    <target name="dcb-doc" depends="dcb" if="app.ui.source-file-exists">
         <mkdir dir="${app.java.dcb.doc.dir}"/>
         <javadoc packagenames="${app.java.dcb.package}.*,com.netspective.sparx.xaf.form.*"
              destdir="${app.java.dcb.doc.dir}"
@@ -246,12 +314,17 @@ Setup instructions:
     -->
 
     <target name="clean" depends="init">
-	<delete>
-		<fileset dir="${app.classes.dir}" includes="**/*.class"/>
-	</delete>
-	<delete dir="${resin.work.dir}"/>
-	<delete dir="${config.app.site-temp-path}"/>
-	<mkdir dir="${config.app.site-temp-path}"/>
+		<delete>
+			<fileset dir="${app.classes.dir}" includes="**/*.class"/>
+		</delete>
+		<delete dir="${resin.work.dir}"/>
+		<delete dir="${config.app.site-temp-path}"/>
+		<mkdir dir="${config.app.site-temp-path}"/>
+    </target>
+
+    <target name="clean-log" depends="init">
+		<delete dir="${app.log.dir}"/>
+		<mkdir dir="${app.log.dir}"/>
     </target>
 
     <!-- =============================== Help =============================== -->
@@ -266,7 +339,10 @@ Setup instructions:
         <echo message="The following targets are available:"/>
         <echo message="  all          Run all of the targets in this order: clean, dal, dal-doc, dcb, dcb-doc"/>
         <echo message="  clean        Clean directories"/>
+        <echo message="  clean-log    Clean only the log directory (remove all entries and re-create)"/>
+        <echo message="  setup-sparx-structure Setup sparx structure (directories, etc)"/>
         <echo message="  setup-sparx  Setup sparx files (configuration.xml, log4j, etc.)"/>
+        <echo message="  start-sparx-app In an empty directory, start a new sparx app"/>
         <echo message="  compile      Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal          Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
         <echo message="  dal-doc      Generate the Data Access Layer (DAL) API Documentation"/>
