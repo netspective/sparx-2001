@@ -24,16 +24,17 @@
 *    and Xalan.                                                                *
 ********************************************************************************
 
-Library                            Ver    File         Source                                                            
----------------------------------- ------ ------------ ----------------------------------------------------------------- 
-Java JDBC API                      2.0    jdbc.jar     http://java.sun.com
-Java Servlet API                   2.3    servlet.jar  http://java.sun.com
-Apache Xalan                       2.4.D1 xalan.jar    http://xml.apache.org/xalan-j
-Apache Xalan JAXP/TrAX XML APIs    2.4.D1 xml-apis.jar http://xml.apache.org/xerces-j
-Apache Xerces                      2.0.2  xerces.jar   http://xml.apache.org/xerces-j
-Jakarta Ant                        1.5.0  ant.jar      http://jakarta.apache.org/ant
-Jakarta Log4J                      1.2.6  log4j.jar    http://jakarta.apache.org/log4j/docs
-Jakarta ORO                        2.0.4  oro.jar      http://jakarta.apache.org/oro
-JUnit Testing Framework            3.8    junit.jar    http://www.junit.org
-IBM Bean Scripting Framework (BSF) 2.2    bsf.jar      http://www.ibm.com/developerworks/projects/bsf
-Netscape Rhino JavaScript for BSF  1.5R3  js.jar       http://www.mozilla.org/rhino
+Library                                 Ver   File         Source                                                            
+--------------------------------------- ----- ------------ ----------------------------------------------------------------- 
+Java JDBC API                           2.0   jdbc.jar     http://java.sun.com
+Java Servlet API                        2.3   servlet.jar  http://java.sun.com
+Apache Xalan                            2.4.0 xalan.jar    http://xml.apache.org/xalan-j
+Apache Xalan JAXP/TrAX XML APIs         2.4.0 xml-apis.jar http://xml.apache.org/xerces-j
+Apache Xerces                           2.0.2 xerces.jar   http://xml.apache.org/xerces-j
+Jakarta Ant                             1.5.0 ant.jar      http://jakarta.apache.org/ant
+Jakarta Log4J                           1.2.6 log4j.jar    http://jakarta.apache.org/log4j/docs
+Jakarta ORO                             2.0.4 oro.jar      http://jakarta.apache.org/oro
+JUnit Testing Framework                 3.8   junit.jar    http://www.junit.org
+IBM Bean Scripting Framework (BSF)      2.2   bsf.jar      http://www.ibm.com/developerworks/projects/bsf
+Netscape Rhino JavaScript for BSF       1.5R3 js.jar       http://www.mozilla.org/rhino
+Ostermiller Syntax Highlighting Library 1.0   syntax.jar   http://ostermiller.org/syntax

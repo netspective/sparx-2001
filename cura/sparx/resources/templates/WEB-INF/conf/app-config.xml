@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 
 <!--
-    **********************************************************************
-    * Sparx Application-specific configuration properites                *
-    * (this file is automatically included by sparx.xml)                 *
-    ********************************************************************** 
--->
+**********************************************************************
+* Sparx Application-specific configuration properites                *
+* (this file is automatically included by sparx.xml)                 *
+********************************************************************** -->
 
 <xaf>
     <configuration>
