@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: XmlSource.java,v 1.2 2002-01-29 11:21:53 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -531,7 +531,7 @@ public class XmlSource
         }
     }
 
-    public void replaceNodeMacros(Node inNode, HashSet nodeNames, Hashtable params)
+    public void replaceNodeMacros(Node inNode, Set nodeNames, Hashtable params)
     {
         if(params == null || params.size() == 0)
             return;
