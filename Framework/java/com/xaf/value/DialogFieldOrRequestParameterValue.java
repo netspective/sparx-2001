@@ -12,6 +12,8 @@ package com.xaf.value;
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 
+import javax.servlet.ServletRequest;
+
 public class DialogFieldOrRequestParameterValue extends ValueSource implements ListValueSource
 {
     public DialogFieldOrRequestParameterValue()
@@ -21,9 +23,17 @@ public class DialogFieldOrRequestParameterValue extends ValueSource implements L
 
     public String getValue(ValueContext vc)
     {
-		String value = vc.getRequest().getParameter(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+        String value = null;
+        ServletRequest request = vc.getRequest();
+        // NOTE: The behavior of the "formOrRequest" value source is changed from returning
+        // the raw value of the dialog field to returning the formatted value.
+        DialogContext dc = (DialogContext) request.getAttribute(DialogContext.DIALOG_CONTEXT_ATTR_NAME);
+        if (dc != null)
+            value = dc.getValue(valueKey);
+        else
+		    value = request.getParameter(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
         if(value == null)
-            value = vc.getRequest().getParameter(valueKey);
+            value = request.getParameter(valueKey);
         return value;
     }
 
