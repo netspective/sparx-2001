@@ -51,11 +51,19 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.5 2002-02-08 22:16:12 snshah Exp $
+ * $Id: DialogContext.java,v 1.6 2002-02-09 13:02:12 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -69,25 +77,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.naming.NamingException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.netspective.sparx.xif.dal.ConnectionContext;
+import org.apache.oro.text.perl.Perl5Util;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import com.netspective.sparx.util.log.AppServerCategory;
 import com.netspective.sparx.util.log.LogManager;
-import com.netspective.sparx.xif.db.DatabaseContext;
-import com.netspective.sparx.xif.db.DatabaseContextFactory;
+import com.netspective.sparx.util.value.ServletValueContext;
+import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
@@ -95,12 +105,9 @@ import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.sql.DmlTask;
 import com.netspective.sparx.xaf.task.sql.TransactionTask;
-import com.netspective.sparx.util.value.ServletValueContext;
-import com.netspective.sparx.util.value.SingleValueSource;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-import org.apache.oro.text.perl.Perl5Util;
+import com.netspective.sparx.xif.dal.ConnectionContext;
+import com.netspective.sparx.xif.db.DatabaseContext;
+import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 public class DialogContext extends ServletValueContext
 {

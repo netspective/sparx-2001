@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSource.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: ValueSource.java,v 1.2 2002-02-09 13:02:12 snshah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -73,7 +73,7 @@ abstract public class ValueSource implements SingleValueSource
         return getClass().getName() + ":" + valueKey;
     }
 
-    public Documentation getDocumentation()
+    public SingleValueSource.Documentation getDocumentation()
     {
         return null;
     }

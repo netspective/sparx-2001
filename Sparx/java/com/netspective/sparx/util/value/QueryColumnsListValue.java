@@ -51,23 +51,25 @@
  */
  
 /**
- * $Id: QueryColumnsListValue.java,v 1.3 2002-02-07 00:38:53 snshah Exp $
+ * $Id: QueryColumnsListValue.java,v 1.4 2002-02-09 13:02:12 snshah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 import javax.naming.NamingException;
 
-import com.netspective.sparx.xif.db.DatabaseContext;
-import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 import com.netspective.sparx.xaf.sql.StatementExecutionException;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.sql.StatementNotFoundException;
+import com.netspective.sparx.xif.db.DatabaseContext;
+import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 public class QueryColumnsListValue extends ListSource
 {

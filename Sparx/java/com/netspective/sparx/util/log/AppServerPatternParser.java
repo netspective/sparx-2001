@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppServerPatternParser.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AppServerPatternParser.java,v 1.2 2002-02-09 13:02:12 snshah Exp $
  */
 
 package com.netspective.sparx.util.log;
@@ -73,7 +73,6 @@ import org.apache.log4j.spi.LoggingEvent;
  *  </ul>
  *  <p>
  *
- *  @see org.apache.log4j.examples.MyPatternLayout
  *  @see org.apache.log4j.helpers.PatternParser
  *  @see org.apache.log4j.PatternLayout
  *

@@ -19,7 +19,7 @@ only property file initialization is supported.
 
 <h3>Automatic Configuration</h3>
 The following properties serve to configure the {@link
-com.netspective.sparx.log.AppServerCategoryFactory}.
+com.netspective.sparx.util.log.AppServerCategoryFactory}.
 <p>
 <table border=1>
 <tr><th>Property<th>Description
@@ -44,14 +44,14 @@ A sample configuration might look like this.
 <p>
 <table border=1>
 <tr><td><pre>
-log4j.categoryFactory=com.netspective.sparx.log.AppServerCategoryFactory
+log4j.categoryFactory=com.netspective.sparx.util.log.AppServerCategoryFactory
 log4j.factory.server=TestServer
 log4j.factory.component=TestComponent
 log4j.factory.version=SomeVersion
 log4j.factory.messageBundle=app_messages
 
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.layout=com.netspective.sparx.log.AppServerPatternLayout
+log4j.appender.stdout.layout=com.netspective.sparx.util.log.AppServerPatternLayout
 log4j.appender.stdout.layout.ConversionPattern=[%h:%s:%b:%v] %m%n
 </pre></table>
 <p>
@@ -67,7 +67,7 @@ as the default factory for the hierarchy so that
 the proper <code>Category</code> subclass.
   -->
 The only change needed to your source file is to invoke the {@link
-com.netspective.sparx.log.AppServerCategory#getInstance(String)}
+com.netspective.sparx.util.log.AppServerCategory#getInstance(String)}
 instead of the usual {@link org.apache.log4j.Category#getInstance(String)}
 to acquire an implementation of <code>Category</code>.
 
@@ -79,7 +79,7 @@ initializer would have.
 <tr><td><pre>
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
-import com.netspective.sparx.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerCategory;
 ...
 PropertyConfigurator.configure("test.properties");
 Category cat = AppServerCategory.getInstance("some.cat");
@@ -96,13 +96,13 @@ categories to be <code>AppServerCategory</code> instances.
 Simply create an <code>AppServerCategoryFactory</code> instance.
 The constructor automatically installs the new instance as the
 default factory for future calls to {@link
-com.netspective.sparx.log.AppServerCategory#getInstance(String)}.
+com.netspective.sparx.util.log.AppServerCategory#getInstance(String)}.
 <p>
 <table border=1>
 <tr><td><pre>
 import org.apache.log4j.Category;
-import com.netspective.sparx.log.AppServerCategoryFactory;
-import com.netspective.sparx.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerCategoryFactory;
+import com.netspective.sparx.util.log.AppServerCategory;
 ...
 org.apache.log4j.BasicConfigurator.configure();
 new AppServerCategoryFactory("MyServer", null, null);
@@ -146,7 +146,7 @@ The configuration of <code>SimpleSocketServer</code> receiving
 serialized <code>AppServerLoggingEvent</code> classes is much the
 same as with the standard <code>LoggingEvent</code> class.  The main
 difference to keep in mind is that the layout implementation should be
-<code>com.netspective.sparx.log.AppServerPatternLayout</code>.
+<code>com.netspective.sparx.util.log.AppServerPatternLayout</code>.
 This will allow for the interpretation of %h, %s, %b and %v symbols.
 <p>
 <h2>Try It Yourself</h2>

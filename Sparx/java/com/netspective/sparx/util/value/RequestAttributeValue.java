@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: RequestAttributeValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: RequestAttributeValue.java,v 1.2 2002-02-09 13:02:12 snshah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -74,9 +74,9 @@ public class RequestAttributeValue extends ValueSource implements ListValueSourc
         super();
     }
 
-    public Documentation getDocumentation()
+    public SingleValueSource.Documentation getDocumentation()
     {
-        return new Documentation(
+        return new SingleValueSource.Documentation(
                 "Provides access to ServletRequest attributes; intelligently handles object of types String, String[], List, and Map.",
                 "attribute-name"
         );

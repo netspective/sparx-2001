@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppServerCategory.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AppServerCategory.java,v 1.2 2002-02-09 13:02:12 snshah Exp $
  */
 
 package com.netspective.sparx.util.log;
@@ -94,8 +94,7 @@ import org.apache.log4j.spi.LoggingEvent;
  *  to create new categories.  In the latter case, you would use
  *  {@link org.apache.log4j.Category#getInstance(String)}.  The former
  *  method allows finer granularity of control; the latter is more
- *  convenient.  Reliance on the
- *  {@link org.apache.log4j.PropertyConfigurator} will employ the
+ *  convenient.  Reliance on the org.apache.log4j.PropertyConfigurator will employ the
  *  latter.
  *
  *  <p>More convenient still is to rely on the
