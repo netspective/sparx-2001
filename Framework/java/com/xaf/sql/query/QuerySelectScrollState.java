@@ -62,6 +62,7 @@ public class QuerySelectScrollState extends ResultSetScrollState
 	public String getSelectSql() { return select.getSql(null); }
 	public String getErrorMsg() { return select.getErrorSql(); }
 	public boolean isValid() { return resultSetValid; }
+	public ReportSkin getSkin() { return skin; }
 
 	public void produceReport(Writer writer, DialogContext dc) throws SQLException, NamingException, IOException
 	{
