@@ -66,21 +66,16 @@
                 person.person_id,
                 person.complete_name,
                 person.complete_sortable_name,
-                org.org_name,
                 projectperson_relation.rel_descr
             from
-                person, projectperson_relation, org, personorg_relationship
+                person, projectperson_relation
             where
                 projectperson_relation.parent_id = ? and
-                person.person_id = projectperson_relation.rel_person_id and
-                org.org_id = ? and
-                org.org_id = personorg_relationship.rel_org_id and
-                person.person_id = personorg_relationship.parent_id
+                person.person_id = projectperson_relation.rel_person_id
             order by
                 person.complete_sortable_name
             <params>
                 <param value="request:project_id"/>
-                <param value="session:organization"/>
             </params>
             <report heading="Project Members">
 				<banner style="horizontal">
@@ -89,7 +84,6 @@
                 <column display="no"/>
                 <column display="no"/>
                 <column heading="Name" align="left" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{1}"/>
-                <column heading="Organization" align="left"/>
                 <column heading="Project Role" align="left"/>
             </report>
         </statement>
@@ -151,5 +145,23 @@
                 <param value="request-attr:person_id"/>
             </params>
 		</statement>
+        <statement name="org-person-list">
+			select
+                person.complete_sortable_name,
+                person.person_id
+			from
+                personorg_relationship por, person, projectorg_relation
+			where
+                por.parent_id = person.person_id and
+                projectorg_relation.parent_id = ? and
+                projectorg_relation.rel_org_id = por.rel_org_id
+
+            order by
+                person.complete_sortable_name
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+
     </sql-statements>
 </xaf>

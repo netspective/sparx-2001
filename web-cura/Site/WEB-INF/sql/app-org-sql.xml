@@ -49,8 +49,8 @@
 				<param value="request:org_id"/>
 			</params>
             <report heading="Account Relationships">
-                <column heading="Account ID"/>
-                <column heading="Account Name"/>
+                <column heading="Account ID" align="left"/>
+                <column heading="Account Name" url="config-expr:home.jsp?org_id=${0}&amp;org_name=%{1}"/>
                 <column heading="Relationship"/>
             </report>
         </statement>
@@ -76,6 +76,42 @@
 
 		<statement name="registration">
 			select
+                org_name,
+				org_code,
+				org_abbrev ,
+				org_ownership.caption as "Ownership",
+				ticker_symbol,
+				sic_code ,
+				employees,
+				time_zone
+			from
+                org, org_ownership
+			where
+                org_id = ? and
+                org.ownership = org_ownership.id (+)
+			<params>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Overview">
+				<banner style="horizontal">
+                    <!--item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/-->
+                    <item caption="Edit" url="config-expr:edit.jsp?org_id=${request:org_id}&amp;${request:org_name}"/>
+                    <item caption="Delete" url="config-expr:delete.jsp?org_id=${request:org_id}&amp;${request:org_name}"/>
+                </banner>
+                <column heading="Name"/>
+                <column heading="Code"/>
+                <column heading="Abbreviation"/>
+                <column heading="Ownership"/>
+                <column heading="Symbol"/>
+                <column heading="SIC"/>
+                <column heading="Employees"/>
+                <column heading="Time Zone"/>
+			</report>
+		</statement>
+
+		<statement name="information">
+			select
 				org_code as "Code",
                 org_name as "Name",
 				org_abbrev as "Abbrev",
@@ -84,9 +120,11 @@
 				sic_code as "SIC",
 				employees as "Employees",
 				time_zone as "Time Zone"
-			from org, org_ownership
-			where org_id = ?
-			and org.ownership = org_ownership.id (+)
+			from
+                org, org_ownership
+			where
+                org_id = ? and
+                org.ownership = org_ownership.id (+)
 			<params>
 				<param value="request:org_id"/>
 			</params>
@@ -95,6 +133,10 @@
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
                 </banner>
+                <column heading="Code"/>
+                <column heading="Name"/>
+                <column heading="Abbreviation"/>
+                <column heading="Ownership"/>
 			</report>
 		</statement>
 
@@ -128,9 +170,7 @@
 			where
                 por.rel_org_id = ? and
                 org.org_id = por.rel_org_id and
-                por.parent_id = person.person_id and
-                por.record_status_id = 1 and
-                por.rel_type = 0
+                por.parent_id = person.person_id
             order by
                 person.complete_sortable_name
             <params>
@@ -138,8 +178,8 @@
             </params>
             <report heading="Account Contacts">
                 <banner  style="horizontal">
-                    <item caption="Import" url="config-expr:member.jsp?cmd=edit&amp;org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
-                    <item caption="Edit" url="config-expr:member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                    <item caption="Import" url="config-expr:add_member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
+                    <item caption="Delete" url="config-expr:delete_member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
                 </banner>
                 <column heading="ID" align="left"/>
                 <column heading="Name" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{2}"/>
@@ -184,10 +224,10 @@
             </params>
             <report heading="Projects">
                 <banner  style="horizontal">
-                    <item caption="Add" url="create-app-url:/project/index.jsp?cmd=dialog,project.registration,add"/>
+                    <item caption="Add" url="config-expr:${create-app-url:/project/create.jsp}?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
                 </banner>
                 <column heading="ID" align="left"/>
-                <column heading="Name" url="create-app-url:/project/home.jsp?project_id=${0}&amp;project_name=%{2}"/>
+                <column heading="Name" url="create-app-url:/project/home.jsp?project_id=${0}&amp;project_name=%{1}"/>
                 <column heading="Status" align="left"/>
                 <column heading="Start Date" align="left"/>
                 <column heading="Target End Date" align="left"/>

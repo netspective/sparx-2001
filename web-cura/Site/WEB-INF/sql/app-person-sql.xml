@@ -219,7 +219,7 @@
                 <column heading="Age"/>
                 <column display="no"/>
                 <column heading="Gender"/>
-                <column heading="Marital Status" column-break="1"/>
+                <column heading="Marital Status" />
                 <column heading="Street Address 1"/>
                 <column heading="Street Address 2"/>
                 <column heading="City"/>

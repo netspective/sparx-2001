@@ -65,8 +65,9 @@
             <field.integer name="project_id" hidden="yes" default="request:project_id"/>
             <field.text name="project_name" caption="Project" read-only="browser" default="request:project_name"/>
             <field.select name="rel_person_id" style="multidual" caption="Contacts" required="yes"
-                choices="query:org.selected-org-person-list" default="query:project.member-persons">
+                choices="query:project.org-person-list" default="query:project.member-persons">
             </field.select>
+
         </dialog>
 
         <dialog name="delete_task" heading="Delete Project Task(s)" retain-params="*" class="app.form.DeleteTaskDialog">
