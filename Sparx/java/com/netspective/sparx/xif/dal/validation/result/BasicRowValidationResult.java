@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BasicRowValidationResult.java,v 1.1 2002-12-04 17:55:19 shahbaz.javeed Exp $
+ * $Id: BasicRowValidationResult.java,v 1.2 2002-12-30 15:49:57 shahid.shah Exp $
  */
 package com.netspective.sparx.xif.dal.validation.result;
 

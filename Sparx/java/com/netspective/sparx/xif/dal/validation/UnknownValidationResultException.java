@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: UnknownValidationResultException.java,v 1.1 2002-12-04 17:52:25 shahbaz.javeed Exp $
+ * $Id: UnknownValidationResultException.java,v 1.2 2002-12-30 15:49:57 shahid.shah Exp $
  */
 package com.netspective.sparx.xif.dal.validation;
 
