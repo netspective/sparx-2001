@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.4 2002-08-25 21:27:58 shahid.shah Exp $
+# $Id: build.sh,v 1.5 2002-09-03 12:40:25 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the SPARX_HOME/documentation/src   **
@@ -34,6 +34,11 @@ USE_CLASS_PATH=$XERCES_JAR:$SPARX_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR
 java -classpath $USE_CLASS_PATH:$ANT_JAR org.apache.tools.ant.Main -buildfile $BUILD_FILE $1 $2 $3 $4 $5
 
 echo "Creating Symlinks to Samples"
-ln -s $HOME/projects/hello ../samples/hello
-ln -s $HOME/projects/library ../samples/library
-ln -s $HOME/projects/cura ../samples/cura
+
+SAMPLES_ROOT=$HOME/projects
+SAMPLES_DOC_ROOT=`pwd`/../samples
+
+ln -svf $SAMPLES_ROOT/hello $SAMPLES_DOC_ROOT/hello
+ln -svf $SAMPLES_ROOT/library $SAMPLES_DOC_ROOT/library
+ln -svf $SAMPLES_ROOT/cura $SAMPLES_DOC_ROOT/cura
+
