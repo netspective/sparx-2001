@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.12 2003-01-14 23:23:11 aye.thu Exp $
+ * $Id: StandardDialogSkin.java,v 1.13 2003-01-16 16:18:32 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -288,24 +288,29 @@ public class StandardDialogSkin implements DialogSkin
             DialogField field = (DialogField) i.next();
             if(field.isVisible(dc))
             {
-                if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
-                    writer.write("<br>");
-                boolean showCaption = field.showCaptionAsChild();
-                if(showCaption)
+                if(field.isInputHidden(dc))
+                    field.renderControlHtml(writer, dc);
+                else
                 {
-                    String caption = field.getCaption(dc);
-                    if(caption != DialogField.CUSTOM_CAPTION && caption != null)
+                    if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
+                        writer.write("<br>");
+                    boolean showCaption = field.showCaptionAsChild();
+                    if(showCaption)
                     {
-                        writer.write("<nobr>" + (field.isRequired(dc) ? "<b>" + caption + "</b>" : caption));
-                        if(captionSuffix != null)
-                            writer.write(captionSuffix);
+                        String caption = field.getCaption(dc);
+                        if(caption != DialogField.CUSTOM_CAPTION && caption != null)
+                        {
+                            writer.write("<nobr>" + (field.isRequired(dc) ? "<b>" + caption + "</b>" : caption));
+                            if(captionSuffix != null)
+                                writer.write(captionSuffix);
+                        }
                     }
+                    field.renderControlHtml(writer, dc);
+                    writer.write("&nbsp;");
+                    if(showCaption) writer.write("</nobr>");
+                    if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_AFTER))
+                        writer.write("<br>");
                 }
-                field.renderControlHtml(writer, dc);
-                writer.write("&nbsp;");
-                if(showCaption) writer.write("</nobr>");
-                if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_AFTER))
-                    writer.write("<br>");
             }
         }
     }
