@@ -36,7 +36,7 @@ public class ResultSetScrollState
 		{
 			rs.last();
 
-			totalRows = rs.getRow() + 1;
+			totalRows = rs.getRow();
 			totalPages = totalRows / rowsPerPage;
 			if((totalPages * rowsPerPage) < totalRows)
 				totalPages++;
