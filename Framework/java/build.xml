@@ -46,7 +46,7 @@ Authors:
     <property name="jndi" value="${resin.libpath}/jndi.jar"/>
     <property name="jdbc-ext" value="${resin.libpath}/jdbc2_0-stdext.jar"/>
 
-    <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext}"/> 
+    <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi}"/> 
 
     <property name="name" value="xaf"/>
     <property name="version" value="1_0"/>
