@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 public class DialogBeanGenerateClassDialog extends Dialog
 {
 	protected TextField outputPathField;
+    protected TextField generatedPkgPrefixField;
     protected SelectField dialogsSelectField;
 
     public DialogBeanGenerateClassDialog()
@@ -28,6 +29,10 @@ public class DialogBeanGenerateClassDialog extends Dialog
 		outputPathField.setFlag(DialogField.FLDFLAG_REQUIRED);
         outputPathField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.web-inf-root-path}/classes/dialog/context"));
 
+        generatedPkgPrefixField = new TextField("pkg_prefix", "Package Prefix");
+		generatedPkgPrefixField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        generatedPkgPrefixField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dialog.context."));
+
         ListValueSource allDialogs = ValueSourceFactory.getListValueSource("dialogs:.*");
         dialogsSelectField = new SelectField("dialogs", "Dialogs", SelectField.SELECTSTYLE_MULTIDUAL, allDialogs);
         dialogsSelectField.setFlag(DialogField.FLDFLAG_REQUIRED);
@@ -35,6 +40,7 @@ public class DialogBeanGenerateClassDialog extends Dialog
         dialogsSelectField.setSize(8);
 
 		addField(outputPathField);
+        addField(generatedPkgPrefixField);
         addField(dialogsSelectField);
 
 		setDirector(new DialogDirector());
@@ -46,6 +52,7 @@ public class DialogBeanGenerateClassDialog extends Dialog
         Map dialogsInfo = manager.getDialogs();
 
         String outputPath = dc.getValue(outputPathField);
+        String pkgPrefix = dc.getValue(generatedPkgPrefixField);
         String[] dialogNames = dc.getValues(dialogsSelectField);
         java.util.Arrays.sort(dialogNames, String.CASE_INSENSITIVE_ORDER);
 
@@ -66,7 +73,7 @@ public class DialogBeanGenerateClassDialog extends Dialog
             DialogManager.DialogInfo activeDialogInfo = (DialogManager.DialogInfo) dialogsInfo.get(activeDialogName);
             try
             {
-                File javaFile = activeDialogInfo.generateDialogBean(outputPath);
+                File javaFile = activeDialogInfo.generateDialogBean(outputPath, pkgPrefix);
                 html.append("<td style='border-bottom:1 solid #EEEEEE'><a href='"+javaFile.getAbsolutePath()+"'>" + javaFile.getAbsolutePath() + "</a></td>");
             }
             catch(IOException e)

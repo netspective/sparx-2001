@@ -19,17 +19,16 @@ import com.xaf.value.*;
 
 public class DmlTask extends AbstractTask
 {
-	public final int DMLCMD_UNKNOWN = 0;
-	public final int DMLCMD_INSERT = 1;
-	public final int DMLCMD_UPDATE = 2;
-	public final int DMLCMD_REMOVE = 3;
-	public final int DMLCMD_INSERT_OR_UPDATE = 4;
+	static public final int DMLCMD_UNKNOWN = 0;
+	static public final int DMLCMD_INSERT = 1;
+	static public final int DMLCMD_UPDATE = 2;
+	static public final int DMLCMD_REMOVE = 3;
+	static public final int DMLCMD_INSERT_OR_UPDATE = 4;
 
     private int command;
 	private String tableName;
 	private SingleValueSource dataSourceValueSource;
     private String fields;
-    private String transaction;
 	private SingleValueSource insertCheckValueSource;
 	private SingleValueSource updateCheckValueSource;
     private String whereCond;
@@ -48,7 +47,6 @@ public class DmlTask extends AbstractTask
 		tableName = null;
 		dataSourceValueSource = null;
 		fields = null;
-        transaction = null;
         whereCond = null;
         columns = null;
 		insertCheckValueSource = null;
@@ -84,9 +82,6 @@ public class DmlTask extends AbstractTask
 	public String getFields() { return fields; }
 	public void setFields(String value) { fields = (value != null && value.length() > 0) ? value : null; }
 
-   	public String getTransaction() { return transaction; }
-	public void setTransaction(String value) { transaction = (value != null && value.length() > 0) ? value : null; }
-
    	public String getWhere() { return whereCond; }
 	public void setWhere(String value) { whereCond = (value != null && value.length() > 0) ? value : null; }
 
@@ -111,7 +106,6 @@ public class DmlTask extends AbstractTask
 		setTable(elem.getAttribute("table"));
 		setCommand(elem.getAttribute("command"));
 		setDataSource(elem.getAttribute("data-src"));
-		setTransaction(elem.getAttribute("transaction"));
 		setWhere(elem.getAttribute("where"));
 		setFields(elem.getAttribute("fields"));
 		setColumns(elem.getAttribute("columns"));
@@ -135,7 +129,7 @@ public class DmlTask extends AbstractTask
 
         if(fields.equals("*"))
         {
-            for(Iterator i = dc.values().iterator(); i.hasNext(); )
+            for(Iterator i = dc.getFieldStates().values().iterator(); i.hasNext(); )
             {
                 DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) i.next();
                 columnNames.add(state.field.getSimpleName());
@@ -144,6 +138,8 @@ public class DmlTask extends AbstractTask
         }
         else
         {
+            Map dialogFieldStates = dc.getFieldStates();
+
             StringTokenizer st = new StringTokenizer(fields, ",");
             while(st.hasMoreTokens())
             {
@@ -158,7 +154,7 @@ public class DmlTask extends AbstractTask
                 else
                     columnNames.add(fieldName);
 
-                DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) dc.get(fieldName);
+                DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) dialogFieldStates.get(fieldName);
                 if(state == null)
                     throw new RuntimeException("In dml tag, field '"+fieldName+"' does not exist in DialogContext");
                 columnValues.add((state.value == null || state.value.length() == 0) ? null : state.field.getValueForSqlBindParam(state.value));

@@ -10,8 +10,12 @@ import com.xaf.db.*;
 import com.xaf.log.*;
 import com.xaf.sql.*;
 import com.xaf.value.*;
+import com.xaf.task.TaskExecuteException;
+import com.xaf.task.TaskContext;
+import com.xaf.task.sql.DmlTask;
+import com.xaf.task.sql.TransactionTask;
 
-public class DialogContext extends Hashtable implements ValueContext
+public class DialogContext extends ServletValueContext
 {
     /* if dialog fields need to be pre-populated (before the context is created)
      * then a java.util.Map can be created and stored in the request attribute
@@ -80,13 +84,10 @@ public class DialogContext extends Hashtable implements ValueContext
 	static public final int STATECALCSTAGE_INITIAL = 0;
 	static public final int STATECALCSTAGE_FINAL   = 1;
 
+    private Map fieldStates = new HashMap();
 	private List listeners = new ArrayList();
 	private boolean resetContext;
 	private String transactionId;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
-	private Servlet servlet;
-	private ServletContext servletContext;
 	private Dialog dialog;
 	private DialogSkin skin;
 	private char activeMode;
@@ -112,12 +113,8 @@ public class DialogContext extends Hashtable implements ValueContext
 		if(monitorLog.isInfoEnabled())
 			startTime = new Date().getTime();
 
+        super.initialize(aContext, aServlet, aRequest, aResponse);
         aRequest.setAttribute(DIALOG_CONTEXT_ATTR_NAME, this);
-
-		request = aRequest;
-		response = aResponse;
-		servlet = aServlet;
-		servletContext = aContext;
 
 		if(servlet instanceof DialogContextListener)
 			listeners.add(servlet);
@@ -188,7 +185,7 @@ public class DialogContext extends Hashtable implements ValueContext
 		{
 			String qName = director.getQualifiedName();
 			if(qName != null)
-				put(qName, new DialogFieldState(director, dataCmd));
+				fieldStates.put(qName, new DialogFieldState(director, dataCmd));
 		}
 
 		LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
@@ -217,7 +214,7 @@ public class DialogContext extends Hashtable implements ValueContext
 			DialogField field = (DialogField) fields.get(i);
 			String qName = field.getQualifiedName();
 			if(qName != null)
-				put(qName, new DialogFieldState(field, dataCmd));
+				fieldStates.put(qName, new DialogFieldState(field, dataCmd));
 			List children = field.getChildren();
 			if(children != null)
 				createStateFields(children);
@@ -233,7 +230,7 @@ public class DialogContext extends Hashtable implements ValueContext
 				for(Iterator i = values.keySet().iterator(); i.hasNext(); )
 				{
 					String keyName = (String) i.next();
-					DialogFieldState state = (DialogFieldState) get(keyName);
+					DialogFieldState state = (DialogFieldState) fieldStates.get(keyName);
 					if(state != null)
 					{
 						Object keyObj = (Object) values.get(keyName);
@@ -293,6 +290,7 @@ public class DialogContext extends Hashtable implements ValueContext
 		dialog.makeStateChanges(this, STATECALCSTAGE_FINAL);
 	}
 
+    public final Map getFieldStates() { return this.fieldStates; }
 	public final String getTransactionId() { return transactionId; }
 	public final boolean contextWasReset() { return resetContext; }
 	public final int getRunSequence() { return runSequence; }
@@ -306,13 +304,13 @@ public class DialogContext extends Hashtable implements ValueContext
 	public final boolean inExecuteMode() { return activeMode == DIALOGMODE_EXECUTE; }
 	public final String getOriginalReferer() { return originalReferer; }
 	public final Dialog getDialog() { return dialog; }
-	public final ServletContext getServletContext() { return servletContext; }
-	public final Servlet getServlet() { return servlet; }
-	public final ServletRequest getRequest() { return request; }
-	public final ServletResponse getResponse() { return response; }
-	public final HttpSession getSession() { return request.getSession(true); }
 	public final DialogSkin getSkin() { return skin; }
+
 	public final int getDataCommand() { return dataCmd; }
+    public final boolean addingData() { return dataCmd == DATA_CMD_ADD; }
+    public final boolean editingData() { return dataCmd == DATA_CMD_EDIT; }
+    public final boolean deletingData() { return dataCmd == DATA_CMD_DELETE; }
+    public final boolean confirmingData() { return dataCmd == DATA_CMD_CONFIRM; }
 
 	public final DatabaseContext getDatabaseContext() { return dbContext; }
 	public final void setDatabaseContext(DatabaseContext value) { dbContext = value; }
@@ -405,13 +403,13 @@ public class DialogContext extends Hashtable implements ValueContext
 
 	public boolean flagIsSet(String fieldQName, long flag)
 	{
-		DialogFieldState state = (DialogFieldState) get(fieldQName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(fieldQName);
 		return (state.flags & flag) != 0;
 	}
 
 	public void setFlag(String fieldQName, long flag)
 	{
-		DialogFieldState state = (DialogFieldState) get(fieldQName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(fieldQName);
 		if(state != null)
 		{
 			state.flags |= flag;
@@ -431,7 +429,7 @@ public class DialogContext extends Hashtable implements ValueContext
 
 	public void clearFlag(String fieldQName, long flag)
 	{
-		DialogFieldState state = (DialogFieldState) get(fieldQName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(fieldQName);
 		if(state != null)
 		{
 			state.flags &= ~flag;
@@ -449,9 +447,41 @@ public class DialogContext extends Hashtable implements ValueContext
 			throw new RuntimeException("Attempting to clear flag '"+ flag +"' for non-existant field '"+ fieldQName + "'" + toString());
 	}
 
+    public DialogField getField(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+		if(state == null)
+            return null;
+		else
+			return state.field;
+	}
+
+    public DialogFieldState getFieldState(String qualifiedName)
+	{
+		return (DialogFieldState) fieldStates.get(qualifiedName);
+	}
+
+    public boolean hasValue(DialogField field)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+		if(state == null)
+			return false;
+		else
+			return state.field.getValueAsObject(state.value) != null;
+	}
+
+	public boolean hasValue(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+		if(state == null)
+            return false;
+		else
+			return state.field.getValueAsObject(state.value) != null;
+	}
+
 	public String getValue(DialogField field)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		if(state == null)
 			return null;
 		else
@@ -460,16 +490,40 @@ public class DialogContext extends Hashtable implements ValueContext
 
 	public String getValue(String qualifiedName)
 	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
 		if(state == null)
 			return null;
 		else
 			return state.value;
 	}
 
+    public String getValue(DialogField field, String defaultValue)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+		if(state == null)
+			return null;
+		else
+        {
+            String value = state.value;
+			return (value == null || value.length() == 0) ? defaultValue : value;
+        }
+	}
+
+	public String getValue(String qualifiedName, String defaultValue)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+		if(state == null)
+			return null;
+        else
+        {
+            String value = state.value;
+            return (value == null || value.length() == 0) ? defaultValue : value;
+        }
+	}
+
 	public Object getValueForSqlBindParam(DialogField field)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		if(state == null)
 			return null;
 		else
@@ -478,7 +532,7 @@ public class DialogContext extends Hashtable implements ValueContext
 
 	public Object getValueForSqlBindParam(String qualifiedName)
 	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
 		if(state == null)
 			return null;
 		else
@@ -487,7 +541,7 @@ public class DialogContext extends Hashtable implements ValueContext
 
     public Object getValueAsObject(DialogField field)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		if(state == null)
 			return null;
 		else
@@ -496,28 +550,52 @@ public class DialogContext extends Hashtable implements ValueContext
 
 	public Object getValueAsObject(String qualifiedName)
 	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
 		if(state == null)
 			return null;
 		else
             return state.field.getValueAsObject(state.value);
 	}
 
+    public Object getValueAsObject(DialogField field, Object defaultValue)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+		if(state == null)
+			return null;
+		else
+        {
+            Object value = state.field.getValueAsObject(state.value);
+			return value == null ? defaultValue : value;
+        }
+	}
+
+	public Object getValueAsObject(String qualifiedName, Object defaultValue)
+	{
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+		if(state == null)
+			return null;
+        else
+        {
+            Object value = state.field.getValueAsObject(state.value);
+			return value == null ? defaultValue : value;
+        }
+	}
+
 	public void setValue(String qualifiedName, String value)
 	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
 		state.value = value;
 	}
 
 	public void setValue(DialogField field, String value)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		state.value = value;
 	}
 
 	public String[] getValues(DialogField field)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		if(state == null)
 			return null;
 		else
@@ -526,7 +604,7 @@ public class DialogContext extends Hashtable implements ValueContext
 
 	public String[] getValues(String qualifiedName)
 	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
 		if(state == null)
 			return null;
 		else
@@ -535,20 +613,20 @@ public class DialogContext extends Hashtable implements ValueContext
 
     public void setValues(String qualifiedName, String[] values)
 	{
-        DialogFieldState state = (DialogFieldState) get(qualifiedName);
+        DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
 		if(state != null)
             state.values = values;
 	}
 
 	public void setValues(DialogField field, String[] values)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		state.values = values;
 	}
 
 	public ArrayList getErrorMessages(DialogField field)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		if(state == null)
 			return field.getErrors();
 		else
@@ -560,9 +638,12 @@ public class DialogContext extends Hashtable implements ValueContext
 		}
 	}
 
-	public void addErrorMessage(DialogField field, String message)
+    public void addErrorMessage(String qualifiedName, String message)
 	{
-		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+        if(state == null)
+            throw new RuntimeException("DialogField '"+ qualifiedName +"' does not exist.");
+
 		if(state.errorMessages == null)
 			state.errorMessages = new ArrayList();
 
@@ -573,6 +654,11 @@ public class DialogContext extends Hashtable implements ValueContext
 		}
 
 		state.errorMessages.add(message);
+	}
+
+	public void addErrorMessage(DialogField field, String message)
+	{
+		addErrorMessage(field.getQualifiedName(), message);
 	}
 
 	public void populateValuesFromStatement(String statementId)
@@ -602,18 +688,130 @@ public class DialogContext extends Hashtable implements ValueContext
 		}
 	}
 
+    public void populateValuesFromSql(String sql)
+	{
+		populateValuesFromStatement(null, sql, null);
+	}
+
+	public void populateValuesFromSql(String sql, Object[] params)
+	{
+		populateValuesFromStatement(null, sql, params);
+	}
+
+	public void populateValuesFromSql(String dataSourceId, String sql, Object[] params)
+	{
+		try
+		{
+			ServletContext context = getServletContext();
+			DatabaseContext dbContext = DatabaseContextFactory.getContext(getRequest(), context);
+			StatementManager.ResultInfo ri = StatementManager.executeSql(dbContext, this, dataSourceId, sql, params);
+			dialogFieldStoreValueSource.setValue(this, ri.getResultSet(), SingleValueSource.RESULTSET_STORETYPE_SINGLEROWFORMFLD);
+			ri.close();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e.toString());
+		}
+	}
+
+    public void beginSqlTransaction() throws TaskExecuteException
+    {
+        beginSqlTransaction(null);
+    }
+
+    public void beginSqlTransaction(String dataSourceId) throws TaskExecuteException
+    {
+        TransactionTask task = new TransactionTask();
+        task.setDataSource(dataSourceId);
+        task.setCommand(TransactionTask.COMMAND_BEGIN);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
+    public void endSqlTransaction() throws TaskExecuteException
+    {
+        endSqlTransaction(null);
+    }
+
+    public void endSqlTransaction(String dataSourceId) throws TaskExecuteException
+    {
+        TransactionTask task = new TransactionTask();
+        task.setDataSource(dataSourceId);
+        task.setCommand(TransactionTask.COMMAND_END);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
+    public void executeSqlInsert(String table, String fields, String columns) throws TaskExecuteException
+    {
+        executeSqlInsert(null, table, fields, columns);
+    }
+
+    public void executeSqlInsert(String dataSourceId, String table, String fields, String columns) throws TaskExecuteException
+    {
+        DmlTask task = new DmlTask();
+        task.setCommand(DmlTask.DMLCMD_INSERT);
+        task.setDataSource(dataSourceId);
+        task.setTable(table);
+        task.setFields(fields);
+        task.setColumns(columns);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
+    public void executeSqlUpdate(String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    {
+        executeSqlUpdate(null, table, fields, columns, whereCond);
+    }
+
+    public void executeSqlUpdate(String dataSourceId, String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    {
+        DmlTask task = new DmlTask();
+        task.setCommand(DmlTask.DMLCMD_UPDATE);
+        task.setDataSource(dataSourceId);
+        task.setTable(table);
+        task.setFields(fields);
+        task.setColumns(columns);
+        task.setWhere(whereCond);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
+    public void executeSqlRemove(String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    {
+        executeSqlRemove(null, table, fields, columns, whereCond);
+    }
+
+    public void executeSqlRemove(String dataSourceId, String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    {
+        DmlTask task = new DmlTask();
+        task.setCommand(DmlTask.DMLCMD_REMOVE);
+        task.setDataSource(dataSourceId);
+        task.setTable(table);
+        task.setFields(fields);
+        task.setColumns(columns);
+        task.setWhere(whereCond);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
 	public String getDebugHtml()
 	{
 		StringBuffer values = new StringBuffer();
 
-		for(Enumeration e = elements(); e.hasMoreElements(); )
+		for(Iterator i = fieldStates.values().iterator(); i.hasNext(); )
 		{
-			DialogFieldState state = (DialogFieldState) e.nextElement();
+			DialogFieldState state = (DialogFieldState) i.next();
 			if(state.values != null)
 			{
 				StringBuffer multiValues = new StringBuffer();
-				for(int i = 0; i < state.values.length; i++)
-					multiValues.append(state.values[i] + "<br>");
+				for(int v = 0; v < state.values.length; v++)
+					multiValues.append(state.values[v] + "<br>");
 
 				values.append("<tr valign=top><td>"+state.field.getQualifiedName()+"</td><td>"+multiValues.toString()+"</td></tr>");
 			}

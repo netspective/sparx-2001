@@ -107,6 +107,7 @@ public class FloatField extends TextField
         String dataType = mi.getDataType();
 
 		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { Float o = (Float) getValueAsObject(\""+ fieldName +"\"); return o == null ? (float) 0.0 : o.floatValue(); }\n");
+        mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { Float o = (Float) getValueAsObject(\""+ fieldName +"\"); return o == null ? defaultValue : o.floatValue(); }\n");
 		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", Float.toString(value)); }\n");
 
 		return mi;

@@ -26,9 +26,9 @@ import java.sql.Connection;
 
 public class TransactionTask extends AbstractTask
 {
-    private final int COMMAND_UNKNOWN = 0;
-    private final int COMMAND_BEGIN = 1;
-    private final int COMMAND_END   = 2;
+    static public final int COMMAND_UNKNOWN = 0;
+    static public final int COMMAND_BEGIN = 1;
+    static public final int COMMAND_END   = 2;
 
     private SingleValueSource dataSourceValueSource;
     private int command;

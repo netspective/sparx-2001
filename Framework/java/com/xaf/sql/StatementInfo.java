@@ -36,6 +36,15 @@ public class StatementInfo
 	{
 	}
 
+    public StatementInfo(String sql)
+	{
+        this.pkgName = "dynamic";
+        this.stmtName = "stmt_" + this.toString();
+        this.sql = sql;
+        if(sql.indexOf(REPLACEMENT_PREFIX) != -1)
+			sqlIsDynamic = true;
+	}
+
 	public final String getPkgName() { return pkgName; }
 	public final String getStmtName() { return stmtName; }
     public final String getId() { return pkgName != null ? (pkgName + "." + stmtName) : stmtName; }

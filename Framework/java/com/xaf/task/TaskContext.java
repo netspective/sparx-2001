@@ -9,7 +9,7 @@ import com.xaf.db.*;
 import com.xaf.form.*;
 import com.xaf.value.*;
 
-public class TaskContext implements ValueContext
+public class TaskContext extends ServletValueContext
 {
 	static public final long TCFLAG_HALTPROCESSING = 1;
 	static public final long TCFLAG_HASERROR = TCFLAG_HALTPROCESSING * 2;
@@ -19,10 +19,6 @@ public class TaskContext implements ValueContext
 	private Object canvas;
 	private Task task;
 	private String transactionId;
-	private ServletContext servletContext;
-	private Servlet servlet;
-	private ServletRequest request;
-	private ServletResponse response;
 	private DialogContext dialogContext;
 	private long resultCode;
 	private StringBuffer resultMessage = new StringBuffer();
@@ -31,11 +27,8 @@ public class TaskContext implements ValueContext
 
 	public TaskContext(ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse)
 	{
+        super(aContext, aServlet, aRequest, aResponse);
 		taskContextNum++;
-		servletContext = aContext;
-		servlet = aServlet;
-		request = aRequest;
-		response = aResponse;
 
 		try
 		{
@@ -62,11 +55,6 @@ public class TaskContext implements ValueContext
 
 	public final DialogContext getDialogContext() { return dialogContext; }
 	public final Dialog getDialog() { return dialogContext != null ? dialogContext.getDialog() : null; }
-
-	public final ServletContext getServletContext() { return servletContext; }
-	public final Servlet getServlet() { return servlet; }
-	public final ServletRequest getRequest() { return request; }
-	public final ServletResponse getResponse() { return response; }
 
 	public final long getFlags() { return flags; }
 	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }

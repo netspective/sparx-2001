@@ -23,7 +23,7 @@ import com.xaf.report.column.*;
 import com.xaf.sql.*;
 import com.xaf.value.*;
 
-public class ReportContext implements ValueContext
+public class ReportContext extends ServletValueContext
 {
 	static public final String REQUESTATTRNAME_LISTENER = "ReportContext.DefaultListener";
 
@@ -90,10 +90,6 @@ public class ReportContext implements ValueContext
     private Report reportDefn;
     private int calcsCount;
 	private int visibleColsCount;
-	private ServletContext servletContext;
-	private Servlet servlet;
-	private ServletRequest request;
-	private ServletResponse response;
 	private ReportSkin skin;
 	private ResultSetScrollState scrollState;
 	private int rowCurrent, rowStart, rowEnd;
@@ -102,10 +98,7 @@ public class ReportContext implements ValueContext
 
     public ReportContext(ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response, Report reportDefn, ReportSkin skin)
     {
-		this.servletContext = context;
-		this.servlet = servlet;
-		this.request = request;
-		this.response = response;
+        super(context, servlet, request, response);
         this.reportDefn = reportDefn;
 		this.skin = skin;
         this.generalNumberFmt = NumberFormat.getNumberInstance();
@@ -168,10 +161,6 @@ public class ReportContext implements ValueContext
 	}
 
     public final Report getReport() { return reportDefn; }
-	public final ServletContext getServletContext() { return servletContext; }
-	public final Servlet getServlet() { return servlet; }
-	public final ServletRequest getRequest() { return request; }
-	public final ServletResponse getResponse() { return response; }
 	public final ReportSkin getSkin() { return skin; }
 
 	public final ColumnState[] getStates() { return states; }

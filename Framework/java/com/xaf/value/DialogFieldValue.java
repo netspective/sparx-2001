@@ -86,10 +86,11 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
 			{
 				ResultSetMetaData rsmd = rs.getMetaData();
 				int colsCount = rsmd.getColumnCount();
+                Map fieldStates = dc.getFieldStates();
 				for(int i = 1; i <= colsCount; i++)
 				{
 					String fieldName = rsmd.getColumnName(i).toLowerCase();
-					DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) dc.get(fieldName);
+					DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(fieldName);
 					if(state != null)
 						state.value = rs.getString(i);
 				}

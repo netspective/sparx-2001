@@ -280,6 +280,8 @@ public class TextField extends DialogField
         String dataType = mi.getDataType();
 
 		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return getValue(\""+ fieldName +"\"); }\n");
+        mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { return getValue(\""+ fieldName +"\", defaultValue); }\n");
+        mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "OrBlank() { return getValue(\""+ fieldName +"\", \"\"); }\n");
 		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", value); }\n");
 
 		return mi;

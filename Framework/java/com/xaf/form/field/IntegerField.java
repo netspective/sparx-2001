@@ -107,6 +107,7 @@ public class IntegerField extends TextField
         String dataType = mi.getDataType();
 
 		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { Integer o = (Integer) getValueAsObject(\""+ fieldName +"\"); return o == null ? 0 : o.intValue(); }\n");
+        mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { Integer o = (Integer) getValueAsObject(\""+ fieldName +"\"); return o == null ? defaultValue : o.intValue(); }\n");
 		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", Integer.toString(value)); }\n");
 
 		return mi;

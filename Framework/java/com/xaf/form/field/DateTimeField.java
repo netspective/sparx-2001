@@ -348,6 +348,7 @@ public class DateTimeField extends TextField
         String dataType = mi.getDataType();
 
 		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return (Date) getValueAsObject(\""+ fieldName +"\"); }\n");
+        mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { return (Date) getValueAsObject(\""+ fieldName +"\", defaultValue); }\n");
 
 		return mi;
 	}

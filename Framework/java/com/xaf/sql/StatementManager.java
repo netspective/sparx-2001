@@ -76,6 +76,8 @@ public class StatementManager extends XmlSource
 		}
 	}
 
+    static private Hashtable dynamicSql = new Hashtable();
+
 	private String defaultStyleSheet = null;
 	private Hashtable statements = new Hashtable();
 	private Hashtable queryDefns = new Hashtable();
@@ -374,6 +376,23 @@ public class StatementManager extends XmlSource
 			return null;
     }
 
+    static public Object[] getResultSetSingleRowArray(ResultSet rs) throws SQLException
+	{
+		if(rs.next())
+		{
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colsCount = rsmd.getColumnCount();
+            Object[] result = new Object[colsCount];
+			for(int i = 1; i <= colsCount; i++)
+			{
+				result[i-1] = rs.getObject(i);
+			}
+			return result;
+		}
+		else
+			return null;
+	}
+
 	static public Map getResultSetSingleRowAsMap(ResultSet rs) throws SQLException
 	{
 		Map result = new HashMap();
@@ -614,6 +633,152 @@ public class StatementManager extends XmlSource
 
 		ri.close();
 	}
+
+    /**
+     * Executes static (XML) SQL and returns the first column of the first row (single value)
+     */
+    public Object executeStmtGetValue(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        Object result = getResultSetSingleColumn(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes static (XML) SQL and returns the first row as an array
+     */
+    public Object[] executeStmtGetValues(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        Object[] result = getResultSetSingleRowArray(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes static (XML) SQL and returns the first row as a map (key is column name, value is value)
+     */
+    public Map executeStmtGetValuesMap(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        Map result = getResultSetSingleRowAsMap(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes static (XML) and returns the all the rows as an array with each row as a map
+     */
+    public Map[] executeStmtGetValuesMapArray(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        Map[] result = getResultSetRowsAsMapArray(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes static (XML) SQL and returns all the objects as a matrix
+     */
+    public Object[] executeStmtGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        Object[] result = getResultSetRowsAsMatrix(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes static (XML) SQL and returns all the rows, but only the first column as a string
+     */
+    public String[] executeStmtGetRowsAsStrings(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        String[] result = getResultSetRowsAsStrings(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL instead of requiring the SQL to be stored in the XML file
+     */
+    static public ResultInfo executeSql(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        StatementInfo si = (StatementInfo) dynamicSql.get(sql);
+        if(si == null)
+        {
+            si = new StatementInfo(sql);
+            dynamicSql.put(sql, si);
+        }
+        return execute(dc, vc, dataSourceId, si, params);
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns the first column of the first row (single value)
+     */
+    static public Object executeSqlGetValue(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        Object result = getResultSetSingleColumn(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns the first row as an array
+     */
+    static public Object[] executeSqlGetValues(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        Object[] result = getResultSetSingleRowArray(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns the first row as a map (key is column name, value is value)
+     */
+    static public Map executeSqlGetValuesMap(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        Map result = getResultSetSingleRowAsMap(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns the all the rows as an array with each row as a map
+     */
+    static public Map[] executeSqlGetValuesMapArray(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        Map[] result = getResultSetRowsAsMapArray(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns all the objects as a matrix
+     */
+    static public Object[] executeSqlGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        Object[] result = getResultSetRowsAsMatrix(ri.getResultSet());
+        ri.close();
+        return result;
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns all the rows, but only the first column as a string
+     */
+    static public String[] executeSqlGetRowsAsStrings(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    {
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        String[] result = getResultSetRowsAsStrings(ri.getResultSet());
+        ri.close();
+        return result;
+    }
 
 	public Metric getMetrics(Metric root)
 	{

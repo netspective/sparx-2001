@@ -43,7 +43,12 @@ public class DialogManager extends XmlSource
 
 			String dialogClassName = defnElement.getAttribute("class");
 			if(dialogClassName == null || dialogClassName.length() == 0)
-				dialogClassName = "dialog." + lookupName;
+            {
+				dialogClassName = "dialog.";
+                if(pkgName != null)
+                    dialogClassName += pkgName + ".";
+                dialogClassName += com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true);
+            }
 
             defnElement.setAttribute("qualified-name", lookupName);
             defnElement.setAttribute("package", pkgName);
@@ -95,7 +100,7 @@ public class DialogManager extends XmlSource
 			return dialog;
 		}
 
-        public File generateDialogBean(String outputPath) throws IOException
+        public File generateDialogBean(String outputPath, String pkgPrefix) throws IOException
         {
             Dialog activeDialog = new Dialog();
             activeDialog.importFromXml(pkgName, defnElement);
@@ -107,10 +112,10 @@ public class DialogManager extends XmlSource
             File javaFilePath = new File(pkgName == null ? outputPath : (outputPath + "/" + pkgName));
             javaFilePath.mkdirs();
 
-            File javaFile = new File(javaFilePath, com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(defnElement.getAttribute("name"), true) + ".java");
+            File javaFile = new File(javaFilePath, com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(defnElement.getAttribute("name"), true) + "Context.java");
 
             Writer writer = new java.io.FileWriter(javaFile);
-            writer.write(activeDialog.getSubclassedDialogContextCode());
+            writer.write(activeDialog.getSubclassedDialogContextCode(pkgPrefix));
             writer.close();
 
             findDialogContextClass();

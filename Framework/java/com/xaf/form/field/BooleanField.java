@@ -139,6 +139,7 @@ public class BooleanField extends DialogField
         String dataType = mi.getDataType();
 
 		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { Boolean o = (Boolean) getValueAsObject(\""+ fieldName +"\"); return o == null ? false : o.booleanValue(); }\n");
+        mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { Boolean o = (Boolean) getValueAsObject(\""+ fieldName +"\"); return o == null ? defaultValue : o.booleanValue(); }\n");
 		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", value == true ? \"1\" : \"0\"); }\n");
 
 		return mi;

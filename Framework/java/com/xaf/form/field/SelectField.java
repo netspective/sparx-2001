@@ -473,7 +473,11 @@ public class SelectField extends DialogField
                 dataType = mi.getDataType();
 
                 mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return getValue(\""+ fieldName +"\"); }\n");
+                mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { return getValue(\""+ fieldName +"\", defaultValue); }\n");
+                mi.addJavaCode("\tpublic int get" + memberName + "Int() { String s = getValue(\""+ fieldName +"\"); return s == null ? -1 : Integer.parseInt(s); }\n");
+                mi.addJavaCode("\tpublic int get" + memberName + "Int(int defaultValue) { String s = getValue(\""+ fieldName +"\"); return s == null ? defaultValue : Integer.parseInt(s); }\n");
                 mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", value); }\n");
+                mi.addJavaCode("\tpublic void set" + memberName + "(int value) { setValue(\""+ fieldName +"\", Integer.toString(value)); }\n");
                 break;
 
             case SELECTSTYLE_MULTICHECK:
@@ -485,6 +489,7 @@ public class SelectField extends DialogField
                 dataType = mi.getDataType();
 
                 mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return getValues(\""+ fieldName +"\"); }\n");
+                mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "("+ dataType +" defaultValue) { "+ dataType +" o = getValues(\""+ fieldName +"\"); return o == null ? defaultValue : o; }\n");
                 mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" values) { setValues(\""+ fieldName +"\", values); }\n");
                 break;
         }
