@@ -10,10 +10,11 @@
 
 	<table name="Task" type="Default">
 		<column name="task_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
-		<column name="owner_project_id" lookupref="Project.project_id" descr="Source Project ID (NULL if belongs to an org or person)"/>
+		<column name="owner_project_id" parentref="Project.project_id" descr="Source Project ID (NULL if belongs to an org or person)"/>
 		<column name="owner_org_id" lookupref="Org.org_id" descr="If this task belongs to a specific org, this is the ID of the org (NULL if belongs to a project or person)"/>
 		<column name="owner_person_id" lookupref="Person.person_id" descr="If this task belongs to a specific person, this is the ID (NULL if belongs to an org or person)"/>
 		<column name="task_type" lookupref="Task_Type" descr="The type of task"/>
+        <!-- column name="task_name" type="text" size="256" descr="Name of the task"/ -->
 		<column name="task_summary" type="text" size="512" descr="Summary of the task"/>
 		<column name="parent_task_id" selfref="Task.task_id" descr="Parent task (NULL if this is not a sub-task)"/>
 		<column name="priority_id" lookupref="Task_Priority" descr="The priority of the task"/>
@@ -49,8 +50,17 @@
 		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
 		<column name="dependency_type" lookupref="Task_Dependency_Type" descr="The type of dependency"/>
 		<column name="parent_id" parentref="Task.task_id" descr="Parent task"/>
-		<column name="dependent_id" lookupref="Task.task_id" descr="Dependent task"/>
+		<column name="dependent_id" parentref="Task.task_id" descr="Task that is dependent on the parent task"/>
 	</table>
+
+    <table name="Task_Dependency_Type" abbrev="TskDepTy" type="Relationship_Type">
+    </table>
+
+    <table name="Task_Type" abbrev="TskTy" type="Enumeration">
+        <enum>Organization</enum>
+        <enum>Project</enum>
+        <enum>Personal</enum>
+    </table>
 
 	<table name="Task_Event" abbrev="TskEvt" type="Event">
 		<param name="parent-ref">Task.task_id</param>

@@ -29,8 +29,12 @@
                 task_type.caption,
                 task_summary,
                 task.parent_task_id,
+                task_status.id as "task_status",
                 task_status.caption,
-                task_priority.caption
+                task_priority.id as "priority_id",
+                task_priority.caption,
+                to_char(task.start_date, 'MM/DD/YYYY') as "start_date",
+                to_char(task.end_date, 'MM/DD/YYYY') as "end_date"
             from
                 task, task_priority, task_status, task_type
             where
@@ -40,15 +44,19 @@
                 task.task_type = task_type.id
             <report heading="Overview">
 				<banner style="horizontal">
-                    <item caption="Edit"  url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
+                    <item caption="Edit"  url="config-expr:edit.jsp?project_id=${request:project_id}&amp;task_id=${request:task_id}"/>
+                    <item caption="Delete" url="config-expr:delete.jsp?project_id=${request:project_id}&amp;task_id=${request:task_id}"/>
                 </banner>
                 <column heading="Task ID" align="left"/>
                 <column heading="Type" />
                 <column heading="Summary" />
-                <column heading="Parent Task" align="left"/>
+                <column heading="Parent Task" align="left" url="config-expr:home.jsp?project_id=${request:project_id}&amp;task_id=${3}"/>
+                <column heading="Status ID" display="no"/>
                 <column heading="Status" />
+                <column heading="Priority ID" display="no"/>
                 <column heading="Priority" />
+                <column heading="Start Date" />
+                <column heading="End Date" />
             </report>
             <params>
                 <param value="request:task_id"/>
@@ -110,8 +118,8 @@
         <statement name="child-task-list-report">
             select
                 task_id,
-                task_type.caption,
                 task_summary,
+                task_type.caption,
                 task_status.caption,
                 task_priority.caption
             from
@@ -123,12 +131,12 @@
                 task.task_type = task_type.id
             <report heading="Child Task(s)">
 				<banner style="horizontal">
-                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>
+                    <item caption="Add" url="config-expr:create.jsp?project_id=${request:project_id}&amp;parent_task_id=${request:task_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
                 </banner>
                 <column heading="Task ID" align="left"/>
+                <column heading="Name" url="config-expr:home.jsp?project_id=${request:project_id}&amp;task_id=${0}"/>
                 <column heading="Type" />
-                <column heading="Summary" />
                 <column heading="Status" />
                 <column heading="Priority" />
             </report>
@@ -136,6 +144,31 @@
                 <param value="request:task_id"/>
             </params>
         </statement>
-
+        <statement name="dependent-task-report">
+            select
+                task.task_id,
+                task.task_summary,
+                task_type.caption,
+                task_status.caption,
+                task_priority.caption
+            from
+                task, task_priority, task_status, task_type, task_dependency
+            where
+                task_dependency.parent_id = ?  and
+                task.task_id = task_dependency.dependent_id and
+                task.priority_id = task_priority.id and
+                task.task_status = task_status.id and
+                task.task_type = task_type.id
+            <report heading="Dependent Task(s)">
+                <column heading="Task ID" align="left"/>
+                <column heading="Name" url="config-expr:home.jsp?project_id=${request:project_id}&amp;task_id=${0}"/>
+                <column heading="Type" />
+                <column heading="Status" />
+                <column heading="Priority" />
+            </report>
+            <params>
+                <param value="request:task_id"/>
+            </params>
+        </statement>
     </sql-statements>
 </xaf>

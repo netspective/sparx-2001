@@ -10,6 +10,11 @@
         <td width='50%' align='left' valign='top'><xaf:query name="task.assigned-members" skin="report" /></td>
         <td width='50%' align='left' valign='top'> <xaf:query name="task.child-task-list-report" skin="report" /></td>
     </tr>
+    <tr>
+        <td width='50%' align='left' valign='top'><xaf:query name="task.dependent-task-report" skin="report" /></td>
+        <td width='50%' align='left' valign='top'> &nbsp;</td>
+    </tr>
+
 </table>
 
 

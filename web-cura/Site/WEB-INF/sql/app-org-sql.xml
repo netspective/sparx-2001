@@ -115,6 +115,48 @@
             </params>
         </statement>
 
+        <statement name="project-report">
+            select
+                Project.project_id,
+                Project.project_name,
+                Project_status.caption,
+                to_char(Project.start_date, 'MM/DD/YYYY'),
+                to_char(Project.target_end_date, 'MM/DD/YYYY')
+            from
+                ProjectOrg_Relation, Project, Project_status
+            where
+                ProjectOrg_Relation.rel_org_id = ? and
+                ProjectOrg_Relation.parent_id = Project.project_id and
+                Project.project_status = Project_Status.id
+            <params>
+                <param value="request:org_id"/>
+            </params>
+            <report heading="Projects">
+                <banner  style="horizontal">
+                    <item caption="Add" url="create-app-url:/project/index.jsp?cmd=dialog,project.registration,add"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Name" url="create-app-url:/project/home.jsp?project_id=${0}&amp;project_name=%{2}"/>
+                <column heading="Status" align="left"/>
+                <column heading="Start Date" align="left"/>
+                <column heading="Target End Date" align="left"/>
+            </report>
+        </statement>
+
+        <statement name="task-list">
+            select
+                task.task_summary,
+                task.task_id
+            from
+                task, task_type
+            where
+                task.owner_org_id = ?   and
+                task.task_type = task_type.id
+            <params>
+                <param value="session:organization"/>
+            </params>
+        </statement>
+
 	</sql-statements>
 
 </xaf>

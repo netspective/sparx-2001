@@ -58,7 +58,8 @@
                 taskperson_relation.parent_id = task.task_id and
                 person.person_id = taskperson_relation.rel_person_id and
                 person.person_id = personorg_relationship.parent_id   and
-                personorg_relationship.rel_org_id = ? and
+                personorg_relationship.rel_org_id = org.org_id and
+                org.org_id = ? and
                 task.priority_id = task_priority.id and
                 task.task_status = task_status.id
             order by task.priority_id
@@ -90,12 +91,12 @@
                 <param value="request:person_id"/>
             </params>
             <report heading="Organization Memberships">
-				<banner>
+				<banner style="horizontal">
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
                 </banner>
-                <column heading="ID" align="center"/>
-                <column heading="Name" align="center"/>
+                <column heading="ID" align="left"/>
+                <column heading="Name" align="left" url="create-app-url:/account/home.jsp?org_id=${0}&amp;org_name=%{1}"/>
                 <column display="no"/>
             </report>
 		</statement>
@@ -132,7 +133,7 @@
                 <param value="request:person_id"/>
             </params>
 			<report heading="Contact Methods">
-				<banner>
+				<banner style="horizontal">
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
                 </banner>
@@ -156,9 +157,8 @@
                 <param value="request:person_id"/>
             </params>
 			<report heading="Physical Address">
-				<banner>
-                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
+				<banner style="horizontal">
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}&amp;person_name=${request:person_name}"/>
                 </banner>
                 <column heading="Street Address 1"/>
                 <column heading="Street Address 2"/>
@@ -192,10 +192,10 @@
 			<params>
 				<param value="request:person_id"/>
 			</params>
-			<report heading="Contact Overview">
-				<banner>
-                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
+			<report heading="Overview">
+				<banner style="horizontal">
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}&amp;person_name=${request:person_name}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}&amp;person_name=${request:person_name}"/>
                 </banner>
                 <column heading="ID" display="no"/>
                 <column heading="Prefix"/>

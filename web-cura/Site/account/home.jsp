@@ -12,7 +12,7 @@
     </tr>
     <tr>
         <td width='50%' align='left' valign='top'><xaf:query name="org.contact-list" skin="report" /></td>
-        <td width='50%' align='left' valign='top'>&nbsp;</td>
+        <td width='50%' align='left' valign='top'><xaf:query name="org.project-report" skin="report" /></td>
     </tr>
 </table>
 </app:page>

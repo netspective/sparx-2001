@@ -5,7 +5,7 @@
 
 		<!-- Fields -->
 		<field id="person_id" caption="Contact ID" join="person" column="person_id">
-			<report heading="ID" url="create-app-url:/contact/home.jsp?person_id=${.}&amp;person_name=%{4}" align="left"/>
+			<report heading="ID"  align="left"/>
 		</field>
 		<field id="name_prefix" caption="Prefix" join="person" column="name_prefix">
 			<report heading="Prefix" />
@@ -17,7 +17,7 @@
             <report heading="Gender"/>
         </field>
 		<field id="name_last" caption="Last Name" join="person" column="name_last" where-expr="upper(person.name_last)">
-			<report heading="Last Name"/>
+			<report heading="Last Name" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{4}"/>
 		</field>
 		<field id="name_first" caption="First Name" join="person" column="name_first" where-expr="upper(person.name_first)">
 			<report heading="First Name"/>

@@ -120,6 +120,22 @@
             </report>
         </statement>
 
+        <statement name="member-tasks">
+            select
+                task.task_summary,
+                task.task_id
+            from
+                task, task_type, project
+            where
+                task.owner_project_id = ?   and
+                task.owner_project_id = project.project_id and
+                task.task_type = task_type.id and
+
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+
 		<statement name="available-orgs">
 			select
                 org.org_name,
