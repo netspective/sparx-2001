@@ -1,13 +1,14 @@
 package com.xaf.form;
 
 import org.w3c.dom.*;
+import com.xaf.value.*;
 
 public class DialogDirector extends DialogField
 {
 	private String submitCaption = "   OK   ";
 	private String cancelCaption = " Cancel ";
-	private String submitActionUrl;
-	private String cancelActionUrl;
+	private SingleValueSource submitActionUrl;
+	private SingleValueSource cancelActionUrl;
 
 	public DialogDirector()
 	{
@@ -25,11 +26,17 @@ public class DialogDirector extends DialogField
 	public String getCancelCaption() { return cancelCaption; }
 	public void setCancelCaption(String value) { cancelCaption = value; }
 
-	public String getSubmitActionUrl() { return submitActionUrl; }
-	public void setSubmitActionUrl(String value) { submitActionUrl = value; }
+	public SingleValueSource getSubmitActionUrl() { return submitActionUrl; }
+	public void setSubmitActionUrl(String value)
+    {
+        submitActionUrl = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
-	public String getCancelActionUrl() { return cancelActionUrl; }
-	public void setCancelActionUrl(String value) { cancelActionUrl = value; }
+	public SingleValueSource getCancelActionUrl() { return cancelActionUrl; }
+	public void setCancelActionUrl(String value)
+    {
+        cancelActionUrl = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
 	public void importFromXml(Element elem)
 	{
@@ -54,11 +61,11 @@ public class DialogDirector extends DialogField
 
 		value = elem.getAttribute("submit-url");
 		if(value.length() != 0)
-			submitActionUrl = value;
+			this.setSubmitActionUrl(value);
 
 		value = elem.getAttribute("cancel-url");
 		if(value.length() != 0)
-			cancelActionUrl = value;
+			this.setCancelActionUrl(value);
 	}
 
 	public String getControlHtml(DialogContext dc)
@@ -102,12 +109,14 @@ public class DialogDirector extends DialogField
 		}
 		else
 		{
+            String cancelStr = "";
 			if(cancelActionUrl.equals("back"))
 				html.append("onclick=\"history.back()\" ");
 			else
 			{
 				html.append("onclick=\"document.location = '");
-				html.append(cancelActionUrl);
+                cancelStr = cancelActionUrl != null ? cancelActionUrl.getValue(dc) : null;
+				html.append(cancelStr);
 				html.append("'\" ");
 			}
 		}
