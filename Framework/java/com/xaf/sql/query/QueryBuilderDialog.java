@@ -5,6 +5,8 @@ import java.io.*;
 import java.sql.*;
 import javax.servlet.http.*;
 
+import org.w3c.dom.*;
+
 import com.xaf.config.*;
 import com.xaf.db.*;
 import com.xaf.form.*;
@@ -15,13 +17,21 @@ import com.xaf.value.*;
 
 public class QueryBuilderDialog extends Dialog
 {
+	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS    = 1;
+	static public final int QBDLGFLAG_ALLOW_DEBUG          = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
+
 	static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
 
-	static public final int MAX_ROWS_IN_SINGLE_PAGE = 9999;
-	static public final int OUTPUTTYPE_HTML_MULTI_PAGE    = 0;
-	static public final int OUTPUTTYPE_HTML_SINGLE_PAGE   = 1;
-	static public final int OUTPUTTYPE_HTML_DELIMITED_CSV = 2;
-	static public final int OUTPUTTYPE_HTML_DELIMITED_TAB = 3;
+	static public final int MAX_ROWS_IN_SINGLE_BROWSER_PAGE = 9999;
+
+	static public final int OUTPUTSTYLE_HTML     = 0;
+	static public final int OUTPUTSTYLE_TEXT_CSV = 1;
+	static public final int OUTPUTSTYLE_TEXT_TAB = 2;
+
+	static public final int OUTPUTDEST_BROWSER_MULTI_PAGE  = 0;
+	static public final int OUTPUTDEST_BROWSER_SINGLE_PAGE = 1;
+	static public final int OUTPUTDEST_FILE_DOWNLOAD       = 2;
+	static public final int OUTPUTDEST_FILE_EMAIL          = 3;
 
 	private int maxConditions;
 	private QueryDefinition queryDefn;
@@ -40,12 +50,19 @@ public class QueryBuilderDialog extends Dialog
 		setLoopEntries(true);
     }
 
-	public int getMaxConditions() { return maxConditions; }
-	public void setMaxConditions(int value)
+	public void importFromXml(String packageName, Element elem)
 	{
-		maxConditions = value;
-		clearFields();
+		super.importFromXml(packageName, elem);
 
+		if(elem.getAttribute("show-output-dests").equals("no"))
+			setFlag(QBDLGFLAG_HIDE_OUTPUT_DESTS);
+
+		if(elem.getAttribute("allow-debug").equals("yes"))
+			setFlag(QBDLGFLAG_ALLOW_DEBUG);
+	}
+
+	public void addInputFields()
+	{
 		int lastConditionNum = maxConditions-1;
 		ListValueSource fieldsList = ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
 		ListValueSource compList = ValueSourceFactory.getListValueSource("sql-comparisons:all");
@@ -84,6 +101,39 @@ public class QueryBuilderDialog extends Dialog
 
 			addField(condition);
 		}
+	}
+
+	public void addResultsSepatorField()
+	{
+		addField(new SeparatorField("results_separator", "Results"));
+	}
+
+	public void addOutputDestinationFields()
+	{
+		DialogField output = new DialogField();
+		output.setSimpleName("output");
+		output.setFlag(DialogField.FLDFLAG_SHOWCAPTIONASCHILD);
+
+		SelectField outputStyle = new SelectField("style", "Style", SelectField.SELECTSTYLE_COMBO, "HTML=0;CSV Text File=1;Tab-delimited Text File=2");
+		outputStyle.setDefaultValue(new StaticValue("0"));
+		output.addChildField(outputStyle);
+
+		SelectField outputDest = new SelectField("destination", "Destination", SelectField.SELECTSTYLE_COMBO, "Browser (HTML) multiple pages=0;Browser (HTML) single page=1;Download File=2;E-mail as Attachment=3");
+		outputDest.setDefaultValue(new StaticValue("0"));
+		output.addChildField(outputDest);
+
+		SelectField rowsPerPage = new SelectField("rows_per_page", null, SelectField.SELECTSTYLE_COMBO, "10 rows per page=10;20 rows per page=20;30 rows per page=30");
+		rowsPerPage.setDefaultValue(new StaticValue("10"));
+   		rowsPerPage.addConditionalAction(new DialogFieldConditionalDisplay(rowsPerPage, "output.destination", "control.selectedIndex == 0"));
+		output.addChildField(rowsPerPage);
+
+		addField(output);
+	}
+
+	public void addDisplayOptionsFields()
+	{
+		ListValueSource fieldsList = ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
+		ListValueSource compList = ValueSourceFactory.getListValueSource("sql-comparisons:all");
 
 		SelectField predefinedSels = null;
 		List predefinedSelects = queryDefn.getSelectsList();
@@ -107,8 +157,8 @@ public class QueryBuilderDialog extends Dialog
 
 		if(predefinedSels != null)
 		{
-			displayFields.addConditionalAction(new DialogFieldConditionalDisplay(displayFields, "options.predefined_select", "control.value == '"+QueryDefnSelectsListValue.CUSTOMIZE+"'"));
-			sortFields.addConditionalAction(new DialogFieldConditionalDisplay(sortFields, "options.predefined_select", "control.value == '"+QueryDefnSelectsListValue.CUSTOMIZE+"'"));
+			displayFields.addConditionalAction(new DialogFieldConditionalDisplay(displayFields, "options.predefined_select", "control.options[control.selectedIndex].value == '"+QueryDefnSelectsListValue.CUSTOMIZE+"'"));
+			sortFields.addConditionalAction(new DialogFieldConditionalDisplay(sortFields, "options.predefined_select", "control.options[control.selectedIndex].value == '"+QueryDefnSelectsListValue.CUSTOMIZE+"'"));
 		}
 
 		DialogField options = new DialogField();
@@ -117,24 +167,32 @@ public class QueryBuilderDialog extends Dialog
 		if(predefinedSels != null)
 			options.addChildField(predefinedSels);
 
-		SelectField outputType = new SelectField("output_type", "Output", SelectField.SELECTSTYLE_COMBO, "HTML (multiple pages)=0;HTML (single page)=1;Delimited File (CSV)=2;Delimited File (Tab)=3");
-		outputType.setDefaultValue(new StaticValue("0"));
-		options.addChildField(outputType);
+		if(flagIsSet(QBDLGFLAG_ALLOW_DEBUG))
+			options.addChildField(new BooleanField("debug", "Debug", BooleanField.BOOLSTYLE_CHECK, 0));
 
-		SelectField rowsPerPage = new SelectField("rows_per_page", null, SelectField.SELECTSTYLE_COMBO, "10 rows per page=10;20 rows per page=20;30 rows per page=30");
-		rowsPerPage.setDefaultValue(new StaticValue("10"));
-   		rowsPerPage.addConditionalAction(new DialogFieldConditionalDisplay(rowsPerPage, "options.output_type", "control.selectedIndex == 0"));
-
-		options.addChildField(rowsPerPage);
-		options.addChildField(new BooleanField("debug", "Debug", BooleanField.BOOLSTYLE_CHECK, 0));
-
-		addField(new SeparatorField("results_separator", "Results"));
 		addField(options);
 		addField(displayFields);
 		addField(sortFields);
+	}
+
+	public void createContents()
+	{
+		clearFields();
+
+		addInputFields();
+		addResultsSepatorField();
+		addOutputDestinationFields();
+		addDisplayOptionsFields();
 
 		addField(new DialogDirector());
 		addField(new ResultSetNavigatorButtonsField());
+	}
+
+	public int getMaxConditions() { return maxConditions; }
+	public void setMaxConditions(int value)
+	{
+		maxConditions = value;
+		createContents();
 	}
 
 	public QueryDefinition getQueryDefn() { return queryDefn; }
@@ -150,6 +208,7 @@ public class QueryBuilderDialog extends Dialog
 		{
 			dc.setFlag("conditions_separator", DialogField.FLDFLAG_INVISIBLE);
 			dc.setFlag("results_separator", DialogField.FLDFLAG_INVISIBLE);
+			dc.setFlag("output", DialogField.FLDFLAG_INVISIBLE);
 			dc.setFlag("options", DialogField.FLDFLAG_INVISIBLE);
 			dc.setFlag("display_fields", DialogField.FLDFLAG_INVISIBLE);
 			dc.setFlag("sort_fields", DialogField.FLDFLAG_INVISIBLE);
@@ -164,6 +223,8 @@ public class QueryBuilderDialog extends Dialog
 		}
 		else
 		{
+			if(flagIsSet(QBDLGFLAG_HIDE_OUTPUT_DESTS))
+				dc.setFlag("output", DialogField.FLDFLAG_INVISIBLE);
 			dc.setFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
 		}
 	}
@@ -217,11 +278,44 @@ public class QueryBuilderDialog extends Dialog
 		return select;
 	}
 
-	public String executeMultiPage(DialogContext dc, int pageSize)
+	protected static class DestinationInfo
+	{
+		protected String storePathName;
+		protected String downloadUrl;
+		protected File storePath;
+		protected File file;
+		protected Writer writer;
+
+		public DestinationInfo(DialogContext dc, ReportSkin skin) throws IOException
+		{
+			Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
+			storePathName = appConfig.getValue(dc, "app.report-file-store-path");
+			downloadUrl = appConfig.getValue(dc, "app.report-file-download-url");
+			if(storePathName == null || downloadUrl == null)
+				throw new RuntimeException("Configuration value 'app.report-file-store-path' and 'app.report-file-download-url' are required.");
+
+			storePath = new File(storePathName);
+			if(! storePath.exists())
+				storePath.mkdirs();
+
+			file = File.createTempFile("report_", skin != null ? skin.getFileExtension() : ".html", storePath);
+			file.deleteOnExit();
+
+			writer = new FileWriter(file);
+		}
+	}
+
+	public String executeHtml(DialogContext dc, int destination)
 	{
 		String transactionId = dc.getTransactionId();
 		HttpSession session = dc.getSession();
 		QuerySelectScrollState state = (QuerySelectScrollState) session.getAttribute(transactionId);
+
+		int pageSize = -1;
+		if(destination == OUTPUTDEST_BROWSER_SINGLE_PAGE)
+			pageSize = MAX_ROWS_IN_SINGLE_BROWSER_PAGE;
+		else if(destination == OUTPUTDEST_FILE_DOWNLOAD || destination == OUTPUTDEST_FILE_EMAIL)
+			pageSize = Integer.MAX_VALUE;
 
 		try
 		{
@@ -235,7 +329,8 @@ public class QueryBuilderDialog extends Dialog
 			{
 				QuerySelect select = createSelect(dc);
 
-				state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? Integer.parseInt(dc.getValue("options.rows_per_page")) : pageSize);
+				String rowsPerPageStr = dc.getValue("output.rows_per_page");
+				state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize);
 				if(state.isValid())
 					session.setAttribute(transactionId, state);
 				else
@@ -252,10 +347,23 @@ public class QueryBuilderDialog extends Dialog
 			else if(dc.getRequest().getParameter("rs_nav_first") != null)
 				state.setPage(1);
 
-			StringWriter writer = new StringWriter();
-			state.produceReport(writer, dc);
-			return writer.toString();
-			//return state.getReport(writer, dc);
+			if(destination == OUTPUTDEST_BROWSER_MULTI_PAGE || destination == OUTPUTDEST_BROWSER_SINGLE_PAGE)
+			{
+				StringWriter writer = new StringWriter();
+	    		state.produceReport(writer, dc);
+		    	return writer.toString();
+			}
+			else
+			{
+				DestinationInfo destInfo = new DestinationInfo(dc, state.getSkin());
+	    		state.produceReport(destInfo.writer, dc);
+				destInfo.writer.close();
+
+				if(destination == OUTPUTDEST_FILE_DOWNLOAD)
+					return "Your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
+				else
+					return "E-mail not supported yet; however, your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
+			}
 		}
 		catch(Exception e)
 		{
@@ -268,7 +376,7 @@ public class QueryBuilderDialog extends Dialog
 		}
 	}
 
-	public String executeText(DialogContext dc, ReportSkin skin)
+	public String executeText(DialogContext dc, int destination, ReportSkin skin)
 	{
 		QuerySelect select = createSelect(dc);
 		DatabaseContext dbc = DatabaseContextFactory.getContext(dc);
@@ -290,25 +398,24 @@ public class QueryBuilderDialog extends Dialog
 						rcl.getColumn(i).importFromColumn(rc);
 				}
 
-				Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
-				String storePathName = appConfig.getValue(dc, "app.report-file-store-path");
-				String downloadUrl = appConfig.getValue(dc, "app.report-file-download-url");
-				if(storePathName == null || downloadUrl == null)
-					throw new RuntimeException("Configuration value 'app.report-file-store-path' and 'app.report-file-download-url' are required.");
-
-				File storePath = new File(storePathName);
-				if(! storePath.exists())
-					storePath.mkdirs();
-
-				File file = File.createTempFile("report_", skin.getFileExtension(), storePath);
-				file.deleteOnExit();
-
 				ReportContext rc = new ReportContext(dc, reportDefn, skin);
-				Writer fileWriter = new FileWriter(file);
-				skin.produceReport(fileWriter, rc, rs);
-				fileWriter.close();
+				if(destination == OUTPUTDEST_BROWSER_MULTI_PAGE || destination == OUTPUTDEST_BROWSER_SINGLE_PAGE)
+				{
+					StringWriter writer = new StringWriter();
+					skin.produceReport(writer, rc, rs);
+					return writer.toString();
+				}
+				else
+				{
+					DestinationInfo destInfo = new DestinationInfo(dc, skin);
+					skin.produceReport(destInfo.writer, rc, rs);
+					destInfo.writer.close();
 
-				return "Your file is ready for download. Please click <a href='"+ downloadUrl + "/" + file.getName() +"'>here</a> to retrieve it.";
+					if(destination == OUTPUTDEST_FILE_DOWNLOAD)
+						return "Your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
+					else
+						return "E-mail not supported yet; however, your file is ready for download. Please click <a href='"+ destInfo.downloadUrl + "/" + destInfo.file.getName() +"'>here</a> to retrieve it.";
+				}
 			}
 			else
 			{
@@ -335,24 +442,25 @@ public class QueryBuilderDialog extends Dialog
             return "<p><pre><code>SQL:<p>" + sql + (sql == null ? "<p>" + select.getErrorSql() : select.getBindParamsDebugHtml(dc)) + "</code></pre>";
 		}
 
-		String outputTypeStr = dc.getValue("options.output_type");
-		int outputType = outputTypeStr != null ? Integer.parseInt(outputTypeStr) : OUTPUTTYPE_HTML_MULTI_PAGE;
-		switch(outputType)
+		String outputStyleStr = dc.getValue("output.style");
+		String outputDestStr = dc.getValue("output.destination");
+
+		int outputStyle = outputStyleStr != null ? Integer.parseInt(outputStyleStr) : OUTPUTSTYLE_HTML;
+		int outputDest = outputDestStr != null ? Integer.parseInt(outputDestStr) : OUTPUTDEST_BROWSER_MULTI_PAGE;
+
+		switch(outputStyle)
 		{
-			case OUTPUTTYPE_HTML_MULTI_PAGE:
-			    return executeMultiPage(dc, -1);
+			case OUTPUTSTYLE_HTML:
+			    return executeHtml(dc, outputDest);
 
-			case OUTPUTTYPE_HTML_SINGLE_PAGE:
-			    return executeMultiPage(dc, MAX_ROWS_IN_SINGLE_PAGE);
+			case OUTPUTSTYLE_TEXT_CSV:
+			    return executeText(dc, outputDest, SkinFactory.getReportSkin("text-csv"));
 
-			case OUTPUTTYPE_HTML_DELIMITED_CSV:
-			    return executeText(dc, SkinFactory.getReportSkin("text-csv"));
-
-			case OUTPUTTYPE_HTML_DELIMITED_TAB:
-			    return executeText(dc, SkinFactory.getReportSkin("text-tab"));
+			case OUTPUTSTYLE_TEXT_TAB:
+			    return executeText(dc, outputDest, SkinFactory.getReportSkin("text-tab"));
 
 			default:
-				return "Output Type " + outputType + " is unknown.";
+				return "Output Style " + outputStyle + " is unknown.";
 		}
 	}
 
