@@ -1,18 +1,17 @@
 These are the things that are still left to do:
 
-2. Refactor "Suggestion", "Tell me what you got" and "Gift Detail"
-3. Security for the ADmin pages.
-4. Change the hardcoded values of -1 and 0 to use value sources or config values.
-6. Look at the status-category foreing key problem on brand new gifts.
-8. Asses if we really need to use DMLs or could we move to SQL stored in the statements.xml
-9. See how we could avoid showing "null" for some values when deleting.
-10. See if we could extend the select field to have "All" instead of "" as the first element or
-    simply have a value source that adds that at the begining of the List.
-11. Take a closer look at the way the images are being done.  It could be improved.
-12. Finish Filling the DB and change all the names
-13. Make it more attractive.
-14. Write document
-15. Verify some extrange behavior with the "List ALl Items" dinamic query.  It has some weird paging after
-    updating or deleting an item.
-16. Take care of Cancel in the Gift Detail dialog
+2. See if we could extend the select field to have "All" instead of "" as the first element or
+   simply have a value source that adds that at the begining of the List.
+3. See how we could avoid showing "null" for some values when deleting.
+1. Change the hardcoded values of -1 and 0 to use value sources or config values.
+5. Make it more attractive.
+6. Write document
+
+
+9. Refactor "Suggestion", "Tell me what you got" and "Gift Detail"
+10. Security for the ADmin pages.
+11. Look at the status-category foreing key problem on brand new gifts.
+12. Asses if we really need to use DMLs or could we move to SQL stored in the statements.xml
+13. Take a closer look at the way the images are being done.  It could be improved.
+
 
