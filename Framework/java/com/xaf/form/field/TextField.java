@@ -86,6 +86,7 @@ public class TextField extends DialogField
 		if(value == null) return null;
 
 		long flags = getFlags();
+        System.out.println(value);
 		if((flags & FLDFLAG_UPPERCASE) != 0) value = value.toUpperCase();
 		if((flags & FLDFLAG_LOWERCASE) != 0) value = value.toLowerCase();
 		if((flags & FLDFLAG_TRIM) != 0) value = value.trim();
@@ -176,6 +177,10 @@ public class TextField extends DialogField
 		{
 			return "<input type='hidden' name='"+ getId() +"' value='" + value + "'><span id='"+ getQualifiedName() +"'>" + value + "</span>";
 		}
+        else if (isBrowserReadOnly(dc))
+        {
+	        return "<input type=\"text\" name=\""+ getId() +"\" readonly style=\"background-color: lightyellow\" value=\"" + value + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
+        }
 		else if(! flagIsSet(FLDFLAG_MASKENTRY))
 		{
 			return "<input type=\"text\" name=\""+ getId() +"\" value=\"" + value + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
@@ -238,5 +243,16 @@ public class TextField extends DialogField
     public void setValidatePatternErrorMessage(String str)
     {
         regexMessage = str;
+    }
+
+   /**
+     *
+     */
+    public String getCustomJavaScriptDefn(DialogContext dc)
+    {
+        if (this.isBrowserReadOnly(dc))
+            return (super.getCustomJavaScriptDefn(dc) + "field.readonly = 'yes';\n");
+        else
+            return (super.getCustomJavaScriptDefn(dc) + "field.readonly = 'no';\n");
     }
 }
