@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SqlServerDatabasePolicy.java,v 1.2 2002-01-28 10:09:54 jruss Exp $
+ * $Id: SqlServerDatabasePolicy.java,v 1.3 2002-02-07 12:47:28 jruss Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -129,4 +129,15 @@ public class SqlServerDatabasePolicy extends BasicDatabasePolicy
     {
 				return false;
 		}
+
+    public String appendInsertSqlForAutoInc()
+    {
+      return "select @@IDENTITY";
+    }
+
+    public Object handleAutoIncPostDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName, Object autoIncColumnValue) throws SQLException
+    {
+        String sql = "select @@IDENTITY";
+        return executeAndGetSingleValue(conn, sql);
+    }
 }
