@@ -104,6 +104,20 @@ public class XmlSource
 		return identifier.toString();
 	}
 
+    public static String xmlTextToJavaConstant(String xml)
+	{
+		if(xml == null || xml.length() == 0)
+			return xml;
+
+		StringBuffer constant = new StringBuffer();
+		for(int i = 0; i < xml.length(); i++)
+		{
+			char ch = xml.charAt(i);
+            constant.append(Character.isJavaIdentifierPart(ch) ? Character.toUpperCase(ch) : '_');
+		}
+		return constant.toString();
+	}
+
 	public Document getDocument()
 	{
 		reload();
