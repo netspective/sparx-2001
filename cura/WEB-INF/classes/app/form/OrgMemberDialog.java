@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
 import java.sql.SQLException;
 
-import dal.table.PersonOrgRelationshipTable;
-import dal.DataAccessLayer;
-import dal.domain.row.PersonOrgRelationshipRow;
+import app.dal.table.PersonOrgRelationshipTable;
+import app.dal.DataAccessLayer;
+import app.dal.domain.row.PersonOrgRelationshipRow;
 
 public class OrgMemberDialog  extends Dialog
 {
@@ -68,8 +68,8 @@ public class OrgMemberDialog  extends Dialog
             cc = dc.getConnectionContext();
             cc.beginTransaction();
             String[] personList = dc.getRequest().getParameterValues("_dc.rel_person_id.checkbox");
-            dialog.context.org.PersonUnregistrationContext rc = (dialog.context.org.PersonUnregistrationContext) dc;
-            PersonOrgRelationshipTable porTable = dal.DataAccessLayer.instance.getPersonOrgRelationshipTable();
+            app.form.context.org.PersonUnregistrationContext rc = (app.form.context.org.PersonUnregistrationContext) dc;
+            PersonOrgRelationshipTable porTable = app.dal.DataAccessLayer.instance.getPersonOrgRelationshipTable();
             for (int j=0; j < personList.length; j++)
             {
                 porTable.delete(cc, porTable.createPersonOrgRelationshipRow(), "rel_org_id = ? and parent_id = ?",
@@ -110,8 +110,8 @@ public class OrgMemberDialog  extends Dialog
             String[] personList = dc.getRequest().getParameterValues("_dc.rel_person_id.checkbox");
 
             cc.beginTransaction();
-            dialog.context.org.PersonRegistrationContext rc = (dialog.context.org.PersonRegistrationContext) dc;
-            PersonOrgRelationshipTable porTable = dal.DataAccessLayer.instance.getPersonOrgRelationshipTable();
+            app.form.context.org.PersonRegistrationContext rc = (app.form.context.org.PersonRegistrationContext) dc;
+            PersonOrgRelationshipTable porTable = app.dal.DataAccessLayer.instance.getPersonOrgRelationshipTable();
             for (int j=0; j < personList.length; j++)
             {
                 PersonOrgRelationshipRow porRow = porTable.createPersonOrgRelationshipRow();

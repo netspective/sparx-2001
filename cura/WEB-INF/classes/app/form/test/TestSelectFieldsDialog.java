@@ -26,7 +26,7 @@ public class TestSelectFieldsDialog extends Dialog
             }
         }
 
-        dialog.context.Test.DialogTest03Context sfdc = (dialog.context.Test.DialogTest03Context) dc;
+        app.form.context.Test.DialogTest03Context sfdc = (app.form.context.Test.DialogTest03Context) dc;
         values = sfdc.getSelFieldMultidual();
         if(values != null)
         {

@@ -11,16 +11,16 @@ import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.security.AuthenticatedUser;
 import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
-import dal.domain.Project;
-import dal.domain.rows.ProjectOrgRelationRows;
-import dal.domain.rows.TaskRows;
-import dal.domain.row.ProjectRow;
-import dal.domain.row.ProjectOrgRelationRow;
-import dal.domain.row.TaskRow;
-import dal.table.ProjectTable;
-import dal.table.RecordStatusTable;
-import dal.table.ProjectOrgRelationTable;
-import dal.table.TaskTable;
+import app.dal.domain.Project;
+import app.dal.domain.rows.ProjectOrgRelationRows;
+import app.dal.domain.rows.TaskRows;
+import app.dal.domain.row.ProjectRow;
+import app.dal.domain.row.ProjectOrgRelationRow;
+import app.dal.domain.row.TaskRow;
+import app.dal.table.ProjectTable;
+import app.dal.table.RecordStatusTable;
+import app.dal.table.ProjectOrgRelationTable;
+import app.dal.table.TaskTable;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
@@ -131,17 +131,17 @@ public class ProjectDialog extends Dialog
 
             cc.beginTransaction();
             // the dialog's context is represented by its own custom bean class
-            dialog.context.project.RegistrationContext rc = (dialog.context.project.RegistrationContext) dc;
+            app.form.context.project.RegistrationContext rc = (app.form.context.project.RegistrationContext) dc;
 
             // remove all the relationships assigned to this project
-            ProjectOrgRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectOrgRelationTable();
+            ProjectOrgRelationTable projRelTable = app.dal.DataAccessLayer.instance.getProjectOrgRelationTable();
             projRelTable.deleteProjectOrgRelationRowsUsingParentId(cc, rc.getProjectId());
 
-            ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
+            ProjectTable projectTable = app.dal.DataAccessLayer.instance.getProjectTable();
             ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
 
             // remove all tasks assigned to this project
-            dal.table.TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+            app.dal.table.TaskTable taskTable = app.dal.DataAccessLayer.instance.getTaskTable();
             TaskRows taskRows = taskTable.getTaskRowsByOwnerProjectId(cc, rc.getProjectId());
             if (taskRows != null && taskRows.size() > 0)
             {
@@ -170,9 +170,9 @@ public class ProjectDialog extends Dialog
             cc.beginTransaction();
 
             // the dialog's context is represented by its own custom bean class
-            dialog.context.project.RegistrationContext rc = (dialog.context.project.RegistrationContext) dc;
+            app.form.context.project.RegistrationContext rc = (app.form.context.project.RegistrationContext) dc;
 
-            ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
+            ProjectTable projectTable = app.dal.DataAccessLayer.instance.getProjectTable();
             ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
             projectRow.setProjectName(rc.getProjectName());
             projectRow.setProjectDescr(rc.getProjectDescr());
@@ -187,7 +187,7 @@ public class ProjectDialog extends Dialog
             projectTable.update(cc, projectRow);
 
 			// every project added needs a 'owner' organization
-            ProjectOrgRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectOrgRelationTable();
+            ProjectOrgRelationTable projRelTable = app.dal.DataAccessLayer.instance.getProjectOrgRelationTable();
             ProjectOrgRelationRows projRelRows =  projectRow.getProjectOrgRelationRows(cc);
 
             Iterator list = projRelRows.listIterator();
@@ -249,7 +249,7 @@ public class ProjectDialog extends Dialog
 			// begin the transaction
             cc.beginTransaction();
 
-            ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
+            ProjectTable projectTable = app.dal.DataAccessLayer.instance.getProjectTable();
             ProjectRow projectRow = projectTable.createProjectRow();
             projectRow.setCrPersonId(personId.longValue());
             projectRow.setCrStampSqlExpr("sysdate");
@@ -267,7 +267,7 @@ public class ProjectDialog extends Dialog
             projectTable.insert(cc, projectRow);
 
             // insert the project relationships
-            ProjectOrgRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectOrgRelationTable();
+            ProjectOrgRelationTable projRelTable = app.dal.DataAccessLayer.instance.getProjectOrgRelationTable();
             ProjectOrgRelationRow projRelRow = projRelTable.createProjectOrgRelationRow();
             projRelRow.setParentId(projectRow.getProjectId());
             projRelRow.setCrPersonId(personId.longValue());
@@ -279,7 +279,7 @@ public class ProjectDialog extends Dialog
                 projRelRow.setRelOrgId(new Long((String)session.getAttribute("organization")));
             // assigning a project to person. Relationship not deifned yet so assign the creating user
             // NOTE: relationship types have not been defined yet. Insert dummy value
-            projRelRow.setRelType(dal.table.ProjectOrgRelationTypeTable.EnumeratedItem.OWNER);
+            projRelRow.setRelType(app.dal.table.ProjectOrgRelationTypeTable.EnumeratedItem.OWNER);
             if (dc.getValue("notify_email") != null)
                 projRelRow.setNotifyEmail(dc.getValue("notify_email"));
 			// insert a new project relationship row

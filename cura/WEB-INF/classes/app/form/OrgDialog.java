@@ -22,17 +22,17 @@ import java.util.Map;
 import java.math.BigDecimal;
 
 import app.TaskHandler;
-import dialog.context.org.RegistrationContext;
-import dal.table.OrgTable;
-import dal.table.OrgIndustryTable;
-import dal.table.OrgTypeTable;
-import dal.table.OrgRelationshipTable;
-import dal.domain.row.OrgRow;
-import dal.domain.row.OrgIndustryRow;
-import dal.domain.row.OrgTypeRow;
-import dal.domain.row.OrgRelationshipRow;
-import dal.domain.rows.OrgRelationshipRows;
-import dal.DataAccessLayer;
+import app.form.context.org.RegistrationContext;
+import app.dal.table.OrgTable;
+import app.dal.table.OrgIndustryTable;
+import app.dal.table.OrgTypeTable;
+import app.dal.table.OrgRelationshipTable;
+import app.dal.domain.row.OrgRow;
+import app.dal.domain.row.OrgIndustryRow;
+import app.dal.domain.row.OrgTypeRow;
+import app.dal.domain.row.OrgRelationshipRow;
+import app.dal.domain.rows.OrgRelationshipRows;
+import app.dal.DataAccessLayer;
 
 public class OrgDialog extends Dialog
 {
@@ -127,16 +127,16 @@ public class OrgDialog extends Dialog
      */
     protected void processDeleteData(DialogContext dc) throws SQLException, NamingException
     {
-        dialog.context.org.RegistrationContext rc = (dialog.context.org.RegistrationContext) dc;
+        app.form.context.org.RegistrationContext rc = (app.form.context.org.RegistrationContext) dc;
         ConnectionContext cc = dc.getConnectionContext();
         String org_id = dc.getRequest().getParameter("org_id");
         cc.beginTransaction();
 
-        OrgTypeTable orgTypeTable = dal.DataAccessLayer.instance.getOrgTypeTable();
+        OrgTypeTable orgTypeTable = app.dal.DataAccessLayer.instance.getOrgTypeTable();
         orgTypeTable.deleteOrgTypeRowsUsingOrgId(cc, new Long(org_id));
-        OrgIndustryTable orgIndustryTable = dal.DataAccessLayer.instance.getOrgIndustryTable();
+        OrgIndustryTable orgIndustryTable = app.dal.DataAccessLayer.instance.getOrgIndustryTable();
         orgIndustryTable.deleteOrgIndustryRowsUsingOrgId(cc, new Long(org_id));
-        OrgTable orgTable = dal.DataAccessLayer.instance.getOrgTable();
+        OrgTable orgTable = app.dal.DataAccessLayer.instance.getOrgTable();
         OrgRow orgRow = orgTable.getOrgByOrgId(cc, new Long(org_id));
         orgTable.delete(cc, orgRow);
         cc.commitTransaction();
@@ -151,9 +151,9 @@ public class OrgDialog extends Dialog
         ConnectionContext cc =  dc.getConnectionContext();
 
         cc.beginTransaction();
-        dialog.context.org.RegistrationContext rc = (RegistrationContext) dc;
+        app.form.context.org.RegistrationContext rc = (RegistrationContext) dc;
         // update the Task table
-        OrgTable orgTable = dal.DataAccessLayer.instance.getOrgTable();
+        OrgTable orgTable = app.dal.DataAccessLayer.instance.getOrgTable();
         OrgRow orgRow = orgTable.getOrgByOrgId(cc, new Long(org_id));
         orgRow.populateDataByNames(dc);
         orgTable.update(cc, orgRow);
@@ -176,17 +176,17 @@ public class OrgDialog extends Dialog
 
         try
         {
-            dialog.context.org.RegistrationContext rc = (RegistrationContext)dc;
+            app.form.context.org.RegistrationContext rc = (RegistrationContext)dc;
             cc =  rc.getConnectionContext();
 
             cc.beginTransaction();
-            OrgTable orgTable = dal.DataAccessLayer.instance.getOrgTable();
+            OrgTable orgTable = app.dal.DataAccessLayer.instance.getOrgTable();
             OrgRow orgRow = orgTable.createOrgRow();
             // populate the row with values from the dialog fields
             orgRow.populateDataByNames(rc);
             orgTable.insert(cc, orgRow);
 
-            OrgIndustryTable orgIndustryTable = dal.DataAccessLayer.instance.getOrgIndustryTable();
+            OrgIndustryTable orgIndustryTable = app.dal.DataAccessLayer.instance.getOrgIndustryTable();
             OrgIndustryRow orgIndustryRow = orgIndustryTable.createOrgIndustryRow();
             orgIndustryRow.setCrOrgId(rc.getCrOrgId());
             orgIndustryRow.setCrPersonId(rc.getCrPersonId());
@@ -195,7 +195,7 @@ public class OrgDialog extends Dialog
             orgIndustryRow.setOrgId(orgRow.getOrgIdLong());
             orgIndustryTable.insert(cc, orgIndustryRow);
 
-            OrgTypeTable orgTypeTable = dal.DataAccessLayer.instance.getOrgTypeTable();
+            OrgTypeTable orgTypeTable = app.dal.DataAccessLayer.instance.getOrgTypeTable();
             OrgTypeRow orgTypeRow = orgTypeTable.createOrgTypeRow();
             orgTypeRow.setCrOrgId(rc.getCrOrgId());
             orgTypeRow.setCrPersonId(rc.getCrPersonId());
@@ -207,7 +207,7 @@ public class OrgDialog extends Dialog
             if (rc.getParentOrgId() != null && rc.getParentOrgId().length() > 0)
             {
                 // add org relationships
-                OrgRelationshipTable orgRelTable = dal.DataAccessLayer.instance.getOrgRelationshipTable();
+                OrgRelationshipTable orgRelTable = app.dal.DataAccessLayer.instance.getOrgRelationshipTable();
                 // add a relationship row for this new org with the parent org
                 OrgRelationshipRow orgRelRow = orgRelTable.createOrgRelationshipRow();
                 orgRelRow.setCrOrgId(rc.getCrOrgId());
@@ -215,7 +215,7 @@ public class OrgDialog extends Dialog
                 orgRelRow.setCrStampSqlExpr("sysdate");
                 orgRelRow.setParentId(orgRow.getOrgIdLong());
                 orgRelRow.setRelOrgId(new Long(rc.getParentOrgId()));
-                orgRelRow.setRelType(dal.table.OrgRelationshipTypeTable.EnumeratedItem.PARENT_OF_ORG);
+                orgRelRow.setRelType(app.dal.table.OrgRelationshipTypeTable.EnumeratedItem.PARENT_OF_ORG);
                 orgRelTable.insert(cc, orgRelRow);
 
                 // add a relationship row for the parent org with the new row as its child
@@ -225,7 +225,7 @@ public class OrgDialog extends Dialog
                 parentOrgRow.setCrStampSqlExpr("sysdate");
                 parentOrgRow.setParentId(new Long(rc.getParentOrgId()));
                 parentOrgRow.setRelOrgId(orgRow.getOrgId());
-                parentOrgRow.setRelType(dal.table.OrgRelationshipTypeTable.EnumeratedItem.CHILD_OF_ORG);
+                parentOrgRow.setRelType(app.dal.table.OrgRelationshipTypeTable.EnumeratedItem.CHILD_OF_ORG);
                 orgRelTable.insert(cc, parentOrgRow);
 
 
@@ -235,7 +235,7 @@ public class OrgDialog extends Dialog
                 {
                     OrgRelationshipRow tmpRow = (OrgRelationshipRow) orgRelRows.get(i);
 
-                    if (tmpRow.getRelTypeEnum() == dal.table.OrgRelationshipTypeTable.EnumeratedItem.PARENT_OF_ORG)
+                    if (tmpRow.getRelTypeEnum() == app.dal.table.OrgRelationshipTypeTable.EnumeratedItem.PARENT_OF_ORG)
                     {
                         // parent of the new org's parent should be added as the new org's ancestor
                         OrgRelationshipRow orgAncestorRow = orgRelTable.createOrgRelationshipRow();
@@ -244,7 +244,7 @@ public class OrgDialog extends Dialog
                         orgAncestorRow.setCrStampSqlExpr("sysdate");
                         orgAncestorRow.setParentId(orgRow.getOrgIdLong());
                         orgAncestorRow.setRelOrgId(tmpRow.getRelOrgId());
-                        orgAncestorRow.setRelType(dal.table.OrgRelationshipTypeTable.EnumeratedItem.ANCESTOR_OF_ORG);
+                        orgAncestorRow.setRelType(app.dal.table.OrgRelationshipTypeTable.EnumeratedItem.ANCESTOR_OF_ORG);
                         orgRelTable.insert(cc, orgAncestorRow);
 
                         // the new org should be added as the descendent of the parent of the new org's parent
@@ -254,7 +254,7 @@ public class OrgDialog extends Dialog
                         ancestorOrgRow.setCrStampSqlExpr("sysdate");
                         ancestorOrgRow.setParentId(tmpRow.getRelOrgId());
                         ancestorOrgRow.setRelOrgId(orgRow.getOrgIdLong());
-                        ancestorOrgRow.setRelType(dal.table.OrgRelationshipTypeTable.EnumeratedItem.DESCENDENT_OF_ORG);
+                        ancestorOrgRow.setRelType(app.dal.table.OrgRelationshipTypeTable.EnumeratedItem.DESCENDENT_OF_ORG);
                         orgRelTable.insert(cc, ancestorOrgRow);
 
                     }

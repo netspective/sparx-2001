@@ -17,7 +17,7 @@ Setup instructions:
        * Java Servlet API 2.2 or above (http://java.sun.com)
        * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
        
-$Id: build.xml,v 1.1 2002-08-12 01:51:01 shahid.shah Exp $
+$Id: build.xml,v 1.2 2002-08-18 23:11:51 shahid.shah Exp $
 -->
 
 <project name="app" default="all" basedir="${basedir}">
@@ -61,6 +61,9 @@ $Id: build.xml,v 1.1 2002-08-12 01:51:01 shahid.shah Exp $
     <target name="init" depends="global">
     	<tstamp/>
 
+		<basename property="app.name" file="${app.root.dir}"/>
+
+		<echo message="Application name is '${app.name}'"/>
     	<echo message="Running build in ${app.WEB-INF.dir}"/>
 		<echo message="Sparx source is in ${sparx.java.dir}"/>
 		<echo message="Application Site root is ${app.root.dir}"/>
@@ -85,17 +88,17 @@ $Id: build.xml,v 1.1 2002-08-12 01:51:01 shahid.shah Exp $
 
 		<available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
 		<property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
-		<property name="app.java.dal.jar" value="${config.app.schema.root-path}/dal.jar"/>
+		<property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.name}-dal.jar"/>
 		<property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
 
 		<available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
-		<property name="app.java.dcb.package" value="dialog.context"/>
+		<property name="app.java.dcb.package" value="app.form.context"/>
 		<property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
-		<property name="app.java.dcb.jar" value="${app.java.dcb.dir}/dcb.jar"/>
+		<property name="app.java.dcb.jar" value="${app.java.dcb.dir}/${app.name}-dcb.jar"/>
 		<property name="app.java.dcb.doc.dir" value="${app.javadoc.root.dir}/dcb"/>
 
 		<available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
-		<property name="app.java.classpath" value="${app.classes.dir}:${app.lib.dir}/dal.jar:${app.lib.dir}/dcb.jar"/>
+		<property name="app.java.classpath" value="${app.classes.dir}:${app.lib.dir}/${app.name}-dal.jar:${app.lib.dir}/${app.name}-dcb.jar"/>
 
 		<echo message="app.classes.dir-exists = ${app.classes.dir-exists}"/>
 		<echo message="app.schema.source-file-exists = ${app.schema.source-file-exists}"/>
@@ -161,6 +164,7 @@ $Id: build.xml,v 1.1 2002-08-12 01:51:01 shahid.shah Exp $
 		<copy file="${sparx.lib.dir}/redist/js.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/oro.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/xalan.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/xml-apis.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/xerces.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/README" todir="${app.lib.dir}"/>
     </target>

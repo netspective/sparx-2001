@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.naming.NamingException;
 
-import dal.table.ProjectPersonRelationTable;
-import dal.domain.ProjectPersonRelation;
-import dal.domain.rows.ProjectPersonRelationRows;
-import dal.domain.row.ProjectPersonRelationRow;
+import app.dal.table.ProjectPersonRelationTable;
+import app.dal.domain.ProjectPersonRelation;
+import app.dal.domain.rows.ProjectPersonRelationRows;
+import app.dal.domain.row.ProjectPersonRelationRow;
 
 import java.sql.SQLException;
 import java.io.Writer;
@@ -77,7 +77,7 @@ public class ProjectMemberDialog extends Dialog
         ConnectionContext cc = dc.getConnectionContext();
         cc.beginTransaction();
 
-        ProjectPersonRelationTable pprTable = dal.DataAccessLayer.instance.getProjectPersonRelationTable();
+        ProjectPersonRelationTable pprTable = app.dal.DataAccessLayer.instance.getProjectPersonRelationTable();
         // check to see if there are any relationships already defined
         ProjectPersonRelationRows pprRows = pprTable.getProjectPersonRelationRowsByParentId(cc, new Long(dc.getValue("project_id")));
         if (pprRows == null || pprRows.size() == 0)
@@ -92,7 +92,7 @@ public class ProjectMemberDialog extends Dialog
                 ppr.setParentId(new Long(dc.getValue("project_id")));
                 ppr.setRelPersonId(new Long(personList[i]));
                 ppr.setRelBeginSqlExpr("sysdate");
-                ppr.setRelType(dal.table.ProjectPersonRelationTypeTable.EnumeratedItem.MEMBER);
+                ppr.setRelType(app.dal.table.ProjectPersonRelationTypeTable.EnumeratedItem.MEMBER);
                 pprTable.insert(cc, ppr);
             }
         }
@@ -143,7 +143,7 @@ public class ProjectMemberDialog extends Dialog
                     ppr.setParentId(new Long(dc.getValue("project_id")));
                     ppr.setRelPersonId(new Long(personList[i]));
                     ppr.setRelBeginSqlExpr("sysdate");
-                    ppr.setRelType(dal.table.ProjectPersonRelationTypeTable.EnumeratedItem.MEMBER);
+                    ppr.setRelType(app.dal.table.ProjectPersonRelationTypeTable.EnumeratedItem.MEMBER);
                     pprTable.insert(cc, ppr);
                 }
             }

@@ -7,18 +7,18 @@
 package app;
 
 import com.netspective.sparx.xif.dal.ConnectionContext;
-import dialog.context.task.RegistrationContext;
+import app.form.context.task.RegistrationContext;
 
 import javax.naming.NamingException;
 import java.sql.SQLException;
 
-import dal.table.TaskTable;
-import dal.table.TaskDependencyTable;
-import dal.table.TaskPersonRelationTable;
-import dal.DataAccessLayer;
-import dal.domain.row.TaskRow;
-import dal.domain.row.TaskDependencyRow;
-import dal.domain.rows.TaskDependencyRows;
+import app.dal.table.TaskTable;
+import app.dal.table.TaskDependencyTable;
+import app.dal.table.TaskPersonRelationTable;
+import app.dal.DataAccessLayer;
+import app.dal.domain.row.TaskRow;
+import app.dal.domain.row.TaskDependencyRow;
+import app.dal.domain.rows.TaskDependencyRows;
 
 public class TaskHandler
 {
@@ -69,7 +69,7 @@ public class TaskHandler
     {
         // check to see if there are tasks dependent on this task. If so, don't allow the deletion
         // until the relationship have been cleared
-        TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
+        TaskDependencyTable tdTable = DataAccessLayer.instance.getTaskDependencyTable();
         TaskDependencyRows tdRows = tdTable.getTaskDependencyRowsByParentId(cc, taskId);
         if (tdRows != null && tdRows.size() != 0)
         {

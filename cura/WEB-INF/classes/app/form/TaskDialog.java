@@ -22,17 +22,17 @@ import java.io.Writer;
 import java.sql.SQLException;
 import java.net.URLEncoder;
 
-import dal.table.TaskTable;
-import dal.table.TaskPersonRelationTable;
-import dal.table.TaskTypeTable;
-import dal.table.TaskDependencyTable;
-import dal.domain.row.TaskRow;
-import dal.domain.row.TaskDependencyRow;
-import dal.domain.TaskPersonRelation;
-import dal.domain.TaskType;
-import dal.domain.rows.TaskDependencyRows;
-import dal.DataAccessLayer;
-import dialog.context.task.RegistrationContext;
+import app.dal.table.TaskTable;
+import app.dal.table.TaskPersonRelationTable;
+import app.dal.table.TaskTypeTable;
+import app.dal.table.TaskDependencyTable;
+import app.dal.domain.row.TaskRow;
+import app.dal.domain.row.TaskDependencyRow;
+import app.dal.domain.TaskPersonRelation;
+import app.dal.domain.TaskType;
+import app.dal.domain.rows.TaskDependencyRows;
+import app.dal.DataAccessLayer;
+import app.form.context.task.RegistrationContext;
 import app.TaskHandler;
 
 public class TaskDialog extends Dialog
@@ -154,7 +154,7 @@ public class TaskDialog extends Dialog
      */
     protected void processDeleteData(DialogContext dc) throws SQLException, NamingException
     {
-        dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
+        app.form.context.task.RegistrationContext rc = (RegistrationContext) dc;
         ConnectionContext cc = dc.getConnectionContext();
         cc.beginTransaction();
 
@@ -172,9 +172,9 @@ public class TaskDialog extends Dialog
         ConnectionContext cc =  dc.getConnectionContext();
 
         cc.beginTransaction();
-        dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
+        app.form.context.task.RegistrationContext rc = (RegistrationContext) dc;
         // update the Task table
-        TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+        TaskTable taskTable = app.dal.DataAccessLayer.instance.getTaskTable();
         TaskRow taskRow = taskTable.getTaskByTaskId(cc, new Long(task_id));
         taskRow.populateDataByNames(dc);
         taskTable.update(cc, taskRow);
@@ -200,7 +200,7 @@ public class TaskDialog extends Dialog
             ConnectionContext cc =  rc.getConnectionContext();
 
             cc.beginTransaction();
-            TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+            TaskTable taskTable = app.dal.DataAccessLayer.instance.getTaskTable();
             TaskRow taskRow = taskTable.createTaskRow();
             // this will extract the values from the dialog fields and populate
             // them into the row.
@@ -213,7 +213,7 @@ public class TaskDialog extends Dialog
             if (rc.getDependentTask() != null && rc.getDependentTask().length() > 0)
             {
                 // include entries into the task dependency table
-                TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
+                TaskDependencyTable tdTable = app.dal.DataAccessLayer.instance.getTaskDependencyTable();
                 TaskDependencyRow tdRow = tdTable.createTaskDependencyRow();
                 tdRow.setCrOrgId(rc.getCrOrgId());
                 tdRow.setCrPersonId(rc.getCrPersonId());

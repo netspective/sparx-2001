@@ -3,7 +3,7 @@
  * User: Aye Thu
  * Date: Jan 20, 2002
  * Time: 3:35:52 PM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package app.form;
@@ -16,11 +16,11 @@ import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dal.table.ProjectOrgRelationTable;
-import dal.table.ProjectTable;
-import dal.table.TaskTable;
-import dal.domain.row.ProjectRow;
-import dal.domain.row.TaskRow;
+import app.dal.table.ProjectOrgRelationTable;
+import app.dal.table.ProjectTable;
+import app.dal.table.TaskTable;
+import app.dal.domain.row.ProjectRow;
+import app.dal.domain.row.TaskRow;
 
 import java.io.Writer;
 import java.net.URLEncoder;
@@ -77,11 +77,11 @@ public class DeleteTaskDialog extends Dialog
 
             cc.beginTransaction();
             // the dialog's context is represented by its own custom bean class
-            dialog.context.project.DeleteTaskContext rc = (dialog.context.project.DeleteTaskContext) dc;
+            app.form.context.project.DeleteTaskContext rc = (app.form.context.project.DeleteTaskContext) dc;
 
             // check to see which task ids were selected for removal
             String[] taskList = rc.getRequest().getParameterValues("_dc.task_id.checkbox");
-            TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+            TaskTable taskTable = app.dal.DataAccessLayer.instance.getTaskTable();
 
             TaskHandler taskHandler = new TaskHandler();
             for (int i=0; i < taskList.length; i++)
