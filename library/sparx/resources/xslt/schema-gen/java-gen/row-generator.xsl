@@ -139,7 +139,8 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	public List getDataForDmlStatement()
 	{
 		List data = new ArrayList();
-<xsl:for-each select="column">		data.add(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] ? ((Object) new DmlStatement.CustomSql(sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])) : <xsl:value-of select="@_gen-member-name"/>);
+		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+<xsl:for-each select="column">		data.add(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] ? ((Object) new DmlStatement.CustomSql(sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])) : table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>));
 </xsl:for-each>
 		return data;
 	}
@@ -447,13 +448,24 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:for-each>
 	public String toString()
 	{
+		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+        Object value = null;
+        Object valueForBindParam = null;
 		StringBuffer str = new StringBuffer();
 		str.append("Primary Key = ");
 		str.append(getActivePrimaryKeyValue());
 		str.append("\n");
 <xsl:for-each select="column">		str.append(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 		str.append(" = ");
-		str.append(<xsl:value-of select="@_gen-member-name"/> != null ? (<xsl:value-of select="@_gen-member-name"/>.toString() + " (" + <xsl:value-of select="@_gen-member-name"/>.getClass().getName() + ")") : "NULL");
+        valueForBindParam = table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>);
+        if(<xsl:value-of select="@_gen-member-name"/> != null)
+        {
+            str.append(<xsl:value-of select="@_gen-member-name"/>.toString() + " (" + <xsl:value-of select="@_gen-member-name"/>.getClass().getName() + ")");
+            if(! <xsl:value-of select="@_gen-member-name"/>.getClass().getName().equals(valueForBindParam.getClass().getName()))
+                str.append("[BIND AS "+ valueForBindParam.getClass().getName() +"]");
+        }
+        else
+            str.append("NULL");
 		if(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])
 			str.append(" [SQL Expr: [" + sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] + "]]");
 		else

@@ -109,6 +109,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 	public int doEndTag() throws JspException
 	{
 		JspWriter out = pageContext.getOut();
+        String rootPath = ((HttpServletRequest) pageContext.getRequest()).getContextPath();
 		try
 		{
 			out.println("   </td>");
@@ -116,8 +117,9 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("");
 			out.println("  </tbody>");
 			out.println("</table>");
-			out.println(" <br>");
-			out.println(" <br>");
+			out.println(" <p>&nbsp;");
+			out.println(" <p>");
+			out.println("<table width=100%><tr><td align=right><a target='netspective' href='http://www.netspective.com'><img border='0' alt='Powered by Netspective Sparx' src='"+ rootPath +"/sparx/resources/images/powered-by-sparx.gif'></a></td><td><font size=1>"+ com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() +"</font></td></table></body>");
 			out.println("</body>");
 			out.println("</html>");
 		}

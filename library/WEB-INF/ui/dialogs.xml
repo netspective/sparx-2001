@@ -2,7 +2,7 @@
 
 <xaf>
 	<dialogs package="library">
-		<dialog class="library.BookInfo" heading="create-data-cmd-heading:Book Information" name="bookInfo" retain-params="*">
+		<dialog class="app.form.BookInfo" heading="create-data-cmd-heading:Book Information" name="bookInfo" retain-params="*">
 			<field.text caption="Book ID" name="bookId" required="yes" max-length="10"/>
 			<field.text caption="Name" name="bookName" required="yes"/>
 			<field.text caption="Author" name="bookAuthor" required="yes"/>
