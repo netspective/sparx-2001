@@ -26,6 +26,7 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 	private String stmtMgrName;
 	private String dataSourceId;
 	private String stmtName;
+    private SingleValueSource[] queryParams;
 
     public QueryResultsListValue()
     {
@@ -48,14 +49,41 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
             stmtName = srcParams.substring(delimPos+1);
         }
         else
-            this.stmtName = srcParams;
+            stmtName = srcParams;
+
+        delimPos = stmtName.indexOf('?');
+        if(delimPos >= 0)
+        {
+            String queryParamsStr = srcParams.substring(delimPos+1);
+            stmtName = stmtName.substring(0, delimPos);
+
+            if(queryParamsStr.length() > 0)
+            {
+                List queryParamsList = new ArrayList();
+                StringTokenizer st = new StringTokenizer(queryParamsStr, ",");
+                while(st.hasMoreTokens())
+                    queryParamsList.add(ValueSourceFactory.getSingleOrStaticValueSource(st.nextToken()));
+                queryParams = (SingleValueSource[]) queryParamsList.toArray(new SingleValueSource[queryParamsList.size()]);
+            }
+        }
     }
 
     public ResultSet getResultSet(ValueContext vc) throws NamingException, StatementNotFoundException, SQLException, StatementExecutionException
     {
         StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
         DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), vc.getServletContext());
-        StatementManager.ResultInfo ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName);
+        StatementManager.ResultInfo ri = null;
+
+        if(queryParams == null)
+            ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName);
+        else
+        {
+            Object[] parameters = new Object[queryParams.length];
+            for(int p = 0; p < queryParams.length; p++)
+                parameters[p] = queryParams[p].getObjectValue(vc);
+            ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName, parameters);
+        }
+
         return ri.getResultSet();
     }
 
