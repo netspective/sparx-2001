@@ -6,6 +6,7 @@ import java.text.*;
 
 import org.w3c.dom.*;
 import com.xaf.form.*;
+import com.xaf.value.SingleValueSource;
 
 public class DateTimeField extends TextField
 {
@@ -13,7 +14,7 @@ public class DateTimeField extends TextField
 	static public final long FLDFLAG_PASTONLY   = FLDFLAG_FUTUREONLY * 2;
    	static public final long FLDFLAG_MAX_LIMIT  = FLDFLAG_PASTONLY * 2;
     static public final long FLDFLAG_MIN_LIMIT  = FLDFLAG_MAX_LIMIT * 2;
-
+    static public final long FLDFLAG_STRICT_YEAR = FLDFLAG_MIN_LIMIT * 2;
 
 	static public final int DTTYPE_DATEONLY = 0;
 	static public final int DTTYPE_TIMEONLY = 1;
@@ -54,7 +55,7 @@ public class DateTimeField extends TextField
 
 	public final SimpleDateFormat getFormat() { return format; }
 
-	public final Date getPreDate() { return preDate; }
+    public final Date getPreDate() { return preDate; }
 	public void setPreDate(Date value) { preDate = value; }
 
 	public final Date getPostDate() { return postDate; }
@@ -120,13 +121,17 @@ public class DateTimeField extends TextField
         }
 
 
-        String maxDateTime = elem.getAttribute("max-value");
+        String maxDateTime = elem.getAttribute("max");
+        if (maxDateTime == null || maxDateTime.length() == 0)
+            maxDateTime = elem.getAttribute("max-value");
         if (maxDateTime != null && maxDateTime.length() > 0)
         {
             this.maxDateStr = maxDateTime;
            	setFlag(FLDFLAG_MAX_LIMIT);
         }
-        String minDateTime = elem.getAttribute("min-value");
+        String minDateTime = elem.getAttribute("min");
+        if (minDateTime == null || minDateTime.length() ==0)
+            minDateTime = elem.getAttribute("min-value");
         if (minDateTime != null && minDateTime.length() > 0)
         {
             this.minDateStr = minDateTime;
@@ -138,6 +143,10 @@ public class DateTimeField extends TextField
 
 		if(elem.getAttribute("past-only").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_READONLY);
+
+        String strictFlag = elem.getAttribute("strict-year");
+        if (strictFlag != null && strictFlag.equals("yes"))
+            setFlag(FLDFLAG_STRICT_YEAR);
 	}
 
 	public boolean isValid(DialogContext dc)
@@ -185,6 +194,7 @@ public class DateTimeField extends TextField
         {
             invalidate(dc, "Maximum or minimum date '" + this.maxDateStr + "' is not valid (format is "+ formats[dataType] +").");
             e.printStackTrace();
+            return false;
         }
 
 		Date now = new Date();
@@ -211,5 +221,86 @@ public class DateTimeField extends TextField
 		}
 
 		return true;
+	}
+
+    /**
+     * Overwrites DialogField's getCustomJavaScriptDefn()
+     */
+    public String getCustomJavaScriptDefn(DialogContext dc)
+    {
+        StringBuffer buf = new StringBuffer(super.getCustomJavaScriptDefn(dc));
+        buf.append("field.dateDataType = " + this.getDataType() + ";\n");
+        buf.append("field.dateFormat = '" + this.getFormat().toPattern() + "';\n");
+
+        if (this.flagIsSet(DateTimeField.FLDFLAG_STRICT_YEAR))
+            buf.append("field.dateStrictYear = true;\n");
+        else
+            buf.append("field.dateStrictYear = false;\n");
+
+        return buf.toString();
+    }
+
+    /**
+     * Populates a default value into the dialog field. Overwites TextField.populateValue().
+     *
+     * @param dc Dialog context
+     */
+	public void populateValue(DialogContext dc)
+	{
+        super.populateValue(dc);
+        String value = dc.getValue(this);
+
+        String xlatedDate = null;
+        if (value != null && (value.startsWith("today") ||  value.startsWith("now")))
+        {
+            int strLength = 0;
+            if (value.startsWith("today"))
+                strLength =  "today".length();
+            else
+                strLength = "now".length();
+
+            Date dt = null;
+            switch (this.dataType)
+            {
+                case DateTimeField.DTTYPE_DATEONLY:
+                case DateTimeField.DTTYPE_BOTH:
+                    if (value.length() > strLength)
+                    {
+                        try
+                        {
+                            String opValueStr = null;
+                            if (value.charAt(strLength) == '+')
+                                opValueStr = value.substring(strLength+1);
+                            else
+                                opValueStr = value.substring(strLength);
+                            int opValue = Integer.parseInt(opValueStr);
+                            Calendar  calendar = new GregorianCalendar();
+                            calendar.add(Calendar.DAY_OF_MONTH, opValue);
+                            dt = calendar.getTime();
+                            xlatedDate = this.format.format(dt);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        dt = new Date();
+                        xlatedDate = this.format.format(dt);
+                    }
+                    break;
+                case DateTimeField.DTTYPE_TIMEONLY:
+                    dt = new Date();
+                    xlatedDate = this.format.format(dt);
+                    break;
+                default:
+                    break;
+            }
+
+            if (xlatedDate != null)
+                dc.setValue(this, xlatedDate);
+        }
+
 	}
 }
