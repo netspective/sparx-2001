@@ -13,11 +13,26 @@
 
 <xsl:template match="schema">
 	<xsl:for-each select="table">
+		<xsl:variable name="table" select="."/>
 		<xsl:if test="column">
 			<xsl:call-template name="table-definition">
 				<xsl:with-param name="table" select="."/>
 			</xsl:call-template>
 		</xsl:if>
+		<!-- This only supports primary keys with single columns -->
+		<xsl:for-each select="column[not(@default) and (@required='yes' or @primarykey='yes')]">
+			<xsl:call-template name="required">
+				<xsl:with-param name="table" select="$table"/>
+				<xsl:with-param name="column" select="."/>
+			</xsl:call-template>
+		</xsl:for-each>
+		<!-- This only supports primary keys with single columns -->
+		<xsl:for-each select="column[@primarykey='yes']">
+			<xsl:call-template name="pkey-ref">
+				<xsl:with-param name="table" select="$table"/>
+				<xsl:with-param name="column" select="."/>
+			</xsl:call-template>
+		</xsl:for-each>
 	</xsl:for-each>
 	<xsl:for-each select="table">
 		<xsl:variable name="table" select="."/>
@@ -96,12 +111,6 @@ create table <xsl:value-of select="$table/@name"/>
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="$column"/>
 	</xsl:call-template>
-	<xsl:if test="$column/@primarykey = 'yes'">
-		<xsl:text> PRIMARY KEY</xsl:text>
-	</xsl:if>
-	<xsl:if test="$column/@required = 'yes'">
-		<xsl:text> NOT NULL</xsl:text>
-	</xsl:if>
 	<xsl:if test="$column/@default">
 		<xsl:call-template name="column-default">
 			<xsl:with-param name="table" select="$table"/>
@@ -149,6 +158,39 @@ create table <xsl:value-of select="$table/@name"/>
 </xsl:text>
 </xsl:template>
 
+<xsl:template name="pkey-ref">
+	<xsl:param name="table"/>
+	<xsl:param name="column"/>
+
+	<xsl:text>alter table </xsl:text>
+	<xsl:value-of select="$table/@name"/>
+	<xsl:text> add (constraint </xsl:text>
+	<xsl:value-of select="$table/@name"/>
+	<xsl:text>_PK PRIMARY KEY (</xsl:text>
+	<xsl:value-of select="$column/@name"/>
+	<!-- line break -->
+	<xsl:text>));
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="required">
+	<xsl:param name="table"/>
+	<xsl:param name="column"/>
+
+	<xsl:text>alter table </xsl:text>
+	<xsl:value-of select="$table/@name"/>
+	<xsl:text> modify (</xsl:text>
+	<xsl:value-of select="$column/@name"/>
+	<xsl:text> constraint (</xsl:text>
+	<xsl:value-of select="$table/@abbrev"/>
+	<xsl:text>_</xsl:text>
+	<xsl:value-of select="$column/@name"/>
+	<xsl:text>_REQ NOT NULL </xsl:text>
+	<!-- line break -->
+	<xsl:text>);
+</xsl:text>
+</xsl:template>
+
 <xsl:template name="fkey-ref">
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
@@ -169,6 +211,7 @@ create table <xsl:value-of select="$table/@name"/>
 	<xsl:text>));
 </xsl:text>
 </xsl:template>
+
 
 <xsl:template name="enum-data">
 	<xsl:param name="table"/>
