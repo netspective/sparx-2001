@@ -77,7 +77,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/add.jsp?data_cmd=add\">Add Books</a></font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/bookInfo.jsp?data_cmd=add\">Add Books</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("           <tr>");

@@ -155,6 +155,19 @@ public class BookInfo   extends Dialog
 			bkInfoRow.setIsbn(dcb.getBookISBN());
 
 			DmlStatement dml = bkInfoRow.createInsertDml(bkInfoTbl);
+			bkInfoTbl.validateDmlValues(dml);
+
+			if (!bkInfoRow.beforeInsert(cc, dml)) {
+				status = false;
+				writer.write ("bkInfoRow.beforeInsert() returned false!<br>");
+			}
+
+	        boolean successful = bkInfoTable.executeDml(cc, bkInfoRow, dml, null);
+	        row.afterInsert(cc);
+
+        cc.returnConnection();
+        return successful;
+
 
 			writer.write (bkInfoRow.toString() + "<br>");
 			writer.write (dml.toString() + "<br>");

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<schema name="tabletypes">
+
+	<indextype name="unique"/>
+
+	<!--
+	*********************************************************************
+	** Anything made a part of the Default tabletype will automatically
+	** become a part of all tables that inherit from it.
+	*********************************************************************
+	-->
+
+	<tabletype name="Default">
+		<column name="cr_stamp" type="stamp" required="dbms" default="sysdate" descr="Date/time record was created"/>
+	</tabletype>
+
+	<!--
+	*********************************************************************
+	** Enumeration and Lookup Templates
+	*********************************************************************
+	-->
+
+	<table name="Reference_Item">
+		<description>
+			This table is basically used for creating parent/child relationships
+			for Enumeration and Lookup tables. Since it has no columns, no physical
+			table will exist so it becomes a simple logical placeholder.
+		</description>
+	</table>
+
+	<tabletype name="Enumeration" parent="Reference_Item">
+		<param name="capsize">96</param>
+		<param name="abbrevsize">32</param>
+
+		<column name="id" type="integer" primarykey="yes" descr="The value associated with a single enum"/>
+		<column name="caption" type="text" size="$capsize$" required="yes" descr="The name/text an end-user would see"/>
+		<column name="abbrev" type="text" size="$abbrevsize$" descr="An abbreviated form of the caption"/>
+	</tabletype>
+
+	<table name="Lookup_Result_Type" abbrev="LkResTy" type="Enumeration">
+		<enum>ID</enum>
+		<enum>Caption</enum>
+		<enum>Abbreviation</enum>
+	</table>
+
+	<tabletype name="Lookup" type="Enumeration">
+		<column name="group_name" type="text" size="32" descr="The group to which the lookup item belongs"/>
+		<column name="sort_seq" type="integer" descr="The sorting sequence within the group (if sorting differently than the ID or Caption"/>
+		<column name="result" lookupref="Lookup_Result_Type" descr="The type of result after a lookup (the value that should be used for the lookup -- the id or caption or abbreviation)"/>
+	</tabletype>
+
+</schema>

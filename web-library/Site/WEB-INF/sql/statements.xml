@@ -14,7 +14,7 @@
 			select * from Book_Info
 			
 			<report>
-				<column heading=" " align="center" output="&lt;a href=&quot;?data_cmd=edit&amp;bookid=${1}&quot;&gt;edit&lt;/a&gt;"/>
+				<column heading=" " align="center" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${1}&quot;&gt;edit&lt;/a&gt;"/>
 			</report>
 		</statement>
 	</sql-statements>

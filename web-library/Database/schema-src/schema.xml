@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<schema name="db">
+
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+	<include file="enums.xml"/>
+
+	<table name="Book_Info" abbrev="bkI" type="Default">
+		<column name="id" type="text" size="10" primarykey="yes" descr="Unique ID for every book in the database"/>
+		<column name="name" type="text" size="64" descr="Name of the book"/>
+		<column name="type" lookupref="Book_Type"/>
+		<column name="author" type="text" size="64" descr="Name of the author(s)"/>
+		<column name="isbn" type="text" size="10" descr="The 10 digit ISBN number"/>
+	</table>
+	
+</schema>
