@@ -51,6 +51,8 @@ public class XmlSource
 	}
 
 	public List getErrors() { return errors; }
+	public void addError(String msg) { errors.add(msg); }
+
 	public SourceInfo getSourceDocument() { return docSource; }
 	public Map getSourceFiles() { return sourceFiles; }
 
