@@ -243,10 +243,17 @@ public class Dialog
 			if(field.isVisible(dc))
 				field.populateValue(dc);
 		}
+
+		List listeners = dc.getListeners();
+		for(int l = 0; l < listeners.size(); l++)
+			((DialogContextListener) listeners.get(l)).populateDialogData(dc);
 	}
 
 	public void makeStateChanges(DialogContext dc, int stage)
 	{
+		List listeners = dc.getListeners();
+		for(int i = 0; i < listeners.size(); i++)
+			((DialogContextListener) listeners.get(i)).makeDialogContextChanges(dc, stage);
 	}
 
 	public String execute(DialogContext dc)
@@ -276,7 +283,20 @@ public class Dialog
 			}
         }
 
-		return "Need to add Dialog actions or override Dialog.execute(DialogContext)." + dc.getDebugHtml();
+		List listeners = dc.getListeners();
+		if(listeners.size() > 0)
+		{
+			StringBuffer result = new StringBuffer();
+			for(int i = 0; i < listeners.size(); i++)
+			{
+				String execStr = ((DialogContextListener) listeners.get(i)).executeDialog(dc);
+				if(execStr != null)
+					result.append(execStr);
+			}
+			return result.toString();
+		}
+		else
+			return "Need to add Dialog actions, provide listener, or override Dialog.execute(DialogContext)." + dc.getDebugHtml();
 	}
 
 	public void prepareContext(DialogContext dc)
@@ -318,7 +338,9 @@ public class Dialog
 				return execute(dc);
 		}
 		else
+		{
 			return dc.getSkin().getHtml(dc);
+		}
 	}
 
 	public String getHtml(ServletContext context, Servlet servlet, HttpServletRequest request, HttpServletResponse response, DialogSkin skin)
@@ -350,11 +372,25 @@ public class Dialog
 			return false;
 
 		int invalidFieldsCount = 0;
+
+		List listeners = dc.getListeners();
+		for(int l = 0; l < listeners.size(); l++)
+		{
+			if(! ((DialogContextListener) listeners.get(l)).isDialogValid(dc, false))
+				invalidFieldsCount++;
+		}
+
 		Iterator i = fields.iterator();
 		while(i.hasNext())
 		{
 			DialogField field = (DialogField) i.next();
 			if(field.isVisible(dc) && (! field.isValid(dc)))
+				invalidFieldsCount++;
+		}
+
+		for(int l = 0; l < listeners.size(); l++)
+		{
+			if(! ((DialogContextListener) listeners.get(l)).isDialogValid(dc, true))
 				invalidFieldsCount++;
 		}
 

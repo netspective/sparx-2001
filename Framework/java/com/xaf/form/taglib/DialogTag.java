@@ -18,6 +18,7 @@ public class DialogTag extends TagSupport
 	private String source;
 	private String skinName;
 	private Dialog dialog;
+	private String listenerAttrName;
 
 	public void release()
 	{
@@ -26,6 +27,7 @@ public class DialogTag extends TagSupport
 		source = null;
 		skinName = null;
 		dialog = null;
+		listenerAttrName = null;
 	}
 
 	public String getName() { return name; }
@@ -36,6 +38,8 @@ public class DialogTag extends TagSupport
 
 	public String getSkin() { return skinName; }
 	public void setSkin(String value) { skinName = value; }
+
+	public void setListener(String value) { listenerAttrName = value; }
 
 	public int doStartTag() throws JspException
 	{
@@ -78,11 +82,21 @@ public class DialogTag extends TagSupport
 			}
 
 			DialogContext dc = new DialogContext(context, (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), dialog, skin);
+			ServletRequest req = pageContext.getRequest();
+			if(listenerAttrName != null)
+			{
+				DialogContextListener listener = (DialogContextListener) req.getAttribute(listenerAttrName);
+				if(listener == null)
+					throw new JspException("No DialogContextListener found for listener attribute '"+listenerAttrName+"'");
+				dc.addListener(listener);
+			}
 			dialog.prepareContext(dc);
 
 		    // if the dialog class has not been overridden (base class) then
-			// we will handle the "execute" portion in the JSP
-			if("com.xaf.form.Dialog".equals(dialog.getClass().getName()) && dc.inExecuteMode())
+			// we will handle the "execute" portion in the JSP unless listeners
+			// are attached
+			if(dc.inExecuteMode() && dc.getListeners().size() == 0 &&
+				"com.xaf.form.Dialog".equals(dialog.getClass().getName()))
 			{
 				// these two attributes are set because they are defined by
 				// the DialogTagTEI so that the nested body (the "execute" portion

@@ -51,7 +51,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 	static public final int STATECALCSTAGE_INITIAL = 0;
 	static public final int STATECALCSTAGE_FINAL   = 1;
 
-	private CallbackManager callbacks;
+	private List listeners = new ArrayList();
 	private String transactionId;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -75,6 +75,9 @@ public final class DialogContext extends Hashtable implements ValueContext
 		response = aResponse;
 		servlet = aServlet;
 		servletContext = aContext;
+
+		if(servlet instanceof DialogContextListener)
+			listeners.add(servlet);
 
 		dialog = aDialog;
 		skin = aSkin;
@@ -124,22 +127,10 @@ public final class DialogContext extends Hashtable implements ValueContext
 		}
 	}
 
-	public CallbackManager getCallbacks()
+	public List getListeners() { return listeners; }
+	public void addListener(DialogContextListener listener)
 	{
-		return callbacks;
-	}
-
-	public CallbackInfo getCallbackMethod(String callbackId)
-	{
-		if(callbacks == null)
-			return null;
-		return callbacks.getCallbackMethod(callbackId);
-	}
-
-	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes)
-	{
-		if(callbacks == null) callbacks = new CallbackManager();
-		callbacks.setCallbackMethod(callbackId, owner, methodName, paramTypes);
+		listeners.add(listener);
 	}
 
 	public void createStateFields(List fields)

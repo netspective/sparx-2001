@@ -23,7 +23,7 @@ import com.xaf.value.*;
 
 public class ReportContext implements ValueContext
 {
-	static public final String REPORTCTX_CALLBACKID_MAKE_SC = "ReportContext.onMakeStateChanges";
+	static public final String REQUESTATTRNAME_LISTENER = "ReportContext.DefaultListener";
 
 	public class ColumnState
 	{
@@ -68,7 +68,7 @@ public class ReportContext implements ValueContext
 		public final String getUrl() { return url; }
 	}
 
-	private CallbackManager callbacks;
+	private List listeners = new ArrayList();
 	private ColumnState[] states;
     private Report reportDefn;
     private int calcsCount;
@@ -98,6 +98,13 @@ public class ReportContext implements ValueContext
 		this.rowCurrent = 0;
 		this.visibleColsCount = -1; // calculate on first-call (could change)
 
+		if(servlet instanceof ReportContextListener)
+			listeners.add(servlet);
+
+		Object listener = request.getAttribute(REQUESTATTRNAME_LISTENER);
+		if(listener != null)
+			listeners.add(listener);
+
         ReportColumnsList columns = reportDefn.getColumns();
         int columnsCount = columns.size();
 
@@ -115,27 +122,12 @@ public class ReportContext implements ValueContext
 	public ReportContext(ValueContext vc, Report reportDefn, ReportSkin skin)
 	{
 		this(vc.getServletContext(), vc.getServlet(), vc.getRequest(), vc.getResponse(), reportDefn, skin);
-		CallbackManager cm = vc.getCallbacks();
-		if(cm != null)
-			callbacks = (CallbackManager) cm.clone();
 	}
 
-	public CallbackManager getCallbacks()
+	public List getListeners() { return listeners; }
+	public void addListener(ReportContextListener listener)
 	{
-		return callbacks;
-	}
-
-	public CallbackInfo getCallbackMethod(String callbackId)
-	{
-		if(callbacks == null)
-			return null;
-		return callbacks.getCallbackMethod(callbackId);
-	}
-
-	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes)
-	{
-		if(callbacks == null) callbacks = new CallbackManager();
-		callbacks.setCallbackMethod(callbackId, owner, methodName, paramTypes);
+		listeners.add(listener);
 	}
 
 	public final void setResultsScrolling(int rowStart, int pageSize)
@@ -192,57 +184,5 @@ public class ReportContext implements ValueContext
 	{
 		reportDefn.makeStateChanges(this, data);
 		skin.produceReport(writer, this, data);
-	}
-
-	public void callOnMakeStateChanges(ResultSet rs)
-	{
-		if(request == null)
-			return;
-
-		String methodName = (String) request.getAttribute(REPORTCTX_CALLBACKID_MAKE_SC);
-		servletContext.log("Method: " + methodName);
-		if(methodName != null)
-		{
-			try
-			{
-				CallbackInfo ci = new CallbackInfo(servlet, methodName, new Class[] { ReportContext.class, ResultSet.class });
-				servletContext.log("Method: " + ci.haveMethod());
-				if(ci.haveMethod())
-					ci.invoke(new Object[] { this, rs });
-			}
-			catch(InvocationTargetException e)
-			{
-			}
-			catch(IllegalAccessException e)
-			{
-				throw new RuntimeException(e.toString());
-			}
-		}
-	}
-
-	public void callOnMakeStateChanges(Object[][] data)
-	{
-		if(request == null)
-			return;
-
-		String methodName = (String) request.getAttribute(REPORTCTX_CALLBACKID_MAKE_SC);
-		servletContext.log("Method: " + methodName);
-		if(methodName != null)
-		{
-			try
-			{
-				CallbackInfo ci = new CallbackInfo(servlet, methodName, new Class[] { ReportContext.class, Object[][].class });
-				servletContext.log("Method: " + ci.haveMethod());
-				if(ci.haveMethod())
-					ci.invoke(new Object[] { this, data });
-			}
-			catch(InvocationTargetException e)
-			{
-			}
-			catch(IllegalAccessException e)
-			{
-				throw new RuntimeException(e.toString());
-			}
-		}
 	}
 }

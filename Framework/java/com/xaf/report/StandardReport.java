@@ -211,12 +211,16 @@ public class StandardReport implements Report
 
 	public void makeStateChanges(ReportContext rc, ResultSet rs)
 	{
-		rc.callOnMakeStateChanges(rs);
+		List listeners = rc.getListeners();
+		for(int i = 0; i < listeners.size(); i++)
+			((ReportContextListener) listeners.get(i)).makeReportStateChanges(rc, rs);
 	}
 
 	public void makeStateChanges(ReportContext rc, Object[][] data)
 	{
-		rc.callOnMakeStateChanges(data);
+		List listeners = rc.getListeners();
+		for(int i = 0; i < listeners.size(); i++)
+			((ReportContextListener) listeners.get(i)).makeReportStateChanges(rc, data);
 	}
 
 	/*

@@ -462,7 +462,7 @@ public class StatementManager extends XmlSource
 		Element reportElem = (Element) reports.get(reportId == null ? statementId : (statementId + "." + reportId));
 		if(reportElem == null && reportId != null)
 		{
-			writer.write("Report id '"+reportElem+"' not found for statement '"+statementId+"'");
+			writer.write("Report id '"+reportId+"' not found for statement '"+statementId+"'");
 		}
 
         rd.initialize(rs, reportElem);
@@ -501,7 +501,7 @@ public class StatementManager extends XmlSource
 		Element reportElem = (Element) reports.get(reportId == null ? statementId : (statementId + "." + reportId));
 		if(reportElem == null && reportId != null)
 		{
-			writer.write("Report id '"+reportElem+"' not found for statement '"+statementId+"'");
+			writer.write("Report id '"+reportId+"' not found for statement '"+statementId+"'");
 		}
 
         rd.initialize(rs, reportElem);

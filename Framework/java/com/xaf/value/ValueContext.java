@@ -10,7 +10,6 @@ package com.xaf.value;
  */
 
 import java.util.*;
-import java.lang.reflect.*;
 import javax.servlet.*;
 
 public interface ValueContext
@@ -19,8 +18,4 @@ public interface ValueContext
 	public ServletRequest getRequest();
 	public ServletResponse getResponse();
 	public ServletContext getServletContext();
-
-	public CallbackManager getCallbacks();
-	public CallbackInfo getCallbackMethod(String callbackId);
-	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes);
 }

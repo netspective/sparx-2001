@@ -16,7 +16,6 @@ public class TaskContext implements ValueContext
 	static public final long TCFLAG_HASRESULTMSG = TCFLAG_HASERROR * 2;
 
 	private static long taskContextNum = 0;
-	private CallbackManager callbacks;
 	private Task task;
 	private String transactionId;
 	private ServletContext servletContext;
@@ -54,24 +53,6 @@ public class TaskContext implements ValueContext
 		this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse());
 		dialogContext = dc;
     }
-
-	public CallbackManager getCallbacks()
-	{
-		return callbacks;
-	}
-
-	public CallbackInfo getCallbackMethod(String callbackId)
-	{
-		if(callbacks == null)
-			return null;
-		return callbacks.getCallbackMethod(callbackId);
-	}
-
-	public void setCallbackMethod(String callbackId, Object owner, String methodName, Class[] paramTypes)
-	{
-		if(callbacks == null) callbacks = new CallbackManager();
-		callbacks.setCallbackMethod(callbackId, owner, methodName, paramTypes);
-	}
 
 	public final String getTransactionId() { return transactionId; }
 

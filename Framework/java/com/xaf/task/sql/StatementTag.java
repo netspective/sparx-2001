@@ -17,20 +17,20 @@ import com.xaf.task.sql.*;
 public class StatementTag extends TagSupport
 {
 	private StatementTask task = new StatementTask();
-	private String makeStateChangesCallbackName;
+	private String listenerAttrName;
 
 	public void release()
 	{
 		super.release();
 		task.reset();
-		makeStateChangesCallbackName = null;
+		listenerAttrName = null;
 	}
 
 	public void setDebug(String value) { if(value.equals("yes")) task.setFlag(Task.TASKFLAG_DEBUG); }
 	public void setName(String value) {	task.setStmtName(value); }
-	public void setCallback(String value) { makeStateChangesCallbackName = value; }
 	public void setStmtSource(String value) { task.setStmtSource(value); }
 	public void setDataSource(String value) { task.setDataSource(value); }
+	public void setListener(String value) { listenerAttrName = value; }
 	public void setReport(String value) { task.setReport(value); }
 	public void setSkin(String value) { task.setSkin(value); }
 	public void setStore(String value) { task.setStore(value); }
@@ -43,8 +43,14 @@ public class StatementTag extends TagSupport
 
 	public int doEndTag() throws JspException
 	{
-		if(makeStateChangesCallbackName != null)
-			pageContext.getRequest().setAttribute(ReportContext.REPORTCTX_CALLBACKID_MAKE_SC, makeStateChangesCallbackName);
+		ServletRequest req = pageContext.getRequest();
+		if(listenerAttrName != null)
+		{
+			ReportContextListener listener = (ReportContextListener) req.getAttribute(listenerAttrName);
+		    if(listener == null)
+				throw new JspException("No ReportContextListener found for listener attribute '"+listenerAttrName+"'");
+			req.setAttribute(ReportContext.REQUESTATTRNAME_LISTENER, listener);
+		}
 
 		JspWriter out = pageContext.getOut();
 		TaskContext tc = new TaskContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
@@ -62,10 +68,12 @@ public class StatementTag extends TagSupport
 		}
 		catch(TaskExecuteException e)
 		{
+			req.removeAttribute(ReportContext.REQUESTATTRNAME_LISTENER);
 			try{ out.write(e.getDetailedMessage()); } catch(IOException ie) { throw new JspException(ie.getMessage()); }
 			return SKIP_PAGE;
 		}
 
+		req.removeAttribute(ReportContext.REQUESTATTRNAME_LISTENER);
 		return EVAL_PAGE;
 	}
 }
