@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.5 2002-09-08 02:08:11 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.6 2002-11-01 23:03:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -107,7 +107,7 @@ public class DatabaseSqlPage extends AceServletPage
 
     public static boolean useDialogParams(ValueContext vc)
     {
-        return ! "no".equals(vc.getRequest().getParameter("ui"));
+        return "yes".equals(vc.getRequest().getParameter("ui"));
     }
 
     public void handlePageBody(PageContext pc) throws ServletException, IOException

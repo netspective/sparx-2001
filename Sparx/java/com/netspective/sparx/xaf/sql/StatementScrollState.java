@@ -103,8 +103,11 @@ public class StatementScrollState extends ResultSetScrollState
             throw new SQLException("Unable to execute SQL: " + stmtInfo.getSql(dc));
         }
     }
+
+
     /**
-     *
+     * Checks to see if the result set is valid
+     * @return boolean
      */
     public boolean isValid()
     {
