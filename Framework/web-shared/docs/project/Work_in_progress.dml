@@ -35,7 +35,7 @@
 			<task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
 			<task><name>In ReportSkin, allow dynamic replacement of "no rows found" message with a user-supplied one.</name></task>
 			<task><name>Allow easier HTML embedding in dialogs and reports (right now it's too hard).</name></task>
-			<task><name>Conditionals require mandatory fields to work properly</name></task>
+			<task><name>Conditionals require mandatory fields to work properly (the "data" attribute).</name></task>
 			<task><name>Implement popup JavaScript calendar for date/time fields.</name></task>
 			<task><name>Allow query select dialogs to return &lt;field.report&gt; dialog.</name></task>
 			<task><name>Allow an alternate default in &lt;field.select&gt; if a ListValueSource returns an empty list.</name></task>
@@ -47,6 +47,7 @@
 
 		<task>
 			<name>Database Management</name>
+			<task><name>Add transaction support features to &lt;xaf:query&gt; and &lt;xaf:dml&gt;.</name></task>
 			<task><name>Add sequences, composite forgeign keys to SchemaDoc.</name></task>
 			<task><name>Create cacheable ResultSets with configurable timeouts.</name></task>
 			<task><name>Add support for <a href="http://sourceforge.net/projects/csvjdbc/">CVS JDBC</a> Driver.</name></task>
@@ -54,6 +55,7 @@
 
 		<task>
 			<name>Architecture</name>
+			<task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
 			<task><name>Add ability to turn off file-change scanning in XmlSource (production software shouldn't check for changed files).</name></task>
 			<task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
 			<task><name>Add logging of SQL Query Definitions.</name></task>
