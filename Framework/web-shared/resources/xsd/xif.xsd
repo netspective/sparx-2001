@@ -244,13 +244,40 @@
 	</xsd:element>
 	<xsd:complexType name="tableType">
 		<xsd:sequence>
-			<xsd:element name="param" type="paramType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="column" type="columnType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="index" type="indexType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="data" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="enum" type="enumType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="java-dal-accessor" type="paramType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="param" type="paramType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Creates a named parameter.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="column" type="columnType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Defines a table column.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="index" type="indexType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Defines a table index.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="data" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies generic table data that should be created in the database (insert statements will be automatically generated for this data).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="enum" type="enumType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies enumeration table data that should be created in the database (insert statements will be automatically generated for this enumeration data).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="java-dal-accessor" type="paramType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the name of an accessor method that will be automatically generated in the DAL.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
 			<xsd:element name="description" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Describes the usage of the table.</xsd:documentation>
+				</xsd:annotation>
 				<xsd:complexType>
 					<xsd:simpleContent>
 						<xsd:extension base="xsd:string">
@@ -264,6 +291,9 @@
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="parent" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the parent of this table (but does not generate a physical relationship through a foriegn-key, just a logcal one through documentation and ERD).</xsd:documentation>
+				</xsd:annotation>
 				<xsd:complexType>
 					<xsd:simpleContent>
 						<xsd:extension base="xsd:string">

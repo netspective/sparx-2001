@@ -34,6 +34,7 @@ a.column_references:hover { text-decoration: underline; }
 
 td.column_name { font-weight: bold; }
 td.column_domain { color: green; }
+td.column_dal_type { color: green; }
 td.column_default { color: #AAAAAA; font-family: lucida console, courier; }
 td.column_descr { color: #AAAAFF; }
 td.column_references { color: red }

@@ -272,8 +272,10 @@
 		<th></th>
 		<th>References</th>
 		<th></th>
+		<th>Java Type</th>
+		<th></th>
 	</tr>
-	<tr><td colspan="14"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="16"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	<xsl:for-each select="column">
 	<tr>
 		<xsl:if test="@primarykey='yes'">
@@ -354,14 +356,26 @@
 			</xsl:if>
 		</td>
 		<td width="4"></td>
+		<td class="column_dal_type">
+			<xsl:choose>
+				<xsl:when test="java-type">
+					<b><xsl:value-of select="java-type"/></b>
+					(<xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/>)
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</td>
+		<td width="4"></td>
 	</tr>
 	<tr>
 		<xsl:if test="@primarykey='yes'">
 			<xsl:attribute name="bgcolor">#EEEEEE</xsl:attribute>
 		</xsl:if>
-		<td colspan="12" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
+		<td colspan="14" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
 	</tr>
-	<tr><td colspan="14"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="16"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	</xsl:for-each>
 	</table>
 
