@@ -700,6 +700,16 @@ public class DialogField
                     ((DialogFieldConditionalApplyFlag) action).applyFlags(dc);
             }
         }
+
+        if (children != null)
+        {
+            Iterator i = children.iterator();
+            while(i.hasNext())
+            {
+                DialogField field = (DialogField) i.next();
+                field.makeStateChanges(dc, stage);
+            }
+        }
     }
 
 	public void populateValue(DialogContext dc, int formatType)
