@@ -53,6 +53,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.bloodpressure", BloodPressureField.class);
         fieldClasses.put("field.report", ReportField.class);
         fieldClasses.put("field.zip", ZipField.class);
+        fieldClasses.put("field.email", EmailField.class);
 		defaultsAvailable = true;
 	}
 
