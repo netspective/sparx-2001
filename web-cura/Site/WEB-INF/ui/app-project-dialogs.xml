@@ -3,6 +3,9 @@
 <xaf>
     <dialogs package="project">
         <dialog name="registration" heading="create-data-cmd-heading:Project" retain-params="*" class="app.form.ProjectDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.text name="org_id" default="request:org_id" hidden="yes"/>
             <field.integer name="project_id" caption="Project ID" read-only="browser">
                 <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
             </field.integer>
@@ -20,7 +23,7 @@
                 <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
             </field.date>
             <field.email name="notify_email" caption="Notify Email" />
-            <field.text name="organization" default="session:organization" hidden="yes"/>
+
         </dialog>
 
         <dialog name="org_relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*" >

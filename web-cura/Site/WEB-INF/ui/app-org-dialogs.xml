@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <xaf>
 	<dialogs package="org">
-		<dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
+		<dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id" class="app.form.OrgDialog">
 			<field.debug visible="no"/>
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
 			<field.text name="org_code" caption="Account Code" required="yes"/>
 			<field.text name="org_name" caption="Name" required="yes"/>
 			<field.text name="org_abbrev" caption="Abbreviation"/>
@@ -17,11 +19,12 @@
 			<field.integer name="employees" caption="Employees"/>
 			<field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
 
-            <field.separator heading="Relationships"/>
             <field.select name="parent_org_id" caption="Parent Organization" choices="query:org.name-id-list"
-                prepend-blank="yes"/>
+                prepend-blank="yes">
+                <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+            </field.select>
 
-			<populate-tasks data-cmd="edit,delete">
+			<!--populate-tasks data-cmd="edit,delete">
 				<exec-statement report="none" store-type="row-fields" store="form:*">
 					select * from org where org_id = ?
 					<params>
@@ -44,13 +47,13 @@
                     columns="rel_org_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1030">
                     <conditional action="execute" has-value="form:parent_org_id"/>
                 </exec-dml>
-                <!-- get the ancestors of the parent and make them this org's ancestors also -->
+
 				<exec-statement stmt-src="org.ancestor-list" report="none" store-type="row-fields" store="request-attr:ancestor-list"/>
-                <!-- exec-dml command="insert" table="org_relationship" auto-inc="system_id,OrgRel_system_id_SEQ"
+                <exec-dml command="insert" table="org_relationship" auto-inc="system_id,OrgRel_system_id_SEQ"
                     fields="parent_org_id=rel_org_id"
                     columns="parent_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1010">
                     <conditional action="execute" has-value="form:parent_org_id"/>
-                </exec-dml -->
+                </exec-dml>
 
 				<exec-transaction command="end"/>
 				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}&amp;org_name=${form:org_name}"/>
@@ -68,7 +71,7 @@
 				<exec-dml command="delete" table="org" where="org_id = ?" where-bind="request:org_id"/>
 				<exec-transaction command="end"/>
 				<exec-redirect url="create-app-url:/account"/>
-			</execute-tasks>
+			</execute-tasks-->
 		</dialog>
 
         <dialog name="person_registeration" heading="Import Organization Member(s)" retain-params="*" class="app.form.AccountMemberDialog">
@@ -81,7 +84,73 @@
             <field.select name="rel_person_id" style="multidual" caption="Contacts" required="yes"
                 choices="query:org.selected-org-person-list" default="query:org.member-persons">
             </field.select>
-
         </dialog>
+
+        <dialog name="person_registration" heading="Import Organization Member(s)" retain-params="*" class="app.form.OrgMemberDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.integer name="org_id" hidden="yes" default="request:org_id"/>
+            <field.report name="rel_person_id" required="yes" style="multicheck">
+                <statement>
+            select
+                0 as "checkbox",
+                person.person_id,
+                person.complete_sortable_name
+            from
+                org,org_relationship,
+                person,personorg_relationship por
+            where
+                org_relationship.parent_id = ? and
+                org.org_id = por.rel_org_id and
+                por.parent_id = person.person_id and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type in (1000, 1010)
+            group by
+                person.person_id, person.complete_sortable_name
+                    <params>
+                        <param value="request:org_id" />
+                    </params>
+                    <report>
+                        <banner>
+                            <item caption="Please select the contact to import"/>
+                        </banner>
+                        <column type="checkbox" field-name="checkbox" field-value="${1}"/>
+                    </report>
+                </statement>
+            </field.report>
+        </dialog>
+
+        <dialog name="person_unregistration" heading="Remove Account Contact(s)" retain-params="*" class="app.form.OrgMemberDialog">
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.integer name="org_id" hidden="yes" default="request:org_id"/>
+            <field.report name="rel_person_id" required="yes" style="multicheck">
+                <statement>
+            select
+                0 as "checkbox",
+                person.person_id,
+                person.complete_sortable_name
+            from
+                person,personorg_relationship por
+            where
+                por.rel_org_id = ? and
+                por.parent_id = person.person_id
+            order by
+                person.complete_sortable_name
+                    <params>
+                        <param value="request:org_id" />
+                    </params>
+                    <report>
+                        <banner>
+                            <item caption="Please select the contact to remove"/>
+                        </banner>
+                        <column type="checkbox" field-name="checkbox" field-value="${1}"/>
+                        <column heading="ID"/>
+                        <column heading="Full Name"/>
+                    </report>
+                </statement>
+            </field.report>
+        </dialog>
+
 	</dialogs>
 </xaf>
