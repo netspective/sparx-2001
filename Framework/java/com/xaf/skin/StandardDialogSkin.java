@@ -604,6 +604,7 @@ public class StandardDialogSkin implements DialogSkin
             errorMsgsHtml.append("</ul></td></tr>\n");
         }
         String dialogIncludeJS = (dialog.getIncludeJSFile() != null ? dialog.getIncludeJSFile().getValue(dc) : null);
+        String encType = dialog.flagIsSet(Dialog.DLGFLAG_ENCTYPE_MULTIPART_FORMDATA) ? "enctype=\"multipart/form-data\"" : "";
 		String html =
 			(includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
 			"<link rel='stylesheet' href='"+ appConfig.getValue(dc, "framework.shared.css-url") +"/dialog.css'>\n"+
@@ -631,7 +632,7 @@ public class StandardDialogSkin implements DialogSkin
 			(heading == null ? "" :
 			"<tr "+frameHdRowAttrs+"><td colspan='"+dlgTableColSpan+"' align='"+ frameHdRowAlign +"'><font "+frameHdFontAttrs+"><b>"+ heading +"</b></font></td></tr>\n") +
             errorMsgsHtml +
-			"<form id='" + dialogName + "' name='"+ dialogName +"' action='"+ actionURL +"' method='post' onsubmit='return(activeDialog.isValid())'>\n" +
+			"<form id='" + dialogName + "' name='"+ dialogName +"' action='"+ actionURL +"' method='post' "+encType+" onsubmit='return(activeDialog.isValid())'>\n" +
 			dc.getStateHiddens() + "\n" +
 			fieldsHtml +
 			"</form>\n" +

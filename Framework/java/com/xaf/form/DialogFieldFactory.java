@@ -69,6 +69,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.email", EmailField.class);
         fieldClasses.put("field.uri", UriField.class);
         fieldClasses.put("field.currency", CurrencyField.class);
+        fieldClasses.put("field.file", FileField.class);
         fieldClasses.put("field.rs-navigator", ResultSetNavigatorButtonsField.class);
 
         conditionalsClasses.put("display", DialogFieldConditionalDisplay.class); // legacy
