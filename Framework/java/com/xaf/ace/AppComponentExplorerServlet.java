@@ -15,6 +15,7 @@ import com.xaf.config.*;
 import com.xaf.db.*;
 import com.xaf.form.*;
 import com.xaf.navigate.*;
+import com.xaf.report.*;
 import com.xaf.skin.*;
 import com.xaf.sql.*;
 import com.xaf.sql.query.*;
@@ -23,7 +24,7 @@ import com.xaf.value.*;
 
 public class AppComponentExplorerServlet extends HttpServlet
 {
-	private static final String[] APP_AREAS = { "Home", "", "Config", "config", "Schema", "schema", "DDL", "ddl", "UI", "ui", "SQL", "sql", "Documents", "documents", "TagDoc", "tagdoc", "JavaDoc", "javadoc" };
+	private static final String[] APP_AREAS = { "Home", "", "Config", "config", "Schema", "schema", "DDL", "ddl", "UI", "ui", "SQL", "sql", "Documents", "documents", "Factories", "factories", "TagDoc", "tagdoc", "JavaDoc", "javadoc" };
     private static final String CONTENT_TYPE = "text/html";
 
 	private Map appAreaElemsMap = new Hashtable();
@@ -32,7 +33,6 @@ public class AppComponentExplorerServlet extends HttpServlet
 	private Document appComponents;
 	private Element rootElem;
 	private Element contextElem;
-	private Element configItemsElem;
 	private Hashtable styleSheetParams = new Hashtable();
 	private String aceHomeStyleSheet;
 	private SchemaGeneratorDialog dialog;
@@ -270,7 +270,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		Element configRootElem = configDoc.createElement("xaf");
 		configDoc.appendChild(configRootElem);
 
-		configItemsElem = configDoc.createElement("config-items");
+		Element configItemsElem = configDoc.createElement("config-items");
 		configRootElem.appendChild(configItemsElem);
 
 		ConfigurationManager manager = ConfigurationManagerFactory.getManager(context);
@@ -301,6 +301,41 @@ public class AppComponentExplorerServlet extends HttpServlet
 
         PrintWriter out = response.getWriter();
 		out.write(Transform.nodeToString(styleSheet, configDoc, styleSheetParams));
+	}
+
+	public void doFactories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		preparePage(request, response, "/factories");
+
+		ServletContext context = getServletContext();
+		ValueContext vc = new ServletValueContext(request, response, context);
+
+		Document facDoc = null;
+		try
+		{
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			facDoc = builder.newDocument();
+		}
+		catch(Exception e)
+		{
+			throw new ServletException(e);
+		}
+
+		Element facRootElem = facDoc.createElement("xaf");
+		facDoc.appendChild(facRootElem);
+
+		Element factoriesElem = facDoc.createElement("factories");
+		facRootElem.appendChild(factoriesElem);
+
+		ValueSourceFactory.createCatalog(factoriesElem);
+		DialogFieldFactory.createCatalog(factoriesElem);
+		ReportColumnFactory.createCatalog(factoriesElem);
+
+		String styleSheet = appConfig.getValue(vc, "app.ace.factories-browser-xsl");
+
+        PrintWriter out = response.getWriter();
+		out.write(Transform.nodeToString(styleSheet, facDoc, styleSheetParams));
 	}
 
 	public void doSchema(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -555,6 +590,8 @@ public class AppComponentExplorerServlet extends HttpServlet
 				doSql(request, response);
 			else if("documents".equals(area))
 				doProject(request, response, pathInfo.substring("documents".length()+1));
+			else if("factories".equals(area))
+				doFactories(request, response);
 			else
 			{
 				preparePage(request, response, null);

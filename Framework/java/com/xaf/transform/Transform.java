@@ -9,6 +9,7 @@ package com.xaf.transform;
  * @version 1.0
  */
 
+import java.io.*;
 import java.util.*;
 
 import org.w3c.dom.*;
@@ -20,6 +21,13 @@ public class Transform
 {
 	static public String nodeToString(String styleSheet, Node node, Hashtable params)
 	{
+		if(styleSheet == null)
+			throw new RuntimeException("styleSheet parameter is null");
+
+		File file = new File(styleSheet);
+		if(! file.exists())
+			throw new RuntimeException("File '"+styleSheet+"' does not exist.");
+
 		//OutputStream os = new ByteArrayOutputStream();
 		//XmlPrinter xp = new XmlPrinter(os);
 		//xp.printPrettyXml(node);

@@ -10,6 +10,7 @@ package com.xaf.form;
  */
 
 import java.util.*;
+import org.w3c.dom.*;
 import com.xaf.form.field.*;
 
 public class DialogFieldFactory
@@ -51,6 +52,26 @@ public class DialogFieldFactory
         fieldClasses.put("field.phone", PhoneField.class);
         fieldClasses.put("field.bloodpressure", BloodPressureField.class);
 		defaultsAvailable = true;
+	}
+
+	public static void createCatalog(Element parent)
+	{
+		if(! defaultsAvailable) setupDefaults();
+
+		Document doc = parent.getOwnerDocument();
+		Element factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Dialog Fields");
+		factoryElem.setAttribute("class", DialogFieldFactory.class.getName());
+		for(Iterator i = fieldClasses.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("dialog-field");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((Class) entry.getValue()).getName());
+			factoryElem.appendChild(childElem);
+		}
 	}
 
 	public static DialogField createField(String fieldType)

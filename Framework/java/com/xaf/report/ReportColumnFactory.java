@@ -13,6 +13,7 @@ import java.util.*;
 import java.sql.*;
 import java.text.*;
 
+import org.w3c.dom.*;
 import com.xaf.report.column.*;
 
 public class ReportColumnFactory
@@ -39,6 +40,42 @@ public class ReportColumnFactory
 		columnClasses.put("default", GeneralColumn.class);
 		columnClasses.put("numeric", NumericColumn.class);
 		columnClasses.put("decimal", DecimalColumn.class);
+		haveDefaultColClasses = true;
+	}
+
+	public static void createCatalog(Element parent)
+	{
+		if(! haveDefaultColClasses)	setupDefaultColClasses();
+        if(! haveDefaultFormats) setupDefaultFormats();
+
+		Document doc = parent.getOwnerDocument();
+		Element factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Report Columns");
+		factoryElem.setAttribute("class", ReportColumnFactory.class.getName());
+		for(Iterator i = columnClasses.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("report-column");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((Class) entry.getValue()).getName());
+			factoryElem.appendChild(childElem);
+		}
+
+		factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Report Column Formats");
+		factoryElem.setAttribute("class", ReportColumnFactory.class.getName());
+		for(Iterator i = formats.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("report-column-format");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((Format) entry.getValue()).getClass().getName());
+			factoryElem.appendChild(childElem);
+		}
 	}
 
 	public static ReportColumn createReportColumn(String type)
