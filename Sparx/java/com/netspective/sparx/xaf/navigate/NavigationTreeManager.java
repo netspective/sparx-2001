@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.5 2003-01-19 00:11:43 roque.hernandez Exp $
+ * $Id: NavigationTreeManager.java,v 1.6 2003-01-26 21:32:18 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -71,6 +71,41 @@ import org.w3c.dom.Node;
 public class NavigationTreeManager extends XmlSource
 {
     public static final String NAME_DEFAULT = "default";
+    static Map conditionalsClasses = new HashMap();
+
+    static
+    {
+        conditionalsClasses.put("apply-flag", NavigationConditionalApplyFlag.class);
+    }
+
+    public static void addConditionalType(String actionName, Class cls)
+    {
+        conditionalsClasses.put(actionName, cls);
+    }
+
+    public static void addConditionalType(String actionName, String className) throws ClassNotFoundException
+    {
+        Class fieldClass = Class.forName(className);
+        addConditionalType(actionName, fieldClass);
+    }
+
+    public static NavigationConditionalAction createConditional(String action)
+    {
+        Class condClass = (Class) conditionalsClasses.get(action);
+        if(condClass == null)
+            return null;
+
+        try
+        {
+            return (NavigationConditionalAction) condClass.newInstance();
+        }
+        catch(Exception e)
+        {
+            //LogManager.recordException(DialogField.class, "createConditional", "unable to instantiate conditional '"+ condClass.getName() +"'", e);
+            return null;
+        }
+    }
+
     private Map structures = new HashMap();
 
     public NavigationTreeManager(File file)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.15 2003-01-14 23:25:54 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.16 2003-01-26 21:37:14 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -550,7 +550,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             for (int i = 0; i < tabElements.size(); i++)
             {
                 NavigationPath tabElement = (NavigationPath) tabElements.get(i);
-                if (tabElement.isVisible(nc))
+                if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE))
                 {
                     writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
                     writer.write("<TD " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
@@ -624,7 +624,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             for (int i = 0; i < tabElements.size(); i++)
             {
                 NavigationPath tabElement = (NavigationPath) tabElements.get(i);
-                if (tabElement.isVisible(nc))
+                if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE))
                 {
                     writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
                     writer.write("<TD " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
@@ -685,7 +685,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             for (int i = 0; i < sideBarElements.size(); i++)
             {
                 NavigationPath sideBarElement = (NavigationPath) sideBarElements.get(i);
-                if (sideBarElement.isVisible(nc))
+                if (!nc.flagIsSet(sideBarElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE))
                 {
                     writer.write("        <TR " + navAttrs + " " + navClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\">");
                     writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
@@ -729,7 +729,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             {
 
                 NavigationPath tabElement = (NavigationPath) tabElements.get(i);
-                if (tabElement.isVisible(nc))
+                if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE))
                 {
                     writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + ">");
                     String tabSeparatorImage = getImagePath(tabElement.getId(), TAB_SEPARATOR_IMAGE, nc);

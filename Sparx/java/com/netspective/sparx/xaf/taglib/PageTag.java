@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageTag.java,v 1.11 2003-01-07 10:46:06 roque.hernandez Exp $
+ * $Id: PageTag.java,v 1.12 2003-01-26 21:32:35 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -347,8 +347,20 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 activePage = (NavigationPage) nc.getActivePath();
                 if(activePage != null)
                 {
+                    if(nc.flagIsSet(activePage.getId(),NavigationPath.NAVGPATHFLAG_INVISIBLE))
+                    {
+                        req.setAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME, "The Page requested could not be Displayed.");
+                        //TODO: Need to dress this message some more with HTML.
+                        req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
+                        out.print(req.getAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME));
+                        return SKIP_BODY;
+                    }
                     activePage.handlePageMetaData(out, nc);
                     activePage.handlePageHeader(out, nc);
+                } else {
+                    req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
+                    out.print("The page requested was not found.");
+                    return SKIP_BODY;
                 }
             }
             else

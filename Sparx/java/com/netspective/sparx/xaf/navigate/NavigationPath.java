@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.9 2003-01-24 04:35:50 erich.oliphant Exp $
+ * $Id: NavigationPath.java,v 1.10 2003-01-26 21:32:18 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -76,7 +76,10 @@ public class NavigationPath
 {
     static public final long NAVGPATHFLAG_ISROOT    = 1;
     static public final long NAVGPATHFLAG_INVISIBLE = NAVGPATHFLAG_ISROOT * 2;
-    static public final long FLDFLAG_STARTCUSTOM = NAVGPATHFLAG_INVISIBLE * 2;
+    static public final long NAVGPATHFLAG_HIDDEN = NAVGPATHFLAG_INVISIBLE * 2;
+    static public final long NAVGPATHFLAG_READONLY = NAVGPATHFLAG_HIDDEN * 2;
+    static public final long NAVGPATHFLAG_INITIAL_FOCUS = NAVGPATHFLAG_READONLY * 2;
+    static public final long FLDFLAG_STARTCUSTOM = NAVGPATHFLAG_INITIAL_FOCUS * 2;
 
     static public final String PATH_SEPARATOR = "/";
     static private int pathNumber = 0;
@@ -202,6 +205,7 @@ public class NavigationPath
     private String actionImageUrl;
     private String entityImageUrl;
     private String controllerName;
+    private List conditionalActions;
     private NavigationController controller;
     private List childrenList = new ArrayList();
     private Map childrenMap = new HashMap();
@@ -473,10 +477,19 @@ public class NavigationPath
         for (int c = 0; c < children.getLength(); c++)
         {
             Node child = children.item(c);
+            String childName = child.getNodeName();
+
             if (child.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
             Element childElem = (Element) child;
+
+            if(childName.equals("conditional"))
+            {
+                importConditionalFromXml(childElem, parent);
+                continue;
+            }
+
             if (childElem.getNodeName().equals("page"))
             {
                 String childClassName = childElem.getAttribute("class");
@@ -561,7 +574,28 @@ public class NavigationPath
                 }
                 childPath.setUrl(url);
 
+                String permissions = childElem.getAttribute("permissions");
+                if (permissions != null && permissions.length() > 0)
+                {
+                    NavigationConditionalApplyFlag permissionConditional = new NavigationConditionalApplyFlag(childPath);
+                    permissionConditional.setNavigationPathFlag(NAVGPATHFLAG_INVISIBLE);
+
+                    List permsList = new ArrayList();
+                    StringTokenizer st = new StringTokenizer(permissions, ",");
+                    while(st.hasMoreTokens())
+                        permsList.add(st.nextToken());
+                    permissionConditional.setHasPermissions((String[]) permsList.toArray(new String[permsList.size()]));
+
+                    childPath.addConditionalAction(permissionConditional);
+                }
+
                 //TODO: It would simplfy the XML definition if we add a url-params if you want to have the defual URL but only define some params, which is in most cases what you want to do.
+
+                //TODO: Make sure that there is flag for wheather there are any conditionals at all.
+
+                //TODO: develop a value source that will do the page hiding depending on entity.
+
+                //TODO: Add sub-heading as a property
 
                 //TODO: Make sure this is modified to inherit retain-params and a way to set them to nothing
                 String retainParams = childElem.getAttribute("retain-params");
@@ -571,7 +605,7 @@ public class NavigationPath
 
                 String visible = childElem.getAttribute("visible");
                 if (visible != null && "no".equals(visible))
-                    childPath.setVisible(false);
+                    childPath.setFlag(NAVGPATHFLAG_INVISIBLE);
 
                 String defaultChildId = childElem.getAttribute("default");
                 childPath.setDefaultChildId(defaultChildId);
@@ -597,8 +631,28 @@ public class NavigationPath
                 }
 
                 childPath.generateAncestorList();
+
                 importFromXml(childElem, childPath);
             }
+        }
+    }
+
+    public void importConditionalFromXml(Element elem, NavigationPath path)
+    {
+        String action = elem.getAttribute("action");
+
+        if(action == null || action.length() == 0)
+        {
+            return;
+        }
+
+        NavigationConditionalAction actionInst = NavigationTreeManager.createConditional(action);
+
+        if(actionInst != null)
+        {
+            actionInst.setPath(path);
+            actionInst.importFromXml(elem);
+            path.addConditionalAction(actionInst);
         }
     }
 
@@ -756,7 +810,7 @@ public class NavigationPath
     /**
      * A String that represents the Id of the default child.  This property is relevant when trying to determine which
      * elements are part of the active path when the current element is not a leaf of the tree.
-     * @return String 
+     * @return String
      */
     public String getDefaultChildId()
     {
@@ -917,36 +971,6 @@ public class NavigationPath
 
 
     /**
-     * Returns a boolean that describes wether the current item of the NavigationPath should be displayed or not.
-     * @param  nc  A NavigationContext object.  This object keeps a runtime state of the NavigationPath.
-     * @return  <code>true</code> if the NavigationContext has true for this NavigationPath's Id.  If the NavigationContext
-     *          does not have a value defined for it, it then looks at the variable defined in NavigationPath.  This variable
-     *          is primarily driven by the importFromXml method.
-     */
-    public boolean isVisible(NavigationPathContext nc)
-    {
-        Boolean isVisible = nc.isPathVisible(this.getId());
-        if (isVisible != null)
-        {
-            return isVisible.booleanValue();
-        }
-        else
-        {
-            return ! flagIsSet(NAVGPATHFLAG_INVISIBLE);
-        }
-    }
-
-    /**
-     * Sets the boolean variable that defines wether this NavigationPath should be displayed.  Calling this method does
-     * not affect the runtime flag kept by the NavigationContext.
-     * @param visible The boolean value.
-     */
-    public void setVisible(boolean visible)
-    {
-        if(visible) clearFlagRecursively(NAVGPATHFLAG_INVISIBLE); else setFlagRecursively(NAVGPATHFLAG_INVISIBLE);
-    }
-
-    /**
      * Determines whether the NavigationPath is part of the active path.
      * @param  nc  A context primarily to obtain the Active NavigationPath.
      * @return  <code>true</code> if the NavigationPath object is:
@@ -1024,7 +1048,45 @@ public class NavigationPath
         return addChild(path, page);
     }
 
-    public void makeStateChanges(NavigationPathContext navigationPathContext) {
+    public void makeStateChanges(NavigationPathContext nc) {
+        //The make state changes should affect the ancestors and its sibilings and the children of the current navPath
+        List ancestors = this.getAncestorsList();
+        applyConditionals(conditionalActions, nc);
+
+        List sibilings = this.getSibilingList();
+        for (int i = 0; sibilings!= null && i < sibilings.size(); i++) {
+            NavigationPath sibiling = (NavigationPath) sibilings.get(i);
+            applyConditionals(sibiling.getConditionalActions(), nc);
+        }
+
+        for (int i = 0; ancestors!= null && i < ancestors.size(); i++) {
+            NavigationPath ancestor = (NavigationPath) ancestors.get(i);
+            applyConditionals(ancestor.getConditionalActions(), nc);
+            List ancestorSibilings = ancestor.getSibilingList();
+            for (int j = 0; ancestorSibilings != null && j < ancestorSibilings.size(); j++) {
+                NavigationPath ancestorSibiling = (NavigationPath) ancestorSibilings.get(j);
+                applyConditionals(ancestorSibiling.getConditionalActions(), nc);
+            }
+        }
+
+        List children = this.getChildrenList();
+        for (int i = 0; children!= null && i < children.size(); i++) {
+            NavigationPath child = (NavigationPath) children.get(i);
+            applyConditionals(child.getConditionalActions(), nc);
+        }
+    }
+
+    public void applyConditionals(List conditionals, NavigationPathContext nc){
+
+        if(conditionals != null)
+        {
+            for(int i = 0; i < conditionals.size(); i++)
+            {
+                NavigationConditionalAction action = (NavigationConditionalAction) conditionals.get(i);
+                if(action instanceof NavigationConditionalApplyFlag)
+                    ((NavigationConditionalApplyFlag) action).applyFlags(nc);
+            }
+        }
     }
 
     public void resolveResources(Map resources){
@@ -1059,6 +1121,26 @@ public class NavigationPath
                 child.resolveResources(resources);
             }
         }
+    }
+
+    /**
+     * Get a list of conditional actions
+     *
+     * @return List a list of conditional actions
+     */
+    public List getConditionalActions()
+    {
+        return conditionalActions;
+    }
+
+    /**
+     * Adds a conditional action
+     *
+     * @param action conditional action object
+     */
+    public void addConditionalAction(NavigationConditionalAction action)
+    {
+        if(conditionalActions == null) conditionalActions = new ArrayList();
 
     }
 }

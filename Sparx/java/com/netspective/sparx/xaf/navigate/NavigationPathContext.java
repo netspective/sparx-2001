@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.7 2003-01-07 10:46:05 roque.hernandez Exp $
+ * $Id: NavigationPathContext.java,v 1.8 2003-01-26 21:32:18 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -61,6 +61,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletResponse;
@@ -75,6 +76,23 @@ import com.netspective.sparx.xif.SchemaDocument;
 public class NavigationPathContext extends ServletValueContext
 {
     static public final long PCFLAG_HASERROR = 0;
+
+    public class NavigationPathState {
+        public NavigationPath path;
+        public long flags;
+
+        public NavigationPathState(NavigationPath path) {
+            this.path = path;
+            this.flags = path.getFlags();
+            //TODO: See if it's necesary to have another constructor that takes a data-cmd like the FieldState
+        }
+
+        public final boolean flagIsSet(long flag)
+        {
+            return (flags & flag) != 0;
+        }
+    }
+
 
     private static int pageContextNum = 0;
     private NavigationTree ownerTree;
@@ -114,8 +132,25 @@ public class NavigationPathContext extends ServletValueContext
             LogManager.recordException(this.getClass(), "constructor", transactionId, e);
         }
 
+        createNavigationPathStates(ownerTree.getChildrenList());
+
         if(activeTree != null)
             activeTree.makeStateChanges(this);
+    }
+
+    public void createNavigationPathStates(List navPaths){
+
+        if (navPaths == null) {
+            return;
+        }
+
+        for (int i = 0; i < navPaths.size(); i++) {
+            NavigationPath navPath = (NavigationPath) navPaths.get(i);
+            navigationStates.put(navPath.getId(), new NavigationPathState(navPath));
+            List children = navPath.getChildrenList();
+            if(children != null)
+                createNavigationPathStates(children);
+        }
     }
 
     public String getApplicationName(NavigationPathContext nc)
@@ -219,19 +254,29 @@ public class NavigationPathContext extends ServletValueContext
         this.navigationStates = navigationStates;
     }
 
-    public void setHiddenPath(String id)
+    public void setFlag(String pathId, long flag)
     {
-        setHiddenPath(id, false);
+        NavigationPathState state = (NavigationPathState) navigationStates.get(pathId);
+        if (state != null) {
+            state.flags |= flag;
+            //TODO: Need to see if we need to recurse into the children.  First thought: Not necesary.
+        }
     }
 
-    public void setHiddenPath(String id, boolean flag)
+    public void clearFlag(String pathId, long flag)
     {
-        this.navigationStates.put(id, new Boolean(flag));
+        NavigationPathState state = (NavigationPathState) navigationStates.get(pathId);
+        if(state != null)
+        {
+            state.flags &= ~flag;
+            //TODO: Need to see if we need to recurse into the children.  First thought: Not necesary.
+        }
     }
 
-    public Boolean isPathVisible(String id)
+    public boolean flagIsSet(String pathId, long flag)
     {
-        return (Boolean) navigationStates.get(id);
+        NavigationPathState state = (NavigationPathState) navigationStates.get(pathId);
+        return state.flagIsSet(flag);
     }
 
     public boolean isPopup()
