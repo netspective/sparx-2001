@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.1</jspversion>
+	<shortname>xaf</shortname>
+	<uri>http://xaf.org/xaf-page.tld</uri>
+
+	<tag>
+		<name>page</name>
+		<tagclass>org.redcross.nbcs.tools.xml.tags.PageTag</tagclass>
+
+		<attribute>
+			<name>title</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>heading</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>
