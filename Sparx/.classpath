@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="java"/>
+    <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+    <classpathentry kind="lib" path="lib/redist/ant-optional.jar"/>
+    <classpathentry kind="lib" path="lib/redist/ant.jar"/>
+    <classpathentry kind="lib" path="lib/redist/bsf.jar"/>
+    <classpathentry kind="lib" path="lib/redist/jdbc.jar"/>
+    <classpathentry kind="lib" path="lib/redist/junit.jar"/>
+    <classpathentry kind="lib" path="lib/redist/log4j.jar"/>
+    <classpathentry kind="lib" path="lib/redist/oro.jar"/>
+    <classpathentry kind="lib" path="lib/redist/servlet.jar"/>
+    <classpathentry kind="lib" path="lib/redist/syntax.jar"/>
+    <classpathentry kind="lib" path="lib/redist/xalan.jar"/>
+    <classpathentry kind="lib" path="lib/redist/xerces.jar"/>
+    <classpathentry kind="lib" path="lib/redist/xml-apis.jar"/>
+    <classpathentry kind="lib" path="lib/redist/commons-jexl.jar"/>
+    <classpathentry kind="lib" path="lib/redist/commons-logging.jar"/>
+    <classpathentry kind="output" path="bin"/>
+</classpath>

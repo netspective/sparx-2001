@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractRow.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: AbstractRow.java,v 1.4 2002-11-14 02:57:14 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -61,8 +61,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.NamingException;
 
@@ -71,13 +73,19 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.sql.DmlStatement;
+import com.netspective.sparx.xif.db.DatabasePolicy;
+import com.netspective.sparx.xif.db.policy.BasicDatabasePolicy;
 
 public abstract class AbstractRow implements Row
 {
     protected Table rowTable;
     protected Column[] rowColumns;
+	protected Map haveSqlExprDataMap = new HashMap();
+	protected Map sqlExprDataMap = new HashMap();
     protected boolean[] haveSqlExprData;
-    protected String[] sqlExprData;
+//    protected String[] sqlExprData;
+
+	public static String DEFAULT_DBMS = "ansi";
 
     public AbstractRow(com.netspective.sparx.xif.dal.Column[] columns)
     {
@@ -94,21 +102,132 @@ public abstract class AbstractRow implements Row
         return null;
     }
 
+	public boolean haveSqlExprData (String dbms, int column) {
+		if (null == haveSqlExprData) {
+			haveSqlExprData = new boolean [getColumns().length];
+			return false;
+		}
+
+		if (! haveSqlExprData[column]) return false;
+		
+		boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
+
+		if (null == haveSqlExprData) {
+			haveSqlExprData = new boolean [getColumns().length];
+			haveSqlExprDataMap.put(dbms, haveSqlExprData);
+		}
+
+		return haveSqlExprData[column];
+	}
+	
+	public boolean haveSqlExprData (int column) {
+		if (null == haveSqlExprData)
+			haveSqlExprData = new boolean [getColumns().length];
+
+		return haveSqlExprData[column];
+	}
+	
+	public void setHaveSqlExprData (String dbms, int column, boolean value) {
+		// First set the value of specified in the dbms specified for the column specified
+		boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
+
+		if (null == haveSqlExprData)
+			haveSqlExprData = new boolean [getColumns().length];
+
+		haveSqlExprData[column] = value;
+		haveSqlExprDataMap.put(dbms, haveSqlExprData);
+		
+		// Now check to see whether the value of the current column is the same
+		// across all dbms values or not.  If so, change the global haveSqlExprData
+		// value to the value passed into this method
+		Set dbmsSet = sqlExprDataMap.keySet();
+		Iterator dbmsIter = dbmsSet.iterator();
+		boolean changeGlobal = true;
+		
+		while (changeGlobal && dbmsIter.hasNext()) {
+			haveSqlExprData = (boolean[]) haveSqlExprDataMap.get((String) dbmsIter.next());
+			
+			if (null == haveSqlExprData) {
+				haveSqlExprData = new boolean [getColumns().length];
+				haveSqlExprDataMap.put(dbms, haveSqlExprData);
+			}
+			
+			if (haveSqlExprData[column] != value) changeGlobal = false;
+		}
+		
+		if (changeGlobal) this.haveSqlExprData[column] = value;
+	}
+	
+	public String sqlExprDataToString (int column) {
+		StringBuffer str = new StringBuffer();
+		
+		if (! haveSqlExprData[column]) return str.toString();
+		
+		Set dbmsSet = sqlExprDataMap.keySet();
+		Iterator dbmsIter = dbmsSet.iterator();
+		
+		while (dbmsIter.hasNext()) {
+			String dbms = (String) dbmsIter.next();
+			
+			haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
+						
+			if (null != haveSqlExprData && haveSqlExprData[column]) {
+				String sqlExprData = getCustomSqlExpr (column, dbms);
+				str.append("[DBMS: " + dbms + ", SQL Expr: " + sqlExprData + "]");
+			}
+		}
+		
+		return str.toString();
+	}
+	
+	public void setSqlExprData (String dbms, int column, String sqlExpr) {
+		String[] sqlExprData = (String[]) sqlExprDataMap.get(dbms);
+		
+        if(null == sqlExprData)
+            sqlExprData = new String[getColumns().length];
+
+        sqlExprData[column] = sqlExpr;
+
+        sqlExprDataMap.put(dbms, sqlExprData);
+	}
+	public String getSqlExprData (String dbms, int column) {
+		String[] sqlExprData = (String[]) sqlExprDataMap.get(dbms);
+		String returnValue = null;
+		
+        if(null == sqlExprData) {
+            sqlExprData = new String[getColumns().length];
+            sqlExprDataMap.put(dbms, sqlExprData);
+        }
+
+        return sqlExprData[column];
+	}
+
     /**
      * Sets the SQL expression that should be passed into the database in place of a bind parameter. This
      * method is used when a column's value should be a database-dependent function or value as opposed to
      * a Java value that is passed in as a bind parameter.
      * @param column The zero-based column index of the column for which the SQL expression is being created
+     * @param dbms A string representing the DBMS for which this SQL expression is relevant
      * @param sqlExpr the actual SQL expression
      */
+    public void setCustomSqlExpr(int column, String dbms, String sqlExpr)
+    {
+		setSqlExprData (dbms, column, sqlExpr);
+        setHaveSqlExprData (dbms, column, true);
+    }
+
     public void setCustomSqlExpr(int column, String sqlExpr)
     {
-        com.netspective.sparx.xif.dal.Column[] columns = getColumns();
-        if(sqlExprData == null)
-            sqlExprData = new String[columns.length];
-        sqlExprData[column] = sqlExpr;
-        haveSqlExprData[column] = true;
+    	setCustomSqlExpr(column, DEFAULT_DBMS, sqlExpr);
     }
+
+	public String getCustomSqlExpr(int column, String dbms) {
+		return getSqlExprData (dbms, column);
+	}
+
+	public String getCustomSqlExpr(int column) {
+		return getCustomSqlExpr(column, DEFAULT_DBMS);
+	}
 
     public Table getTable()
     {
@@ -134,7 +253,9 @@ public abstract class AbstractRow implements Row
 
     abstract public Object[] getData();
 
-    abstract public List getDataForDmlStatement();
+    // abstract public List getDataForDmlStatement();
+
+	abstract public List getDataForDmlStatement(DatabasePolicy dbPolicy);
 
     /**
      * Given a ResultSet, return a Map of all the column names in the ResultSet
@@ -187,19 +308,19 @@ public abstract class AbstractRow implements Row
         return primary.equals(compareTo);
     }
 
-    public DmlStatement createInsertDml(Table table)
+    public DmlStatement createInsertDml(Table table, DatabasePolicy dbPolicy)
     {
-        return new DmlStatement(table.getName(), table.getColumnNames(), getDataForDmlStatement());
+        return new DmlStatement(table.getName(), dbPolicy, table.getColumnNames(), getDataForDmlStatement(dbPolicy));
     }
 
-    public DmlStatement createUpdateDml(Table table, String whereCond)
+    public DmlStatement createUpdateDml(Table table, DatabasePolicy dbPolicy, String whereCond)
     {
-        return new DmlStatement(table.getName(), table.getColumnNames(), getDataForDmlStatement(), whereCond);
+        return new DmlStatement(table.getName(), dbPolicy, table.getColumnNames(), getDataForDmlStatement(dbPolicy), whereCond);
     }
 
-    public DmlStatement createDeleteDml(Table table, String whereCond)
+    public DmlStatement createDeleteDml(Table table, DatabasePolicy dbPolicy, String whereCond)
     {
-        return new DmlStatement(table.getName(), whereCond);
+        return new DmlStatement(table.getName(), dbPolicy, whereCond);
     }
 
     public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
@@ -237,4 +358,31 @@ public abstract class AbstractRow implements Row
     public void retrieveChildren(ConnectionContext cc) throws NamingException, SQLException
     {
     }
+	/**
+	 * @see com.netspective.sparx.xif.dal.Row#createDeleteDml(com.netspective.sparx.xif.dal.Table, java.lang.String)
+	 */
+	public DmlStatement createDeleteDml(Table table, String whereCond) {
+		BasicDatabasePolicy dbPolicy = new BasicDatabasePolicy();
+		
+		return createDeleteDml(table, dbPolicy, whereCond);
+	}
+
+	/**
+	 * @see com.netspective.sparx.xif.dal.Row#createInsertDml(com.netspective.sparx.xif.dal.Table)
+	 */
+	public DmlStatement createInsertDml(Table table) {
+		BasicDatabasePolicy dbPolicy = new BasicDatabasePolicy();
+		
+		return createInsertDml(table, dbPolicy);
+	}
+
+	/**
+	 * @see com.netspective.sparx.xif.dal.Row#createUpdateDml(com.netspective.sparx.xif.dal.Table, java.lang.String)
+	 */
+	public DmlStatement createUpdateDml(Table table, String whereCond) {
+		BasicDatabasePolicy dbPolicy = new BasicDatabasePolicy();
+		
+		return createUpdateDml(table, dbPolicy, whereCond);
+	}
+
 }

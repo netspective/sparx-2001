@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabasePolicy.java,v 1.4 2002-10-20 15:58:45 shahid.shah Exp $
+ * $Id: DatabasePolicy.java,v 1.5 2002-11-14 02:57:15 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -201,4 +201,10 @@ public interface DatabasePolicy
      * insert or update DMLs.
      */
     public boolean retainGUIDColInDml();
+    
+    /**
+     * Returns a string identifier that can be used in a database schema to
+     * specify dbms-specific SQL that might need to be used.
+     */
+    public String getDBMSName();
 }

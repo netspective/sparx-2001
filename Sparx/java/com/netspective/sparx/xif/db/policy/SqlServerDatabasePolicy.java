@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SqlServerDatabasePolicy.java,v 1.3 2002-02-07 12:47:28 jruss Exp $
+ * $Id: SqlServerDatabasePolicy.java,v 1.4 2002-11-14 02:57:15 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -140,4 +140,11 @@ public class SqlServerDatabasePolicy extends BasicDatabasePolicy
         String sql = "select @@IDENTITY";
         return executeAndGetSingleValue(conn, sql);
     }
+	/**
+	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
+	 */
+	public String getDBMSName() {
+		return "mssql";
+	}
+
 }

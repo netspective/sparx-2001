@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PostgreSQLDatabasePolicy.java,v 1.1 2002-11-01 04:10:41 shahbaz.javeed Exp $
+ * $Id: PostgreSQLDatabasePolicy.java,v 1.2 2002-11-14 02:57:15 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -121,4 +121,11 @@ public class PostgreSQLDatabasePolicy extends BasicDatabasePolicy
     {
         return executeAndGetSingleValue(conn, "select currval('" + seqOrTableName + "')");
     }
+	/**
+	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
+	 */
+	public String getDBMSName() {
+		return "postgres";
+	}
+
 }

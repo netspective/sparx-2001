@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HSqlDbDatabasePolicy.java,v 1.1 2002-03-26 22:52:41 snshah Exp $
+ * $Id: HSqlDbDatabasePolicy.java,v 1.2 2002-11-14 02:57:15 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -140,4 +140,11 @@ public class HSqlDbDatabasePolicy extends BasicDatabasePolicy
         String sql = "CALL IDENTITY()";
         return executeAndGetSingleValue(conn, sql);
     }
+	/**
+	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
+	 */
+	public String getDBMSName() {
+		return "hsql";
+	}
+
 }

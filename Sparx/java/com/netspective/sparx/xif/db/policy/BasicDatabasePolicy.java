@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BasicDatabasePolicy.java,v 1.4 2002-10-20 15:58:45 shahid.shah Exp $
+ * $Id: BasicDatabasePolicy.java,v 1.5 2002-11-14 02:57:15 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -149,4 +149,11 @@ public class BasicDatabasePolicy implements DatabasePolicy
     {
         return true;
     }
+	/**
+	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
+	 */
+	public String getDBMSName() {
+		return "0";
+	}
+
 }

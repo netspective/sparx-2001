@@ -51,23 +51,44 @@
  */
 
 /**
- * $Id: DmlStatement.java,v 1.2 2002-01-28 10:14:46 jruss Exp $
+ * $Id: DmlStatement.java,v 1.3 2002-11-14 02:57:14 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+
+import com.netspective.sparx.xif.db.DatabasePolicy;
 
 public class DmlStatement
 {
     static public class CustomSql
     {
-        String customSql;
+		public static String DEFAULT_DBMS = "ansi";
+
+        Map customSql = new HashMap();
 
         public CustomSql(String sql)
         {
-            customSql = sql;
+            customSql.put(DEFAULT_DBMS, sql);
+        }
+        
+        public CustomSql(String dbms, String sql)
+        {
+            customSql.put(dbms, sql);
+        }
+        
+		public String getCustomSql()
+		{
+			return getCustomSql(DEFAULT_DBMS);
+		}
+		
+        public String getCustomSql(String dbms)
+        {
+        	return (String) customSql.get(dbms);
         }
     }
 
@@ -75,8 +96,11 @@ public class DmlStatement
     static public final short STMTTYPE_UPDATE = 1;
     static public final short STMTTYPE_DELETE = 2;
 
+	public static String DEFAULT_DBMS = "ansi";
+
     private short stmtType;
-    private String sql;
+	private Map sql = new HashMap();
+//    private String sql;
     private String tableName;
 		// We want a new List object that we can remove columns
 		// from without affecting the DAL objects
@@ -86,17 +110,44 @@ public class DmlStatement
     private String whereCond;
 		private int autoIncIdx;
 
-    public DmlStatement(String tableName, List columnNames, List columnValues)
+    public DmlStatement(String tableName, DatabasePolicy dbPolicy, List columnNames, List columnValues)
+    {
+		String dbms = dbPolicy.getDBMSName();
+
+        stmtType = STMTTYPE_INSERT;
+        this.tableName = tableName;
+		this.columnNames.addAll(columnNames);
+        this.columnValues.addAll(columnValues);
+        this.bindValues = new boolean[columnValues.size()];
+        createInsertSql(dbms);
+    }
+
+	public DmlStatement(String tableName, List columnNames, List columnValues)
     {
         stmtType = STMTTYPE_INSERT;
         this.tableName = tableName;
 				this.columnNames.addAll(columnNames);
         this.columnValues.addAll(columnValues);
         this.bindValues = new boolean[columnValues.size()];
-        createInsertSql();
+        createInsertSql(DEFAULT_DBMS);
     }
 
-    public DmlStatement(String tableName, List columnNames, List columnValues, String whereCond)
+
+
+    public DmlStatement(String tableName, DatabasePolicy dbPolicy, List columnNames, List columnValues, String whereCond)
+    {
+		String dbms = dbPolicy.getDBMSName();
+		
+        stmtType = STMTTYPE_UPDATE;
+        this.tableName = tableName;
+        this.columnNames.addAll(columnNames);
+		this.columnValues.addAll(columnValues);
+        this.whereCond = whereCond;
+        this.bindValues = new boolean[columnValues.size()];
+        createUpdateSql(dbms);
+    }
+
+	public DmlStatement(String tableName, List columnNames, List columnValues, String whereCond)
     {
         stmtType = STMTTYPE_UPDATE;
         this.tableName = tableName;
@@ -104,16 +155,30 @@ public class DmlStatement
 				this.columnValues.addAll(columnValues);
         this.whereCond = whereCond;
         this.bindValues = new boolean[columnValues.size()];
-        createUpdateSql();
+        createUpdateSql(DEFAULT_DBMS);
     }
 
-    public DmlStatement(String tableName, String whereCond)
+
+
+    public DmlStatement(String tableName, DatabasePolicy dbPolicy, String whereCond)
+    {
+		String dbms = dbPolicy.getDBMSName();
+		
+        stmtType = STMTTYPE_UPDATE;
+        this.tableName = tableName;
+        this.whereCond = whereCond;
+        createDeleteSql(dbms);
+    }
+
+	public DmlStatement(String tableName, String whereCond)
     {
         stmtType = STMTTYPE_UPDATE;
         this.tableName = tableName;
         this.whereCond = whereCond;
-        createDeleteSql();
+        createDeleteSql(DEFAULT_DBMS);
     }
+
+
 
     public short getStmtType()
     {
@@ -122,7 +187,12 @@ public class DmlStatement
 
     public String getSql()
     {
-        return sql;
+        return (String) sql.get(DEFAULT_DBMS);
+    }
+
+    public String getSql(String dbms)
+    {
+        return (String) sql.get(dbms);
     }
 
     public String getTableName()
@@ -150,31 +220,41 @@ public class DmlStatement
         return whereCond;
     }
 
-    public void updateValue(int index, Object value)
+    public void updateValue(int index, String dbms, Object value)
     {
         columnValues.set(index, value);
-        createSql();
+        createSql(dbms);
     }
 
     public void createSql()
     {
+		createSql(DEFAULT_DBMS);
+    }
+
+    public void createSql(String dbms)
+    {
         switch(stmtType)
         {
             case STMTTYPE_INSERT:
-                createInsertSql();
+                createInsertSql(dbms);
                 break;
 
             case STMTTYPE_UPDATE:
-                createUpdateSql();
+                createUpdateSql(dbms);
                 break;
 
             case STMTTYPE_DELETE:
-                createDeleteSql();
+                createDeleteSql(dbms);
                 break;
         }
     }
 
     public void createInsertSql()
+    {
+    	createInsertSql(DEFAULT_DBMS);
+    }
+
+    public void createInsertSql(String dbms)
     {
         int columnsCount = columnNames.size();
         StringBuffer names = new StringBuffer();
@@ -192,7 +272,7 @@ public class DmlStatement
             Object value = columnValues.get(i);
             if(value instanceof CustomSql)
             {
-                values.append(((CustomSql) value).customSql);
+                values.append(((CustomSql) value).customSql.get(dbms));
             }
             else
             {
@@ -206,10 +286,16 @@ public class DmlStatement
             }
         }
 
-        sql = "insert into " + tableName + " (" + names + ") values (" + values + ")";
+		String sqlString = "insert into " + tableName + " (" + names + ") values (" + values + ")";
+        sql.put(dbms, "insert into " + tableName + " (" + names + ") values (" + values + ")");
     }
 
     public void createUpdateSql()
+    {
+    	createUpdateSql(DEFAULT_DBMS);
+    }
+    
+    public void createUpdateSql(String dbms)
     {
         int columnsCount = columnNames.size();
         StringBuffer sets = new StringBuffer();
@@ -226,7 +312,7 @@ public class DmlStatement
 
             if(value instanceof CustomSql)
             {
-                sets.append(((CustomSql) value).customSql);
+                sets.append(((CustomSql) value).customSql.get(dbms));
             }
             else
             {
@@ -242,17 +328,26 @@ public class DmlStatement
             }
         }
 
-        sql = "update " + tableName + " set " + sets;
+        String sql = "update " + tableName + " set " + sets;
         if(whereCond != null)
             sql += " where " + whereCond;
+            
+        this.sql.put(dbms, sql);
 
     }
 
     public void createDeleteSql()
     {
-        sql = "delete from " + tableName;
+    	createDeleteSql(DEFAULT_DBMS);
+    }
+    
+    public void createDeleteSql(String dbms)
+    {
+        String sql = "delete from " + tableName;
         if(whereCond != null)
             sql += " where " + whereCond;
+            
+        this.sql.put(dbms, sql);
     }
 
     public String toString()

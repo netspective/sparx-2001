@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Row.java,v 1.4 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: Row.java,v 1.5 2002-11-14 02:57:14 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -69,6 +69,7 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.sql.DmlStatement;
+import com.netspective.sparx.xif.db.DatabasePolicy;
 
 public interface Row
 {
@@ -105,7 +106,13 @@ public interface Row
      * Returns a List that of the current values of each of the columns in the Row. This list is
      * suitable for passing into the DmlStatement object.
      */
-    public List getDataForDmlStatement();
+    // public List getDataForDmlStatement();
+
+	/**
+	 * Returns a List that of the current values of each of the columns in the Row. This list is
+	 * suitable for passing into the DmlStatement object.
+	 */
+	public List getDataForDmlStatement(DatabasePolicy dbPolicy);
 
     /**
      * Returns the value of primary key in the Row.
@@ -242,15 +249,30 @@ public interface Row
      */
     public DmlStatement createInsertDml(Table table);
 
+	/**
+	 * Create the DML that can be used to insert this row into the database.
+	 */
+	public DmlStatement createInsertDml(Table table, DatabasePolicy dbPolicy);
+
     /**
      * Create the DML that can be used to update this row in the database.
      */
     public DmlStatement createUpdateDml(Table table, String whereCond);
 
+	/**
+	 * Create the DML that can be used to update this row in the database.
+	 */
+	public DmlStatement createUpdateDml(Table table, DatabasePolicy dbPolicy, String whereCond);
+
     /**
      * Create the DML that can be used to delete this row from the database.
      */
     public DmlStatement createDeleteDml(Table table, String whereCond);
+
+	/**
+	 * Create the DML that can be used to delete this row from the database.
+	 */
+	public DmlStatement createDeleteDml(Table table, DatabasePolicy dbPolicy, String whereCond);
 
     /**
      * This method is executed immediately prior to an insert action on this row and

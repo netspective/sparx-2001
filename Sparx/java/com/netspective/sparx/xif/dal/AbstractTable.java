@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.8 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: AbstractTable.java,v 1.9 2002-11-14 02:57:14 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -69,6 +69,7 @@ import java.util.Map;
 import javax.naming.NamingException;
 
 import com.netspective.sparx.xaf.sql.DmlStatement;
+import com.netspective.sparx.xif.db.DatabasePolicy;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QueryField;
 import com.netspective.sparx.xaf.querydefn.QueryJoin;
@@ -686,17 +687,23 @@ public abstract class AbstractTable implements Table
     {
         boolean result = false;
         PreparedStatement stmt = null;
+        String dbms = cc.getDatabasePolicy().getDBMSName();
+        
         try
         {
-            stmt = cc.getConnection().prepareStatement(dml.getSql());
+        	String sqlString = dml.getSql(dbms);
+
+            stmt = cc.getConnection().prepareStatement(sqlString);
+        	
+            // stmt = cc.getConnection().prepareStatement(dml.getSql(dbms));
 
             int columnNum = 1;
             boolean[] bindValues = dml.getBindValues();
             List columnValues = dml.getColumnValues();
             if(bindValues != null)
             {
-								// Need to use columnValues.size() since the dml may have removed
-								// columns if autoinc columns are not included in the SQL
+				// Need to use columnValues.size() since the dml may have removed
+				// columns if autoinc columns are not included in the SQL
                 for(int c = 0; c < columnValues.size(); c++)
                 {
                     if(bindValues[c])
@@ -755,7 +762,7 @@ public abstract class AbstractTable implements Table
                 }
             }
 
-            throw new SQLException(e.toString() + " [" + dml.getSql() + "\n(bind " + (bindParams.length() > 0 ? bindParams.toString() : "none") + ")\n" + row.toString() + "]");
+            throw new SQLException(e.toString() + " [" + dml.getSql(dbms) + "\n(bind " + (bindParams.length() > 0 ? bindParams.toString() : "none") + ")\n" + row.toString() + "]");
         }
         finally
         {
@@ -765,7 +772,10 @@ public abstract class AbstractTable implements Table
 
     public boolean insert(ConnectionContext cc, Row row) throws NamingException, SQLException
     {
-        DmlStatement dml = row.createInsertDml(this);
+		DatabasePolicy dbPolicy = cc.getDatabasePolicy();
+        DmlStatement dml = row.createInsertDml(this, dbPolicy);
+        if (null == dml) throw new NullPointerException ("dml is null in AbstractTable.insert()");
+        
         validateDmlValues(dml);
 
         if(!row.beforeInsert(cc, dml))
@@ -785,7 +795,8 @@ public abstract class AbstractTable implements Table
 
     public boolean update(ConnectionContext cc, Row row, String whereCond, Object[] whereCondBindParams) throws NamingException, SQLException
     {
-        DmlStatement dml = row.createUpdateDml(this, whereCond);
+		DatabasePolicy dbPolicy = cc.getDatabasePolicy();
+        DmlStatement dml = row.createUpdateDml(this, dbPolicy, whereCond);
         validateDmlValues(dml);
 
         if(!row.beforeUpdate(cc, dml))
@@ -805,7 +816,8 @@ public abstract class AbstractTable implements Table
 
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object[] whereCondBindParams) throws NamingException, SQLException
     {
-        DmlStatement dml = row.createDeleteDml(this, whereCond);
+		DatabasePolicy dbPolicy = cc.getDatabasePolicy();
+        DmlStatement dml = row.createDeleteDml(this, dbPolicy, whereCond);
         if(!row.beforeDelete(cc, dml))
             return false;
 

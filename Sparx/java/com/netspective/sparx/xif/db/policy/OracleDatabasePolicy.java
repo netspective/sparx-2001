@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: OracleDatabasePolicy.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: OracleDatabasePolicy.java,v 1.2 2002-11-14 02:57:15 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -121,4 +121,11 @@ public class OracleDatabasePolicy extends BasicDatabasePolicy
     {
         return executeAndGetSingleValue(conn, "select " + seqOrTableName + ".currval from dual");
     }
+	/**
+	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
+	 */
+	public String getDBMSName() {
+		return "oracle";
+	}
+
 }

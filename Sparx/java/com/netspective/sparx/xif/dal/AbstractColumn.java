@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractColumn.java,v 1.2 2002-04-09 12:42:15 rarora Exp $
+ * $Id: AbstractColumn.java,v 1.3 2002-11-14 02:57:14 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -72,6 +72,8 @@ public abstract class AbstractColumn implements Column
     public static long COLUMNFLAG_CUSTOMSTART = COLUMNFLAG_SQLDEFNHASSIZE * 2;
 
     public static String SIZE_REPLACEMENT_FMT = "%size%";
+    
+    public static String DEFAULT_DBMS = "ansi";
 
     private Table parentTable;
     private String name;
@@ -84,7 +86,7 @@ public abstract class AbstractColumn implements Column
     private String foreignKeyRef;
     private String sequenceName;
     private short foreignKeyRefType;
-    private String defaultSqlExprValue;
+    private Map defaultSqlExprValue = new HashMap();
     private String dataClassName;
     private List dependentFKeys;
 
@@ -137,7 +139,7 @@ public abstract class AbstractColumn implements Column
 
     public String getSqlDefn(String dbms)
     {
-        String defn = (String) sqlDefn.get(dbms == null ? "ansi" : dbms);
+        String defn = (String) sqlDefn.get(dbms == null ? DEFAULT_DBMS : dbms);
         if(defn != null)
             return flagIsSet(COLUMNFLAG_SQLDEFNHASSIZE) ? replaceValueInStr(defn, SIZE_REPLACEMENT_FMT, Integer.toString(size)) : defn;
         else
@@ -149,7 +151,7 @@ public abstract class AbstractColumn implements Column
         if(value.indexOf(SIZE_REPLACEMENT_FMT) >= 0)
             setFlag(COLUMNFLAG_SQLDEFNHASSIZE);
 
-        sqlDefn.put(dbms == null ? "ansi" : dbms, value);
+        sqlDefn.put(dbms == null ? DEFAULT_DBMS : dbms, value);
     }
 
     public String getDescription()
@@ -220,14 +222,24 @@ public abstract class AbstractColumn implements Column
         indexInRow = value;
     }
 
+    public String getDefaultSqlExprValue(String dbms)
+    {
+        return (String) defaultSqlExprValue.get(dbms);
+    }
+
     public String getDefaultSqlExprValue()
     {
-        return defaultSqlExprValue;
+        return (String) defaultSqlExprValue.get(DEFAULT_DBMS);
+    }
+
+    public void setDefaultSqlExprValue(String dbms, String value)
+    {
+        defaultSqlExprValue.put(dbms, value);
     }
 
     public void setDefaultSqlExprValue(String value)
     {
-        defaultSqlExprValue = value;
+        defaultSqlExprValue.put(DEFAULT_DBMS, value);
     }
 
     public boolean isIndexed()
