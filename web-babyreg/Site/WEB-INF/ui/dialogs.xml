@@ -2,7 +2,7 @@
 <xaf>
 	<register-field tag-name="field.image" class="app.field.ImageField"/>
 	<dialogs package="Gift">
-		<dialog name="DetailGift" heading="Gift Entry Screen" retain-params="*" loop="append">
+		<dialog name="DetailGift" heading="Gift Detail Screen" retain-params="*" loop="append">
 			<field.text name="name" caption="Gift Name">
 				<client-js event="lose-focus" type="extends" js-expr="var name = getControl(activeDialog,'_dc.name');
                                                                       var picture = getControl(activeDialog,'_dc.picture_path');
@@ -46,20 +46,21 @@
 				<exec-transaction command="begin"/>
 				<exec-dml command="update" table="gift" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form:age_range.unit" fields="name,category_id,status_id,user_id,picture_path,price,brand,url,description" where="id = ?" where-bind="request:id"/>
 				<exec-transaction command="end"/>
-                <exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes"/>
+                <exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes&amp;_dc.output.destination=1"/>
 			</execute-tasks>
 			<execute-tasks data-cmd="add">
 				<exec-transaction command="begin"/>
 				<exec-dml command="insert" table="gift" auto-inc="id,gift_id_seq" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form:age_range.unit" fields="name,category_id,status_id,user_id,picture_path,price,brand,url,description"/>
 				<exec-transaction command="end"/>
-				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes&amp;_dc.output.destination=1"/>
 			</execute-tasks>
             <execute-tasks data-cmd="delete">
 				<exec-transaction command="begin"/>
 				<exec-dml command="delete" table="gift" where="id = ?" where-bind="request:id"/>
 				<exec-transaction command="end"/>
-				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes&amp;_dc.output.destination=1"/>
 			</execute-tasks>
+            <director cancel-url="flow-control:AdminGiftList.jsp?s_category,s_status"/>
 
 			<!-- TODO: Figure out how to take care of Cancel since we have to go to 2 different places
                        depending on the data-cmd.  Option 1. Create a value source-->
@@ -147,7 +148,7 @@
 			<field.text name="last_name" caption="Last Name" required="yes"/>
 			<field.text name="email_addr" caption="E-mail"/>
 			<field.text name="phone" caption="Contact Phone Number"/>
-			<field.select name="relationship_id" caption="Relationship" choices="query:User.realtionships_allowed"/>
+			<field.select name="relationship_id" required="yes" caption="Relationship" choices="query:User.realtionships_allowed"/>
 			<populate-tasks data-cmd="edit,delete">
 				<exec-statement name="User.UserDetail" report="none" store-type="row-fields" store="form:*"/>
 			</populate-tasks>
