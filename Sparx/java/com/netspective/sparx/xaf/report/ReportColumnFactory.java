@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportColumnFactory.java,v 1.2 2002-12-26 19:37:20 shahid.shah Exp $
+ * $Id: ReportColumnFactory.java,v 1.3 2003-04-30 20:24:50 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -75,6 +75,8 @@ import com.netspective.sparx.xaf.report.column.CheckBoxFieldColumn;
 import com.netspective.sparx.xaf.report.column.DecimalColumn;
 import com.netspective.sparx.xaf.report.column.GeneralColumn;
 import com.netspective.sparx.xaf.report.column.NumericColumn;
+import com.netspective.sparx.xaf.report.column.ClobSummaryColumn;
+import com.netspective.sparx.xaf.report.column.ClobStreamColumn;
 import com.netspective.sparx.xif.SchemaDocument;
 
 public class ReportColumnFactory implements Factory
@@ -99,6 +101,10 @@ public class ReportColumnFactory implements Factory
         columnClasses.put("numeric", NumericColumn.class);
         columnClasses.put("decimal", DecimalColumn.class);
         columnClasses.put("checkbox", CheckBoxFieldColumn.class);
+
+	// Custom Report Columns - These might not be part of the main Sparx distribution
+	columnClasses.put("clob-summary", ClobSummaryColumn.class);
+	columnClasses.put("clob-detail", ClobStreamColumn.class);
     }
 
     public static void createCatalog(Element parent)

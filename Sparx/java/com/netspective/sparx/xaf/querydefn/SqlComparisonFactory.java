@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SqlComparisonFactory.java,v 1.2 2003-04-22 04:39:20 shahbaz.javeed Exp $
+ * $Id: SqlComparisonFactory.java,v 1.3 2003-04-30 20:24:50 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -93,6 +93,7 @@ public class SqlComparisonFactory implements Factory
         addComparison(new DateComparison("gt-date", ">"), new String[]{"gt-date", "greater-than-date"});
 
         addComparison(new LobContainsComparison(), null);
+	addComparison(new IndexedLobContainsComparison(), null);
     }
 
     static public void addComparison(SqlComparison comp, String[] aliases)
