@@ -35,7 +35,7 @@ public class GeneralColumn implements ReportColumn
 	private int alignStyle;
 	private int colIndexInArray;
     private int colIndexInResultSet;
-	private String heading;
+	private SingleValueSource headingValueSource;
 	private SingleValueSource urlValueSource;
     private String calcCmd;
     private Format formatter;
@@ -75,8 +75,11 @@ public class GeneralColumn implements ReportColumn
         colIndexInResultSet = value + 1;
     }
 
-	public final String getHeading() { return heading; }
-	public final void setHeading(String value) { heading = value; }
+	public final SingleValueSource getHeading() { return headingValueSource; }
+	public final void setHeading(String value)
+    {
+        headingValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
 	public final SingleValueSource getUrl() { return urlValueSource; }
 	public final void setUrl(String value)
@@ -172,7 +175,7 @@ public class GeneralColumn implements ReportColumn
 	{
 		flags = rc.getFlags();
 
-		setHeading(rc.getHeading());
+		this.headingValueSource = rc.getHeading();
 		this.urlValueSource = rc.getUrl();
 		setAlignStyle(rc.getAlignStyle());
 		setWidth(rc.getWidth());

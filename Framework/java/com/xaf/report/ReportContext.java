@@ -57,7 +57,7 @@ public class ReportContext implements ValueContext
 					url = column.resolvePattern(column.getUrl().getValue(ReportContext.this));
 			}
 
-			heading = column.getHeading();
+			heading = column.getHeading().getValue(ReportContext.this);
 
 			if(column instanceof DialogFieldColumn)
 			{

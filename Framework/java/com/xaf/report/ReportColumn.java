@@ -40,7 +40,7 @@ public interface ReportColumn
 	public int getColIndexInArray();
 	public void setColIndexInArray(int value);
 
-	public String getHeading();
+	public SingleValueSource getHeading();
 	public void setHeading(String value);
 
 	public SingleValueSource getUrl();
