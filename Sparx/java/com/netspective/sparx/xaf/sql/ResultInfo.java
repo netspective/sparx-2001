@@ -13,18 +13,24 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.LogManager;
 
 public class ResultInfo
 {
+    private ValueContext vc;
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
 
-    public ResultInfo(Connection conn, Statement stmt) throws SQLException
+    public ResultInfo(ValueContext vc, Connection conn, Statement stmt) throws SQLException
     {
+        this.vc = vc;
         this.conn = conn;
         this.stmt = stmt;
         this.rs = stmt.getResultSet();
@@ -37,14 +43,26 @@ public class ResultInfo
 
     public void close() throws SQLException
     {
-        rs.close();
-        rs = null;
-        stmt.close();
-        stmt = null;
-        if(conn.getAutoCommit() == true)
+        if(rs != null)
         {
-            conn.close();
-            conn = null;
+            rs.close();
+            rs = null;
+        }
+
+        if(stmt != null)
+        {
+            stmt.close();
+            stmt = null;
+        }
+
+        if(conn != null)
+        {
+            if(conn.getAutoCommit() == true)
+            {
+                AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " closing connection: " + conn);
+                conn.close();
+                conn = null;
+            }
         }
     }
 

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.7 2002-07-05 17:37:08 aye.thu Exp $
+ * $Id: StatementManager.java,v 1.8 2002-08-17 15:06:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -130,9 +130,9 @@ public class StatementManager extends XmlSource
         private StatementInfo si;
         private StatementExecutionLogEntry logEntry;
 
-        ResultInfo(Connection conn, StatementInfo si, Statement stmt, StatementExecutionLogEntry logEntry) throws SQLException
+        ResultInfo(ValueContext vc, Connection conn, StatementInfo si, Statement stmt, StatementExecutionLogEntry logEntry) throws SQLException
         {
-            super(conn, stmt);
+            super(vc, conn, stmt);
             this.si = si;
             this.logEntry = logEntry;
         }
@@ -394,7 +394,7 @@ public class StatementManager extends XmlSource
             {
                 logEntry.registerExecSqlEndSuccess();
                 //logEntry.finalize(vc); -- this will be done in the "finally" block??
-                return new ResultInfo(conn, si, stmt, logEntry);
+                return new ResultInfo(vc, conn, si, stmt, logEntry);
             }
             logEntry.registerExecSqlEndFailed();
         }
@@ -433,7 +433,7 @@ public class StatementManager extends XmlSource
             {
                 logEntry.registerExecSqlEndSuccess();
                 //logEntry.finalize(vc); -- this will be done in the "finally" block??
-                return new ResultInfo(conn, si, stmt, logEntry);
+                return new ResultInfo(vc, conn, si, stmt, logEntry);
             }
             logEntry.registerExecSqlEndFailed();
         }
@@ -685,13 +685,15 @@ public class StatementManager extends XmlSource
     public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
     {
         ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
-        produceReport(ri, writer, dc, vc, skin, params, reportId);
+        if(ri != null)
+            produceReport(ri, writer, dc, vc, skin, params, reportId);
     }
 
     public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, StatementInfo si, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
     {
         ResultInfo ri = execute(dc, vc, dataSourceId, si, params);
-        produceReport(ri, writer, dc, vc, skin, params, reportId);
+        if(ri != null)
+            produceReport(ri, writer, dc, vc, skin, params, reportId);
     }
 
     public void produceReport(ResultInfo ri, Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
