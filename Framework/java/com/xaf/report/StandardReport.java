@@ -14,6 +14,10 @@ import java.util.*;
 import java.sql.*;
 
 import org.w3c.dom.*;
+import com.xaf.form.*;
+import com.xaf.form.field.*;
+import com.xaf.report.column.*;
+import com.xaf.value.*;
 
 public class StandardReport implements Report
 {
@@ -21,6 +25,7 @@ public class StandardReport implements Report
     static public final int REPORTFLAG_HASPLACEHOLDERS = REPORTFLAG_INITIALIZED * 2;
 	static public final int REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS = REPORTFLAG_HASPLACEHOLDERS * 2;
 
+	private Object canvas;
     private String name;
 	private ReportColumnsList columns = new ReportColumnsList();
 	private boolean contentsFinalized;
@@ -32,6 +37,9 @@ public class StandardReport implements Report
     public StandardReport()
     {
     }
+
+	public Object getCanvas() { return canvas; }
+	public void setCanvas(Object value) { canvas = value; }
 
     public String getName() { return name; }
 	public ReportFrame getFrame() { return frame; }
@@ -127,20 +135,32 @@ public class StandardReport implements Report
 				if(value.length() > 0)
 					columnIndex = Integer.parseInt(value);
 
+                String colType = columnElem.getAttribute("type");
+                if(colType.length() == 0)
+                    colType = null;
+
                 if(columns.size() <= columnIndex)
                 {
-                    String colType = columnElem.getAttribute("type");
-                    if(colType.length() == 0)
-                        colType = null;
-
                     ReportColumn column = ReportColumnFactory.createReportColumn(colType);
                     column.importFromXml(columnElem);
                     column.setColIndexInArray(columnIndex);
+					if(column instanceof DialogFieldColumn)
+						((DialogFieldColumn) column).setParentField((ReportField) canvas);
                     columns.add(column);
                 }
                 else
                 {
-    				ReportColumn column = columns.getColumn(columnIndex);
+    				ReportColumn column = null;
+					if(colType == null)
+						column = columns.getColumn(columnIndex);
+					else
+					{
+						column = ReportColumnFactory.createReportColumn(colType);
+	                    column.setColIndexInArray(columnIndex);
+						if(column instanceof DialogFieldColumn)
+							((DialogFieldColumn) column).setParentField((ReportField) canvas);
+						columns.set(columnIndex, column);
+					}
 	    			column.importFromXml(columnElem);
                 }
 
@@ -161,7 +181,74 @@ public class StandardReport implements Report
 		}
 	}
 
-    public String replaceOutputPatterns(ReportContext rc, Object[] rowData, String row)
+	/**
+	 * Replace contents from rowData using the String row as a template. Each
+	 * occurrence of ${#} will be replaced with rowNum and occurrences of ${x}
+	 * where x is a number between 0 and rowData.length will be replaced with
+	 * the contents of rowData[x].
+	 */
+
+    public String replaceOutputPatterns(ReportContext rc, long rowNum, Object[] rowData, String row)
+    {
+        StringBuffer sb = new StringBuffer();
+        int i = 0;
+        int prev = 0;
+
+        int pos;
+        while((pos=row.indexOf("$", prev)) >= 0)
+		{
+            if(pos>0)
+			{
+                sb.append(row.substring( prev, pos ));
+            }
+            if( pos == (row.length() - 1))
+			{
+                sb.append('$');
+                prev = pos + 1;
+            }
+            else if (row.charAt( pos + 1 ) != '{')
+			{
+                sb.append(row.charAt(pos + 1));
+                prev=pos+2;
+            }
+			else
+			{
+                int endName=row.indexOf('}', pos);
+                if( endName < 0 )
+				{
+                    throw new RuntimeException("Syntax error in: " + row);
+                }
+                String expression = row.substring(pos+2, endName);
+
+				if(expression.equals("#"))
+					sb.append(rowNum);
+				else
+				{
+					try
+					{
+						int colIndex = Integer.parseInt(expression);
+						sb.append(columns.getColumn(colIndex).getFormattedData(rc, rowNum, rowData, false));
+					}
+					catch(NumberFormatException e)
+					{
+						SingleValueSource vs = ValueSourceFactory.getSingleValueSource(expression);
+						if(vs == null)
+							sb.append("Invalid: '"+expression+"'");
+						else
+							sb.append(vs.getValue(rc));
+					}
+				}
+
+                prev=endName+1;
+            }
+        }
+
+        if(prev < row.length()) sb.append(row.substring(prev));
+        return sb.toString();
+    }
+
+	/*
+    public String replaceOutputPatterns(ReportContext rc, long rowNum, Object[] rowData, String row)
     {
         int plhOpenPos = row.indexOf(ReportColumn.PLACEHOLDER_OPEN);
         if(plhOpenPos == -1)
@@ -188,15 +275,23 @@ public class StandardReport implements Report
                 continue;
             }
 
+			String item = replacedIn.substring(plhStartPos, plhEndPos);
 			try
 			{
-				int colIndex = Integer.parseInt(replacedIn.substring(plhStartPos, plhEndPos));
-				String colValue = columns.getColumn(colIndex).getFormattedData(rc, rowData, false);
-				replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, colValue);
+				if(item.equals("#"))
+				{
+					replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, Long.toString(rowNum));
+				}
+				else
+				{
+					int colIndex = Integer.parseInt(item);
+	    			String colValue = columns.getColumn(colIndex).getFormattedData(rc, rowNum, rowData, false);
+		    		replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, colValue);
+				}
 			}
 			catch(NumberFormatException e)
 			{
-				replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, "Invalid: " + replacedIn.substring(plhOpenPos, plhEndPos+1));
+				replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, "Invalid: " + item);
 				done = true;
 			}
 
@@ -208,6 +303,7 @@ public class StandardReport implements Report
 
         return replacedIn.toString();
     }
+	*/
 
 	public void makeStateChanges(ReportContext rc, ResultSet rs)
 	{
@@ -222,30 +318,4 @@ public class StandardReport implements Report
 		for(int i = 0; i < listeners.size(); i++)
 			((ReportContextListener) listeners.get(i)).makeReportStateChanges(rc, data);
 	}
-
-	/*
-	public void produceReport(Writer writer, ResultSet rs, ReportContext rc) throws SQLException, IOException
-	{
-        ReportContext rc = new ReportContext(null, null, null, this, skin);
-		skin.produceReport(writer, rc, rs);
-	}
-
-	public void produceReport(Writer writer, Object[][] data, ReportContext rc) throws IOException
-	{
-        ReportContext rc = new ReportContext(null, null, null, this, skin);
-		skin.produceReport(writer, rc, data);
-	}
-
-	public void produceReport(Writer writer, ResultSet rs, ReportSkin skin) throws SQLException, IOException
-	{
-        ReportContext rc = new ReportContext(null, null, null, this, skin);
-		skin.produceReport(writer, rc, rs);
-	}
-
-	public void produceReport(Writer writer, Object[][] data, ReportSkin skin) throws IOException
-	{
-        ReportContext rc = new ReportContext(null, null, null, this, skin);
-		skin.produceReport(writer, rc, data);
-	}
-	*/
 }
