@@ -1,6 +1,6 @@
 .report { color: #000; font-size: 11px; font-family: Tahoma; background-color: white; padding: 1px 4px; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
-.report-detail { color: #000000; font-size: 11px; font-family: Tahoma; background-color: #ffffff; padding: 1px 4px; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
+.report-detail  { color: black; font-size: 11px; font-family: Tahoma; background-color: #f1eeee; text-align: left; padding: 1px 4px; border-right: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3 }
 .report-field  { color: #000; font-weight: bold; font-size: 11px; font-family: Tahoma; background-color: #f5f5f5; padding: 1px 4px; border: solid 1px #696969 }
-.report-field-detail { color: #000; font-weight: bold; font-size: 11px; font-family: Tahoma; background: url(../images/panel/output/content-separator.gif) no-repeat right center; padding: 1px 7px 1px 4px }
+.report-field-detail  { color: #000; font-weight: bold; font-size: 11px; font-family: Tahoma; background: url(../images/panel/output/content-separator.gif) no-repeat right center; padding: 1px 7px 1px 4px; border-bottom: 1px solid #d3d3d3 }
 .report-alternative { color: #000; font-size: 11px; font-family: Tahoma; background-color: #f1eeee; padding: 1px 4px; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
 .report-summary  { color: #333; font-weight: bold; font-size: 11px; font-family: Tahoma; background-color: #f5f5f5; padding: 1px 4px; border-top: 1px solid #696969; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
