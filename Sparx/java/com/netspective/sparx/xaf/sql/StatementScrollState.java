@@ -89,7 +89,7 @@ public class StatementScrollState extends ResultSetScrollState
         this.stmtInfo = si;
         this.datasourceId = datasourceId;
         this.reportName = reportName;
-        System.out.println(reportName + " " + skinName);
+
         this.dbContext = dbContext;
         ResultSet rs = getResultSet();
         if (rs != null)

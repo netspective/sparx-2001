@@ -158,7 +158,7 @@ public class StatementDialog extends Dialog
     /**
      * Get the static query statement associated with the dialog
      *
-     * @param stmt query name
+     * @return StatementInfo
      */
     public StatementInfo getStatement()
     {
@@ -168,21 +168,30 @@ public class StatementDialog extends Dialog
 
     public void makeStateChanges(DialogContext dc, int stage)
     {
-        boolean hideFields = dc.inExecuteMode() && stage == DialogContext.STATECALCSTAGE_FINAL;
 
-        Iterator k = this.getFields().iterator();
-        while(k.hasNext())
+        if (stage == DialogContext.STATECALCSTAGE_FINAL)
         {
-            DialogField field = (DialogField) k.next();
-            field.makeStateChanges(dc, stage);
+            boolean hideFields = false;
+            if (getFields().size() == 1 || dc.inExecuteMode())
+            {
+                hideFields = true;
+            }
+
+            Iterator k = this.getFields().iterator();
+            while(k.hasNext())
+            {
+                DialogField field = (DialogField) k.next();
+                field.makeStateChanges(dc, stage);
+                if(hideFields)
+                    dc.setFlag(field.getQualifiedName(), DialogField.FLDFLAG_INVISIBLE);
+            }
+
             if(hideFields)
-                dc.setFlag(field.getQualifiedName(), DialogField.FLDFLAG_INVISIBLE);
-        }
-
-        if(hideFields)
-        {
-            dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
-            dc.setFlag("director", DialogField.FLDFLAG_INVISIBLE);
+            {
+                dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
+                if (this.getDirector() != null)
+                    dc.setFlag("director", DialogField.FLDFLAG_INVISIBLE);
+            }
         }
     }
 
@@ -196,7 +205,9 @@ public class StatementDialog extends Dialog
             prepareContext(dc);
 
         if(getFields().size() == 1 || dc.inExecuteMode())
+        {
             execute(writer, dc);
+        }
         else
             dc.getSkin().renderHtml(writer, dc);
     }
@@ -232,7 +243,6 @@ public class StatementDialog extends Dialog
      *
      * @param writer
      * @param dc dialog context
-     * @param destination
      */
     public void execute(Writer writer, DialogContext dc) throws IOException
     {
