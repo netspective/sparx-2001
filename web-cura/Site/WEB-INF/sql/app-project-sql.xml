@@ -26,26 +26,26 @@
         </statement>
         <statement name="member-persons">
             select
-                rel_person_id,
                 name_last,
                 name_first,
+                org.org_name,
                 rel_descr
             from
-                person, project_relation
+                person, project_relation, org
             where
                 parent_id = ? and
-                person.person_id = project_relation.rel_person_id
+                person.person_id = project_relation.rel_person_id and
+                org.org_id = project_relation.rel_org_id
             <params>
                 <param value="request:project_id"/>
             </params>
             <report heading="Project Members">
 				<banner>
-                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;project_id=${request:project_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;project_id=${request:project_id}"/>
+                    <item caption="Add" url="config-expr:member.jsp?cmd=dialog,project.relation,add&amp;project_id=${request:project_id}"/>
                 </banner>
-                <column heading="ID" align="left"/>
-                <column heading="Last Name" align="left"/>
+                <column heading="Last Name" align="left" url="config-expr:member.jsp?cmd=dialog,project.relation,edit&amp;project_id=${request:project_id}"/>
                 <column heading="First Name" align="left"/>
+                <column heading="Organization" align="left"/>
                 <column heading="Relationship" align="left"/>
             </report>
         </statement>

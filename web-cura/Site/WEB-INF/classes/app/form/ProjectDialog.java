@@ -42,7 +42,7 @@ public class ProjectDialog extends Dialog
             return;
 
         // now do the populating using DialogContext methods
-        if (dc.editingData())
+        if (dc.editingData() || dc.deletingData())
         {
             String projectId = dc.getRequest().getParameter("project_id");
             dc.populateValuesFromStatement("project.information", new Object[] {new Long(projectId)});
@@ -79,14 +79,23 @@ public class ProjectDialog extends Dialog
             this.processAddData(dc);
         }
 
-
         if (dc.editingData())
         {
             // dialog is in the edit data command mode
             this.processEditData(dc);
         }
+
+        if (dc.deletingData())
+        {
+            // dialog is in the delete data command mode
+            this.processDeleteData(dc);
+
+            return "";
+        }
+
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-        String url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id");
+        String url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id") +
+            "&project_name=" + request.getAttribute("project_name");
         try
         {
             ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
@@ -101,7 +110,37 @@ public class ProjectDialog extends Dialog
     }
 
     /**
-     * Process the update data
+     * Process the delete action
+     */
+    protected void processDeleteData(DialogContext dc)
+    {
+        try
+        {
+            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
+                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+
+            cc.beginTransaction();
+            // the dialog's context is represented by its own custom bean class
+            dialog.context.project.RegistrationContext rc = (dialog.context.project.RegistrationContext) dc;
+
+            // remove all the relationships assigned to this project
+            ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
+            projRelTable.deleteProjectRelationRowsUsingParentId(cc, rc.getProjectId());
+
+            ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
+            ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
+            // delete the row in the project table
+            projectTable.delete(cc, projectRow);
+            cc.endTransaction();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Process the edit action
      */
     protected void processEditData(DialogContext dc)
     {
@@ -139,6 +178,7 @@ public class ProjectDialog extends Dialog
 
             cc.endTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
+            dc.getRequest().setAttribute("project_name", projectRow.getProjectName());
         }
         catch (Exception e)
         {
@@ -186,6 +226,7 @@ public class ProjectDialog extends Dialog
             projectTable.insert(cc, projectRow);
 
             // insert the project relationships
+            /*
             ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
             ProjectRelationRow projRelRow = projRelTable.createProjectRelationRow();
             projRelRow.setParentId(projectRow.getProjectId());
@@ -201,10 +242,12 @@ public class ProjectDialog extends Dialog
                 projRelRow.setNotifyEmail(dc.getValue("notify_email"));
 			// insert a new project relationship row
             projRelTable.insert(cc, projRelRow);
+            */
 
             // end the transaction
             cc.endTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
+            dc.getRequest().setAttribute("project_name", projectRow.getProjectName());
         }
         catch (Exception e)
         {

@@ -12,22 +12,22 @@
             bgcolor='#AFD997' colspan='2'
         </frame-head-row-attrs>
         <frame-head-font-attrs>
-            face='Verdana, Arial' color='white' style='font-size: 12px'
+            face='Trebuchet MS, Arial' color='#4A74E7' style='font-size: 12px'
         </frame-head-font-attrs>
         <caption-cell-attrs>
             align='right'  valign='top'
         </caption-cell-attrs>
         <caption-font-attrs>
-            face='Verdana, Arial' style='font-size: 11px'
+            face='Trebuchet MS, Arial' style='font-size: 11px'
         </caption-font-attrs>
         <separator-font-attrs>
-            face='Verdana, Arial' color='#000000' style='font-size: 12px'
+            face='Trebuchet MS, Arial' color='#000000' style='font-size: 12px'
         </separator-font-attrs>
         <control-area-font-attrs>
-            face='Trebuchet MS,Arial' style='font-size: 12px'
+            face='Trebuchet MS,Arial' style='font-size: 10px'
         </control-area-font-attrs>
         <control-area-style-attrs>
-            style='font-size: 12px; background-color: #F4FAF1'
+            style='font-size: 10px; background-color: #F4FAF1'
         </control-area-style-attrs>
         <hint-font-attrs>
             color='navy' face='Arial' style='font-size: 10px'

@@ -3,6 +3,7 @@
 <xaf>
     <dialogs package="project">
         <dialog name="registration" heading="create-data-cmd-heading:Project" retain-params="*" class="app.form.ProjectDialog">
+            <field.separator heading="Information"/>
             <field.integer name="project_id" caption="Project ID" read-only="browser">
                 <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
             </field.integer>
@@ -11,14 +12,22 @@
             <field.memo name="project_descr" caption="Description" required="yes"/>
             <field.select name="parent_project" caption="Parent Project" choices="Self" />
 
-            <field.select name="organization" caption="Organization" choices="query:person.active-org-memberships-name-id" required="yes">
-                <conditional action="apply-flag" flag="browser-read-only" data-cmd="edit,delete"/>
-            </field.select>
-
-            <field.email name="notify_email" caption="Notify Email" />
             <!--execute-tasks data-cmd="add">
 				<exec-redirect url="config-expr:${create-app-url:/project/home.jsp}?project_id=${request-attr:project_id}"/>
 			</execute-tasks -->
+        </dialog>
+
+        <dialog name="relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*">
+            <field.separator heading="Relations"/>
+            <field.select name="organization" caption="Organization" choices="query:person.active-org-memberships-name-id" required="yes">
+                <conditional action="apply-flag" flag="browser-read-only" data-cmd="delete"/>
+            </field.select>
+            <field.select name="person" style="multilist" caption="Member(s)" required="yes">
+                <popup action="config-app-url:/org/index.jsp?panel,org&org_id=" fill="owner_person_id"/>
+            </field.select>
+
+
+            <field.email name="notify_email" caption="Notify Email" />
         </dialog>
     </dialogs>
 </xaf>

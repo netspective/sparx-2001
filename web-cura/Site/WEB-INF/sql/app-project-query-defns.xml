@@ -6,7 +6,7 @@
             <report heading="Code" />
         </field>
         <field id="project_id" caption="Project ID" join="project" column="project_id">
-            <report heading="ID" url="create-app-url:/project/home.jsp?project_id=${.}" align="right"/>
+            <report heading="ID" url="create-app-url:/project/home.jsp?project_id=${.}&amp;project_name=%{1}" align="right"/>
         </field>
         <field id="project_name" caption="Project Name" join="project" column="project_name">
             <report heading="Name" />
