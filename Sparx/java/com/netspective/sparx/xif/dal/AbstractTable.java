@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.6 2002-04-19 10:45:59 jruss Exp $
+ * $Id: AbstractTable.java,v 1.7 2002-08-29 03:35:13 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -87,7 +87,8 @@ public abstract class AbstractTable implements Table
     private String columNamesForSelect;
     private String selectByPrimaryKeySql;
     private String primaryKeyBindSql;
-    private Map childTables;
+    private Map childTablesByName;
+    private Map childTablesByXmlNodeName;
     private Column[] allColumns;
     private Column[] requiredColumns;
     private Column[] sequencedColumns;
@@ -255,6 +256,32 @@ public abstract class AbstractTable implements Table
             columNamesForSelect = str.toString();
         }
         return columNamesForSelect;
+    }
+
+    public void registerChildTable(Table table)
+    {
+        if(childTablesByName == null)
+        {
+            childTablesByName = new HashMap();
+            childTablesByXmlNodeName = new HashMap();
+        }
+        childTablesByName.put(table.getNameForMapKey(), table);
+        childTablesByXmlNodeName.put(table.getNameForXmlNode(), table);
+    }
+
+    public Table getChildTable(String name)
+    {
+        return childTablesByName != null ? ((Table) childTablesByName.get(name)) : null;
+    }
+
+    public Table getChildTableForXmlNode(String nodeName)
+    {
+        return childTablesByXmlNodeName != null ? ((Table) childTablesByXmlNodeName.get(nodeName)) : null;
+    }
+
+    public int getChildTablesCount()
+    {
+        return childTablesByName == null ? 0 : childTablesByName.size();
     }
 
     abstract public Row createRow();
@@ -628,9 +655,8 @@ public abstract class AbstractTable implements Table
         // if we are the "referenced" foreign key, then the source is a child of ours
         if(fKey.getType() == ForeignKey.FKEYTYPE_PARENT)
         {
-            if(childTables == null) childTables = new HashMap();
             Table childTable = fKey.getSourceColumn().getParentTable();
-            childTables.put(childTable.getNameForMapKey(), childTable);
+            registerChildTable(childTable);
         }
     }
 

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Table.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: Table.java,v 1.2 2002-08-29 03:35:13 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -168,6 +168,26 @@ public interface Table
      * Returns the column at the specified index.
      */
     public Column getColumn(int index);
+
+    /**
+     * Register the given table as a child table of this table
+     */
+    public void registerChildTable(Table table);
+    /**
+     *
+     * Returns a child table with the given name or null if there is no such child table
+     */
+    public Table getChildTable(String name);
+
+    /**
+     * Returns a child table with the given XML node name or null if there is no such child table
+     */
+    public Table getChildTableForXmlNode(String nodeName);
+
+    /**
+     * Returns the number of child tables for this table
+     */
+    public int getChildTablesCount();
 
     /**
      * Create a single row object suitable for storing data for this table's columns
