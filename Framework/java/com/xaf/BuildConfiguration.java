@@ -10,6 +10,11 @@ public class BuildConfiguration
 	public static final int versionMinor = 8;
 	public static final int buildNumber = 17;
 
+	static public final int getReleaseNumber() { return releaseNumber; }
+	static public final int getVersionMajor() { return versionMajor; }
+	static public final int getVersionMinor() { return versionMinor; }
+	static public final int getBVuildNumber() { return buildNumber; }
+
 	static public final String getBuildPathPrefix()
 	{
 		return productId + "-" + releaseNumber + "_" + versionMajor + "_" + versionMinor + "-" + buildNumber;
@@ -37,6 +42,6 @@ public class BuildConfiguration
 
 	static public final String getVersionAndBuildShort()
 	{
-		return "v" + getVersion() + "b" + buildNumber;
+		return "v" + getVersion() + " b" + buildNumber;
 	}
 }
