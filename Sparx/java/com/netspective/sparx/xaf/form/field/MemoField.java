@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: MemoField.java,v 1.4 2003-03-06 20:57:22 aye.thu Exp $
+ * $Id: MemoField.java,v 1.5 2003-05-23 14:19:02 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -212,7 +212,7 @@ public class MemoField extends DialogField
         else
         {
             writer.write(
-                    "<textarea maxlength=\"" + maxLength + "\" name=\"" + id + "\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
+                    "<textarea title=\"" + getTitle() + "\" maxlength=\"" + maxLength + "\" name=\"" + id + "\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
                     WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? " class=\"" + dc.getSkin().getControlAreaRequiredStyleClass()+ "\" " : " ") +
                     dc.getSkin().getDefaultControlAttrs() +
                     ">" + (value != null ? escapeHTML(value) : "") + "</textarea>");

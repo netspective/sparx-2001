@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.26 2003-05-23 13:41:39 aye.thu Exp $
+ * $Id: DialogField.java,v 1.27 2003-05-23 14:19:02 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -157,6 +157,7 @@ public class DialogField
 	private String submitOnBlurCustomScript;
 	private String scanCodeIgnoreCase;
     private String accessKey;
+    private String title; // equivalent to HTML title
 
 	/**
 	 * Creates a dialog field
@@ -322,6 +323,13 @@ public class DialogField
         String aKey = elem.getAttribute("access-key");
         if (aKey != null && aKey.length() > 0)
             setAccessKey(aKey);
+
+        String titleStr = elem.getAttribute("title");
+        if (titleStr != null && titleStr.length() > 0)
+            title = titleStr;
+        else
+            title = "";
+
 		importChildrenFromXml(elem);
 	}
 
@@ -592,6 +600,24 @@ public class DialogField
     public void setAccessKey(String accessKey)
     {
         this.accessKey = accessKey;
+    }
+
+    /**
+     * Gets the title
+     * @return
+     */
+    public String getTitle()
+    {
+        return title;
+    }
+
+    /**
+     * Sets the title for the field.
+     * @param title
+     */
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
 	/**

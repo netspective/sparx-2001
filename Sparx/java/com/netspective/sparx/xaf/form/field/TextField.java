@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.16 2003-04-14 15:23:53 aye.thu Exp $
+ * $Id: TextField.java,v 1.17 2003-05-23 14:19:02 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -437,19 +437,19 @@ public class TextField extends DialogField
         else if(isBrowserReadOnly(dc))
         {
             className = dc.getSkin().getControlAreaReadonlyStyleClass();
-            writer.write("<input type=\"text\" name=\"" + getId() + "\" readonly value=\"" +
+            writer.write("<input type=\"text\" title=\"" + getTitle() + "\" name=\"" + getId() + "\" readonly value=\"" +
                     value + "\" maxlength=\"" + maxLength + "\" size=\"" + size + "\" " + controlAreaStyle +
                     " class=\"" + className + "\" " + dc.getSkin().getDefaultControlAttrs() + ">");
         }
         else if(!flagIsSet(FLDFLAG_MASKENTRY))
         {
-            writer.write("<input type=\"text\" name=\"" + getId() + "\" value=\"" + value + "\" maxlength=\"" +
+            writer.write("<input type=\"text\" title=\"" + getTitle() + "\" name=\"" + getId() + "\" value=\"" + value + "\" maxlength=\"" +
                     maxLength + "\" size=\"" + size + "\" " + controlAreaStyle + " class=\"" + className + "\" " +
                     dc.getSkin().getDefaultControlAttrs() + ">");
         }
         else
         {
-            writer.write("<input type=\"password\" name=\"" + getId() + "\" value=\"" + value + "\" maxlength=\"" +
+            writer.write("<input type=\"password\" title=\"" + getTitle() + "\" name=\"" + getId() + "\" value=\"" + value + "\" maxlength=\"" +
                     maxLength + "\" size=\"" + size + "\" " + controlAreaStyle + " class=\"" + className + "\" " +
                     dc.getSkin().getDefaultControlAttrs() + ">");
         }

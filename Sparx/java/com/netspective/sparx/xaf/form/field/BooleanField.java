@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BooleanField.java,v 1.5 2003-01-20 21:57:40 shahbaz.javeed Exp $
+ * $Id: BooleanField.java,v 1.6 2003-05-23 14:19:02 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -252,24 +252,24 @@ public class BooleanField extends DialogField
                     String[] val = { "" , "" , "" };
                     setChecked (strValue, val);
                     writer.write(
-                        "<nobr><input type='radio' name='" + id + "' id='" + id + "0' value='0' " + val[0] + defaultControlAttrs + "> <label for='" + id + "0'>" + falseText + "</label></nobr> " +
-                        "<nobr><input type='radio' name='" + id + "' id='" + id + "1' value='1' " + val[1] + defaultControlAttrs + "> <label for='" + id + "1'>" + trueText + "</label></nobr> " +
-                        "<nobr><input type='radio' name='" + id + "' id='" + id + "2' value='2' " + val[2] + defaultControlAttrs + "> <label for='" + id + "2'>" + noneText + "</label></nobr>");
+                        "<nobr><input title=\"" + getTitle() + "\" type='radio' name='" + id + "' id='" + id + "0' value='0' " + val[0] + defaultControlAttrs + "> <label for='" + id + "0'>" + falseText + "</label></nobr> " +
+                        "<nobr><input title=\"" + getTitle() + "\" type='radio' name='" + id + "' id='" + id + "1' value='1' " + val[1] + defaultControlAttrs + "> <label for='" + id + "1'>" + trueText + "</label></nobr> " +
+                        "<nobr><input title=\"" + getTitle() + "\" type='radio' name='" + id + "' id='" + id + "2' value='2' " + val[2] + defaultControlAttrs + "> <label for='" + id + "2'>" + noneText + "</label></nobr>");
                 }
                 else
                 {
                     writer.write(
-                        "<nobr><input type='radio' name='" + id + "' id='" + id + "0' value='0' " + (value ? "" : "checked ") + defaultControlAttrs + "> <label for='" + id + "0'>" + falseText + "</label></nobr> " +
-                        "<nobr><input type='radio' name='" + id + "' id='" + id + "1' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> <label for='" + id + "1'>" + trueText + "</label></nobr>");
+                        "<nobr><input title=\"" + getTitle() + "\" type='radio' name='" + id + "' id='" + id + "0' value='0' " + (value ? "" : "checked ") + defaultControlAttrs + "> <label for='" + id + "0'>" + falseText + "</label></nobr> " +
+                        "<nobr><input title=\"" + getTitle() + "\" type='radio' name='" + id + "' id='" + id + "1' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> <label for='" + id + "1'>" + trueText + "</label></nobr>");
                 }
                 break;
 
             case BOOLSTYLE_CHECK:
-                writer.write("<nobr><input type='checkbox' name='" + id + "' id='" + id + "' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> <label for='" + id + "'>" + super.getCaption(dc) + "</label></nobr>");
+                writer.write("<nobr><input title=\"" + getTitle() + "\" type='checkbox' name='" + id + "' id='" + id + "' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> <label for='" + id + "'>" + super.getCaption(dc) + "</label></nobr>");
                 break;
 
             case BOOLSTYLE_CHECKALONE:
-                writer.write("<input type='checkbox' name='" + id + "' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> ");
+                writer.write("<input title=\"" + getTitle() + "\" type='checkbox' name='" + id + "' value='1' " + (value ? "checked " : "") + defaultControlAttrs + "> ");
                 break;
 
             case BOOLSTYLE_COMBO:
