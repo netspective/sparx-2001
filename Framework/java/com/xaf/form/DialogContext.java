@@ -162,15 +162,23 @@ public final class DialogContext extends Hashtable implements ValueContext
 		activeMode = DIALOGMODE_INPUT;
 		dialog.makeStateChanges(this, STATECALCSTAGE_INITIAL);
 
-		String modeParamValue = request.getParameter(dialog.getActiveModeParamName());
-		if(modeParamValue != null)
+		String autoExec = request.getParameter(Dialog.PARAMNAME_AUTOEXECUTE);
+		if(autoExec != null && ! autoExec.equals("no"))
 		{
-			char givenMode = modeParamValue.charAt(0);
-			activeMode = (
-				givenMode == DIALOGMODE_VALIDATE ?
-					(dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE) :
-					givenMode
-				);
+			activeMode = dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
+		}
+		else
+		{
+			String modeParamValue = request.getParameter(dialog.getActiveModeParamName());
+			if(modeParamValue != null)
+			{
+				char givenMode = modeParamValue.charAt(0);
+				activeMode = (
+					givenMode == DIALOGMODE_VALIDATE ?
+						(dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE) :
+						givenMode
+					);
+			}
 		}
 
 		nextMode = activeMode;

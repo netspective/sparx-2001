@@ -14,6 +14,7 @@ import com.xaf.value.*;
 
 public class Dialog
 {
+	static public final String PARAMNAME_AUTOEXECUTE   = "_d_exec";
 	static public final String PARAMNAME_DIALOGPREFIX  = "_d.";
 	static public final String PARAMNAME_CONTROLPREFIX = "_dc.";
 	static public final String PARAMNAME_DIALOGQNAME   = "_d.dialog_qname";
