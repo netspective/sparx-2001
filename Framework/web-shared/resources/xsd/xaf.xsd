@@ -521,7 +521,7 @@
 			</xsd:element>
 			<xsd:element name="order-by" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
-					<xsd:attribute name="field" type="query-defn-field-id" use="required"/>
+					<xsd:attribute name="field" type="single-value-source" use="required"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="condition" type="query-defn-conditionType" minOccurs="0" maxOccurs="unbounded"/>
@@ -588,7 +588,7 @@
 	</xsd:complexType>
 	<xsd:simpleType name="exec-dml-command-enum">
 		<xsd:annotation>
-			<xsd:documentation>Commands allowed in <exec-dml> tag</xsd:documentation>
+			<xsd:documentation>Commands allowed in exec-dml tag</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="insert"/>
@@ -598,7 +598,7 @@
 	</xsd:simpleType>
 	<xsd:simpleType name="report-first-row-enum">
 		<xsd:annotation>
-			<xsd:documentation>Values for the "first-row" attribute in <report> tag</xsd:documentation>
+			<xsd:documentation>Values for the "first-row" attribute in report tag</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="data"/>

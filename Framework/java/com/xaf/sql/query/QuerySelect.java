@@ -72,6 +72,9 @@ public class QuerySelect
 
     public String getBindParamsDebugHtml(ValueContext vc)
     {
+		if(bindParams == null)
+			return "NONE";
+
         StringBuffer result = new StringBuffer();
 		result.append("<p><br>BIND PARAMETERS:<ol>");
 
@@ -130,25 +133,31 @@ public class QuerySelect
 			addReportField(fieldNames[i]);
 	}
 
-	public void addOrderBy(QueryField field)
+	public void addOrderBy(QuerySortFieldRef field)
 	{
 		orderBy.add(field);
-		isDirty = true;
+		if(field.isStatic())
+			isDirty = true;
+		else
+			alwaysDirty = true;
 	}
 
-	public void addOrderBy(String fieldName)
+	public void addOrderBy(String fieldName, boolean descending)
 	{
-		QueryField field = queryDefn.getField(fieldName);
-		if(field == null)
+		QuerySortFieldRef sortRef = new QuerySortFieldRef(queryDefn, fieldName);
+		if(descending)
+			sortRef.setDescending();
+
+		if(sortRef.isStatic() && sortRef.getField(null) == null)
 			addError("query-select-addOrderBy", "field '"+ fieldName +"' not found");
 		else
-			addOrderBy(field);
+			addOrderBy(sortRef);
 	}
 
 	public void addOrderBy(String[] fieldNames)
 	{
 		for(int i = 0; i < fieldNames.length; i++)
-			addOrderBy(fieldNames[i]);
+			addOrderBy(fieldNames[i], false);
 	}
 
 	public void addCondition(QueryCondition condition)
@@ -299,7 +308,8 @@ public class QuerySelect
 			}
 			else if(childName.equals("order-by"))
 			{
-				addOrderBy(((Element) node).getAttribute("field"));
+				Element obElem = (Element) node;
+				addOrderBy(obElem.getAttribute("field"), obElem.getAttribute("descending").equals("yes") ? true : false);
 			}
 			else if(childName.equals("condition"))
 			{

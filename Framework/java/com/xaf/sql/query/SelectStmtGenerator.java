@@ -221,7 +221,17 @@ public class SelectStmtGenerator
 			sql.append("order by\n");
 			for(int ob = 0; ob < orderBysCount; ob++)
 			{
-				sql.append("  " + ((QueryField) orderBys.get(ob)).getOrderByClauseExpr());
+				QuerySortFieldRef sortRef = (QuerySortFieldRef) orderBys.get(ob);
+				QueryField field = sortRef.getField(vc);
+				if(field == null)
+				{
+					return "Order by field '" + sortRef.getFieldName().getId() + "' did not evaluate to an appropriate QueryField.\n";
+				}
+
+				sql.append("  " + field.getOrderByClauseExpr());
+				if(sortRef.isDescending())
+					sql.append(" descending");
+
 				if(ob != orderBysLast)
 					sql.append(", ");
 				sql.append("\n");

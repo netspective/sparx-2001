@@ -43,20 +43,20 @@ public class QuerySelectDialog extends Dialog
 			if(childName.startsWith(DialogField.FIELDTAGPREFIX))
 			{
 				String condFieldId = childElem.getAttribute("query-field");
-				if(condFieldId.length() == 0)
-					throw new RuntimeException("dialog fields in QuerySelectDialog '"+dialogId+"' must contain a 'query-field' attribute");
+				if(condFieldId.length() > 0)
+				{
+					QueryField condField = queryDefn.getField(condFieldId);
+					if(condField == null)
+						throw new RuntimeException("query-field '"+condFieldId+"' in QuerySelectDialog '"+dialogId+"' does not exist");
 
-				QueryField condField = queryDefn.getField(condFieldId);
-				if(condField == null)
-					throw new RuntimeException("query-field '"+condFieldId+"' in QuerySelectDialog '"+dialogId+"' does not exist");
+					String fieldName = childElem.getAttribute("name");
+					if(fieldName.length() == 0)
+						childElem.setAttribute("name", condFieldId);
 
-				String fieldName = childElem.getAttribute("name");
-				if(fieldName.length() == 0)
-					childElem.setAttribute("name", condFieldId);
-
-				String childCaption = childElem.getAttribute("caption");
-				if(childCaption.length() == 0)
-					childElem.setAttribute("caption", condField.getCaption());
+					String childCaption = childElem.getAttribute("caption");
+					if(childCaption.length() == 0)
+						childElem.setAttribute("caption", condField.getCaption());
+				}
 			}
 			else if(childName.equals("select"))
 			{
