@@ -126,7 +126,9 @@ Setup instructions:
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/schema.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="${app.WEB-INF.dir}/sql"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="${app.WEB-INF.dir}/security"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
@@ -136,7 +138,7 @@ Setup instructions:
 		</copy>
     </target>
 
-    <target name="setup-sparx-libs" depends="global">
+    <target name="copy-sparx-libs" depends="global">
 		<copy file="${sparx.lib.dir}/sparx.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/bsf.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/log4j.jar" todir="${app.lib.dir}"/>
@@ -153,34 +155,12 @@ Setup instructions:
 		</copy>
     </target>    
 
-    <target name="setup-sparx" depends="global">
-    	<!-- Setup Sparx TagLib Descriptor File (sparx.tld) -->
-		<property name="sparx.default.taglib-descriptor.file" value="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld"/>
-		<property name="app.taglib-descriptor.file" value="${app.WEB-INF.dir}/tld/sparx.tld"/>
-
-		<echo message="Copying Sparx default taglib descriptor file ${sparx.default.taglib-descriptor.file} to ${app.taglib-descriptor.file}"/>
-		<copy file="${sparx.default.taglib-descriptor.file}" tofile="${app.taglib-descriptor.file}" overwrite="yes"/>
-
-    	<!-- Setup Sparx Log4J Properties file (backup current, copy default, replace variables)  -->
-		<property name="sparx.default.log4j.properties.file" value="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties"/>
-		<property name="app.log4j.properties.file" value="${app.WEB-INF.dir}/classes/log4j.properties"/>
-		<property name="app.log.dir" value="${app.WEB-INF.dir}/log"/>
-
-		<echo message="Backing up ${app.log4j.properties.file} to ${app.log4j.properties.file}.orig"/>
-		<copy file="${app.log4j.properties.file}" tofile="${app.log4j.properties.file}.orig" overwrite="yes"/>
-
-		<echo message="Copying Sparx default Log4J properties file ${sparx.default.log4j.properties.file} to ${app.log4j.properties.file}"/>
-		<copy file="${sparx.default.log4j.properties.file}" tofile="${app.log4j.properties.file}" overwrite="yes"/>
-		<replace file="${app.log4j.properties.file}" token="{APP_LOG_PATH}" value="${app.log.dir}"/>
-		<mkdir dir="${app.log.dir}"/>
-    </target>
-
-    <target name="start-sparx-app" depends="setup-sparx-structure,setup-sparx-libs,setup-sparx">
+    <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-libs">
     	<echo message="All Sparx files copied. Please review ${app.WEB-INF.dir} to create a valid web.xml file for your application server."/>
     	<echo message="Required libraries copied into ${app.lib.dir}, please confirm that you want them in that location."/>
     </target>
 
-    <target name="migrate-xaf12-sparx20" depends="global,setup-sparx">
+    <target name="migrate-xaf12-sparx20" depends="global">
     	<echo message="Replacing references to 'xaf.tld' with 'sparx.tld'."/>
     	<replace dir="${app.root.dir}" token="xaf.tld" value="sparx.tld" summary="yes"/>
 		<delete file="${app.WEB-INF.dir}/tld/xaf.tld" quiet="yes"/>
@@ -216,6 +196,7 @@ Setup instructions:
     	<echo message="** [signature change] Please be sure to update your AppLoginDialog.java in WEB-INF/classes and replace producePage(DialogContext, Writer) with producePage(Writer, DialogContext)"/>
     	<echo message="** [signature change] Please be sure to update your PageTag.java in WEB-INF/classes and replace loginDialog.producePage(DialogContext, Writer) with loginDialog.producePage(Writer, DialogContext)"/>
     	<echo message="** [method change] Please be sure to update all your dialog classes in WEB-INF/classes and replace getHtml(dc) with renderHtml(writer, dc)"/>
+    	<echo message="** [structure change] Please be sure to update all your directories to be compliant with new Version 2.0.9 directory structure."/>
     	<echo message="***************************************************************"/>
     </target>
 
@@ -335,18 +316,22 @@ Setup instructions:
         <echo message="ANT build targets for Application"/>
         <echo message=""/>
         <echo message="The following targets are available:"/>
-        <echo message="  all          Run all of the targets in this order: clean, dal, dcb, compile, dal-doc, dcb-doc"/>
+        <echo message="  all          Run all of the targets in this order: clean, dal, dcb, compile,"/>
+        <echo message="               dal-doc, dcb-doc"/>
         <echo message="  clean        Clean directories"/>
         <echo message="  clean-log    Clean only the log directory (remove all entries and re-create)"/>
+        <echo message="  "/>
         <echo message="  setup-sparx-structure Setup sparx structure (directories, etc)"/>
-        <echo message="  setup-sparx  Setup sparx files (configuration.xml, log4j, etc.)"/>
-        <echo message="  start-sparx-app In an empty directory, start a new sparx app"/>
-        <echo message="  setup-sparx-libs  Copy all the applicable Sparx libraries into the application"/>
+        <echo message="  start-sparx-app In an empty directory, start a new sparx app (runs"/>
+        <echo message="                  setup-sparx-structure, copy-sparx-libs, copy-sparx-resources"/>
+        <echo message="  "/>
         <echo message="  compile      Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal          Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
         <echo message="  dal-doc      Generate the Data Access Layer (DAL) API Documentation"/>
         <echo message="  dcb          Generate the Dialog Context Beans from Dialogs (XML)"/>
         <echo message="  dcb-doc      Generate the Dialog Context Beans API Documentation"/>
+        <echo message="  "/>
+        <echo message="  copy-sparx-libs  Copy all the applicable Sparx libraries into the application"/>
         <echo message="  copy-sparx-resources  Copy all the web-based resources need for Sparx (SPARX_HOME/web-shared/resources)"/>
     </target>
 </project>
