@@ -44,6 +44,7 @@
                         <name>Logging</name>
                         <task><name>Add auditing of user actions in dialogs, pages, and SQL (as opposed to just system logging).</name></task>
                         <task><name>Add <a href="http://freshmeat.net/releases/51516/">Java Exception Notification</a> into framework.</name></task>
+                        <task><name>Integrate with <a href="http://appstats.sourceforge.net/">AppStats Framework</a>.</name></task>
                     </task>
 
                     <task>
