@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportContext.java,v 1.3 2002-12-26 19:38:31 shahid.shah Exp $
+ * $Id: ReportContext.java,v 1.4 2003-01-24 14:13:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -263,6 +263,7 @@ public class ReportContext extends ServletValueContext
     private ReportSkin skin;
     private ResultSetScrollState scrollState;
     private int rowCurrent, rowStart, rowEnd;
+    private long frameFlags;
 
     public NumberFormat generalNumberFmt;
 
@@ -296,6 +297,9 @@ public class ReportContext extends ServletValueContext
                 calcsCount++;
             states[i] = state;
         }
+
+        ReportFrame frame = reportDefn.getFrame();
+        frameFlags = frame != null ? frame.getFlags() : 0;
     }
 
     public ReportContext(ValueContext vc, Report reportDefn, ReportSkin skin)
@@ -306,6 +310,11 @@ public class ReportContext extends ServletValueContext
     public ReportContext(QuerySelect select, DialogContext dc, Report reportDefn, ReportSkin skin)
     {
         this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse(), reportDefn, skin);
+    }
+
+    public long getFrameFlags()
+    {
+        return frameFlags;
     }
 
     /**
