@@ -720,6 +720,7 @@ var DASH_KEY_RANGE         = [45,  45];
 var UPPER_ALPHA_KEYS_RANGE = [65,  90];
 var LOW_ALPHA_KEYS_RANGE   = [97, 122];
 var UNDERSCORE_KEY_RANGE   = [95,  95];
+var COLON_KEY_RANGE        = [58, 58];
 
 function keypressAcceptRanges(field, control, acceptKeyRanges)
 {
@@ -946,6 +947,11 @@ function DateField_valueChanged(field, control)
         control.value = result[1];
         return result[0];
     }
+    else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
+    {        
+        var result = formatTime(field, control);  
+        return result;
+    }
     return true;
 }
 
@@ -954,6 +960,10 @@ function DateField_onKeyPress(field, control)
     if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
     {
 		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange]);
+    }
+    else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
+    {  
+        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, COLON_KEY_RANGE]);
     }
     return true;
 }
@@ -1100,6 +1110,59 @@ function formatSSN(field, control)
         control.value = ssn;
     }    
     return true;    
+}
+
+
+function testTime(field, control)
+{    
+    var inTime = control.value;
+    if (inTime == '')
+        return true;
+    var hr = null;
+    var min = null;
+    if (inTime.length == 5 && inTime.indexOf(":") == 2)
+    {
+        hr = inTime.substring(0, 2);
+        min = inTime.substring(3);
+        if (hr > 23 || min > 59)
+        {
+            field.alertMessage(control, "Time field must have a valid value");
+            return false;
+        }
+        return true;
+    }
+    else if (inTime.length == 4 && inTime.indexOf(":") == 1)
+    {
+        hr = inTime.substring(0, 1);
+        min = inTime.substring(2);        
+        if (hr > 23 || min > 59)
+        {
+            field.alertMessage(control, "Time field must have a valid value");
+            return false;
+        }        
+        return true;
+    }
+    field.alertMessage(control, "Time field must have the correct format: " + field.dateFormat);
+    return false;
+}
+
+function formatTime(field, control)
+{
+    var inTime = control.value;        
+    newTime = inTime;
+    if (field.timeStrict == false && inTime.indexOf(":") == -1)
+    {
+        if (inTime.length == 4) 
+        {
+            newTime = inTime.substring(0, 2) + ":"  + inTime.substring(2);
+        }
+        else if (inTime.length == 3)
+        {
+            newTime = inTime.substring(0, 1) + ":" + inTime.substring(1);
+        }
+        control.value = newTime;        
+    }             
+    return testTime(field, control);    
 }
 
 function formatDate(field, control, delim, strictYear)
