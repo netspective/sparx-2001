@@ -52,6 +52,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.phone", PhoneField.class);
         fieldClasses.put("field.bloodpressure", BloodPressureField.class);
         fieldClasses.put("field.report", ReportField.class);
+        fieldClasses.put("field.zip", ZipField.class);
 		defaultsAvailable = true;
 	}
 
