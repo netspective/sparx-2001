@@ -96,7 +96,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		ValueContext vc = new ServletValueContext(config.getServletContext(), this, null, null);
 
 		pagesPath.registerPage("/application/monitor", new MonitorLogPage());
-		Collection logs = appConfig.getValues(vc, "framework.ace.monitor.logs");
+		Collection logs = appConfig.getValues(vc, CONFIGITEM_DEFAULT_PREFIX + "monitor.logs");
 		if(logs != null)
 		{
 			for(Iterator i = logs.iterator(); i.hasNext(); )
@@ -114,7 +114,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		}
 
 		pagesPath.registerPage("/documents", new DocumentsPage());
-		Collection bookmarks = appConfig.getValues(vc, "framework.ace.bookmarks");
+		Collection bookmarks = appConfig.getValues(vc, CONFIGITEM_DEFAULT_PREFIX + "bookmarks");
 		if(bookmarks != null)
 		{
 			for(Iterator i = bookmarks.iterator(); i.hasNext(); )
