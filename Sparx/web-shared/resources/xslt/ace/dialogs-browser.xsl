@@ -155,7 +155,8 @@
 		<td><xsl:value-of select="$indent"/><xsl:value-of select="name()"/></td>
 		<td><font color="navy"><xsl:value-of select="$field/@default"/></font></td>
 		<td>
-			<xsl:for-each select="$field/@*">
+			<!-- this should be select="$field/@*" but Xalan doesn't seem to work with that so we're using just @* because . is active field anyway -->
+			<xsl:for-each select="@*">
 				<xsl:if test="name() != 'name' and name() != 'caption' and name() != 'default'">
 					<font color="green"><xsl:value-of select="name()"/></font>
 					=
