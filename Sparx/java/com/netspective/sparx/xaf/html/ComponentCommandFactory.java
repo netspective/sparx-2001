@@ -51,15 +51,12 @@
  */
 
 /**
- * $Id: ComponentCommandFactory.java,v 1.3 2003-01-01 19:27:45 shahid.shah Exp $
+ * $Id: ComponentCommandFactory.java,v 1.4 2003-01-20 05:33:06 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.html;
 
-import com.netspective.sparx.xaf.html.command.ListValueSourceComponentCommand;
-import com.netspective.sparx.xaf.html.command.DialogComponentCommand;
-import com.netspective.sparx.xaf.html.command.StatementComponentCommand;
-import com.netspective.sparx.xaf.html.command.QueryDefinitionDialogComponentCommand;
+import com.netspective.sparx.xaf.html.command.*;
 import com.netspective.sparx.util.value.ServletValueContext;
 
 import java.util.Map;
@@ -94,6 +91,9 @@ public class ComponentCommandFactory
         registerCommand(DialogComponentCommand.COMMAND_ID, DialogComponentCommand.class);
         registerCommand(ListValueSourceComponentCommand.COMMAND_ID, ListValueSourceComponentCommand.class);
         registerCommand(StatementComponentCommand.COMMAND_ID, StatementComponentCommand.class);
+        registerCommand(RecordUpdateComponentCommand.COMMAND_ID, RecordUpdateComponentCommand.class);
+        registerCommand(RecordAddComponentCommand.COMMAND_ID, RecordAddComponentCommand.class);
+        registerCommand(RecordDeleteComponentCommand.COMMAND_ID, RecordDeleteComponentCommand.class);
         registerCommand(QueryDefinitionDialogComponentCommand.COMMAND_ID, QueryDefinitionDialogComponentCommand.class);
     }
 

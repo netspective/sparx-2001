@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementComponentCommand.java,v 1.3 2003-01-16 16:38:06 shahid.shah Exp $
+ * $Id: StatementComponentCommand.java,v 1.4 2003-01-20 05:33:06 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -100,12 +100,12 @@ public class StatementComponentCommand extends AbstractComponentCommand
                         new Documentation.Parameter("debug-flags", false, new String[] { "SHOW_DATA" }, null, "The debug flags."),
                     });
 
-    private String statementName;
-    private int rowsPerPage;
-    private String skinName;
-    private String reportId;
-    private String[] urlFormats;
-    private DialogComponentCommand dialogCommand;
+    protected String statementName;
+    protected int rowsPerPage;
+    protected String skinName;
+    protected String reportId;
+    protected String[] urlFormats;
+    protected DialogComponentCommand dialogCommand;
 
     public Documentation getDocumentation()
     {
