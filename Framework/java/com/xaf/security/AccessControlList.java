@@ -10,12 +10,13 @@ import javax.servlet.*;
 
 import org.w3c.dom.*;
 
+import com.xaf.*;
 import com.xaf.xml.*;
 import com.xaf.form.*;
 import com.xaf.sql.*;
 import com.xaf.value.*;
 
-public class AccessControlList extends XmlSource
+public class AccessControlList extends XmlSource implements FactoryListener
 {
 	public static final String NAME_SEPARATOR = "/";
 	public static final String INHERIT_ATTR_NAME = "inherit";
@@ -43,21 +44,45 @@ public class AccessControlList extends XmlSource
 	}
 
 	private ComponentPermission rootPerm;
-	private Map permissions = new HashMap();
+	private Map permissionsByName = new HashMap();
+	private List permissionsById = new ArrayList();
 
 	public AccessControlList(File file)
 	{
 		loadDocument(file);
 	}
 
+	public void factoryContentsChanged(FactoryEvent event)
+	{
+		forceReload();
+	}
+
+	public int getHighestPermissionId()
+	{
+		return permissionsById.size();
+	}
+
 	public void addPermission(ComponentPermission perm)
 	{
-		permissions.put(perm.getFullName(), perm);
+		permissionsByName.put(perm.getFullName(), perm);
+		permissionsById.add(perm.getId(), perm);
 	}
 
 	public ComponentPermission getPermission(String name)
 	{
-		return (ComponentPermission) permissions.get(name);
+		return (ComponentPermission) permissionsByName.get(name);
+	}
+
+	public ComponentPermission getPermission(int id)
+	{
+		try
+		{
+			return (ComponentPermission) permissionsById.get(id);
+		}
+		catch(IndexOutOfBoundsException e)
+		{
+			return null;
+		}
 	}
 
 	public Element addPermissionElem(Element parent, String name)
@@ -101,9 +126,65 @@ public class AccessControlList extends XmlSource
 		}
 	}
 
+	public void generatePermissions(Element parentElem)
+	{
+		NodeList children = parentElem.getChildNodes();
+		for(int n = 0; n < children.getLength(); n++)
+		{
+			Node node = children.item(n);
+			if(node.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+
+			Element childElem = (Element) node;
+			if(childElem.getNodeName().equals("generate-permissions"))
+			{
+				String factoryClassName = childElem.getAttribute("class");
+				if(factoryClassName.length() == 0)
+					addError("In generate-permissions tag, no class provided.");
+				else
+				{
+					try
+					{
+						Element generatedRoot = addPermissionElem(parentElem, childElem.getAttribute("name"));
+						generatedRoot.setAttribute("generated", "yes");
+
+						Class factoryClass = Class.forName(factoryClassName);
+
+						Method addListenerMethod = factoryClass.getMethod("addListener", new Class[] { FactoryListener.class });
+						Method generateMethod = factoryClass.getMethod("generatePermissions", new Class[] { AccessControlList.class, Element.class });
+
+						addListenerMethod.invoke(null, new Object[] { this });
+						generateMethod.invoke(null, new Object[] { this, generatedRoot });
+					}
+					catch(ClassNotFoundException e)
+					{
+						addError(e.toString());
+					}
+					catch(NoSuchMethodException e)
+					{
+						addError("Method generatePermissions not found in '"+factoryClassName+"'");
+					}
+					catch(InvocationTargetException e)
+					{
+						addError(e.toString());
+					}
+					catch(IllegalAccessException e)
+					{
+						addError(e.toString());
+					}
+				}
+			}
+			else
+			{
+				generatePermissions(childElem);
+			}
+		}
+	}
+
 	public void catalogNodes()
 	{
-		permissions.clear();
+		permissionsByName.clear();
+		permissionsById.clear();
 		rootPerm = null;
 
         if(xmlDoc == null)
@@ -120,39 +201,7 @@ public class AccessControlList extends XmlSource
 			if(nodeName.equals("access-control"))
 			{
 				Element accessControlElem = (Element) node;
-				NodeList generatePerms = accessControlElem.getElementsByTagName("generate-permissions");
-				for(int gp = 0; gp < generatePerms.getLength(); gp++)
-				{
-					Element generateElem = (Element) generatePerms.item(gp);
-				    String factoryClassName = generateElem.getAttribute("class");
-					if(factoryClassName.length() == 0)
-						addError("In generate-permissions tag, no class provided.");
-					else
-					{
-						try
-						{
-							Class factoryClass = Class.forName(factoryClassName);
-							Method generateMethod = factoryClass.getMethod("generatePermissions", new Class[] { AccessControlList.class, Element.class, String.class });
-							generateMethod.invoke(null, new Object[] { this, accessControlElem, generateElem.getAttribute("name") });
-						}
-						catch(ClassNotFoundException e)
-						{
-							addError(e.toString());
-						}
-						catch(NoSuchMethodException e)
-						{
-							addError("Method generatePermissions not found in '"+factoryClassName+"'");
-						}
-						catch(InvocationTargetException e)
-						{
-							addError(e.toString());
-						}
-						catch(IllegalAccessException e)
-						{
-							addError(e.toString());
-						}
-					}
-				}
+				generatePermissions(accessControlElem);
 
 				AccessControlCatalogContext context = new AccessControlCatalogContext();
 				catalogPermissions(context, node, null);
@@ -181,6 +230,7 @@ public class AccessControlList extends XmlSource
 				accessControlElem.setAttribute("id", "0");
 				rootPerm = new ComponentPermission();
 				rootPerm.importFromXml(this, null, accessControlElem);
+				rootPerm.finalizeXml(this, accessControlElem);
 			}
 		}
 

@@ -10,9 +10,8 @@ import com.xaf.value.*;
 
 public class LoginDialog extends Dialog
 {
-	static public final String FIELDNAME_USERID = "user_id";
-	static public final String COOKIENAME_USERID = "xaf_user_id_01";
-	static public final String ATTRNAME_USERINFO = "authenticated-user";
+	static public final String DEFAULT_COOKIENAME_USERID = "xaf_user_id_01";
+	static public final String DEFAULT_ATTRNAME_USERINFO = "authenticated-user";
 
 	private TextField userIdField;
 	private TextField passwordField;
@@ -22,21 +21,38 @@ public class LoginDialog extends Dialog
 
     public LoginDialog()
     {
-		super("Login", "Please Login");
+		super();
 
-		userIdField = new TextField(FIELDNAME_USERID, "User ID");
-		userIdField.setFlag(DialogField.FLDFLAG_REQUIRED);
+		userNameCookieName = DEFAULT_COOKIENAME_USERID;
+		userInfoSessionAttrName = DEFAULT_ATTRNAME_USERINFO;
+    }
 
-		passwordField = new TextField("password", "Password");
-		passwordField.setFlag(DialogField.FLDFLAG_REQUIRED | TextField.FLDFLAG_MASKENTRY);
+	public TextField createUserIdField()
+	{
+		TextField result = new TextField("user_id", "User ID");
+		result.setFlag(DialogField.FLDFLAG_REQUIRED);
+		return result;
+	}
+
+	public TextField createPasswordField()
+	{
+		TextField result = new TextField("password", "Password");
+		result.setFlag(DialogField.FLDFLAG_REQUIRED | TextField.FLDFLAG_MASKENTRY);
+		return result;
+	}
+
+	public void initialize()
+	{
+		this.setHeading("Please Login");
+		this.setName("login");
+
+		userIdField = createUserIdField();
+		passwordField = createPasswordField();
 
 		addField(userIdField);
 		addField(passwordField);
 		addField(new DialogDirector());
-
-		userNameCookieName = COOKIENAME_USERID;
-		userInfoSessionAttrName = ATTRNAME_USERINFO;
-    }
+	}
 
 	public String getUserNameCookieName() { return userNameCookieName; }
 	public void setUserNameCookieName(String value) { userNameCookieName = value; }
@@ -61,24 +77,50 @@ public class LoginDialog extends Dialog
 		writer.write("</center>");
 	}
 
-	public String execute(DialogContext dc)
+	public AuthenticatedUser getActiveUser(ValueContext vc)
 	{
-		AuthenticatedUser userInfo = new BasicAuthenticatedUser(
-			dc.getValue(userIdField), dc.getValue(userIdField), dc.getValue(passwordField));
-		((HttpServletRequest) dc.getRequest()).getSession(true).setAttribute(userInfoSessionAttrName, userInfo);
+		return (AuthenticatedUser) ((HttpServletRequest) vc.getRequest()).getSession(true).getAttribute(userInfoSessionAttrName);
+	}
+
+	public AuthenticatedUser createUserData(DialogContext dc)
+	{
+		return new BasicAuthenticatedUser(dc.getValue(userIdField), dc.getValue(userIdField));
+	}
+
+	public void applyAccessControls(DialogContext dc, AuthenticatedUser user)
+	{
+		AccessControlList acl = AccessControlListFactory.getACL(dc.getServletContext());
+		user.setRoles(acl, new String[] { "/role/super-user" });
+	}
+
+	public void storeUserData(DialogContext dc, AuthenticatedUser user)
+	{
+		((HttpServletRequest) dc.getRequest()).getSession(true).setAttribute(userInfoSessionAttrName, user);
 
 		Cookie cookie = new Cookie(userNameCookieName, dc.getValue(userIdField));
 		cookie.setPath("/");
 		((HttpServletResponse) dc.getResponse()).addCookie(cookie);
-		return null;
 	}
 
-	public void logout(ValueContext vc)
+	public void clearUserData(ValueContext vc)
 	{
 		((HttpServletRequest) vc.getRequest()).getSession(true).removeAttribute(userInfoSessionAttrName);
 		Cookie cookie = new Cookie(userNameCookieName, "");
 		cookie.setPath("/");
 		cookie.setMaxAge(-1);
 		((HttpServletResponse) vc.getResponse()).addCookie(cookie);
+	}
+
+	public String execute(DialogContext dc)
+	{
+		AuthenticatedUser user = createUserData(dc);
+		applyAccessControls(dc, user);
+		storeUserData(dc, user);
+		return null;
+	}
+
+	public void logout(ValueContext vc)
+	{
+		clearUserData(vc);
 	}
 }

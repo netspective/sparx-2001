@@ -87,6 +87,11 @@ public class XmlSource
 		return false;
 	}
 
+	public void forceReload()
+	{
+		loadDocument(docSource.getFile());
+	}
+
 	public void reload()
 	{
 		if(allowReload && docSource != null && sourceChanged())

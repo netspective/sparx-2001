@@ -3,6 +3,7 @@ package com.xaf.security;
 import java.util.*;
 import java.security.*;
 import org.w3c.dom.*;
+import com.xaf.*;
 
 public class ComponentPermission
 {
@@ -35,9 +36,31 @@ public class ComponentPermission
 		name = parentElem.getAttribute("name");
 		fullName = parentElem.getAttribute("full-name");
 		childPermissions.set(id);
-		boolean haveChildren = false;
 
 		acl.addPermission(this);
+
+		NodeList children = parentElem.getChildNodes();
+		for(int n = 0; n < children.getLength(); n++)
+		{
+			Node node = children.item(n);
+			if(node.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+
+			Element childElem = (Element) node;
+			String cName = childElem.getNodeName();
+			if(cName.equals(AccessControlList.PERMISSION_ELEM_NAME))
+			{
+				ComponentPermission childPerm = new ComponentPermission();
+				childPerm.importFromXml(acl, this, childElem);
+				childPermissions.set(childPerm.getId());
+				childPermissions.or(childPerm.getChildPermissions());
+			}
+		}
+	}
+
+	public void finalizeXml(AccessControlList acl, Element parentElem)
+	{
+		boolean haveChildren = false;
 
 		NodeList children = parentElem.getChildNodes();
 		for(int n = 0; n < children.getLength(); n++)
@@ -55,10 +78,8 @@ public class ComponentPermission
 			String cName = childElem.getNodeName();
 			if(cName.equals(AccessControlList.PERMISSION_ELEM_NAME))
 			{
-				ComponentPermission childPerm = new ComponentPermission();
-				childPerm.importFromXml(acl, this, (Element) childElem);
-				childPermissions.set(childPerm.getId());
-				childPermissions.or(childPerm.getChildPermissions());
+				ComponentPermission childPerm = acl.getPermission(childElem.getAttribute("full-name"));
+				childPerm.finalizeXml(acl, childElem);
 				haveChildren = true;
 			}
 			else if(cName.equals("grant"))

@@ -124,6 +124,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 			{
 				Class loginDialogClass = Class.forName(loginDialogClassName);
 				loginDialog = (LoginDialog) loginDialogClass.newInstance();
+				loginDialog.initialize();
 				if(loginDialogUserInfoAttrName != null)
 					loginDialog.setUserInfoSessionAttrName(loginDialogUserInfoAttrName);
 				String imageSrc = appConfig.getValue(vc, configItemsPrefix + CONFIGITEM_LOGIN_DIALOGIMAGE);

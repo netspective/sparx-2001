@@ -17,6 +17,7 @@ import javax.servlet.http.*;
 
 import org.w3c.dom.*;
 
+import com.xaf.*;
 import com.xaf.config.*;
 import com.xaf.security.*;
 import com.xaf.value.*;
@@ -25,11 +26,33 @@ public class DialogManagerFactory
 {
 	static final String ATTRNAME_DIALOGMGR = "framework.dialog-mgr";
 	static final String REQPARAMNAME_SOURCE = "dlgsrc";
-	static Hashtable managers = new Hashtable();
+	static Map managers = new Hashtable();
+	static List listeners;
 
-	public static void generatePermissions(AccessControlList acl, Element parentElem, String name)
+	public static void addListener(FactoryListener listener)
 	{
-		Element dialogsElem = acl.addPermissionElem(parentElem, name);
+		if(listeners == null)
+			listeners = new ArrayList();
+
+		if(! listeners.contains(listener))
+			listeners.add(listener);
+	}
+
+	public static void contentsChanged()
+	{
+		if(listeners == null)
+			return;
+
+		FactoryEvent event = new FactoryEvent(DialogManagerFactory.class);
+		for(Iterator i = listeners.iterator(); i.hasNext(); )
+		{
+			FactoryListener listener = (FactoryListener) i.next();
+			listener.factoryContentsChanged(event);
+		}
+	}
+
+	public static void generatePermissions(AccessControlList acl, Element parentElem)
+	{
 		for(Iterator m = managers.values().iterator(); m.hasNext(); )
 		{
 			DialogManager manager = (DialogManager) m.next();
@@ -37,7 +60,7 @@ public class DialogManagerFactory
 			for(Iterator d = dialogs.values().iterator(); d.hasNext(); )
 			{
 				DialogManager.DialogInfo info = (DialogManager.DialogInfo) d.next();
-				acl.addPermissionElem(dialogsElem, info.getLookupName());
+				acl.addPermissionElem(parentElem, info.getLookupName());
 			}
 		}
 	}
@@ -49,6 +72,7 @@ public class DialogManagerFactory
 		{
 			activeManager = new DialogManager(new File(file));
 			managers.put(file, activeManager);
+			contentsChanged();
 		}
 		return activeManager;
 	}

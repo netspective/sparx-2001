@@ -54,6 +54,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 			{
 				Class loginDialogClass = Class.forName(loginDialogClassName);
 				loginDialog = (LoginDialog) loginDialogClass.newInstance();
+				loginDialog.initialize();
 				loginDialog.setUserNameCookieName(loginDialogCookieName);
 				loginDialog.setUserInfoSessionAttrName(loginDialogUserInfoAttrName);
 			}
@@ -87,6 +88,12 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
         if (excludeEntryNames.contains(name) || name.startsWith(".") || name.startsWith("_"))
             ret = false;
 		return ret;
+	}
+
+	public AuthenticatedUser getActiveUser(ServletRequest req)
+	{
+		ValueContext vc = new ServletValueContext(getServletContext(), this, req, null);
+		return loginDialog.getActiveUser(vc);
 	}
 
 	public String getParentsHtml(HttpServletRequest req, FileSystemContext fsContext)
