@@ -17,10 +17,14 @@ public class PhoneField extends TextField
 {
     static public final long FLDFLAG_STRIPBRACKETS = TextField.FLDFLAG_STARTCUSTOM;
 
+
     public PhoneField()
     {
         super();
         setFlag(FLDFLAG_STRIPBRACKETS);
+        // set the dafault regex pattern for the phone field
+        setValidatePattern("/^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})[ ]?([x][\\d]{1,5})?$/");
+        setValidatePatternErrorMessage("Input must be in the 999-999-9999 x99999 format.");
     }
 
     public void importFromXml(Element elem)
@@ -31,7 +35,7 @@ public class PhoneField extends TextField
             clearFlag(FLDFLAG_STRIPBRACKETS);
 	}
 
-    	public boolean needsValidation(DialogContext dc)
+    public boolean needsValidation(DialogContext dc)
 	{
         return true;
 	}
@@ -44,12 +48,28 @@ public class PhoneField extends TextField
         if(value == null)
             return value;
 
-        if(value.length() != 13)
-    		return value;
+        String retValue = value;
 
-        String phoneValueStr = null;
-        phoneValueStr = (value.substring(2,3) + value.substring(6,3)+value.substring(10,4));
-        return phoneValueStr;
+        try
+        {
+            String[] subgroups = this.patternMatches(value);
+            if (subgroups != null && subgroups.length > 0)
+            {
+                retValue = "";
+                for (int i=0; i < subgroups.length; i++)
+                {
+                    if (subgroups[i] != null)
+                        retValue += subgroups[i];
+                }
+            }
+
+        }
+        catch (Exception mpe)
+        {
+            mpe.printStackTrace();
+
+        }
+        return retValue;
 
 	}
 	public boolean isValid(DialogContext dc)
@@ -58,58 +78,6 @@ public class PhoneField extends TextField
         if(! result)
             return false;
 
-        String value = dc.getValue(this);
-        int valLen = value.length();
-        if(value != null && valLen > 0)
-        {
-            if(valLen == 13)
-            {
-                String phoneValueStr = null;
-
-                try
-                {
-                    phoneValueStr = value.substring(1,4);
-                    phoneValueStr = phoneValueStr + value.substring(5,8);
-                    phoneValueStr = phoneValueStr + value.substring(10,13) ;
-                }
-                catch (Exception e)
-                {
-                    invalidate(dc, "'" + phoneValueStr + "' is not a valid phone number.");
-                    return false;
-                }
-
-
-                if(phoneValueStr.length() != 10)
-                    return false;
-
-                try
-                {
-                    double phoneValue = Double.parseDouble(phoneValueStr);
-                }
-                catch(NumberFormatException e)
-                {
-    				invalidate(dc, "'" + value + "' is not a valid phone number.");
-                    return false;
-                }
-            }
-            else if(valLen == 10)
-            {
-                try
-                {
-                    double phoneValue = Double.parseDouble(value);
-                }
-                catch(NumberFormatException e)
-                {
-    				invalidate(dc, "'" + value + "' is not a valid phone number.");
-                    return false;
-                }
-            }
-            else
-            {
-   				invalidate(dc, "'" + value + "' is not a valid phone number.");
-                return false;
-            }
-        }
 
         return true;
 	}
