@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PopupUrlValue.java,v 1.1 2002-12-31 19:34:22 shahid.shah Exp $
+ * $Id: PopupUrlValue.java,v 1.2 2003-04-17 16:05:57 aye.thu Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -62,11 +62,17 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 public class PopupUrlValue extends ValueSource
 {
     public final String CONFIGPROP_POPUP_PAGE_URL = "sparx.shared.popup.page-url";
+    public final String APP_CONFIGPROP_POPUP_PAGE_URL = "app.popup.page-url";
 
     public String getValue(ValueContext vc)
     {
         Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(vc.getServletContext());
-        String popupPageUrl = config.getTextValue(vc, CONFIGPROP_POPUP_PAGE_URL);
+        // Check if the application has its own popup url, if not use the default one
+        String popupPageUrl = config.getTextValue(vc, APP_CONFIGPROP_POPUP_PAGE_URL);
+        if (popupPageUrl == null || popupPageUrl.length() == 0)
+        {
+            popupPageUrl = config.getTextValue(vc, CONFIGPROP_POPUP_PAGE_URL);
+        }
         return valueKey != null ? (popupPageUrl + "?" + valueKey) : popupPageUrl;
     }
 }
