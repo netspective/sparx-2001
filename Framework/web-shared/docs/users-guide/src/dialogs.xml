@@ -62,7 +62,45 @@
         <para>
         Every type of field available has its own both client-side and server-side validation
         features. For example, an integer field allows only numerical values into the field and
-        a social security number field only allows dashes and numeric digits.
+        a social security number field only allows dashes and numeric digits. Aside from using the 
+        built-in fields, &product-name; provides a way to create new fields using the &framework-name;'s
+        Java class called <classname>com.xaf.form.DialogField</classname>. The following is a sample
+        class definition for creating a dialog field:
+        <programlisting>
+            <![CDATA[
+import com.xaf.form.*;
+
+public class NewField extends com.xaf.form.DialogField
+{
+    ...
+    ..
+}
+            ]]>
+        </programlisting>
+        The following XML entry must be added to the dialog's package so that the dialog can access
+        the field. The following is an example of a dialog using the <classname>NewField</classname>:
+        <programlisting>
+            <![CDATA[        
+    <dialogs package="Test">
+        <register-field class="NewField" tag-name="field.newfield"/>    
+        <dialog name="TestNewField" heading="Test New Field">
+            <field.newfield name="new_field" caption="My New Field" ... />
+            ....
+            ...
+        </dialog>
+    </dialogs>            
+            ]]>
+        </programlisting> 
+        As shown above, the XML tag <sgmltag class="element">register-field</sgmltag> is used to register 
+        the new field. The attribute <sgmltag class="attribute">class</sgmltag> is used to define the
+        Java class for the new field and the <sgmltag class="attribute">tag-name</sgmltag> attribute
+        is used to define the XML tag name.
+        <note>
+            <para>
+            Any new field being created must have an XML element name that beings 
+            with <quote>field.</quote>
+            </para>
+        </note>
         </para>
         
         <section>
@@ -395,12 +433,7 @@
             </programlisting>
             The above example displays a dialog with a text field named <emphasis>text_field_2</emphasis> 
             which cannot be filled in by the user but can only be filled in from a popup box associated with it.
-            By clicking on the popup icon (
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="../../../resources/images/dialogs/magnifying-glass-sm.gif" format="GIF"/>
-                </imageobject>
-                </mediaobject>)
+            By clicking on the popup icon (<imageobject align="left"><imagedata fileref="../../resources/images/dialog/magnifying-glass-sm.gif" format="GIF"/></imageobject>)
             the URL defined as the action, <literal>textJS.html</literal>, will be displayed in a popup window.
             The process through a value or multiple values  being returned into the <emphasis>text_field_2</emphasis>
             is to invoke a Javascript method called <literal>populateValues()</literal> provided by &product-name;. 
@@ -632,14 +665,32 @@
             <para>
             There could be times when the total built-in behavior of a dialog does not satisfy the requirements
             of a web application; thus &product-name; provides a way to create a dialog
-            object outside of the <filename class="conf">WEB-INF/ui/dialog.xml</filename> file. 
-            For example, a dialog named <emphasis>Test1</emphasis> belonging to a package named
-            <emphasis>Test</emphasis> can be created using a Java class 
-            named <classname>Test1</classname> also belonging to a package called <classname>Test</classname>. 
-            The <classname>Test1</classname> Java class must extend the &framework-name;'s dialog class called
-            <classname>com.xaf.form.Dialog</classname>. The behavior of the dialog can then be modified
-            by overwriting the methods available or introducing new methods.
-            The dialog can be then used in a JSP as if it is defined in the XML file.
+            object in Java. 
+            A dialog can be created using a Java class which 
+            must extend the &framework-name;'s dialog class called
+            <classname>com.xaf.form.Dialog</classname>: 
+            <programlisting>
+            <![CDATA[
+package Test;
+
+public class Test1  extends com.xaf.form.Dialog
+{
+    ...
+    ..
+}                        
+            ]]>
+            </programlisting>
+            The behavior of the dialog can then be modified by overwriting the methods available or introducing new methods.
+            The new dialog class can then be used by associating the class with a dialog
+            definition in <filename class="conf">WEB-INF/ui/dialog.xml</filename> file:
+            <programlisting>
+            <![CDATA[
+        <dialog name="TestDialog" heading="Test Dialog" class="Test.Test1">
+            ...
+            ..
+        </dialog>            
+            ]]>
+            </programlisting>            
             </para>
         </section>
     </section>
