@@ -64,51 +64,62 @@ public class DocumentsPage extends AceServletPage
 		return isFileRef;
 	}
 
-	public void handlePageBody(PageContext pc) throws ServletException, IOException
+	public void handlePage(PageContext pc) throws ServletException
 	{
-		if(! isFileRef)
+		try
 		{
-			((HttpServletResponse) pc.getResponse()).sendRedirect(ref);
-			return;
-		}
-
-		VirtualPath.FindResults activePath = pc.getActivePath();
-		String relativePath = activePath.getUnmatchedPath();
-
-		ServletContext context = pc.getServletContext();
-		if(fsContext == null)
-		{
-			fsContext = new FileSystemContext(
-				activePath.getMatchedPath().getAbsolutePath(pc),
-				ref, getCaption(pc), relativePath);
-		}
-		else
-			fsContext.setRelativePath(relativePath);
-
-		FileSystemEntry activeEntry = fsContext.getActivePath();
-		if(activeEntry.isDirectory())
-		{
-			Document navgDoc = null;
-			try
+			if(! isFileRef)
 			{
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				navgDoc = builder.newDocument();
-			}
-			catch(Exception e)
-			{
-				throw new ServletException(e);
+				((HttpServletResponse) pc.getResponse()).sendRedirect(ref);
+				return;
 			}
 
-			Element navgRootElem = navgDoc.createElement("xaf");
-			navgDoc.appendChild(navgRootElem);
+			VirtualPath.FindResults activePath = pc.getActivePath();
+			String relativePath = activePath.getUnmatchedPath();
 
-			fsContext.addXML(navgRootElem, fsContext);
-			transform(pc, navgDoc, ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
+			ServletContext context = pc.getServletContext();
+			if(fsContext == null)
+			{
+				fsContext = new FileSystemContext(
+					activePath.getMatchedPath().getAbsolutePath(pc),
+					ref, getCaption(pc), relativePath);
+			}
+			else
+				fsContext.setRelativePath(relativePath);
+
+			FileSystemEntry activeEntry = fsContext.getActivePath();
+			if(activeEntry.isDirectory())
+			{
+				Document navgDoc = null;
+				try
+				{
+					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder builder = factory.newDocumentBuilder();
+					navgDoc = builder.newDocument();
+				}
+				catch(Exception e)
+				{
+					throw new ServletException(e);
+				}
+
+				Element navgRootElem = navgDoc.createElement("xaf");
+				navgDoc.appendChild(navgRootElem);
+
+				fsContext.addXML(navgRootElem, fsContext);
+
+				handlePageMetaData(pc);
+				handlePageHeader(pc);
+				transform(pc, navgDoc, ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
+				handlePageFooter(pc);
+			}
+			else
+			{
+				activeEntry.send((HttpServletResponse) pc.getResponse());
+			}
 		}
-		else
+		catch(IOException e)
 		{
-			activeEntry.send((HttpServletResponse) pc.getResponse());
+			throw new ServletException(e);
 		}
 	}
 }
