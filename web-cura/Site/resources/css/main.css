@@ -1,0 +1,56 @@
+A:Link
+{
+    font-size: 8pt;
+    color: #336699;
+    font-family: Verdana;
+    Text-decoration: underline
+}
+A:Top
+{
+    font-size: 8pt;
+    color: #336699;
+    font-family: Verdana;
+    Text-decoration: none
+}
+A:Visited
+{
+    font-size: 8pt;
+    color: #663366;
+    font-family: Verdana;
+    Text-decoration: underline
+}
+A:Hover
+{
+    font-size: 8pt;
+    background: #AFD997;
+    color: #ff3300;
+    font-family: Verdana;
+    Text-decoration: underline
+}
+A.Menu:Link
+{
+    font-size: 8pt;
+    color: #4A74E7;
+    font-family: Verdana;
+    Text-decoration: none
+}
+A.Menu:Hover
+{
+    font-size: 8pt;
+    background: #FFFFFF;
+    color: #4A74E7;
+    font-family: Verdana;
+    Text-decoration: none
+}
+A.Menu:Visited
+{
+    font-size: 8pt;
+    color: #4A74E7;
+    font-family: Verdana;
+    Text-decoration: none
+}
+.Font8pt
+{
+	font-size:8pt;
+	font-family:Verdana;
+}
