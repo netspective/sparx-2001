@@ -28,7 +28,8 @@ public class StatementInfo
 	private boolean sqlIsDynamic;
 	private String sql;
 	private StatementParameter[] parameters;
-	private List reportElems;
+	private Element defaultReportElem;
+	private Map reportElems;
 
 	public StatementInfo()
 	{
@@ -38,7 +39,8 @@ public class StatementInfo
 	public final String getStmtName() { return stmtName; }
     public final String getId() { return pkgName != null ? (pkgName + "." + stmtName) : stmtName; }
 	public final Element getStatementElement() { return stmtElem; }
-	public final List getReportElems() { return reportElems; }
+	public final Map getReportElems() { return reportElems; }
+	public final Element getReportElement(String name) { return name == null ? defaultReportElem : (Element) reportElems.get(name); }
 	public final String getDataSourceId() { return dataSourceId; }
     public final StatementParameter[] getParams() { return parameters; }
 
@@ -170,8 +172,15 @@ public class StatementInfo
             String childName = stmtChild.getNodeName();
 			if(childName.equals("report"))
 			{
-				if(reportElems == null) reportElems = new ArrayList();
-				reportElems.add(stmtChild);
+				Element reportElem = (Element) stmtChild;
+				String reportName = reportElem.getAttribute("name");
+				if(reportName.length() == 0)
+					defaultReportElem = reportElem;
+				else
+				{
+					if(reportElems == null) reportElems = new HashMap();
+					reportElems.put(reportName, reportElem);
+				}
 			}
 			else if(childName.equals("params"))
 			{

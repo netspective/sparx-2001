@@ -22,6 +22,7 @@ import com.xaf.xml.*;
 import com.xaf.skin.*;
 import com.xaf.sql.query.*;
 import com.xaf.report.*;
+import com.xaf.task.*;
 import com.xaf.value.*;
 
 public class StatementManager extends XmlSource
@@ -90,11 +91,13 @@ public class StatementManager extends XmlSource
 		return queryDefns;
 	}
 
+	/*
 	public Map getReports()
 	{
 		reload();
 		return reports;
 	}
+	*/
 
 	public QueryDefinition getQueryDefn(String name)
 	{
@@ -106,7 +109,7 @@ public class StatementManager extends XmlSource
 	{
 
 		statements.clear();
-		reports.clear();
+		//reports.clear();
         queryDefns.clear();
 		defaultStyleSheet = null;
 
@@ -155,6 +158,8 @@ public class StatementManager extends XmlSource
 						statements.put(statementId, si);
 						stmtElem.setAttribute("qualified-name", si.getId());
 						stmtElem.setAttribute("package", stmtPkg);
+
+						/*
 						if(si.getReportElems() != null)
 						{
 							for(Iterator i = si.getReportElems().iterator(); i.hasNext(); )
@@ -167,6 +172,7 @@ public class StatementManager extends XmlSource
 									reports.put(statementId, reportElem);
 							}
 						}
+						*/
 					}
 				}
 			}
@@ -464,8 +470,11 @@ public class StatementManager extends XmlSource
         ResultSet rs = ri.getResultSet();
 
         Report rd = new StandardReport();
+		if(vc instanceof TaskContext)
+			rd.setCanvas(((TaskContext) vc).getCanvas());
+
         String statementId = ri.si.getId();
-		Element reportElem = (Element) reports.get(reportId == null ? statementId : (statementId + "." + reportId));
+		Element reportElem = ri.si.getReportElement(reportId);
 		if(reportElem == null && reportId != null)
 		{
 			writer.write("Report id '"+reportId+"' not found for statement '"+statementId+"'");
@@ -504,8 +513,11 @@ public class StatementManager extends XmlSource
 		vs.setValue(vc, rs.getMetaData(), data, storeType);
 
         Report rd = new StandardReport();
+		if(vc instanceof TaskContext)
+			rd.setCanvas(((TaskContext) vc).getCanvas());
+
         String statementId = ri.si.getPkgName() + ri.si.getStmtName();
-		Element reportElem = (Element) reports.get(reportId == null ? statementId : (statementId + "." + reportId));
+		Element reportElem = ri.si.getReportElement(reportId);
 		if(reportElem == null && reportId != null)
 		{
 			writer.write("Report id '"+reportId+"' not found for statement '"+statementId+"'");
