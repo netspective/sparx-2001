@@ -445,4 +445,13 @@ public class SelectField extends DialogField
 				return "Unknown style " + style;
 		}
 	}
+
+    /**
+     * Empty method. Overwritten by extending classes needing to to extra Javascript work.
+     */
+    public String getCustomJavaScriptDefn(DialogContext dc)
+    {
+        return (super.getCustomJavaScriptDefn(dc) + "field.style = " + getStyle() + ";\n");
+    }
+
 }
