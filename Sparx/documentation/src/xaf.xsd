@@ -228,6 +228,11 @@
 											<xsd:documentation>The name of the table that should be placed into the from clause when the select statement is generated. This should refer to a real table in the database.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
+									<xsd:attribute name="from-expr" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>The complete from clause expression that will be placed into the SQL (automatically generated using table name and alias if not supplied).</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
 									<xsd:attribute name="condition" type="xsd:string" use="optional">
 										<xsd:annotation>
 											<xsd:documentation>Specifies a condition that will automatically be placed into the where clause when the select statement is generated. This should be used if the join is used to connect two tables.</xsd:documentation>
