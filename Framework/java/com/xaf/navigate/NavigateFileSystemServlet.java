@@ -57,7 +57,10 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 
 	public boolean accept(File dir, String name)
 	{
-		return ! excludeEntryNames.contains(name);
+        boolean ret = true;
+        if (excludeEntryNames.contains(name) || name.startsWith(".") || name.startsWith("_"))
+            ret = false;
+		return ret;
 	}
 
 	public String getParentsHtml(HttpServletRequest req, FileSystemContext fsContext)
