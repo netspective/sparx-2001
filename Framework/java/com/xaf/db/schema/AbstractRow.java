@@ -77,6 +77,11 @@ public abstract class AbstractRow implements Row
         return (Column) columnsList.get(index);
     }
 
+    public RowData createRowData()
+    {
+        return new BasicRowData(this);
+    }
+
     public DataContext createDataContext(DialogContext dc, boolean fillFieldValues)
     {
         return new DataContext(this, dc, fillFieldValues);

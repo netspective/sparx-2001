@@ -9,6 +9,7 @@
 package com.xaf.db.schema;
 
 import com.xaf.value.SingleValueSource;
+import com.xaf.value.ValueContext;
 
 public interface Column
 {
@@ -40,14 +41,16 @@ public interface Column
     public String getDataClassName();
     public void setDataClassName(String value);
 
+    public boolean hasValue(RowData rowData);
+    public Object getObjectValue(RowData rowData);
+    public void setValueObject(RowData rowData, Object value);
+    public void setValueSqlExpr(RowData rowData, String expr);
+
     public boolean hasValue(DataContext dc);
     public Object getObjectValue(DataContext dc);
-    public void setValueObject(DataContext dc, Object value);
 
-    public boolean hasDefaultValue(DataContext dc);
-    public boolean isDefaultValueSqlExpr();
-    public Object getDefaultValue(DataContext dc);
-    public void setDefaultValue(SingleValueSource value);
+    public ColumnData getDefaultValue();
+    public void setDefaultValue(ColumnData value);
 
     public boolean isIndexed();
     public boolean isNaturalPrimaryKey();
@@ -55,4 +58,10 @@ public interface Column
     public boolean isRequired();
     public boolean isSequencedPrimaryKey();
     public boolean isUnique();
+
+    public void setIsIndexed(boolean flag);
+    public void setIsNaturalPrimaryKey(boolean flag);
+    public void setIsRequired(boolean flag);
+    public void setIsSequencedPrimaryKey(boolean flag);
+    public void setIsUnique(boolean flag);
 }

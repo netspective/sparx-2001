@@ -21,63 +21,24 @@ import java.util.Iterator;
 
 public class DataContext extends ServletValueContext
 {
-    public static int ROWDATAFLAG_VALUEISSINGLEVALUESRC = 1;
-    public static int ROWDATAFLAG_VALUEISSQLEXPR = ROWDATAFLAG_VALUEISSINGLEVALUESRC * 2;
-
-    private Row row;
-    private int[] flags;
-    private Object[] data;
+    private RowData rowData;
     private DialogContext dialogContext;
 
     public DataContext(Row row, DialogContext dc, boolean fillFieldValues)
 	{
-        this.row = row;
-        this.dialogContext = dc;
+        rowData = row.createRowData();
+        dialogContext = dc;
         initialize(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse());
         if(fillFieldValues) setValuesFromFields();
 	}
 
     public DataContext(Row row, ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response)
 	{
-        this.row = row;
+        rowData = row.createRowData();
         initialize(context, servlet, request, response);
 	}
 
-    public void initialize(ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response)
-    {
-        super.initialize(context, servlet, request, response);
-        data = new Object[row.getColumnsCount()];
-        flags = new int[row.getColumnsCount()];
-    }
-
-    public Row getRow() { return row; }
-
-    public boolean hasValue(Column column) { return data[column.getIndexInRow()] != null; }
-    public boolean valueIsSqlExpr(Column column) { return (flags[column.getIndexInRow()] & ROWDATAFLAG_VALUEISSQLEXPR) != 0; }
-
-    public Object getValue(Column column)
-    {
-        int colIndex = column.getIndexInRow();
-        Object dataItem = data[colIndex];
-        if((flags[colIndex] & ROWDATAFLAG_VALUEISSINGLEVALUESRC) != 0)
-            return dataItem != null ? (((SingleValueSource) dataItem).getObjectValue(this)) : null;
-        else
-            return dataItem;
-    }
-
-    public void setValue(Column column, Object value)
-    {
-        int colIndex = column.getIndexInRow();
-        data[colIndex] = value;
-        if(value instanceof SingleValueSource)
-            flags[colIndex] |= ROWDATAFLAG_VALUEISSINGLEVALUESRC;
-    }
-
-    public void setSqlExprValue(Column column, Object value)
-    {
-        setValue(column, value);
-        flags[column.getIndexInRow()] |= ROWDATAFLAG_VALUEISSQLEXPR;
-    }
+    public RowData getRowData() { return rowData; }
 
     public DialogContext findDialogContext()
     {
@@ -92,6 +53,7 @@ public class DataContext extends ServletValueContext
             return;
 
         Map fieldStates = dc.getFieldStates();
+        Row row = rowData.getRow();
         for(Iterator i = fieldStates.values().iterator(); i.hasNext(); )
         {
             DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) i.next();
@@ -100,7 +62,7 @@ public class DataContext extends ServletValueContext
             {
                 Column column = row.getColumn(fieldName);
                 if(column != null)
-                    column.setValueObject(this, state.value);
+                    column.setValueObject(rowData, state.value);
             }
 
         }
@@ -112,12 +74,13 @@ public class DataContext extends ServletValueContext
         if(dc == null)
             return;
 
+        Row row = rowData.getRow();
         for(int i = 0; i < fields.length; i++)
         {
             String fieldName = fields[i];
             Column column = row.getColumn(fieldName);
             if(column != null)
-                column.setValueObject(this, dc.getValue(fieldName));
+                column.setValueObject(rowData, dc.getValue(fieldName));
         }
     }
 
@@ -127,11 +90,12 @@ public class DataContext extends ServletValueContext
         if(dc == null)
             return;
 
+        Row row = rowData.getRow();
         for(int i = 0; i < fieldNames.length; i++)
         {
             Column column = row.getColumn(columnNames[i]);
             if(column != null)
-                column.setValueObject(this, dc.getValue(fieldNames[i]));
+                column.setValueObject(rowData, dc.getValue(fieldNames[i]));
         }
     }
 }

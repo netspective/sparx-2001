@@ -16,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.sql.Connection;
 
 public interface Row
 {
@@ -29,6 +30,27 @@ public interface Row
     public Column getColumn(int index);
 
     public void finalizeDefn(Schema schema);
+
+    public RowData createRowData();
+
     public DataContext createDataContext(DialogContext dc, boolean fillFieldValues);
     public DataContext createDataContext(ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response);
+
+/*
+    public void initializeRowData(RowData rowData);
+
+    public boolean isRowDataValid(RowData rowData);
+    public boolean isRowDataValidForInsert(RowData rowData);
+    public boolean isRowDataValidForUpdate(RowData rowData);
+    public boolean isRowDataValidForRemove(RowData rowData);
+
+    public boolean allowInsert(Connection conn, RowData rowData);
+    public void insertCompleted(Connection conn, RowData rowData);
+
+    public boolean allowUpdate(Connection conn, RowData rowData);
+    public void updateCompleted(Connection conn, RowData rowData);
+
+    public boolean allowDelete(Connection conn, RowData rowData);
+    public void deleteCompleted(Connection conn, RowData rowData);
+*/
 }
