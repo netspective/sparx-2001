@@ -51,12 +51,16 @@
  */
  
 /**
- * $Id: Schema.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: Schema.java,v 1.2 2002-08-29 03:38:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
 import java.util.Map;
+import java.io.File;
+
+import com.netspective.sparx.xif.dal.xml.ImportException;
+import com.netspective.sparx.xif.dal.xml.ParseContext;
 
 public interface Schema
 {
@@ -68,6 +72,8 @@ public interface Schema
 
     public Table getTable(String name);
 
+    public Table getTableForXmlNode(String nodeName);
+
     public int getTablesCount();
 
     public Column getColumn(String tableName, String tableColumn);
@@ -75,4 +81,6 @@ public interface Schema
     public Map getTablesMap();
 
     public ForeignKey getForeignKey(Column srcColumn, short type, String ref);
+
+    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws ImportException;
 }
