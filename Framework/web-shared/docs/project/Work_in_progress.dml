@@ -24,6 +24,7 @@
 
 		<task>
 			<name>User Interface Management</name>
+            <task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
 			<task><name>Optimize performance of DialogSkin by using Writer instead of String for HTML generation (like in ReportSkin).</name></task>
 			<task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
 			<task><name>Add ability to auto-generate "form bean" java classes from Dialog XML (at runtime).</name></task>
@@ -65,9 +66,10 @@
 
 		<task>
 			<name>Architecture</name>
+			<task><name>XAF applications need to be able to be put into .ear or .jar files and still work (due to the XML files, that's not the case right now).</name></task>
 			<task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
 			<task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of constructing "source" references manually.</name></task>
-			<task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE.</name></task> 
+			<task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE.</name></task>
 			<task><name>Integrate <a href="http://www.servlets.com/cos/index.html">O'Reilly Servlet Package</a> into XAF (for MultiPart parsing), ServletUtils, and ParameterParser.</name></task>
 			<task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
 			<task><name>Add logging of SQL Query Definitions.</name></task>
