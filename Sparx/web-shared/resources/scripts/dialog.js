@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.25 2003-04-21 22:03:00 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.26 2003-04-23 14:45:47 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -977,8 +977,8 @@ function controlOnChange(control, event)
 		var validScan = scanField_changeDisplayValue(field, control);
 		if(! validScan)
 		{
-			window.event.cancelBubble = true;
-			window.event.returnValue = false;
+			event.cancelBubble = true;
+			event.returnValue = false;
 			return false;
 		}
 	}
@@ -1171,33 +1171,10 @@ function TextField_valueChanged(field, control)
 		control.value = control.value.toUpperCase();
 	}
 
-	if (control.value.length > 0)
-	{
-		if (field.validValues)
-		{
-			var valid = false;
-			for (k in field.validValues)
-			{
-				if (field.validValues[k] == control.value)
-					valid = true;
-			}
-			if (valid == false)
-			{
-				field.alertMessage(control, "value '" + control.value + "' is not valid. ");
-				return false;
-			}
-		}
-		if (field.text_format_pattern != null && (typeof field.text_format_pattern != "undefined"))
-		{
-			var test = testText(field, control);
-			if (test == false)
-			{
-				field.alertMessage(control, field.text_format_err_msg);
-				return false;
-			}
-		}
-	}
-	return true;
+	if(control.value == "")
+		return true;
+
+	return TextField_isValid(field, control);
 }
 
 function TextField_onKeyPress(field, control, event)
@@ -1216,6 +1193,7 @@ function TextField_isValid(field, control)
 		field.alertRequired(control);
 		return false;
 	}
+
 	if (control.value.length > 0)
 	{
 		if (field.validValues)
@@ -1228,21 +1206,25 @@ function TextField_isValid(field, control)
 			}
 			if (valid == false)
 			{
-				field.alertMessage(control, control.name + ": Entered field value '" + control.value + "' is not valid. ");
+				field.alertMessage(control, "value '" + control.value + "' is not valid. ");
+				control.value = "";
+				return false;
+			}
+		}
+
+		if (field.text_format_pattern != null && (typeof field.text_format_pattern != "undefined")
+			&& field.text_format_pattern != "")
+		{
+			var test = testText(field, control);
+			if (test == false)
+			{
+				field.alertMessage(control, field.text_format_err_msg);
+				control.value = "";
 				return false;
 			}
 		}
 	}
 
-	if (control.value.length > 0 && field.text_format_pattern != '')
-	{
-		var test = testText(field, control);
-		if (test == false)
-		{
-			field.alertMessage(control, field.text_format_err_msg);
-			return false;
-		}
-	}
 	return true;
 }
 
@@ -1449,7 +1431,7 @@ function SelectField_isValid(field, control)
 			field.alertRequired(control);
 			return false;
 		}
-		alert(field.name + " " + control.value.length);
+
 		if (control.value.length > 0 && field.choicesCaption)
 		{
 			var valid = -1;
@@ -1462,6 +1444,7 @@ function SelectField_isValid(field, control)
 			if (valid < 0)
 			{
 				field.alertMessage(control, "Entered field value '" + control.value + "' is not valid. ");
+				control.value = "";
 				return false;
 			}
 			else
@@ -1469,7 +1452,7 @@ function SelectField_isValid(field, control)
 				adjacentArea = field.getAdjacentArea(activeDialog);
 				if(adjacentArea != null)
 				{
-					alert("Adjacent set to " + field.choicesValue[valid]);
+					// alert("Adjacent set to " + field.choicesValue[valid]);
 					adjacentArea.innerHTML = field.choicesValue[valid];
 				}
 				return true;
@@ -1552,8 +1535,8 @@ function SelectField_isValid(field, control)
 	return true;
 }
 
-addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, null, null, TextField_onFocus, TextField_valueChanged, null, null);
-addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, null, SelectField_isValid, null, null, null, null);
+addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, TextField_isValid, null, TextField_onFocus, TextField_valueChanged, null, null);
+addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, null, null, null, SelectField_isValid, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.netspective.sparx.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
 addFieldType("com.netspective.sparx.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, null, null, DateField_valueChanged, DateField_onKeyPress, null);
@@ -2115,6 +2098,22 @@ function documentOnKeyUp()
 				field.scanStopCode.length && field.numCharsEntered >= field.autoBlurLength -1)
 			{
 				field.numCharsEntered = 0;
+
+				// --------------------------------------
+				if (field.scannable == 'yes')
+				{
+					field.isScanned = false;
+					var validScan = scanField_changeDisplayValue(field, control);
+					if(! validScan)
+					{
+						control.value = "";
+						event.cancelBubble = true;
+						event.returnValue = false;
+						return false;
+					}
+				}
+				// --------------------------------------
+
 				field.focusNext(activeDialog);
 			}
 		}
