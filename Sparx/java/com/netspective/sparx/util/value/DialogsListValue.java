@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogsListValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: DialogsListValue.java,v 1.2 2002-12-23 04:45:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -96,7 +96,7 @@ public class DialogsListValue extends ListSource
 
         DialogManager dialogMgr = DialogManagerFactory.getManager(vc.getServletContext());
 
-        Map dialogs = dialogMgr.getDialogs();
+        Map dialogs = dialogMgr.getDialogs(vc.getServletContext(), null);
         for(Iterator i = dialogs.keySet().iterator(); i.hasNext();)
         {
             String dialogName = (String) i.next();
