@@ -20,6 +20,8 @@ import java.io.*;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -81,16 +83,41 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 		Document requirementsDoc = reqManager.getDocument();
 		NodeList requirements = requirementsDoc.getElementsByTagName("requirement");
 
+		Date now = new Date();
+		SimpleDateFormat format1 = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss");
+		SimpleDateFormat format2 = new SimpleDateFormat(".MM_dd_yyyy_HH_mm_ss");
+
 		String outFileName = dc.getValue(outputFileField);
-		FileWriter fw = new FileWriter(outFileName);
-		StreamResult streamResult = new StreamResult(fw);
+		String tmpFileName = outFileName + format2.format(now);
+		File tmpFile = new File(tmpFileName);
+
+		FileWriter tmpWriter = new FileWriter(tmpFile);
+		StreamResult streamResult = new StreamResult(tmpWriter);
 
 		transformNavigations(context, requirements, streamResult);
 		transformStatements(context, requirements, streamResult);
 		transformQueryDefs(context, requirements, streamResult);
 		transformDialogs(context, requirements, streamResult);
 
-		writer.write("<h4>Generated <b style='color:darkred'>'" + outFileName + "'</b></h4>");
+		tmpWriter.close();
+
+		BufferedReader reader = new BufferedReader(new FileReader(tmpFileName));
+		BufferedWriter bWriter = new BufferedWriter(new FileWriter(outFileName));
+
+		String line = null;
+		while((line = reader.readLine()) != null)
+		{
+			if(line.equals("&nbsp;") || line.length() == 0) continue;
+			bWriter.write(line);
+			bWriter.newLine();
+		}
+
+		reader.close();
+		bWriter.close();
+		tmpFile.delete();
+
+		writer.write("<h4 style='font-family:Verdana; font-size:9pt'>Generated <b style='color:darkred'>'"
+			+ outFileName + "'</b><br>@ " + format1.format(now) + "</h4>");
 	}
 
 	public void transformDialogs(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException
