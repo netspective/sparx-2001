@@ -6,7 +6,9 @@
 <xsl:variable name="dbms-id">hsqldb</xsl:variable>
 <xsl:variable name="generate-constraints">no</xsl:variable>
 <xsl:variable name="generate-seq">no</xsl:variable>
+<!--<xsl:variable name="generate-drop-table">yes</xsl:variable>-->
 <xsl:variable name="system-date-function">curdate()</xsl:variable>
+
 
 <xsl:template match="schema">
 	<xsl:for-each select="table">
@@ -90,5 +92,20 @@
 
 	<xsl:text> </xsl:text>
 </xsl:template>
+<xsl:template name="column-sql-modifiers">
+	<xsl:param name="table"/>
+	<xsl:param name="column"/>
 
+	<xsl:if test="$generate-constraints != 'yes'">
+		<xsl:if test="@primarykey='yes' and @type='autoinc'">
+			<xsl:text> IDENTITY PRIMARY KEY</xsl:text>
+		</xsl:if>
+		<xsl:if test="@primarykey='yes' and @type='guid32'">
+			<xsl:text>  PRIMARY KEY</xsl:text>
+		</xsl:if>
+		<xsl:if test="@required='yes'">
+			<xsl:text> NOT NULL</xsl:text>
+		</xsl:if>
+	</xsl:if>
+</xsl:template>
 </xsl:stylesheet>
