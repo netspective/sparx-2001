@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: RecordViewerReportSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
+ * $Id: RecordViewerReportSkin.java,v 1.3 2003-03-21 05:51:04 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -82,7 +82,7 @@ public class RecordViewerReportSkin extends com.netspective.sparx.xaf.theme.Html
     {
         ArrayList items = frame.getItems();
         SingleValueSource addRecordUrl = frame.getRecordAddUrlFormat();
-        if(addRecordUrl != null || items.size() > 0)
+        if(addRecordUrl != null || (items!= null && items.size() > 0) )
         {
             if (imgPath == null)
             {
