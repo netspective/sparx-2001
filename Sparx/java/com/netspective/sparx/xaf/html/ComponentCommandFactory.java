@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ComponentCommandFactory.java,v 1.6 2003-04-07 15:27:33 aye.thu Exp $
+ * $Id: ComponentCommandFactory.java,v 1.7 2003-05-08 18:22:08 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -225,8 +225,46 @@ public class ComponentCommandFactory
             return false;
         }
     }
+    /**
+     *
+     * @param context
+     * @param servlet
+     * @param req
+     * @param resp
+     * @param writer
+     * @return
+     * @throws ComponentCommandException
+     * @throws IOException
+     */
+    public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp, Writer writer) throws ComponentCommandException, IOException
+   {
+       String pageCmdReqParamValue = req.getParameter(ComponentCommand.PAGE_COMMAND_REQUEST_PARAM_NAME);
+       if(pageCmdReqParamValue == null)
+           return false;
 
-/**
+       String pageCmd = "unknown";
+       String pageCmdParam = null;
+       int cmdDelimPos = pageCmdReqParamValue.indexOf(CMDNAME_AND_PARAM_DELIM);
+       if(cmdDelimPos != -1)
+       {
+           pageCmd = pageCmdReqParamValue.substring(0, cmdDelimPos);
+           pageCmdParam = pageCmdReqParamValue.substring(cmdDelimPos+1);
+       }
+
+       ComponentCommand command = ComponentCommandFactory.getCommand(pageCmd, pageCmdParam);
+       if(command != null)
+       {
+           command.handleCommand(new ServletValueContext(context, servlet, req, resp), writer, false);
+           return true;
+       }
+       else
+       {
+           resp.getWriter().write("Page command '" + pageCmd + "' not recognized.");
+           return false;
+       }
+   }
+
+    /**
      * Process the page context for component commands
      * @param pageContext
      * @param writer
