@@ -160,6 +160,7 @@ public class BookInfo   extends Dialog
 			writer.write (dml.toString() + "<br>");
 
 			status = bkInfoTbl.insert(cc, bkInfoRow);
+			cc.commitTransaction();
 		} catch (NamingException ne) {
 			ne.printStackTrace();
 		} catch (SQLException se) {

@@ -9,5 +9,13 @@
 				<column heading="" align="center" url="abc" xoutput="&lt;a href=&quot;?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
 			</report>
 		</statement>
+
+		<statement name="sel_all_books">
+			select * from Book_Info
+			
+			<report>
+				<column heading=" " align="center" output="&lt;a href=&quot;?data_cmd=edit&amp;bookid=${1}&quot;&gt;edit&lt;/a&gt;"/>
+			</report>
+		</statement>
 	</sql-statements>
 </xaf>
