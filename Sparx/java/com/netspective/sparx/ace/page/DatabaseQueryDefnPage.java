@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: DatabaseQueryDefnPage.java,v 1.4 2002-12-26 19:21:40 shahid.shah Exp $
+ * $Id: DatabaseQueryDefnPage.java,v 1.5 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -65,14 +66,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
-import com.netspective.sparx.xaf.page.VirtualPath;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QuerySelectDialog;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseQueryDefnPage extends AceServletPage
 {
@@ -86,47 +88,47 @@ public class DatabaseQueryDefnPage extends AceServletPage
         return "sql_query_defn.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "SQL Query Definitions";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "SQL Query Definitions";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        String testWhat = getTestCommandItem(pc);
+        String testWhat = getTestCommandItem(nc);
         if(testWhat != null)
         {
-            VirtualPath.FindResults results = pc.getActivePath();
+            NavigationPath.FindResults results = nc.getActivePathFindResults();
             String[] testParams = results.unmatchedPathItems();
             // note -- testParams[0] will be the word "test"
             //         testParams[1] will be "test what"
-            handleUnitTestPageBegin(pc, "Dynamic Query Unit Test");
+            handleUnitTestPageBegin(writer, nc, "Dynamic Query Unit Test");
             if(testWhat.equals("query-defn"))
-                handleTestQueryDefn(pc, testParams[2]);
+                handleTestQueryDefn(nc, testParams[2]);
             else if(testWhat.equals("query-defn-dlg"))
-                handleTestQueryDefnSelectDialog(pc, testParams[2], testParams[3]);
-            handleUnitTestPageEnd(pc);
+                handleTestQueryDefnSelectDialog(nc, testParams[2], testParams[3]);
+            handleUnitTestPageEnd(writer, nc);
             return;
         }
 
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
         manager.updateExecutionStatistics();
         manager.addMetaInfoOptions();
-        transform(pc, manager.getDocument(pc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "query-defn-browser-xsl");
+        transform(nc, manager.getDocument(nc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "query-defn-browser-xsl");
     }
 
-    public void handleTestQueryDefn(PageContext pc, String queryDefnId) throws ServletException, IOException
+    public void handleTestQueryDefn(NavigationPathContext nc, String queryDefnId) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
 
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
 
         out.write("<h1>Query Definition: " + queryDefnId + "</h1>");
 
@@ -138,20 +140,20 @@ public class DatabaseQueryDefnPage extends AceServletPage
         }
 
         QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
-        dialog.renderHtml(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
     }
 
-    public void handleTestQueryDefnSelectDialog(PageContext pc, String queryDefnId, String dialogId) throws ServletException, IOException
+    public void handleTestQueryDefnSelectDialog(NavigationPathContext nc, String queryDefnId, String dialogId) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
 
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
 
         out.write("<h1>Query Definition: " + queryDefnId + ", Dialog: " + dialogId + "</h1>");
 
         QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
         QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogId);
-        dialog.renderHtml(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
     }
 }

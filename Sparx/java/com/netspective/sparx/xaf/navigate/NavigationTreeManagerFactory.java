@@ -51,16 +51,17 @@
  */
 
 /**
- * $Id: NavigationTreeManagerFactory.java,v 1.1 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationTreeManagerFactory.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
  */
 
-package com.netspective.sparx.xaf.page;
+package com.netspective.sparx.xaf.navigate;
 
 import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
 
 import javax.servlet.ServletContext;
 import java.util.HashMap;
@@ -119,7 +120,7 @@ public class NavigationTreeManagerFactory implements Factory
      * @param context ServletContext for web application requesting the navigation tree
      * @return NavigationTree
      */
-    public static NavigationTree getNavigationTree(ServletContext context)
+    public static NavigationPath getNavigationTree(ServletContext context)
     {
         NavigationTreeManager manager = getManager(context);
         return manager != null ? manager.getTree(null) : null;

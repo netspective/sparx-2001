@@ -51,77 +51,99 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.2 2002-12-27 00:23:56 shahid.shah Exp $
+ * $Id: NavigationPage.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
  */
 
-package com.netspective.sparx.xaf.page;
+package com.netspective.sparx.xaf.navigate;
 
-import com.netspective.sparx.util.xml.XmlSource;
-import com.netspective.sparx.util.ClassPath;
-import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.html.ComponentCommandFactory;
+import com.netspective.sparx.xaf.page.PageControllerServlet;
+import com.netspective.sparx.util.value.ValueContext;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
+import javax.servlet.ServletException;
 
-public class NavigationTreeManager extends XmlSource
+public class NavigationPage extends NavigationPath
 {
-    public static final String NAME_DEFAULT = "default";
-    private Map structures = new HashMap();
-
-    public NavigationTreeManager(File file)
+    public String getPageIcon()
     {
-        loadDocument(file);
+        return null;
     }
 
-    public NavigationTree getTree(String name)
+    public String getCaption(ValueContext vc)
     {
-        reload();
-        return (NavigationTree) structures.get(name == null ? NAME_DEFAULT : name);
+        return getName();
     }
 
-    public void catalogNodes()
+    public String getHeading(ValueContext vc)
     {
-        structures.clear();
+        String result = getCaption(vc);
+        if(result == null)
+            return getName();
+        else
+            return result;
+    }
 
-        if(xmlDoc == null)
-            return;
+    public String getTitle(ValueContext vc)
+    {
+        String result = getHeading(vc);
+        if(result == null)
+            return getCaption(vc);
+        else
+            return result;
+    }
 
-        NodeList children = xmlDoc.getDocumentElement().getChildNodes();
-        for(int c = 0; c < children.getLength(); c++)
+    public void registerPage(PageControllerServlet servlet, NavigationPath rootPath)
+    {
+    }
+
+    public boolean requireLogin(NavigationPathContext nc)
+    {
+        return true;
+    }
+
+    public boolean canHandlePage(NavigationPathContext nc)
+    {
+        return true;
+    }
+
+    public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    {
+    }
+
+    public void handlePageHeader(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    {
+    }
+
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    {
+        writer.write("Path '"+ nc.getActivePathFindResults().getSearchedForPath() +"' is a " + this.getClass().getName() + " class but has no body.");
+    }
+
+    public void handlePageFooter(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    {
+    }
+
+    public void handlePage(Writer writer, NavigationPathContext nc) throws ServletException
+    {
+        try
         {
-            Node child = children.item(c);
-            if(child.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-
-            Element childElem = (Element) child;
-            if(childElem.getNodeName().equals("structure"))
-            {
-                setAttrValueDefault(childElem, "name", NAME_DEFAULT);
-                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationTree.class, true);
-                NavigationTree tree = (NavigationTree) instanceGen.getInstance();
-                tree.importFromXml(childElem, tree);
-                structures.put(childElem.getAttribute("name"), tree);
-            }
-            else if(childElem.getNodeName().equals("register-navigation-skin"))
-            {
-                String name = childElem.getAttribute("name");
-                String className = childElem.getAttribute("class");
-                try
-                {
-                    SkinFactory.addNavigationSkin(name, className);
-                }
-                catch (Exception e)
-                {
-                    addError("Error registering skin '"+ name +"': "+ e.toString());
-                }
-            }
+            handlePageMetaData(writer, nc);
+            handlePageHeader(writer, nc);
+            if(!ComponentCommandFactory.handleDefaultBodyItem(nc.getServletContext(), nc.getServlet(), nc.getRequest(), nc.getResponse()))
+                handlePageBody(writer, nc);
+            handlePageFooter(writer, nc);
         }
-
-        addMetaInformation();
+        catch (ComponentCommandException e)
+        {
+            throw new ServletException(e);
+        }
+        catch(IOException e)
+        {
+            throw new ServletException(e);
+        }
     }
 }

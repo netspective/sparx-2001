@@ -51,31 +51,30 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.4 2002-12-23 04:27:22 shahid.shah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.5 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
-import com.netspective.sparx.xaf.page.VirtualPath;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xif.SchemaDocument;
 import com.netspective.sparx.xif.dal.Schema;
 import com.netspective.sparx.xif.dal.Table;
 import com.netspective.sparx.util.ClassPath;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSchemaDocPage extends AceServletPage
 {
@@ -89,14 +88,14 @@ public class DatabaseSchemaDocPage extends AceServletPage
         return "schema.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "SchemaDoc (XML)";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
-        VirtualPath.FindResults results = pc.getActivePath();
+        NavigationPath.FindResults results = ((NavigationPathContext) vc).getActivePathFindResults();
         String[] unmatchedItems = results.unmatchedPathItems();
         if(unmatchedItems != null && unmatchedItems[0].equals("query"))
         {
@@ -109,11 +108,11 @@ public class DatabaseSchemaDocPage extends AceServletPage
             return "Database Schema (XML Source)";
     }
 
-    public void handleTableQueryDefn(PageContext pc, String[] params) throws IOException
+    public void handleTableQueryDefn(NavigationPathContext nc, String[] params) throws IOException
     {
-        SchemaDocument schemaDoc = SchemaDocFactory.getDoc(pc.getServletContext());
+        SchemaDocument schemaDoc = SchemaDocFactory.getDoc(nc.getServletContext());
 
-        Writer out = pc.getResponse().getWriter();
+        Writer out = nc.getResponse().getWriter();
         if(params.length < 2)
         {
             out.write("<p>Table name parameters is required.");
@@ -146,21 +145,21 @@ public class DatabaseSchemaDocPage extends AceServletPage
         out.write("<p><center>");
         QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
         dialog.renderHtml(
-            pc.getServletContext(), pc.getServlet(), (HttpServletRequest) pc.getRequest(),
-            (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+            nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(),
+            (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
         out.write("</center>");
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        SchemaDocument schema = SchemaDocFactory.getDoc(pc.getServletContext());
+        SchemaDocument schema = SchemaDocFactory.getDoc(nc.getServletContext());
         schema.addMetaInfoOptions();
 
-        VirtualPath.FindResults results = pc.getActivePath();
+        NavigationPath.FindResults results = nc.getActivePathFindResults();
         String[] unmatchedItems = results.unmatchedPathItems();
         if(unmatchedItems != null && unmatchedItems[0].equals("query"))
-            handleTableQueryDefn(pc, unmatchedItems);
+            handleTableQueryDefn(nc, unmatchedItems);
         else
-            transform(pc, schema.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "schema-browser-xsl");
+            transform(nc, schema.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "schema-browser-xsl");
     }
 }

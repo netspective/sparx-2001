@@ -51,19 +51,21 @@
  */
 
 /**
- * $Id: AppNavigationPage.java,v 1.1 2002-12-26 19:20:16 shahid.shah Exp $
+ * $Id: AppNavigationPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
-import com.netspective.sparx.xaf.page.PageContext;
-import com.netspective.sparx.xaf.page.NavigationTreeManagerFactory;
-import com.netspective.sparx.xaf.page.NavigationTreeManager;
+import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
+import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.ace.AceServletPage;
+import com.netspective.sparx.util.value.ValueContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.io.Writer;
 
 public class AppNavigationPage extends AceServletPage
 {
@@ -77,22 +79,22 @@ public class AppNavigationPage extends AceServletPage
         return "dialogs.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Navigation";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Application Navigation";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         NavigationTreeManager manager = NavigationTreeManagerFactory.getManager(context);
         manager.addMetaInfoOptions();
 
-        transform(pc, manager.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "navigation-browser-xsl");
+        transform(nc, manager.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "navigation-browser-xsl");
     }
 }

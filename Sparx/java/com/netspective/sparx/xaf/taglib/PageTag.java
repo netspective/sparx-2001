@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.6 2002-12-27 00:30:17 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.7 2002-12-27 17:16:05 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -75,7 +75,10 @@ import com.netspective.sparx.xaf.security.AccessControlList;
 import com.netspective.sparx.xaf.security.AccessControlListFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.page.*;
+import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.config.Configuration;
@@ -88,22 +91,22 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 {
     public static final String ATTRNAME_SKIPPEDBODY = "skipped-body";
     public static final String ATTRVALUE_YES = "yes";
+    public static final String ATTRVALUE_NO = "no";
     static public final String PAGE_SECURITY_MESSAGE_ATTRNAME = "security-message";
     static public final String PAGE_DEFAULT_LOGIN_DIALOG_CLASS = "com.netspective.sparx.xaf.security.LoginDialog";
 
     static private LoginDialog loginDialog;
-    static private NavigationSkin navSkin;
+    static private NavigationPathSkin navSkin;
 
     private String title;
     private String heading;
     private String[] permissions;
     private boolean popup;
-    private boolean ignoreLogin;
+    private boolean secure = true;
     private long startTime;
     private String navSkinName;
     private String navId;
-    private NavigationContext nc;
-    private NavigationPage page;
+    private NavigationPathContext nc;
 
     public void release()
     {
@@ -112,9 +115,8 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         heading = null;
         permissions = null;
         popup = false;
-        ignoreLogin= false;
+        secure = true;
         nc = null;
-        page = null;
         navSkinName = null;
         navId = null;
     }
@@ -134,9 +136,9 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         return popup;
     }
 
-    public final boolean ignoreLogin()
+    public final boolean secure()
     {
-        return ignoreLogin;
+        return secure;
     }
 
     public void setTitle(String value)
@@ -159,14 +161,14 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         setPopup(value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false));
     }
 
-    public void setIgnoreLogin(boolean value)
+    public void setSecure(boolean value)
     {
-        ignoreLogin = value;
+        secure = value;
     }
 
-    public void setIgnoreLogin(String value)
+    public void setSecure(String value)
     {
-        setIgnoreLogin(value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false));
+        setSecure(value == null ? true : (value.equals(ATTRVALUE_NO) ? false : true));
     }
 
     public void setNavSkin(String value)
@@ -318,11 +320,6 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         }
     }
 
-    public NavigationPage createDefaultPage()
-    {
-        return null;
-    }
-
     public int doStartTag() throws javax.servlet.jsp.JspException
     {
         doPageBegin();
@@ -333,22 +330,23 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         HttpServletResponse resp = (HttpServletResponse) pageContext.getResponse();
         ServletContext servletContext = pageContext.getServletContext();
 
-        try {
-            if (!ignoreLogin && doLogin(servletContext, (Servlet) pageContext.getPage(), req, resp))
+        try
+        {
+            if (secure && doLogin(servletContext, (Servlet) pageContext.getPage(), req, resp))
             {
                 req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
                 return SKIP_BODY;
             }
 
-            if (!ignoreLogin && !hasPermission())
+            if (secure && !hasPermission())
             {
                 req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
                 out.print(req.getAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME));
                 return SKIP_BODY;
             }
 
-            NavigationTree navTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
-            if(navTree != null)
+            NavigationPath appNavigationTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
+            if(appNavigationTree != null)
             {
                 if(navSkin == null)
                 {
@@ -364,8 +362,8 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 }
 
                 String navId = req.getPathInfo();
-                nc = navTree.createContext(pageContext, navId == null ? this.navId : navId, navSkin, popup);
-                navSkin.renderNavigation(out, navTree, nc);
+                nc = navSkin.createContext(pageContext, appNavigationTree, navId == null ? this.navId : navId, popup);
+                navSkin.renderNavigationBeforeBody(out, nc);
             }
             else
                 out.print("NavigationTree navTree is null.");
@@ -386,11 +384,11 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public int doEndTag() throws javax.servlet.jsp.JspException
     {
         HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
-        if(req.getAttribute(ATTRNAME_SKIPPEDBODY) == null && page != null)
+        if(req.getAttribute(ATTRNAME_SKIPPEDBODY) == null)
         {
             try
             {
-                page.handlePageAfterBody(nc);
+                navSkin.renderNavigationAfterBody(pageContext.getOut(), nc);
             }
             catch (Exception e)
             {

@@ -51,12 +51,13 @@
  */
  
 /**
- * $Id: AppFactoryPage.java,v 1.2 2002-12-26 19:20:36 shahid.shah Exp $
+ * $Id: AppFactoryPage.java,v 1.3 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
@@ -67,14 +68,15 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xaf.form.DialogFieldFactory;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.report.ColumnDataCalculatorFactory;
 import com.netspective.sparx.xaf.report.ReportColumnFactory;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.querydefn.SqlComparisonFactory;
 import com.netspective.sparx.xaf.task.TaskFactory;
 import com.netspective.sparx.xaf.html.ComponentCommandFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class AppFactoryPage extends AceServletPage
 {
@@ -113,17 +115,17 @@ public class AppFactoryPage extends AceServletPage
         return "factories.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return caption == null ? "Factories" : caption;
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
-        return getCaption(pc);
+        return getCaption(vc);
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
         Document doc = null;
         try
@@ -171,6 +173,6 @@ public class AppFactoryPage extends AceServletPage
                 ComponentCommandFactory.createCatalog(rootElem);
         }
 
-        transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
+        transform(nc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
     }
 }

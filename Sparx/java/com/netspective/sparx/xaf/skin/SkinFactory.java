@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.7 2002-12-27 00:30:16 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.8 2002-12-27 17:16:05 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -66,7 +66,7 @@ import org.w3c.dom.Element;
 import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.report.ReportSkin;
-import com.netspective.sparx.xaf.page.NavigationSkin;
+import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
 
 public class SkinFactory implements Factory
 {
@@ -146,7 +146,7 @@ public class SkinFactory implements Factory
         return getDialogSkin("default");
     }
 
-    public static void addNavigationSkin(String id, NavigationSkin skin)
+    public static void addNavigationSkin(String id, NavigationPathSkin skin)
     {
         navigationSkins.put(id, skin);
     }
@@ -154,15 +154,15 @@ public class SkinFactory implements Factory
     public static void addNavigationSkin(String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         Class skinClass = Class.forName(className);
-        addNavigationSkin(id, (NavigationSkin) skinClass.newInstance());
+        addNavigationSkin(id, (NavigationPathSkin) skinClass.newInstance());
     }
 
-    public static NavigationSkin getNavigationSkin(String id)
+    public static NavigationPathSkin getNavigationSkin(String id)
     {
-        return (NavigationSkin) navigationSkins.get(id);
+        return (NavigationPathSkin) navigationSkins.get(id);
     }
 
-    public static NavigationSkin getNavigationSkin()
+    public static NavigationPathSkin getNavigationSkin()
     {
         return getNavigationSkin("default");
     }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.9 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.10 2002-12-27 17:16:05 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -59,6 +59,7 @@ package com.netspective.sparx.xaf.page;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -82,6 +83,8 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -127,7 +130,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private String logoutParamName;
 
     private String rediscoverParamName;
-    private VirtualPath pagesPath = new VirtualPath();
+    private NavigationPath pagesPath;
 
     protected AppServerLogger debugLog;
     protected AppServerLogger monitorLog;
@@ -165,7 +168,12 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         return DEFAULT_CONTENT_TYPE;
     }
 
-    public final VirtualPath getPagesPath()
+    public void setPagesPath(NavigationPath pagesPath)
+    {
+        this.pagesPath = pagesPath;
+    }
+
+    public final NavigationPath getPagesPath()
     {
         return pagesPath;
     }
@@ -324,12 +332,12 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
             for(Iterator i = tasks.iterator(); i.hasNext();)
             {
                 Class cls = (Class) i.next();
-                if(!cls.isInterface() && ServletPage.class.isAssignableFrom(cls))
+                if(!cls.isInterface() && com.netspective.sparx.xaf.navigate.NavigationPage.class.isAssignableFrom(cls))
                 {
                     sc.log("[discover] found ServletPage " + cls.getName());
                     try
                     {
-                        ServletPage page = (ServletPage) cls.newInstance();
+                        com.netspective.sparx.xaf.navigate.NavigationPage page = (com.netspective.sparx.xaf.navigate.NavigationPage) cls.newInstance();
                         page.registerPage(this, pagesPath);
                     }
                     catch(InstantiationException e)
@@ -438,39 +446,42 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 
         resp.setContentType(getDefaultContentType());
 
-        PageContext pc = new PageContext(this, req, resp);
-        VirtualPath.FindResults activePathResults = pc.getActivePath();
-        VirtualPath activePath = activePathResults.getMatchedPath();
-        ServletPage page = null;
+        NavigationPathContext nc = new NavigationPathContext(pagesPath, getServletContext(), this, req, resp, getActivePathToFind(req));
+        NavigationPath.FindResults activePathResults = nc.getActivePathFindResults();
+        NavigationPath activePath = activePathResults.getMatchedPath();
+        Writer writer = resp.getWriter();
+
         if(activePath != null)
         {
-            page = activePath.getPage();
-            if(page == null)
+            if(activePath instanceof com.netspective.sparx.xaf.navigate.NavigationPage)
             {
-                resp.getWriter().print("Found a path object for '" + activePath.getAbsolutePath() + "' but could not find a ServletPage.");
-                org.apache.log4j.NDC.pop();
-                return;
-            }
-
-            if(page.requireLogin(pc))
-            {
-                if(doLogin(req, resp))
+                com.netspective.sparx.xaf.navigate.NavigationPage activePage = (com.netspective.sparx.xaf.navigate.NavigationPage) activePath;
+                if(activePage.requireLogin(nc))
                 {
-                    org.apache.log4j.NDC.pop();
-                    return;
+                    if(doLogin(req, resp))
+                    {
+                        org.apache.log4j.NDC.pop();
+                        return;
+                    }
                 }
-            }
 
-            page.handlePage(pc);
+                activePage.handlePage(writer, nc);
+            }
+            else
+            {
+                resp.getWriter().print("Path '"+ activePathResults.getSearchedForPath() +"' is a " + activePath.getClass().getName() +" -- should be a com.netspective.sparx.xaf.navigate.NavigationPage");
+                if(ConfigurationManagerFactory.isDevelopmentEnvironment(getServletContext()))
+                    resp.getWriter().print(pagesPath.getDebugHtml(nc));
+            }
         }
         else
         {
             resp.getWriter().print("Unable to find a ServletPage to match this URL path. ("+ activePathResults.getSearchedForPath() +")");
             if(ConfigurationManagerFactory.isDevelopmentEnvironment(getServletContext()))
-                resp.getWriter().print(pagesPath.getDebugHtml(pc));
+                resp.getWriter().print(pagesPath.getDebugHtml(nc));
         }
 
-        LogManager.recordAccess(req, monitorLog, page != null ? page.getClass().getName() : this.getClass().getName(), req.getRequestURI(), startTime);
+        LogManager.recordAccess(req, monitorLog, activePath != null ? activePath.getClass().getName() : this.getClass().getName(), req.getRequestURI(), startTime);
         org.apache.log4j.NDC.pop();
     }
 

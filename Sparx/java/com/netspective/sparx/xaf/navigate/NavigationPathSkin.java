@@ -51,71 +51,40 @@
  */
 
 /**
- * $Id: NavigationIdUrlValue.java,v 1.2 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationPathSkin.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
  */
 
-package com.netspective.sparx.util.value;
+package com.netspective.sparx.xaf.navigate;
 
-import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
-import com.netspective.sparx.xaf.page.NavigationTree;
-import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
+import javax.servlet.jsp.PageContext;
+import java.io.Writer;
+import java.io.IOException;
 
-public class NavigationIdUrlValue extends ValueSource
+public interface NavigationPathSkin
 {
-    private String source;
+    /**
+     * Create a context that can be used to render this navigation skin.
+     * @param jspPageContext The JSP page that will be rendering the navigation skin.
+     * @param navTreeId The active page that will be rendered.
+     * @param popup True if this is a popup window
+     * @return NavigationContext
+     */
+    public NavigationPathContext createContext(PageContext jspPageContext, NavigationPath tree, String navTreeId, boolean popup);
 
-    public NavigationIdUrlValue()
-    {
-        super();
-    }
+    /**
+     * Render all the navigation prior to the body (the metadata, masthead, headings, etc)
+     * @param writer The output writer
+     * @param nc The current navigation context
+     * @throws java.io.IOException
+     */
+    public void renderNavigationBeforeBody(Writer writer, NavigationPathContext nc) throws IOException;
 
-    public SingleValueSource.Documentation getDocumentation()
-    {
-        return new SingleValueSource.Documentation(
-                "Provides access to the URL defined in a NavigationTree (WEB-INF/ui/structure.xml). If " +
-                "no source-name is provided the navigation-id requested is read from the default NavigationTreeManager " +
-                "of the default configuration file. If a source-name is provided, then the property-name is read from the " +
-                "NavigationTreeManager named source-name in the default configuration file.",
-                new String[]{"navigation-id", "source-name/navigation-id"}
-        );
-    }
+    /**
+     * Render all the navigation after to the body (the footer)
+     * @param writer The output writer
+     * @param nc The current navigation context
+     * @throws java.io.IOException
+     */
+    public void renderNavigationAfterBody(Writer writer, NavigationPathContext nc) throws IOException;
 
-    public void initializeSource(String srcParams)
-    {
-        int delimPos = srcParams.indexOf('/');
-        if(delimPos >= 0)
-        {
-            source = srcParams.substring(0, delimPos);
-            valueKey = srcParams.substring(delimPos + 1);
-        }
-        else
-            valueKey = srcParams;
-    }
-
-    public String getValue(ValueContext vc)
-    {
-        NavigationPath navTree = null;
-        if(source == null)
-        {
-            navTree = NavigationTreeManagerFactory.getNavigationTree(vc.getServletContext());
-            if(navTree == null)
-                return "No default NavigationTree found in " + getId();
-        }
-        else
-        {
-            NavigationTreeManager manager = NavigationTreeManagerFactory.getManager(vc.getServletContext());
-            if(manager == null)
-                return "No NavigationTreeManager found in " + getId();
-            navTree = manager.getTree(source);
-            if(navTree == null)
-                return "No '" + source + "' Configuration found in " + getId();
-        }
-
-        NavigationTree result = (NavigationTree) navTree.getAbsolutePathsMap().get(valueKey);
-        if(result != null)
-            return result.getUrl(vc);
-        else
-            return "Navigation id '"+ valueKey +"' not found.";
-    }
 }

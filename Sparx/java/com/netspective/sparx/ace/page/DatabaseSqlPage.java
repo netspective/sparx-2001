@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.8 2002-12-26 19:21:40 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.9 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -59,6 +59,7 @@ package com.netspective.sparx.ace.page;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -68,7 +69,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.sql.StatementManager;
@@ -78,6 +78,7 @@ import com.netspective.sparx.xaf.task.sql.StatementTask;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSqlPage extends AceServletPage
@@ -92,12 +93,12 @@ public class DatabaseSqlPage extends AceServletPage
         return "sql.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "SQL Statements";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "SQL Statements";
     }
@@ -107,47 +108,47 @@ public class DatabaseSqlPage extends AceServletPage
         return "yes".equals(vc.getRequest().getParameter("ui"));
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        String testItem = getTestCommandItem(pc);
+        String testItem = getTestCommandItem(nc);
         if(testItem != null)
         {
-            handleUnitTestPageBegin(pc, "Static SQL Unit Test");
-            if (useDialogParams(pc))
-                handleTestStatementWithUI(pc, testItem);
+            handleUnitTestPageBegin(writer, nc, "Static SQL Unit Test");
+            if (useDialogParams(nc))
+                handleTestStatementWithUI(nc, testItem);
             else
-                handleTestStatementNoUI(pc, testItem);
-            handleUnitTestPageEnd(pc);
+                handleTestStatementNoUI(nc, testItem);
+            handleUnitTestPageEnd(writer, nc);
         }
         else
         {
-            ServletContext context = pc.getServletContext();
+            ServletContext context = nc.getServletContext();
             StatementManager manager = StatementManagerFactory.getManager(context);
             manager.updateExecutionStatistics();
             manager.addMetaInfoOptions();
-            transform(pc, manager.getDocument(pc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
+            transform(nc, manager.getDocument(nc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
         }
     }
 
-    public void handleTestStatementWithUI(PageContext pc, String stmtId) throws IOException
+    public void handleTestStatementWithUI(NavigationPathContext nc, String stmtId) throws IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
 
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
 
-        StatementInfo si = manager.getStatement(pc.getServletContext(), null, stmtId);
+        StatementInfo si = manager.getStatement(nc.getServletContext(), null, stmtId);
         if(si != null)
         {
             out.write("<h1>SQL Unit Test: " + stmtId + "</h1>");
             StatementDialog dialog = si.getDialog();
             if(dialog != null)
             {
-                DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+                DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
                 dialog.prepareContext(dc);
                 dialog.renderHtml(out, dc, true);
                 out.write("<p>");
-                out.write(si.getDebugHtml(pc, false, false, null));
+                out.write(si.getDebugHtml(nc, false, false, null));
             }
             else
                 out.write("Statement '"+ stmtId +"' produced a NULL dialog.");
@@ -156,30 +157,30 @@ public class DatabaseSqlPage extends AceServletPage
             out.write("Statement '"+ stmtId +"' not found in default context.");
     }
 
-    public void handleTestStatementNoUI(PageContext pc, String stmtId) throws ServletException, IOException
+    public void handleTestStatementNoUI(NavigationPathContext nc, String stmtId) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
 
-        PrintWriter out = pc.getResponse().getWriter();
-        DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
+        PrintWriter out = nc.getResponse().getWriter();
+        DatabaseContext dbc = DatabaseContextFactory.getContext(nc.getRequest(), context);
 
         out.write("<h1>SQL: " + stmtId + "</h1>");
-        StatementInfo si = manager.getStatement(pc.getServletContext(), null, stmtId);
+        StatementInfo si = manager.getStatement(nc.getServletContext(), null, stmtId);
         try
         {
-            if ("yes".equals(pc.getRequest().getParameter("pageable")))
+            if ("yes".equals(nc.getRequest().getParameter("pageable")))
             {
                 try
                 {
                     StatementTask task = new StatementTask();
                     task.setPageableReport(true);
                     task.setStmtName(stmtId);
-                    String rows = pc.getRequest().getParameter("rows");
+                    String rows = nc.getRequest().getParameter("rows");
                     if (rows != null && rows.length() > 0)
                         task.setRowsPerPage(Integer.parseInt(rows));
 
-                    TaskContext tc = new TaskContext(pc);
+                    TaskContext tc = new TaskContext(nc);
                     task.execute(tc);
                     if(tc.hasError())
                         out.write(tc.getErrorMessage());
@@ -199,7 +200,7 @@ public class DatabaseSqlPage extends AceServletPage
                 }
             }
             else
-                manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null, null);
+                manager.produceReport(out, dbc, nc, null, SkinFactory.getReportSkin("report"), stmtId, null, null, null);
         }
         catch(Exception e)
         {
@@ -213,6 +214,6 @@ public class DatabaseSqlPage extends AceServletPage
             out.write("</pre>");
         }
         out.write("<br>");
-        out.write(si.getDebugHtml(pc, false, false, null));
+        out.write(si.getDebugHtml(nc, false, false, null));
     }
 }

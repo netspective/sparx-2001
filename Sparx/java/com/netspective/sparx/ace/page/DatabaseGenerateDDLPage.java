@@ -51,21 +51,23 @@
  */
  
 /**
- * $Id: DatabaseGenerateDDLPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabaseGenerateDDLPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseGenerateDDLPage extends AceServletPage
 {
@@ -79,26 +81,26 @@ public class DatabaseGenerateDDLPage extends AceServletPage
         return "ddl.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Generate SQL DDL";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Generate SQL Data Definition";
     }
 
     private DatabaseGenerateDDLDialog dialog;
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         if(dialog == null)
             dialog = new DatabaseGenerateDDLDialog();
 
         out.write("<p><center>");
-        dialog.renderHtml(pc.getServletContext(), pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        dialog.renderHtml(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
         out.write("</center>");
     }
 }

@@ -51,16 +51,16 @@
  */
  
 /**
- * $Id: SystemPropertiesPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: SystemPropertiesPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,7 +69,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class SystemPropertiesPage extends AceServletPage
 {
@@ -83,19 +84,18 @@ public class SystemPropertiesPage extends AceServletPage
         return "servlet_context.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "System Properties";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "System Properties";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
         Document doc = null;
         try
         {
@@ -133,6 +133,6 @@ public class SystemPropertiesPage extends AceServletPage
             propertiesElem.appendChild(propertyElem);
         }
 
-        transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
+        transform(nc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
     }
 }

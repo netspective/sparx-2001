@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationSkin.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationSkin.java,v 1.3 2002-12-27 17:16:05 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;

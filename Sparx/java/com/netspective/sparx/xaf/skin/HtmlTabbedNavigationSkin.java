@@ -1,3 +1,59 @@
+/*
+ * Copyright (c) 2000-2002 Netspective Corporation -- all rights reserved
+ *
+ * Netspective Corporation permits redistribution, modification and use
+ * of this file in source and binary form ("The Software") under the
+ * Netspective Source License ("NSL" or "The License"). The following
+ * conditions are provided as a summary of the NSL but the NSL remains the
+ * canonical license and must be accepted before using The Software. Any use of
+ * The Software indicates agreement with the NSL.
+ *
+ * 1. Each copy or derived work of The Software must preserve the copyright
+ *    notice and this notice unmodified.
+ *
+ * 2. Redistribution of The Software is allowed in object code form only
+ *    (as Java .class files or a .jar file containing the .class files) and only
+ *    as part of an application that uses The Software as part of its primary
+ *    functionality. No distribution of the package is allowed as part of a software
+ *    development kit, other library, or development tool without written consent of
+ *    Netspective Corporation. Any modified form of The Software is bound by
+ *    these same restrictions.
+ *
+ * 3. Redistributions of The Software in any form must include an unmodified copy of
+ *    The License, normally in a plain ASCII text file unless otherwise agreed to,
+ *    in writing, by Netspective Corporation.
+ *
+ * 4. The names "Sparx" and "Netspective" are trademarks of Netspective
+ *    Corporation and may not be used to endorse products derived from The
+ *    Software without without written consent of Netspective Corporation. "Sparx"
+ *    and "Netspective" may not appear in the names of products derived from The
+ *    Software without written consent of Netspective Corporation.
+ *
+ * 5. Please attribute functionality to Sparx where possible. We suggest using the
+ *    "powered by Sparx" button or creating a "powered by Sparx(tm)" link to
+ *    http://www.netspective.com for each application using Sparx.
+ *
+ * The Software is provided "AS IS," without a warranty of any kind.
+ * ALL EXPRESS OR IMPLIED REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * OR NON-INFRINGEMENT, ARE HEREBY DISCLAIMED.
+ *
+ * NETSPECTIVE CORPORATION AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES
+ * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING
+ * THE SOFTWARE. IN NO EVENT WILL NETSPECTIVE OR ITS LICENSORS BE LIABLE
+ * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
+ * CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
+ * REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
+ * INABILITY TO USE THE SOFTWARE, EVEN IF HE HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGES.
+ *
+ * @author Shahid N. Shah
+ */
+
+/**
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.2 2002-12-27 17:16:05 shahid.shah Exp $
+ */
+
 package com.netspective.sparx.xaf.skin;
 
 import java.io.IOException;
@@ -5,19 +61,38 @@ import java.io.Writer;
 import java.io.StringWriter;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.Servlet;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-import com.netspective.sparx.xaf.page.*;
 import com.netspective.sparx.xaf.security.AuthenticatedUser;
+import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.BuildConfiguration;
 import com.netspective.sparx.xif.SchemaDocument;
+
 import org.w3c.dom.Element;
 
-public class HtmlTabbedNavigationSkin implements NavigationSkin
+public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 {
     protected NavigationStyle horizontalCaptionStyle = new HorizontalCaptionsStyle();
     protected NavigationStyle horizontalImagesStyle = new HorizontalImagesStyle();
     protected NavigationStyle verticalCaptionStyle = new VerticalCaptionsStyle();
     protected String cssFileName = "/sparx/resources/css/tabbed-navigation-skin.css";
+
+    public class NavigationPathContext extends com.netspective.sparx.xaf.navigate.NavigationPathContext
+    {
+        private String rootUrl;
+
+        public NavigationPathContext(NavigationPath pagesPath, ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse, String navTreeId)
+        {
+            super(pagesPath, aContext, aServlet, aRequest, aResponse, navTreeId);
+            rootUrl = ((HttpServletRequest) aRequest).getContextPath();
+        }
+    }
 
     public HtmlTabbedNavigationSkin()
     {
@@ -26,24 +101,36 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
         verticalCaptionStyle = new VerticalCaptionsStyle();
     }
 
-    public String getApplicationName(NavigationContext nc)
+    public com.netspective.sparx.xaf.navigate.NavigationPathContext createContext(javax.servlet.jsp.PageContext jspPageContext, NavigationPath tree, String navTreeId, boolean popup)
+    {
+        com.netspective.sparx.xaf.navigate.NavigationPathContext result = new NavigationPathContext(tree,
+                jspPageContext.getServletContext(),
+                (Servlet) jspPageContext.getPage(),
+                jspPageContext.getRequest(),
+                jspPageContext.getResponse(),
+                navTreeId);
+        if(popup) result.setPopup(true);
+        return result;
+    }
+
+    public String getApplicationName(NavigationPathContext nc)
     {
         return SchemaDocument.sqlIdentifierToText(nc.getServletContext().getServletContextName().substring(1), true);
     }
 
-    public void renderPageMetaData(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageMetaData(Writer writer, NavigationPathContext nc) throws IOException
     {
-        ServletPage page = nc.getPage();
+        NavigationPath activePath = nc.getActivePath();
 
         writer.write("<!-- Application Header Begins -->\n");
         writer.write("<html>\n");
         writer.write("<head>\n");
-        writer.write("<title>" + (page != null ? page.getTitle(nc) : "No page found") + "</title>\n");
-        writer.write("	<link rel=\"stylesheet\" href=\"" + rootUrl + cssFileName +"\" type=\"text/css\">\n");
+        writer.write("<title>" + activePath.getTitle(nc) + "</title>\n");
+        writer.write("	<link rel=\"stylesheet\" href=\"" + nc.rootUrl + cssFileName +"\" type=\"text/css\">\n");
         writer.write("</head>\n");
     }
 
-    public void renderPageMasthead(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageMasthead(Writer writer, NavigationPathContext nc) throws IOException
     {
         AuthenticatedUser authUser = (AuthenticatedUser) nc.getSession().getAttribute("authenticated-user");
         String personName = authUser != null ? authUser.getUserId() : "Not logged in";
@@ -56,16 +143,16 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
         writer.write("	<table class=\"app_header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">");
         writer.write("	    <tr>");
         writer.write("           <td class=\"app_header\" nowrap height=\"20\">");
-        writer.write("	            <img src=\"" + rootUrl + "/resources/images/design/app-header/app-header-marker.gif\">&nbsp;USER:&nbsp;<a class=\"app_header\" href=\"" + rootUrl + "/person/summary.jsp?person_id=" + personId + "\">" + personName.toUpperCase() + "</a>");
+        writer.write("	            <img src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-marker.gif\">&nbsp;USER:&nbsp;<a class=\"app_header\" href=\"" + nc.rootUrl + "/person/summary.jsp?person_id=" + personId + "\">" + personName.toUpperCase() + "</a>");
         writer.write("           </td>");
         writer.write("           <td class=\"app_header\" nowrap>");
-        writer.write("               <img src=\"" + rootUrl + "/resources/images/design/app-header/app-header-marker.gif\">&nbsp;ORG:&nbsp;<a class=\"app_header\" href=\"" + rootUrl + "/org/summary.jsp?org_id=" + orgId + "\">" + orgName.toUpperCase() + "</a>");
+        writer.write("               <img src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-marker.gif\">&nbsp;ORG:&nbsp;<a class=\"app_header\" href=\"" + nc.rootUrl + "/org/summary.jsp?org_id=" + orgId + "\">" + orgName.toUpperCase() + "</a>");
         writer.write("           </td>");
         writer.write("           <td width=\"100%\" class=\"app_header\" nowrap>");
-        writer.write("	            <img src=\"" + rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\">");
+        writer.write("	            <img src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\">");
         writer.write("           </td>");
         writer.write("           <td class=\"app_header\" nowrap>");
-        writer.write("           <img src=\"" + rootUrl + "/resources/images/design/app-header/app-header-marker.gif\"><a class=\"app_header\" href=\"" + rootUrl + "?_logout=yes\">&nbsp;LOGOUT</a>");
+        writer.write("           <img src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-marker.gif\"><a class=\"app_header\" href=\"" + nc.rootUrl + "?_logout=yes\">&nbsp;LOGOUT</a>");
         writer.write("           </td>");
         writer.write("	    </tr>");
         writer.write("   </table>");
@@ -75,8 +162,8 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
         writer.write("<!-- Master Header Begins -->");
         writer.write("   <TABLE class=\"mast_header\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
         writer.write("      <TR>");
-        writer.write("	        <TD>&nbsp;<A class=\"app_name\" href=\"" + rootUrl + "/index.jsp\">"+ appName +"</A></TD>");
-        writer.write("	        <TD width=\"100%\"><IMG height=25 src=\"" + rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\" width=10 border=0></TD>");
+        writer.write("	        <TD>&nbsp;<A class=\"app_name\" href=\"" + nc.rootUrl + "/index.jsp\">"+ appName +"</A></TD>");
+        writer.write("	        <TD width=\"100%\"><IMG height=25 src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\" width=10 border=0></TD>");
         writer.write("			<TD rowspan=\"2\"><!-- space for image on right --></TD>");
         writer.write("       </TR>");
 
@@ -85,41 +172,42 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
         writer.write("<!-- Master Header Ends -->");
     }
 
-    public void renderPageMenusLevelOne(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageMenusLevelOne(Writer writer, NavigationPathContext nc) throws IOException
     {
         writer.write("<!-- App Tabs Begins -->");
-        renderNavigation(writer, nc, 1, horizontalImagesStyle, rootUrl);
+        renderNavigation(writer, nc, 1, horizontalImagesStyle);
         writer.write("<!-- App Tabs Ends -->");
 
         writer.write("	        </TD>");
-        writer.write("         <TD><IMG height=15 alt=\"\" src=\"" + rootUrl + "/resources/images/design/app-tabs/apptab_div.gif\" width=\"100%\" border=0></TD>");
+        writer.write("         <TD><IMG height=15 alt=\"\" src=\"" + nc.rootUrl + "/resources/images/design/app-tabs/apptab_div.gif\" width=\"100%\" border=0></TD>");
         writer.write("      </TR>");
         writer.write("   </TABLE>");
     }
 
-    public void renderPageMenusLevelTwo(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageMenusLevelTwo(Writer writer, NavigationPathContext nc) throws IOException
     {
         writer.write("<!-- Function Tabs Begins -->");
-        renderNavigation(writer, nc, 2, horizontalCaptionStyle, rootUrl);
+        renderNavigation(writer, nc, 2, horizontalCaptionStyle);
         writer.write("<!-- Function Tabs Ends -->");
     }
 
-    public void renderPageHeading(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageHeading(Writer writer, NavigationPathContext nc) throws IOException
     {
+        NavigationPath activePath = nc.getActivePath();
+
         writer.write("<!-- Page Heading Begins -->");
         writer.write("<TABLE class=\"page_header\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
         writer.write("<TR>");
 
-        ServletPage page = nc.getPage();
-        String actionIcon = page != null ? page.getPageIcon() : null;
+        String actionIcon = null;
         if (actionIcon != null && !"".equals(actionIcon))
         {
             writer.write("<td>&nbsp;<img src=\"" + actionIcon + "\"></td>");
         }
         //Page Heading
-        writer.write("<TD nowrap class=page_header height=\"30\">" + (page != null ? page.getHeading(nc) : "No page found") + "</TD>");
-        writer.write("<td><img src=\"" + rootUrl + "/resources/images/design/page-header/page-heading-middle.gif\"></td>");
-        writer.write("<TD width=\"100%\" background=\"" + rootUrl + "/resources/images/design/page-header/page-heading-background.gif\"><IMG height=3 alt=\"\" src=\"" + rootUrl + "/resources/images/pixel.gif\" width=10 border=0></TD>");
+        writer.write("<TD nowrap class=page_header height=\"30\">" + activePath.getHeading(nc) + "</TD>");
+        writer.write("<td><img src=\"" + nc.rootUrl + "/resources/images/design/page-header/page-heading-middle.gif\"></td>");
+        writer.write("<TD width=\"100%\" background=\"" + nc.rootUrl + "/resources/images/design/page-header/page-heading-background.gif\"><IMG height=3 alt=\"\" src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\" width=10 border=0></TD>");
 
         // Select the entity icon that goes on the right of the Page Heading.
         String entityIcon = null;
@@ -130,12 +218,15 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
 
         writer.write("</TR></TABLE>");
         writer.write("<!-- Page Heading Ends -->");
+
+        writer.write("<TABLE class=\"main\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0 height=\"100%\">");
+        writer.write("  <TR>");
     }
 
-    public void renderPageMenusLevelThree(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageMenusLevelThree(Writer writer, NavigationPathContext nc) throws IOException
     {
         StringWriter sideBarNavHtml = new StringWriter();
-        renderNavigation(sideBarNavHtml, nc, 3, verticalCaptionStyle, rootUrl);
+        renderNavigation(sideBarNavHtml, nc, 3, verticalCaptionStyle);
         if(sideBarNavHtml.getBuffer().length() > 0)
         {
             writer.write("    <TD vAlign=top height=\"100%\">");
@@ -145,65 +236,65 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
         writer.write("		  <TD class=\"page_content\" vAlign=top align=\"center\" width=\"100%\">");
     }
 
-    public void renderPageFooter(Writer writer, NavigationContext nc, NavigationTree navTree, String rootUrl) throws IOException
+    public void renderPageFooter(Writer writer, NavigationPathContext nc) throws IOException
     {
-        String sparxResourcesUrl = rootUrl + "/sparx/resources";
+        String sparxResourcesUrl = nc.rootUrl + "/sparx/resources";
 
-        if (nc.getRequest().getAttribute("skipped-body") == null)
-        {
-            writer.write("   </TD></TR></TABLE>");
-            writer.write("   <table width=100%> ");
-            writer.write("        <tr> ");
-            writer.write("                <td align=left class=\"power_by_sparx_footer\"> ");
-            writer.write("                        <a target=\"netspective\" href=\"http://www.netspective.com/\"> ");
-            writer.write("                        <img border=\"0\" alt=\"Powered by Netspective Sparx\" src=\"" + sparxResourcesUrl + "/images/powered-by-sparx.gif\">");
-            writer.write("                        </a> ");
-            writer.write("                        <br> ");
-            writer.write("                                " + BuildConfiguration.getVersionAndBuildShort());
-            writer.write("                </td> ");
-            writer.write("                <td align=center class=\"copyright_footer\"> ");
-            writer.write("                        Copyright &copy; 2002, Netspective Communications LLC. All Rights Reserved.");
-            writer.write("                </td> ");
-            writer.write("        </tr> ");
-            writer.write("   </table> ");
-            writer.write("</body>");
-        }
+        writer.write("   </TD></TR></TABLE>");
+        writer.write("   <table width=100%> ");
+        writer.write("        <tr> ");
+        writer.write("                <td align=left class=\"power_by_sparx_footer\"> ");
+        writer.write("                        <a target=\"netspective\" href=\"http://www.netspective.com/\"> ");
+        writer.write("                        <img border=\"0\" alt=\"Powered by Netspective Sparx\" src=\"" + sparxResourcesUrl + "/images/powered-by-sparx.gif\">");
+        writer.write("                        </a> ");
+        writer.write("                        <br> ");
+        writer.write("                                " + BuildConfiguration.getVersionAndBuildShort());
+        writer.write("                </td> ");
+        writer.write("                <td align=center class=\"copyright_footer\"> ");
+        writer.write("                        Copyright &copy; 2002, Netspective Communications LLC. All Rights Reserved.");
+        writer.write("                </td> ");
+        writer.write("        </tr> ");
+        writer.write("   </table> ");
+        writer.write("</body>");
     }
 
-    public void renderNavigation(Writer writer, NavigationContext nc, int level, NavigationStyle style, String rootUrl) throws IOException
+    public void renderNavigation(Writer writer, NavigationPathContext nc, int level, NavigationStyle style) throws IOException
     {
-        NavigationTree activeNavTree = (NavigationTree) nc.getActivePath().getMatchedPath();
-        List ancestorList = activeNavTree.getAncestorsList();
-        NavigationTree currentNavTree = null;
+        NavigationPath activePath = nc.getActivePath();
+
+        List ancestorList = activePath.getAncestorsList();
+        NavigationPath currentNavTree = null;
 
         if (level < ancestorList.size())
         {
-            currentNavTree = (NavigationTree) ancestorList.get(level);
+            currentNavTree = (NavigationPath) ancestorList.get(level);
         }
         else if (level == ancestorList.size())
         {
-            currentNavTree = activeNavTree;
+            currentNavTree = activePath;
         }
         else
         {
             return;
         }
 
-        style.renderHtml(writer, currentNavTree, nc, rootUrl);
+        style.renderHtml(writer, currentNavTree, nc);
     }
 
-    public void renderNavigation(Writer writer, NavigationTree owner, NavigationContext nc) throws IOException
+    public void renderNavigationBeforeBody(Writer writer, com.netspective.sparx.xaf.navigate.NavigationPathContext nc) throws IOException
     {
-        NavigationTree navTree = (NavigationTree) nc.getActivePath().getMatchedPath();
-        String rootUrl = ((HttpServletRequest)nc.getRequest()).getContextPath();
+        NavigationPathContext htmlNC = (NavigationPathContext) nc;
+        renderPageMetaData(writer, htmlNC);
+        renderPageMasthead(writer, htmlNC);
+        renderPageMenusLevelOne(writer, htmlNC);
+        renderPageMenusLevelTwo(writer, htmlNC);
+        renderPageHeading(writer, htmlNC);
+        renderPageMenusLevelThree(writer, htmlNC);
+    }
 
-        renderPageMetaData(writer, nc, navTree, rootUrl);
-        renderPageMasthead(writer, nc, navTree, rootUrl);
-        renderPageMenusLevelOne(writer, nc, navTree, rootUrl);
-        renderPageMenusLevelTwo(writer, nc, navTree, rootUrl);
-        renderPageHeading(writer, nc, navTree, rootUrl);
-        renderPageMenusLevelThree(writer, nc, navTree, rootUrl);
-        renderPageFooter(writer, nc, navTree, rootUrl);
+    public void renderNavigationAfterBody(Writer writer, com.netspective.sparx.xaf.navigate.NavigationPathContext nc) throws IOException
+    {
+        renderPageFooter(writer, (NavigationPathContext) nc);
     }
 
     abstract public class NavigationStyle
@@ -293,7 +384,7 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
             if (set) flags |= flag; else flags &= ~flag;
         }
 
-        abstract public void renderHtml(Writer writer, NavigationTree currentNavTree, NavigationContext nc, String rootUrl) throws IOException;
+        abstract public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException;
     }
 
     public class HorizontalImagesStyle extends NavigationStyle
@@ -310,7 +401,7 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
             navImgAttrs = "height=15 width=75 border=0 alt=\"\"";
         }
 
-        public void renderHtml(Writer writer, NavigationTree currentNavTree, NavigationContext nc, String rootUrl) throws IOException
+        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
         {
             //render each appTab
             List tabElements = currentNavTree.getSibilingList();
@@ -324,11 +415,11 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
 
                 appTabDivImage = "app-separator-" + i + ".gif";
 
-                NavigationTree tabElement = (NavigationTree) tabElements.get(i);
+                NavigationPath tabElement = (NavigationPath) tabElements.get(i);
                 if (tabElement.isVisible(nc))
                 {
                     writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " ");
-                    writer.write("src=\"" + rootUrl + "/resources/images/design/app-tabs/" + appTabDivImage + "\"></TD>");
+                    writer.write("src=\"" + nc.rootUrl + "/resources/images/design/app-tabs/" + appTabDivImage + "\"></TD>");
                     writer.write("<TD " + navAttrs + ">");
                     writer.write("<A " + navLinkAttrs + " href=\"" + tabElement.getUrl(nc) + "\">");
                     writer.write("<IMG " + navImgAttrs + " ");
@@ -340,7 +431,7 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
 
             if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
             {
-                writer.write("<TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\" ></TD>");
+                writer.write("<TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\" ></TD>");
             }
 
             writer.write("</TR>");
@@ -378,7 +469,7 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
             this.flags = NAVFLAG_VERTICAL_DISPLAY | NAVFLAG_EXPAND_MARGIN_RIGHT;
         }
 
-        public void renderHtml(Writer writer, NavigationTree currentNavTree, NavigationContext nc, String rootUrl) throws IOException
+        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
         {
             List tabElements = currentNavTree.getSibilingList();
 
@@ -390,21 +481,21 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
 
             writer.write("   <table " + tableClass + " " + tableAttrs + ">");
             writer.write("       <tr>");
-            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
             writer.write("       </tr>");
             writer.write("       <tr" + containerClass + " " + containerAttrs + ">");
 
             if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_LEFT))
             {
-                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
             }
 
             for (int i = 0; i < tabElements.size(); i++)
             {
-                NavigationTree tabElement = (NavigationTree) tabElements.get(i);
+                NavigationPath tabElement = (NavigationPath) tabElements.get(i);
                 if (tabElement.isVisible(nc))
                 {
-                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
                     writer.write("<TD " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
                     writer.write("<a " + navLinkAttrs + " " + navLinkClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "</a></TD>");
                 }
@@ -412,12 +503,12 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
 
             if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
             {
-                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
             }
 
             writer.write("       </tr>");
             writer.write("       <tr>");
-            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
             writer.write("       </tr>");
             writer.write("   </table>");
         }
@@ -428,13 +519,13 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
         public VerticalCaptionsStyle()
         {
             flags = NavigationStyle.NAVFLAG_VERTICAL_DISPLAY;
-            tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=150";
+            tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
             tableClass = "";
             outerSeparatorAttrs = "";
             outerSeparatorClass = "class=\"sidenav_off\"";
             outerSeparatorImgAttrs = "height=34 width=1 border=0 alt=\"\"";
             outerSeparatorImgClass = "";
-            innerSeparatorAttrs = "colSpan=2";
+            innerSeparatorAttrs = "colSpan=3";
             innerSeparatorClass = "class=\"sidenav_div\"";
             innerSeparatorImgAttrs = "height=1 width=1 border=0 alt=\"\"";
             innerSeparatorImgClass = "";
@@ -444,9 +535,8 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
             navImgAttrs = "height=17 width=10 border=0 alt=\"\"";
         }
 
-        public void renderHtml(Writer writer, NavigationTree currentNavTree, NavigationContext nc, String rootUrl) throws IOException
+        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
         {
-            //render each appTab
             List sideBarElements = currentNavTree.getSibilingList();
             if (sideBarElements == null || sideBarElements.isEmpty())
             {
@@ -455,27 +545,27 @@ public class HtmlTabbedNavigationSkin implements NavigationSkin
 
             writer.write("      <TABLE " + tableClass + " " + tableAttrs + ">");
             writer.write("        <TR " + outerSeparatorClass + " " + outerSeparatorAttrs + ">");
-            writer.write("          <TD><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+            writer.write("          <TD><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
             writer.write("        </TR>");
-            //writer.write("        <TR " + navStyle.outerSeparatorClass + " " + navStyle.outerSeparatorAttrs + ">");
             writer.write("        <TR>");
-            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD></TR>");
+            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD></TR>");
             writer.write("        </TR>");
 
             for (int i = 0; i < sideBarElements.size(); i++)
             {
-                NavigationTree sideBarElement = (NavigationTree) sideBarElements.get(i);
+                NavigationPath sideBarElement = (NavigationPath) sideBarElements.get(i);
                 writer.write("        <TR " + navAttrs + " " + navClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\">");
-                writer.write("          <TD><IMG " + navImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD>");
+                writer.write("          <TD><IMG " + navImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
                 writer.write("              <TD><A " + navLinkClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\" ");
-                writer.write("            href=\"" + sideBarElement.getUrl(nc) + "\">" + sideBarElement.getCaption(nc) + "</A></TD>");
+                writer.write("            href=\"" + sideBarElement.getUrl(nc) + "\"><nobr>" + sideBarElement.getCaption(nc) + "</nobr></A></TD>");
+                writer.write("          <TD><IMG " + navImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
                 writer.write("            </TR>");
                 writer.write("        <TR>");
-                writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD></TR>");
+                writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD></TR>");
             }
 
             writer.write("        <TR>");
-            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + rootUrl + "/resources/images/pixel.gif\"></TD></TR></TABLE>");
+            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.rootUrl + "/resources/images/design/app-header/app-header-spacer.gif\"></TD></TR></TABLE>");
         }
     }
 }

@@ -51,20 +51,22 @@
  */
  
 /**
- * $Id: AppAccessControlListPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppAccessControlListPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.security.AccessControlList;
 import com.netspective.sparx.xaf.security.AccessControlListFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class AppAccessControlListPage extends AceServletPage
 {
@@ -78,21 +80,21 @@ public class AppAccessControlListPage extends AceServletPage
         return "access.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Access Control";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Access Control List";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         AccessControlList acl = AccessControlListFactory.getACL(context);
         acl.addMetaInfoOptions();
-        transform(pc, acl.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "acl-browser-xsl");
+        transform(nc, acl.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "acl-browser-xsl");
     }
 }

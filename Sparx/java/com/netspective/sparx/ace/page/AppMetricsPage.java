@@ -51,13 +51,14 @@
  */
  
 /**
- * $Id: AppMetricsPage.java,v 1.3 2002-08-09 12:56:52 shahid.shah Exp $
+ * $Id: AppMetricsPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,11 +75,12 @@ import com.netspective.sparx.util.metric.FileTypeMetric;
 import com.netspective.sparx.util.metric.Metric;
 import com.netspective.sparx.util.config.ConfigurationManager;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.form.DialogManager;
 import com.netspective.sparx.xaf.form.DialogManagerFactory;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 
 public class AppMetricsPage extends AceServletPage
 {
@@ -98,12 +100,12 @@ public class AppMetricsPage extends AceServletPage
         return "metrics.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Metrics";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Application Metrics";
     }
@@ -178,13 +180,13 @@ public class AppMetricsPage extends AceServletPage
         calcFileSystemMetrics(path, 1, dirMetrics, allFileMetrics, codeFileMetrics, appFileMetrics);
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         ConfigurationManager config = ConfigurationManagerFactory.getManager(context);
 
-        ignoreCaseInFileExtn = config.getBooleanValue(pc, FILESYS_CFG_PREFIX + ".ignore-case", true);
-        String[] codeExtns = config.getDelimitedValues(pc, FILESYS_CFG_PREFIX + ".code-extensions", null, ",");
+        ignoreCaseInFileExtn = config.getBooleanValue(nc, FILESYS_CFG_PREFIX + ".ignore-case", true);
+        String[] codeExtns = config.getDelimitedValues(nc, FILESYS_CFG_PREFIX + ".code-extensions", null, ",");
         if(codeExtns != null)
         {
             countLinesInFileExtn.clear();
@@ -200,7 +202,7 @@ public class AppMetricsPage extends AceServletPage
         StatementManager smanager = StatementManagerFactory.getManager(context);
         smanager.getMetrics(metrics);
 
-        createFileSystemMetrics(metrics, config.getTextValue(pc, "app.site-root-path"));
+        createFileSystemMetrics(metrics, config.getTextValue(nc, "app.site-root-path"));
 
         try
         {
@@ -212,7 +214,7 @@ public class AppMetricsPage extends AceServletPage
             xmlDoc.appendChild(rootElem);
 
             metrics.createElement(rootElem);
-            transform(pc, xmlDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "metrics-browser-xsl");
+            transform(nc, xmlDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "metrics-browser-xsl");
         }
         catch(Exception e)
         {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: RedirectPage.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: RedirectPage.java,v 1.2 2002-12-27 17:16:05 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -65,7 +65,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
-public class RedirectPage extends AbstractServletPage
+public class RedirectPage extends com.netspective.sparx.xaf.navigate.NavigationPage
 {
     private SingleValueSource redirect;
     private String name;

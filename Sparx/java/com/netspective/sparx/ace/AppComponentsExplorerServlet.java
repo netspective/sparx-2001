@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppComponentsExplorerServlet.java,v 1.4 2002-12-26 19:19:09 shahid.shah Exp $
+ * $Id: AppComponentsExplorerServlet.java,v 1.5 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -74,8 +74,8 @@ import com.netspective.sparx.xaf.html.Component;
 import com.netspective.sparx.xaf.html.component.HierarchicalMenu;
 import com.netspective.sparx.xaf.page.PageControllerServlet;
 import com.netspective.sparx.xaf.page.RedirectPage;
-import com.netspective.sparx.xaf.page.ServletPage;
-import com.netspective.sparx.xaf.page.VirtualPath;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPage;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -83,7 +83,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 {
     private Hashtable styleSheetParams = new Hashtable();
     private Component[] menus;
-    private VirtualPath homePath;
+    private NavigationPage homePage;
 
     protected void initFirstRequest(HttpServletRequest req, HttpServletResponse resp)
     {
@@ -95,7 +95,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
         int menuNum = 1;
         for(Iterator i = mainMenu.iterator(); i.hasNext();)
         {
-            VirtualPath path = (VirtualPath) i.next();
+            NavigationPath path = (NavigationPath) i.next();
             if(path.getChildrenList().size() > 0)
                 menuBar.add(new HierarchicalMenu(menuNum, 171 + (66 * (menuNum - 1)), 110, 38, path, getSharedScriptsRootURL()));
             menuNum++;
@@ -119,19 +119,20 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
         return com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX;
     }
 
-    public VirtualPath getHomePath()
+    public NavigationPath getHomePath()
     {
-        return homePath;
+        return homePage;
     }
 
     public void registerPages(ServletConfig config) throws ServletException
     {
-        VirtualPath pagesPath = getPagesPath();
+        NavigationPage pagesPath = new NavigationPage();
+        pagesPath.setName(null);
+        setPagesPath(pagesPath);
 
-        ServletPage homePage = new HomePage();
-        homePath = pagesPath.registerPage("/", homePage);
+        homePage = new HomePage();
+        pagesPath.registerPage("/", homePage);
         pagesPath.registerPage("/home", homePage);
-
         pagesPath.registerPage("/application", new RedirectPage("application", "Application", null));
         pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
         pagesPath.registerPage("/application/navigation", new AppNavigationPage());

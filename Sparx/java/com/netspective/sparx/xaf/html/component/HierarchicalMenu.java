@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HierarchicalMenu.java,v 1.2 2002-12-26 19:30:27 shahid.shah Exp $
+ * $Id: HierarchicalMenu.java,v 1.3 2002-12-27 17:16:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.component;
@@ -60,8 +60,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import com.netspective.sparx.xaf.page.VirtualPath;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class HierarchicalMenu extends AbstractComponent
@@ -76,7 +75,7 @@ public class HierarchicalMenu extends AbstractComponent
         }
     }
 
-    private VirtualPath entries;
+    private NavigationPath entries;
     private String sharedScriptsRootURL;
     private String entriesJS;
     private int menuNum = 0;
@@ -96,7 +95,7 @@ public class HierarchicalMenu extends AbstractComponent
     private String borderColor = "#FDF43F";
     private String separatorColor = "#FDF43F";
 
-    public HierarchicalMenu(int menuNum, int left, int width, int top, VirtualPath entries, String sharedScriptsRootURL)
+    public HierarchicalMenu(int menuNum, int left, int width, int top, NavigationPath entries, String sharedScriptsRootURL)
     {
         this.menuNum = menuNum;
         this.menuLeftPos = left;
@@ -106,7 +105,7 @@ public class HierarchicalMenu extends AbstractComponent
         this.sharedScriptsRootURL = sharedScriptsRootURL;
     }
 
-    public void createMenuJS(ValueContext vc, VirtualPath path, StringBuffer script, String levelInfo)
+    public void createMenuJS(ValueContext vc, NavigationPath path, StringBuffer script, String levelInfo)
     {
         script.append("HM_Array");
         script.append(levelInfo);
@@ -153,7 +152,7 @@ public class HierarchicalMenu extends AbstractComponent
         List children = path.getChildrenList();
         for(int c = 0; c < children.size(); c++)
         {
-            VirtualPath child = (VirtualPath) children.get(c);
+            NavigationPath child = (NavigationPath) children.get(c);
             if(child.getChildrenList().size() > 0)
             {
                 createMenuJS(vc, child, script, levelInfo + "_" + (c + 1));
@@ -161,18 +160,18 @@ public class HierarchicalMenu extends AbstractComponent
         }
     }
 
-    public void createItemsJS(ValueContext vc, VirtualPath path, StringBuffer script)
+    public void createItemsJS(ValueContext vc, NavigationPath path, StringBuffer script)
     {
         List children = path.getChildrenList();
         int lastChild = children.size() - 1;
         for(int c = 0; c <= lastChild; c++)
         {
-            VirtualPath child = (VirtualPath) children.get(c);
+            NavigationPath child = (NavigationPath) children.get(c);
 
             script.append("['");
-            script.append(child.getCaption((PageContext) vc));
+            script.append(child.getCaption(vc));
             script.append("', '");
-            script.append(child.getAbsolutePath((PageContext) vc));
+            script.append(child.getAbsolutePath(vc));
             script.append("', 1, 0, ");
             script.append(child.getChildrenList().size() > 0 ? 1 : 0);
             script.append("]");
@@ -213,12 +212,12 @@ public class HierarchicalMenu extends AbstractComponent
         writer.write(entriesJS);
     }
 
-    public VirtualPath getEntries()
+    public NavigationPath getEntries()
     {
         return entries;
     }
 
-    public void setEntries(VirtualPath entries)
+    public void setEntries(NavigationPath entries)
     {
         this.entries = entries;
     }

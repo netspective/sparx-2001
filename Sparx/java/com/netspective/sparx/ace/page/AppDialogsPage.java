@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.6 2002-12-26 19:21:21 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.7 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -68,12 +69,13 @@ import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogManager;
 import com.netspective.sparx.xaf.form.DialogManagerFactory;
-import com.netspective.sparx.xaf.page.PageContext;
-import com.netspective.sparx.xaf.page.VirtualPath;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.html.command.DialogComponentCommand;
 import com.netspective.sparx.xaf.html.ComponentCommandFactory;
 import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class AppDialogsPage extends AceServletPage
 {
@@ -89,23 +91,23 @@ public class AppDialogsPage extends AceServletPage
         return "dialogs.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Dialogs";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Application Dialogs";
     }
 
-    public void handleBeanGenerator(PageContext pc) throws IOException
+    public void handleBeanGenerator(NavigationPathContext nc) throws IOException
     {
         if(dialog == null)
             dialog = new DialogBeanGenerateClassDialog();
 
-        PrintWriter out = pc.getResponse().getWriter();
-        DialogContext dc = dialog.createContext(pc.getServletContext(), pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        PrintWriter out = nc.getResponse().getWriter();
+        DialogContext dc = dialog.createContext(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
         dialog.prepareContext(dc);
         if(!dc.inExecuteMode())
         {
@@ -117,24 +119,24 @@ public class AppDialogsPage extends AceServletPage
             dialog.renderHtml(out, dc, true);
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         DialogManager manager = DialogManagerFactory.getManager(context);
         manager.addMetaInfoOptions();
 
-        String testItem = getTestCommandItem(pc);
+        String testItem = getTestCommandItem(nc);
         if(testItem != null)
         {
-            PrintWriter out = pc.getResponse().getWriter();
-            DialogComponentCommand dcmd = (DialogComponentCommand) ComponentCommandFactory.getDialogCommand(testItem);
-            VirtualPath.FindResults path = pc.getActivePath();
+            PrintWriter out = nc.getResponse().getWriter();
+            DialogComponentCommand dcmd = ComponentCommandFactory.getDialogCommand(testItem);
+            NavigationPath.FindResults path = nc.getActivePathFindResults();
 
-            handleUnitTestPageBegin(pc, "Form (Dialog) Unit Test");
+            handleUnitTestPageBegin(writer, nc, "Form (Dialog) Unit Test");
             out.write("<h1>Form (Dialog) Unit Test: " + dcmd.getDialogName() + "</h1><p>");
             try
             {
-                dcmd.handleCommand(pc, pc.getResponse().getWriter(), true);
+                dcmd.handleCommand(nc, nc.getResponse().getWriter(), true);
             }
             catch (ComponentCommandException e)
             {
@@ -153,17 +155,17 @@ public class AppDialogsPage extends AceServletPage
             dcmd.setSkinName(null);
             out.write("To try the dialog in 'edit' mode using the default skin:<br>");
             out.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
-            handleUnitTestPageEnd(pc);
+            handleUnitTestPageEnd(writer, nc);
         }
         else
         {
-            VirtualPath.FindResults results = pc.getActivePath();
+            NavigationPath.FindResults results = nc.getActivePathFindResults();
             String[] unmatchedItems = results.unmatchedPathItems();
             if(unmatchedItems != null && unmatchedItems[0].equals("generate-dc"))
-                handleBeanGenerator(pc);
+                handleBeanGenerator(nc);
             else
             {
-                transform(pc, manager.getDocument(context, null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
+                transform(nc, manager.getDocument(context, null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
             }
         }
     }

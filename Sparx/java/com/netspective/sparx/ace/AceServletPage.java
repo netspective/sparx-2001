@@ -51,15 +51,12 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.8 2002-12-26 19:18:24 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.9 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Hashtable;
@@ -81,27 +78,25 @@ import org.w3c.dom.Text;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
 import com.netspective.sparx.xaf.html.Component;
-import com.netspective.sparx.xaf.html.ComponentCommandException;
 import com.netspective.sparx.xaf.html.component.HierarchicalMenu;
-import com.netspective.sparx.xaf.page.AbstractServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.page.PageControllerServlet;
-import com.netspective.sparx.xaf.page.VirtualPath;
-import com.netspective.sparx.ace.page.DatabaseGenerateJavaDialog;
+import com.netspective.sparx.xaf.navigate.NavigationPage;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
 
-public class AceServletPage extends AbstractServletPage
+public class AceServletPage extends NavigationPage
 {
     static public final String ACE_TESTITEM_ATTRNAME = "ace-test-item";
     static public final String ACE_CONFIG_ITEM_PROPBROWSERXSL = com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "properties-browser-xsl";
 
-    public String getTitle(PageContext pc)
+    public String getTitle(NavigationPathContext nc)
     {
-        return "ACE - " + getHeading(pc);
+        return "ACE - " + getHeading(nc);
     }
 
-    public String getTestCommandItem(PageContext pc)
+    public String getTestCommandItem(NavigationPathContext nc)
     {
-        return (String) pc.getRequest().getAttribute(ACE_TESTITEM_ATTRNAME);
+        return (String) nc.getRequest().getAttribute(ACE_TESTITEM_ATTRNAME);
     }
 
     public void addText(Element parent, String elemName, String text)
@@ -113,9 +108,9 @@ public class AceServletPage extends AbstractServletPage
         parent.appendChild(elemNode);
     }
 
-    public void transform(PageContext pc, Document doc, String styleSheetConfigName, String outputFileName) throws IOException
+    public void transform(NavigationPathContext nc, Document doc, String styleSheetConfigName, String outputFileName) throws IOException
     {
-        AppComponentsExplorerServlet servlet = ((AppComponentsExplorerServlet) pc.getServlet());
+        AppComponentsExplorerServlet servlet = ((AppComponentsExplorerServlet) nc.getServlet());
         Hashtable styleSheetParams = servlet.getStyleSheetParams();
 
         /**
@@ -125,7 +120,7 @@ public class AceServletPage extends AbstractServletPage
          */
         if(styleSheetParams.get("config-items-added") == null)
         {
-            Configuration appConfig = ((PageControllerServlet) pc.getServlet()).getAppConfig();
+            Configuration appConfig = ((PageControllerServlet) nc.getServlet()).getAppConfig();
             for(Iterator i = appConfig.entrySet().iterator(); i.hasNext();)
             {
                 Map.Entry configEntry = (Map.Entry) i.next();
@@ -134,20 +129,20 @@ public class AceServletPage extends AbstractServletPage
                 {
                     Property property = (Property) configEntry.getValue();
                     String propName = property.getName();
-                    styleSheetParams.put(propName, appConfig.getTextValue(pc, propName));
+                    styleSheetParams.put(propName, appConfig.getTextValue(nc, propName));
                 }
             }
             styleSheetParams.put("config-items-added", new Boolean(true));
         }
 
-        styleSheetParams.put("root-url", pc.getActivePath().getMatchedPath().getAbsolutePath(pc));
-        styleSheetParams.put("page-heading", getHeading(pc));
+        styleSheetParams.put("root-url", nc.getActivePathFindResults().getMatchedPath().getAbsolutePath(nc));
+        styleSheetParams.put("page-heading", getHeading(nc));
 
         styleSheetParams.remove("detail-type");
         styleSheetParams.remove("detail-name");
         styleSheetParams.remove("sub-detail-name");
 
-        VirtualPath.FindResults results = pc.getActivePath();
+        NavigationPath.FindResults results = nc.getActivePathFindResults();
         String[] unmatchedItems = results.unmatchedPathItems();
         if(unmatchedItems != null)
         {
@@ -159,8 +154,8 @@ public class AceServletPage extends AbstractServletPage
                 styleSheetParams.put("sub-detail-name", unmatchedItems[2]);
         }
 
-        String styleSheet = servlet.getAppConfig().getTextValue(pc, styleSheetConfigName);
-        PrintWriter out = pc.getResponse().getWriter();
+        String styleSheet = servlet.getAppConfig().getTextValue(nc, styleSheetConfigName);
+        PrintWriter out = nc.getResponse().getWriter();
 
         try
         {
@@ -200,14 +195,14 @@ public class AceServletPage extends AbstractServletPage
         }
     }
 
-    public void transform(PageContext pc, Document doc, String styleSheetConfigName) throws IOException
+    public void transform(NavigationPathContext nc, Document doc, String styleSheetConfigName) throws IOException
     {
-        transform(pc, doc, styleSheetConfigName, null);
+        transform(nc, doc, styleSheetConfigName, null);
     }
 
-    public void transform(PageContext pc, File xmlSourceFile, String xsltSourceFile) throws IOException
+    public void transform(NavigationPathContext nc, File xmlSourceFile, String xsltSourceFile) throws IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
 
         try
         {
@@ -234,25 +229,24 @@ public class AceServletPage extends AbstractServletPage
         }
     }
 
-    public void handlePageMetaData(PageContext pc) throws ServletException, IOException
+    public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        if(getTestCommandItem(pc) != null)
+        if(getTestCommandItem(nc) != null)
             return;
 
-        String sharedScriptsRootURL = ((PageControllerServlet) pc.getServlet()).getSharedScriptsRootURL();
-        String sharedCssRootURL = ((PageControllerServlet) pc.getServlet()).getSharedCssRootURL();
+        String sharedCssRootURL = ((PageControllerServlet) nc.getServlet()).getSharedCssRootURL();
 
         HierarchicalMenu.DrawContext dc = new HierarchicalMenu.DrawContext();
-        pc.getRequest().setAttribute(HierarchicalMenu.DrawContext.class.getName(), dc);
+        nc.getRequest().setAttribute(HierarchicalMenu.DrawContext.class.getName(), dc);
 
 
-        Component[] menus = ((AppComponentsExplorerServlet) pc.getServlet()).getMenuBar();
+        Component[] menus = ((AppComponentsExplorerServlet) nc.getServlet()).getMenuBar();
         try
         {
-            PrintWriter out = pc.getResponse().getWriter();
+            PrintWriter out = nc.getResponse().getWriter();
             out.print("<head>\n");
             out.print("<title>");
-            out.print(getTitle(pc));
+            out.print(getTitle(nc));
             out.print("</title>\n");
             out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
             out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
@@ -260,7 +254,7 @@ public class AceServletPage extends AbstractServletPage
             {
                 dc.firstMenu = i == 0;
                 dc.lastMenu = i == (menus.length - 1);
-                menus[i].renderHtml(pc, out);
+                menus[i].renderHtml(nc, out);
             }
             out.print("</head>\n\n");
         }
@@ -270,18 +264,18 @@ public class AceServletPage extends AbstractServletPage
         }
     }
 
-    public void handlePageHeader(PageContext pc) throws ServletException, IOException
+    public void handlePageHeader(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        if(getTestCommandItem(pc) != null)
+        if(getTestCommandItem(nc) != null)
             return;
 
-        AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) pc.getServlet();
+        AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) nc.getServlet();
         String sharedImagesRootURL = servlet.getSharedImagesRootURL();
-        String homeUrl = servlet.getHomePath().getAbsolutePath(pc);
+        String homeUrl = servlet.getHomePath().getAbsolutePath(nc);
 
         try
         {
-            PrintWriter out = pc.getResponse().getWriter();
+            PrintWriter out = nc.getResponse().getWriter();
             out.print("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
             out.print("<map name='menu_map'>");
             out.print(" <area shape='rect' coords='14,19,76,41' href='" + homeUrl + "'>");
@@ -291,7 +285,7 @@ public class AceServletPage extends AbstractServletPage
             out.print("</map>");
             out.print("<table border='0' cellpadding='0' cellspacing='0' height='44'>");
             out.print("	<tr>");
-            out.print("		<td><a href='" + (((HttpServletRequest) pc.getRequest()).getContextPath()) + "'><img src='" + sharedImagesRootURL + "/ace/masthead-logo.gif' width='158' height='44' border='0'></a></td>");
+            out.print("		<td><a href='" + (((HttpServletRequest) nc.getRequest()).getContextPath()) + "'><img src='" + sharedImagesRootURL + "/ace/masthead-logo.gif' width='158' height='44' border='0'></a></td>");
             out.print("		<td><img src='" + sharedImagesRootURL + "/ace/masthead.gif' width='642' height='44' border='0' usemap='#menu_map'></td>");
             out.print("	</tr>");
             out.print("</table>");
@@ -300,7 +294,7 @@ public class AceServletPage extends AbstractServletPage
             out.print("		<td width='107'><img src='" + sharedImagesRootURL + "/ace/masthead-icon-leader.gif' width='107' height='38' border='0'></td>");
             out.print("		<td width='32' bgcolor='white' valign='middle' align='center'><img src='" + sharedImagesRootURL + "/ace/icons/" + getPageIcon() + "' width='32' height='32' border='0'></td>");
             out.print("		<td width='18'><img src='" + sharedImagesRootURL + "/ace/masthead-curve.gif' width='18' height='38' border='0'></td>");
-            out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left'><nobr>" + getHeading(pc) + "</nobr></td>");
+            out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left'><nobr>" + getHeading(nc) + "</nobr></td>");
             out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left' width='166'><img src='" + sharedImagesRootURL + "/ace/masthead-sparx.gif' width='166' height='38' border='0'></td>");
             out.print("	</tr>");
             out.print(" <tr bgcolor='#003366' height='2'><td bgcolor='#003366' height='2' colspan='5'></td></tr>");
@@ -312,14 +306,14 @@ public class AceServletPage extends AbstractServletPage
         }
     }
 
-    public void handleUnitTestPageBegin(PageContext pc, String category) throws IOException
+    public void handleUnitTestPageBegin(Writer writer, NavigationPathContext nc, String category) throws IOException
     {
-        AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) pc.getServlet();
-        String sharedCssRootURL = ((PageControllerServlet) pc.getServlet()).getSharedCssRootURL();
+        AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) nc.getServlet();
+        String sharedCssRootURL = ((PageControllerServlet) nc.getServlet()).getSharedCssRootURL();
         String unitTestsImagesPrefix = servlet.getSharedImagesRootURL() + "/ace/unit-test/unit-test-";
-        String homeUrl = servlet.getHomePath().getAbsolutePath(pc);
+        String homeUrl = servlet.getHomePath().getAbsolutePath(nc);
 
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
 
         out.println("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
         out.println("		<basefont face='Trebuchet MS' size=2>");
@@ -362,20 +356,20 @@ public class AceServletPage extends AbstractServletPage
         out.println("			<tr><td>");
     }
 
-    public void handleUnitTestPageEnd(PageContext pc) throws IOException
+    public void handleUnitTestPageEnd(Writer writer, NavigationPathContext nc) throws IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         out.println("			</td></tr>");
         out.println("		</table>");
     }
 
-    public void handlePage(PageContext pc) throws ServletException
+    public void handlePage(Writer writer, NavigationPathContext nc) throws ServletException
     {
-        VirtualPath.FindResults results = pc.getActivePath();
+        NavigationPath.FindResults results = nc.getActivePathFindResults();
         String[] unmatchedItems = results.unmatchedPathItems();
         if(unmatchedItems != null && unmatchedItems.length >= 2 && unmatchedItems[0].equals("test"))
-            pc.getRequest().setAttribute(ACE_TESTITEM_ATTRNAME, unmatchedItems[1]);
+            nc.getRequest().setAttribute(ACE_TESTITEM_ATTRNAME, unmatchedItems[1]);
 
-        super.handlePage(pc);
+        super.handlePage(writer, nc);
     }
 }

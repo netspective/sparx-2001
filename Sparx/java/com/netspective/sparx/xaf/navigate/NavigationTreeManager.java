@@ -51,71 +51,78 @@
  */
 
 /**
- * $Id: NavigationIdUrlValue.java,v 1.2 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationTreeManager.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
  */
 
-package com.netspective.sparx.util.value;
+package com.netspective.sparx.xaf.navigate;
 
-import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
-import com.netspective.sparx.xaf.page.NavigationTree;
-import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
+import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 
-public class NavigationIdUrlValue extends ValueSource
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+
+public class NavigationTreeManager extends XmlSource
 {
-    private String source;
+    public static final String NAME_DEFAULT = "default";
+    private Map structures = new HashMap();
 
-    public NavigationIdUrlValue()
+    public NavigationTreeManager(File file)
     {
-        super();
+        loadDocument(file);
     }
 
-    public SingleValueSource.Documentation getDocumentation()
+    public NavigationPath getTree(String name)
     {
-        return new SingleValueSource.Documentation(
-                "Provides access to the URL defined in a NavigationTree (WEB-INF/ui/structure.xml). If " +
-                "no source-name is provided the navigation-id requested is read from the default NavigationTreeManager " +
-                "of the default configuration file. If a source-name is provided, then the property-name is read from the " +
-                "NavigationTreeManager named source-name in the default configuration file.",
-                new String[]{"navigation-id", "source-name/navigation-id"}
-        );
+        reload();
+        return (NavigationPath) structures.get(name == null ? NAME_DEFAULT : name);
     }
 
-    public void initializeSource(String srcParams)
+    public void catalogNodes()
     {
-        int delimPos = srcParams.indexOf('/');
-        if(delimPos >= 0)
-        {
-            source = srcParams.substring(0, delimPos);
-            valueKey = srcParams.substring(delimPos + 1);
-        }
-        else
-            valueKey = srcParams;
-    }
+        structures.clear();
 
-    public String getValue(ValueContext vc)
-    {
-        NavigationPath navTree = null;
-        if(source == null)
+        if(xmlDoc == null)
+            return;
+
+        NodeList children = xmlDoc.getDocumentElement().getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
         {
-            navTree = NavigationTreeManagerFactory.getNavigationTree(vc.getServletContext());
-            if(navTree == null)
-                return "No default NavigationTree found in " + getId();
-        }
-        else
-        {
-            NavigationTreeManager manager = NavigationTreeManagerFactory.getManager(vc.getServletContext());
-            if(manager == null)
-                return "No NavigationTreeManager found in " + getId();
-            navTree = manager.getTree(source);
-            if(navTree == null)
-                return "No '" + source + "' Configuration found in " + getId();
+            Node child = children.item(c);
+            if(child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            Element childElem = (Element) child;
+            if(childElem.getNodeName().equals("structure"))
+            {
+                setAttrValueDefault(childElem, "name", NAME_DEFAULT);
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationPath.class, true);
+                NavigationPath tree = (NavigationPath) instanceGen.getInstance();
+                tree.importFromXml(childElem, tree);
+                structures.put(childElem.getAttribute("name"), tree);
+            }
+            else if(childElem.getNodeName().equals("register-navigation-skin"))
+            {
+                String name = childElem.getAttribute("name");
+                String className = childElem.getAttribute("class");
+                try
+                {
+                    SkinFactory.addNavigationSkin(name, className);
+                }
+                catch (Exception e)
+                {
+                    addError("Error registering skin '"+ name +"': "+ e.toString());
+                }
+            }
         }
 
-        NavigationTree result = (NavigationTree) navTree.getAbsolutePathsMap().get(valueKey);
-        if(result != null)
-            return result.getUrl(vc);
-        else
-            return "Navigation id '"+ valueKey +"' not found.";
+        addMetaInformation();
     }
 }

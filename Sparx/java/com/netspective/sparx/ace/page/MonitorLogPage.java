@@ -51,15 +51,12 @@
  */
  
 /**
- * $Id: MonitorLogPage.java,v 1.3 2002-08-18 20:55:47 shahid.shah Exp $
+ * $Id: MonitorLogPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -74,7 +71,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.FileAppender;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 
 public class MonitorLogPage extends AceServletPage
 {
@@ -128,28 +126,28 @@ public class MonitorLogPage extends AceServletPage
         return "monitor.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return loggerName == null ? "Logs" : loggerName;
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
-        return getCaption(pc);
+        return getCaption(vc);
     }
 
-    public void sendText(PageContext pc, byte[] contents, int startIndex) throws IOException
+    public void sendText(NavigationPathContext nc, byte[] contents, int startIndex) throws IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         out.write("<pre style='font-family: lucida-sans,courier'>");
         for(int i = startIndex; i < contents.length; i++)
             out.write(contents[i]);
         out.write("</pre>");
     }
 
-    public void sendFormatted(PageContext pc, byte[] contents, int startIndex, String delim) throws IOException
+    public void sendFormatted(NavigationPathContext nc, byte[] contents, int startIndex, String delim) throws IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         List lines = new ArrayList();
         StringBuffer line = new StringBuffer();
         for(int i = startIndex; i < contents.length; i++)
@@ -201,9 +199,9 @@ public class MonitorLogPage extends AceServletPage
         out.write("</table></div>");
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         if(loggerName == null)
             return;
 
@@ -257,9 +255,9 @@ public class MonitorLogPage extends AceServletPage
             }
 
             if(logStyle == LOGSTYLE_TEXT)
-                sendText(pc, contents, i);
+                sendText(nc, contents, i);
             else
-                sendFormatted(pc, contents, i, "\t");
+                sendFormatted(nc, contents, i, "\t");
         }
         else
         {

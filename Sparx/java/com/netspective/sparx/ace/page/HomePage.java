@@ -51,20 +51,22 @@
  */
  
 /**
- * $Id: HomePage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: HomePage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 
 import com.netspective.sparx.BuildConfiguration;
+import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.page.PageControllerServlet;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 
 public class HomePage extends AceServletPage
 {
@@ -78,22 +80,22 @@ public class HomePage extends AceServletPage
         return "home.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "ACE Home";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Welcome to ACE";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        String sharedImagesRootURL = ((PageControllerServlet) pc.getServlet()).getSharedImagesRootURL();
+        String sharedImagesRootURL = ((PageControllerServlet) nc.getServlet()).getSharedImagesRootURL();
         try
         {
-            PrintWriter out = pc.getResponse().getWriter();
+            PrintWriter out = nc.getResponse().getWriter();
 
             out.print("<table cool border='0' cellpadding='0' cellspacing='0'>");
             out.print("<tr height='304'>");
@@ -110,7 +112,7 @@ public class HomePage extends AceServletPage
             out.print("							<tr>");
             out.print("								<td valign='middle' align='right' class='list'>");
             out.print("									<div align='right'>");
-            out.print("										<span class='dialog_control'><b>" + com.netspective.sparx.util.config.ConfigurationManagerFactory.getExecutionEvironmentName(pc.getServletContext()) + " </b>Environment<b><br>" +
+            out.print("										<span class='dialog_control'><b>" + com.netspective.sparx.util.config.ConfigurationManagerFactory.getExecutionEvironmentName(nc.getServletContext()) + " </b>Environment<b><br>" +
                     BuildConfiguration.getProductBuild() + "</b><br>");
             out.print("											");
             out.print("											 by Netspective Corp.</span></div>");

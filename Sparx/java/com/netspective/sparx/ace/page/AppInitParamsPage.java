@@ -51,12 +51,13 @@
  */
  
 /**
- * $Id: AppInitParamsPage.java,v 1.3 2002-09-04 16:33:25 shahid.shah Exp $
+ * $Id: AppInitParamsPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
@@ -67,11 +68,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.netspective.sparx.BuildConfiguration;
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.ClassPath;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 
 public class AppInitParamsPage extends AceServletPage
 {
@@ -85,19 +86,19 @@ public class AppInitParamsPage extends AceServletPage
         return "servlet_context.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Servlet Context";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Application Servlet Context";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         Document doc = null;
         try
         {
@@ -185,6 +186,6 @@ public class AppInitParamsPage extends AceServletPage
         addText(propertyElem, "value-detail", ClassPath.getClassFileName(className));
         propertiesElem.appendChild(propertyElem);
 
-        transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
+        transform(nc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
     }
 }

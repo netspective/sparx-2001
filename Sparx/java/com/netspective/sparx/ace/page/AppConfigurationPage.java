@@ -51,12 +51,13 @@
  */
  
 /**
- * $Id: AppConfigurationPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppConfigurationPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -77,7 +78,8 @@ import com.netspective.sparx.util.config.ConfigurationManager;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.config.PropertiesCollection;
 import com.netspective.sparx.util.config.Property;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 
 public class AppConfigurationPage extends AceServletPage
 {
@@ -91,21 +93,21 @@ public class AppConfigurationPage extends AceServletPage
         return "configuration.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Configuration";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Application Configuration";
     }
 
-    public void createConfigElement(PageContext pc, Configuration defaultConfig, Element itemElem, Property property)
+    public void createConfigElement(NavigationPathContext nc, Configuration defaultConfig, Element itemElem, Property property)
     {
         itemElem.setAttribute("name", property.getName());
         String expression = property.getExpression();
-        String value = defaultConfig.getValue(pc, property, null);
+        String value = defaultConfig.getValue(nc, property, null);
         itemElem.setAttribute("value", value);
         if(!expression.equals(value))
         {
@@ -117,9 +119,9 @@ public class AppConfigurationPage extends AceServletPage
             itemElem.setAttribute("description", property.getDescription());
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
         Document configDoc = null;
         try
         {
@@ -166,7 +168,7 @@ public class AppConfigurationPage extends AceServletPage
             if(configEntry.getValue() instanceof Property)
             {
                 Property property = (Property) configEntry.getValue();
-                createConfigElement(pc, defaultConfig, itemElem, property);
+                createConfigElement(nc, defaultConfig, itemElem, property);
             }
             else if(configEntry.getValue() instanceof PropertiesCollection)
             {
@@ -179,7 +181,7 @@ public class AppConfigurationPage extends AceServletPage
                 {
                     Element childElem = configDoc.createElement("config-item");
                     Property property = (Property) c.next();
-                    createConfigElement(pc, defaultConfig, childElem, property);
+                    createConfigElement(nc, defaultConfig, childElem, property);
                     itemElem.appendChild(childElem);
                 }
             }
@@ -187,6 +189,6 @@ public class AppConfigurationPage extends AceServletPage
             configItemsElem.appendChild(itemElem);
         }
 
-        transform(pc, configDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "config-browser-xsl");
+        transform(nc, configDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "config-browser-xsl");
     }
 }

@@ -51,18 +51,20 @@
  */
  
 /**
- * $Id: DatabasePage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabasePage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabasePage extends AceServletPage
 {
@@ -76,19 +78,19 @@ public class DatabasePage extends AceServletPage
         return "sql.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Database";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "ACE - Database";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         out.print("I'm in DatabasePage!");
     }
 }

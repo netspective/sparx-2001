@@ -51,13 +51,14 @@
  */
  
 /**
- * $Id: DatabaseMetaDataPage.java,v 1.3 2002-08-14 02:31:29 shahid.shah Exp $
+ * $Id: DatabaseMetaDataPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.DatabaseMetaData;
@@ -70,9 +71,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xif.SchemaDocument;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseMetaDataPage extends AceServletPage
 {
@@ -88,25 +90,25 @@ public class DatabaseMetaDataPage extends AceServletPage
         return "schema.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Reverse Engineer";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Reverse Engineer SchemaDoc";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         if(dialog == null)
             dialog = new DatabaseMetaDataToSchemaDocDialog();
 
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
 
-        DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
         dialog.prepareContext(dc);
         if(!dc.inExecuteMode())
         {

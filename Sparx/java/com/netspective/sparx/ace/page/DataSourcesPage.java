@@ -51,16 +51,16 @@
  */
  
 /**
- * $Id: DataSourcesPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DataSourcesPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -70,7 +70,8 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
-import com.netspective.sparx.xaf.page.PageContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DataSourcesPage extends AceServletPage
 {
@@ -84,19 +85,18 @@ public class DataSourcesPage extends AceServletPage
         return "data_source.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Data Sources";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Application Data Sources";
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
         Document doc = null;
         try
         {
@@ -114,12 +114,12 @@ public class DataSourcesPage extends AceServletPage
 
         try
         {
-            DatabaseContextFactory.createCatalog(pc, rootElem);
-            transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
+            DatabaseContextFactory.createCatalog(nc, rootElem);
+            transform(nc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
         }
         catch(NamingException e)
         {
-            PrintWriter out = pc.getResponse().getWriter();
+            PrintWriter out = nc.getResponse().getWriter();
             out.write(e.toString());
             e.printStackTrace(out);
         }

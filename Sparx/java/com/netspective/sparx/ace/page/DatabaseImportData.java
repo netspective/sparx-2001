@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportData.java,v 1.6 2002-12-23 04:28:38 shahid.shah Exp $
+ * $Id: DatabaseImportData.java,v 1.7 2002-12-27 17:16:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -62,14 +62,11 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
-import java.util.Set;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Method;
@@ -80,12 +77,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.xml.sax.Locator;
-
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xif.SchemaDocument;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.xif.dal.Schema;
@@ -93,8 +87,8 @@ import com.netspective.sparx.xif.dal.TableImportStatistic;
 import com.netspective.sparx.xif.dal.xml.ParseContext;
 import com.netspective.sparx.xif.dal.xml.ImportException;
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.BuildConfiguration;
 import com.netspective.sparx.util.ClassPath;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseImportData extends AceServletPage
 {
@@ -110,12 +104,12 @@ public class DatabaseImportData extends AceServletPage
         return "schema.gif";
     }
 
-    public final String getCaption(PageContext pc)
+    public final String getCaption(ValueContext vc)
     {
         return "Import DAL Data";
     }
 
-    public final String getHeading(PageContext pc)
+    public final String getHeading(ValueContext vc)
     {
         return "Import XML Data using DAL";
     }
@@ -163,15 +157,15 @@ public class DatabaseImportData extends AceServletPage
             out.write("<br>"+ caption +": None");
     }
 
-    public void handlePageBody(PageContext pc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
     {
-        PrintWriter out = pc.getResponse().getWriter();
+        PrintWriter out = nc.getResponse().getWriter();
         if(dialog == null)
             dialog = new DatabaseImportDataDialog();
 
-        ServletContext context = pc.getServletContext();
+        ServletContext context = nc.getServletContext();
 
-        DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+        DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
         dialog.prepareContext(dc);
         if(!dc.inExecuteMode())
         {
