@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageContext.java,v 1.3 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: PageContext.java,v 1.4 2002-11-25 14:56:29 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -62,6 +62,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.log.LogManager;
@@ -83,6 +85,27 @@ public class PageContext extends ServletValueContext
 
         pageContextNum++;
         activePath = aServlet.getPagesPath().findPath(aServlet.getActivePathToFind(aRequest));
+
+        try
+        {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update((pageContextNum + new Date().toString()).getBytes());
+            transactionId = md.digest().toString();
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            transactionId = "No MessageDigest Algorithm found!";
+            LogManager.recordException(this.getClass(), "constructor", transactionId, e);
+        }
+           }
+
+    public PageContext(VirtualPath pagesPath, ServletContext aServletContext, Servlet aServlet , HttpServletRequest aRequest, HttpServletResponse aResponse, String NavTreeId)
+    {
+        super(aServletContext, aServlet, aRequest, aResponse);
+
+        pageContextNum++;
+        System.out.println("path to find:" + NavTreeId );
+        activePath = pagesPath.findPath(NavTreeId);
 
         try
         {
