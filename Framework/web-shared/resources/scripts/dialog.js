@@ -5,24 +5,28 @@ var GRIDHEADROW_PREFIX = "_dghr.";
 var ALLOW_CLIENT_VALIDATION = true;
 var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
 
+var validTimeStrings = ["noon", "midnight"];
+var validNumbers =  ["0","1","2","3","4","5","6","7","8","9"];
+
 //****************************************************************************
 // FieldType class
 //****************************************************************************
 
-function FieldType(name, onValidate, onChange, onFocus, onBlur)
+function FieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress)
 {
     this.type = name;
     this.isValid = onValidate;
     this.getFocus = onFocus;
     this.valueChanged = onChange;
+    this.keyPress = onKeyPress;    
     this.loseFocus = onBlur;
 }
 
 var FIELD_TYPES = new Array();
 
-function addFieldType(name, onValidate, onChange, onFocus, onBlur)
+function addFieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress)
 {
-    FIELD_TYPES[name] = new FieldType(name, onValidate, onChange, onFocus, onBlur);
+    FIELD_TYPES[name] = new FieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress);
 }
 
 //****************************************************************************
@@ -124,6 +128,10 @@ var SELECTSTYLE_MULTICHECK = 3;
 var SELECTSTYLE_MULTILIST  = 4;
 var SELECTSTYLE_MULTIDUAL  = 5;
 
+var DATE_DTTYPE_DATEONLY = 0;
+var DATE_DTTYPE_TIMEONLY = 1;
+var DATE_DTTYPE_BOTH     = 2;
+
 function DialogField(type, id, name, qualifiedName, caption, flags)
 {
     this.typeName = type;
@@ -151,6 +159,7 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
     this.getFieldAreaElem = DialogField_getFieldAreaElem;
     this.alertRequired = DialogField_alertRequired;
     this.isRequired = DialogField_isRequired;
+    this.alertMessage = DialogField_alertMessage;
 }
 
 function DialogField_isRequired()
@@ -194,6 +203,12 @@ function DialogField_evaluateConditionals(dialog)
     var conditionalFields = this.dependentConditions;
     for(var i = 0; i < conditionalFields.length; i++)
         conditionalFields[i].evaluate(dialog, control);
+}
+
+function DialogField_alertMessage(control, message)
+{
+    alert(this.caption + ": " + message);
+    control.focus();    
 }
 
 function DialogField_alertRequired(control)
@@ -353,7 +368,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
         alert("control is null in DialogFieldConditionalDisplay.evaluate(control)");
         return;
     }
-    
+    alert(this.source);
     var fieldAreaId = FIELDROW_PREFIX + this.source;
     var fieldAreaElem = document.all.item(fieldAreaId);
     if(fieldAreaElem == null)
@@ -373,7 +388,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
             }
         }
     }
-
+    alert(control.checked);
     // now that we have the fieldArea that we want to show/hide go ahead
     // and evaluate the js expression to see if the field should be shown
     // or hidden. remember, the expression is evaluted in the current context
@@ -489,47 +504,100 @@ function SimpleSort(objSelect)
 // Event handlers
 //****************************************************************************
 
+function controlOnKeypress(control)
+{
+    field = activeDialog.fieldsById[control.name];
+    if(field == null || field.type == null) return;
+    if (field.type.keyPress != null)
+        return field.type.keyPress(field, control);
+    else
+        return true;
+}
+
 function controlOnFocus(control)
 {
-    //control.style.backgroundColor = "lightyellow";
+    field = activeDialog.fieldsById[control.name];
+    if(field == null || field.type == null) return;
+    if (field.type.getFocus != null)
+        return field.type.getFocus(field, control);
+    else
+        return true;        
 }
 
 function controlOnChange(control)
 {
     field = activeDialog.fieldsById[control.name];
-    if(field == null)
-    {
-        alert("Control '"+ control.name + "' was not found in activeDialog.fieldsById");
-        return;
-    }
+    if(field == null) return;
     if(field.dependentConditions.length > 0)    
     {
         var conditionalFields = field.dependentConditions;
         for(var i = 0; i < conditionalFields.length; i++)
             conditionalFields[i].evaluate(activeDialog, control);
     }
+    if(field.type == null) return;
+    if (field.type.valueChanged != null)
+        return field.type.valueChanged(field, control);
+    else
+        return true;        
 }
 
 function controlOnBlur(control)
 {
-    //control.style.backgroundColor = "";
+    field = activeDialog.fieldsById[control.name];
+    if(field == null || field.type == null) return;
+    if (field.type.loseFocus != null)
+        return field.type.loseFocus(field, control);
+    else
+        return true;     
 }
 
 //****************************************************************************
 // Field-specific functions
 //****************************************************************************
 
-function MemoField_isValid(field, maxlimit) 
+function MemoField_isValid(field, control) 
 {
-    if (field.value.length > maxlimit)
+    maxlimit = field.maxLength;    
+    if (control.value.length > maxlimit)
     {
-        field.value = field.value.substring(0, maxlimit);
-        alert("Maximum number of characters allowed is " + maxlimit);
+        alert(field.caption + ": Maximum number of characters allowed is " + maxlimit);
+        control.focus();
         return false;
-    }
+    }    
     return true;
 }
 
+function MemoField_onKeyPress(field, control)
+{
+    maxlimit = field.maxLength;    
+    if (control.value.length >= maxlimit)
+    {        
+        alert(field.caption + ": Maximum number of characters allowed is " + maxlimit);
+        return false;
+    }    
+    return true;
+}
+
+function DateField_isValid(field, control)
+{
+    return DateField_valueChanged(field, control);
+}
+
+function DateField_valueChanged(field, control)
+{
+    if (field.dateDataType == DATE_DTTYPE_DATEONLY)
+    {
+        var delim = null;
+        if (field.dateFormat == "MM/dd/yyyy" || field.dateFormat == "MM/dd/yy")
+            delim = '/';
+        else if (field.dateFormat == "MM-dd-yyyy" || field.dateFormat == "MM-dd-yy")
+            delim = '-';        
+        var retVal = formatDate(field, control, delim, field.dateStrictYear);
+        control.value = retVal[1];
+        return retVal[0];
+    }
+    return true;
+}
 
 function SelectField_isValid(field, control)
 {
@@ -584,7 +652,160 @@ function SelectField_isValid(field, control)
     return true;
 }
 
-addFieldType("com.xaf.form.field.SelectField", SelectField_isValid, controlOnChange, controlOnFocus, controlOnBlur);
+addFieldType("com.xaf.form.field.SelectField", SelectField_isValid);
+addFieldType("com.xaf.form.field.MemoField", MemoField_isValid, null, null, null, MemoField_onKeyPress);
+addFieldType("com.xaf.form.field.DateTimeField", DateField_isValid, DateField_valueChanged);
+
+//****************************************************************************
+// Date Formatting
+//****************************************************************************
+
+// returns a string of exactly count characters left padding with zeros
+function padZeros(number, count)
+{
+    var padding = "0";
+    for (var i=1; i < count; i++)
+        padding += "0";
+    if (typeof(number) == 'number')
+        number = number.toString();
+    if (number.length < count)
+        number = (padding.substring(0, (count - number.length))) + number;
+    if (number.length > count)
+        number = number.substring((number.length - count));
+    return number;
+}
+
+function formatDate(field, control, delim, strictYear)
+{
+    if (delim == null)
+        delim = "/";
+    
+    var inDate = control.value;
+    var today = new Date();
+    var currentDate = today.getDate();
+    var currentMonth = today.getMonth() + 1;
+    var currentYear = today.getYear();
+    var fmtMessage = "Date must be in correct format: 'D', 'M" + delim + "D', 'M" + delim + "D" + delim + "Y', or 'M" + delim + "D" + delim + "YYYY'";
+
+    inDate = inDate.toLowerCase();
+    var a = splitNotInArray(inDate, validNumbers);
+    for (i in a)
+    {
+        a[i] = '' + a[i];
+    }
+    if (a.length == 0)
+    {
+        if (inDate.length > 0)
+            field.alertMessage(control, fmtMessage);
+        return [true, inDate];
+    }
+    if (a.length == 1)
+    {
+        if ((a[0].length == 6) || (a[0].length == 8))
+        {
+            a[2] = a[0].substring(4);
+            a[1] = a[0].substring(2,4);
+            a[0] = a[0].substring(0,2);
+        }
+        else
+        {
+            if (a[0] == 0)
+            {
+                a[0] = currentMonth;
+                a[1] = currentDate;
+            }
+            else
+            {
+                a[1] = a[0];
+                a[0] = currentMonth;
+            }
+        }
+    }
+    if (a.length == 2)
+    {
+        if (a[0] <= (currentMonth - 3))
+            a[2] = currentYear + 1;
+        else
+            a[2] = currentYear;
+    }
+
+    if (strictYear != true)
+    {        
+        if (a[2] < 100 && a[2] > 10)
+            a[2] = "19" + a[2];
+        if (a[2] < 1000)
+            a[2] = "20" + a[2];              
+    }
+    if ( (a[0] < 1) || (a[0] > 12) )
+    {
+        field.alertMessage(control, "Month value must be between 1 and 12");
+        return [false, inDate];
+    }
+    if ( (a[1] < 1) || (a[1] > 31) )
+    {
+        field.alertMessage(control, "Day value must be between 1 and 31");
+        return [false, inDate];
+    }
+    if ( (a[2] < 1800) || (a[2] > 2999) )
+    {
+        field.alertMessage(control, "Year must be between 1800 and 2999");
+        return [false, inDate];
+    }
+    return [true, padZeros(a[0],2) + delim + padZeros(a[1],2) + delim + a[2]];
+}
+
+// Split "string" into multiple tokens at "char"
+function splitOnChar(strString, strDelimiter)
+{
+    var a = new Array();
+    var field = 0;
+    for (var i = 0; i < strString.length; i++)
+    {
+        if ( strString.charAt(i) != strDelimiter )
+        {
+            if (a[field] == null)
+                a[field] = strString.charAt(i);
+            else
+                a[field] += strString.charAt(i);
+        }
+        else
+        {
+            if (a[field] != null)
+                field++;
+        }
+    }
+    return a;
+}
+
+// Split "strString" into multiple tokens at inverse of "array"
+function splitNotInArray(strString, arrArray)
+{
+    var a = new Array();
+    var field = 0;
+    var matched;
+    for (var i = 0; i < strString.length; i++)
+    {
+        matched = 0;
+        for (k in arrArray)
+        {
+            if (strString.charAt(i) == arrArray[k])
+            {
+                if (a[field] == null)
+                    a[field] = strString.charAt(i);
+                else
+                    a[field] += strString.charAt(i);
+                matched = 1;
+                break;
+            }
+        }
+        if ( matched == 0 && a[field] != null )
+            field++;
+    }
+    return a;
+}
+
+
+
 
 //****************************************************************************
 // Event handlers
@@ -619,3 +840,4 @@ function documentOnKeyDown(control)
 document.onkeydown = documentOnKeyDown;
 
 dialogLibraryLoaded = true;
+
