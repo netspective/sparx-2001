@@ -20,6 +20,22 @@ public class AppConfigurationPage extends AceServletPage
 	public final String getCaption(PageContext pc) { return "Configuration"; }
 	public final String getHeading(PageContext pc) { return "Application Configuration"; }
 
+	public void createConfigElement(PageContext pc, Configuration defaultConfig, Element itemElem, Property property)
+	{
+		itemElem.setAttribute("name", property.getName());
+		String expression = property.getExpression();
+		String value = defaultConfig.getValue(pc, property, null);
+		itemElem.setAttribute("value", value);
+		if(! expression.equals(value))
+		{
+			itemElem.setAttribute("expression", expression);
+			if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
+				itemElem.setAttribute("final", "no");
+		}
+		if(property.getDescription() != null)
+			itemElem.setAttribute("description", property.getDescription());
+	}
+
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
 		ServletContext context = pc.getServletContext();
@@ -49,29 +65,28 @@ public class AppConfigurationPage extends AceServletPage
 		{
 			Element itemElem = configDoc.createElement("config-item");
 			Map.Entry configEntry = (Map.Entry) i.next();
-			itemElem.setAttribute("name", (String) configEntry.getKey());
 
 			if(configEntry.getValue() instanceof Property)
 			{
 				Property property = (Property) configEntry.getValue();
-				String expression = property.getExpression();
-				String value = defaultConfig.getValue(pc, property.getName());
-				itemElem.setAttribute("value", value);
-				if(! expression.equals(value))
-				{
-					itemElem.setAttribute("expression", expression);
-					if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
-						itemElem.setAttribute("final", "no");
-				}
-				if(property.getDescription() != null)
-					itemElem.setAttribute("description", property.getDescription());
+				createConfigElement(pc, defaultConfig, itemElem, property);
 			}
 			else if(configEntry.getValue() instanceof PropertiesCollection)
 			{
+				itemElem = configDoc.createElement("config-items");
+				itemElem.setAttribute("name", (String) configEntry.getKey());
+
 				PropertiesCollection propColl = (PropertiesCollection) configEntry.getValue();
 				Collection coll = propColl.getCollection();
-				itemElem.setAttribute("expression", "list of " + coll.size() + " item(s)");
+				for(Iterator c = coll.iterator(); c.hasNext(); )
+				{
+					Element childElem = configDoc.createElement("config-item");
+					Property property = (Property) c.next();
+					createConfigElement(pc, defaultConfig, childElem, property);
+					itemElem.appendChild(childElem);
+				}
 			}
+
 			configItemsElem.appendChild(itemElem);
 		}
 
