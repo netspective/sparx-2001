@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryResultsListValue.java,v 1.2 2002-02-01 04:02:12 thua Exp $
+ * $Id: QueryResultsListValue.java,v 1.3 2002-02-07 00:38:53 snshah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -133,7 +133,7 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
         }
     }
 
-    public ResultSet getResultSet(ValueContext vc) throws NamingException, StatementNotFoundException, SQLException, StatementExecutionException
+    public StatementManager.ResultInfo getResultInfo(ValueContext vc) throws NamingException, StatementNotFoundException, SQLException, StatementExecutionException
     {
         StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
         DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), vc.getServletContext());
@@ -149,17 +149,18 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
             ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName, parameters);
         }
 
-        return ri.getResultSet();
+        return ri;
     }
 
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
         SelectChoicesList choices = new SelectChoicesList();
 
-        ResultSet rs = null;
+        StatementManager.ResultInfo ri = null;
         try
         {
-            rs = getResultSet(vc);
+            ri = getResultInfo(vc);
+            ResultSet rs = ri.getResultSet();
             ResultSetMetaData rsmd = rs.getMetaData();
             int numColumns = rsmd.getColumnCount();
 
@@ -187,11 +188,9 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
         {
             try
             {
-                if(rs != null)
-                {
-                    closeStatement(rs);
-                }
-
+                if(ri != null)
+                    ri.close();
+                ri = null;
             }
             catch(Exception e)
             {
@@ -202,25 +201,13 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
         return choices;
     }
 
-    private void closeStatement(ResultSet rs) throws SQLException
-    {
-        Statement stmt = rs.getStatement();
-        Connection con = stmt.getConnection();
-        rs.close();
-        stmt.close();
-        con.close();
-
-        rs = null;
-        stmt = null;
-        con = null;
-    }
-
     public String[] getValues(ValueContext vc)
     {
-        ResultSet rs = null;
+        StatementManager.ResultInfo ri = null;
         try
         {
-            String[] result = StatementManager.getResultSetRowsAsStrings(getResultSet(vc));
+            ri = getResultInfo(vc);
+            String[] result = StatementManager.getResultSetRowsAsStrings(ri.getResultSet());
             if(result == null)
                 return new String[]{""};
             else
@@ -234,11 +221,9 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
         {
             try
             {
-                if(rs != null)
-                {
-                    closeStatement(rs);
-                }
-
+                if(ri != null)
+                    ri.close();
+                ri = null;
             }
             catch(Exception e)
             {
@@ -255,10 +240,11 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 
     public Object getObjectValue(ValueContext vc)
     {
-        ResultSet rs = null;
+        StatementManager.ResultInfo ri = null;
         try
         {
-            return StatementManager.getResultSetSingleColumn(getResultSet(vc));
+            ri = getResultInfo(vc);
+            return StatementManager.getResultSetSingleColumn(ri.getResultSet());
         }
         catch(Exception e)
         {
@@ -268,11 +254,9 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
         {
             try
             {
-                if(rs != null)
-                {
-                    closeStatement(rs);
-                }
-
+                if(ri != null)
+                    ri.close();
+                ri = null;
             }
             catch(Exception e)
             {
