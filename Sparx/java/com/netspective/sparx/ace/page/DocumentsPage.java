@@ -51,13 +51,15 @@
  */
  
 /**
- * $Id: DocumentsPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DocumentsPage.java,v 1.2 2002-07-04 03:15:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileInputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,6 +78,7 @@ import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.ace.AppComponentsExplorerServlet;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
+import com.netspective.sparx.util.java2html.Java2Html;
 import com.netspective.sparx.xaf.navigate.FileSystemContext;
 import com.netspective.sparx.xaf.navigate.FileSystemEntry;
 import com.netspective.sparx.xaf.page.PageContext;
@@ -90,6 +93,14 @@ public class DocumentsPage extends AceServletPage
     private FileSystemContext fsContext;
     private boolean transformersMapInitialized;
     private Map transformersMap;
+    static private Java2Html j2h;
+
+    static
+    {
+        j2h = new Java2Html();
+        j2h.setLineNumberFlag(true);
+        j2h.setTabString("    ");
+    }
 
     public DocumentsPage()
     {
@@ -126,7 +137,8 @@ public class DocumentsPage extends AceServletPage
 
     public final String getCaption(PageContext pc)
     {
-        return caption == null ? "Documents" : caption;
+        FileSystemEntry activeEntry = (FileSystemEntry) pc.getRequest().getAttribute("active-entry");
+        return activeEntry != null ? (activeEntry.getEntryCaption() + "." + activeEntry.getEntryType()) : (caption == null ? "Documents" : caption);
     }
 
     public final String getHeading(PageContext pc)
@@ -211,21 +223,49 @@ public class DocumentsPage extends AceServletPage
             }
             else
             {
-                if(transformersMap != null)
+                if(activeEntry.getEntryType().equalsIgnoreCase("java") || activeEntry.getEntryType().equalsIgnoreCase("js") || activeEntry.getEntryType().equalsIgnoreCase("jsp"))
                 {
-                    String transformUsingStyleSheet = (String) transformersMap.get(activeEntry.getEntryType());
-                    if(transformUsingStyleSheet != null)
+                    Document navgDoc = null;
+                    try
                     {
-                        handlePageMetaData(pc);
-                        handlePageHeader(pc);
-                        transform(pc, activeEntry, transformUsingStyleSheet);
-                        handlePageFooter(pc);
+                        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                        DocumentBuilder builder = factory.newDocumentBuilder();
+                        navgDoc = builder.newDocument();
+                    }
+                    catch(Exception e)
+                    {
+                        throw new ServletException(e);
+                    }
+
+                    Element navgRootElem = navgDoc.createElement("xaf");
+                    navgDoc.appendChild(navgRootElem);
+
+                    fsContext.addXML(navgRootElem, fsContext);
+                    pc.getRequest().setAttribute("active-entry", activeEntry);
+                    handlePageMetaData(pc);
+                    handlePageHeader(pc);
+                    transform(pc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
+                    j2h.generateHtml(new FileInputStream(activeEntry), pc.getResponse().getOutputStream());
+                    handlePageFooter(pc);
+                }
+                else
+                {
+                    if(transformersMap != null)
+                    {
+                        String transformUsingStyleSheet = (String) transformersMap.get(activeEntry.getEntryType());
+                        if(transformUsingStyleSheet != null)
+                        {
+                            handlePageMetaData(pc);
+                            handlePageHeader(pc);
+                            transform(pc, activeEntry, transformUsingStyleSheet);
+                            handlePageFooter(pc);
+                        }
+                        else
+                            activeEntry.send((HttpServletResponse) pc.getResponse());
                     }
                     else
                         activeEntry.send((HttpServletResponse) pc.getResponse());
                 }
-                else
-                    activeEntry.send((HttpServletResponse) pc.getResponse());
             }
         }
         catch(IOException e)

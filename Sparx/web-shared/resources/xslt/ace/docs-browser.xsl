@@ -53,7 +53,7 @@
 					<xsl:attribute name="src"><xsl:value-of select="$ace-navigate-images-root-url"/>/page-yellow.gif</xsl:attribute>
 				</img>
 				</td>
-				<td><a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a></td>
+				<td><a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/>.<xsl:value-of select="@type"/></a></td>
 			</tr>
 		</xsl:for-each>
 	</table>
