@@ -186,8 +186,8 @@ Build targets:
     <!-- ==================== Deployment/kitting targets  =================== -->
        
     <target name="kit-eval" depends="init">
-        <property name="kit.full-name" value="${kit.dir}/${kit.base-dir-name}.zip"/>
         <property name="kit.base-dir-name" value="${build.libitem.file.prefix}"/>
+        <property name="kit.full-name" value="${kit.dir}/${kit.base-dir-name}.zip"/>
 
         <delete file="${kit.full-name}"/>
         <zip destfile="${kit.full-name}">
@@ -228,23 +228,19 @@ Build targets:
             <fileset dir="../web-shared"/>
         </copy>
         		
-		<property name="sparx.cvs.root" value=":pserver:shahid.shah@cvs.netspective.com:/home/netspective/cvs/Sparx"/>
-		<property name="sparx.cvs.passfile" value="../../.cvspass"/>
+		<property name="sparx.cvs.root" value=":pserver:shahid.shah@localhost:/home/netspective/cvs/Sparx"/>
 		
 		<cvs command="checkout" package="hello" dest="${kit.samples.stage.dir}" 
 				cvsRoot="${sparx.cvs.root}"
-				compressionlevel="9" failonerror="yes" quiet="yes"
-				passfile="${sparx.cvs.passfile}"/>
+				compressionlevel="9" failonerror="yes" quiet="yes"/>
 				
 		<cvs command="checkout" package="library" dest="${kit.samples.stage.dir}" 
 				cvsRoot="${sparx.cvs.root}"
-				compressionlevel="9" failonerror="yes" quiet="yes"
-				passfile="${sparx.cvs.passfile}"/>
+				compressionlevel="9" failonerror="yes" quiet="yes"/>
 
 		<cvs command="checkout" package="cura" dest="${kit.samples.stage.dir}" 
 				cvsRoot="${sparx.cvs.root}"
-				compressionlevel="9" failonerror="yes" quiet="yes"
-				passfile="${sparx.cvs.passfile}"/>
+				compressionlevel="9" failonerror="yes" quiet="yes"/>
 
 		<property name="sparx.home.replace.file.bat" value="WEB-INF/build.bat"/>
 		<property name="sparx.home.replace.token.bat" value="SPARX_HOME=..\..\Sparx"/>
