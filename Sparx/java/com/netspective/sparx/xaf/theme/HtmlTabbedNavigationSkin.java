@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.3 2003-03-03 07:16:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -451,6 +451,10 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 break;
             default:
                 writer.write("  <tr>\n");
+                writer.write("      <td colspan=\"3\"><img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" " +
+                    "alt=\"\" width=\"100%\" height=\"12\" border=\"0\"></td>\n");
+                writer.write("  </tr>\n");
+                writer.write("  <tr>\n");
                 break;
 
         }
@@ -732,7 +736,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     {
                         if (tabElement.isInActivePath(nc))
                         {
-                                writer.write("                    <td class=\"menu-level1-tab-end-on\" valign=\"bottom\" nowrap><span class=\"menu-level1\">" +
+                                writer.write("                    <td class=\"menu-level1-tab-end-on\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
                                     "&nbsp;&nbsp;&nbsp;</span></td>\n");
 
                             writer.write("                    <td " + navClass + "on\" " + navAttrs + ">");
@@ -741,7 +745,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                         }
                         else
                         {
-                                writer.write("                    <td class=\"menu-level1-tab-end-off\" valign=\"bottom\" nowrap><span class=\"menu-level1\">" +
+                                writer.write("                    <td class=\"menu-level1-tab-end-off\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
                                     "&nbsp;&nbsp;&nbsp;</span></td>\n");
 
                             writer.write("                    <td " + navClass + "off\" " + navAttrs + ">");
@@ -813,10 +817,11 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                         !nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
                 {
                     writer.write("<td " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
-                    writer.write("<a " + navLinkAttrs + " " + navLinkClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\" href=\"" + tabElement.getUrl(nc) + "\">&nbsp;&nbsp;" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></TD>\n");
+                    writer.write("<a " + navLinkAttrs + " " + navLinkClass + (tabElement.isInActivePath(nc) ? "on" : "off") +
+                            "\" href=\"" + tabElement.getUrl(nc) + "\">&nbsp;&nbsp;" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></TD>\n");
                 }
             }
-            writer.write("			    <td align=\"center\" nowrap><a class=\"menu-level2\">&nbsp;&nbsp;</a></td>\n");
+            //writer.write("			    <td align=\"center\" nowrap><a class=\"menu-level2\">&nbsp;&nbsp;</a></td>\n");
             writer.write("            </tr>\n");
             writer.write("        </table>\n");
             writer.write("    </td>\n");
