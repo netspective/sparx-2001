@@ -4,10 +4,10 @@
 <schema name="enumerations">
 	<include file="datatypes.xml"/>
 
-	<table name="Project_Org_Relationship_Type" abbrev="PrjORTy" type="Relationship_Type">
+	<table name="Project_Org_Rel_Type" abbrev="PrjORTy" type="Relationship_Type">
 	</table>
 
-	<table name="Project_Person_Relationship_Type" abbrev="PrjPRTy" type="Relationship_Type">
+	<table name="Project_Person_Rel_Type" abbrev="PrjPRTy" type="Relationship_Type">
 	</table>
 
 	<table name="Project_Event_Type" abbrev="PrjETy" type="Event_Type">

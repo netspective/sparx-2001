@@ -45,7 +45,7 @@
 
 	<table name="Person_Event_Status" abbrev="PerESt" type="Event_Status"/>
 
-	<table name="Person_Event" abbrev="PrjEvt" type="Event">
+	<table name="Person_Event" abbrev="PerEvt" type="Event">
 		<param name="parent-ref">Person.person_id</param>
 		<param name="event-type-enum">Person_Event_Type</param>
 		<param name="record-status-enum">Person_Event_Status</param>
@@ -56,7 +56,7 @@
 
 	<table name="Person_Flag_Status" abbrev="PerFlSt" type="Flag_Status"/>
 
-	<table name="Person_Flag" abbrev="PrjFlg" type="Flag">
+	<table name="Person_Flag" abbrev="PerFlg" type="Flag">
 		<param name="parent-ref">Person.person_id</param>
 		<param name="record-status-enum">Person_Flag_Status</param>
 		<param name="flag-type-enum">Person_Flag_Type</param>
@@ -90,7 +90,6 @@
 			without affecting a person's registation record.
 		</description>
 		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
-		<column name="login_id" type="autoinc" primarykey="yes" descr="Unique identifier for any given row"/>
 		<column name="person_id" parentref="Person.person_id" indexed="yes" descr="The person for whom login information is specified"/>
 		<column name="user_id" type="text" size="32" unique="yes" descr="The login ID for the person in this system"/>
 		<column name="password" type="text" size="16" descr="The login password"/>
@@ -115,7 +114,7 @@
 		<!-- nothing here yet, just a placeholder for later enhancements -->
 	</table>
 
-	<table name="Person_Role" abbrev="PerLg" type="Default">
+	<table name="Person_Role" abbrev="PerRl" type="Default">
 		<description>
 			Stores the login roles for each person.
 		</description>
@@ -139,18 +138,18 @@
 		<param name="relationship-type-enum">Person_Relationship_Type</param>
 	</table>
 
-	<table name="PersonOrg_Relationship_Type" abbrev="PeORelTy" type="Relationship_Type">
+	<table name="PersonOrg_Rel_Type" abbrev="PeORelTy" type="Relationship_Type">
 		<enum>Member (person_id is a member of org_id)</enum>
 		<enum>Client (person_id is a client of org_id)</enum>
 	</table>
 
-	<table name="PersonOrg_Relationship_Status" abbrev="PeORelSt" type="Relationship_Status"/>
+	<table name="PersonOrg_Rel_Status" abbrev="PeORelSt" type="Relationship_Status"/>
 
 	<table name="PersonOrg_Relationship" abbrev="PeORel" type="Org_Relationship">
 		<description>The relationship between a person and an organization.</description>
 		<param name="parent-ref">Person.person_id</param>
-		<param name="record-status-enum">PersonOrg_Relationship_Status</param>
-		<param name="relationship-type-enum">PersonOrg_Relationship_Type</param>
+		<param name="record-status-enum">PersonOrg_Rel_Status</param>
+		<param name="relationship-type-enum">PersonOrg_Rel_Type</param>
 	</table>
 
 	<table name="Person_Address" abbrev="PerAddr" type="Physical_Address">

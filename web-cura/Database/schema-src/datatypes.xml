@@ -4,53 +4,81 @@
 <schema name="generic-datatypes">
 
 	<datatype name="text">
-		<sqldefn>varchar2(%size%)</sqldefn>
+		<java-class package="java.lang">String</java-class>
+		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<size>32</size>
 	</datatype>
 
 	<datatype name="float">
-		<sqldefn>number(20,6)</sqldefn>
+		<java-type>float</java-type>
+		<java-class package="java.lang">Float</java-class>
+		<sqldefn dbms="ansi">float</sqldefn>
+		<sqldefn dbms="oracle">number(20,6)</sqldefn>
 	</datatype>
 
 	<datatype name="integer">
-		<sqldefn>number(8)</sqldefn>
+		<java-type>int</java-type>
+		<java-class package="java.lang">Integer</java-class>
+		<sqldefn dbms="ansi">integer</sqldefn>
+		<sqldefn dbms="oracle">number(8)</sqldefn>
 	</datatype>
 
 	<datatype name="smallint">
-		<sqldefn>number(4)</sqldefn>
+		<java-type>int</java-type>
+		<java-class package="java.lang">Integer</java-class>
+		<sqldefn dbms="ansi">smallint</sqldefn>
+		<sqldefn dbms="oracle">number(4)</sqldefn>
 	</datatype>
 
 	<datatype name="longint">
-		<sqldefn>number(16)</sqldefn>
+		<java-type>long</java-type>
+		<java-class package="java.lang">Long</java-class>
+		<sqldefn dbms="ansi">integer</sqldefn>
+		<sqldefn dbms="oracle">number(16)</sqldefn>
 	</datatype>
 
 	<datatype name="boolean">
-		<sqldefn>number(1)</sqldefn>
+		<java-type>boolean</java-type>
+		<java-class package="java.lang">Boolean</java-class>
+		<sqldefn dbms="ansi">boolean</sqldefn>
+		<sqldefn dbms="oracle">number(1)</sqldefn>
 	</datatype>
 
 	<datatype name="currency">
-		<sqldefn>number(12,2)</sqldefn>
+		<java-type>float</java-type>
+		<java-class package="java.lang">Float</java-class>
+		<sqldefn dbms="ansi">currency</sqldefn>
+		<sqldefn dbms="oracle">number(12,2)</sqldefn>
+		<sqldefn dbms="mssql">money</sqldefn>
 	</datatype>
 
 	<datatype name="percentage">
-		<sqldefn>number(5,2)</sqldefn>
+		<java-type>float</java-type>
+		<java-class package="java.lang">Float</java-class>
+		<sqldefn dbms="ansi">float</sqldefn>
+		<sqldefn dbms="oracle">number(5,2)</sqldefn>
 	</datatype>
 
 	<datatype name="lookup">
-		<sqldefn>number(8)</sqldefn>
-		<sqlwritefmt>$value$</sqlwritefmt>
+		<java-type>integer</java-type>
+		<java-class package="java.lang">Integer</java-class>
+		<sqldefn dbms="ansi">integer</sqldefn>
+		<sqldefn dbms="oracle">number(8)</sqldefn>
 	</datatype>
 
 	<datatype name="date">
-		<sqldefn>date</sqldefn>
+		<java-class package="java.util">Date</java-class>
+		<sqldefn dbms="ansi">date</sqldefn>
 	</datatype>
 
 	<datatype name="stamp">
-		<sqldefn>date</sqldefn>
+		<java-class package="java.util">Date</java-class>
+		<sqldefn dbms="ansi">date</sqldefn>
 	</datatype>
 
 	<datatype name="time">
-		<sqldefn>date</sqldefn>
+		<java-class package="java.util">Date</java-class>
+		<sqldefn dbms="ansi">date</sqldefn>
 	</datatype>
 
 	<datatype name="autoinc" type="longint">
@@ -58,7 +86,7 @@
 	</datatype>
 
 	<datatype name="datablock">
-		<sqldefn>clob</sqldefn>
+		<sqldefn dbms="oracle">clob</sqldefn>
 	</datatype>
 
 	<datatype name="email" type="text">

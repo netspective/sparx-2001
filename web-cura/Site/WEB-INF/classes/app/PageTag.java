@@ -43,7 +43,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 
 		if(! loginDialog.accessAllowed(servletContext, req, resp))
 		{
-			DialogContext dc = new DialogContext(servletContext, page, req, resp, loginDialog, SkinFactory.getDialogSkin());
+			DialogContext dc = loginDialog.createContext(servletContext, page, req, resp, SkinFactory.getDialogSkin());
 			loginDialog.prepareContext(dc);
 			if(dc.inExecuteMode())
 			{
@@ -102,7 +102,10 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			throw new JspException(e.toString());
 		}
 
-		return EVAL_BODY_INCLUDE;
+		if(handleDefaultBodyItem())
+			return SKIP_BODY;
+		else
+			return EVAL_BODY_INCLUDE;
 	}
 
 	public int doEndTag() throws JspException

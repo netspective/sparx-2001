@@ -105,12 +105,13 @@ public class AppLoginDialog extends LoginDialog
 		Map personRegistration = null;
 		Map memberOrgs = new HashMap();
 
+		StatementManager.ResultInfo ri = null;
 		try
 		{
 			DatabaseContext dbc = DatabaseContextFactory.getContext(dc);
 			StatementManager stmtMgr = StatementManagerFactory.getManager(dc.getServletContext());
 
-			StatementManager.ResultInfo ri = stmtMgr.execute(dbc, dc, null, "person.active-org-memberships", new Object[] { personId });
+			ri = stmtMgr.execute(dbc, dc, null, "person.active-org-memberships", new Object[] { personId });
 			ResultSet rs = ri.getResultSet();
 			while(rs.next())
 			{
@@ -125,7 +126,10 @@ public class AppLoginDialog extends LoginDialog
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException(e.toString());
+			if(ri != null)
+				throw new RuntimeException(e.toString() + "\n" + ri.getSQL(dc));
+			else
+				throw new RuntimeException(e.toString());
 		}
 
 		if(personRegistration == null)

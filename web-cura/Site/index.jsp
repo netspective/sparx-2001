@@ -3,7 +3,7 @@
 <app:page title="Cura" heading="Welcome to Cura">
 
 	<b>Accounts</b><br/>
-	&nbsp;&nbsp;<app:link url="/account/create.jsp">Create new Account</app:link><br/>
+	&nbsp;&nbsp;<app:link url="/account/index.jsp?cmd=dialog,org.registration,add">Create new Account</app:link><br/>
 	&nbsp;&nbsp;<app:link url="/account/browse.jsp">Review Accounts</app:link><br/>
 	<b>Contacts</b><br/>
 	&nbsp;&nbsp;<app:link url="/resources/pages">Create new Contact</app:link><br/>

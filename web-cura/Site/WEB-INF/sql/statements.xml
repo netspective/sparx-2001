@@ -24,11 +24,11 @@
 
 		<statement name="active-org-memberships">
 			select org.org_id, org.org_name
-			from org, person_relation
-			where person_id = ?
-			and relation_type = 0    /* member of organization */
-			and relation_status = 1  /* active status only */
-			and person_relation.org_id = org.org_id /* join to get org_name */
+			from org, personorg_relationship por
+			where por.parent_id = ?
+			and por.record_status_id = 1  /* active status only */
+			and por.rel_type = 0       /* member of organization */
+			and por.rel_org_id = org.org_id /* join to get org_name */
 		</statement>
 
 	</sql-statements>
@@ -57,7 +57,10 @@
 			<params>
 				<param value="request:org_id"/>
 			</params>
-			<report heading="Overview"/>
+			<report heading="Overview">
+				<banner-item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+				<banner-item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+			</report>
 		</statement>
 
 		<statement name="classification">
@@ -78,26 +81,13 @@
 			</params>
 			<report heading="Classification"/>
 		</statement>
-
-		<statement name="enum-ownerships-all">
-			select caption, id from Org_Ownership
-		</statement>
-
-		<statement name="enum-industries-all">
-			select caption, id from Org_Industry_Enum
-		</statement>
-
-		<statement name="enum-types-all">
-			select caption, id from Org_Type_Enum
-		</statement>
-
 	</sql-statements>
 
 	<query-defn id="Organization">
 
 		<!-- Fields -->
 		<field id="org_id" caption="Account ID" join="org" column="org_id">
-			<report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}"/>
+			<report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}" align="right"/>
 		</field>
 		<field id="org_code" caption="Account Code" join="org" column="org_code">
 			<report heading="Code"/>
@@ -108,19 +98,20 @@
 		<field id="org_abbrev" caption="Account Abbreviation" join="org" column="org_abbrev" where-expr="upper(org.org_abbrev)">
 			<report heading="Abbrev"/>
 		</field>
-		<field id="org_industry" caption="Industry" join="org_industry" column="org_industry">
-			<report heading="Industry" calc="count" type="numeric" format="currency"/>
+		<field id="org_industry" caption="Account Industry" join="org_industry" column="org_industry" column-expr="org_industry_enum.caption">
+			<report heading="Industry"/>
 		</field>
 
 		<!-- Joins -->
 		<join id="org" table="org" auto-include="yes"/>
-		<join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)"/>
+		<join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)" imply-join="org_industry_enum"/>
+		<join id="org_industry_enum" table="org_industry_enum" condition="org_industry.org_industry = org_industry_enum.id (+)" imply-join="org_industry_enum"/>
 
 		<select-dialog name="org_search" allow-debug="yes" show-output-dests="no" hide-readonly-hints="yes" heading="Search Accounts">
 			<field.text query-field="org_code"/>
 			<field.text query-field="org_name"/>
 			<field.text query-field="org_abbrev"/>
-			<field.select query-field="org_industry" choices="query:org.enum-industries-all" prepend-blank="yes"/>
+			<field.select query-field="org_industry" choices="schema-enum:Org_Industry_Enum" prepend-blank="yes"/>
 			<field.select name="sort_order"
 					caption="Sort By"
 					style="combo"
@@ -133,6 +124,7 @@
 				<display field="org_industry"/>
 				<order-by field="form:sort_order"/>
 
+				<condition field="org_code" allow-null="no" comparison="starts-with" value="form:org_code" connector="and" bind-expr="upper(?)"/>
 				<condition field="org_name" allow-null="no" comparison="starts-with" value="form:org_name" connector="and" bind-expr="upper(?)"/>
 				<condition field="org_abbrev" allow-null="no" comparison="starts-with" value="form:org_abbrev" connector="and" bind-expr="upper(?)"/>
 				<condition field="org_industry" allow-null="no" comparison="equals" value="form:org_industry" connector="and"/>

@@ -11,12 +11,12 @@ insert into Person(person_id, name_first, name_last, short_name, simple_name, co
 
 /* allow SNSHAH to log in */
 
-insert into Person_Login(login_id, person_id, login_status, user_id, password, quantity) 
-	values(PerLg_login_id_seq.nextval, Per_person_id_seq.currval, 1, 'cura', 'cura', 1024);
+insert into Person_Login(system_id, person_id, login_status, user_id, password, quantity) 
+	values(PerLg_system_id_seq.nextval, Per_person_id_seq.currval, 1, 'cura', 'cura', 1024);
 
 /* make SNSHAH a member of COMSYS */
 
-insert into Person_Relation(system_id, person_id, relation_type, relation_status, org_id)
+insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
 	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 
 commit;	

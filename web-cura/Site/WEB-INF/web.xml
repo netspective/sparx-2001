@@ -3,21 +3,7 @@
 <web-app>
 	<!-- setup external classes -->
 	<classpath id='C:\Projects\Framework\tools\idea\classes'/>
-	<classpath id='C:\Utils\Java\jakarta-oro-2.0.3\jakarta-oro-2.0.3.jar'/>
-	<classpath id='C:\Utils\Java\jakarta-log4j-1.1.2\dist\lib\log4j.jar'/>
-	<classpath id='C:\Utils\java\xerces-1_4_1\xerces.jar'/>
-	<classpath id='C:\Utils\java\xalan-j_2_1_0\bin\xalan.jar'/>
-	<classpath id='C:\oracle\ora81\jdbc\lib\classes12.zip'/>
-
-	<!-- setup application servlet aliases -->
-	<servlet>
-		<servlet-name>Navigator</servlet-name>
-		<servlet-class>com.xaf.navigate.NavigateFileSystemServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Navigator</servlet-name>
-		<url-pattern>/navigate/*</url-pattern>
-	</servlet-mapping>
+	<classpath id='C:\utils\dbms\oracle\ora81\jdbc\lib\classes12.zip'/>
 
 	<!-- setup utility servlet aliases -->
 	<servlet>
@@ -39,7 +25,7 @@
 	  <res-ref-name>jdbc/cura</res-ref-name>
 	  <res-type>javax.sql.DataSource</res-type>
 	  <init-param driver-name="oracle.jdbc.driver.OracleDriver"/>
-	  <init-param url="jdbc:oracle:thin:@mobilis:1521:mobilis"/>
+	  <init-param url="jdbc:oracle:thin:@aruba:1521:aruba"/>
 	  <init-param user="cura"/>
 	  <init-param password="cura"/>
 	  <init-param max-connections="20"/>
