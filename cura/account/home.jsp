@@ -8,7 +8,7 @@
 <app:page title="<%= org_name %>" heading="<%= org_name %>">
 <table width='100%' cellpadding='3' cellspacing='0'>
     <tr>
-        <td colspan='2' align='left' valign='top'><xaf:query name="org.registration" skin="detail-full" /></td>
+        <td colspan='2' align='left' valign='top'><xaf:query name="org.registration" skin="detail" /></td>
     </tr>
     <tr>
         <td width='50%' align='left' valign='top'><xaf:query name="org.contact-list" skin="report" /></td>

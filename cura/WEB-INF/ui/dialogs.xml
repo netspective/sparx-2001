@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 
 <xaf>
+	<!-- Uncomment the following to try out different skins
 	<include file="app-skins.xml"/>
+	-->
+	
 	<include file="app-dialogs.xml"/>
 	<include file="test-skins.xml"/>
 	<include file="test-dialogs.xml"/>	

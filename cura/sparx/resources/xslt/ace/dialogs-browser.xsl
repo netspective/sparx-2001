@@ -130,10 +130,48 @@
 		<td class="data_table"><font color="red"><xsl:value-of select="@retain-params"/><xsl:if test="not(@retain-params)">&#160;</xsl:if></font></td>
 		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(*)"/></font></td>
 		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(execute-tasks/*)"/></font></td>
-		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_class-name"/></font></td>
-		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_dc-class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_dc-class-name"/></font></td>
-		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_director-class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_director-class-name"/></font></td>
+		<td class="data_table">
+            <xsl:call-template name="class-doc">
+                <xsl:with-param name="class-name" select="@_class-name"/>
+                <xsl:with-param name="class-file-name" select="@_class-file-name"/>
+                <xsl:with-param name="class-src-name" select="@_class-src-name"/>
+            </xsl:call-template>
+        </td>
+		<td class="data_table">
+            <xsl:call-template name="class-doc">
+                <xsl:with-param name="class-name" select="@_dc-class-name"/>
+                <xsl:with-param name="class-file-name" select="@_dc-class-file-name"/>
+                <xsl:with-param name="class-src-name" select="@_dc-class-src-name"/>
+            </xsl:call-template>
+        </td>
+		<td class="data_table">
+            <xsl:call-template name="class-doc">
+                <xsl:with-param name="class-name" select="@_director-class-name"/>
+                <xsl:with-param name="class-file-name" select="@_director-class-file-name"/>
+                <xsl:with-param name="class-src-name" select="@_director-class-src-name"/>
+            </xsl:call-template>
+        </td>
 	</tr>
+</xsl:template>
+
+<xsl:template name="class-doc">
+    <xsl:param name="class-name"/>
+    <xsl:param name="class-file-name"/>
+    <xsl:param name="class-src-name"/>
+    <xsl:choose>
+        <xsl:when test="$class-src-name">
+            <a>
+                <xsl:attribute name="href"><xsl:value-of select="concat($root-url, '../../../documents', '?browseDoc=', $class-src-name)"/></xsl:attribute>
+                <xsl:attribute name="target"><xsl:value-of select="$class-src-name"/></xsl:attribute>
+                <xsl:attribute name="title"><xsl:value-of select="$class-src-name"/>
+                <xsl:value-of select="$class-file-name"/></xsl:attribute>
+                <xsl:value-of select="$class-name"/>
+            </a>
+        </xsl:when>
+        <xsl:otherwise>
+            <span><xsl:attribute name="title"><xsl:value-of select="$class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="$class-name"/></font></span>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="dialog" mode="toc-select">
@@ -155,7 +193,8 @@
 		<td><xsl:value-of select="$indent"/><xsl:value-of select="name()"/></td>
 		<td><font color="navy"><xsl:value-of select="$field/@default"/></font></td>
 		<td>
-			<xsl:for-each select="$field/@*">
+			<!-- this should be select="$field/@*" but Xalan doesn't seem to work with that so we're using just @* because . is active field anyway -->
+			<xsl:for-each select="@*">
 				<xsl:if test="name() != 'name' and name() != 'caption' and name() != 'default'">
 					<font color="green"><xsl:value-of select="name()"/></font>
 					=

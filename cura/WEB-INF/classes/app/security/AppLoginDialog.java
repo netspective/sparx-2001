@@ -36,13 +36,16 @@ public class AppLoginDialog extends LoginDialog
 	{
 		String resourcesUrl = ((HttpServletRequest) dc.getRequest()).getContextPath() + "/resources";
 
+		/* uncomment the following if this is not a sample application */
+		/*
 		writer.write("<head>");
 		writer.write("<title>Welcome to CURA</title>");
 		writer.write("</head>");
 		writer.write("<body background='white'>");
+		*/
 		writer.write("	<center><br>");
         writer.write("  <table width='400' cellpadding='0' cellspacing='0'>");
-        writer.write("  <tr><td align='center' ><img src='"+ resourcesUrl +"/images/design/logo-main.gif' border='0'></td</tr>");
+        writer.write("  <tr><td align='center' ><img src='"+ resourcesUrl +"/images/design/logo-main.gif' border='0'></td></tr>");
 		writer.write("	<tr><td align='center' >");
         renderHtml(writer, dc, true);
         writer.write("  </td></tr>");
@@ -50,7 +53,9 @@ public class AppLoginDialog extends LoginDialog
         writer.write("  </td></tr>");
         writer.write("  </table>");
 		writer.write("	</center>");
+		/*
 		writer.write("</body>");
+		*/
 	}
 
     public boolean isValid(DialogContext dc)

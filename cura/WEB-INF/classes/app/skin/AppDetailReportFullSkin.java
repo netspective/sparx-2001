@@ -3,7 +3,7 @@
  * User: Aye Thu
  * Date: Jan 14, 2002
  * Time: 12:12:31 AM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package app.skin;
@@ -14,17 +14,16 @@ public class AppDetailReportFullSkin extends HtmlSingleRowReportSkin
 {
     public AppDetailReportFullSkin()
     {
-        this(1, true);
+        this(true, 1, true);
     }
 
-    public AppDetailReportFullSkin(int tableCols, boolean horizontalLayout)
+    public AppDetailReportFullSkin(boolean fullWidth, int tableCols, boolean horizontalLayout)
     {
-        super(tableCols, horizontalLayout);
+        super(fullWidth, tableCols, horizontalLayout);
         outerTableAttrs = "width='100%' border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	    innerTableAttrs = "cellpadding='2' cellspacing='0' border='0' width='100%'";
 	    frameHdRowAttrs = "bgcolor='#4A74E7'";
 	    frameHdFontAttrs = "face='Trebuchet MS,Arial' color=white style='font-size: 10pt;' ";
-        frameHdTableRowBgcolorAttrs = "#F4F8FA";
         frameFtRowAttrs = "bgcolor='#c4d6ec'";
         frameFtFontAttrs = "face='verdana,arial,helvetica'  color='#000000'";
 	    bannerRowAttrs = "bgcolor='#c4d6ec'";
@@ -34,6 +33,5 @@ public class AppDetailReportFullSkin extends HtmlSingleRowReportSkin
 	    dataFtFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
 	    rowSepImgSrc = "/shared/resources/images/design/bar.gif";
         captionCellAttrs  = "style='width: 100px'";
-
     }
 }

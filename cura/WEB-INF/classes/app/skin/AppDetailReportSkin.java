@@ -2,7 +2,7 @@
  * Description: app.skin.AppDetailReportSkin
  * @author ThuA
  * @created Dec 28, 2001 1:20:48 PM
- * @version 
+ * @version
  */
 package app.skin;
 
@@ -12,17 +12,16 @@ public class AppDetailReportSkin   extends HtmlSingleRowReportSkin
 {
     public AppDetailReportSkin()
     {
-        this(1, true);
+        this(false, 1, true);
     }
 
-    public AppDetailReportSkin(int tableCols, boolean horizontalLayout)
+    public AppDetailReportSkin(boolean fullWidth, int tableCols, boolean horizontalLayout)
     {
-        super(tableCols, horizontalLayout);
+        super(fullWidth, tableCols, horizontalLayout);
         outerTableAttrs = "width='300' border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	    innerTableAttrs = "cellpadding='2' cellspacing='0' border='0' width='100%'";
 	    frameHdRowAttrs = "bgcolor='#4A74E7'";
 	    frameHdFontAttrs = "face='Trebuchet MS,Arial' color=white style='font-size: 10pt;' ";
-        frameHdTableRowBgcolorAttrs = "#F4F8FA";
         frameFtRowAttrs = "bgcolor='#c4d6ec'";
         frameFtFontAttrs = "face='verdana,arial,helvetica'  color='#000000'";
 	    bannerRowAttrs = "bgcolor='#c4d6ec'";
@@ -32,6 +31,5 @@ public class AppDetailReportSkin   extends HtmlSingleRowReportSkin
 	    dataFtFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
 	    rowSepImgSrc = "/shared/resources/images/design/bar.gif";
         captionCellAttrs  = "style='width: 100px'";
-
     }
 }

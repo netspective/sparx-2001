@@ -4,7 +4,7 @@
 <app:page title="Task Home" heading="Task Home">
 <table width='100%' cellpadding='3' cellspacing='0'>
     <tr>
-        <td colspan='2' align='left' valign='top'><xaf:query name="task.information" skin="detail-full" /></td>
+        <td colspan='2' align='left' valign='top'><xaf:query name="task.information" skin="detail-compressed" /></td>
     </tr>
     <tr>
         <td width='50%' align='left' valign='top'><xaf:query name="task.assigned-members" skin="report" /></td>

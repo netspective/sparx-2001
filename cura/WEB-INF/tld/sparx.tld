@@ -10,6 +10,45 @@
     <uri>http://xaf.org/xaf-db.tld</uri>
 
     <tag>
+        <name>panel</name>
+        <tag-class>com.netspective.sparx.xaf.taglib.PanelTag</tag-class>
+
+        <attribute>
+            <name>heading</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>headingExtra</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>frameColor</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>bodyColor</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>extraCellAttrs</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>frameFontAttrs</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>bodyStartHtml</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>bodyEndHtml</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>dialog</name>
         <tag-class>com.netspective.sparx.xaf.taglib.DialogTag</tag-class>
         <tei-class>com.netspective.sparx.xaf.taglib.DialogTagTEI</tei-class>

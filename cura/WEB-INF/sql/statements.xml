@@ -11,7 +11,9 @@
     <include file="app-task-query-defns.xml"/>
     <include file="app-task-sql.xml"/>
 
+	<!--
     <register-report-skin name="report" class="app.skin.AppReportSkin"/>
     <register-report-skin name="detail" class="app.skin.AppDetailReportSkin"/>
     <register-report-skin name="detail-full" class="app.skin.AppDetailReportFullSkin"/>
+    -->
 </xaf>
