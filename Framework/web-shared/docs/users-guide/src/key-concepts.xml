@@ -5,55 +5,332 @@
     <section>
         <title>Centralized Configuration</title>
         <para>
-        All Sparx applications use a single XML-based repository for all configuration items.
+        All &product-name; applications use centralized XML-based repositories for configuration items 
+        and data sources. The configuration files contain  <emphasis role="bold">&lt;property&gt;</emphasis>
+        and <emphasis role="bold">&lt;properties&gt;</emphasis> tags that can use dynamic 
+        value replacements to define properties that depend on the runtime values of other properties.
+        The following is a sample section from the main configuration file, 
+        <filename class="conf">WEB-INF/configuration.xml</filename>:
+
+        <programlisting>
+        <![CDATA[        
+<property name="system.projects-root" value="D:/Projects"/>
+<property name="framework.root-path" value="${system.projects-root}/Framework"/>
+<property name="app.project-root" value="${system.projects-root}/web-cura"/>
+...
+<property name="framework.ace.root-url" value="${create-app-url:/ace}"/>
+...
+<properties name="framework.ace.bookmarks">
+    <property name="tagdoc,Tag Docs" value="${framework.shared.docs-url}/tagdoc/xaf.html"/>
+    <property name="javadoc,Java Docs" value="${framework.shared.docs-url}/javadoc/index.html"/>
+    <property name="project,Project Docs" value="${app.documents-root-path}"/>
+    <property name="framework,Framework Docs" value="${framework.shared.docs-path}/project"/>
+</properties>
+...
+<system-property name="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+        ]]>                
+        </programlisting>
+        As shown above, the configuration properties are defined as name/value pairs and the values
+        can either be static or dynamic. For the properties with dynamic values, value sources can also be used 
+        to generate the value(as in the <emphasis>framework.ace.root-url</emphasis> property defined above
+        using the <emphasis>create-app-url</emphasis> value source).
+
         </para>
-
-       <section>
-            <title>Data Sources</title>
-            <para>
-
-            </para>
-        </section>
     </section>
-
+    
     <section>
         <title>Value Sources</title>
         <para>
-        A Value Source is the source of a single value, or a collection of values (a data object),
-        for use in many places throughout Sparx. The format of a value source is similar to a URL (name:params).
-        For example:
+            <!-- Unlike Java properties, Sparx configuration files allow programmers to define dynamic properties 
+            driven by value sources that change their values depending upon the execution environment 
+            (request-time parameters, session attributes, etc).     
+            -->
+            A Value Source is the source of a single value, or a collection of values (a data object),
+            for use in many places throughout &product-name;. The format of a value source is similar to a URL (name:params).
+            For example:
         <itemizedlist>
             <listitem>request:abc</listitem>
             <listitem>session-attr:abc</listitem>
             <listitem>form:abc</listitem>
         </itemizedlist>
+        All available &product-name; value sources can be seen in &explorer-name; submenu item
+            <menuchoice role="bold">
+                <guimenu>Application</guimenu>  
+                <guimenuitem>
+                    Factories
+                    
+                </guimenuitem>
+                <guisubmenu>Value Sources </guisubmenu>
+            </menuchoice>       
+         as shown below:
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/statements/ace-valuesource.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>                 
+           
         </para>
         <section>
-            <title>Single Value Sources</title>
+            <title>Single Value Sources (SVS)</title>
             <para>
-
+            A SingleValueSource(SVS) is an object that returns a single value from a particular source 
+            (like a request parameter, text field, or session attribute). The following are all
+            the single value sources defined in &product-name;:
+            <variablelist>
+                <title>SVS Definitions</title>
+                <varlistentry>
+                    <term> <filename>config</filename> </term>
+                    <term> <filename>config-expr</filename> </term>
+                    <listitem>
+                        <para>
+                        configuration item defined in <filename class="conf">WEB-INF/configuration.xml</filename>
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><filename>create-app-url</filename></term>                    
+                    <listitem>
+                        <para>
+                        The application's root URL
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><filename>custom-sql</filename></term>                    
+                    <listitem>
+                        <para>
+                        Used for DML tasks(using either <emphasis role="bold">&lt;xaf:dml&gt;</emphasis> 
+                        custom tag or <emphasis role="bold">&lt;exec-dml&gt;</emphasis> XML tag)
+                        when one needs to specify a customized SQL expression for a column. For example:
+                        <programlisting>
+&lt;exec-dml command="insert" table="org" columns="cdate=custom-sql:to_char('MM/dd/YYYY', sysdate)"/&gt;
+                        </programlisting>
+                        </para>
+                    </listitem>
+                </varlistentry>          
+                <varlistentry>
+                    <term><filename>request</filename></term>                    
+                    <term><filename>request-param</filename></term>
+                    <listitem>
+                        <para>
+                        Retrieves a request parameter value. For example, the following dialog
+                        text field is filled with the value of <emphasis>myval</emphasis>request parameter:
+                        <programlisting>
+&lt;field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/&gt;
+                        </programlisting>                        
+                        </para>
+                    </listitem>
+                </varlistentry>                 
+                <varlistentry>
+                    <term><filename>servlet-context-init-param</filename></term>                                        
+                    <listitem>
+                        <para>
+                        Retrieves a servlet context init parameter.
+                        </para>
+                    </listitem>
+                </varlistentry>                 
+                <varlistentry>
+                    <term><filename>servlet-context-path</filename></term>                                        
+                    <listitem>
+                        <para>
+                        Retrieves the application's servlet context path.
+                        </para>
+                    </listitem>
+                </varlistentry>   
+                <varlistentry>
+                    <term><filename>static</filename></term>                    
+                    <term><filename>string</filename></term>
+                    <listitem>
+                        <para>
+                        Static value source.                      
+                        </para>
+                    </listitem>
+                </varlistentry>      
+                <varlistentry>
+                    <term><filename>system-property</filename></term>                    
+                    <listitem>
+                        <para>
+                        A system property variable value
+                        </para>
+                    </listitem>
+                </varlistentry>                
+            </variablelist>
             </para>
         </section>
         <section>
-            <title>List Value Sources</title>
+            <title>List Value Sources (LVS)</title>
+            <para>
+            A ListValueSource is an object that returns a list of values from a particular source 
+            (like a select field or SQL query).
+            
+            <variablelist>
+                <title>LVS Definitions</title>
+                <varlistentry>
+                    <term> <filename>form</filename> </term>                    
+                    <listitem>
+                        <para>
+                        configuration item defined in <filename class="conf">WEB-INF/configuration.xml</filename>
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><filename>formOrRequest</filename></term>                    
+                    <listitem>
+                        <para>
+                        The application's root URL
+                        </para>
+                    </listitem>
+                </varlistentry>     
+                <varlistentry>
+                    <term><filename>query</filename></term>                    
+                    <listitem>
+                        <para>
+                        Result column value(s) from a query. For example, the following dialog field 
+                        select list's options are filled with the result set of the query <emphasis>enum-types-all</emphasis>:
+                        <programlisting>
+&lt;field.select name="org_type" caption="Type" choices="query:org.enum-types-all"/&gt;
+                        </programlisting>
+                        </para>
+                    </listitem>
+                </varlistentry>                    
+                <varlistentry>
+                    <term><filename>query-cols</filename></term>                    
+                    <listitem>
+                        <para>
+                        Result column name(s) from a query. This is different from <filename>query</filename>
+                        value source because it does not return the data values.
+                        </para>
+                    </listitem>
+                </varlistentry>                     
+                <varlistentry>
+                    <term><filename>query-defn-fields</filename></term>                    
+                    <listitem>
+                        <para>
+                        Retrieves the data fields defined inside a dynamic query definition.
+                        </para>
+                    </listitem>
+                </varlistentry> 
+                <varlistentry>
+                    <term><filename>query-defn-selects</filename></term>                    
+                    <listitem>
+                        <para>
+                        Retrieves the select statements defined inside a dynamic query definition.
+                        </para>
+                    </listitem>
+                </varlistentry>                
 
+                <varlistentry>
+                    <term><filename>session</filename></term>                    
+                    <listitem>
+                        <para>
+                        Retrieves session attribute(s)
+                        </para>
+                    </listitem>
+                </varlistentry>                   
+                <varlistentry>
+                    <term><filename>strings</filename></term>                    
+                    <listitem>
+                        <para>
+                        A list of static strings
+                        </para>
+                    </listitem>
+                </varlistentry>              
+            </variablelist>            
+            </para>
         </section>
     </section>
+        
+    <section>
+        <title>Data Sources</title>
+        <para>
+        All data sources are defined as resources in <filename class="conf">WEB-INF/web.xml</filename> using the
+        <emphasis role="bold">&lt;resource-ref&gt; </emphasis> tags. The following is an example of a data
+        source entry:
+
+        <programlisting>
+&lt;resource-ref&gt;
+&lt;res-ref-name&gt;jdbc/cura&lt;/res-ref-name&gt;
+&lt;res-type&gt;javax.sql.DataSource&lt;/res-type&gt;
+&lt;init-param driver-name="oracle.jdbc.driver.OracleDriver"/&gt;
+&lt;init-param url="jdbc:oracle:thin:@mobilis:1521:mobilis"/&gt;
+&lt;init-param user="cura"/&gt;
+&lt;init-param password="cura"/&gt;
+&lt;init-param max-connections="20"/&gt;
+&lt;init-param enable-transaction="false"/&gt;
+&lt;/resource-ref&gt;    
+        </programlisting>
+
+        The example listed above defines a data source named <emphasis>jdbc/cura</emphasis>
+        with its connection parameters. The data sources listed in
+        <filename class="conf">WEB-INF/web.xml</filename> can then be accessed from the
+        SQL XML files or the JSP files themselves. The availability of the data sources can be 
+        tested using the Application Component Explorer(ACE). In ACE, 
+        </para>
+
+        <para>
+        <menuchoice>
+            <guimenu>Database</guimenu>  
+            <guimenuitem>Data Sources</guimenuitem>
+        </menuchoice>
+        menu item displays the status of the data sources defined as shown below:
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/statements/ace-datasrcs.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>            
+        </para>
+    </section>
+
 
     <section>
         <title>XML Task Tags and JSP Tags</title>
         <para>
-
+        A task is a piece of code that can be executed and Sparx provides the ability to
+        execute tasks either through XML tags or through custom tags in JSP pages. This flexibility 
+        gives developers the choice of defining  application logic within XML files or within JSP files.
         </para>
 
        <section>
             <title>XML Task Tags</title>
             <para>
-
+            Available XML task tags can be viewed in the Application Component Explorer(ACE)'s menu item
+           <menuchoice>
+                <guimenu>Application</guimenu>  
+                <guimenuitem>Factories</guimenuitem>
+                <guisubmenu>Tasks</guisubmenu>
+            </menuchoice>                 
+            as shown below:
+            
+            <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/key-concepts/ace-tasks.jpg" format="JPEG"/>
+                </imageobject>
+            </mediaobject>   
+            
+            The following is an example of how multiple tasks to be executed by a dialog is defined with the
+            dialog itself instead of defined inside a JSP:
+            <programlisting>
+            &lt;dialog name="registration" heading="Add Account"&gt;
+                &lt;field.text name="org_code" caption="Account Code" required="yes"/&gt;
+                &lt;field.text name="org_name" caption="Name" required="yes"/&gt;
+                ...
+                &lt;execute-tasks&gt;
+                    &lt;exec-transaction command="begin"/&gt;
+                    &lt;exec-statement store="request-attr:org_id" store-type="single-column" report="none"&gt;
+                        select org_org_id_seq.nextval from dual
+                    &lt;/exec-statement&gt;
+                    &lt;exec-dml command="insert" table="org" columns="org_id=request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/&gt;
+                    &lt;exec-transaction command="end"/&gt;
+                    &lt;exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/&gt;
+                &lt;/execute-tasks&gt;
+            &lt;/dialog&gt;
+             </programlisting>
             </para>
         </section>
        <section>
             <title>JSP Tags</title>
+            Inside JSPs, any task to be executed when a dialog is executed defined as a child node within
+            the <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> custom tag.
             <para>
 
             </para>
