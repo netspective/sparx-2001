@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.3 2002-02-10 16:31:24 snshah Exp $
+ * $Id: QuerySelect.java,v 1.4 2002-02-11 23:48:05 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -515,7 +515,7 @@ public class QuerySelect
             {
                 Element obElem = (Element) node;
                 String fieldName = obElem.getAttribute("field");
-                addOrderBy(obElem.getAttribute("descending").equals("yes") ? ("-" + fieldName) : fieldName);
+                addOrderBy(fieldName);
             }
             else if(childName.equals("group-by"))
             {
