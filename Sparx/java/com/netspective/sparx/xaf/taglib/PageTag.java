@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageTag.java,v 1.12 2003-01-26 21:32:35 roque.hernandez Exp $
+ * $Id: PageTag.java,v 1.13 2003-02-03 00:50:30 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -87,6 +87,7 @@ import com.netspective.sparx.BuildConfiguration;
 
 public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 {
+    public static final String ATTRNAME_ACTIVENAVGPAGE = "active-navigation-page";
     public static final String ATTRNAME_SKIPPEDBODY = "skipped-body";
     public static final String ATTRVALUE_YES = "yes";
     public static final String ATTRVALUE_NO = "no";
@@ -347,6 +348,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 activePage = (NavigationPage) nc.getActivePath();
                 if(activePage != null)
                 {
+                    req.setAttribute(ATTRNAME_ACTIVENAVGPAGE, activePage);
                     if(nc.flagIsSet(activePage.getId(),NavigationPath.NAVGPATHFLAG_INVISIBLE))
                     {
                         req.setAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME, "The Page requested could not be Displayed.");
@@ -359,7 +361,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                     activePage.handlePageHeader(out, nc);
                 } else {
                     req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
-                    out.print("The page requested was not found.");
+                    out.print("The page '"+ (navId == null ? this.navId : navId) +"' was not found.");
                     return SKIP_BODY;
                 }
             }
