@@ -17,7 +17,7 @@ Setup instructions:
        * Java Servlet API 2.2 or above (http://java.sun.com)
        * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
        
-$Id: build.xml,v 1.3 2002-08-18 22:19:32 shahid.shah Exp $
+$Id: build.xml,v 1.4 2002-08-25 21:32:46 shahid.shah Exp $
 -->
 
 <project name="app" default="all" basedir="${basedir}">
@@ -51,17 +51,17 @@ $Id: build.xml,v 1.3 2002-08-18 22:19:32 shahid.shah Exp $
 		<pathconvert targetos="unix" property="app.root.dir" refid="app.root.dir.temp"/>
 
 		<property name="app.lib.dir" value="${app.WEB-INF.dir}/lib"/>
-		<property name="app.config.file" value="${app.WEB-INF.dir}/configuration.xml"/>
+		<property name="app.config.file" value="${app.WEB-INF.dir}/conf/sparx.xml"/>
 
 		<!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
 		<taskdef name="sparx" classname="com.netspective.sparx.util.ant.BuildConfigurationTask"/>
 		<sparx/>
+
+		<basename property="app.name" file="${app.root.dir}"/>
 	</target>
 
     <target name="init" depends="global">
     	<tstamp/>
-
-		<basename property="app.name" file="${app.root.dir}"/>
 
 		<echo message="Application name is '${app.name}'"/>
     	<echo message="Running build in ${app.WEB-INF.dir}"/>
@@ -74,7 +74,7 @@ $Id: build.xml,v 1.3 2002-08-18 22:19:32 shahid.shah Exp $
 		<taskdef name="dcb" classname="com.netspective.sparx.util.ant.GenerateDialogBeansTask"/>
 		<taskdef name="cp" classname="com.netspective.sparx.util.ant.ClassPathTask"/>
 
-		<!-- read all of the configuration.xml entries into config.* entries -->
+		<!-- read all of the sparx.xml configuration entries into config.* entries -->
 		<config file="${app.config.file}" prefix="config." debug="no"/>
 
 		<echo message="Simulated application WEB-INF is ${config.app.web-inf-root-path}"/>
@@ -116,6 +116,11 @@ $Id: build.xml,v 1.3 2002-08-18 22:19:32 shahid.shah Exp $
 		<mkdir dir="${app.root.dir}/sparx/resources"/>
     	<mkdir dir="${app.WEB-INF.dir}"/>
     	<mkdir dir="${app.WEB-INF.dir}/classes"/>
+    	<mkdir dir="${app.WEB-INF.dir}/classes/app"/>
+    	<mkdir dir="${app.WEB-INF.dir}/classes/app/form"/>
+    	<mkdir dir="${app.WEB-INF.dir}/classes/app/security"/>
+    	<mkdir dir="${app.WEB-INF.dir}/classes/app/tag"/>
+    	<mkdir dir="${app.WEB-INF.dir}/conf"/>
     	<mkdir dir="${app.WEB-INF.dir}/documents"/>
     	<mkdir dir="${app.WEB-INF.dir}/lib"/>
     	<mkdir dir="${app.WEB-INF.dir}/schema"/>
@@ -127,13 +132,11 @@ $Id: build.xml,v 1.3 2002-08-18 22:19:32 shahid.shah Exp $
     </target>
 
     <target name="copy-sparx-templates" depends="global">
-		<copy file="${sparx.tools.dir}/app-build.xml" tofile="${app.WEB-INF.dir}/build.xml"/>
-
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml" todir="${app.WEB-INF.dir}"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/resin.web.xml" todir="${app.WEB-INF.dir}"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="${app.WEB-INF.dir}"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/resin-web.xml" todir="${app.WEB-INF.dir}/conf"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" todir="${app.WEB-INF.dir}/conf"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/schema.xml" todir="${app.WEB-INF.dir}/schema"/>
@@ -175,6 +178,7 @@ $Id: build.xml,v 1.3 2002-08-18 22:19:32 shahid.shah Exp $
 			<fileset dir="${sparx.shared.resources.dir}"/>
 		</copy>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
+		<replace file="${app.root.dir}/sparx/resources/css/dialog.css" token="background-image: url(/shared/resources/images/dialog/required-field.gif)" value="background-image: url(/${app.name}/sparx/resources/images/dialog/required-field.gif)" summary="yes"/>
     </target>    
 
     <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-templates,copy-sparx-resources,copy-sparx-libs">

@@ -17,10 +17,10 @@
 				book_info.type = book_type.id;
 			
 			<report>
-				<column align="center" heading=" " index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
+				<column align="center" heading="&amp;nbsp;" index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
 				<column index="1" output="&lt;a href=&quot;viewBook.jsp?bookid=${0}&quot;&gt;${1}&lt;/a&gt;"/>
 				<column heading="Genre" index="2"/>
-				<column align="center" heading=" " index="5" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=delete&amp;bookid=${0}&quot;&gt;delete&lt;/a&gt;"/>
+				<column align="center" heading="&amp;nbsp;" index="5" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=delete&amp;bookid=${0}&quot;&gt;delete&lt;/a&gt;"/>
 			</report>
 		</statement>
 

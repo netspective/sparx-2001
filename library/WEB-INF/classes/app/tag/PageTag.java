@@ -48,6 +48,11 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
             String rootPath = req.getContextPath();
 			String resourcesUrl = rootPath + "/resources";
 
+			/* Netspective sample apps have a special border around them. If this is not a sample app, then comment out
+			   doSamplePageBegin() and uncomment the <!DOCTYPE>... through <body> */
+
+			doSamplePageBegin(resourcesUrl +"/css/library.css");
+			/*
 			out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
 			out.println("<html>");
 			out.println("<head>");
@@ -58,7 +63,8 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("</head>");
 			out.println("  <body>");
 			out.println("");
-			out.println("<table cellpadding=\"2\" cellspacing=\"5\" border=\"0\" width=\"100%\">");
+			*/
+			out.println("<table cellpadding=\"2\" cellspacing=\"5\" border=\"0\" >");
 			out.println("   <tbody>");
 			out.println("     <tr>");
 			out.println("       <td valign=\"top\" width=\"100\"><img src=\"" + resourcesUrl + "/images/scatteredBooks.jpg\" alt=\"Library logo\" width=\"150\" height=\"84\">");
@@ -69,27 +75,25 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("       </td>");
 			out.println("     </tr>");
 			out.println("     <tr>");
-			out.println("       <td valign=\"top\" bgcolor=\"#800000\">");
+			out.println("       <td valign=\"top\" bgcolor=\"#333333\">");
 			out.println("      <table width=\"100%\" border=\"0\" cellspacing=\"5\" cellpadding=\"2\">");
 			out.println("         <tbody>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/index.jsp\">Home</a></font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#EEEEEE\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/index.jsp\">Home</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/bookInfo.jsp?data_cmd=add\">Add Books</a></font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#EEEEEE\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/bookInfo.jsp?data_cmd=add\">Add Books</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/search.jsp\">Search Books</a></font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#EEEEEE\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/search.jsp\">Search Books</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
-			out.println("");
 			out.println("        </tbody>");
 			out.println("      </table>");
 			out.println("       <br>");
 			out.println("       </td>");
-//			out.println("       <td valign=\"top\" bgcolor=\"#800000\"><br>");
 			out.println("       <td align=\"center\" valign=\"top\" bgcolor=\"white\"><br>");
 
         }
@@ -114,14 +118,14 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 		{
 			out.println("   </td>");
 			out.println("     </tr>");
-			out.println("");
 			out.println("  </tbody>");
 			out.println("</table>");
 			out.println(" <p>&nbsp;");
 			out.println(" <p>");
-			out.println("<table width=100%><tr><td align=right><a target='netspective' href='http://www.netspective.com'><img border='0' alt='Powered by Netspective Sparx' src='"+ rootPath +"/sparx/resources/images/powered-by-sparx.gif'></a></td><td><font size=1>"+ com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() +"</font></td></table></body>");
-			out.println("</body>");
-			out.println("</html>");
+			//out.println("<table width=100%><tr><td align=right><a target='netspective' href='http://www.netspective.com'><img border='0' alt='Powered by Netspective Sparx' src='"+ rootPath +"/sparx/resources/images/powered-by-sparx.gif'></a></td><td><font size=1>"+ com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() +"</font></td></table></body>");
+			//out.println("</body>");
+			//out.println("</html>");
+			doSamplePageEnd(); // remove if this is not a Netspective "Sample" application
 		}
 		catch(IOException e)
 		{
