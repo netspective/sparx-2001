@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogComponentCommand.java,v 1.1 2002-12-26 19:30:27 shahid.shah Exp $
+ * $Id: DialogComponentCommand.java,v 1.2 2003-01-01 19:27:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -59,6 +59,7 @@ package com.netspective.sparx.xaf.html.command;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xif.dal.TableDialog;
 
 import java.util.StringTokenizer;
@@ -72,6 +73,17 @@ public class DialogComponentCommand extends AbstractComponentCommand
             {
                 PAGE_COMMAND_REQUEST_PARAM_NAME
             };
+    static public final Documentation DOCUMENTATION = new Documentation(
+            "Displays and executes a dialog box.",
+            new Documentation.Parameter[]
+                {
+                    // these parameters are used by StatementComponentCommand so be sure to copy them into the docs
+                    //there too
+                    new Documentation.Parameter("dialog-name", true, null, null, "The fully qualified name of the dialog (package-name.dialog-name)"),
+                    new Documentation.Parameter("data-command", false, Dialog.VALID_DATA_COMMANDS, null, "The data command to send to DialogContext."),
+                    new SkinParameter(),
+                    new Documentation.Parameter("debug-flags", false, new String[] { "SHOW_DATA" }, null, "The debug flags."),
+                });
 
     private String dialogName;
     private String dataCmd;
@@ -80,18 +92,7 @@ public class DialogComponentCommand extends AbstractComponentCommand
 
     public Documentation getDocumentation()
     {
-        return new Documentation(
-                "Displays a dialog box. The dialog-name is required, but data-command (like 'add', 'edit', or 'delete'), " +
-                "skin-name, and debug-flags are optional (may be empty or set to '-' to mean 'none'. Debug-flags may be "+
-                "set to SHOW_DATA if you want to ignore the execute portion of the dialog and just dump the data.",
-                new Documentation.Parameter[]
-                    {
-                        new Documentation.Parameter("dialog-name", true),
-                        new Documentation.Parameter("data-command", false),
-                        new Documentation.Parameter("skin-name", false),
-                        new Documentation.Parameter("debug-flags", false),
-                    }
-        );
+        return DOCUMENTATION;
     }
 
     public void setCommand(StringTokenizer st)
@@ -244,5 +245,18 @@ public class DialogComponentCommand extends AbstractComponentCommand
         }
         else
             dialog.renderHtml(writer, dc, true);
+    }
+
+    public static class SkinParameter extends Documentation.Parameter
+    {
+        public SkinParameter()
+        {
+            super("skin-name", false, null, SkinFactory.DEFAULT_DIALOG_SKIN_NAME, "The name of a DialogSkin implementation registered in the SkinFactory.");
+        }
+
+        public String[] getEnums()
+        {
+            return (String[]) SkinFactory.getDialogSkins().keySet().toArray(new String[SkinFactory.getNavigationSkins().keySet().size()]);
+        }
     }
 }

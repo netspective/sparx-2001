@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ComponentCommandFactory.java,v 1.2 2002-12-31 19:40:11 shahid.shah Exp $
+ * $Id: ComponentCommandFactory.java,v 1.3 2003-01-01 19:27:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -83,7 +83,11 @@ public class ComponentCommandFactory
      * ComponentCommand class that is instantiated for each command.
      */
     static private Map commandClasses = new HashMap();
-    static private Map cmdAndParamInstances = new HashMap();
+
+    /**
+     * The string used to delimit the command name and the entire parameter string
+     */
+    static private String CMDNAME_AND_PARAM_DELIM = ",";
 
     static
     {
@@ -106,7 +110,7 @@ public class ComponentCommandFactory
             try
             {
                 ComponentCommand command = (ComponentCommand) ccClass.newInstance();
-                command.setCommand(params);
+                if(params != null) command.setCommand(params);
                 return command;
             }
             catch (InstantiationException e)
@@ -155,19 +159,33 @@ public class ComponentCommandFactory
         return command;
     }
 
+    static public StatementComponentCommand getStatementCommand(String params)
+    {
+        StatementComponentCommand command = new StatementComponentCommand();
+        command.setCommand(params);
+        return command;
+    }
+
+    static public StatementComponentCommand getStatementCommand(StringTokenizer params)
+    {
+        StatementComponentCommand command = new StatementComponentCommand();
+        command.setCommand(params);
+        return command;
+    }
+
     public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp) throws ComponentCommandException, IOException
     {
-        String pageCmdReqParam = req.getParameter(ComponentCommand.PAGE_COMMAND_REQUEST_PARAM_NAME);
-        if(pageCmdReqParam == null)
+        String pageCmdReqParamValue = req.getParameter(ComponentCommand.PAGE_COMMAND_REQUEST_PARAM_NAME);
+        if(pageCmdReqParamValue == null)
             return false;
 
         String pageCmd = "unknown";
         String pageCmdParam = null;
-        int cmdDelimPos = pageCmdReqParam.indexOf(",");
+        int cmdDelimPos = pageCmdReqParamValue.indexOf(CMDNAME_AND_PARAM_DELIM);
         if(cmdDelimPos != -1)
         {
-            pageCmd = pageCmdReqParam.substring(0, cmdDelimPos);
-            pageCmdParam = pageCmdReqParam.substring(cmdDelimPos+1);
+            pageCmd = pageCmdReqParamValue.substring(0, cmdDelimPos);
+            pageCmdParam = pageCmdReqParamValue.substring(cmdDelimPos+1);
         }
 
         ComponentCommand command = ComponentCommandFactory.getCommand(pageCmd, pageCmdParam);
@@ -208,7 +226,7 @@ public class ComponentCommandFactory
 
                 if(commandDoc != null)
                 {
-                    childElem.setAttribute("usage", commandDoc.getUsageHtml(commandId, command.getParametersDelimiter()));
+                    childElem.setAttribute("usage", commandDoc.getUsageHtml(commandId, command.getParametersDelimiter(), true));
                     childElem.setAttribute("params", commandDoc.getParamsHtml(commandId));
                     String descr = commandDoc.getDescription();
                     if(descr != null)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryDefinitionDialogComponentCommand.java,v 1.2 2002-12-29 17:08:25 shahid.shah Exp $
+ * $Id: QueryDefinitionDialogComponentCommand.java,v 1.3 2003-01-01 19:27:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -67,23 +67,23 @@ import java.io.Writer;
 public class QueryDefinitionDialogComponentCommand extends AbstractComponentCommand
 {
     static public final String COMMAND_ID = "qd-dialog";
+    static public final Documentation DOCUMENTATION = new Documentation(
+                 "Displays results of a query definition select dialog.",
+                 new Documentation.Parameter[]
+                     {
+                         new Documentation.Parameter("query-defn-name", true, null, null, "The name of the query definition."),
+                         new Documentation.Parameter("query-select-dialog-name", true, null, null, "The name of the query select dialog."),
+                         new StatementComponentCommand.SkinParameter(),
+                     });
+
     private String dialogName;
     private String source;
     private String skinName;
 
     public Documentation getDocumentation()
-     {
-         return new Documentation(
-                 "Displays results of a query definition select dialog. The query-defn-name and dialog-name is required, "+
-                 "but skin-name is optional and may be omitted.",
-                 new Documentation.Parameter[]
-                     {
-                         new Documentation.Parameter("query-defn-name", true),
-                         new Documentation.Parameter("query-select-dialog-name", true),
-                         new Documentation.Parameter("skin-name", false),
-                     }
-         );
-     }
+    {
+         return DOCUMENTATION;
+    }
 
     public void setCommand(StringTokenizer params)
     {

@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: StatementComponentCommand.java,v 1.1 2002-12-26 19:30:27 shahid.shah Exp $
+ * $Id: StatementComponentCommand.java,v 1.2 2003-01-01 19:27:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
 
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import com.netspective.sparx.xaf.sql.StatementDialog;
 import com.netspective.sparx.xaf.report.ReportSkin;
@@ -81,6 +82,24 @@ public class StatementComponentCommand extends AbstractComponentCommand
     static public final String COMMAND_ID = "statement";
     static public final int UNLIMITED_ROWS = Integer.MAX_VALUE;
 
+    static public final Documentation DOCUMENTATION = new Documentation(
+                "Displays results of a SQL statement and optionally allows a dialog to be executed along with it.",
+                new Documentation.Parameter[]
+                    {
+                        new Documentation.Parameter("statement-name", true, null, null, "The fully qualified name of the statement (package-name.statement-name)."),
+                        new Documentation.Parameter("report-id", false, null, null, "The name of a specific report element in the statement declaration or '-' for the default report-id."),
+                        new Documentation.Parameter("rows-per-page", false, null, "-", "The number of rows per page to display ('-' means single page, any other number means a pageable report."),
+                        new SkinParameter(),
+                        new Documentation.Parameter("url-formats", false, null, null, "The url-formats parameter is one or more "+
+                                            "semicolon-separated URL formats that may override those within a report."),
+
+                        // the following are the same as the ones in DialogComponentCommand so be sure to make them look the same
+                        new Documentation.Parameter("dialog-name", false, null, null, "The fully qualified name of the dialog to show next to the statement (for data-editing)."),
+                        new Documentation.Parameter("data-command", false, Dialog.VALID_DATA_COMMANDS, null, "The data command to send to DialogContext."),
+                        new DialogComponentCommand.SkinParameter(),
+                        new Documentation.Parameter("debug-flags", false, new String[] { "SHOW_DATA" }, null, "The debug flags."),
+                    });
+
     private String statementName;
     private int rowsPerPage;
     private String skinName;
@@ -90,20 +109,7 @@ public class StatementComponentCommand extends AbstractComponentCommand
 
     public Documentation getDocumentation()
     {
-        return new Documentation(
-                "Displays results of a SQL statement. The dialog-name is required, all other parameters are optional. To skip a " +
-                "parameter and have it accept the default, just set it to '-'. URL formats are used to override URLs for given "+
-                "columns and are delimited by semi-colons.",
-                new Documentation.Parameter[]
-                    {
-                        new Documentation.Parameter("statement-name", true),
-                        new Documentation.Parameter("report-id", false),
-                        new Documentation.Parameter("rows-per-page", false),
-                        new Documentation.Parameter("skin-name", false),
-                        new Documentation.Parameter("url-formats", false),
-                        new Documentation.Parameter("dialog-commands", false),
-                    }
-        );
+        return DOCUMENTATION;
     }
 
     public void setCommand(StringTokenizer params)
@@ -278,6 +284,19 @@ public class StatementComponentCommand extends AbstractComponentCommand
             writer.write("</td><td>");
             dialogCommand.handleCommand(vc, writer, unitTest);
             writer.write("</td></tr></td></table>");
+        }
+    }
+
+    public static class SkinParameter extends Documentation.Parameter
+    {
+        public SkinParameter()
+        {
+            super("skin-name", false, null, SkinFactory.DEFAULT_REPORT_SKIN_NAME, "The name of a ReportSkin implementation registered in the SkinFactory.");
+        }
+
+        public String[] getEnums()
+        {
+            return (String[]) SkinFactory.getReportSkins().keySet().toArray(new String[SkinFactory.getNavigationSkins().keySet().size()]);
         }
     }
 }

@@ -22,6 +22,22 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
     static public final int LVSTYPE_REFERENCE = 1;
     static public final int LVSTYPE_INSTANCE  = 2;
 
+    static public final Documentation DOCUMENTATION = new Documentation(
+                "Displays the contents of a ListValueSource.",
+                new Documentation.Parameter[]
+                    {
+                        new Documentation.Parameter("value-source-type", true, new String[] { LVSTYPENAME_REFERENCE, LVSTYPENAME_INSTANCE }, LVSTYPENAME_INSTANCE,
+                                "The value-source-type parameter may be either 'reference' or 'instance'. When it is set " +
+                                "to reference, the value-source-spec parameter is basically the value-source spefication like xxx:yyy. " +
+                                "When the value-source-type parameter is set to 'reference' it means that the value-source-spec is actually " +
+                                "a single value source that points to an actual ListValueSource at runtime)."),
+                        new Documentation.Parameter("value-source-spec", true, null, null, "The value source specification (depends upon value-source-type)."),
+                        new Documentation.Parameter("is-popup", false, new String[] { "yes", "popup", "no" }, "popup", "Declares whether or not the lvs command is being used in a popup window."),
+                        new Documentation.Parameter("url-formats", false, null, null, "The urlFormats parameter is one or more "+
+                                "comma-separated URL formats that may override those within a report."),
+                        new StatementComponentCommand.SkinParameter()
+                    });
+
     private int valueSourceType;
     private String valueSourceSpec;
     private SingleValueSource valueSourceReference;
@@ -32,24 +48,7 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
 
     public Documentation getDocumentation()
     {
-        return new Documentation(
-                "Displays the contents of a ListValueSource. Unlike most of the other commands, this command has " +
-                "parameters separated by semi-colons instead of commas since commas may be found within a value-source "+
-                "specification. The value-source-type parameter may be either 'reference' or 'instance'. When it is set " +
-                "to reference, the value-source-spec parameter is basically the value-source spefication like xxx:yyy. " +
-                "When the value-source-type parameter is set to 'reference' it means that the value-source-spec is actually " +
-                "a single value source that points to an actual ListValueSource at runtime. The "+
-                "isPopup parameter may be '-' or 'true', 'popup', or 'no'. The urlFormats parameter is one or more "+
-                "comma-separated URL formats that may override those within a report.",
-                new Documentation.Parameter[]
-                    {
-                        new Documentation.Parameter("value-source-type", true),
-                        new Documentation.Parameter("value-source-spec", true),
-                        new Documentation.Parameter("is-popup", false, "yes"),
-                        new Documentation.Parameter("url-formats", false),
-                        new Documentation.Parameter("skin-name", false),
-                    }
-        );
+         return DOCUMENTATION;
     }
 
     public String getParametersDelimiter()

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ComponentCommand.java,v 1.1 2002-12-26 19:30:27 shahid.shah Exp $
+ * $Id: ComponentCommand.java,v 1.2 2003-01-01 19:27:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -67,6 +67,7 @@ import java.util.StringTokenizer;
 public interface ComponentCommand
 {
     static public final String PAGE_COMMAND_REQUEST_PARAM_NAME = "cmd";
+    static public final String EMPTY_COMMAND_PARAMETER = "-";
 
     /**
      * Returns the documentation for this command
@@ -110,19 +111,17 @@ public interface ComponentCommand
         {
             private String name;
             private boolean required;
+            private String[] enums;
             private String defaultValue;
+            private String description;
 
-            public Parameter(String name, boolean required, String defaultValue)
+            public Parameter(String name, boolean required, String[] enums, String defaultValue, String description)
             {
                 this.name = name;
                 this.required = required;
+                this.enums = enums;
                 this.defaultValue = defaultValue;
-            }
-
-            public Parameter(String name, boolean required)
-            {
-                this.name = name;
-                this.required = required;
+                this.description = description;
             }
 
             public String getDefaultValue()
@@ -154,6 +153,26 @@ public interface ComponentCommand
             {
                 this.required = required;
             }
+
+            public String[] getEnums()
+            {
+                return enums;
+            }
+
+            public void setEnums(String[] enums)
+            {
+                this.enums = enums;
+            }
+
+            public String getDescription()
+            {
+                return description;
+            }
+
+            public void setDescription(String description)
+            {
+                this.description = description;
+            }
         }
 
         private String description;
@@ -172,38 +191,62 @@ public interface ComponentCommand
                 addParameter(params[i]);
         }
 
-        public String getUsageHtml(String commandId, String delim)
+        public String getUsageHtml(String commandId, String delim, boolean all)
         {
             StringBuffer html = new StringBuffer();
             boolean isFirst = true;
-            html.append("<nobr><code>"+ PAGE_COMMAND_REQUEST_PARAM_NAME + "=" + commandId + ",<i>");
+            if(commandId != null)
+                html.append(PAGE_COMMAND_REQUEST_PARAM_NAME + "=" + commandId + ",");
             for(int i = 0; i < parameters.size(); i++)
             {
-                if(i > 0) html.append("<br/>");
                 Parameter param = (Parameter) parameters.get(i);
-                if(param.isRequired())
+                if(all || param.isRequired())
                 {
                     if(! isFirst) html.append(delim);
+                    if(param.isRequired()) html.append("<i>");
                     html.append(param.getName());
+                    if(param.isRequired()) html.append("</i>");
                     isFirst = false;
                 }
             }
-            html.append("</i></code></nobr>");
             return html.toString();
         }
 
         public String getParamsHtml(String commandId)
         {
             StringBuffer html = new StringBuffer();
+            html.append("<table class='data_table' cellspacing='0' cellpadding='2' border='0'>");
+            html.append("<tr class='data_table_header'><th class='data_table'>Name</th><th class='data_table'>Req</th><th class='data_table'>Default</th><th class='data_table'>Choices</th></tr>");
             for(int i = 0; i < parameters.size(); i++)
             {
-                if(i > 0) html.append("<br/>");
+                html.append("<tr class='data_table'>");
                 Parameter param = (Parameter) parameters.get(i);
-                html.append("<nobr><code>" + param.getName() + "</code>, "+ (param.isRequired() ? "required" : "optional"));
-                if(param.getDefaultValue() != null)
-                    html.append(" (default is '<code>"+ param.getDefaultValue() +"</code>')");
-                html.append("</nobr>");
+                html.append("<td class='data_table' rowspan=2><nobr>" + (param.isRequired() ? "<b>" : "") + param.getName() + "</b></nobr></td><td class='data_table'>"+ (param.isRequired() ? "required" : "optional") + "</td>");
+                String defaultValue = param.getDefaultValue();
+                html.append("<td class='data_table'>" + (defaultValue != null ? defaultValue : "&nbsp;") + "</td>");
+                html.append("<td class='data_table'>");
+                String[] enums = param.getEnums();
+                if(enums != null)
+                {
+                    for(int e = 0; e < enums.length; e++)
+                    {
+                        if(e > 0) html.append(" | ");
+                        String enum = enums[e];
+                        if(defaultValue != null && enum.equals(defaultValue))
+                        {
+                            html.append("<u>" + enums[e] + "</u>");
+                        }
+                        else
+                            html.append(enums[e]);
+                    }
+                }
+                else
+                    html.append("&nbsp;");
+                html.append("</td>");
+                html.append("</tr>");
+                html.append("<tr><td class='data_table' colspan=3><font color='blue'>"+ param.getDescription() +"</font></td></tr>");
             }
+            html.append("</table>");
             return html.toString();
         }
 
