@@ -133,20 +133,20 @@ public interface Row
     public DmlStatement createDeleteDml(Table table, String whereCond);
 
     /**
-     * This method is executed immediately prior to an insert action on this row.
-     * @returns true if the insert that is about to be performed on this row should be allowed.
+     * This method is executed immediately prior to an insert action on this row and
+     * returns true if the insert that is about to be performed on this row should be allowed.
      */
     public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
     /**
-     * This method is executed immediately prior to an update action on this row.
-     * @returns true if the insert that is about to be performed on this row should be allowed.
+     * This method is executed immediately prior to an update action on this row and returns
+     * true if the insert that is about to be performed on this row should be allowed.
      */
     public boolean beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
     /**
-     * This method is executed immediately prior to a delete action on this row.
-     * @returns true if the insert that is about to be performed on this row should be allowed.
+     * This method is executed immediately prior to a delete action on this row and
+     * true if the insert that is about to be performed on this row should be allowed.
      */
     public boolean beforeDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 

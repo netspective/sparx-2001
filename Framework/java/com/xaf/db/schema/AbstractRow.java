@@ -49,6 +49,13 @@ public abstract class AbstractRow implements Row
         return null;
     }
 
+    /**
+     * Sets the SQL expression that should be passed into the database in place of a bind parameter. This
+     * method is used when a column's value should be a database-dependent function or value as opposed to
+     * a Java value that is passed in as a bind parameter.
+     * @param column The zero-based column index of the column for which the SQL expression is being created
+     * @param sqlExpr the actual SQL expression
+     */
     public void setCustomSqlExpr(int column, String sqlExpr)
     {
         Column[] columns = getColumns();

@@ -82,12 +82,12 @@ Setup instructions:
     	<delete dir="${dal.temp.build.dir}"/>
     	<mkdir dir="${app.lib.dir}"/>
     	<move file="${app.java.dal.jar}" todir="${app.lib.dir}"/>
-    	<echo message="The Data Access Library JAR file (${app.java.dal.jar}) is in ${app.lib.dir}"/>
+    	<echo message="The Data Access Library JAR file is in ${app.lib.dir}"/>
     </target>
 
     <target name="dal-doc" depends="dal">
         <mkdir dir="${app.java.dal.doc.dir}" />
-        <javadoc packagenames="dal.*,com.xaf.db.schema.*,com.xaf.form.DialogContext"
+        <javadoc packagenames="dal.*,com.xaf.db.*,com.xaf.db.schema.*,com.xaf.form.DialogContext,com.xaf.sql.DmlStatement"
              sourcepath="${app.java.dal.dir}:${framework.source.dir}"
              destdir="${app.java.dal.doc.dir}"
              author="true"
@@ -117,7 +117,7 @@ Setup instructions:
     	<delete dir="${dal.temp.build.dir}"/>
     	<mkdir dir="${app.lib.dir}"/>
     	<move file="${app.java.dcb.jar}" todir="${app.lib.dir}"/>
-    	<echo message="The Dialog Context Beans JAR file (${app.java.dcb.jar}) is in ${app.lib.dir}"/>
+    	<echo message="The Dialog Context Beans JAR file is in ${app.lib.dir}"/>
     </target>
     
     <target name="dcb-doc" depends="dcb">

@@ -32,34 +32,55 @@ import com.xaf.form.*;
 import com.xaf.sql.*;
 import com.xaf.value.*;
 
+/**
+ * Represents a single row of the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; table.
+<xsl:if test="@is-enum = 'yes'"> * &lt;p&gt;Because this interface defines the
+ * row of a table that is an Enumeration tabletype, it is recommended that this
+ * interface &lt;b&gt;not&lt;/b&gt; be used for simple reads from the database. 
+ * Instead, one should use the <xsl:value-of select="@_gen-table-class-name"/>.EnumeratedItem class 
+ * so that a join in the database will not be required for static data.</xsl:if>
+ * &lt;p&gt;
+ * Some relevant facts about this class:
+ * &lt;ul&gt;
+ *   &lt;li&gt; It represents the data that can be stored and retrieved from the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; table in the database.
+ <xsl:if test="@parent"> * &lt;li&gt; The row is a child of the &lt;code&gt;<xsl:value-of select="@parent"/>&lt;/code&gt; table in the database.
+ </xsl:if> *   &lt;li&gt; It has <xsl:value-of select="count(column)"/> columns, all of which have getter and setter methods.
+<xsl:if	test="column[@_gen-ref-table-is-enum = 'yes']"> *   &lt;li&gt; It has <xsl:value-of select="count(column[@_gen-ref-table-is-enum = 'yes'])"/> columns that reference Enumeration tables, all of which have special 
+ *              getter and setter methods to help prevent database joins for obtaining simple lookup values:
+ *              &lt;ol&gt;
+<xsl:for-each select="column[@_gen-ref-table-is-enum = 'yes']"> *                &lt;li&gt; &lt;code&gt;get<xsl:value-of select="@_gen-method-name"/>Enum()&lt;/code&gt; and &lt;code&gt;set<xsl:value-of select="@_gen-method-name"/>(<xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem)&lt;/code&gt;
+</xsl:for-each> *              &lt;/ol&gt;
+</xsl:if><xsl:if	test="child-table"> *   &lt;li&gt; It has children which can be retrieved using:
+ *              &lt;ol&gt;
+<xsl:for-each select="child-table"> *                &lt;li&gt; &lt;code&gt;get<xsl:value-of select="@_gen-rows-name"/>()&lt;/code&gt; (join condition is &lt;code&gt;parent.<xsl:value-of select="@parent-col"/> = this.<xsl:value-of select="@child-col"/>&lt;/code&gt;)
+</xsl:for-each> *              &lt;/ol&gt;
+</xsl:if> * &lt;/ul&gt;
+ * &lt;/p&gt;
+ */
 public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <xsl:value-of select="@_gen-domain-class-name"/>
-{
-	/* COLNAME_XX (column_name_xx) is the name of the XX column in the database */
-<xsl:for-each select="column">	public static final String COLNAME_<xsl:value-of select="@_gen-constant-name"/> = &quot;<xsl:value-of select="@name"/>&quot;;
+{	
+<xsl:for-each select="column">	/** The name of the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column in the database **/
+	public static final String COLNAME_<xsl:value-of select="@_gen-constant-name"/> = &quot;<xsl:value-of select="@name"/>&quot;;
 </xsl:for-each>
 
-	/* NODENAME_XX (column_name_xx) is the name of the XX column in the database suitable for use as an XML node/element */
-<xsl:for-each select="column">	public static final String NODENAME_<xsl:value-of select="@_gen-constant-name"/> = &quot;<xsl:value-of select="@_gen-node-name"/>&quot;;
+<xsl:for-each select="column">	/** The name of the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column suitable for use as an XML node/element **/
+	public static final String NODENAME_<xsl:value-of select="@_gen-constant-name"/> = &quot;<xsl:value-of select="@_gen-node-name"/>&quot;;
+</xsl:for-each>
+	
+<xsl:for-each select="column">	/** The index of the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column in a ResultSet when all columns are selected from a table (1-based) **/
+	public static final int COLRSI_<xsl:value-of select="@_gen-constant-name"/> = <xsl:value-of select="position()"/>;
 </xsl:for-each>
 
-	/* COLRSI_XX (column result set index) is the index of the XX column in a 
-	   ResultSet when all columns are selected from a table (1-based) */
-<xsl:for-each select="column">	public static final int COLRSI_<xsl:value-of select="@_gen-constant-name"/> = <xsl:value-of select="position()"/>;
+<xsl:for-each select="column">	/** The index of the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column in an array when all columns are selected from a table (0-based) **/
+	public static final int COLAI_<xsl:value-of select="@_gen-constant-name"/> = <xsl:value-of select="position()-1"/>;
 </xsl:for-each>
 
-	/* COLAI_XX (column array index) is the index of the XX column in a Java 
-	   array when all columns are selected from a table (0-based) */
-<xsl:for-each select="column">	public static final int COLAI_<xsl:value-of select="@_gen-constant-name"/> = <xsl:value-of select="position()-1"/>;
+<xsl:for-each select="column">	/** The &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column data **/
+	protected <xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
 </xsl:for-each>
 
-	/* Member variables that manage the actual data */
-<xsl:for-each select="column">	protected <xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
-</xsl:for-each>
-
-<xsl:if test="child-table">
-	/* Member variables that manage the child tables' data */
-</xsl:if>
-<xsl:for-each select="child-table">	protected <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-rows-member-name"/>;
+<xsl:for-each select="child-table">	/** The children rows from <xsl:value-of select="@name"/> connected to this row by parent.<xsl:value-of select="@parent-col"/> = this.<xsl:value-of select="@child-col"/> (null if children not retrieved) **/
+	protected <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-rows-member-name"/>;
 </xsl:for-each>
 	
 	public <xsl:value-of select="$row-name"/>(<xsl:value-of select="@_gen-table-class-name"/> table)
@@ -78,6 +99,9 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	}
 
 <xsl:if test="column[@primarykey='yes']">
+	/**
+	 * Return the value of the <xsl:value-of select="column[@primarykey='yes']/@name"/> column
+	 **/
 	public Object getActivePrimaryKeyValue()
 	{
 		return get<xsl:value-of select="column[@primarykey='yes']/@_gen-method-name"/>();
@@ -93,6 +117,13 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		};
 	}
 
+	/**
+	 * Return true if the row is an instance of the <xsl:value-of select="$row-name"/> class
+	 * and each of the columns in the row parameter matches the data contained in this 
+	 * row. The values of two columns are considered equal when either the object is the
+	 * same, both are null, or the equals() method for the two objects when compared with
+	 * other returns true.
+	 **/
 	public boolean equals(Object row)
 	{
 		if(this == row) return true;
@@ -280,9 +311,12 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	public <xsl:value-of select="$java-class-spec"/> get<xsl:value-of select="@_gen-method-name"/>(<xsl:value-of select="$java-class-spec"/> defaultValue) { return <xsl:value-of select="$member-name"/> != null ? <xsl:value-of select="$member-name"/> : defaultValue; }
 	public <xsl:value-of select="$java-class-spec"/> get<xsl:value-of select="@_gen-method-name"/>() { return <xsl:value-of select="$member-name"/>; }
 	public void set<xsl:value-of select="@_gen-method-name"/>(<xsl:value-of select="$java-class-spec"/> value) { <xsl:value-of select="$member-name"/> = value; haveSqlExprData[<xsl:value-of select="$array-index"/>] = false; }
+	/** <xsl:value-of select="@descr"/> **/
 	public void set<xsl:value-of select="@_gen-method-name"/>SqlExpr(String value) { setCustomSqlExpr(<xsl:value-of select="$array-index"/>, value); }
 <xsl:if	test="@_gen-ref-table-is-enum = 'yes'">
+	/** <xsl:value-of select="@descr"/> **/
 	public <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem get<xsl:value-of select="@_gen-method-name"/>Enum() { return <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem.getItemById(get<xsl:value-of select="@_gen-method-name"/>()); }
+	/** <xsl:value-of select="@descr"/> **/
 	public void set<xsl:value-of select="@_gen-method-name"/>(<xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem value) { set<xsl:value-of select="@_gen-method-name"/>(value != null ? value.getIdAsInteger() : null); }
 </xsl:if>
 </xsl:for-each>
@@ -298,6 +332,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:for-each>	}
 </xsl:if>
 <xsl:for-each select="child-table[@child-col-_gen-method-name]"><xsl:variable name="parent-col"><xsl:value-of select="@parent-col"/></xsl:variable>
+	/** Create a <xsl:value-of select="@_gen-row-name"/> and automatically set the <xsl:value-of select="@name"/> <xsl:value-of select="@child-col"/> column to the current value of this table's <xsl:value-of select="@parent-col"/> column **/
 	public <xsl:value-of select="@_gen-row-class-name"/><xsl:text> </xsl:text>create<xsl:value-of select="@_gen-row-name"/>()
 	{
 		<xsl:value-of select="@_gen-table-class-name"/> table = ((<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema()).get<xsl:value-of select="@_gen-table-name"/>();
@@ -306,11 +341,13 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		return row;
 	}
 	
+	/** Returns the children rows from <xsl:value-of select="@name"/> connected to this row by <xsl:value-of select="@parent-col"/> = <xsl:value-of select="@child-col"/> that was retrieved by retrieveChildren() or get<xsl:value-of select="@_gen-rows-name"/>(ConnectionContext) (null otherwise) **/
 	public <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-rows-name"/>() throws NamingException, SQLException
 	{
 		return <xsl:value-of select="@_gen-rows-member-name"/>;
 	}
 	
+	/** Executes the SQL necessary to retrieve the children rows from <xsl:value-of select="@name"/> connected to this row by <xsl:value-of select="@parent-col"/> = <xsl:value-of select="@child-col"/> and saves the data into a member variable that can be retrieved by calling get<xsl:value-of select="@_gen-rows-name"/>() **/
 	public <xsl:value-of select="@_gen-rows-class-name"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-rows-name"/>(ConnectionContext cc) throws NamingException, SQLException
 	{
 		<xsl:value-of select="@_gen-table-class-name"/> table = ((<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema()).get<xsl:value-of select="@_gen-table-name"/>();
@@ -339,9 +376,3 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:template>
 
 </xsl:stylesheet>
-
-
-
-
-
-

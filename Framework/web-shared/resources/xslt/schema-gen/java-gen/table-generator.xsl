@@ -24,12 +24,39 @@ import com.xaf.db.*;
 import com.xaf.db.schema.*;
 import com.xaf.value.*;
 
+/**
+ * Represents the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; table.
+<xsl:if test="@is-enum = 'yes'"> * &lt;p&gt;Because this table is an Enumeration tabletype, it automatically defines a
+ * EnumeratedItem nested class that represents all of the values contained in the original SchemaDoc 
+ * specification. Therefore, to get enumeration captions and abbreviations for tables that are
+ * referencing this table as a foreign key, a join in the database is not required.&lt;/p&gt;</xsl:if>
+ * &lt;p&gt;
+ * Some relevant facts about this class:
+ * &lt;ul&gt;
+ *   &lt;li&gt; It represents the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; in the database.
+ <xsl:if test="@parent"> * &lt;li&gt; It is a child of the &lt;code&gt;<xsl:value-of select="@parent"/>&lt;/code&gt; table in the database.
+ </xsl:if> *   &lt;li&gt; It has <xsl:value-of select="count(column)"/> columns, all of which are represented as Column class instances as protected member variables and have public getter methods.
+ *   &lt;li&gt; Wrappers are provided around the &lt;code&gt;createRow()&lt;/code&gt; and &lt;code&gt;createRows()&lt;/code&gt; methods to allow typed retrieval of the <xsl:value-of select="@_gen-row-name"/> and <xsl:value-of select="@_gen-rows-name"/> objects.
+<xsl:if test="column[@primarykey='yes']"> * &lt;li&gt; The &lt;code&gt;get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="column[@primarykey='yes']/@_gen-method-name"/>()&lt;/code&gt; method is provided to retrieve a single row by the primary key
+</xsl:if> 
+<xsl:for-each select="column[@reftype='parent']"> * &lt;li&gt; The &lt;code&gt;get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>()&lt;/code&gt; method is provided to retrieve all rows identified by the parent column
+ * &lt;li&gt; The &lt;code&gt;delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>()&lt;/code&gt; method is provided to delete all rows identified by the parent column
+</xsl:for-each> * &lt;/ul&gt;
+ * &lt;/p&gt;
+ */
 public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if test="@_implements-table-types">implements <xsl:value-of select="@_implements-table-types"/></xsl:if>
 {
-<xsl:for-each select="column">	protected <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
+<xsl:for-each select="column">	/** The &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column definition **/
+	protected <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
 </xsl:for-each>
 
 <xsl:if test="@is-enum = 'yes'">
+	/**
+	 * This class represents a cache of the enumerated values from the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; table.
+	 * It is designed to allow access to the actual values stored in the database without having to retrieve
+	 * the data from the database each time it's needed (for example, you would use this class to check the
+	 * caption of an enumerated item without doing a join in the database).
+	 */
 	public static class EnumeratedItem implements com.xaf.db.schema.EnumeratedItem
 	{
 		protected static final Map captionsMap = new HashMap();
@@ -120,6 +147,8 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if>
 <xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsRequired(true);
 </xsl:if>
+<xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsUnique(true);
+</xsl:if>
 <xsl:choose>
 	<xsl:when test="@default-java">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="@default-java"/>);
@@ -142,9 +171,9 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if>
 <xsl:if test="selfref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_SELF, &quot;<xsl:value-of select="lookupref"/>&quot;);
 </xsl:if>
-<xsl:if test="parentref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_PARENT, &quot;<xsl:value-of select="lookupref"/>&quot;);
+<xsl:if test="parentref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_PARENT, &quot;<xsl:value-of select="parentref"/>&quot;);
 </xsl:if>
-<xsl:if test="lookupref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_LOOKUP, &quot;<xsl:value-of select="lookupref"/>&quot;);
+<xsl:if test="lookupref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_LOOKUP, &quot;<xsl:value-of select="selfref"/>&quot;);
 </xsl:if>
 </xsl:for-each>	
 		setAllColumns(new Column[] {
@@ -154,27 +183,44 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		});
 	}
 
+	/**
+	* Create the <xsl:value-of select="$_gen-table-row-name"/> class that should
+	* be used to store a single row of this table's data.
+	*/
 	public Row createRow()
 	{
 		return new <xsl:value-of select="$_gen-table-row-class-name"/>(this);
 	}
 	
+	/**
+	* Create the <xsl:value-of select="@_gen-rows-name"/> class that should
+	* be used to store multiple rows of this table's data.
+	*/
 	public Rows createRows()
 	{
 		return new <xsl:value-of select="@_gen-rows-class-name"/>(this);
 	}
 	
+	/**
+	* Create the <xsl:value-of select="$_gen-table-row-name"/> class that should
+	* be used to store a single row of this table's data.
+	*/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> create<xsl:value-of select="$_gen-table-row-name"/>()
 	{
 		return new <xsl:value-of select="$_gen-table-row-class-name"/>(this);
 	}
 	
+	/**
+	* Create the <xsl:value-of select="@_gen-rows-name"/> class that should
+	* be used to store multiple rows of this table's data.
+	*/
 	public <xsl:value-of select="@_gen-rows-class-name"/> create<xsl:value-of select="@_gen-rows-name"/>()
 	{
 		return new <xsl:value-of select="@_gen-rows-class-name"/>(this);
 	}
 	
-<xsl:for-each select="column">	public <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-method-name"/>Column() { return <xsl:value-of select="@_gen-member-name"/>; }
+<xsl:for-each select="column">	/** Returns the &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt; column definition **/
+	public <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-method-name"/>Column() { return <xsl:value-of select="@_gen-member-name"/>; }
 </xsl:for-each>
 
 <xsl:for-each select="column">	
@@ -182,22 +228,26 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 <xsl:variable name="java-type-init-cap"><xsl:value-of select="@_gen-java-type-init-cap"/></xsl:variable>
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:if test="java-type and @primarykey = 'yes'">
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException 
 	{ 
 		return get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value)); 
 	}
 </xsl:if><xsl:if test="@primarykey = 'yes'">
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
 	{ 
 		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
 	}
 </xsl:if>
 <xsl:if test="java-type and (@primarykey = 'yes') and ../child-table">
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type and loads all the child objects **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value, boolean retrieveChildren) throws NamingException, SQLException 
 	{ 
 		return get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value), retrieveChildren); 
 	}
 </xsl:if><xsl:if test="@primarykey = 'yes' and ../child-table">
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key and loads all the child objects **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value, boolean retrieveChildren) throws NamingException, SQLException
 	{
 		<xsl:value-of select="$_gen-table-row-class-name"/> row = (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
@@ -207,21 +257,27 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if>
 <xsl:if test="@reftype = 'parent'">
 <xsl:if test="java-type">
+	/** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by the parent key as a primitive type **/
 	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException
 	{
 		return get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
 	}
 
+	/** Deletes all the rows identified by the parent key as a primitive type **/
 	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException
 	{ 
 		delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
 	}
 </xsl:if>
+	/** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by the parent key **/
 	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
 	{ 
 		return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value, null); 
 	}
 
+	/** 
+	* Deletes all the rows identified by the parent key 
+	**/
 	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
 	{ 
 		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value); 
