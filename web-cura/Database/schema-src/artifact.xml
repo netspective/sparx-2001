@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE schema SYSTEM "../../../Framework/web-shared/resources/dtd/schema-markup.dtd">
+<!DOCTYPE schema SYSTEM "c:/projects/Framework/web-shared/resources/dtd/schema-markup.dtd">
 
 <schema name="artifact">
 
