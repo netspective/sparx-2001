@@ -15,6 +15,8 @@
 			<quick-links>
 				<quick-link caption="Why use Sparx?" page="overview/why-use-sparx"/>
 				<quick-link caption="Sparx API (JavaDoc)" page="javadoc/index"/>
+                <quick-link caption="Sparx XAF Tags" page="tagdoc/xaf/xaf"/>
+                <quick-link caption="Sparx XIF Tags" page="tagdoc/xif/xif"/>
 				<!-- <quick-link caption="Development Road Map" page="to-do"/> -->
 			</quick-links>
 		</page>

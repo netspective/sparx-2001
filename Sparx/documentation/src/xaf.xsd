@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Shahid N. Shah (Netspective Corporation) -->
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Shahid Nehal Shah (Netspective Corporation) -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xsd:element name="xaf">
 		<xsd:annotation>
@@ -22,6 +22,15 @@
 										<xsd:group ref="dialog-fields"/>
 										<xsd:element name="director" minOccurs="0">
 											<xsd:complexType>
+												<xsd:choice minOccurs="0">
+													<xsd:element name="next-actions" minOccurs="0">
+														<xsd:complexType>
+															<xsd:choice>
+																<xsd:element name="choices" type="dialog-select-field-choices"/>
+															</xsd:choice>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:choice>
 												<xsd:attribute name="style" use="optional">
 													<xsd:simpleType>
 														<xsd:restriction base="xsd:string">
@@ -96,6 +105,16 @@
 									<xsd:attribute name="retain-params" type="xsd:string" use="optional">
 										<xsd:annotation>
 											<xsd:documentation>Specifies the names of the URL parameters that should be retained during multiple invocations of this dialog. As dialogs are processed by browsers, the same dialog may be called during more than one request/response cycle. This parameter provides one or more comma-separated list of URL parameter names that should be kept between request/response cycles. If you would like to retain all parameters, pass an asterisk (*) as the value to this attribute.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="read-only-fields-hidden-unless-have-data" type="yes-no" use="optional" default="no">
+										<xsd:annotation>
+											<xsd:documentation>Specifies whether or not fields in this dialog that are flagged as read-only will be made hidden (value will still be available but field is not visible) if the field does not have a value.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="read-only-fields-invisible-unless-have-data" type="yes-no" use="optional" default="no">
+										<xsd:annotation>
+											<xsd:documentation>Specifies whether or not fields in this dialog that are flagged as read-only will be made invislble (field will not be visible nor will it have any value associated with it) if the field does not have a value.</xsd:documentation>
 										</xsd:annotation>
 									</xsd:attribute>
 								</xsd:complexType>
@@ -463,7 +482,7 @@
 				<xsd:documentation>The single value source (or list value source if appropriate) that specifies the default value of the field.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="hint" type="xsd:string" use="optional">
+		<xsd:attribute name="hint" type="single-value-source" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>The text that will be shown to a user to provide a hint as to the usage of the field. The exact behavior of this attribute depends upon the skin being used, but typically the contents of the hint attribute are shown right under the field control.</xsd:documentation>
 			</xsd:annotation>
@@ -657,6 +676,16 @@
 			</xsd:element>
 		</xsd:choice>
 		<xsd:attributeGroup ref="dialog-field"/>
+		<xsd:attribute name="read-only-hidden-unless-has-data" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not this field (when it's read-only) will be made hidden (value will still be available but field is not visible) if the field does not have a value.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="read-only-invisible-unless-has-data" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not this field (when it's read-only) will be made invisible if the field does not have a value.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
 	<xsd:simpleType name="dialog-field-name">
 		<xsd:annotation>
@@ -830,6 +859,12 @@
 								</xsd:annotation>
 							</xsd:attribute>
 							<xsd:attribute name="false" type="single-value-source" use="optional"/>
+							<xsd:attribute name="allow-neither" type="single-value-source" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>Specifies a third, "No Answer" option for radio buttons.  If this attribute is set, a 
+third radio button will be displayed with the specified caption allowing the user to have an option other than true or false.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
 						</xsd:extension>
 					</xsd:complexContent>
 				</xsd:complexType>
@@ -1054,6 +1089,16 @@
 				<xsd:annotation>
 					<xsd:documentation>A field that allows the selection of a file that will be downloaded (should be used in combination with miltipart MIME requests).</xsd:documentation>
 				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.html" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A field allows arbitrary HTML to be included in dialogs. This field should be used in the place of field.static when buttons and general HTML needs to be included. The actual HTML is enclosed inside the field.html tag body.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType mixed="true">
+					<xsd:complexContent mixed="true">
+						<xsd:extension base="dialog-field"/>
+					</xsd:complexContent>
+				</xsd:complexType>
 			</xsd:element>
 		</xsd:choice>
 	</xsd:group>
@@ -1317,6 +1362,31 @@
 					<xsd:documentation>Describe the banner that should be displayed across the report</xsd:documentation>
 				</xsd:annotation>
 			</xsd:element>
+			<xsd:element name="heading" type="single-value-source" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>SingleValueSource that declares the heading for the report.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="record-add-caption" type="single-value-source" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>SingleValueSource that declares the "Add Record" caption for inserting a new record associated with this report. The actual appearance of the caption is dependent upon the report skin. The value source create-record-add-text may be used to construct this caption in a consistent manner.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="record-add-url" type="single-value-source" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>SingleValueSource that declares the URL that will be associated with the "Add Record" caption. The value source called report-record-url:add can be used to access this URL in report columns. The actual appearance of the URL is dependent upon the report skin (the record-editor and record-viewer skins know how to use this element).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="record-edit-url" type="single-value-source" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>SingleValueSource that declares the URL that will provide editing of the active record. The value source called report-record-url:edit can be used to access this URL in report columns. The actual appearance of the URL is dependent upon the report skin (the record-editor and record-viewer skins know how to use this element).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="record-delete-url" type="single-value-source" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>SingleValueSource that declares the URL that will provide deletion of the active record. The value source called report-record-url:delete can be used to access this URL in report columns. The actual appearance of the URL is dependent upon the report skin (the record-editor and record-viewer skins know how to use this element).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
 		</xsd:choice>
 		<xsd:attribute name="name" type="xsd:string" use="optional" default="default"/>
 		<xsd:attribute name="heading" type="single-value-source" use="optional"/>
@@ -1356,7 +1426,7 @@
 				<xsd:documentation>Specifies the field that should be compared to the value.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="comparison" type="query-defn-comparison-id" use="required">
+		<xsd:attribute name="comparison" type="query-defn-comparison-id" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>The comparison to perform on the given field and value.</xsd:documentation>
 			</xsd:annotation>
@@ -1469,6 +1539,11 @@
 			<xsd:element name="where-expr" type="query-defn-where-exprType" minOccurs="0" maxOccurs="unbounded">
 				<xsd:annotation>
 					<xsd:documentation>Specifies a static SQL where condition expression that should be applied to the generated SQL statement as specified by the programmer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="choices" type="dialog-select-field-choices" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>When the choices are more convenient as subtags then they can be provided as elements (when there are lots of choices in the case of a static choices lists).</xsd:documentation>
 				</xsd:annotation>
 			</xsd:element>
 		</xsd:choice>
@@ -1846,5 +1921,25 @@
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="inherit" type="acl-permission" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="dialog-select-field-choices">
+		<xsd:annotation>
+			<xsd:documentation>A set of choices available in select fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="choice">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="single-value-source">
+							<xsd:attribute name="value" type="single-value-source" use="required">
+								<xsd:annotation>
+									<xsd:documentation>The value of the choice that will be provided to programmers when the choice is selected.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
 	</xsd:complexType>
 </xsd:schema>
