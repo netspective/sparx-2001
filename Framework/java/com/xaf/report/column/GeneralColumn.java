@@ -13,6 +13,8 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 import java.sql.*;
+import java.net.URLEncoder;
+
 import org.w3c.dom.*;
 
 import com.xaf.report.*;
@@ -79,7 +81,8 @@ public class GeneralColumn implements ReportColumn
 	public final SingleValueSource getUrl() { return urlValueSource; }
 	public final void setUrl(String value)
     {
-        urlValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+        // convert all '$' to '%' so that all request parameters are URL encoded.
+        urlValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value.replace('$', '%')) : null;
         if(urlValueSource != null)
             setFlag(COLFLAG_WRAPURL);
         else
