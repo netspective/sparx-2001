@@ -105,10 +105,12 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 				if(menuStructure == null)
 					throw new Exception("Unable to create menu structure");
 
-				mainMenu = new HierarchicalMenu(1, 171, 110, 38, menuStructure, appConfig.getValue(null, "framework.shared.scripts-url"));
+				mainMenu = new HierarchicalMenu(1, 10, 125, 75, menuStructure, appConfig.getValue(null, "framework.shared.scripts-url"));
 				mainMenu.setTopPermanent(true);
 				mainMenu.setTopHorizontal(true);
 				mainMenu.setTopMoreImagesVisible(false);
+				mainMenu.setBgColor("#AFD997");
+				mainMenu.setBorderColor("navy");
 			}
 
 			out.println("<html>");
