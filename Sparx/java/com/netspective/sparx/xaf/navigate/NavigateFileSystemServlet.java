@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigateFileSystemServlet.java,v 1.3 2002-08-26 14:29:52 shahid.shah Exp $
+ * $Id: NavigateFileSystemServlet.java,v 1.4 2002-08-26 14:44:21 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -146,6 +146,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 
         excludeEntryNames.add(skinJspPageName);
         excludeEntryNames.add("WEB-INF");
+        excludeEntryNames.add("sparx");
         excludeEntryNames.add("resources");
         excludeEntryNames.add("temp");
         excludeEntryNames.add("index.jsp");
