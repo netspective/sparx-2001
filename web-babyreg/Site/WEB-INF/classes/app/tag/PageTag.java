@@ -109,6 +109,8 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
                             out.print("<ul>");
                             out.print("<font face='Tahoma' size='2'><b><a href='AdminGiftDetail.jsp?data_cmd=add'>Add a new Item</a></b></font><br><br>");
                             out.print("<font face='Tahoma' size='2'><b><a href='AdminGiftList.jsp'>List All Items</a></b></font><br><br>");
+                            out.print("<font face='Tahoma' size='2'><b><a href='AdminUserList.jsp'>List Users</a></b></font><br><br>");
+                            out.print("<font face='Tahoma' size='2'><b><a href='AdminEditUser.jsp?data_cmd=add'>Add New User</a></b></font><br><br>");
                             out.print("</ul>");
                         }
 						out.print("<ul>");
