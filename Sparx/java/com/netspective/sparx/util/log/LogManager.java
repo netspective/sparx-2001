@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LogManager.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: LogManager.java,v 1.2 2002-08-18 20:56:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.log;
@@ -72,10 +72,10 @@ public class LogManager
     public static final String MONITOR_SECURITY = "sparx.monitor.security";
     public static final String MONITOR_SQL = "sparx.monitor.sql";
 
-    public static void recordAccess(HttpServletRequest req, AppServerCategory cat, String objName, String id, long startTime)
+    public static void recordAccess(HttpServletRequest req, AppServerLogger logger, String objName, String id, long startTime)
     {
-        if(cat == null) cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
-        if(!cat.isInfoEnabled())
+        if(logger == null) logger = (AppServerLogger) AppServerLogger.getLogger(LogManager.MONITOR_PAGE);
+        if(!logger.isInfoEnabled())
             return;
 
         long renderTime = (new Date().getTime()) - startTime;
@@ -92,7 +92,7 @@ public class LogManager
         else
             info.append(req.getRequestURI());
 
-        cat.info(info.toString());
+        logger.info(info.toString());
     }
 
 }

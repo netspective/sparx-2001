@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppServerLoggingEvent.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AppServerLoggingEvent.java,v 1.2 2002-08-18 20:56:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.log;
@@ -74,7 +74,7 @@ import org.apache.log4j.spi.LoggingEvent;
  *  <p>
  *  This class is used to add some application server related attributes
  *  to those attributes already provided by log4j.  It is instanciated by
- *  <code>AppServerCategory.forcedLog</code> methods.
+ *  <code>AppServerLogger.forcedLog</code> methods.
  *
  *  @author Paul Glezen
  */
@@ -100,29 +100,29 @@ public class AppServerLoggingEvent extends LoggingEvent
      *  <p>
      *  All the fields of
      *  <code>AppServerLoggingEvent</code> are obtained from
-     *  <code>AppServerCategory</code> or filled when actually needed.
+     *  <code>AppServerLogger</code> or filled when actually needed.
      *  <p>
-     *  @param fqnOfCategoryClass The Category class name.
-     *  @param category  The category of this event.
+     *  @param fqnOfLoggerClass The Logger class name.
+     *  @param logger  The logger of this event.
      *  @param priority  The priority of this event.
      *  @param message   The message of this event.
      *  @param throwable The throwable of this event.
      */
-    public AppServerLoggingEvent(String fqnOfCategoryClass,
-                                 AppServerCategory category,
+    public AppServerLoggingEvent(String fqnOfLoggerClass,
+                                 AppServerLogger logger,
                                  Priority priority,
                                  Object message,
                                  Throwable throwable)
     {
-        super(fqnOfCategoryClass,
-                category,
+        super(fqnOfLoggerClass,
+                logger,
                 priority,
                 message,
                 throwable);
 
-        hostname = category.getHostname();
-        component = category.getComponent();
-        server = category.getServer();
-        version = category.getVersion();
+        hostname = logger.getHostname();
+        component = logger.getComponent();
+        server = logger.getServer();
+        version = logger.getVersion();
     }
 }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractDatabaseContext.java,v 1.3 2002-08-17 15:04:39 shahid.shah Exp $
+ * $Id: AbstractDatabaseContext.java,v 1.4 2002-08-18 20:57:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -66,11 +66,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Element;
-import org.apache.log4j.Category;
 
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.log.LogManager;
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
@@ -101,7 +100,7 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
     public Connection beginConnectionSharing(ValueContext vc, String dataSourceId) throws NamingException, SQLException
     {
         Connection sharedConn = getSharedConnection(vc, dataSourceId);
-        AppServerCategory log = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SQL);
+        AppServerLogger log = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_SQL);
         if(sharedConn != null)
         {
             if(log.isDebugEnabled())
@@ -121,7 +120,7 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
     {
         String attrName = SHARED_CONN_ATTR_PREFIX + dataSourceId;
         Connection conn = (Connection) vc.getRequest().getAttribute(attrName);
-        AppServerCategory log = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SQL);
+        AppServerLogger log = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_SQL);
         if(log.isDebugEnabled())
             log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " ending shared connection" + dataSourceId + ": " + conn);
         if(conn != null)
@@ -171,5 +170,6 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
 
     public void createCatalog(ValueContext vc, Element parent) throws NamingException
     {
+        throw new RuntimeException("Not implemented");
     }
 }

@@ -14,17 +14,17 @@ the following text information to each logging event.
 <p>
 <h2>Configuration</h2>
 Using this package in your programs differs little from using
-{@link org.apache.log4j.Category}.  In this initial version,
+{@link org.apache.log4j.Logger}.  In this initial version,
 only property file initialization is supported.
 
 <h3>Automatic Configuration</h3>
 The following properties serve to configure the {@link
-com.netspective.sparx.util.log.AppServerCategoryFactory}.
+com.netspective.sparx.util.log.AppServerLoggerFactory}.
 <p>
 <table border=1>
 <tr><th>Property<th>Description
-<tr><td><code><b>log4j.categoryFactory</b></code>
-	<td>The {@link org.apache.log4j.spi.CategoryFactory}
+<tr><td><code><b>log4j.loggerFactory</b></code>
+	<td>The {@link org.apache.log4j.spi.LoggerFactory}
 	implementation to use.
 <tr><td><code><b>log4j.factory.server</b></code>
 	<td>The value assigned to the server attribute.
@@ -44,7 +44,7 @@ A sample configuration might look like this.
 <p>
 <table border=1>
 <tr><td><pre>
-log4j.categoryFactory=com.netspective.sparx.util.log.AppServerCategoryFactory
+log4j.loggerFactory=com.netspective.sparx.util.log.AppServerLoggerFactory
 log4j.factory.server=TestServer
 log4j.factory.component=TestComponent
 log4j.factory.version=SomeVersion
@@ -57,19 +57,19 @@ log4j.appender.stdout.layout.ConversionPattern=[%h:%s:%b:%v] %m%n
 <p>
 <!--
 There is <b>no</b> need to change your source code to go from using
-<code>Category</code> to <code>AppServerCategory</code> if you are
+<code>Logger</code> to <code>AppServerLogger</code> if you are
 using property files to configure your logging infrastructure.
-Simply specifying the <code>AppServerCategoryFactory</code>
-as the {@link org.apache.log4j.spi.CategoryFactory} implementation
+Simply specifying the <code>AppServerLoggerFactory</code>
+as the {@link org.apache.log4j.spi.LoggerFactory} implementation
 does the trick.  It installs the factory
 as the default factory for the hierarchy so that
-{@link org.apache.log4j.Category#getInstance(String)} always returns
-the proper <code>Category</code> subclass.
+{@link org.apache.log4j.Logger#getLogger(String)} always returns
+the proper <code>Logger</code> subclass.
   -->
 The only change needed to your source file is to invoke the {@link
-com.netspective.sparx.util.log.AppServerCategory#getInstance(String)}
-instead of the usual {@link org.apache.log4j.Category#getInstance(String)}
-to acquire an implementation of <code>Category</code>.
+com.netspective.sparx.util.log.AppServerLogger#getLogger(String)}
+instead of the usual {@link org.apache.log4j.Logger#getLogger(String)}
+to acquire an implementation of <code>Logger</code>.
 
 <h3>Manual Configuration</h3>
 You can manually invoke the configuration much like the static
@@ -77,12 +77,12 @@ initializer would have.
 <p>
 <table border=1>
 <tr><td><pre>
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 ...
 PropertyConfigurator.configure("test.properties");
-Category cat = AppServerCategory.getInstance("some.cat");
+Logger logger = AppServerLogger.getLogger("some.cat");
 ...
 cat.info("This is an INFO statement.");
 </pre> </table>
@@ -91,46 +91,46 @@ cat.info("This is an INFO statement.");
 If you want complete control over the configuration process, you
 can leave <code>PropertyConfigurator</code> out of it all
 together.  This could be useful if you want only some of your
-categories to be <code>AppServerCategory</code> instances.
+categories to be <code>AppServerLogger</code> instances.
 <p>
-Simply create an <code>AppServerCategoryFactory</code> instance.
+Simply create an <code>AppServerLoggerFactory</code> instance.
 The constructor automatically installs the new instance as the
 default factory for future calls to {@link
-com.netspective.sparx.util.log.AppServerCategory#getInstance(String)}.
+com.netspective.sparx.util.log.AppServerLogger#getLogger(String)}.
 <p>
 <table border=1>
 <tr><td><pre>
-import org.apache.log4j.Category;
-import com.netspective.sparx.util.log.AppServerCategoryFactory;
-import com.netspective.sparx.util.log.AppServerCategory;
+import org.apache.log4j.Logger;
+import com.netspective.sparx.util.log.AppServerLoggerFactory;
+import com.netspective.sparx.util.log.AppServerLogger;
 ...
 org.apache.log4j.BasicConfigurator.configure();
-new AppServerCategoryFactory("MyServer", null, null);
+new AppServerLoggerFactory("MyServer", null, null);
 ...
-Category cat = AppServerCategory.getInstance("my.category");
+Logger logger  = AppServerLogger.getLogger("my.logger");
 cat.info("Entry");
 </pre> </table>
 <p>
 <h4>A Note on Configurators</h4>
 Using the <i>very manual</i> approach to configure
-<code>AppServerCategory</code> with
+<code>AppServerLogger</code> with
 <code>PropertyConfigurator</code> or <code>DOMConfigurator</code>
 requires a note of caution.  Since the <i>very manual</i> method
-does not provide the <code>log4j.categoryFactory</code> property,
-these configurators do not know that <code>Category</code> has
+does not provide the <code>log4j.loggerFactory</code> property,
+these configurators do not know that <code>Logger</code> has
 been subclassed.  Upon
 constructing a configuration from a set of properties, it will
-construct <code>Category</code> instances rather than instances
+construct <code>Logger</code> instances rather than instances
 of the desired subclass.  One way to around this is decribed
 below.
 <p>
-By instanciating any anticipated <code>AppServerCategory</code>
+By instanciating any anticipated <code>AppServerLogger</code>
 instances before calling a configurator, the configurator will
 use the instances you create rather than trying to (incorrectly)
 create its own.  The consequence is that you can
 not always predict which categories will be created.  Their
 dynamic nature is the reason for externalizing their configuration
-in the first place.  This drawback is limited to category names
+in the first place.  This drawback is limited to logger names
 explicitly defined in the configuration.
 <p>
 <h2>Remote Usage</h2>

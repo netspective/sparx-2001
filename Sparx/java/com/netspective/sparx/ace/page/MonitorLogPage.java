@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: MonitorLogPage.java,v 1.2 2002-03-31 14:07:33 snshah Exp $
+ * $Id: MonitorLogPage.java,v 1.3 2002-08-18 20:55:47 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -70,7 +70,7 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletException;
 
 import org.apache.log4j.Appender;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.FileAppender;
 
 import com.netspective.sparx.ace.AceServletPage;
@@ -83,7 +83,7 @@ public class MonitorLogPage extends AceServletPage
     public static final int LOGSTYLE_TEXT = 0;
     public static final int LOGSTYLE_TAB_DELIMITED = 1;
 
-    private String categoryName;
+    private String loggerName;
     private String logStyleStr;
     private int logStyle;
     private String[] delimitedHeaders;
@@ -94,9 +94,9 @@ public class MonitorLogPage extends AceServletPage
         super();
     }
 
-    public MonitorLogPage(String categoryName, String logStyle)
+    public MonitorLogPage(String loggerName, String logStyle)
     {
-        this.categoryName = categoryName;
+        this.loggerName = loggerName;
         this.logStyleStr = logStyle;
         if(logStyle != null)
         {
@@ -120,7 +120,7 @@ public class MonitorLogPage extends AceServletPage
 
     public final String getName()
     {
-        return categoryName == null ? "monitor" : categoryName;
+        return loggerName == null ? "monitor" : loggerName;
     }
 
     public final String getPageIcon()
@@ -130,7 +130,7 @@ public class MonitorLogPage extends AceServletPage
 
     public final String getCaption(PageContext pc)
     {
-        return categoryName == null ? "Logs" : categoryName;
+        return loggerName == null ? "Logs" : loggerName;
     }
 
     public final String getHeading(PageContext pc)
@@ -204,14 +204,14 @@ public class MonitorLogPage extends AceServletPage
     public void handlePageBody(PageContext pc) throws ServletException, IOException
     {
         PrintWriter out = pc.getResponse().getWriter();
-        if(categoryName == null)
+        if(loggerName == null)
             return;
 
         if(logFile == null)
         {
             // find the first "appender" that is going to a file
-            Category category = Category.getInstance(categoryName);
-            for(Enumeration appenders = category.getAllAppenders(); appenders.hasMoreElements();)
+            Logger logger = Logger.getLogger(loggerName);
+            for(Enumeration appenders = logger.getAllAppenders(); appenders.hasMoreElements();)
             {
                 Appender appender = (Appender) appenders.nextElement();
                 if(appender instanceof FileAppender)
@@ -263,13 +263,13 @@ public class MonitorLogPage extends AceServletPage
         }
         else
         {
-            out.write("<p>No log file found for category '<b>" + categoryName + "</b>'.");
+            out.write("<p>No log file found for logger '<b>" + loggerName + "</b>'.");
         }
 
-        out.write("<div class='content'><hr size=2 color='#AAAADD'>category '<b>" + categoryName + "</b>' appenders:<ol>");
+        out.write("<div class='content'><hr size=2 color='#AAAADD'>logger '<b>" + loggerName + "</b>' appenders:<ol>");
 
-        Category category = Category.getInstance(categoryName);
-        for(Enumeration appenders = category.getAllAppenders(); appenders.hasMoreElements();)
+        Logger logger = Logger.getLogger(loggerName);
+        for(Enumeration appenders = logger.getAllAppenders(); appenders.hasMoreElements();)
         {
             Appender appender = (Appender) appenders.nextElement();
             out.write("<li><b>" + appender.getName() + "</b></li>");

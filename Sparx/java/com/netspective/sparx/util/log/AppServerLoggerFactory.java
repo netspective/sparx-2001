@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppServerCategoryFactory.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AppServerLoggerFactory.java,v 1.1 2002-08-18 20:56:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.log;
@@ -59,15 +59,15 @@ package com.netspective.sparx.util.log;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.LogLog;
-import org.apache.log4j.spi.CategoryFactory;
+import org.apache.log4j.spi.LoggerFactory;
 
 import com.netspective.sparx.util.factory.Factory;
 
 /**
  *  Creates correctly populated instances of
- *  <a href="AppServerCategory.html"><code>AppServerCategory</code></a>.
+ *  <a href="AppServerLogger.html"><code>AppServerLogger</code></a>.
  *  An attempt is made to
  *  determine the <code>hostname</code> using the
  *  <code>java.net</code> API.  The other three attributes,
@@ -83,7 +83,7 @@ import com.netspective.sparx.util.factory.Factory;
  *
  *  @author Paul Glezen
  */
-public class AppServerCategoryFactory implements CategoryFactory, Factory
+public class AppServerLoggerFactory implements LoggerFactory, Factory
 {
 
     /** The hostname on which this factory resides.  This is
@@ -103,26 +103,25 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     protected String version;
 
     /** The message bundle to be used by
-     </code>AppServerCategory</code> instances.  */
+     </code>AppServerLogger</code> instances.  */
     protected ResourceBundle messageBundle;
 
     /**
-     *  Construct a new <code>AppServerCategoryFactory</code> with
+     *  Construct a new <code>AppServerLoggerFactory</code> with
      *  the provided attributes.  An attempt is made to obtain the
      *  hostname from the java.net API.  This constructor sets the
      *  newly created instance as the default factory for future
-     *  invocations of {@link AppServerCategory#getInstance(String)}
-     *  via {@link AppServerCategory#setFactory}.
+     *  invocations of {@link AppServerLogger#getLogger(String)}
+     *  via {@link AppServerLogger#setFactory}.
      *
-     *  @param categoryName  the name of the category.
-     *  @param serverName    the name of the server using this category.  This
+     *  @param serverName    the name of the server using this logger.  This
      *                       may be null.
-     *  @param componentName the name of the component using this category.
+     *  @param componentName the name of the component using this logger.
      *                       This may be null.
      *  @param versionName   the version identifier of the component.  This may
      *                       may be null.
      */
-    public AppServerCategoryFactory(String serverName, String componentName,
+    public AppServerLoggerFactory(String serverName, String componentName,
                                     String versionName)
     {
         try
@@ -131,26 +130,26 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
         }
         catch(java.net.UnknownHostException uhe)
         {
-            LogLog.warn("AppServerCategoryFactory: could not determine local hostname.");
+            LogLog.warn("AppServerLoggerFactory: could not determine local hostname.");
         }
         server = serverName;
         component = componentName;
         version = versionName;
 
-        AppServerCategory.setFactory(this);
+        AppServerLogger.setFactory(this);
     }
 
     /**
      *  The default constructor merely calls the three-argument
      *  constructor with null values.
      */
-    public AppServerCategoryFactory()
+    public AppServerLoggerFactory()
     {
         this(null, null, null);
     }
 
     /**
-     *  Get the name of the component for which this category is logging.
+     *  Get the name of the component for which this logger is logging.
      *
      *  @return the component name
      */
@@ -160,7 +159,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Get the hostname of the machine on which this category is running.
+     *  Get the hostname of the machine on which this logger is running.
      *
      *  @return the hostname
      */
@@ -170,7 +169,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Get the name of the server process in which this category is running.
+     *  Get the name of the server process in which this logger is running.
      *
      *  @return the server name
      */
@@ -180,7 +179,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Get the version name of the component in which this category is
+     *  Get the version name of the component in which this logger is
      *  running.
      *
      *  @return the version name
@@ -191,12 +190,12 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Create a new instance of <code>AppServerCategory</code>
+     *  Create a new instance of <code>AppServerLogger</code>
      *  using the information contained in this instance.
      */
-    public Category makeNewCategoryInstance(String name)
+    public Logger makeNewLoggerInstance(String name)
     {
-        Category result = new AppServerCategory(name, hostname, server,
+        Logger result = new AppServerLogger(name, hostname, server,
                 component, version);
         if(messageBundle != null)
             result.setResourceBundle(messageBundle);
@@ -205,7 +204,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Set the name of the component for which the category will be logging.
+     *  Set the name of the component for which the logger will be logging.
      *
      *  @param component name of component
      *
@@ -216,7 +215,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Set the host name of the component on which this category is running.
+     *  Set the host name of the component on which this logger is running.
      *  An attempt is made by the constructor to determine the hostname using
      *  the java.net API.  Use this method only to override this
      *  determination.
@@ -229,7 +228,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
     }
 
     /**
-     *  Set the message bundle to be used for all <code>Category</code>
+     *  Set the message bundle to be used for all <code>Logger</code>
      *  objects created by this <code>CatgoryFactory</code>.
      *
      *  param bundle a bundle of messages
@@ -263,7 +262,7 @@ public class AppServerCategoryFactory implements CategoryFactory, Factory
 
     /**
      *  Set the name of the application server process in which this
-     *  category is logging.
+     *  logger is logging.
      *
      *  @param server name of application server process.
      */

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: BasicDatabaseContext.java,v 1.2 2002-08-17 15:04:39 shahid.shah Exp $
+ * $Id: BasicDatabaseContext.java,v 1.3 2002-08-18 20:57:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -76,7 +76,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
@@ -121,14 +121,10 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
             if(source == null)
                 throw new NamingException("Data source '" + dataSourceId + "' not found");
             conn = source.getConnection();
-            AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got new connection for " + dataSourceId + ": " + conn);
-            //Throwable t = new Throwable();
-            //StringWriter stack = new StringWriter();
-            //t.fillInStackTrace().printStackTrace(new PrintWriter(stack));
-            //AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(stack.toString());
+            AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got new connection for " + dataSourceId + ": " + conn);
         }
         else
-            AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got shared connection for " + dataSourceId + ": " + conn);
+            AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got shared connection for " + dataSourceId + ": " + conn);
         return conn;
     }
 

@@ -51,18 +51,18 @@
  */
  
 /**
- * $Id: AppServerCategory.java,v 1.2 2002-02-09 13:02:12 snshah Exp $
+ * $Id: AppServerLogger.java,v 1.1 2002-08-18 20:56:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.log;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-import org.apache.log4j.spi.CategoryFactory;
+import org.apache.log4j.spi.LoggerFactory;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
- *  Extends {@link org.apache.log4j.Category Category} by adding four
+ *  Extends {@link org.apache.log4j.Logger Logger} by adding four
  *  text attributes relevant to applications applications run in
  *  application servers.  These attributes are
  *
@@ -76,7 +76,7 @@ import org.apache.log4j.spi.LoggingEvent;
  *  <li><b>version</b> - the version of this code
  *  </ul>
  *
- *  <p>This <code>Category</code> subclass generates {@link
+ *  <p>This <code>Logger</code> subclass generates {@link
  *  AppServerLoggingEvent AppServerLoggingEvent} subclasses of {@link
  *  org.apache.log4j.spi.LoggingEvent LoggingEvent} which include the
  *  additional attributes.  {@link AppServerPatternLayout
@@ -84,36 +84,36 @@ import org.apache.log4j.spi.LoggingEvent;
  *  attributes.
  *
  *  <p>Rather than set all these attributes for each
- *  <code>AppServerCategory</code> instance, it is usually more
- *  convenient to set them once on {@link AppServerCategoryFactory}.
+ *  <code>AppServerLogger</code> instance, it is usually more
+ *  convenient to set them once on {@link AppServerLoggerFactory}.
  *  The factory can then be associated with the
- *  <code>AppServerCategory</code> class via {@link #setFactory}
+ *  <code>AppServerLogger</code> class via {@link #setFactory}
  *  or with the entire hierarchy via
- *  {@link org.apache.log4j.Hierarchy#setCategoryFactory}.  In the
- *  former case, you should use {@link AppServerCategory#getInstance}
+ *  {@link org.apache.log4j.Hierarchy#setLoggerFactory}.  In the
+ *  former case, you should use {@link AppServerLogger#getLogger}
  *  to create new categories.  In the latter case, you would use
- *  {@link org.apache.log4j.Category#getInstance(String)}.  The former
+ *  {@link org.apache.log4j.Logger#getLogger(String)}.  The former
  *  method allows finer granularity of control; the latter is more
  *  convenient.  Reliance on the org.apache.log4j.PropertyConfigurator will employ the
  *  latter.
  *
  *  <p>More convenient still is to rely on the
- *  {@link org.apache.log4j.Category} static initializer.  See the
+ *  {@link org.apache.log4j.Logger} static initializer.  See the
  *  package level documention for details.
  *
  *  @author Paul Glezen */
-public class AppServerCategory extends Category
+public class AppServerLogger extends Logger
 {
 
-    private static String FQCN = AppServerCategory.class.getName();
+    private static String FQCN = AppServerLogger.class.getName();
 
-    /** The name of the component using this category.  */
+    /** The name of the component using this logger.  */
     protected String component;
 
-    /** The hostname on which this category resides.  */
+    /** The hostname on which this logger resides.  */
     protected String hostname;
 
-    /** The application server name for this category. This is
+    /** The application server name for this logger. This is
      particularly meaningful in a CORBA or EBJ application
      server environment.  */
     protected String server;
@@ -121,31 +121,31 @@ public class AppServerCategory extends Category
     /** An identifier for this particular version/release. */
     protected String version = com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort();
 
-    /** A reference to the factory to create <code>AppServerCategory</code>
+    /** A reference to the factory to create <code>AppServerLogger</code>
      instances.  */
-    private static CategoryFactory factory = new AppServerCategoryFactory(null, null, null);
+    private static LoggerFactory factory = new AppServerLoggerFactory(null, null, null);
 
     /**
-     *  Construct a new AppServerCategory with the provided
+     *  Construct a new AppServerLogger with the provided
      *  attributes.  The constructor is protected because the only
-     *  classes invoking it should be a CategoryFactory subclass or
-     *  a subclass of AppServerCategory.
+     *  classes invoking it should be a LoggerFactory subclass or
+     *  a subclass of AppServerLogger.
      *
-     *  @param categoryName the name of the category.
-     *  @param instanceFCQN the fully qualified name of this category instance
+     *  @param loggerName the name of the logger.
+     *  @param instanceFCQN the fully qualified name of this logger instance
      *  @param hostname     the name of the physical machine on which this
-     *                      category resides.  This may be null.
-     *  @param server       the name of the server using this category.  This
+     *                      logger resides.  This may be null.
+     *  @param server       the name of the server using this logger.  This
      *                      may be null.
-     *  @param component    the name of the component using this category.
+     *  @param component    the name of the component using this logger.
      *                      This may be null.
      *  @param version      the version identifier of the component.  This may
      *                      may be null.
      */
-    protected AppServerCategory(String categoryName, String hostname,
+    protected AppServerLogger(String loggerName, String hostname,
                                 String server, String component, String version)
     {
-        super(categoryName);
+        super(loggerName);
 
         this.hostname = hostname;
         this.server = server;
@@ -154,9 +154,9 @@ public class AppServerCategory extends Category
     }
 
     /**
-     *  Get the component name for this category.
+     *  Get the component name for this logger.
      *
-     *  @return the category name
+     *  @return the logger name
      */
     public String getComponent()
     {
@@ -169,7 +169,7 @@ public class AppServerCategory extends Category
     }
 
     /**
-     *  Get the hostname for this category.
+     *  Get the hostname for this logger.
      *
      *  @return a string representation of the hostname
      */
@@ -184,22 +184,22 @@ public class AppServerCategory extends Category
     }
 
     /**
-     *  Return an <code>AppServerCategory</code> instance with the
+     *  Return an <code>AppServerLogger</code> instance with the
      *  provided name.  If such an instance exists, return it.
      *  Otherwise, create a new one.
      *
-     *  @param name the name of the Catgory
-     *  @return an instance of <code>AppServerCategory</code>.  The
-     *          signature indicates <code>Category</code> to maintain
+     *  @param name the name of the logger
+     *  @return an instance of <code>AppServerLogger</code>.  The
+     *          signature indicates <code>Logger</code> to maintain
      *          compatibility with the base class.
      */
-    public static Category getInstance(String name)
+    public static Logger getLogger(String name)
     {
-        return Category.getInstance(name, factory);
+        return Logger.getLogger(name, factory);
     }
 
     /**
-     * Get the server name for this category.  This attribute is more
+     * Get the server name for this logger.  This attribute is more
      * germane in application server environments such as CORBA and EJB.
      *
      * @return a string representing the server name
@@ -215,9 +215,9 @@ public class AppServerCategory extends Category
     }
 
     /**
-     *  Get the version name for this category.
+     *  Get the version name for this logger.
      *
-     *  @return the version of the the component for this category.
+     *  @return the version of the the component for this logger.
      */
     public String getVersion()
     {
@@ -242,9 +242,9 @@ public class AppServerCategory extends Category
 
 
     /**
-     *  Set the component name for this category.
+     *  Set the component name for this logger.
      *
-     *  @param categoryName the component name to be used for this category.
+     *  @param componentName the component name to be used for this logger.
      */
     public void setComponent(String componentName)
     {
@@ -253,20 +253,20 @@ public class AppServerCategory extends Category
 
     /**
      *  Set the factory instance for creation of
-     *  <code>AppServerCategory</code> instances.
-     *  in the <code>getInstance</code> method.
+     *  <code>AppServerLogger</code> instances.
+     *  in the <code>getLogger</code> method.
      *
-     *  @param factory an <code>AppServerCategory</code> factory
+     *  @param factory an <code>AppServerLogger</code> factory
      */
-    public static void setFactory(CategoryFactory factory)
+    public static void setFactory(LoggerFactory factory)
     {
-        AppServerCategory.factory = factory;
+        AppServerLogger.factory = factory;
     }
 
     /**
-     *  Explicity set the hostname for this category.
+     *  Explicity set the hostname for this logger.
      *
-     *  @param hostname the hostname to be used for this category.
+     *  @param hostname the hostname to be used for this logger.
      */
     public void setHostname(String hostname)
     {
@@ -274,9 +274,9 @@ public class AppServerCategory extends Category
     }
 
     /**
-     *  Set the server name for this category.
+     *  Set the server name for this logger.
      *
-     *  @param serverName the server name to be used for this category.
+     *  @param serverName the server name to be used for this logger.
      *             This is useful in CORBA and EJB environments.
      */
     public void setServer(String serverName)
@@ -285,7 +285,7 @@ public class AppServerCategory extends Category
     }
 
     /**
-     *  Set the version of the component for this category.
+     *  Set the version of the component for this logger.
      *
      *  @param versionName version name
      */
