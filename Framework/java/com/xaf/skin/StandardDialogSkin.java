@@ -59,7 +59,7 @@ public class StandardDialogSkin implements DialogSkin
 		gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
 		controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
-		controlAttrs = "class='dialog_control' onfocus='controlOnFocus(this)' onchange='controlOnChange(this)' onblur='controlOnBlur(this)' ";
+		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this)' onchange='controlOnChange(this)' onblur='controlOnBlur(this)' onkeypress='controlOnKeypress(this)'";
 		separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
 		separatorHtml = "<hr size=1 color=#555555>";
         hintFontAttrs = "color='navy'";
@@ -387,49 +387,7 @@ public class StandardDialogSkin implements DialogSkin
 		return "&nbsp;<a style='cursor:hand;' onclick=\"javascript:"+ expression +"\"><img border='0' src='"+ imageUrl +"'></a>&nbsp;";
 	}
 
-	public String getJavaScriptDefn(DialogContext dc, DialogField field)
-	{
-		String fieldClassName = field.getClass().getName();
-		String js =
-			"field = new DialogField(\"" + fieldClassName + "\", \""+ field.getId() + "\", \"" + field.getSimpleName() + "\", \"" + field.getQualifiedName() + "\", \"" + field.getCaption(dc) + "\", " + field.getFlags() +");\n" +
-			"dialog.registerField(field);\n";
 
-		if(field instanceof SelectField)
-			js += "field.style = " + ((SelectField) field).getStyle() + ";\n";
-
-		ArrayList dependentConditions = field.getDependentConditions();
-		if(dependentConditions != null)
-		{
-			StringBuffer dcJs = new StringBuffer();
-			Iterator i = dependentConditions.iterator();
-			while(i.hasNext())
-			{
-				DialogFieldConditionalAction o = (DialogFieldConditionalAction) i.next();
-
-				if(o instanceof DialogFieldConditionalDisplay)
-				{
-					DialogFieldConditionalDisplay action = (DialogFieldConditionalDisplay) o;
-					dcJs.append("field.dependentConditions[field.dependentConditions.length] = new DialogFieldConditionalDisplay(\""+ action.getSourceField().getQualifiedName() +"\", \""+ action.getPartnerField().getQualifiedName() + "\", \""+ action.getExpression() + "\");\n");
-				}
-			}
-			js = js + dcJs.toString();
-		}
-
-		ArrayList children = field.getChildren();
-		if(children != null)
-		{
-			StringBuffer childJs = new StringBuffer();
-			Iterator i = children.iterator();
-			while(i.hasNext())
-			{
-				DialogField child = (DialogField) i.next();
-				childJs.append(getJavaScriptDefn(dc, child));
-			}
-			js = js + childJs.toString();
-		}
-
-		return js;
-	}
 
 	public void appendFieldHtml(DialogContext dc, DialogField field, StringBuffer fieldsHtml, StringBuffer fieldsJSDefn)
 	{
@@ -520,7 +478,7 @@ public class StandardDialogSkin implements DialogSkin
 		}
 
 		if(field.getSimpleName() != null)
-			fieldsJSDefn.append(getJavaScriptDefn(dc, field));
+			fieldsJSDefn.append(field.getJavaScriptDefn(dc));
 	}
 
 	public String getHtml(DialogContext dc)
