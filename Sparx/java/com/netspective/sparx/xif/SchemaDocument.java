@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.18 2002-12-15 18:03:18 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.19 2002-12-15 20:27:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -517,13 +517,14 @@ public class SchemaDocument extends XmlSource
             return (table.getAttribute("name") + "." + column.getAttribute("name")).toUpperCase();
         }
 
-        public void resolveDialogField(Element dialogElem, Element tableColumnRefFieldPlaceholder)
+        public Element resolveDialogField(Element dialogElem, Element tableColumnRefFieldPlaceholder)
         {
             // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
             overrideAttributes(tableColumnRefFieldPlaceholder, dialogFieldDefn);
             Element cloned = (Element) dialogElem.getOwnerDocument().importNode(dialogFieldDefn, true);
             cloned.setAttribute("_original-tag", tableColumnRefFieldPlaceholder.getNodeName());
             dialogElem.insertBefore(cloned, tableColumnRefFieldPlaceholder);
+            return cloned;
         }
     }
 
