@@ -51,13 +51,14 @@
  */
  
 /**
- * $Id: FilesystemEntriesListValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: FilesystemEntriesListValue.java,v 1.2 2002-08-30 00:24:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.StringTokenizer;
 
 import org.apache.oro.text.perl.Perl5Util;
 
@@ -69,7 +70,7 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
     static public Perl5Util perlUtil = new Perl5Util();
     static public String ALL_FILES_FILTER = "/.*/";
 
-    private boolean includePathInCaption;
+    private boolean includePathInValue;
     private SingleValueSource rootPathValue;
     private String filter;
 
@@ -84,19 +85,20 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
                 "Provides list of files contained in a directory (either all files or by filter). If only a path is " +
                 "provided then this LVS returns a list of all the files in the given path. If a regular expression is " +
                 "provided (filter-reg-ex) then it must be a Perl5 regular expression that will be used to match the " +
-                "files that should be included in the list.",
-                new String[]{"path", "path,filter-reg-ex"}
+                "files that should be included in the list. If the {include-path} parameter is set to 1 then the full "+
+                "path included in the selected value otherwise just the filename is provided.",
+                new String[]{ "path", "path,filter-reg-ex", "path,filter-reg-ex,include-path" }
         );
     }
 
     public boolean isPathInSelection()
     {
-        return includePathInCaption;
+        return includePathInValue;
     }
 
     public void setIncludePathInSelection(boolean includePathInSelection)
     {
-        this.includePathInCaption = includePathInSelection;
+        this.includePathInValue = includePathInSelection;
     }
 
     public SingleValueSource getRootPath()
@@ -106,7 +108,7 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
 
     public void setRootPath(String rootPath)
     {
-        this.rootPathValue = ValueSourceFactory.getSingleOrStaticValueSource(rootPath);
+        setRootPath(ValueSourceFactory.getSingleOrStaticValueSource(rootPath));
     }
 
     public void setRootPath(SingleValueSource rootPath)
@@ -132,17 +134,21 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
     public void initializeSource(String srcParams)
     {
         super.initializeSource(srcParams);
-        int delimPos = srcParams.indexOf(",");
-        if(delimPos > 0)
+        StringTokenizer st = new StringTokenizer(srcParams, ",");
+        if(st.hasMoreTokens())
+            setRootPath(st.nextToken());
+        if(st.hasMoreTokens())
         {
-            setRootPath(srcParams.substring(0, delimPos));
-            setFilter(srcParams.substring(delimPos + 1));
+            String filterParam = st.nextToken();
+            if(filterParam.equals(""))
+                filter = ALL_FILES_FILTER;
+            else
+                setFilter(filterParam);
         }
         else
-        {
-            setRootPath(srcParams);
             filter = ALL_FILES_FILTER;
-        }
+        if(st.hasMoreTokens())
+            setIncludePathInSelection(st.nextToken().equals("1"));
     }
 
     public SelectChoicesList getSelectChoices(ValueContext vc)
@@ -153,7 +159,7 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
 
         if(files != null && files.length > 0)
         {
-            if(includePathInCaption)
+            if(!includePathInValue)
             {
                 for(int f = 0; f < files.length; f++)
                 {
@@ -164,11 +170,13 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
             {
                 for(int f = 0; f < files.length; f++)
                 {
-                    File file = new File(files[f]);
-                    choices.add(new SelectChoice(file.getName(), files[f]));
+                    File file = new File(rootPath, files[f]);
+                    choices.add(new SelectChoice(file.getName(), file.getAbsolutePath()));
                 }
             }
         }
+        else
+            choices.add(new SelectChoice(rootPath.getAbsolutePath() + " does not contain files matching '"+ filter +"'"));
 
         return choices;
     }
