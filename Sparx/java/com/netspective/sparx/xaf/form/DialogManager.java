@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogManager.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogManager.java,v 1.2 2002-07-08 13:13:50 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -73,6 +73,11 @@ import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.skin.StandardDialogSkin;
 import com.netspective.sparx.util.xml.XmlSource;
 
+/**
+ * The dialog manager is a dialog pool from which dialogs are retreived. When the <code>DialogManager</code> object is
+ * created,  it catalogs all dialogs as XML elements and when a dialog is requested for the first time, a new
+ * <code>Dialog</code> object is created and cached.
+ */
 public class DialogManager extends XmlSource
 {
     public static class DialogInfo
@@ -159,6 +164,11 @@ public class DialogManager extends XmlSource
             return dialogClass;
         }
 
+        /**
+         * Gets the dialog context class
+         *
+         * @return Class
+         */
         public Class getDialogContextClass()
         {
             return dialogContextClass;
@@ -181,6 +191,11 @@ public class DialogManager extends XmlSource
             }
         }
 
+        /**
+         * Gets the dialog object and if it doesn't exist, a new one is created and returned
+         *
+         * @return Dialog
+         */
         public Dialog getDialog()
         {
             if(dialog == null)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.6 2002-07-03 15:08:17 shahid.shah Exp $
+ * $Id: DialogField.java,v 1.7 2002-07-08 13:13:50 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -74,6 +74,13 @@ import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalDisplay;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
+/**
+ * A dialog field provides various dialog data operations such as data entry, validation, and formatting.
+ * One can think of a dialog as a container/manager object consisting of data fields which have their own behaviors and
+ * properties: a <code>DialogField</b> object provides the default behavior and functionality for all types of
+ * dialog fields. Child classes extending <code>DialogField</code> class overwrites or extends its functionalities.
+ *
+ */
 public class DialogField
 {
     // all these values are also defined in dialog.js (make sure they are always in sync)
@@ -124,6 +131,9 @@ public class DialogField
     private DialogFieldPopup popup;
     private String hint;
 
+    /**
+     * Creates a dialog field
+     */
     public DialogField()
     {
         defaultValue = null;
@@ -131,6 +141,12 @@ public class DialogField
         flags = 0;
     }
 
+    /**
+     * Creates a dialog field
+     *
+     * @param aName field name
+     * @param aCaption field caption
+     */
     public DialogField(String aName, String aCaption)
     {
         this();
@@ -161,6 +177,11 @@ public class DialogField
         return false;
     }
 
+    /**
+     * Import dialog XML declaration
+     *
+     * @param elem DOM Document element representing a dialog
+     */
     public void importFromXml(Element elem)
     {
         simpleName = elem.getAttribute("name");
@@ -234,6 +255,11 @@ public class DialogField
         importChildrenFromXml(elem);
     }
 
+    /**
+     * Import children nodes of a dialog element
+     *
+     * @param elem dialog element
+     */
     public void importChildrenFromXml(Element elem)
     {
         NodeList children = elem.getChildNodes();
@@ -319,6 +345,11 @@ public class DialogField
         this.addClientJavascript(customJS);
     }
 
+    /**
+     * Imports XML nodes representing conditional logic for a dialog element
+     *
+     * @param elem dialog element
+     */
     public void importConditionalFromXml(Element elem)
     {
         String action = elem.getAttribute("action");
@@ -340,7 +371,11 @@ public class DialogField
             addErrorMessage("Conditional action '" + action + "' unknown.");
         }
     }
-
+    /**
+     * Imports XML nodes representing popup window logic for a dialog element
+     *
+     * @param elem dialog element
+     */
     public void importPopupFromXml(Element elem)
     {
         String action = elem.getAttribute("action");
@@ -392,11 +427,21 @@ public class DialogField
         dc.addErrorMessage(parent != null ? parent : this, message);
     }
 
+    /**
+     * Gets the parent dialog field
+     *
+     * @return DialogField
+     */
     public final DialogField getParent()
     {
         return parent;
     }
 
+    /**
+     * Sets the parent dialog field
+     *
+     * @param newParent the parent field
+     */
     public void setParent(DialogField newParent)
     {
         parent = newParent;
@@ -407,16 +452,31 @@ public class DialogField
         return id;
     }
 
+    /**
+     * Gets the simple name of the dialog
+     *
+     * @return String
+     */
     public final String getSimpleName()
     {
         return simpleName;
     }
 
+    /**
+     * Gets the qualified name of the dialog
+     *
+     * @return String
+     */
     public final String getQualifiedName()
     {
         return qualifiedName;
     }
 
+    /**
+     * Sets the simple name of the dialog
+     *
+     * @param newName new simple name
+     */
     public void setSimpleName(String newName)
     {
         simpleName = newName;
@@ -427,6 +487,11 @@ public class DialogField
         }
     }
 
+    /**
+     * Sets the qualified name of the dialog
+     *
+     * @param newName new qualified name
+     */
     public void setQualifiedName(String newName)
     {
         qualifiedName = newName;
@@ -434,51 +499,102 @@ public class DialogField
             id = Dialog.PARAMNAME_CONTROLPREFIX + qualifiedName;
     }
 
+    /**
+     * Gets the cookie name associated with the dialog
+     *
+     * @return String cookie name
+     */
     public final String getCookieName()
     {
         return "DLG_" + parent.getSimpleName() + "_FLD_" + (cookieName.length() > 0 ? cookieName : simpleName);
     }
 
+    /**
+     * Sets the cookie name associated with the dialog
+     *
+     * @param name cookie name
+     */
     public void setCookieName(String name)
     {
         cookieName = name;
     }
 
+    /**
+     * Gets the caption of the dialog as a single value source
+     *
+     * @return SingleValueSource
+     */
     public SingleValueSource getCaptionSource()
     {
         return caption;
     }
 
+    /**
+     * Gets the caption string of the dialog
+     *
+     * @param dc dialog context
+     * @return String
+     */
     public String getCaption(DialogContext dc)
     {
         return caption != null ? caption.getValue(dc) : null;
     }
 
+    /**
+     * Sets the caption of the dialog from a value source
+     *
+     * @param value value source object from which the caption is being extracted
+     */
     public void setCaption(SingleValueSource value)
     {
         caption = value;
     }
 
+    /**
+     * Sets the caption of the dialog from a value source
+     *
+     * @param value value source from which the caption string is being extracted
+     */
     public void setCaption(String value)
     {
         setCaption(value != null ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
     }
 
+    /**
+     * Gets the hint string associated with the dialog field
+     *
+     * @return String
+     */
     public final String getHint()
     {
         return hint;
     }
 
+    /**
+     * Sets the hint string associated with the dialog field
+     *
+     * @param value hint string
+     */
     public void setHint(String value)
     {
         hint = value;
     }
 
+    /**
+     * Gets the display error message when a validation fails
+     *
+     * @return String
+     */
     public final String getErrorMessage()
     {
         return errorMessage;
     }
 
+    /**
+     * Sets the error message for display when a validation fails
+     *
+     * @param newMessage error message string
+     */
     public void setErrorMessage(String newMessage)
     {
         errorMessage = newMessage;
@@ -575,6 +691,12 @@ public class DialogField
 
     }
 
+    /**
+     * Returns the current dialog field or one of its children which has the passed in qualified name
+     *
+     * @param qualifiedName qualified name
+     * @return DialogField
+     */
     public DialogField findField(String qualifiedName)
     {
         if(this.qualifiedName != null && this.qualifiedName.equals(qualifiedName))
