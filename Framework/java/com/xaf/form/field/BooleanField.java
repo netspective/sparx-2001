@@ -46,6 +46,11 @@ public class BooleanField extends DialogField
 			return super.getCaption(dc);
 	}
 
+    public Object getValueAsObject(String value)
+    {
+        return new Boolean("1".equals(value) ? true : false);
+    }
+
 	public void importFromXml(Element elem)
 	{
 		super.importFromXml(elem);
@@ -123,4 +128,19 @@ public class BooleanField extends DialogField
 		return "Unknown style " + style;
 	}
 
+    /**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+        DialogContextMemberInfo mi = createDialogContextMemberInfo("boolean");
+        String fieldName = mi.getFieldName();
+		String memberName = mi.getMemberName();
+        String dataType = mi.getDataType();
+
+		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { Boolean o = (Boolean) getValueAsObject(\""+ fieldName +"\"); return o == null ? false : o.booleanValue(); }\n");
+		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", value == true ? \"1\" : \"0\"); }\n");
+
+		return mi;
+	}
 }

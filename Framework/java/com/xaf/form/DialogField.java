@@ -607,9 +607,14 @@ public class DialogField
 		return value;
 	}
 
+    public Object getValueAsObject(String value)
+    {
+        return value;
+    }
+
 	public Object getValueForSqlBindParam(String value)
 	{
-		return value;
+		return getValueAsObject(value);
 	}
 
 	public void populateValue(DialogContext dc)
@@ -694,18 +699,41 @@ public class DialogField
         return "";
     }
 
+    /**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo createDialogContextMemberInfo(String dataTypeName)
+	{
+		return new DialogContextMemberInfo(this.getQualifiedName(), dataTypeName);
+	}
+
 	/**
 	 * Produces Java code when a custom DialogContext is created
+     * The default method produces nothing; all the subclasses must define what they need.
 	 */
 	public DialogContextMemberInfo getDialogContextMemberInfo()
 	{
-		String fieldName = this.getSimpleName();
-		DialogContextMemberInfo mi = new DialogContextMemberInfo(this.getSimpleName(), "String");
-		String memberName = mi.getMemberName();
+        if(children == null) return null;
 
-		mi.setGetterMethodCode("\tpublic String get" + memberName + "() { return getValue(\""+ fieldName +"\"); }\n");
-		mi.setSetterMethodCode("\tpublic void set" + memberName + "(String value) { setValue(\""+ fieldName +"\", value); }\n");
+        DialogContextMemberInfo mi = createDialogContextMemberInfo("children");
+		Iterator i = children.iterator();
+		while(i.hasNext())
+		{
+			DialogField field = (DialogField) i.next();
+            DialogContextMemberInfo childMI = field.getDialogContextMemberInfo();
+            if(childMI == null)
+                continue;
 
-		return mi;
+            String[] childImports = childMI.getImportModules();
+            if(childImports != null)
+            {
+                for(int m = 0; m < childImports.length; m++)
+                    mi.addImportModule(childImports[m]);
+            }
+
+            mi.addJavaCode(childMI.getCode());
+		}
+
+        return mi;
 	}
 }

@@ -51,20 +51,20 @@ public class IntegerField extends TextField
         return true;
 	}
 
-	public Object getValueForSqlBindParam(String value)
-	{
-        Integer ret = null;
+    public Object getValueAsObject(String value)
+    {
+        Integer result = null;
 
         try
         {
-            ret = new Integer(value);
+            result = new Integer(value);
         }
         catch (NumberFormatException e)
         {
-            ret = null;
+            result = null;
         }
-        return ret;
-	}
+        return result;
+    }
 
 	public boolean isValid(DialogContext dc)
 	{
@@ -94,5 +94,21 @@ public class IntegerField extends TextField
 		}
 		else
 			return false;
+	}
+
+    /**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+        DialogContextMemberInfo mi = createDialogContextMemberInfo("int");
+        String fieldName = mi.getFieldName();
+		String memberName = mi.getMemberName();
+        String dataType = mi.getDataType();
+
+		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { Integer o = (Integer) getValueAsObject(\""+ fieldName +"\"); return o == null ? 0 : o.intValue(); }\n");
+		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", Integer.toString(value)); }\n");
+
+		return mi;
 	}
 }

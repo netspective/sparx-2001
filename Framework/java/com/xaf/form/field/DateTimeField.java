@@ -68,6 +68,21 @@ public class DateTimeField extends TextField
 		postDate = high;
 	}
 
+    public Object getValueAsObject(String value)
+    {
+        try
+        {
+            if (dataType == DTTYPE_TIMEONLY)
+                return new String(this.formatTimeValue(value));
+            else
+                return new Date(format.parse(value).getTime());
+        }
+        catch(ParseException e)
+        {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
 	public Object getValueForSqlBindParam(String value)
 	{
         try
@@ -319,5 +334,21 @@ public class DateTimeField extends TextField
                 dc.setValue(this, xlatedDate);
         }
 
+	}
+
+    /**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+        DialogContextMemberInfo mi = createDialogContextMemberInfo("Date");
+        mi.addImportModule("java.util.Date");
+        String fieldName = mi.getFieldName();
+		String memberName = mi.getMemberName();
+        String dataType = mi.getDataType();
+
+		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return (Date) getValueAsObject(\""+ fieldName +"\"); }\n");
+
+		return mi;
 	}
 }

@@ -485,6 +485,24 @@ public class DialogContext extends Hashtable implements ValueContext
             return state.field.getValueForSqlBindParam(state.value);
 	}
 
+    public Object getValueAsObject(DialogField field)
+	{
+		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
+		if(state == null)
+			return null;
+		else
+            return field.getValueAsObject(state.value);
+	}
+
+	public Object getValueAsObject(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		if(state == null)
+			return null;
+		else
+            return state.field.getValueAsObject(state.value);
+	}
+
 	public void setValue(String qualifiedName, String value)
 	{
 		DialogFieldState state = (DialogFieldState) get(qualifiedName);
@@ -515,34 +533,17 @@ public class DialogContext extends Hashtable implements ValueContext
 			return state.values;
 	}
 
+    public void setValues(String qualifiedName, String[] values)
+	{
+        DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		if(state != null)
+            state.values = values;
+	}
+
 	public void setValues(DialogField field, String[] values)
 	{
 		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
 		state.values = values;
-	}
-
-	public int getIntValue(String qualifiedName)
-	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
-		return state == null ? 0 : Integer.parseInt(state.value);
-	}
-
-	public double getDoubleValue(String qualifiedName)
-	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
-		return state == null ? 0.0 : Double.parseDouble(state.value);
-	}
-
-	public float getFloatValue(String qualifiedName)
-	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
-		return state == null ? (float) 0.0 : Float.parseFloat(state.value);
-	}
-
-	public boolean getBooleanValue(String qualifiedName)
-	{
-		DialogFieldState state = (DialogFieldState) get(qualifiedName);
-		return state == null ? false : (state.value.equals("1") ? true : false);
 	}
 
 	public ArrayList getErrorMessages(DialogField field)

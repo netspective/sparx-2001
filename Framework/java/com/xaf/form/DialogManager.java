@@ -45,41 +45,15 @@ public class DialogManager extends XmlSource
 			if(dialogClassName == null || dialogClassName.length() == 0)
 				dialogClassName = "dialog." + lookupName;
 
-			if(ConfigurationManagerFactory.isDevelopmentEnvironment(servletContext) && defnElement.getAttribute("dc-class").equals(Dialog.GENERATE_DC_ATTR_VALUE))
-			{
-				/* create a generic dialog and read in the fields */
-				dialog = new Dialog();
-				dialog.importFromXml(pkgName, defnElement);
+            defnElement.setAttribute("qualified-name", lookupName);
+            defnElement.setAttribute("package", pkgName);
 
-				/* figure out the file name we need to create, and create the necessary paths */
-				String classNamePrep = new String(lookupName);
-				classNamePrep.replace('.', '/');
-				String webInfPath = ConfigurationManagerFactory.getDefaultConfiguration(servletContext).getValue(null, "app.web-inf-root-path");
-				String classesPath = webInfPath + "/classes/dialog/context";
-
-				File javaFilePath = new File(pkgName == null ? classesPath : (classesPath + "/" + pkgName));
-				javaFilePath.mkdirs();
-
-				File javaFile = new File(javaFilePath, com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true) + ".java");
-				try
-				{
-					Writer writer = new java.io.FileWriter(javaFile);
-	    			writer.write(dialog.getSubclassedDialogContextCode());
-					writer.close();
-				}
-				catch(IOException e)
-				{
-					throw new RuntimeException(e.toString());
-				}
-
-				/* reset so that real dialog will be created when needed */
-				dialog = null;
-			}
-			dialogContextClass = Dialog.findDialogContextClass(pkgName, defnElement);
-
+            findDialogContextClass();
 			try
 			{
 				dialogClass = Class.forName(dialogClassName);
+                defnElement.setAttribute("_class-name", dialogClass.getName());
+                defnElement.setAttribute("_class-file-name", com.xaf.BuildConfiguration.getClassFileName(dialogClass.getName()));
 			}
 		    catch(Exception e)
 			{
@@ -87,9 +61,21 @@ public class DialogManager extends XmlSource
 			}
 		}
 
+        public Element getDefnElem() { return defnElement; }
+        public String getPackageName() { return pkgName; }
 		public String getLookupName() { return lookupName; }
 		public Class getDialogClass() { return dialogClass; }
 		public Class getDialogContextClass() { return dialogContextClass; }
+
+        public void findDialogContextClass()
+        {
+            dialogContextClass = Dialog.findDialogContextClass(pkgName, defnElement);
+            if(dialogContextClass != DialogContext.class)
+            {
+                defnElement.setAttribute("_dc-class-name", dialogContextClass.getName());
+                defnElement.setAttribute("_dc-class-file-name", com.xaf.BuildConfiguration.getClassFileName(dialogContextClass.getName()));
+            }
+        }
 
 		public Dialog getDialog()
 		{
@@ -108,6 +94,28 @@ public class DialogManager extends XmlSource
 			}
 			return dialog;
 		}
+
+        public File generateDialogBean(String outputPath) throws IOException
+        {
+            Dialog activeDialog = new Dialog();
+            activeDialog.importFromXml(pkgName, defnElement);
+
+            /* figure out the file name we need to create, and create the necessary paths */
+            String classNamePrep = new String(lookupName);
+            classNamePrep.replace('.', '/');
+
+            File javaFilePath = new File(pkgName == null ? outputPath : (outputPath + "/" + pkgName));
+            javaFilePath.mkdirs();
+
+            File javaFile = new File(javaFilePath, com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(defnElement.getAttribute("name"), true) + ".java");
+
+            Writer writer = new java.io.FileWriter(javaFile);
+            writer.write(activeDialog.getSubclassedDialogContextCode());
+            writer.close();
+
+            findDialogContextClass();
+            return javaFile;
+        }
 	}
 
 	static final String REQPARAMNAME_DIALOG = "dlg";
@@ -190,18 +198,6 @@ public class DialogManager extends XmlSource
 						Element dialogElem = (Element) dialogsChild;
 						DialogInfo di = new DialogInfo(servletContext, stmtPkg, dialogElem);
 		    			dialogs.put(di.getLookupName(), di);
-						dialogElem.setAttribute("qualified-name", di.getLookupName());
-						dialogElem.setAttribute("package", stmtPkg);
-						if(di.getDialogClass() != Dialog.class)
-						{
-							dialogElem.setAttribute("_class-name", di.getDialogClass().getName());
-	    					dialogElem.setAttribute("_class-file-name", com.xaf.BuildConfiguration.getClassFileName(di.getDialogClass().getName()));
-						}
-						if(di.getDialogContextClass() != DialogContext.class)
-						{
-							dialogElem.setAttribute("_dc-class-name", di.getDialogContextClass().getName());
-	    					dialogElem.setAttribute("_dc-class-file-name", com.xaf.BuildConfiguration.getClassFileName(di.getDialogContextClass().getName()));
-						}
 					}
 					else if(scName.equals("register-field"))
 					{

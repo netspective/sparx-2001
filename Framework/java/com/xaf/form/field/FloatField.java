@@ -51,10 +51,20 @@ public class FloatField extends TextField
         return true;
 	}
 
-	public Object getValueForSqlBindParam(String value)
-	{
-        return new Float(value);
-	}
+    public Object getValueAsObject(String value)
+    {
+        Float result = null;
+
+        try
+        {
+            result = new Float(value);
+        }
+        catch (NumberFormatException e)
+        {
+            result = null;
+        }
+        return result;
+    }
 
 	public boolean isValid(DialogContext dc)
 	{
@@ -84,5 +94,21 @@ public class FloatField extends TextField
 		}
 		else
 			return false;
+	}
+
+    /**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+        DialogContextMemberInfo mi = createDialogContextMemberInfo("float");
+        String fieldName = mi.getFieldName();
+		String memberName = mi.getMemberName();
+        String dataType = mi.getDataType();
+
+		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { Float o = (Float) getValueAsObject(\""+ fieldName +"\"); return o == null ? (float) 0.0 : o.floatValue(); }\n");
+		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", Float.toString(value)); }\n");
+
+		return mi;
 	}
 }

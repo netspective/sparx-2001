@@ -41,10 +41,10 @@ public class SystemPropertiesPage extends AceServletPage
 		Element propertiesElem = doc.createElement("properties");
 		rootElem.appendChild(propertiesElem);
 
-		for(Enumeration e = System.getProperties().keys(); e.hasMoreElements(); )
+		for(Iterator i = System.getProperties().keySet().iterator(); i.hasNext(); )
 		{
 			Element propertyElem = doc.createElement("property");
-			String paramName = (String) e.nextElement();
+			String paramName = (String) i.next();
 			addText(propertyElem, "name", paramName);
 			if(paramName.endsWith(".path"))
 			{

@@ -86,9 +86,13 @@ public class XmlSource
 		for(int i = 0; i < xml.length(); i++)
 		{
 			char ch = xml.charAt(i);
-			if(ch != '_' && Character.isJavaIdentifierPart(ch))
+            if(ch == '.')
+            {
+                identifier.append('_');
+            }
+			else if(ch != '_' && Character.isJavaIdentifierPart(ch))
 			{
-				identifier.append(uCase ? Character.toUpperCase(ch) : Character.toLowerCase(ch));
+				identifier.append(Character.isUpperCase(ch) ? ch : (uCase ? Character.toUpperCase(ch) : Character.toLowerCase(ch)));
 				uCase = false;
 			}
 			else

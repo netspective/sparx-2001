@@ -9,6 +9,9 @@
   <component class="com.intellij.compiler.Compiler">
     <option name="DEFAULT_COMPILER" value="Javac" />
     <option name="COMPILE_IN_BACKGROUND" value="false" />
+    <excludeFromCompile>
+      <directory path="C:/Utils/java/jdk1.3.1" includeSubdirectories="true" />
+    </excludeFromCompile>
   </component>
   <component class="com.intellij.compiler.JavacSettings">
     <option name="DEBUGGING_INFO" value="true" />
@@ -67,7 +70,7 @@
     </Diff>
     <Add>
       <option name="ADD_AS_BINARY" value="false" />
-      <option name="LOG_MESSAGE" />
+      <option name="LOG_MESSAGE" value="" />
     </Add>
     <Status>
       <option name="NON_RECURSIVE" value="false" />
@@ -115,10 +118,10 @@
   </component>
   <component class="com.intellij.cvsSupport.CvsManager">
     <expanded_paths>
-      <path value="C:/Projects/Framework/java" />
       <path value="C:/Projects/Framework/java/com/xaf/ace" />
-      <path value="C:/Projects/Framework/java/com" />
+      <path value="C:/Projects/Framework/java" />
       <path value="C:/Projects/Framework/java/com/xaf" />
+      <path value="C:/Projects/Framework/java/com" />
     </expanded_paths>
   </component>
   <component class="com.intellij.debugger.Debugger">
@@ -220,29 +223,56 @@
   <component class="com.intellij.ide.SelectInManager" />
   <component class="com.intellij.ide.bookmarks.BookmarkManager" />
   <component class="com.intellij.ide.commander.Commander">
-    <leftPanel view="Project" active="true" />
-    <rightPanel view="Project" active="false" />
+    <leftPanel view="Project" active="false" url="file://C:/Projects/Framework/java/com/xaf/ace" />
+    <rightPanel view="Project" active="true" url="file://C:/Projects/Framework/java/com/xaf" />
     <splitter proportion="0.5" />
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" column="41" line="12" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/navigate/FileSystemEntry.java" column="70" line="19" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ant/BuildConfigurationTask.java" column="31" line="17" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppInitParamsPage.java" column="70" line="29" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogContext.java" column="133" line="606" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/task/sql/DmlTask.java" column="67" line="266" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/DialogBeanGenerateClassDialog.java" column="138" line="57" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/BuildConfiguration.java" column="94" line="43" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/SystemPropertiesPage.java" column="45" line="41" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/xml/XmlSource.java" column="76" line="98" />
+      <file_info url="file://C:/Projects/Framework/web-shared/resources/xslt/ace/dialogs-browser.xsl" column="102" line="24" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogManager.java" column="75" line="63" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/Dialog.java" column="63" line="133" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/value/ValueSourceFactory.java" column="58" line="18" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/value/QueryDefnFieldsListValue.java" column="0" line="45" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/value/DialogsListValue.java" column="0" line="43" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppDialogsPage.java" column="12" line="36" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogManagerFactory.java" column="24" line="33" />
     </recent_files>
     <open_files>
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" column="41" line="12" />
-      <active_file url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogContext.java" column="133" line="606" />
+      <active_file url="file://C:/Projects/Framework/java/com/xaf/form/DialogContext.java" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/DialogBeanGenerateClassDialog.java" column="138" line="57" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppDialogsPage.java" column="12" line="36" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogManager.java" column="75" line="63" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/form/Dialog.java" column="63" line="133" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/xml/XmlSource.java" column="76" line="98" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/BuildConfiguration.java" column="94" line="43" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/SystemPropertiesPage.java" column="45" line="41" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppInitParamsPage.java" column="70" line="29" />
     </open_files>
   </component>
   <component class="com.intellij.ide.impl.ProjectWorkspace" />
   <component class="com.intellij.ide.navigator.impl.ProjectNavigatorSettings">
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/xml" />
       <expanded_node type="directory" url="file://C:/Projects/Framework/java/com" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/value" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/form" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/task" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/task/sql" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/form/field" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace/page" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false" />
   </component>
@@ -273,9 +303,6 @@
   </component>
   <component class="com.intellij.projectRoots.ProjectRootContainer">
     <jdk name="java version &quot;1.3.1&quot;" />
-    <root file="file://$PROJECT_DIR$/classes">
-      <property name="type" value="outputPath" />
-    </root>
     <root file="jar://C:/Utils/java/xerces-1_4_1/xerces.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
@@ -297,11 +324,17 @@
     <root file="jar://C:/Utils/app-servers/resin-2.0.2/lib/jsdk23.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
+    <root file="file://$PROJECT_DIR$/classes">
+      <property name="type" value="outputPath" />
+    </root>
     <root file="file://C:/Projects/Framework/java">
       <property name="type" value="projectFiles" />
     </root>
     <root file="file://C:/Projects/Framework/java">
       <property name="type" value="sourcePathEntry" />
+    </root>
+    <root file="file://C:/Utils/java/jdk1.3/docs/api">
+      <property name="type" value="javadocPathEntry" />
     </root>
   </component>
   <component class="com.intellij.usageTree.impl.RefactoringOptions">

@@ -268,4 +268,20 @@ public class TextField extends DialogField
 
         return buf.toString();
     }
+
+    /**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+		DialogContextMemberInfo mi = createDialogContextMemberInfo("String");
+        String fieldName = mi.getFieldName();
+		String memberName = mi.getMemberName();
+        String dataType = mi.getDataType();
+
+		mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return getValue(\""+ fieldName +"\"); }\n");
+		mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", value); }\n");
+
+		return mi;
+	}
 }

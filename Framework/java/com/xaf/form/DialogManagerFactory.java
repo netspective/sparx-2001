@@ -29,6 +29,11 @@ public class DialogManagerFactory
 	static Map managers = new Hashtable();
 	static List listeners;
 
+    public static Map getManagers()
+    {
+        return managers;
+    }
+
 	public static void addListener(FactoryListener listener)
 	{
 		if(listeners == null)

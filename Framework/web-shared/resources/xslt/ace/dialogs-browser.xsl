@@ -22,6 +22,7 @@
 		<xsl:otherwise>
 			<div class="content">
 				<div class="content_head">Dialogs</div>
+                <a><xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/','generate-dc')"/></xsl:attribute>Generate Dialog Beans</a><p/>
 				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
 				<tr class="data_table_header">
 					<th class="data_table">Actions</th>

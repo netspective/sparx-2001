@@ -13,6 +13,7 @@ import com.xaf.config.*;
 import com.xaf.form.*;
 import com.xaf.page.*;
 import com.xaf.skin.*;
+import com.xaf.BuildConfiguration;
 
 public class AppInitParamsPage extends AceServletPage
 {
@@ -62,6 +63,23 @@ public class AppInitParamsPage extends AceServletPage
 		addText(propertyElem, "name", "Is Development Environment");
 		addText(propertyElem, "value", ConfigurationManagerFactory.isDevelopmentEnvironment(context) ? "Yes" : "No");
 		propertiesElem.appendChild(propertyElem);
+
+        propertiesElem = doc.createElement("properties");
+		propertiesElem.setAttribute("name", "Classpath ("+ Thread.currentThread().getContextClassLoader().getClass().getName() + ")");
+		rootElem.appendChild(propertiesElem);
+
+        BuildConfiguration.ClassPathInfo[] classPaths = BuildConfiguration.getClassPaths();
+        if(classPaths != null)
+        {
+            for(int i = 0; i < classPaths.length; i++)
+            {
+                BuildConfiguration.ClassPathInfo cpi = classPaths[i];
+                propertyElem = doc.createElement("property");
+                addText(propertyElem, "name", cpi.getClassPath().getAbsolutePath());
+                addText(propertyElem, "value", ! cpi.isValid() ? "invalid" : (cpi.isDirectory() ? "directory" : (cpi.isJar() ? "JAR" : "ZIP")));
+                propertiesElem.appendChild(propertyElem);
+            }
+        }
 
 		propertiesElem = doc.createElement("properties");
 		propertiesElem.setAttribute("name", "Init Parameters");

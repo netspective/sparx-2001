@@ -1,5 +1,8 @@
 package com.xaf.form;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * Title:        The eXtensible Application Framework
  * Description:
@@ -14,8 +17,8 @@ public class DialogContextMemberInfo
 	private String fieldName;
 	private String dataType;
 	private String memberName;
-	private String getterMethodCode;
-	private String setterMethodCode;
+    private List imports;
+	private StringBuffer code = new StringBuffer();
 
 	public DialogContextMemberInfo(String fieldName, String dataType)
 	{
@@ -26,8 +29,8 @@ public class DialogContextMemberInfo
 	public String getFieldName() { return fieldName; }
 	public String getDataType() { return dataType; }
 	public String getMemberName() { return memberName; }
-	public String getGetterMethodCode() { return getterMethodCode; }
-	public String getSetterMethodCode() { return setterMethodCode; }
+	public String getCode() { return code.toString(); }
+    public String[] getImportModules() { return imports == null ? null : ((String[]) imports.toArray(new String[imports.size()])); }
 
 	public void setFieldName(String fieldName)
 	{
@@ -40,13 +43,21 @@ public class DialogContextMemberInfo
 		this.dataType = dataType;
 	}
 
-	public void setGetterMethodCode(String value)
-	{
-		getterMethodCode = value;
-	}
+    public void addImportModule(String module)
+    {
+        if(imports == null)
+            imports = new ArrayList();
+        imports.add(module);
+    }
 
-	public void setSetterMethodCode(String value)
-	{
-		setterMethodCode = value;
-	}
+    public void addJavaCode(String codeFragment)
+    {
+        code.append(codeFragment);
+    }
+
+    public void addJavaCodeAndSeparator(String codeFragment)
+    {
+        addJavaCode(codeFragment);
+        code.append("\n");
+    }
 }

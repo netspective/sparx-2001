@@ -454,4 +454,41 @@ public class SelectField extends DialogField
         return (super.getCustomJavaScriptDefn(dc) + "field.style = " + getStyle() + ";\n");
     }
 
+    /*
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+        DialogContextMemberInfo mi = null;
+        String fieldName, memberName, dataType;
+
+        switch(style)
+        {
+            case SELECTSTYLE_RADIO:
+            case SELECTSTYLE_COMBO:
+            case SELECTSTYLE_LIST:
+                mi = createDialogContextMemberInfo("String");
+                fieldName = mi.getFieldName();
+                memberName = mi.getMemberName();
+                dataType = mi.getDataType();
+
+                mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return getValue(\""+ fieldName +"\"); }\n");
+                mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" value) { setValue(\""+ fieldName +"\", value); }\n");
+                break;
+
+            case SELECTSTYLE_MULTICHECK:
+            case SELECTSTYLE_MULTILIST:
+            case SELECTSTYLE_MULTIDUAL:
+                mi = createDialogContextMemberInfo("String[]");
+                fieldName = mi.getFieldName();
+                memberName = mi.getMemberName();
+                dataType = mi.getDataType();
+
+                mi.addJavaCode("\tpublic "+ dataType +" get" + memberName + "() { return getValues(\""+ fieldName +"\"); }\n");
+                mi.addJavaCode("\tpublic void set" + memberName + "("+ dataType +" values) { setValues(\""+ fieldName +"\", values); }\n");
+                break;
+        }
+
+        return mi;
+	}
 }

@@ -12,10 +12,30 @@ import com.xaf.skin.*;
 
 public class AppDialogsPage extends AceServletPage
 {
+    DialogBeanGenerateClassDialog dialog;
+
 	public final String getName() { return "dialogs"; }
 	public final String getPageIcon() { return "dialogs.gif"; }
 	public final String getCaption(PageContext pc) { return "Dialogs"; }
 	public final String getHeading(PageContext pc) { return "Application Dialogs"; }
+
+    public void handleBeanGenerator(PageContext pc) throws IOException
+    {
+        if(dialog == null)
+            dialog = new DialogBeanGenerateClassDialog();
+
+        PrintWriter out = pc.getResponse().getWriter();
+		DialogContext dc = dialog.createContext(pc.getServletContext(), pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+		dialog.prepareContext(dc);
+		if(! dc.inExecuteMode())
+		{
+			out.write("&nbsp;<p><center>");
+			out.write(dialog.getHtml(dc, true));
+			out.write("</center>");
+		}
+        else
+            out.write(dialog.getHtml(dc, true));
+    }
 
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
@@ -35,7 +55,14 @@ public class AppDialogsPage extends AceServletPage
 			out.write(dialog.getHtml(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin()));
 			out.write("</center>");
 		}
-		else
-			transform(pc, manager.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
+        else
+        {
+            VirtualPath.FindResults results = pc.getActivePath();
+            String[] unmatchedItems = results.unmatchedPathItems();
+            if(unmatchedItems != null && unmatchedItems[0].equals("generate-dc"))
+                handleBeanGenerator(pc);
+            else
+                transform(pc, manager.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
+        }
 	}
 }
