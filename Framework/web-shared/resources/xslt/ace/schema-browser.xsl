@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:xalan="http://xml.apache.org/xalan"
-                   exclude-result-prefixes="xalan">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html"/>
 
 <xsl:param name="root-url"/>
@@ -149,9 +148,6 @@
 <xsl:template match="table" mode="structure">
 	<div class="table_struct">
 		<xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute>
-		<!--
-		<a class="table_struct"><xsl:attribute name="href"><xsl:value-of select="$root-url"/>/table/<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
-		-->
 		<xsl:if test="not(table)">
 		<xsl:value-of select="@name"/>
 		<span class="table_struct_menu"><a class="column_references"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/table/', @name)"/></xsl:attribute>4</a></span>
@@ -188,32 +184,8 @@
 		<xsl:if test="@reftype = 'parent'">
 			<xsl:value-of select="$table-name"/> -&gt; <xsl:value-of select="@reftbl"/> [label="<xsl:value-of select="@refcol"/>"];
 		</xsl:if>
-		<!--
-		<xsl:if test="@reftype = 'lookup'">
-			<xsl:value-of select="$table-name"/> -&gt; <xsl:value-of select="@reftbl"/> [label="<xsl:value-of select="@refcol"/>"];
-		</xsl:if>
-		-->
 	</xsl:for-each>
 </xsl:template>
-
-<!--
-	<xsl:param name="parent-table"/>
-
-	<xsl:if test="@parent-col and $parent-table">
-		<xsl:value-of select="@name"/> -&gt; <xsl:value-of select="$parent-table"/>
-		<xsl:if test="@parent-col = @child-col">
-		[label="<xsl:value-of select="@child-col"/>"];
-		</xsl:if>
-		<xsl:if test="@parent-col != @child-col">
-		[label="<xsl:value-of select="@child-col"/>=<xsl:value-of select="@parent-col"/>"];
-		</xsl:if>
-	</xsl:if>
-
-	<xsl:apply-templates select="table" mode="graphviz">
-		<xsl:with-param name="parent-table"><xsl:value-of select="@name"/></xsl:with-param>
-		<xsl:sort select="@name"/>
-	</xsl:apply-templates>
--->
 
 <xsl:template match="table-structure">
 	<div class="table_struct_open">
@@ -393,46 +365,6 @@
 	</xsl:for-each>
 	</table>
 
-	<xsl:if test="enum">
-	<p/><h1>Table Data</h1>
-	<table border="0" cellspacing="0">
-	<tr bgcolor="beige">
-        <xsl:for-each select="$table/*">
-            <xsl:variable name="elem-name" select="name()"/>
-            <xsl:if test="$elem-name = 'column'"><th align='center'><xsl:value-of select="@name"/></th></xsl:if>
-		</xsl:for-each>
-        <!-- xsl:for-each select="$table/column">
-            <th align='center'><xsl:value-of select="@name"/></th>
-		</xsl:for-each -->
-
-    </tr>
-
-    <xsl:for-each select="enum">
-    <tr>
-        <xsl:variable name="column-data-elems">
-            <xsl:call-template name="get-data-elems">
-                <xsl:with-param name="data-elem" select="."/>
-                <xsl:with-param name="table" select="$table"/>
-            </xsl:call-template>
-        </xsl:variable>
-		<xsl:for-each select="xalan:nodeset($column-data-elems)/*">
-                <td align='left'><xsl:value-of select="."/></td>
-		</xsl:for-each>
-    </tr>
-    </xsl:for-each>
-
-
-	<!-- tr>
-		<td align="right"><xsl:value-of select="@id"/></td>
-		<td></td>
-		<td><xsl:value-of select="."/></td>
-		<td></td>
-		<td><xsl:value-of select="@abbrev"/></td>
-	</tr -->
-
-	</table>
-	</xsl:if>
-
 	<xsl:if test="index">
 	<p/><h1>Indexes</h1>
 	<table border="0" cellspacing="0">
@@ -481,27 +413,57 @@
     </table>
     </xsl:if>
 
+	<xsl:if test="enum | data">
+	<p/><h1>Static Data (XML)</h1>
+	<table border="1" cellspacing="0" cellpadding="3">
+	<tr bgcolor="beige">
+        <xsl:for-each select="$table/column">
+            <th align='center'><xsl:value-of select="@name"/></th>
+		</xsl:for-each>
+    </tr>
+
+    <xsl:for-each select="enum">
+		<xsl:call-template name="table-data-row">
+			<xsl:with-param name="table" select="$table"/>
+			<xsl:with-param name="data-elem" select="."/>
+		</xsl:call-template>
+    </xsl:for-each>
+
+    <xsl:for-each select="data">
+		<xsl:call-template name="table-data-row">
+			<xsl:with-param name="table" select="$table"/>
+			<xsl:with-param name="data-elem" select="."/>
+		</xsl:call-template>
+    </xsl:for-each>
+
+	</table>
+	</xsl:if>
+
 	</td></tr></table>
 </xsl:template>
 
-<xsl:template name="get-data-elems">
-    <xsl:param name="data-elem"/>
+<xsl:template name="table-data-row">
     <xsl:param name="table"/>
-       <xsl:for-each select="$data-elem/@*">
-            <xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
-            <!-- if the attribute matches one of our column names, we want it -->
-            <xsl:if test="$table/column[@name = $attr-name]">
-                <xsl:element name="{$attr-name}"><xsl:value-of select="."/></xsl:element>
-
-            </xsl:if>
-        </xsl:for-each>
-        <xsl:for-each select="$data-elem/*">
-            <xsl:variable name="child-name"><xsl:value-of select="name()"/></xsl:variable>
-            <!-- if the attribute matches one of our column names, we want it -->
-            <xsl:if test="$table/column[@name = $child-name]">
-                <xsl:copy-of select="."/>
-            </xsl:if>
-        </xsl:for-each>
+    <xsl:param name="data-elem"/>
+    <tr valign="top">
+        <xsl:for-each select="$table/column">
+       		<td>
+        	<xsl:variable name="column-name" select="@name"/>
+        	<xsl:for-each select="$data-elem/@*">
+        		<xsl:choose>
+					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>        			
+        		</xsl:choose>        		
+        	</xsl:for-each>
+        	<xsl:for-each select="$data-elem/*">
+        		<xsl:choose>
+					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>        			
+        		</xsl:choose>        		
+        	</xsl:for-each>
+       		</td>
+		</xsl:for-each>
+    </tr>
 </xsl:template>
 
 <xsl:template match="column">
