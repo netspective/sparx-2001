@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.3 2002-01-30 03:40:35 thua Exp $
+ * $Id: DialogContext.java,v 1.4 2002-02-07 02:42:14 thua Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1262,6 +1262,41 @@ public class DialogContext extends ServletValueContext
     {
         return ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
                 dataSource, ConnectionContext.CONNCTXTYPE_TRANSACTION);
+    }
+
+    /**
+     * Prints out all the field names and their respective values contained within the Dialog context
+     *
+     * @returns String dialog context values string
+     */
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer(super.toString() + "\n[\n");
+        Set keySet = fieldStates.keySet();
+        Iterator keySetIterator = keySet.iterator();
+        while (keySetIterator.hasNext())
+        {
+            Object key = keySetIterator.next();
+            DialogFieldState dfs = (DialogFieldState)fieldStates.get(key);
+            if (dfs.value != null)
+            {
+                sb.append(key + "(" + dfs.value.getClass() + ") = " + dfs.value + "\n");
+            }
+            else if (dfs.values != null)
+            {
+                String[] values = dfs.values;
+                sb.append(key + " = ");
+                for (int i=0; i < values.length; i++)
+                {
+                    sb.append(values[i]);
+                    if (i != values.length - 1)
+                        sb.append(", ");
+                }
+                sb.append("\n");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 }
