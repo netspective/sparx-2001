@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryJoin.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QueryJoin.java,v 1.2 2002-04-11 21:39:17 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -109,10 +109,13 @@ public class QueryJoin
 
     public void finalizeDefn(QueryDefinition queryDefn)
     {
-        if(tableName.equals(name))
-            fromClauseExpr = tableName;
-        else
-            fromClauseExpr = tableName + " " + name;
+        if(fromClauseExpr == null)
+        {
+            if(tableName.equals(name))
+                fromClauseExpr = tableName;
+            else
+                fromClauseExpr = tableName + " " + name;
+        }
 
         if(implyJoinsStr != null)
         {
@@ -141,6 +144,10 @@ public class QueryJoin
     {
         name = elem.getAttribute("id");
         tableName = elem.getAttribute("table");
+
+        fromClauseExpr = elem.getAttribute("from-expr");
+        if(fromClauseExpr.length() == 0)
+            fromClauseExpr = null;
 
         criteria = elem.getAttribute("condition");
         if(criteria.length() == 0)
