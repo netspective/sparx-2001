@@ -100,6 +100,6 @@
         <property name="app.jndi.ldap.environment" value="Software Engineering"/>
         <property name="app.jndi.ldap.database-context" value="ou=Software Engineering,ou=Environment,ou=eimo,ou=Applications,ou=NBCS-DC,dc=arc,dc=org"/>
 
-        <!-- <property name="app.data-src.default" value="jdbc/otrack"/>  -->
+        <!-- <property name="app.data-src.default" value="jdbc/otrack"/> -->
     </configuration>
 </xaf>
