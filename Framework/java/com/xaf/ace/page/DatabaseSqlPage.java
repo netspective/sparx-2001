@@ -21,31 +21,21 @@ public class DatabaseSqlPage extends AceServletPage
 {
 	public final String getName() { return "sql"; }
 	public final String getPageIcon() { return "sql.gif"; }
-	public final String getCaption(PageContext pc) { return "SQL"; }
-	public final String getHeading(PageContext pc) { return "SQL Components"; }
+	public final String getCaption(PageContext pc) { return "SQL Statements"; }
+	public final String getHeading(PageContext pc) { return "SQL Statements"; }
 
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
-		String testWhat = getTestCommandItem(pc);
-		if(testWhat != null)
+		String testItem = getTestCommandItem(pc);
+		if(testItem != null)
+		    handleTestStatement(pc, testItem);
+		else
 		{
-			VirtualPath.FindResults results = pc.getActivePath();
-			String[] testParams = results.unmatchedPathItems();
-			// note -- testParams[0] will be the word "test"
-			//         testParams[1] will be "test what"
-			if(testWhat.equals("statement"))
-				handleTestStatement(pc, testParams[2]);
-			else if(testWhat.equals("query-defn"))
-				handleTestQueryDefn(pc, testParams[2]);
-			else if(testWhat.equals("query-defn-dlg"))
-				handleTestQueryDefnSelectDialog(pc, testParams[2], testParams[3]);
-			return;
+			ServletContext context = pc.getServletContext();
+			StatementManager manager = StatementManagerFactory.getManager(context);
+			manager.updateExecutionStatistics();
+			transform(pc, manager.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
 		}
-
-		ServletContext context = pc.getServletContext();
-		StatementManager manager = StatementManagerFactory.getManager(context);
-		manager.updateExecutionStatistics();
-		transform(pc, manager.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
 	}
 
 	public void handleTestStatement(PageContext pc, String stmtId) throws ServletException, IOException
@@ -75,39 +65,4 @@ public class DatabaseSqlPage extends AceServletPage
 			out.write("</pre>");
 		}
 	}
-
-	public void handleTestQueryDefn(PageContext pc, String queryDefnId) throws ServletException, IOException
-	{
-		ServletContext context = pc.getServletContext();
-		StatementManager manager = StatementManagerFactory.getManager(context);
-
-        PrintWriter out = pc.getResponse().getWriter();
-
-		out.write("<h1>Query Definition: "+queryDefnId+"</h1>");
-
-		QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
-		if(queryDefn == null)
-		{
-			out.write("QueryDefinition not found.");
-			return;
-		}
-
-		QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
-		out.print(dialog.getHtml(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin()));
-	}
-
-	public void handleTestQueryDefnSelectDialog(PageContext pc, String queryDefnId, String dialogId) throws ServletException, IOException
-	{
-		ServletContext context = pc.getServletContext();
-		StatementManager manager = StatementManagerFactory.getManager(context);
-
-        PrintWriter out = pc.getResponse().getWriter();
-
-		out.write("<h1>Query Definition: "+queryDefnId+", Dialog: "+ dialogId +"</h1>");
-
-		QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
-		QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogId);
-		out.print(dialog.getHtml(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin()));
-	}
-
 }

@@ -87,14 +87,33 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 
 		pagesPath.registerPage("/database", new DatabasePage());
 		pagesPath.registerPage("/database/sql", new DatabaseSqlPage());
+		pagesPath.registerPage("/database/query-defn", new DatabaseQueryDefnPage());
 		pagesPath.registerPage("/database/schema", new DatabaseSchemaDocPage());
 		pagesPath.registerPage("/database/generate-ddl", new DatabaseGenerateDDLPage());
 		pagesPath.registerPage("/database/data-sources", new DataSourcesPage());
 
-		pagesPath.registerPage("/documents", new DocumentsPage());
 		Configuration appConfig = getAppConfig();
 		ValueContext vc = new ServletValueContext(config.getServletContext(), this, null, null);
 
+		pagesPath.registerPage("/application/monitor", new MonitorLogPage());
+		Collection logs = appConfig.getValues(vc, "framework.ace.monitor.logs");
+		if(logs != null)
+		{
+			for(Iterator i = logs.iterator(); i.hasNext(); )
+			{
+				Object entry = i.next();
+				if(entry instanceof Property)
+				{
+					Property logProperty = (Property) entry;
+					String logName = logProperty.getName();
+					String logStyle = appConfig.getValue(vc, logProperty, null);
+					MonitorLogPage page = new MonitorLogPage(logName, logStyle);
+					pagesPath.registerPage("/application/monitor/" + page.getName(), page);
+				}
+			}
+		}
+
+		pagesPath.registerPage("/documents", new DocumentsPage());
 		Collection bookmarks = appConfig.getValues(vc, "framework.ace.bookmarks");
 		if(bookmarks != null)
 		{
