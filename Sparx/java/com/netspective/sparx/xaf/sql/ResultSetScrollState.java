@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetScrollState.java,v 1.4 2002-03-23 21:43:36 snshah Exp $
+ * $Id: ResultSetScrollState.java,v 1.5 2002-09-07 21:57:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -195,7 +195,8 @@ public class ResultSetScrollState
 
     public final boolean hasMoreRows() throws SQLException
     {
-        return resultSetScrollable ? (!resultInfo.getResultSet().isAfterLast()) : haveMoreRows;
+        ResultSet rs = resultInfo != null ? resultInfo.getResultSet() : null;
+        return resultSetScrollable ? (rs == null ? false : ! rs.isAfterLast()) : haveMoreRows;
     }
 
     public void scrollToActivePage() throws SQLException
