@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.17 2003-02-13 21:34:50 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.18 2003-03-11 16:19:52 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -104,7 +104,8 @@ public class DialogField
     static public final int FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA = FLDFLAG_IDENTIFIER * 2;
     static public final int FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
 		static public final int FLDFLAG_DOUBLEENTRY = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
-    static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_DOUBLEENTRY * 2; // all DialogField "children" will use this
+		static public final int FLDFLAG_SCANNABLE = FLDFLAG_DOUBLEENTRY * 2;
+		static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_SCANNABLE * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -143,6 +144,9 @@ public class DialogField
     private String columnName;
     private Column column;
     private Map dalProperties;
+		private String scanStartCode;
+		private String scanStopCode;
+		private String scanPartnerField;
 
     /**
      * Creates a dialog field
@@ -304,9 +308,7 @@ public class DialogField
         }
 
 				if(elem.getAttribute("double-entry").equalsIgnoreCase("yes"))
-				{
 					setFlag(DialogField.FLDFLAG_DOUBLEENTRY);
-				}
 
         importChildrenFromXml(elem);
     }
@@ -348,8 +350,25 @@ public class DialogField
             {
                 importCustomJavaScriptFromXml((Element) node);
             }
+						else if(childName.equals("scan-entry"))
+						{
+								setFlag(DialogField.FLDFLAG_SCANNABLE);
+								importScanEntryFromXml((Element) node);
+						}
         }
     }
+
+	public void importScanEntryFromXml(Element elem)
+	{
+		String startCode = elem.getAttribute("start-code");
+		scanStartCode = (startCode == null || startCode.length() == 0) ? "" : startCode;
+
+		String stopCode = elem.getAttribute("stop-code");
+		scanStopCode = (stopCode == null || stopCode.length() == 0) ? "" : stopCode;
+
+		String partnerField = elem.getAttribute("partner");
+		scanPartnerField = (partnerField == null || partnerField.length() == 0) ? "" : partnerField;
+	}
 
     /**
      * Reads the XML for Custom Javascript configuration assigned to a dialog field
@@ -1010,15 +1029,12 @@ public class DialogField
         }
 
 				if(flagIsSet(DialogField.FLDFLAG_DOUBLEENTRY))
-				{
 					this.setupDoubleEntry();
-				}
+
     }
 
 		private void setupDoubleEntry()
 		{
-			// if(this.getHint() == null) this.setHint("Double Entry");
-
       this.setHint("Double Entry");
 			DialogFieldClientJavascript doubleEntryJS = new DialogFieldClientJavascript();
 			doubleEntryJS.setType("extends");
@@ -1026,11 +1042,11 @@ public class DialogField
 			doubleEntryJS.setScript("validateDoubleEntry(field, control)");
 			this.addClientJavascript(doubleEntryJS);
 
-			DialogFieldClientJavascript blankOnFocusJS = new DialogFieldClientJavascript();
-			blankOnFocusJS.setType("extends");
-			blankOnFocusJS.setEvent("get-focus");
-			blankOnFocusJS.setScript("control.value = ''");
-			this.addClientJavascript(blankOnFocusJS);
+			DialogFieldClientJavascript deOnChangeJS = new DialogFieldClientJavascript();
+			deOnChangeJS.setType("extends");
+			deOnChangeJS.setEvent("value-changed");
+			deOnChangeJS.setScript("field.successfulEntry = false");
+			this.addClientJavascript(deOnChangeJS);
 		}
 
     public List getDependentConditions()
@@ -1541,12 +1557,26 @@ public class DialogField
         return ret;
     }
 
-    /**
-     * Empty method. Overwritten by extending classes that define extra Javascript definitions.
-     */
     public String getCustomJavaScriptDefn(DialogContext dc)
     {
-        return "";
+			StringBuffer sb = new StringBuffer();
+
+			if(flagIsSet(FLDFLAG_DOUBLEENTRY))
+			{
+				sb.append("field.doubleEntry = 'yes';\n");
+				sb.append("field.firstEntryValue = '';\n");
+				sb.append("field.successfulEntry = true;\n");
+			}
+
+			if(flagIsSet(FLDFLAG_SCANNABLE))
+			{
+				sb.append("field.scannable = 'yes';\n");
+				sb.append("field.scanStartCode = '" + scanStartCode + "';\n");
+				sb.append("field.scanStopCode = '" + scanStopCode + "';\n");
+				sb.append("field.isScanned = false;\n");
+				sb.append("field.scanPartner = '" + scanPartnerField + "';\n");
+			}
+			return sb.toString();
     }
 
     /**

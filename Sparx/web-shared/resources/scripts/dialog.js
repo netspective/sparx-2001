@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.12 2003-03-05 23:44:41 aye.thu Exp $
+ * $Id: dialog.js,v 1.13 2003-03-11 16:19:23 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -67,6 +67,7 @@ var SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE = false;
 
 var anyControlChangedEventCalled = false;
 var submittedDialogValid = false;
+var documentOnKeyDownResult; // So we don't execute documentOnKeyDown() again.
 
 function setAllowValidation(value)
 {
@@ -148,7 +149,6 @@ function radioButtonSelected(fieldName, value)
 
     return control.checked;
 }
-
 
 //****************************************************************************
 // FieldType class
@@ -283,9 +283,10 @@ var FLDFLAG_IDENTIFIER                         = FLDFLAG_BROWSER_READONLY * 2;
 var FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA    = FLDFLAG_IDENTIFIER * 2;
 var FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
 var FLDFLAG_DOUBLEENTRY                        = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
-var FLDFLAG_STARTCUSTOM                        = FLDFLAG_DOUBLEENTRY * 2;// all DialogField "children" will use this
-// These constants MUST be kept identical to what is in com.netspective.sparx.form.field.SelectField
+var FLDFLAG_SCANNABLE                          = FLDFLAG_DOUBLEENTRY * 2;
+var FLDFLAG_STARTCUSTOM                        = FLDFLAG_SCANNABLE * 2; // all DialogField "children" will use this
 
+// These constants MUST be kept identical to what is in com.netspective.sparx.form.field.SelectField
 var SELECTSTYLE_RADIO      = 0;
 var SELECTSTYLE_COMBO      = 1;
 var SELECTSTYLE_LIST       = 2;
@@ -433,11 +434,28 @@ function DialogField_finalizeContents(dialog)
 
     if((this.flags & FLDFLAG_INITIAL_FOCUS) != 0)
     {
-        var control = this.getControl(dialog);
-        if(control == null)
-            alert("Unable to find control '"+this.controlId+"' in DialogField.finalizeContents() -- trying to set initial focus");
-        else
-            control.focus();
+			var field = dialog.fieldsByQualName[this.qualifiedName];
+
+			var control = this.getControl(dialog);
+			if(control == null)
+				alert("Unable to find control '"+this.controlId+"' in DialogField.finalizeContents() -- trying to set initial focus");
+			else
+			{
+				if(browser.ie5 || browser.ie6)
+				{
+					if (control.isContentEditable && (field.currentlyVisible || typeof field.currentlyVisible == 'undefined'))
+					{
+						control.focus();
+					}
+				}
+				else
+				{
+					if (field.currentlyVisible || typeof field.currentlyVisible == 'undefined')
+					{
+						control.focus();
+					}
+				}
+			}
     }
 }
 
@@ -557,12 +575,16 @@ function DialogField_focusNext(dialog)
         nextField = dialog.fields[fieldIndex];
         nextFieldAreaElem = nextField.getFieldAreaElem(dialog);
         nextFieldControl = nextField.getControl(dialog);
+
         //nextFieldControl = document.all.item(nextField.controlId);
         if(nextFieldControl != null && nextFieldControl.length > 0)
             nextFieldControl = nextFieldControl[0];
 
-        if(nextField.typeName == "com.netspective.sparx.form.DialogDirector")
-            return false;
+        if(nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector")
+        {
+					if (nextFieldControl != null) nextFieldControl.setActive();
+					return false;
+				}
 
         if( (nextFieldControl != null && nextFieldControl.style.display == 'none') ||
             (nextFieldAreaElem != null && nextFieldAreaElem.style.display == 'none') ||
@@ -570,6 +592,7 @@ function DialogField_focusNext(dialog)
             nextField.typeName == "com.netspective.sparx.xaf.form.field.StaticField" ||
             nextField.typeName == "com.netspective.sparx.xaf.form.field.DurationField" || // duration is a composite
             nextField.typeName == "com.netspective.sparx.xaf.form.DialogField" || // composites are of this type
+            nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector" || // composites are of this type
             (nextField.flags & FLDFLAG_INVISIBLE) != 0 ||
             (nextField.flags & FLDFLAG_READONLY) != 0 ||
             (nextField.flags & FLDFLAG_INPUT_HIDDEN) != 0)
@@ -580,14 +603,15 @@ function DialogField_focusNext(dialog)
 
     if(foundEditable)
     {
-        //alert("found editable: " + nextField.controlId + " -- " + fieldIndex);
+			//alert("Found " + nextField.typeName);
+
         if(nextFieldControl != null)
         {
-            nextFieldControl.focus();
+        	nextFieldControl.focus();
         }
         else
         {
-            alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ") ["+ nextField.typeName +"]")
+        	alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ") ["+ nextField.typeName +"]")
         }
         return true;
     }
@@ -660,71 +684,6 @@ function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
     }
 }
 
-/**
- * THsi function changes the color of the parent row of the passed in source item
- */
-function highlightRow(source, color)
-{
-    while (source.tagName.toUpperCase() != 'TR' && source != null)
-        source = document.all ? source.parentElement : source.parentNode;
-    if (source)
-        source.bgColor = color;
-}
-
-
-/**
- * This function allows you to select a row by clicking on a checkbox. THe value assigned to the
- * checkbox is saved to a 'selected items' list.
- */
-function handleRowCheckEvent(source, fieldName, value)
-{
-    // fieldName  is the name of the dialog field where the list of selected items are stored
-    // and value is the value to add to or remove from the list
-	var fieldId = DIALOGFIELD_PREFIX + "." + fieldName;
-	var control = getControl(activeDialog, fieldId);
-	if(control == null)
-	{
-		alert("Field '" + fieldId + "' not found in active dialog -- can't check for selected values");
-		return false;
-	}
-	var intLength = control.options.length;
-	if (source.checked)
-	{
-	    var newOption = true;
-	    for (var i=0; i < intLength; i++)
-        {
-            if(control.options[i] != null && control.options[i].value == value)
-            {
-                newOption = false;
-            }
-        }
-
-        if (newOption == true)
-        {
-            // create a new entry to the selected item list
-            var objNewOpt = new Option();
-            objNewOpt.value = value;
-            objNewOpt.text = value;
-            objNewOpt.selected = true;
-            control.options[control.options.length] = objNewOpt;
-        }
-        highlightRow(source, "#ccd9e5");
-    }
-    else
-    {
-        highlightRow(source, "#ffffff");
-        // remove entry from the selected item list
-        for (var i=0; i < intLength; i++)
-        {
-            if(control.options[i] != null && control.options[i].value == value)
-            {
-                control.options[i] = null;
-            }
-        }
-    }
-	return true;
-}
-
 //****************************************************************************
 // DialogFieldConditionalDisplay class
 //****************************************************************************
@@ -772,6 +731,8 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     // the conditional "partner" (not the source)
     if(eval(this.expression) == true)
     {
+				condSource.currentlyVisible = true;
+
         //fieldAreaElem.className = 'section_field_area_conditional_expanded';
         if (fieldAreaElem.style)
             fieldAreaElem.style.display = '';
@@ -780,6 +741,8 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     }
     else
     {
+				condSource.currentlyVisible = false;
+
         //fieldAreaElem.className = 'section_field_area_conditional';
         if (fieldAreaElem.style)
             fieldAreaElem.style.display = 'none';
@@ -932,6 +895,7 @@ function controlOnKeypress(control, event)
 {
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
+
     if (field.customHandlers.keyPress != null)
     {
         var retval = true;
@@ -980,35 +944,42 @@ function controlOnFocus(control, event)
 
 function controlOnChange(control, event)
 {
-	  anyControlChangedEventCalled = true;
-    field = activeDialog.fieldsById[control.name];
-    if(typeof field == "undefined" || field == null) return;
-    if(field.dependentConditions.length > 0)
-    {
-        var conditionalFields = field.dependentConditions;
-        for(var i = 0; i < conditionalFields.length; i++)
-            conditionalFields[i].evaluate(activeDialog, control);
-    }
-    if(field.type == null) return;
-    if (field.customHandlers.valueChanged != null)
-    {
-        var retval = true;
-        if (field.customHandlers.valueChangedType == 'extends')
-        {
-            if (field.type.valueChanged != null)
-                retval = field.type.valueChanged(field, control);
-        }
-        if (retval)
-            retval =  field.customHandlers.valueChanged(field, control);
-        return retval;
-    }
-    else
-    {
-        if (field.type.valueChanged != null)
-            return field.type.valueChanged(field, control);
-        else
-            return true;
-    }
+	anyControlChangedEventCalled = true;
+	field = activeDialog.fieldsById[control.name];
+	if(typeof field == "undefined" || field == null) return;
+
+	if (field.scannable == 'yes')
+	{
+		field.isScanned = false;
+		scanField_changeDisplayValue(field, control);
+	}
+
+	if(field.dependentConditions.length > 0)
+	{
+		var conditionalFields = field.dependentConditions;
+		for(var i = 0; i < conditionalFields.length; i++)
+			conditionalFields[i].evaluate(activeDialog, control);
+	}
+	if(field.type == null) return;
+	if (field.customHandlers.valueChanged != null)
+	{
+		var retval = true;
+		if (field.customHandlers.valueChangedType == 'extends')
+		{
+			if (field.type.valueChanged != null)
+				retval = field.type.valueChanged(field, control);
+		}
+		if (retval)
+			retval =  field.customHandlers.valueChanged(field, control);
+		return retval;
+	}
+	else
+	{
+		if (field.type.valueChanged != null)
+			return field.type.valueChanged(field, control);
+		else
+			return true;
+	}
 }
 
 function controlOnBlur(control, event)
@@ -1049,6 +1020,7 @@ var UPPER_ALPHA_KEYS_RANGE = [65,  90];
 var LOW_ALPHA_KEYS_RANGE   = [97, 122];
 var UNDERSCORE_KEY_RANGE   = [95,  95];
 var COLON_KEY_RANGE        = [58, 58];
+var ENTER_KEY_RANGE        = [13, 13];
 
 function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 {
@@ -1057,13 +1029,13 @@ function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 
     // if the default document keypress handler handled the event,
     // it returns "FALSE" so we don't want to bother with the event
-    if(! documentOnKeyDown())
+    if(! documentOnKeyDownResult)
         return true;
     // the event should have been passed in here but for some reason
     // its null, look for it in the window object (works only in IE)
     if (event == null || typeof event == "undefined")
         event = window.event;
-    for (i in acceptKeyRanges)
+    for (i=0; i<acceptKeyRanges.length; i++)
     {
         var keyCodeValue = null;
         if (event.keyCode)
@@ -1143,6 +1115,7 @@ function TextField_valueChanged(field, control)
     {
         control.value = control.value.toUpperCase();
     }
+
     if (control.value.length > 0)
     {
         if (field.text_format_pattern != null && (typeof field.text_format_pattern != "undefined"))
@@ -1363,15 +1336,15 @@ function DateField_valueChanged(field, control)
 
 function DateField_onKeyPress(field, control, event)
 {
-    if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
-    {
-        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange], event);
-    }
-    else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
-    {
-        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, COLON_KEY_RANGE], event);
-    }
-    return true;
+	if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
+	{
+		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange], event);
+	}
+	else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
+	{
+		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, COLON_KEY_RANGE], event);
+	}
+	return true;
 }
 
 function SelectField_isValid(field, control)
@@ -1491,7 +1464,7 @@ function testText(field, control)
     var pattern = field.text_format_pattern;
     if (control.value == '' || pattern == '')
         return true;
-    return pattern.test(control.value) ;
+   	return pattern.test(control.value);
 }
 
 function testCurrency(field, control)
@@ -1783,26 +1756,59 @@ function splitNotInArray(strString, arrArray)
     return a;
 }
 
-var dbEntry_firstEntry = null;
 function validateDoubleEntry(field, control)
 {
-	if (control.value == "") return true;
-	// if (ScanField_changeDisplayValue(field, control)) return true;
-
-	if(dbEntry_firstEntry == null)
+	if (field.successfulEntry) return true;
+	if (field.scannable == 'yes' && field.isScanned)
 	{
-		dbEntry_firstEntry = control.value;
+		field.successfulEntry = true;
+		return true;
+	}
+
+	if(field.firstEntryValue == "")
+	{
+		field.firstEntryValue = control.value;
+		if(field.firstEntryValue == "") field.successfulEntry = true;
 		control.value = "";
 		control.focus();
+		return false;
 	}
 	else
 	{
-		if (dbEntry_firstEntry != control.value)
+		if (field.firstEntryValue != control.value)
 		{
-			field.alertMessage(control, "Double Entries do not match.  Please re-enter.");
+			control.value = "";
+			field.alertMessage(control, "Double Entries do not match.  Previous entry = '"
+				+ field.firstEntryValue + "'");
+			field.firstEntryValue = "";
 		}
-		dbEntry_firstEntry = null;
+		else
+		{
+			field.successfulEntry = true;
+			field.firstEntryValue = "";
+			return true;
+		}
 	}
+}
+
+function scanField_changeDisplayValue(field, control)
+{
+	var beginPattern = new RegExp("^" + field.scanStartCode);
+	var endPattern   = new RegExp(field.scanStopCode + "$");
+
+	var newValue = control.value.replace(beginPattern, "");
+	newValue = newValue.replace(endPattern, "");
+
+	field.isScanned = (beginPattern.test(control.value) && endPattern.test(control.value)) ? true : false;
+
+	if(field.scanPartner != "")
+	{
+		var partnerField = dialog.fieldsByQualName[field.scanPartner];
+		var partnerControl = partnerField.getControl(dialog);
+		partnerControl.value = (field.isScanned) ? 'yes' : 'no';
+	}
+
+	control.value = newValue;
 }
 
 //****************************************************************************
@@ -1811,32 +1817,50 @@ function validateDoubleEntry(field, control)
 
 function documentOnKeyDown()
 {
-    if(TRANSLATE_ENTER_KEY_TO_TAB_KEY && window.event.keyCode == KEYCODE_ENTER)
-    {
-        var control = window.event.srcElement;
-        var field = activeDialog.fieldsById[control.name];
-        if(field == null)
-        {
-            alert("Control '"+ control.srcElement.name + "' was not found in activeDialog.fieldsById");
-            window.event.returnValue = false;
-            return false;
-        }
+	var control = window.event.srcElement;
+	var field = activeDialog.fieldsById[control.name];
+	if (field != null)
+	{
+		if(window.event.keyCode == KEYCODE_ENTER && field.doubleEntry == 'yes')
+		{
+			control.blur();
+			if(field.focusNext(activeDialog))
+			{
+				window.event.cancelBubble = true;
+				window.event.returnValue = false;
+				documentOnKeyDownResult = false;
+				return false;
+			}
+		}
+	}
 
-        if(field.focusNext(activeDialog))
-        {
-            window.event.cancelBubble = true;
-            window.event.returnValue = false;
-            return false;
-        }
-    }
+	if(TRANSLATE_ENTER_KEY_TO_TAB_KEY && window.event.keyCode == KEYCODE_ENTER)
+	{
+		if(field == null)
+		{
+			alert("Control '"+ control.srcElement.name + "' was not found in activeDialog.fieldsById");
+			window.event.returnValue = false;
+			documentOnKeyDownResult = false;
+			return false;
+		}
 
-    return true;
+		if(field.focusNext(activeDialog))
+		{
+			window.event.cancelBubble = true;
+			window.event.returnValue = false;
+			documentOnKeyDownResult = false;
+			return false;
+		}
+	}
+
+	documentOnKeyDownResult = true;
+	return true;
 }
 
 function documentOnLeave()
 {
-	  if(SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE && anyControlChangedEventCalled && ! submittedDialogValid)
-			return "You have changed data on this page. If you leave, you will lose the data.";
+	if(SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE && anyControlChangedEventCalled && ! submittedDialogValid)
+		return "You have changed data on this page. If you leave, you will lose the data.";
 }
 
 document.onkeydown = documentOnKeyDown;
