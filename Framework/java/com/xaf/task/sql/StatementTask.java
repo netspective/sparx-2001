@@ -1,4 +1,4 @@
-package com.xaf.form.action;
+package com.xaf.task.sql;
 
 import java.io.*;
 import java.sql.*;
@@ -14,9 +14,10 @@ import com.xaf.form.*;
 import com.xaf.report.*;
 import com.xaf.sql.*;
 import com.xaf.skin.*;
+import com.xaf.task.*;
 import com.xaf.value.*;
 
-public class QueryExecuteAction extends BaseProcessAction
+public class StatementTask extends AbstractTask
 {
     static public final String DEFAULT_REPORTSKINID = "report";
 
@@ -32,11 +33,33 @@ public class QueryExecuteAction extends BaseProcessAction
 	private boolean produceReport = true;
 	private int storeValueType;
 
-    public boolean isExecuteAction()
+    public StatementTask()
     {
-        return true;
+		super();
     }
 
+   	public boolean getDebug() { return debug; }
+	public void setDebug(boolean value) { debug = value; }
+
+	public String getStmtName() { return stmtName; }
+	public void setStmtName(String value) {	stmtName = value; }
+
+	public String getStmtSource() { return stmtSourceId; }
+	public void setStmtSource(String value) { stmtSourceId = value; }
+
+	public String getDataSource() { return dataSourceId; }
+	public void setDataSource(String value) { dataSourceId = value; }
+
+	public String getReport() { return reportId; }
+	public void setReport(String value) { reportId = value; if("none".equals(value)) produceReport = false; }
+
+	public String getSkin() { return reportSkinId; }
+	public void setSkin(String value) { reportSkinId = value; }
+
+	public String getStore() { return storeValueName; }
+	public void setStore(String value) { storeValueName = value; }
+
+	public String getStoreType() { return Integer.toString(storeValueType); }
 	public void setStoreType(String value)
 	{
         if(value.length() == 0)
@@ -58,7 +81,7 @@ public class QueryExecuteAction extends BaseProcessAction
 		storeValueType = -1;
 	}
 
-    public void initializeProcessAction(Element elem) throws DialogProcessActionInitializeException
+    public void initialize(Element elem) throws TaskInitializeException
     {
         stmtSourceId = elem.getAttribute("stmt-src");
         if(stmtSourceId.length() == 0) stmtSourceId = null;
@@ -69,7 +92,7 @@ public class QueryExecuteAction extends BaseProcessAction
         if(elem.getChildNodes().getLength() > 0)
         {
             if(elem.getAttribute("name").length() == 0)
-                elem.setAttribute("name", "SqlExecuteAction-" + getUniqueActionId());
+                elem.setAttribute("name", "SqlExecuteAction-" + getTaskNum());
             statementInfo = new StatementManager.StatementInfo();
             statementInfo.importFromXml(elem, "DialogProcessAction", null);
         }
@@ -98,26 +121,29 @@ public class QueryExecuteAction extends BaseProcessAction
 
 			storeValueSource = ValueSourceFactory.getStoreValueSource(storeValueName);
 			if(storeValueSource == null)
-				throw new DialogProcessActionInitializeException("SingleValueSource '"+ storeValueName +"' not found");
+				throw new TaskInitializeException("SingleValueSource '"+ storeValueName +"' not found");
 			if(! storeValueSource.supportsSetValue())
-				throw new DialogProcessActionInitializeException("SingleValueSource '"+ storeValueName +"' does not support value storage.");
+				throw new TaskInitializeException("SingleValueSource '"+ storeValueName +"' does not support value storage.");
 
 			if(storeValueSource instanceof DialogFieldValue)
 				storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWFORMFLD;
 
 			if(storeValueType == -1)
-				throw new DialogProcessActionInitializeException("store-type must be one of "+SingleValueSource.RESULTSET_STORETYPES.toString());
+				throw new TaskInitializeException("store-type must be one of "+SingleValueSource.RESULTSET_STORETYPES.toString());
 		}
     }
 
-    public String executeDialog(Dialog dialog, DialogContext dc)
+    public void execute(TaskContext tc)
     {
-		ServletContext context = dc.getServletContext();
+		ServletContext context = tc.getServletContext();
 		StatementManager stmtManager = stmtSourceId == null ? StatementManagerFactory.getManager(context) : StatementManagerFactory.getManager(stmtSourceId);
-		DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), context);
+		DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
 
         if(stmtManager == null)
-            return "StatementManager file '" + stmtSourceId + "' not found (specified in ServletContext config init parameter 'sql-statements-file'";
+		{
+            tc.addErrorMessage("StatementManager file '" + stmtSourceId + "' not found (specified in ServletContext config init parameter 'sql-statements-file'");
+			return;
+		}
 
         if(debug)
         {
@@ -135,10 +161,11 @@ public class QueryExecuteAction extends BaseProcessAction
 				debugMessage.append("<p>SQL: statement '");
 				debugMessage.append(si.getId());
 				debugMessage.append("</p></pre>");
-				debugMessage.append(si.getDebugHtml(dc));
+				debugMessage.append(si.getDebugHtml(tc));
 				debugMessage.append("</pre>");
             }
-            return debugMessage.toString();
+			tc.addErrorMessage(debugMessage.toString());
+            return;
         }
 
         StringWriter out = new StringWriter();
@@ -149,33 +176,39 @@ public class QueryExecuteAction extends BaseProcessAction
             {
                 ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinId);
                 if(reportSkin == null)
-                    return "ReportSkin '"+reportSkinId+"' not found.";
+				{
+					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.");
+                    return;
+				}
                 else
                 {
                     if(statementInfo != null)
-                        stmtManager.produceReport(out, dbContext, dc, reportSkin, statementInfo, null, reportId);
+                        stmtManager.produceReport(out, dbContext, tc, reportSkin, statementInfo, null, reportId);
                     else
-                        stmtManager.produceReport(out, dbContext, dc, reportSkin, stmtName, null, reportId);
+                        stmtManager.produceReport(out, dbContext, tc, reportSkin, stmtName, null, reportId);
                 }
             }
             else if(!produceReport && storeValueSource != null)
             {
                 if(statementInfo != null)
-                    stmtManager.executeAndStore(dbContext, dc, dataSourceId, statementInfo, storeValueSource, storeValueType);
+                    stmtManager.executeAndStore(dbContext, tc, dataSourceId, statementInfo, storeValueSource, storeValueType);
                 else
-                    stmtManager.executeAndStore(dbContext, dc, dataSourceId, stmtName, storeValueSource, storeValueType);
+                    stmtManager.executeAndStore(dbContext, tc, dataSourceId, stmtName, storeValueSource, storeValueType);
             }
             else if(produceReport && storeValueSource != null)
             {
                 ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinId);
                 if(reportSkin == null)
-                    return "ReportSkin '"+reportSkinId+"' not found.";
+				{
+					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.");
+                    return;
+				}
                 else
                 {
                     if(statementInfo != null)
-                        stmtManager.produceReportAndStoreResultSet(out, dbContext, dc, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
+                        stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
                     else
-                        stmtManager.produceReportAndStoreResultSet(out, dbContext, dc, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
+                        stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
                 }
             }
         }
@@ -192,12 +225,13 @@ public class QueryExecuteAction extends BaseProcessAction
             e.printStackTrace(new PrintWriter(stack));
 
 			errorMsg.append("<pre>");
-			errorMsg.append(si.getDebugHtml(dc));
+			errorMsg.append(si.getDebugHtml(tc));
 			errorMsg.append("\n\n");
 			errorMsg.append(stack.toString());
 			errorMsg.append("</pre>");
 
-			return errorMsg.toString();
+			tc.addErrorMessage(errorMsg.toString());
+            return;
         }
         catch(StatementNotFoundException e)
         {
@@ -208,6 +242,7 @@ public class QueryExecuteAction extends BaseProcessAction
             throw new RuntimeException(e.toString());
         }
 
-        return out.toString();
+		tc.addResultMessage(out.toString());
     }
+
 }

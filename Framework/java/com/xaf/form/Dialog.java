@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 
 import org.w3c.dom.*;
 import com.xaf.form.field.*;
+import com.xaf.task.*;
 import com.xaf.value.*;
 
 public class Dialog
@@ -25,7 +26,7 @@ public class Dialog
 	static public final String PARAMNAME_TRANSACTIONID = ".transaction_id";
 
 	private ArrayList fields = new ArrayList();
-    private DialogProcessAction[] executeActions;
+    private Task[] executeTasks;
 	private DialogDirector director;
 	private String name;
 	private SingleValueSource heading;
@@ -125,9 +126,9 @@ public class Dialog
 					field = new SelectField("error", "Unable to create field of type '" + childName, SelectField.SELECTSTYLE_COMBO, ValueSourceFactory.getListValueSource("dialog-field-types:"));
 				addField(field);
 			}
-            else if(childName.equals("process-actions"))
+            else if(childName.equals("execute-tasks"))
             {
-                ArrayList actionsList = new ArrayList();
+                ArrayList tasksList = new ArrayList();
         		NodeList eaChildren = node.getChildNodes();
                 for(int eac = 0; eac < eaChildren.getLength(); eac++)
                 {
@@ -136,8 +137,8 @@ public class Dialog
                     {
                         try
                         {
-                            DialogProcessAction action = DialogProcessActionsFactory.getProcessAction((Element) eaNode, true);
-                            actionsList.add(action);
+                            Task task = TaskFactory.getTask((Element) eaNode, true);
+                            tasksList.add(task);
                         }
                         catch(Exception e)
                         {
@@ -145,9 +146,9 @@ public class Dialog
                         }
                     }
                 }
-                if(actionsList.size() > 0)
+                if(tasksList.size() > 0)
                 {
-                    executeActions = (DialogProcessAction[]) actionsList.toArray(new DialogProcessAction[actionsList.size()]);
+                    executeTasks = (Task[]) tasksList.toArray(new Task[tasksList.size()]);
                 }
             }
 			else if(childName.equals("director"))
@@ -222,15 +223,18 @@ public class Dialog
 
 	public String execute(DialogContext dc)
 	{
-        if(executeActions != null && executeActions.length > 0)
+        if(executeTasks != null && executeTasks.length > 0)
         {
-            StringBuffer out = new StringBuffer();
-            for(int i = 0; i < executeActions.length; i++)
+			TaskContext tc = new TaskContext(dc);
+
+            for(int i = 0; i < executeTasks.length; i++)
             {
-                DialogProcessAction action = executeActions[i];
-                out.append(action.executeDialog(this, dc));
+                executeTasks[i].execute(tc);
             }
-            return out.toString();
+			if(tc.hasError())
+				return tc.getErrorMessage();
+			else if(tc.hasResultMessage())
+				return tc.getResultMessage();
         }
 
 		return "Need to add Dialog actions or override Dialog.execute(DialogContext)." + dc.getDebugHtml();
