@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.w3c.dom.*;
 import com.xaf.form.*;
+import com.xaf.value.*;
 
 public class DurationField extends DialogField
 {
@@ -46,9 +47,21 @@ public class DurationField extends DialogField
 			type = DTTYPE_TIMEONLY;
 
 		String name = getSimpleName();
-
 		beginField = new DateTimeField(name + "_begin", "Begin", type);
 		endField = new DateTimeField(name + "_end", "End", type);
+
+        // see if the default value attributes are set
+        String value = elem.getAttribute("default-begin");
+        if (value != null && value.length() != 0)
+            beginField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource(value));
+        else
+            beginField.setDefaultValue(this.getDefaultValue());
+
+        value = elem.getAttribute("default-end");
+        if (value != null && value.length() != 0)
+            endField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource(value));
+        else
+            endField.setDefaultValue(this.getDefaultValue());
 
 		addChildField(beginField);
 		addChildField(endField);
