@@ -448,6 +448,9 @@
     <tr valign="top">
         <xsl:for-each select="$table/column">
        		<td>
+       		<xsl:if test="$data-elem[name() = 'enum'] and @name = 'caption'">
+				<xsl:value-of select="$data-elem/text()"/>
+       		</xsl:if>
         	<xsl:variable name="column-name" select="@name"/>
         	<xsl:for-each select="$data-elem/@*">
         		<xsl:choose>
