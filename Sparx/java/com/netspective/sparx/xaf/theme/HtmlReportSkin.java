@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.3 2003-03-06 20:57:22 aye.thu Exp $
+ * $Id: HtmlReportSkin.java,v 1.4 2003-03-19 19:14:59 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -167,7 +167,7 @@ public class HtmlReportSkin implements ReportSkin
     {
         ArrayList items = frame.getItems();
 
-        if(items.size() > 0)
+        if(items != null && items.size() > 0)
         {
             if (imgPath == null)
             {
