@@ -275,7 +275,14 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
 	}
-</xsl:if>
+<xsl:if test="@type = 'autoinc'">
+	// For Autoinc/Guid32 Transparency
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key **/
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+	{
+		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, (<xsl:value-of select="$java-class-spec"/>) value, null);
+	}
+</xsl:if></xsl:if>
 <xsl:if test="java-type and (@primarykey = 'yes') and ../child-table">
 	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type and loads all the child objects **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value, boolean retrieveChildren) throws NamingException, SQLException
@@ -290,7 +297,16 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		if(retrieveChildren) row.retrieveChildren(cc);
 		return row;
 	}
-</xsl:if>
+<xsl:if test="@type = 'autoinc'">
+	// For Autoinc/Guid32 Transparency
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key and loads all the child objects **/
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value, boolean retrieveChildren) throws NamingException, SQLException
+	{
+		<xsl:value-of select="$_gen-table-row-class-name"/> row = (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, (<xsl:value-of select="$java-class-spec"/>) value, null);
+		if(retrieveChildren) row.retrieveChildren(cc);
+		return row;
+	}
+</xsl:if></xsl:if>
 <xsl:if test="@reftype = 'parent'">
 <xsl:if test="java-type">
 	/** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by the parent key as a primitive type **/
@@ -320,6 +336,27 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value);
 	}
+
+	// AGProcessing Starts
+	// Rows Class: <xsl:value-of select="../@_gen-rows-class-name"/>, Column Type: <xsl:value-of select="@type"/>, Gen Method Name: <xsl:value-of select="@_gen-method-name"/>
+<xsl:if test="@type = 'autoinc' or @type = 'longint'">
+	// For Autoinc/Guid32 Transparency
+	/** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by the parent key **/
+	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+	{
+		return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, (<xsl:value-of select="$java-class-spec"/>) value, null);
+	}
+
+	/**
+	* Deletes all the rows identified by the parent key (does a fast SQL delete, which does not generate interim rows and therefore does not call beforeDelete and afterDelete methods in Row)
+	**/
+	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+	{
+		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, (<xsl:value-of select="$java-class-spec"/>) value);
+	}
+</xsl:if>
+	// AGProcessing Ends
+	
 </xsl:if>
 <xsl:if test="java-type and (@unique = 'yes' and @primarykey != 'yes')">
     /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type **/
@@ -333,6 +370,14 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
     {
         return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
     }
+<xsl:if test="@type = 'autoinc'">
+		// For Autoinc/Guid32 Transparency
+    /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by a unique key <xsl:value-of select="@name"/> **/
+    public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+    {
+        return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, (<xsl:value-of select="$java-class-spec"/>) value, null);
+    }
+</xsl:if>
 </xsl:if>
 </xsl:for-each>
 <xsl:for-each select="index[@type='unique' and @java-method-name]">

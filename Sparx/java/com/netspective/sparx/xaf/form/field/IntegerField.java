@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: IntegerField.java,v 1.2 2002-12-04 17:47:35 shahbaz.javeed Exp $
+ * $Id: IntegerField.java,v 1.3 2002-12-16 21:04:10 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -179,8 +179,21 @@ public class IntegerField extends TextField
 
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? 0 : o.intValue(); }\n");
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.intValue(); }\n");
+
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return (null == o) ? \"0\" : o.toString(); }\n");
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object(" + dataType + " defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return (null == o) ? \"0\" : (new Integer(defaultValue)).toString(); }\n");
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object(Integer defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return (null == o) ? \"0\" : defaultValue.toString(); }\n");
+
+        mi.addJavaCode("\tpublic String get" + memberName + "String() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return (null == o) ? \"0\" : o.toString(); }\n");
+        mi.addJavaCode("\tpublic String get" + memberName + "String(" + dataType + " defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return (null == o) ? \"0\" : (new Integer(defaultValue)).toString(); }\n");
+        mi.addJavaCode("\tpublic String get" + memberName + "String(Integer defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return (null == o) ? \"0\" : defaultValue.toString(); }\n");
+
         mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", Integer.toString(value)); }\n");
 	    mi.addJavaCode("\tpublic void set" + memberName + "(Integer value) { setValue(\"" + fieldName + "\", value.toString()); }\n");
+
+        mi.addJavaCode("\tpublic void set" + memberName + "(Object value) { setValue(\"" + fieldName + "\", value.toString()); }\n");
+
+        mi.addJavaCode("\tpublic void set" + memberName + "(String value) { setValue(\"" + fieldName + "\", value.toString()); }\n");
 
         return mi;
     }
