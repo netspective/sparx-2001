@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: GenerateJavaDALTask.java,v 1.6 2002-12-04 17:47:02 shahbaz.javeed Exp $
+ * $Id: GenerateJavaDALTask.java,v 1.7 2002-12-23 04:31:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -70,26 +70,6 @@ public class GenerateJavaDALTask extends Task
     private String schemaDocFile;
     private String destRoot;
     private String styleSheetRoot;
-
-    private String dataTypesPkg = "app.dal.column";
-    private String tableTypesPkg = "app.dal.table.type";
-    private String tablesPkg = "app.dal.table";
-    private String domainsPkg = "app.dal.domain";
-    private String listenersPkg = "app.dal.listener";
-    private String rowsPkg = "app.dal.domain.row";
-    private String rowsListPkg = "app.dal.domain.rows";
-    private String schemaPkg = "app.dal";
-    private String schemaClassName = "DataAccessLayer";
-
-    private String dataTypesGeneratorStyleSheet = "data-type-generator.xsl";
-    private String tableTypesGeneratorStyleSheet = "table-type-generator.xsl";
-    private String tablesGeneratorStyleSheet = "table-generator.xsl";
-    private String domainsGeneratorStyleSheet = "domain-generator.xsl";
-    private String listenersGeneratorStyleSheet = "listener-generator.xsl";
-    private String rowsGeneratorStyleSheet = "row-generator.xsl";
-    private String rowsListGeneratorStyleSheet = "rows-generator.xsl";
-    private String schemaGeneratorStyleSheet = "schema-generator.xsl";
-    private String xsdGeneratorStyleSheet = "xsd-generator.xsl";
 
     private boolean debug = false;
 
@@ -117,86 +97,6 @@ public class GenerateJavaDALTask extends Task
         this.styleSheetRoot = styleSheetRoot;
     }
 
-    public void setDatatypespkg(String dataTypesPkg)
-    {
-        this.dataTypesPkg = dataTypesPkg;
-    }
-
-    public void setTabletypespkg(String tableTypesPkg)
-    {
-        this.tableTypesPkg = tableTypesPkg;
-    }
-
-    public void setTablespkg(String tablesPkg)
-    {
-        this.tablesPkg = tablesPkg;
-    }
-
-    public void setDomainspkg(String domainsPkg)
-    {
-        this.domainsPkg = domainsPkg;
-    }
-
-    public void setRowspkg(String rowsPkg)
-    {
-        this.rowsPkg = rowsPkg;
-    }
-
-    public void setRowslistpkg(String rowsListPkg)
-    {
-        this.rowsListPkg = rowsListPkg;
-    }
-
-    public void setSchemapkg(String schemaPkg)
-    {
-        this.schemaPkg = schemaPkg;
-    }
-
-    public void setSchemaclassname(String schemaClassName)
-    {
-        this.schemaClassName = schemaClassName;
-    }
-
-    public void setDatatypesgeneratorstylesheet(String dataTypesGeneratorStyleSheet)
-    {
-        this.dataTypesGeneratorStyleSheet = dataTypesGeneratorStyleSheet;
-    }
-
-    public void setTabletypesgeneratorstylesheet(String tableTypesGeneratorStyleSheet)
-    {
-        this.tableTypesGeneratorStyleSheet = tableTypesGeneratorStyleSheet;
-    }
-
-    public void setTablesGeneratorStyleSheet(String tablesGeneratorStyleSheet)
-    {
-        this.tablesGeneratorStyleSheet = tablesGeneratorStyleSheet;
-    }
-
-    public void setDomainsGeneratorStyleSheet(String domainsGeneratorStyleSheet)
-    {
-        this.domainsGeneratorStyleSheet = domainsGeneratorStyleSheet;
-    }
-
-    public void setRowsGeneratorStyleSheet(String rowsGeneratorStyleSheet)
-    {
-        this.rowsGeneratorStyleSheet = rowsGeneratorStyleSheet;
-    }
-
-    public void setRowslistGeneratorStyleSheet(String rowsListGeneratorStyleSheet)
-    {
-        this.rowsListGeneratorStyleSheet = rowsListGeneratorStyleSheet;
-    }
-
-    public void setSchemaGeneratorStyleSheet(String schemaGeneratorStyleSheet)
-    {
-        this.schemaGeneratorStyleSheet = schemaGeneratorStyleSheet;
-    }
-
-    public void setXsdGeneratorStyleSheet(String xsdGeneratorStyleSheet)
-    {
-        this.xsdGeneratorStyleSheet = xsdGeneratorStyleSheet;
-    }
-
     public void execute() throws BuildException
     {
         log("Opening SchemaDoc (XML) file " + schemaDocFile + "...");
@@ -211,42 +111,22 @@ public class GenerateJavaDALTask extends Task
                 log("SchemaDoc Warning: " + (String) ei.next());
         }
 
-        SchemaDocument.ObjectRelationalGenerator orGenerator = new SchemaDocument.ObjectRelationalGenerator();
-        orGenerator.setDestRoot(destRoot);
-
-        orGenerator.setDataTypesPkg(dataTypesPkg);
-        orGenerator.setTableTypesPkg(tableTypesPkg);
-        orGenerator.setTablesPkg(tablesPkg);
-        orGenerator.setDomainsPkg(domainsPkg);
-        orGenerator.setListenersPkg(listenersPkg);
-        orGenerator.setRowsPkg(rowsPkg);
-        orGenerator.setRowsListPkg(rowsListPkg);
-        orGenerator.setSchemaPkg(schemaPkg);
-        orGenerator.setSchemaClassName(schemaClassName);
-
-        orGenerator.setDataTypesGeneratorStyleSheet(styleSheetRoot + "/" + dataTypesGeneratorStyleSheet);
-        orGenerator.setTableTypesGeneratorStyleSheet(styleSheetRoot + "/" + tableTypesGeneratorStyleSheet);
-        orGenerator.setTablesGeneratorStyleSheet(styleSheetRoot + "/" + tablesGeneratorStyleSheet);
-        orGenerator.setDomainsGeneratorStyleSheet(styleSheetRoot + "/" + domainsGeneratorStyleSheet);
-        orGenerator.setListenersGeneratorStyleSheet(styleSheetRoot + "/" + listenersGeneratorStyleSheet);
-        orGenerator.setRowsGeneratorStyleSheet(styleSheetRoot + "/" + rowsGeneratorStyleSheet);
-        orGenerator.setRowsListGeneratorStyleSheet(styleSheetRoot + "/" + rowsListGeneratorStyleSheet);
-        orGenerator.setSchemaGeneratorStyleSheet(styleSheetRoot + "/" + schemaGeneratorStyleSheet);
-        orGenerator.setXsdGeneratorStyleSheet(styleSheetRoot + "/" + xsdGeneratorStyleSheet);
+        SchemaDocument.DataAccessLayerGenerator dalGen = schemaDoc.getDataAccessLayerGenerator(styleSheetRoot);
+        dalGen.setDestRoot(destRoot);
 
         try
         {
             log("Generating Data Access Layer...");
-            orGenerator.generate(schemaDoc);
+            dalGen.generate();
             log("Generated Java Data Access Layer in " + destRoot);
-            log("Generated " + orGenerator.getDataTypesGeneratedCount() + " data types");
-            log("Generated " + orGenerator.getTableTypesGeneratedCount() + " table types");
-            log("Generated " + orGenerator.getTablesGeneratedCount() + " tables");
+            log("Generated " + dalGen.getDataTypesGeneratedCount() + " data types");
+            log("Generated " + dalGen.getTableTypesGeneratedCount() + " table types");
+            log("Generated " + dalGen.getTablesGeneratedCount() + " tables");
 
             if (debug)
             {
                 log("<--------------- OR Generator Messages --------------->");
-                List messages = orGenerator.getMessages();
+                List messages = dalGen.getMessages();
                 if (messages.size() > 0)
                 {
                     for (int i = 0; i < messages.size(); i++)
@@ -259,7 +139,7 @@ public class GenerateJavaDALTask extends Task
         }
         catch (Exception e)
         {
-            List messages = orGenerator.getMessages();
+            List messages = dalGen.getMessages();
             if (messages.size() > 0)
             {
                 for (int i = 0; i < messages.size(); i++)
