@@ -293,33 +293,31 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/LoginDialog.java" column="53" line="81" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/conditional/DialogFieldConditionalApplyFlag.java" column="50" line="99" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/DialogField.java" column="138" line="96" />
-      <file_info url="jar://c:/utils/java/jdk1.3.1/src.jar!/src/java/security/Principal.java" column="22" line="56" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/security/AuthenticatedUser.java" column="22" line="82" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/security/BasicAuthenticatedUser.java" column="87" line="85" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractTable.java" column="5" line="157" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/Schema.java" column="30" line="74" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractSchema.java" column="42" line="148" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/ConnectionContext.java" column="0" line="237" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/ParseContext.java" column="0" line="76" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/SchemaImportHandler.java" column="25" line="222" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/Row.java" column="7" line="204" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/TableImportStatistic.java" column="5" line="79" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractRow.java" column="61" line="185" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/value/FilesystemEntriesListValue.java" column="43" line="164" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/value/DataSourceEntriesListValue.java" column="70" line="95" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/AceServletPage.java" column="0" line="190" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/ConnectionContext.java" column="13" line="159" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/DialogContext.java" column="35" line="1045" />
+      <file_info url="jar://C:/Projects/Sparx/lib/redist/xml-apis.jar!/org/xml/sax/Locator.class" column="17" line="5" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db/context/BasicDatabaseContext.java" column="55" line="141" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/Schema.java" column="30" line="84" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseImportDataDialog.java" column="49" line="106" />
+      <file_info url="jar://c:/utils/java/jdk1.3.1/src.jar!/src/java/lang/Object.java" column="28" line="172" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/ParseContext.java" column="23" line="157" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/SchemaImportHandler.java" column="24" line="119" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/TableImportStatistic.java" column="29" line="65" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractSchema.java" column="61" line="149" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseImportData.java" column="44" line="114" />
     </recent_files>
     <open_files>
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/TableImportStatistic.java" column="5" line="79" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/SchemaImportHandler.java" column="25" line="222" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/ParseContext.java" column="0" line="76" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/ConnectionContext.java" column="0" line="237" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/Schema.java" column="30" line="74" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractSchema.java" column="42" line="148" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/Row.java" column="7" line="204" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractRow.java" column="61" line="185" />
-      <active_file url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractRow.java" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/AbstractTable.java" column="5" line="157" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseImportDataDialog.java" column="49" line="106" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseImportData.java" column="44" line="114" />
+      <active_file url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseImportData.java" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/ParseContext.java" column="23" line="157" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml/SchemaImportHandler.java" column="24" line="119" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/Schema.java" column="30" line="84" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/ConnectionContext.java" column="13" line="159" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db/context/BasicDatabaseContext.java" column="55" line="141" />
     </open_files>
   </component>
   <component class="com.intellij.ide.hierarchy.HierarchyBrowserManager">
@@ -331,20 +329,28 @@
   <component class="com.intellij.ide.navigator.impl.ProjectNavigatorSettings">
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form" />
       <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/util" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt/schema-gen" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective" />
       <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt/schema-gen/java-gen" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/conditional" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/field" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db/context" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/value" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal/xml" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt/schema-gen" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/dal" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/util" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false" />
   </component>

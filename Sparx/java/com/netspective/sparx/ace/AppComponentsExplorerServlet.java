@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppComponentsExplorerServlet.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
+ * $Id: AppComponentsExplorerServlet.java,v 1.3 2002-08-30 00:31:47 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -85,6 +85,7 @@ import com.netspective.sparx.ace.page.DocumentsPage;
 import com.netspective.sparx.ace.page.HomePage;
 import com.netspective.sparx.ace.page.MonitorLogPage;
 import com.netspective.sparx.ace.page.SystemPropertiesPage;
+import com.netspective.sparx.ace.page.DatabaseImportData;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
 import com.netspective.sparx.xaf.html.Component;
@@ -172,6 +173,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
         pagesPath.registerPage("/database/generate-ddl", new DatabaseGenerateDDLPage());
         pagesPath.registerPage("/database/generate-java", new DatabaseGenerateJavaPage());
         pagesPath.registerPage("/database/data-sources", new DataSourcesPage());
+        pagesPath.registerPage("/database/import-data", new DatabaseImportData());
         pagesPath.registerPage("/database/meta-data", new DatabaseMetaDataPage());
 
         Configuration appConfig = getAppConfig();
