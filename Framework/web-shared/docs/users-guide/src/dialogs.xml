@@ -53,16 +53,16 @@
             <listitem>Phone Number</listitem>
         </itemizedlist>
         All available fields can be seen in &explorer-name;:
-        </para>        
+        </para>
             <mediaobject>
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-fields.jpg" format="JPEG"/>
             </imageobject>
-            </mediaobject>                
+            </mediaobject>
         <para>
         Every type of field available has its own both client-side and server-side validation
         features. For example, an integer field allows only numerical values into the field and
-        a social security number field only allows dashes and numeric digits. Aside from using the 
+        a social security number field only allows dashes and numeric digits. Aside from using the
         built-in fields, &product-name; provides a way to create new fields using the &framework-name;'s
         Java class called <classname>com.xaf.form.DialogField</classname>. The following is a sample
         class definition for creating a dialog field:
@@ -80,45 +80,48 @@ public class NewField extends com.xaf.form.DialogField
         The following XML entry must be added to the dialog's package so that the dialog can access
         the field. The following is an example of a dialog using the <classname>NewField</classname>:
         <programlisting>
-            <![CDATA[        
+            <![CDATA[
     <dialogs package="Test">
-        <register-field class="NewField" tag-name="field.newfield"/>    
+        <register-field class="NewField" tag-name="field.newfield"/>
         <dialog name="TestNewField" heading="Test New Field">
             <field.newfield name="new_field" caption="My New Field" ... />
             ....
             ...
         </dialog>
-    </dialogs>            
+    </dialogs>
             ]]>
-        </programlisting> 
-        As shown above, the XML tag <sgmltag class="element">register-field</sgmltag> is used to register 
+        </programlisting>
+        As shown above, the XML tag <sgmltag class="element">register-field</sgmltag> is used to register
         the new field. The attribute <sgmltag class="attribute">class</sgmltag> is used to define the
         Java class for the new field and the <sgmltag class="attribute">tag-name</sgmltag> attribute
         is used to define the XML tag name.
         <note>
             <para>
-            Any new field being created must have an XML element name that beings 
+            Any new field being created must have an XML element name that beings
             with <quote>field.</quote>
             </para>
         </note>
         </para>
-        
+
         <section>
-            <title>Example 1</title>
+            <title> Examples </title>
             <para>
-            The following is an example of a dialog containing general fields such as text, static, integer,
-            float and specialized fields such as social security number and zip code.
-            <programlisting>
-            <![CDATA[
+            <example>
+                <title>Text, Static, Integer, Float, SSN, and Zip fields</title>
+                <para>
+                The following is an example of a dialog containing general fields such as text, static, integer,
+                float and specialized fields such as social security number and zip code.
+                <programlisting>
+                <![CDATA[
 <dialog  name="Test1" heading="Test Fields" retain-params="*">
     <field.separator heading="Text Fields"/>
     <field.text name="text_field_hidden" hidden="yes" default='request:id'/>
     <field.static name="static_field" default='Static Field'/>
-    <field.text name="text_field_required" caption="Text Required" 
+    <field.text name="text_field_required" caption="Text Required"
         hint="Text field required" required="yes"/>
-    <field.text name="text_field" caption="Text" hint="Text field optional" 
+    <field.text name="text_field" caption="Text" hint="Text field optional"
         max-length="5" uppercase="yes"/>
-    <field.text name="text_field_email" caption="Text Email" 
+    <field.text name="text_field_email" caption="Text Email"
         hint="Text field with regular expression checking"
         validate-pattern="/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/"
         validate-msg="Invalid email format."/>
@@ -130,38 +133,39 @@ public class NewField extends com.xaf.form.DialogField
     <field.float name="float_field" caption="Float Field" hint="Float field"/>
     <field.zip name="zip_field" caption="Zip Field" hint="Zip code field"/>
     <director submit-caption="Submit"/>
-</dialog>        
-        ]]>
-            </programlisting>
-            The above example contains multiple fields of various types and some of the attributes available for
-            the different types. The attribute <sgmltag class="attribute">retain-params</sgmltag> of the 
-            <sgmltag class="element">dialog</sgmltag> tag is useful for retaining field values (whether they were
-            entered by the user or from value sources) as the dialog goes through its different stages before execution.
-            The default values for the dialog fields can be empty or they can be specified in the 
-            XML file. The attribute <sgmltag class="attribute">default</sgmltag> is available for specifying
-            the default value and it can either be a static value or it can be a value source. In the example above, the hidden
-            text field called <emphasis>text_field_hidden</emphasis> gets its value from a request parameter
-            value source while the static field called <emphasis>static_field</emphasis> gets its value
-            as a plain string. Most dialog fields have an attribute called <sgmltag class="attribute">hint</sgmltag> which
-            is used to display a helpful hint for the user on what to enter into the field.
+</dialog>
+                ]]>
+                </programlisting>
+                The above example contains multiple fields of various types and some of the attributes available for
+                the different types. The attribute <sgmltag class="attribute">retain-params</sgmltag> of the
+                <sgmltag class="element">dialog</sgmltag> tag is useful for retaining field values (whether they were
+                entered by the user or from value sources) as the dialog goes through its different stages before execution.
+                The default values for the dialog fields can be empty or they can be specified in the
+                XML file. The attribute <sgmltag class="attribute">default</sgmltag> is available for specifying
+                the default value and it can either be a static value or it can be a value source. In the example above, the hidden
+                text field called <emphasis>text_field_hidden</emphasis> gets its value from a request parameter
+                value source while the static field called <emphasis>static_field</emphasis> gets its value
+                as a plain string. Most dialog fields have an attribute called <sgmltag class="attribute">hint</sgmltag> which
+                is used to display a helpful hint for the user on what to enter into the field.
 
-            The following is a screenshot of how the actual dialog looks like:
-            </para>
-            <para>
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="./resources/images/dialogs/test1.jpg" format="JPEG"/>
-                </imageobject>
-                </mediaobject>            
-            </para>
-        </section>
-        <section>
-            <title>Example 2</title>
-            <para>          
-            The following is a definition for a dialog which contains a memo field, several versions
-            of the date and time field, and several versions of the boolean field:
-            <programlisting>
-            <![CDATA[            
+                The following is a screenshot of how the actual dialog looks like:
+                </para>
+                <para>
+                    <mediaobject>
+                    <imageobject align="left">
+                        <imagedata fileref="./resources/images/dialogs/test1.jpg" format="JPEG"/>
+                    </imageobject>
+                    </mediaobject>
+                </para>
+            </example>
+
+            <example>
+                <title>Memo, Date &amp; Time, Boolean fields</title>
+                <para>
+                The following is a definition for a dialog which contains a memo field, several versions
+                of the date and time field, and several versions of the boolean field:
+                <programlisting>
+                <![CDATA[
 <dialog name="Test2" heading="Test Fields" retain-params="*">
     <field.separator name="Memo" heading="Memo"/>
     <field.memo name="memo_field_01" caption="Memo Field"
@@ -187,91 +191,93 @@ public class NewField extends com.xaf.form.DialogField
     <field.boolean name="bool_field_radio" caption="Boolean Field (Radio)" style="radio"/>
     <field.boolean name="bool_field_alone" caption="Boolean Field (Alone)" style="checkalone"/>
     <field.boolean name="bool_field_combo" caption="Boolean Field (Combo)" style="combo"/>
-    <director submit-caption="Submit"/>     
+    <director submit-caption="Submit"/>
 </dialog>
-            ]]>
-            </programlisting>
-            <variablelist>
-                <varlistentry>
-                    <term> <sgmltag class="element">field.memo</sgmltag> </term>
-                    <listitem>
-                        <para>
-                        The <sgmltag class="element">field.memo</sgmltag> is based on the HTML TEXTAREA element
-                        and the attribute <sgmltag class="attribute">max-length</sgmltag> is used to enforce 
-                        the maximum number of characters allowed in the memo field. Javascript client-side validations
-                        are done to enforce the maximum number of characters allowed.
-                        </para>
-                    </listitem>
-                </varlistentry>            
-                <varlistentry>
-                    <term> <sgmltag class="element">field.duration</sgmltag> </term>
-                    <listitem>
-                        <para>
-                        The duration field, <sgmltag class="element">field.duration</sgmltag>, is used to
-                        allow entry of  a begin date and an end date. It has client-side validations to make sure
-                        that the date values are valid and that beginning date field is before the end date field.
-                        </para>
-                    </listitem>
-                </varlistentry>           
-                <varlistentry>
-                    <term> <sgmltag class="element">field.date</sgmltag> </term>
-                    <listitem>
-                        <para>
-                        By default date fields, <sgmltag class="element">field.date</sgmltag> do not allow 2-digit years 
-                        and this can be changed by setting the attribute <sgmltag class="attribute">strict-year="no"</sgmltag>. 
-                        Also the format of a date field can be specified by setting the attribute
-                        <sgmltag class="attribute">format</sgmltag>. The value for <sgmltag class="attribute">format</sgmltag>
-                        is based on the <classname>java.text.SimpleDateFormat</classname>'s pattern strings. The date field
-                        also has a built-n client-side formatting feature which will automatically format the user 
-                        entered value: user enters 11021999 and it gets displayed as 11/02/1999. The default value
-                        of the date field accepts special strings such as "<emphasis>today</emphasis>" and "<emphasis>now</emphasis>"
-                        and interprets them as present date. Any numerical operation defined after the special string
-                        is used to recalculate the default date (for example, "<emphasis>today+1</emphasis>" will
-                        display tomorrow's date)
-                        </para>
-                    </listitem>
-                </varlistentry>           
-                <varlistentry>
-                    <term> <sgmltag class="element">field.time</sgmltag> </term>
-                    <listitem>
-                        <para>
-                        The time field, <sgmltag class="element">field.time</sgmltag>, is used to
-                        allow entry of  a time value. It has client-side validations to make sure
-                        that the time entered is valid. It also accepts the special string
-                        "<emphasis>now</emphasis>" as a default value. 
-                        </para>
-                    </listitem>
-                </varlistentry>   
-                <varlistentry>
-                    <term> <sgmltag class="element">field.boolean</sgmltag> </term>
-                    <listitem>
-                        <para>
-                        The boolean field, <sgmltag class="element">field.boolean</sgmltag>, represents
-                        different HTML elements: a single checkbox, a Yes/No select list, and a Yes/No radio buttons.
-                        These different elements are represented by the <sgmltag class="attribute">style</sgmltag>
-                        attribute with the following values respectively: <emphasis>radio</emphasis>, 
-                        <emphasis>checkalone</emphasis>, and <emphasis>combo</emphasis>. A "No" selection
-                        submits a value of 0 and a "Yes" selection submits a value of 1.                        
-                        </para>
-                    </listitem>
-                </varlistentry>   
-            </variablelist>                
-            
-            The XML definition above is shown as:
-            </para>
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="./resources/images/dialogs/test2.jpg" format="JPEG"/>
-                </imageobject>
-                </mediaobject>               
-        </section>
-        <section>
-            <title>Example 3</title>
-            <para>          
-                The following is a XML definition example to show the different styles available for 
-                select fields:
-                <programlisting>
-                <![CDATA[
+                ]]>
+                </programlisting>
+                <variablelist>
+                    <varlistentry>
+                        <term> <sgmltag class="element">field.memo</sgmltag> </term>
+                        <listitem>
+                            <para>
+                            The <sgmltag class="element">field.memo</sgmltag> is based on the HTML TEXTAREA element
+                            and the attribute <sgmltag class="attribute">max-length</sgmltag> is used to enforce
+                            the maximum number of characters allowed in the memo field. Javascript client-side validations
+                            are done to enforce the maximum number of characters allowed.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term> <sgmltag class="element">field.duration</sgmltag> </term>
+                        <listitem>
+                            <para>
+                            The duration field, <sgmltag class="element">field.duration</sgmltag>, is used to
+                            allow entry of  a begin date and an end date. It has client-side validations to make sure
+                            that the date values are valid and that beginning date field is before the end date field.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term> <sgmltag class="element">field.date</sgmltag> </term>
+                        <listitem>
+                            <para>
+                            By default date fields, <sgmltag class="element">field.date</sgmltag> do not allow 2-digit years
+                            and this can be changed by setting the attribute <sgmltag class="attribute">strict-year="no"</sgmltag>.
+                            Also the format of a date field can be specified by setting the attribute
+                            <sgmltag class="attribute">format</sgmltag>. The value for <sgmltag class="attribute">format</sgmltag>
+                            is based on the <classname>java.text.SimpleDateFormat</classname>'s pattern strings. The date field
+                            also has a built-n client-side formatting feature which will automatically format the user
+                            entered value: user enters 11021999 and it gets displayed as 11/02/1999. The default value
+                            of the date field accepts special strings such as "<emphasis>today</emphasis>" and "<emphasis>now</emphasis>"
+                            and interprets them as present date. Any numerical operation defined after the special string
+                            is used to recalculate the default date (for example, "<emphasis>today+1</emphasis>" will
+                            display tomorrow's date)
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term> <sgmltag class="element">field.time</sgmltag> </term>
+                        <listitem>
+                            <para>
+                            The time field, <sgmltag class="element">field.time</sgmltag>, is used to
+                            allow entry of  a time value. It has client-side validations to make sure
+                            that the time entered is valid. It also accepts the special string
+                            "<emphasis>now</emphasis>" as a default value.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term> <sgmltag class="element">field.boolean</sgmltag> </term>
+                        <listitem>
+                            <para>
+                            The boolean field, <sgmltag class="element">field.boolean</sgmltag>, represents
+                            different HTML elements: a single checkbox, a Yes/No select list, and a Yes/No radio buttons.
+                            These different elements are represented by the <sgmltag class="attribute">style</sgmltag>
+                            attribute with the following values respectively: <emphasis>radio</emphasis>,
+                            <emphasis>checkalone</emphasis>, and <emphasis>combo</emphasis>. A "No" selection
+                            submits a value of 0 and a "Yes" selection submits a value of 1.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+
+                The XML definition above is shown as:
+                </para>
+                <para>
+                    <mediaobject>
+                    <imageobject align="left">
+                        <imagedata fileref="./resources/images/dialogs/test2.jpg" format="JPEG"/>
+                    </imageobject>
+                    </mediaobject>
+                </para>
+            </example>
+            <example>
+                <title>Select fields</title>
+                <para>
+                    The following is a XML definition example to show the different styles available for
+                    select fields:
+                    <programlisting>
+                    <![CDATA[
 <dialog name="Test3" heading="Test Fields" retain-params="*">
     <field.separator heading="Select Fields" />
     <field.select name="sel_field_combo" read-only="no" caption="Select Field (Combo)"
@@ -291,32 +297,32 @@ public class NewField extends com.xaf.form.DialogField
         caption-right="Right Caption" multi-width="100"
         default="A"/>
      <director submit-caption="Submit"/>
-</dialog>            
-                ]]>
-                </programlisting>
-                The XML tag, <sgmltag class="element">field.select</sgmltag>, is based upon the
-                SELECT HTML element. It can be used as a list capable of allowing the user to choose
-                one selection or multiple selections based on the configuration. There are six styles
-                of selection list available (<emphasis>combo</emphasis>, <emphasis>radio</emphasis>, <emphasis>list</emphasis>, 
-                <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and <emphasis>multidual</emphasis>)
-                and they can be defined using the <sgmltag class="attribute">style</sgmltag>
-                attribute. The <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and 
-                <emphasis>multidual</emphasis> styles allow a selection of more than one option.
-            </para>
-            <para>
-                The choices available for a selection are defined by the <sgmltag class="attribute">choices</sgmltag>
-                attribute. The syntax for the choices is <emphasis>choice_1=value_1;choice_2=value_2;...</emphasis>
-                where the <emphasis>choice_x</emphasis> is the displayed choice and the <emphasis>value_x</emphasis>
-                is the actual value that is submitted. 
-                
-                There is another way to define the choices available for a selection and it is by using 
-                a value source called <emphasis>query</emphasis>. This way builds the option list from
-                the result of a static query (the query must be defined in <filename class="conf">WEB-INF/ui/statement.xml</filename>).
-                For example, the following SQL can be used as <emphasis>choices="query:test.user_list</emphasis>
-                attribute setting:
-                <programlisting>
-                <![CDATA[ 
-<sql-statements package="test">               
+</dialog>
+                    ]]>
+                    </programlisting>
+                    The XML tag, <sgmltag class="element">field.select</sgmltag>, is based upon the
+                    SELECT HTML element. It can be used as a list capable of allowing the user to choose
+                    one selection or multiple selections based on the configuration. There are six styles
+                    of selection list available (<emphasis>combo</emphasis>, <emphasis>radio</emphasis>, <emphasis>list</emphasis>,
+                    <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and <emphasis>multidual</emphasis>)
+                    and they can be defined using the <sgmltag class="attribute">style</sgmltag>
+                    attribute. The <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and
+                    <emphasis>multidual</emphasis> styles allow a selection of more than one option.
+                </para>
+                <para>
+                    The choices available for a selection are defined by the <sgmltag class="attribute">choices</sgmltag>
+                    attribute. The syntax for the choices is <emphasis>choice_1=value_1;choice_2=value_2;...</emphasis>
+                    where the <emphasis>choice_x</emphasis> is the displayed choice and the <emphasis>value_x</emphasis>
+                    is the actual value that is submitted.
+
+                    There is another way to define the choices available for a selection and it is by using
+                    a value source called <emphasis>query</emphasis>. This way builds the option list from
+                    the result of a static query (the query must be defined in <filename class="conf">WEB-INF/ui/statement.xml</filename>).
+                    For example, the following SQL can be used as <emphasis>choices="query:test.user_list</emphasis>
+                    attribute setting:
+                    <programlisting>
+                    <![CDATA[
+<sql-statements package="test">
     <statement name="user_list">
         select
             name,
@@ -324,128 +330,127 @@ public class NewField extends com.xaf.form.DialogField
         from User
     </statement>
 </sql-statements>
-                ]]>
-                </programlisting>
-                The above SQL's <emphasis>name</emphasis> and <emphasis>id</emphasis> result
-                will be used to construct a choice list with the <emphasis>name</emphasis> entry
-                being the displayed string and the corrsponding <emphasis>id</emphasis> being the
-                submitted value.
-                
-                
-                
-                There are two other attributes that effect the display
-                of the choices for selection and they are <sgmltag class="attribute">prepend-blank</sgmltag>
-                and <sgmltag class="attribute">append-blank</sgmltag>. The functionality of these two attributes
-                is to prepend a blank to the choice list and to append a blank to the choice list respectively.
-                The following is a screenshot of the dialog defined above:
-            </para>
-            <para>
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="./resources/images/dialogs/test3.jpg" format="JPEG"/>
-                </imageobject>
-                </mediaobject>    
+                    ]]>
+                    </programlisting>
+                    The above SQL's <emphasis>name</emphasis> and <emphasis>id</emphasis> result
+                    will be used to construct a choice list with the <emphasis>name</emphasis> entry
+                    being the displayed string and the corrsponding <emphasis>id</emphasis> being the
+                    submitted value.
 
-            </para>                
-        </section>
-        <section>
-            <title>Example 4</title>
-            <para>    
-            &product-name; provides a dynamic field displaying and hiding functionality which is 
-            defined by the <sgmltag class="element">conditional </sgmltag> XML element. The following
-            is an example dialog definition:
-            <programlisting>
-            <![CDATA[ 
+                    There are two other attributes that effect the display
+                    of the choices for selection and they are <sgmltag class="attribute">prepend-blank</sgmltag>
+                    and <sgmltag class="attribute">append-blank</sgmltag>. The functionality of these two attributes
+                    is to prepend a blank to the choice list and to append a blank to the choice list respectively.
+                    The following is a screenshot of the dialog defined above:
+                </para>
+                <para>
+                    <mediaobject>
+                    <imageobject align="left">
+                        <imagedata fileref="./resources/images/dialogs/test3.jpg" format="JPEG"/>
+                    </imageobject>
+                    </mediaobject>
+
+                </para>
+            </example>
+            <example>
+                <title>Conditional fields</title>
+                <para>
+                    &product-name; provides a dynamic field displaying and hiding functionality which is
+                    defined by the <sgmltag class="element">conditional </sgmltag> XML element. The following
+                    is an example dialog definition:
+                    <programlisting>
+                    <![CDATA[
         <dialog name="Test6" heading="Test Conditionals" loop="yes">
-            <field.select name="sel_field_list" caption="Select Field (Combo)" style="combo" 
+            <field.select name="sel_field_list" caption="Select Field (Combo)" style="combo"
                 size="5" choices="-;Choice 1=A;Choice 2=B;Choice 3=C"/>
             <field.text name="text_field" caption="Hidden Text" default="Here I am!">
-                <conditional action="display" partner="sel_field_list" 
+                <conditional action="display" partner="sel_field_list"
                  js-expr="control.selectedIndex != 0"/>
             </field.text>
             <field.boolean name="checkbox_field" caption="Checkbox" style="checkalone" />
             <field.static name="static_field2" default="Checkbox checked!">
-                <conditional action="display" partner="checkbox_field" 
+                <conditional action="display" partner="checkbox_field"
                  js-expr="control.checked == true"/>
             </field.static>
-        </dialog>          
-            ]]>
-            </programlisting>
-            In the above example, the text field named <emphasis>text_field</emphasis> is dependent upon the select field
-            named <emphasis>sel_field_list</emphasis>. This is done by adding the <sgmltag class="element">conditional </sgmltag>
-            element as a child node to the text field and setting the attribute <sgmltag class="attribute">partner</sgmltag>
-            to the name of the select field. The condition for displaying the text field is created by setting the
-             <sgmltag class="attribute">js-expr</sgmltag> (Javascript expression) attribute. In the definition above, 
-             the text field named <emphasis>text_field</emphasis> will only be displayed if the selected option of the
-             <emphasis>sel_field_list</emphasis> is not the first option.
-             </para>
-             
-             <para>
-             The second conditional field of the dialog is a static field named <emphasis>static_field</emphasis>
-             and its' display status is dependent upon the <emphasis>checkbox_field</emphasis> being "checked". The
-             following is a screen shot of the initial stage of the dialog:             
-            </para>
-            <para>
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="./resources/images/dialogs/test6_1.jpg" format="JPEG"/>
-                </imageobject>
-                </mediaobject>  
-            </para>
-            <para>
-            The following is a screen shot of the dialog after the select field's selection has been changed:
-            </para>
-            <para>
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="./resources/images/dialogs/test6_2.jpg" format="JPEG"/>
-                </imageobject>
-                </mediaobject>              
-            </para>                
-            <para>
-            The following is a screen shot of the dialog after the checkbox has been checked:
-            </para>  
-            <para>            
-                <mediaobject>
-                <imageobject align="left">
-                    <imagedata fileref="./resources/images/dialogs/test6_3.jpg" format="JPEG"/>
-                </imageobject>
-                </mediaobject>                 
-            </para>                
+        </dialog>
+                    ]]>
+                    </programlisting>
+                    In the above example, the text field named <emphasis>text_field</emphasis> is dependent upon the select field
+                    named <emphasis>sel_field_list</emphasis>. This is done by adding the <sgmltag class="element">conditional </sgmltag>
+                    element as a child node to the text field and setting the attribute <sgmltag class="attribute">partner</sgmltag>
+                    to the name of the select field. The condition for displaying the text field is created by setting the
+                     <sgmltag class="attribute">js-expr</sgmltag> (Javascript expression) attribute. In the definition above,
+                     the text field named <emphasis>text_field</emphasis> will only be displayed if the selected option of the
+                     <emphasis>sel_field_list</emphasis> is not the first option.
+                 </para>
+
+                 <para>
+                     The second conditional field of the dialog is a static field named <emphasis>static_field</emphasis>
+                     and its' display status is dependent upon the <emphasis>checkbox_field</emphasis> being "checked". The
+                     following is a screen shot of the initial stage of the dialog:
+                </para>
+                <para>
+                    <mediaobject>
+                    <imageobject align="left">
+                        <imagedata fileref="./resources/images/dialogs/test6_1.jpg" format="JPEG"/>
+                    </imageobject>
+                    </mediaobject>
+                </para>
+                <para>
+                    The following is a screen shot of the dialog after the select field's selection has been changed:
+                </para>
+                <para>
+                    <mediaobject>
+                    <imageobject align="left">
+                        <imagedata fileref="./resources/images/dialogs/test6_2.jpg" format="JPEG"/>
+                    </imageobject>
+                    </mediaobject>
+                </para>
+                <para>
+                    The following is a screen shot of the dialog after the checkbox has been checked:
+                </para>
+                <para>
+                    <mediaobject>
+                    <imageobject align="left">
+                        <imagedata fileref="./resources/images/dialogs/test6_3.jpg" format="JPEG"/>
+                    </imageobject>
+                    </mediaobject>
+                </para>
+            </example>
+
+            <example>
+                <title>Popup field</title>
+                <para>
+                    &product-name; provides a feature to display a popup dialog box when a popup icon
+                    is clicked and values from a selection in the popup can be returned to the main window.
+                    The following XML definition creates a field that has a popup dialog associated with it:
+                    <programlisting>
+                    <![CDATA[
+    <dialog name="Test7" heading="Test Popup" loop="yes">
+        <field.text name="text_field_1" caption="Text Field 1" />
+        <field.text name="text_field_2" caption="Text Field 2" read-only="browser"
+            hint="Click on the icon to select a value">
+            <popup action="create-app-url:/textJS.html" fill="text_field_1,text_field_2"/>
+        </field.text>
+    </dialog>
+                ]]>
+                    </programlisting>
+                    The above example displays a dialog with a text field named <emphasis>text_field_2</emphasis>
+                    which cannot be filled in by the user but can only be filled in from a popup box associated with it.
+                    By clicking on the popup icon (<imageobject align="left"><imagedata fileref="../../resources/images/dialog/magnifying-glass-sm.gif" format="GIF"/></imageobject>)
+                    the URL defined as the action, <literal>textJS.html</literal>, will be displayed in a popup window.
+                    The process through a value or multiple values  being returned into the <emphasis>text_field_2</emphasis>
+                    is to invoke a Javascript method called <literal>populateValues()</literal> provided by &product-name;.
+                    The following is an example of a HTML string to invoke the Javascript method:
+                    <programlisting>
+                    <![CDATA[
+    <input type="button" value="OK" onClick="populateValues('This is the filled in text!');"/>
+                    ]]>
+                    </programlisting>
+                </para>
+            </example>
+        </para>
         </section>
-        
-        <section>
-            <title>Example 5</title>
-            <para>
-            &product-name; provides a feature to display a popup dialog box when a popup icon
-            is clicked and values from a selection in the popup can be returned to the main window.
-            The following XML definition creates a field that has a popup dialog associated with it:
-            <programlisting>
-            <![CDATA[
-        <dialog name="Test7" heading="Test Popup" loop="yes">
-            <field.text name="text_field_1" caption="Text Field 1" />
-            <field.text name="text_field_2" caption="Text Field 2" read-only="browser" 
-                hint="Click on the icon to select a value">
-                <popup action="create-app-url:/textJS.html" fill="text_field_1,text_field_2"/>
-            </field.text>
-        </dialog>            
-            ]]>
-            </programlisting>
-            The above example displays a dialog with a text field named <emphasis>text_field_2</emphasis> 
-            which cannot be filled in by the user but can only be filled in from a popup box associated with it.
-            By clicking on the popup icon (<imageobject align="left"><imagedata fileref="../../resources/images/dialog/magnifying-glass-sm.gif" format="GIF"/></imageobject>)
-            the URL defined as the action, <literal>textJS.html</literal>, will be displayed in a popup window.
-            The process through a value or multiple values  being returned into the <emphasis>text_field_2</emphasis>
-            is to invoke a Javascript method called <literal>populateValues()</literal> provided by &product-name;. 
-            The following is an example of a HTML string to invoke the Javascript method:
-            <programlisting>
-            <![CDATA[
-            <input type="button" value="OK" onClick="populateValues('This is the filled in text!');"/>
-            ]]>
-            </programlisting>
-            </para>
-        </section>
-        
     </section>
 
 
@@ -453,7 +458,7 @@ public class NewField extends com.xaf.form.DialogField
         <title>Look &amp; Feel: Skins</title>
         <para>
         Skins provide consistent look and feel and allows the same code to run on a variety of
-        browsers and platforms (e.g. hand-helds). Skins are defined in 
+        browsers and platforms (e.g. hand-helds). Skins are defined in
         <filename class="conf">WEB-INF/ui/dialog.xml</filename> with the XML tag
         <emphasis role="bold"> &lt;dialog-skin&gt;</emphasis>. The following is an example
         of how a skin is defined:
@@ -470,7 +475,7 @@ public class NewField extends com.xaf.form.DialogField
             style='font-family: Andale Mono'
         </caption-cell-attrs>
         <include-pre-script src="/test/script.js"/>
-        <include-post-script src="/test/script-post.js"/>        
+        <include-post-script src="/test/script-post.js"/>
         <append-post-script> alert(activeDialog);   </append-post-script>
     </dialog-skin>
         ]]>
@@ -480,25 +485,25 @@ public class NewField extends com.xaf.form.DialogField
             <![CDATA[
      <xaf:dialog name="Test.Test1" skin="TestSkin"/>
             ]]>
-        </programlisting>  
+        </programlisting>
         <note>
         <para>
         Refer to <xref linkend="Using-Dialog"/> for the complete description on how
         to use the <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> tag.
         </para>
         </note>
-        
+
         The following is a screenshot of the dialog with the default skin:
         </para>
-        
+
         <para>
         <mediaobject>
         <imageobject align="left">
             <imagedata fileref="./resources/images/dialogs/skin1.jpg" format="JPEG"/>
         </imageobject>
-        </mediaobject>              
+        </mediaobject>
         </para>
-        
+
         <para>
         The following is a screenshot of the dialog after the <emphasis>TestSkin</emphasis>
         was configured:
@@ -509,8 +514,8 @@ public class NewField extends com.xaf.form.DialogField
         <imageobject align="left">
             <imagedata fileref="./resources/images/dialogs/skin2.jpg" format="JPEG"/>
         </imageobject>
-        </mediaobject>              
-        </para>        
+        </mediaobject>
+        </para>
     </section>
 
 
@@ -520,10 +525,10 @@ public class NewField extends com.xaf.form.DialogField
             <title>Unit Testing</title>
             <para>
             All dialogs defined in <filename class="conf">WEB-INF/ui/dialog.xml</filename>
-            are listed in &explorer-name; under 
+            are listed in &explorer-name; under
             <menuchoice role="bold">
-                <guimenu>Application</guimenu>  
-                <guimenuitem>Dialogs</guimenuitem>                
+                <guimenu>Application</guimenu>
+                <guimenuitem>Dialogs</guimenuitem>
             </menuchoice>    menu item.
             </para>
 
@@ -532,7 +537,7 @@ public class NewField extends com.xaf.form.DialogField
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-dialogs.jpg" format="JPEG"/>
             </imageobject>
-            </mediaobject>              
+            </mediaobject>
             </para>
 
             <para>
@@ -546,10 +551,10 @@ public class NewField extends com.xaf.form.DialogField
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-testdialog.jpg" format="JPEG"/>
             </imageobject>
-            </mediaobject>              
+            </mediaobject>
             </para>
 
-            <para>            
+            <para>
             This will display the entered values:
             </para>
 
@@ -558,7 +563,7 @@ public class NewField extends com.xaf.form.DialogField
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-testresult.jpg" format="JPEG"/>
             </imageobject>
-            </mediaobject>              
+            </mediaobject>
             </para>
         </section>
     </section>
@@ -569,12 +574,12 @@ public class NewField extends com.xaf.form.DialogField
             &product-name; provides convenient yet flexible ways to use and enhance the behavior of
             Dialog objects. The most common usage of a dialog is to define the dialog in the
             <filename class="conf">WEB-INF/ui/dialog.xml</filename> file and then to use the JSP
-            custom tag <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> to invoke the dialog. 
+            custom tag <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> to invoke the dialog.
             <programlisting>
         <![CDATA[
     <xaf:dialog name="test.Test1"/>
-        ]]>                
-            </programlisting>                
+        ]]>
+            </programlisting>
             This utilizes the built-in functionality and behavior of a &product-name; dialog. The user does not
             need to be concerned with various processes of a HTML form submittal such as
             data validations, verifying the correct stage execution (blocking redundant submittals), and
@@ -585,9 +590,9 @@ public class NewField extends com.xaf.form.DialogField
             <programlisting>
         <![CDATA[
          <xaf:dialog name="test.Test1">
-            <xaf:query name="MyQuery" skin="report"/>        
+            <xaf:query name="MyQuery" skin="report"/>
          </xaf:dialog>
-        ]]>                
+        ]]>
             </programlisting>
             The above snippet of JSP code describes a dialog which will execute a SQL query when it is
             submitted. Instead of a query, one can also write pure Java code:
@@ -598,13 +603,13 @@ public class NewField extends com.xaf.form.DialogField
             response.sendRedirect("/home");
         %>
      </xaf:dialog>
-    ]]>                
-            </programlisting>        
+    ]]>
+            </programlisting>
             Everything within the dialog custom tags (HTML, Java code, custom tags) are considered the
             action of the dialog.
         </para>
         <para>
-            Usually, the action of the dialog is defined outside of the 
+            Usually, the action of the dialog is defined outside of the
             definition of the dialog such as in the JSP but there is a way to define
             an action for a dialog within the <filename class="conf">WEB-INF/ui/dialog.xml</filename>.
             The following is an example:
@@ -624,19 +629,19 @@ public class NewField extends com.xaf.form.DialogField
                 </report>
             </statement>
         </field.report>
-    </dialog>            
-    ]]>                
-            </programlisting>               
+    </dialog>
+    ]]>
+            </programlisting>
         </para>
         <section>
             <title>Using listeners</title>
             <para>
             &product-name; provides a way to implement business logic into the behavior
             of a dialog by providing a feature called <emphasis>Listeners</emphasis>.
-            A listener is a Java object which is invoked when state changes occur in a dialog. 
+            A listener is a Java object which is invoked when state changes occur in a dialog.
             It contains various behavior methods such as execution, data
             validation, and data population. All listeners must extend &framework-name;'s
-            listener class <classname>com.xaf.form.DefaultDialogContextListener</classname>. 
+            listener class <classname>com.xaf.form.DefaultDialogContextListener</classname>.
             The following is an example of a listener used in a JSP:
             <programlisting>
     <![CDATA[
@@ -644,31 +649,31 @@ public class NewField extends com.xaf.form.DialogField
     ("test-listener", new DefaultDialogContextListener()
         {
             public boolean isDialogValid(DialogContext dc, boolean fieldsAlreadyValidated)
-            {   
+            {
                 // insert code here to validate dialog
             }
         }
     );
-    
+
     <xaf:dialog name="Test.Test1" listener="test-listener"/>
-        
-    ]]>                       
+
+    ]]>
             </programlisting>
             In the example above, the <emphasis>test-listener</emphasis>'s  <methodname>isDialogValid</methodname> method is
             called when the dialog needs to check validity of data, before the dialog
             has performed its own validation.
             </para>
         </section>
-        
+
         <section>
             <title>Defining a customized Java Dialog class</title>
             <para>
             There could be times when the total built-in behavior of a dialog does not satisfy the requirements
             of a web application; thus &product-name; provides a way to create a dialog
-            object in Java. 
-            A dialog can be created using a Java class which 
+            object in Java.
+            A dialog can be created using a Java class which
             must extend the &framework-name;'s dialog class called
-            <classname>com.xaf.form.Dialog</classname>: 
+            <classname>com.xaf.form.Dialog</classname>:
             <programlisting>
             <![CDATA[
 package Test;
@@ -677,7 +682,7 @@ public class Test1  extends com.xaf.form.Dialog
 {
     ...
     ..
-}                        
+}
             ]]>
             </programlisting>
             The behavior of the dialog can then be modified by overwriting the methods available or introducing new methods.
@@ -688,9 +693,9 @@ public class Test1  extends com.xaf.form.Dialog
         <dialog name="TestDialog" heading="Test Dialog" class="Test.Test1">
             ...
             ..
-        </dialog>            
+        </dialog>
             ]]>
-            </programlisting>            
+            </programlisting>
             </para>
         </section>
     </section>
