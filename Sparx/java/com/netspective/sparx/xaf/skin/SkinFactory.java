@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: SkinFactory.java,v 1.2 2002-08-24 05:36:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -82,7 +82,8 @@ public class SkinFactory implements Factory
         addReportSkin("text-csv", new TextReportSkin(".csv", ",", "\"", true));
         addReportSkin("text-tab", new TextReportSkin(".txt", "  ", null, true));
 
-        addDialogSkin("default", new StandardDialogSkin());
+        addDialogSkin("default", new StylizedDialogSkin());
+        addDialogSkin("standard", new StandardDialogSkin());
         addDialogSkin("hand-held", new HandHeldDialogSkin());
     }
 

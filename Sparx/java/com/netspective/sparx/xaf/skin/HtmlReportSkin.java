@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.4 2002-05-19 23:31:29 snshah Exp $
+ * $Id: HtmlReportSkin.java,v 1.5 2002-08-24 05:36:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -72,6 +72,7 @@ import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.config.Configuration;
 
@@ -85,18 +86,27 @@ public class HtmlReportSkin implements ReportSkin
     static public final String[] ALIGN_ATTRS = {"LEFT", "CENTER", "RIGHT"};
 
     protected int flags;
-    protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
-    protected String innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
-    protected String frameHdRowAttrs = "bgcolor='#6699CC'";
-    protected String frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color=white";
-    protected String frameHdTableRowBgcolorAttrs = "#FFFFCC";
-    protected String frameFtRowAttrs = "bgcolor='lightyellow'";
-    protected String frameFtFontAttrs = "face='verdana,arial,helvetica' size=2 color='#000000'";
-    protected String bannerRowAttrs = "bgcolor='lightyellow'";
+    protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#666666'";
+    protected String innerTableAttrs = "cellpadding='2' cellspacing='0' border='0' width='100%'";
+    protected String frameHdRowAttrs = "bgcolor='#666666' height=15";
+    protected String frameHdRowSpacerAttrs = "bgcolor='#666666' height=2";
+    protected String frameHdCellAttrs = "bgcolor='#666666' width='40%'";
+    protected String frameHdInfoCellAttrs = "bgcolor='white'";
+    protected String frameHdFontAttrs = "face='tahoma,arial,helvetica' size=1 color=white";
+    protected SingleValueSource frameHdTabImgSrcValueSource = ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/tabs/transparent-triangle.gif");
+    protected SingleValueSource frameHdSpacerImgSrcValueSource = ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/tabs/black-on-lgray/spacer.gif");
+    protected String frameFtRowAttrs = "bgcolor='#EEEEEE'";
+    protected String frameFtFontAttrs = "face='tahoma,arial,helvetica' size=2 color='#000000'";
+    protected String bannerRowAttrs = "bgcolor='#EEEEEE'";
     protected String bannerItemFontAttrs = "face='arial,helvetica' size=2";
-    protected String dataHdFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
-    protected String dataFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;'";
-    protected String dataFtFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
+    protected String dataHdRowAttrs = "bgcolor='#EEEEEE'";
+    protected String dataHdCellAttrs = "style='border-bottom: 2px solid #999999'";
+    protected String dataHdFontAttrs = "face='tahoma,arial' size='2' style='font-size: 8pt;' color='navy'";
+    protected String dataEvenRowAttrs = "bgcolor='#EEEEEE'";
+    protected String dataOddRowAttrs = "bgcolor='#FFFFFF'";
+    protected String dataFontAttrs = "face='tahoma,arial' size='2' style='font-size: 8pt;'";
+    protected String dataFtRowAttrs = "bgcolor='#EEEEEE'";
+    protected String dataFtFontAttrs = "face='tahoma,arial' size='2' style='font-size: 8pt;' color='navy'";
     protected String rowSepImgSrc = "/shared/resources/images/design/bar.gif";
     protected String sortAscImgSrc = "/shared/resources/images/navigate/triangle-up-blue.gif";
     protected String sortDescImgSrc = "/shared/resources/images/navigate/triangle-down-lblue.gif";
@@ -143,10 +153,11 @@ public class HtmlReportSkin implements ReportSkin
         ReportFrame frame = rc.getReport().getFrame();
         ReportBanner banner = rc.getReport().getBanner();
 
+        writer.write("<table cellspacing=0 cellpadding=0><tr><td>");
+
         boolean haveOuterTable = (frame != null || banner != null);
         if(haveOuterTable)
         {
-            writer.write("<table " + outerTableAttrs + ">");
             if(frame != null)
             {
                 String heading = null;
@@ -154,9 +165,20 @@ public class HtmlReportSkin implements ReportSkin
                 if(hvs != null)
                     heading = hvs.getValue(rc);
 
-                writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdRowAttrs + "><font " + frameHdFontAttrs + "><b>" + heading + "</b></font></td></tr>");
+                SingleValueSource hevs = frame.getHeadingExtra();
+                String headingExtra = hevs != null ? hevs.getValue(rc) : null;
+                if(headingExtra == null) headingExtra = "&nbsp;";
+
+                String frameHdTabImgSrc = frameHdTabImgSrcValueSource.getValue(rc);
+                String frameHdSpacerImgSrc = frameHdSpacerImgSrcValueSource.getValue(rc);
+
+                writer.write("<table cellspacing=0 cellpadding=0 width='100%'>");
+                writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
+                writer.write("<tr " + frameHdRowSpacerAttrs +"><td colspan=3><img src='"+ frameHdSpacerImgSrc +"' height=2></td></tr>");
+                writer.write("</table>");
             }
 
+            writer.write("<table " + outerTableAttrs + ">");
             if(banner != null)
             {
                 writer.write("<tr " + bannerRowAttrs + "><td>");
@@ -214,6 +236,7 @@ public class HtmlReportSkin implements ReportSkin
             writer.write("</table>");
         }
 
+        writer.write("</table>");
         com.netspective.sparx.util.log.LogManager.recordAccess((javax.servlet.http.HttpServletRequest) rc.getRequest(), null, this.getClass().getName(), rc.getLogId(), startTime);
     }
 
@@ -246,7 +269,7 @@ public class HtmlReportSkin implements ReportSkin
         String sortAscImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-ascending-img-src", getSortAscImgSrc()) + "\" border=0>";
         String sortDescImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
 
-        writer.write("<tr bgcolor=" + frameHdTableRowBgcolorAttrs + "><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+        writer.write("<tr " + dataHdRowAttrs + "><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         if(headings == null)
         {
             for(int i = 0; i < dataColsCount; i++)
@@ -265,7 +288,7 @@ public class HtmlReportSkin implements ReportSkin
                 if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_DESCENDING))
                     colHeading += sortDescImgTag;
 
-                writer.write("<td><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
             }
         }
         else
@@ -289,14 +312,16 @@ public class HtmlReportSkin implements ReportSkin
                     if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_DESCENDING))
                         colHeading += sortDescImgTag;
 
-                    writer.write("<td><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                    writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
                 }
                 else
-                    writer.write("<td><font " + dataHdFontAttrs + "></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                    writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + "></font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
             }
         }
+        /*
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='2' width='100%'></td></tr>");
+        */
     }
 
     public void produceHeadingRow(Writer writer, ReportContext rc, ResultSet rs) throws IOException, SQLException
@@ -313,7 +338,7 @@ public class HtmlReportSkin implements ReportSkin
         String sortAscImgTag = "<img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-ascending-img-src", getSortAscImgSrc()) + "\" border=0>";
         String sortDescImgTag = "<img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
 
-        writer.write("<tr bgcolor=" + frameHdTableRowBgcolorAttrs + "><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+        writer.write("<tr " + dataHdRowAttrs + "><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         for(int i = 0; i < dataColsCount; i++)
         {
             ReportColumn rcd = columns.getColumn(i);
@@ -333,10 +358,10 @@ public class HtmlReportSkin implements ReportSkin
                 if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_DESCENDING))
                     colHeading += sortDescImgTag;
 
-                writer.write("<td><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
             }
             else
-                writer.write("<td><font " + dataHdFontAttrs + "></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='2' width='100%'></td></tr>");
@@ -367,6 +392,7 @@ public class HtmlReportSkin implements ReportSkin
 
         ResultSetMetaData rsmd = rs.getMetaData();
         int resultSetColsCount = rsmd.getColumnCount();
+        boolean isOddRow = false;
 
         while(rs.next())
         {
@@ -378,10 +404,13 @@ public class HtmlReportSkin implements ReportSkin
             for(int i = 1; i <= resultSetColsCount; i++)
                 rowData[i - 1] = rs.getObject(i);
 
-            writer.write("<tr><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
+            isOddRow = ! isOddRow;
+            int rowNum = rs.getRow();
+
+            writer.write("<tr "+ (isOddRow ? dataOddRowAttrs : dataEvenRowAttrs) +"><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
             for(int i = 0; i < dataColsCount; i++)
             {
-                int rowNum = rs.getRow();
+
                 ReportColumn column = columns.getColumn(i);
                 ReportContext.ColumnState state = states[i];
 
@@ -530,7 +559,7 @@ public class HtmlReportSkin implements ReportSkin
             String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='1' width='100%'></td></tr>");
         }
-        writer.write("<tr bgcolor='lightyellow'><td><font " + dataFtFontAttrs + ">&nbsp;&nbsp;</font></td>");
+        writer.write("<tr "+ dataFtRowAttrs +"><td><font " + dataFtFontAttrs + ">&nbsp;&nbsp;</font></td>");
         for(int i = 0; i < dataColsCount; i++)
         {
             ReportColumn column = columns.getColumn(i);
@@ -580,16 +609,6 @@ public class HtmlReportSkin implements ReportSkin
     public void setFrameHdFontAttrs(String frameHdFontAttrs)
     {
         this.frameHdFontAttrs = frameHdFontAttrs;
-    }
-
-    public String getFrameHdTableRowBgcolorAttrs()
-    {
-        return frameHdTableRowBgcolorAttrs;
-    }
-
-    public void setFrameHdTableRowBgcolorAttrs(String frameHdTableRowBgcolorAttrs)
-    {
-        this.frameHdTableRowBgcolorAttrs = frameHdTableRowBgcolorAttrs;
     }
 
     public String getFrameFtRowAttrs()

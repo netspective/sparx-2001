@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.2 2002-02-17 14:07:31 snshah Exp $
+ * $Id: StandardDialogSkin.java,v 1.3 2002-08-24 05:36:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -82,14 +82,16 @@ import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.field.GridField;
 import com.netspective.sparx.xaf.form.field.SeparatorField;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.log.LogManager;
 
 public class StandardDialogSkin implements DialogSkin
 {
-    public final String FIELDROW_PREFIX = "_dfr.";
-    public final String GRIDHEADROW_PREFIX = "_dghr.";
-    public final String GRIDFIELDROW_PREFIX = "_dgfr.";
-    public final String EMPTY = "";
+    static public final String FIELDROW_PREFIX = "_dfr.";
+    static public final String GRIDHEADROW_PREFIX = "_dghr.";
+    static public final String GRIDFIELDROW_PREFIX = "_dgfr.";
+    static public final String EMPTY = "";
 
+    protected boolean summarizeErrors;
     protected String outerTableAttrs;
     protected String innerTableAttrs;
     protected String frameHdRowAlign;
@@ -125,21 +127,22 @@ public class StandardDialogSkin implements DialogSkin
 
     public StandardDialogSkin()
     {
+        summarizeErrors = true;
         outerTableAttrs = "cellspacing='1' cellpadding='0' bgcolor='#6699CC' ";
-        innerTableAttrs = "cellspacing='0' cellpadding='4' bgcolor='lightyellow' ";
+        innerTableAttrs = "cellspacing='0' cellpadding='4' bgcolor='#EEEEEE' ";
         frameHdRowAlign = "LEFT";
         frameHdRowAttrs = "bgcolor='#6699CC' ";
-        frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='yellow' ";
+        frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='white' style='font-size:8pt' ";
         errorMsgHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='darkred'";
         errorMsgHdText = "Please review the following:";
         fieldRowAttrs = "";
-        fieldRowErrorAttrs = "bgcolor='beige' ";
+        fieldRowErrorAttrs = "bgcolor='#DDDDDD' ";
         captionCellAttrs = "align='right' ";
         captionFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
         gridCellAttrs = "align='center'";
         gridTableAttrs = "cellpadding='2' cellspacing='0' border='0'";
-        gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
-        gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
+        gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
+        gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
         gridCaptionCellAttrs = "align='center'";
         controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
         controlAreaStyleAttrs = "style=\"background-color: lightyellow\"";
@@ -174,7 +177,9 @@ public class StandardDialogSkin implements DialogSkin
             Node firstChild = node.getFirstChild();
             String nodeText = firstChild != null ? firstChild.getNodeValue() : null;
 
-            if(nodeName.equals("outer-table-attrs") && nodeText != null)
+            if(nodeName.equals("summary-errors") && nodeText != null)
+                summarizeErrors = nodeText.equals("yes");
+            else if(nodeName.equals("outer-table-attrs") && nodeText != null)
                 outerTableAttrs = nodeText;
             else if(nodeName.equals("inner-table-attrs") && nodeText != null)
                 innerTableAttrs = nodeText;
@@ -598,7 +603,6 @@ public class StandardDialogSkin implements DialogSkin
             fieldErrorMsgs.addAll(dlgErrorMsgs);
 
         Dialog dialog = dc.getDialog();
-        String dialogName = dialog.getName();
 
         int layoutColumnsCount = dialog.getLayoutColumnsCount();
         int dlgTableColSpan = 2;
@@ -675,18 +679,6 @@ public class StandardDialogSkin implements DialogSkin
             }
         }
 
-        String heading = null;
-        SingleValueSource headingVS = dialog.getHeading();
-        if(headingVS != null)
-            heading = headingVS.getValue(dc);
-
-        String actionURL = null;
-        if(director != null)
-            actionURL = director.getSubmitActionUrl() != null ?director.getSubmitActionUrl().getValue(dc) : null;
-
-        if(actionURL == null)
-            actionURL = ((HttpServletRequest) dc.getRequest()).getRequestURI();
-
         Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
         String sharedScriptsUrl = appConfig.getTextValue(dc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "scripts-url");
 
@@ -702,51 +694,93 @@ public class StandardDialogSkin implements DialogSkin
             errorMsgsHtml.append("</ul></td></tr>\n");
         }
         String dialogIncludeJS = (dialog.getIncludeJSFile() != null ? dialog.getIncludeJSFile().getValue(dc) : null);
-        String encType = dialog.flagIsSet(Dialog.DLGFLAG_ENCTYPE_MULTIPART_FORMDATA) ? "enctype=\"multipart/form-data\"" : "";
-        String html =
-                (includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
-                "<link rel='stylesheet' href='" + appConfig.getTextValue(dc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "css-url") + "/dialog.css'>\n" +
-                (includePostStyleSheets != null ? includePostStyleSheets : EMPTY) +
-                (prependPreScript != null ? prependPreScript : EMPTY) +
-                "<script language='JavaScript'>var _version = 1.0;</script>\n" +
-                "<script language='JavaScript1.1'>_version = 1.1;</script>\n" +
-                "<script language='JavaScript1.2'>_version = 1.2;</script>\n" +
-                "<script language='JavaScript1.3'>_version = 1.3;</script>\n" +
-                "<script language='JavaScript1.4'>_version = 1.4;</script>\n" +
-                (includePreScripts != null ? includePreScripts : EMPTY) +
-                "<script src='" + sharedScriptsUrl + "/popup.js' language='JavaScript1.1'></script>\n" +
-                "<script src='" + sharedScriptsUrl + "/dialog.js' language='JavaScript1.2'></script>\n" +
+
+        if(includePreStyleSheets != null)
+            writer.write(includePreStyleSheets);
+        writer.write("<link rel='stylesheet' href='" + appConfig.getTextValue(dc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "css-url") + "/dialog.css'>\n");
+        if(includePostStyleSheets != null)
+            writer.write(includePostStyleSheets);
+        if(prependPreScript != null)
+            writer.write(prependPreScript);
+        writer.write(
+            "<script language='JavaScript'>var _version = 1.0;</script>\n" +
+            "<script language='JavaScript1.1'>_version = 1.1;</script>\n" +
+            "<script language='JavaScript1.2'>_version = 1.2;</script>\n" +
+            "<script language='JavaScript1.3'>_version = 1.3;</script>\n" +
+            "<script language='JavaScript1.4'>_version = 1.4;</script>\n");
+        if(includePreScripts != null)
+            writer.write(includePreScripts);
+
+        writer.write("<script src='" + sharedScriptsUrl + "/popup.js' language='JavaScript1.1'></script>\n");
+        writer.write("<script src='" + sharedScriptsUrl + "/dialog.js' language='JavaScript1.2'></script>\n");
+
+        writer.write(
                 "<script language='JavaScript'>\n" +
                 "	if(typeof dialogLibraryLoaded == 'undefined')\n" +
                 "	{\n" +
                 "		alert('ERROR: " + sharedScriptsUrl + "/dialog.js could not be loaded');\n" +
                 "	}\n" +
-                "</script>\n" +
-                (dialogIncludeJS != null ? "<script language='JavaScript' src='" + dialogIncludeJS + "'></script>\n" : EMPTY) +
-                (includePostScripts != null ? includePostScripts : EMPTY) +
-                (prependPostScript != null ? prependPostScript : EMPTY) +
-                "<table " + outerTableAttrs + ">\n" +
-                "<tr><td><table " + innerTableAttrs + ">" +
-                (heading == null ? "" :
-                "<tr " + frameHdRowAttrs + "><td colspan='" + dlgTableColSpan + "' align='" + frameHdRowAlign + "'><font " + frameHdFontAttrs + "><b>" + heading + "</b></font></td></tr>\n") +
-                errorMsgsHtml +
-                "<form id='" + dialogName + "' name='" + dialogName + "' action='" + actionURL + "' method='post' " + encType + " onsubmit='return(activeDialog.isValid())'>\n" +
-                dc.getStateHiddens() + "\n" +
-                fieldsHtml +
-                "</form>\n" +
-                "</table></td></tr></table>" +
-                (appendPreScript != null ? appendPreScript : EMPTY) +
+                "</script>\n");
+
+        if(dialogIncludeJS != null)
+            writer.write("<script language='JavaScript' src='" + dialogIncludeJS + "'></script>\n");
+        if(includePostScripts != null)
+            writer.write(includePostScripts);
+        if(prependPostScript != null)
+            writer.write(prependPostScript);
+
+        String dialogName = dialog.getName();
+
+        String encType = dialog.flagIsSet(Dialog.DLGFLAG_ENCTYPE_MULTIPART_FORMDATA) ? "enctype=\"multipart/form-data\"" : "";
+        String heading = null;
+        SingleValueSource headingVS = dialog.getHeading();
+        if(headingVS != null)
+            heading = headingVS.getValue(dc);
+
+        String actionURL = null;
+        if(director != null)
+            actionURL = director.getSubmitActionUrl() != null ? director.getSubmitActionUrl().getValue(dc) : null;
+
+        if(actionURL == null)
+            actionURL = ((HttpServletRequest) dc.getRequest()).getRequestURI();
+
+        renderContentsHtml(writer, dc, appConfig, dialogName, actionURL, encType, heading, dlgTableColSpan, errorMsgsHtml, fieldsHtml);
+
+        if(appendPreScript != null)
+            writer.write(appendPreScript);
+
+        writer.write(
                 "<script language='JavaScript'>\n" +
                 "       var " + dialogName + " = new Dialog(\"" + dialogName + "\");\n" +
                 "       var dialog = " + dialogName + "; setActiveDialog(dialog);\n" +
                 "       var field;\n" +
                 fieldsJSDefn +
                 "       dialog.finalizeContents();\n" +
-                "</script>\n" +
-                (appendPostScript != null ? appendPostScript : EMPTY);
+                "</script>\n");
 
-        com.netspective.sparx.util.log.LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getLogId(), startTime);
-        writer.write(html);
+        if(appendPostScript != null)
+            writer.write(appendPostScript);
+
+        LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getLogId(), startTime);
+    }
+
+    public void renderContentsHtml(Writer writer, DialogContext dc, Configuration appConfig, String dialogName, String actionURL, String encType, String heading, int dlgTableColSpan, StringBuffer errorMsgsHtml, StringBuffer fieldsHtml) throws IOException
+    {
+        writer.write(
+                "<table " + outerTableAttrs + ">\n" +
+                "<tr><td><table " + innerTableAttrs + ">" +
+                (heading == null ? "" :
+                "<tr " + frameHdRowAttrs + "><td colspan='" + dlgTableColSpan + "' align='" + frameHdRowAlign + "'><font " + frameHdFontAttrs + "><b>" + heading + "</b></font></td></tr>\n"));
+
+        if(summarizeErrors)
+            writer.write(errorMsgsHtml.toString());
+
+        writer.write(
+                "<form id='" + dialogName + "' name='" + dialogName + "' action='" + actionURL + "' method='post' " + encType + " onsubmit='return(activeDialog.isValid())'>\n" +
+                dc.getStateHiddens() + "\n" +
+                fieldsHtml +
+                "</form>\n" +
+                "</table></td></tr></table>");
     }
 
     public void renderSeparatorHtml(Writer writer, DialogContext dc, SeparatorField field) throws IOException
@@ -769,6 +803,16 @@ public class StandardDialogSkin implements DialogSkin
             if(! field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
                 writer.write(field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE) ? "<br>" : "<hr size=1 color=silver>");
         }
+    }
+
+    public boolean isSummarizeErrors()
+    {
+        return summarizeErrors;
+    }
+
+    public void setSummarizeErrors(boolean summarizeErrors)
+    {
+        this.summarizeErrors = summarizeErrors;
     }
 
     public String getOuterTableAttrs()
