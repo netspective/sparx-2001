@@ -202,5 +202,9 @@
             <name>skin</name>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+            <attribute>
+                <name>reportSkin</name>
+                <rtexprvalue>true</rtexprvalue>
+            </attribute>
         </tag>
 </taglib>
