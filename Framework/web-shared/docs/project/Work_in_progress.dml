@@ -12,6 +12,8 @@
 
 		<task>
 			<name>ACE</name>
+			<task><name>Add a dialog that connects to <a href="http://www.clarkware.com/software.html#JWhich">JWhich</a> to show where classes are coming from.</name></task>
+			<task><name>Install <a href="http://www.clarkware.com/software/JDepend.html">JDepend</a> to augment the metrics page with even more data.</name></task>	
 			<task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
 			<task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
 			<task><name>SchemaDoc (XML) area of ACE needs to be color-coordinated with remainder of ACE.</name></task>
@@ -24,7 +26,7 @@
 
 		<task>
 			<name>User Interface Management</name>
-            <task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
+            		<task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
 			<task><name>Optimize performance of DialogSkin by using Writer instead of String for HTML generation (like in ReportSkin).</name></task>
 			<task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
 			<task><name>Add ability to auto-generate "form bean" java classes from Dialog XML (at runtime).</name></task>
