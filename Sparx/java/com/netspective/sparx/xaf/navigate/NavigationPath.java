@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.8 2003-01-22 06:30:22 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.9 2003-01-24 04:35:50 erich.oliphant Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -156,7 +156,7 @@ public class NavigationPath
         /**
          * Returns the <code>NavigationPath</code> object which id matched the requested path, or there was an absolute path
          * registered with the string as its id.
-         * @return
+         * @return NavigationPath
          */
         public NavigationPath getMatchedPath()
         {
@@ -165,7 +165,7 @@ public class NavigationPath
 
         /**
          * Returns a String array that contains the portions of the path that could not be matched.
-         * @return
+         * @return String[]  Array of unmatched path items
          */
         public String[] unmatchedPathItems()
         {
@@ -173,8 +173,8 @@ public class NavigationPath
         }
 
         /**
-         * Returns a concatenatted String of all of the elements of unmatchedPathItems with a "/" as a path separator.
-         * @return
+         * Returns a concatenated String of all of the elements of unmatchedPathItems with a "/" as a path separator.
+         * @return String  Full unmatched path
          */
         public String getUnmatchedPath()
         {
@@ -448,7 +448,7 @@ public class NavigationPath
 
     /**
      * A method that returns the default class used to represent a path available.
-     * @return
+     * @return Class Default class of the avaiable path
      */
     public Class getChildPathClass()
     {
@@ -457,8 +457,8 @@ public class NavigationPath
 
     /**
      * A method that returns the object to represent a new path.
-     * This method can be overwritten to allow the placement of other objects of type <code>NavigationPath</code>.
-     * @return
+     * This method can be overridden to allow the placement of other objects of type <code>NavigationPath</code>.
+     * @return NavigationPath
      */
     public NavigationPath createChildPathInstance()
     {
@@ -746,7 +746,7 @@ public class NavigationPath
     /**
      * A method that returns the object to represent every path available.
      * This method can be overwritten to allow the placement of other objects of type <code>NavigationPath</code>.
-     * @return
+     * @return NavigationPath
      */
     public NavigationPath getChildPathInstance(String name)
     {
@@ -756,7 +756,7 @@ public class NavigationPath
     /**
      * A String that represents the Id of the default child.  This property is relevant when trying to determine which
      * elements are part of the active path when the current element is not a leaf of the tree.
-     * @return
+     * @return String 
      */
     public String getDefaultChildId()
     {
@@ -777,7 +777,7 @@ public class NavigationPath
      * A ValueSource that represents what the URL of the element should be.  Unlike VIrtualPath, where its Id is the
      * URL that get rendered with the element, a NavigationPath's Id is simply to uniquely identify an element on the
      * tree.  If a url is not provided, the id is used for the url.
-     * @return
+     * @return SingleValueSource
      */
     public SingleValueSource getUrl()
     {
@@ -789,7 +789,7 @@ public class NavigationPath
      * URL that get rendered with the element, a NavigationPath's Id is simply to uniquely identify an element on the
      * tree.  If a url is not provided, the id is used for the url.
      * @param  vc  An object of type ValueContext to enable us to get the value from a ValueSource.
-     * @return
+     * @return String
      */
     public String getUrl(ValueContext vc)
     {
@@ -829,7 +829,7 @@ public class NavigationPath
      * A List that represents all of the ancestors of the current object.  This list is initialized by getting a
      * reference to the parents until the method getParent() returns null.  This List is relevant when determining what
      * elements to render on levels above the active path.
-     * @return
+     * @return List
      */
     public List getAncestorsList()
     {
@@ -838,7 +838,7 @@ public class NavigationPath
 
     /**
      * Get the number of ancestors (parents) we have
-     * @return
+     * @return int
      */
     public int getAncestorsCount()
     {
@@ -860,7 +860,7 @@ public class NavigationPath
      * A Map that represents all of the ancestors of the current object.  This list is initialized by getting a
      * reference to the parents until the method getParent() returns null.  This Map is relevant when determining what
      * elements to render on levels above the active path.
-     * @return
+     * @return Map
      */
     public Map getAncestorMap()
     {

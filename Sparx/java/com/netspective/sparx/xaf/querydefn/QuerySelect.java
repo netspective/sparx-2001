@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.10 2002-12-23 23:08:03 aye.thu Exp $
+ * $Id: QuerySelect.java,v 1.11 2003-01-24 04:35:51 erich.oliphant Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -503,7 +503,7 @@ public class QuerySelect
 
     /**
      * Create a report
-     * @return
+     * @return Report
      */
     public Report createReport()
     {

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Column.java,v 1.6 2003-01-08 06:39:37 shahbaz.javeed Exp $
+ * $Id: Column.java,v 1.7 2003-01-24 04:35:51 erich.oliphant Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -86,7 +86,7 @@ public interface Column
     public Object getValueForSqlBindParam(Object value);
 
     /**
-     * Returns the name of the column suitable for use as an XML node name (e.g. abc_def becomes abc-def)
+     * Returns the name of the column suitable for use as an XML node name (abc_def becomes abc-def)
      */
     public String getXmlNodeName();
 
