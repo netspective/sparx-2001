@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
+$Id: build.xml,v 1.7 2002-09-30 03:29:23 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -113,12 +113,18 @@ $Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
         <property name="java.dal.stylesheet.root.dir" value="${config.sparx.shared.xslt-path}/schema-gen/java-gen"/>
 
         <property name="app.javadoc.root.dir" value="${config.app.documents-root-path}/javadoc"/>
+        <property name="app.java.identifiers-pkg" value="id"/>
+        <property name="app.java.identifiers-pkg.root-path" value="${app.classes.dir}"/>
+        <property name="app.java.identifiers.doc.dir" value="${app.javadoc.root.dir}/identifiers"/>
+        
+        <property name="app.java.identifiers.config-props.class-name" value="${app.java.identifiers-pkg}.Config"/>
 
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
         <property name="app.java.dal.jar.name" value="${app.name}-dal.jar"/>
         <property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
         <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.java.dal.jar.name}"/>
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
+        <property name="app.java.identifiers.dialogs.class-name" value="${app.java.identifiers-pkg}.Dialog"/>
 
         <available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
         <property name="app.java.dcb.jar.name" value="${app.name}-dcb.jar"/>
@@ -126,6 +132,12 @@ $Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
         <property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
         <property name="app.java.dcb.jar" value="${app.java.dcb.dir}/${app.java.dcb.jar.name}"/>
         <property name="app.java.dcb.doc.dir" value="${app.javadoc.root.dir}/dcb"/>
+
+        <available file="${config.app.sql.source-file}" property="app.sql.source-file-exists"/>
+        <property name="app.java.identifiers.statements.class-name" value="${app.java.identifiers-pkg}.Statement"/>
+
+        <available file="${config.app.security.acl-file}" property="app.security.acl-file-exists"/>
+        <property name="app.java.identifiers.acl.class-name" value="${app.java.identifiers-pkg}.ACL"/>
 
         <available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
 
@@ -322,7 +334,7 @@ $Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
 
     <target name="dal-doc" depends="dal" if="app.schema.source-file-exists">
         <mkdir dir="${app.java.dal.doc.dir}" />
-        <javadoc packagenames="dal.*,com.netspective.sparx.xif.db.*,com.netspective.sparx.xif.dal.*,com.netspective.sparx.xaf.form.DialogContext,com.netspective.sparx.xaf.sql.DmlStatement"
+        <javadoc packagenames="app.dal.*,com.netspective.sparx.xif.db.*,com.netspective.sparx.xif.dal.*,com.netspective.sparx.xaf.form.DialogContext,com.netspective.sparx.xaf.sql.DmlStatement"
              destdir="${app.java.dal.doc.dir}"
              classpathref="project.class.path"
              author="true"
@@ -380,6 +392,58 @@ $Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
     </target>
 
     <!--
+    ============================= Generate Identifiers Classes ================================
+    -->
+
+    <target name="identifiers-setup" depends="init">
+        <taskdef name="dids" classname="com.netspective.sparx.util.ant.GenerateDialogsIdentifiersClassTask" classpathref="project.class.path">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*-dal.jar"/>
+                    <include name="*-dcb.jar"/>
+                </fileset>
+            </classpath>
+        </taskdef>
+        <taskdef name="sids" classname="com.netspective.sparx.util.ant.GenerateStatementsIdentifiersClassTask" classpathref="project.class.path"/>
+        <taskdef name="cids" classname="com.netspective.sparx.util.ant.GenerateConfigIdentifiersClassTask" classpathref="project.class.path"/>
+        <taskdef name="aids" classname="com.netspective.sparx.util.ant.GenerateAccessControlIdentifiersClassTask" classpathref="project.class.path"/>
+    </target>
+
+    <target name="dialogs-ids" depends="init" if="app.ui.source-file-exists">
+        <dids source="${config.app.ui.source-file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.dialogs.class-name}" debug="no"/>
+    </target>
+
+    <target name="statements-ids" depends="init" if="app.sql.source-file-exists">
+        <sids source="${config.app.sql.source-file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.statements.class-name}" debug="no"/>
+    </target>
+
+    <target name="acl-ids" depends="init" if="app.security.acl-file-exists">
+        <aids source="${config.app.security.acl-file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.acl.class-name}" debug="no"/>
+    </target>
+
+    <target name="identifiers" depends="identifiers-setup,dialogs-ids,statements-ids,acl-ids">
+        <cids source="${app.config.file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.config-props.class-name}" debug="no"/>
+    </target>
+
+    <target name="identifiers-doc" depends="identifiers">
+        <mkdir dir="${app.java.identifiers.doc.dir}"/>
+        <javadoc 
+             packagenames="${app.java.identifiers-pkg}.*"
+             destdir="${app.java.identifiers.doc.dir}"
+             classpathref="project.class.path"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="Application Identifiers API"
+             doctitle="Application Identifiers API Documentation"
+             bottom="Copyright &#169; 2002 Netspective. All Rights Reserved.">
+            <sourcepath>
+                <pathelement path="${app.java.identifiers-pkg.root-path}"/>
+            </sourcepath>
+        </javadoc>
+    </target>
+
+    <!--
     ============================= Clean Items ==================================
     * Dispose of all *.class files in WEB-INF/classes directory to
       force an automatic recompile
@@ -406,7 +470,7 @@ $Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
     </target>
 
     <!-- =============================== Help =============================== -->
-    <target name="all" depends="init,clean,dal,dcb,compile,dal-doc,dcb-doc">
+    <target name="all" depends="init,clean,dal,dcb,compile,dal-doc,dcb-doc,identifiers,identifiers-doc">
         <echo message="Complete"/>
     </target>
 
@@ -427,11 +491,13 @@ $Id: build.xml,v 1.6 2002-09-16 03:05:37 shahid.shah Exp $
         <echo message="                  latest version available in SPARX_HOME (basically runs these"/>
         <echo message="                  two targets: copy-sparx-libs and copy-sparx-resources"/>
         <echo message="  "/>
-        <echo message="  compile      Compile all the classes in the WEB-INF/classes directory"/>
-        <echo message="  dal          Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
-        <echo message="  dal-doc      Generate the Data Access Layer (DAL) API Documentation"/>
-        <echo message="  dcb          Generate the Dialog Context Beans from Dialogs (XML)"/>
-        <echo message="  dcb-doc      Generate the Dialog Context Beans API Documentation"/>
+        <echo message="  compile         Compile all the classes in the WEB-INF/classes directory"/>
+        <echo message="  dal             Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
+        <echo message="  dal-doc         Generate the Data Access Layer (DAL) API Documentation"/>
+        <echo message="  dcb             Generate the Dialog Context Beans from Dialogs (XML)"/>
+        <echo message="  dcb-doc         Generate the Dialog Context Beans API Documentation"/>
+        <echo message="  identifiers     Generate the Identifiers for Dialogs, Statements, Configs, etc."/>
+        <echo message="  identifiers-doc Generate the Identifiers API Documentation"/>
         <echo message="  "/>
         <echo message="  copy-sparx-libs  Copy all the applicable Sparx libraries into the"/>
         <echo message="                   application"/>
