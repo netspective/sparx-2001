@@ -66,6 +66,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 	private int validationStage;
 	private String originalReferer;
 	private DatabaseContext dbContext;
+	private boolean executeHandled;
 
 	public DialogContext(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
 	{
@@ -242,6 +243,9 @@ public final class DialogContext extends Hashtable implements ValueContext
 	public boolean validationPerformed() { return validationStage != VALSTAGE_NOT_PERFORMED ? true : false; }
 	public int getValidationStage() { return validationStage; }
 	public void setValidationStage(int value) { validationStage = value; }
+
+	public boolean executeStageHandled() { return executeHandled; }
+	public void setExecuteStageHandled(boolean value) { executeHandled = value; }
 
 	public String getStateHiddens()
 	{

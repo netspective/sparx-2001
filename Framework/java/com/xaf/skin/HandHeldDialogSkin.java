@@ -202,7 +202,7 @@ public class HandHeldDialogSkin implements DialogSkin
 		if(headingVS != null)
 		    heading = headingVS.getValue(dc);
 
-		String actionURL = dialog.getActionURL();
+		String actionURL = director != null ? director.getSubmitActionUrl() : null;
 		if(actionURL == null)
 			actionURL = ((HttpServletRequest) dc.getRequest()).getRequestURI();
 

@@ -96,18 +96,22 @@ public class DialogTag extends TagSupport
 			// there are no listeners attached and there are no execut tasks then
 			// we will handle the "execute" portion in the JSP unless listeners
 			// are attached
-			if(dc.inExecuteMode() && dc.getListeners().size() == 0 &&
-				dc.getDialog().getExecuteTasks() == null &&
-				"com.xaf.form.Dialog".equals(dialog.getClass().getName()))
+			if(dc.inExecuteMode())
 			{
-				// these two attributes are set because they are defined by
-				// the DialogTagTEI so that the nested body (the "execute" portion
-				// of the dialog) has full access to the dialog that was created
-				// as well as the context it's running in
+				dialog.execute(dc);
+				if(! dc.executeStageHandled())
+				{
+					// these two attributes are set because they are defined by
+					// the DialogTagTEI so that the nested body (the "execute" portion
+					// of the dialog) has full access to the dialog that was created
+					// as well as the context it's running in
 
-				pageContext.setAttribute("dialog", dialog);
-				pageContext.setAttribute("dialogContext", dc);
-				return EVAL_BODY_INCLUDE;
+					pageContext.setAttribute("dialog", dialog);
+					pageContext.setAttribute("dialogContext", dc);
+					return EVAL_BODY_INCLUDE;
+				}
+				else
+					return SKIP_BODY;
 			}
 			else
 			{

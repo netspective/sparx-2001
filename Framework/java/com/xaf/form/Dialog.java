@@ -59,9 +59,6 @@ public class Dialog
 	public void setHeading(String value) { heading = ValueSourceFactory.getSingleOrStaticValueSource(value); }
 	public void setHeading(SingleValueSource vs) { heading = vs; }
 
-	public String getActionURL() { return actionURL; }
-	public void setActionURL(String newURL) { actionURL = newURL; }
-
 	public final boolean loopEntries() { return loopDataEntry; }
 	public final void setLoopEntries(boolean value) { loopDataEntry = value; }
 	public final boolean appendAfterLoop() { return appendWhenLooping; }
@@ -110,8 +107,8 @@ public class Dialog
 			setHeading(headingVS);
 
 		String loop = elem.getAttribute("loop");
-		if(loop.equals("yes"))
-			loopDataEntry = true;
+		if(loop.equals("no"))
+			loopDataEntry = false;
 
 		if(director == null)
 			director = new DialogDirector();
@@ -262,6 +259,7 @@ public class Dialog
 	{
         if(executeTasks != null && executeTasks.length > 0)
         {
+			dc.setExecuteStageHandled(true);
 			TaskContext tc = new TaskContext(dc);
 
 			try
@@ -354,6 +352,14 @@ public class Dialog
 	public boolean needsValidation(DialogContext dc)
 	{
 		int validateFieldsCount = 0;
+
+		List listeners = dc.getListeners();
+		for(int l = 0; l < listeners.size(); l++)
+		{
+			if(((DialogContextListener) listeners.get(l)).dialogNeedsValidation(dc))
+				validateFieldsCount++;
+		}
+
 		Iterator i = fields.iterator();
 		while(i.hasNext())
 		{

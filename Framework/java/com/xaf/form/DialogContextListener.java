@@ -16,6 +16,11 @@ public interface DialogContextListener extends EventListener
 	public void makeDialogContextChanges(DialogContext dc, int stage);
 
     /**
+     *  Fired when the dialog needs to check if data <i>should</i> be validated
+     */
+	public boolean dialogNeedsValidation(DialogContext dc);
+
+    /**
      *  Fired when the dialog needs to check validity of data, <b>before</b> the dialog
 	 *  has performed its own validation.
      */
@@ -23,6 +28,7 @@ public interface DialogContextListener extends EventListener
 
     /**
      *  Fired when the execute method is about to be called (after validation is performed).
+	 *  If the execute <i>is</i> handled, then be sure to call dc.setExecuteStageHandled(true);
      */
 	public String executeDialog(DialogContext dc);
 }

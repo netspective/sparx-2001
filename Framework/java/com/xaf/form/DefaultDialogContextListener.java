@@ -27,6 +27,14 @@ public class DefaultDialogContextListener implements DialogContextListener
 	}
 
     /**
+     *  Fired when the dialog needs to check if data <i>should</i> be validated
+     */
+	public boolean dialogNeedsValidation(DialogContext dc)
+	{
+		return false;
+	}
+
+    /**
      *  Fired when the dialog needs to check validity of data, <b>before</b> the dialog
 	 *  has performed its own validation.
      */
@@ -37,6 +45,7 @@ public class DefaultDialogContextListener implements DialogContextListener
 
     /**
      *  Fired when the execute method is about to be called (after validation is performed).
+	 *  If the execute <i>is</i> handled, then be sure to call dc.setExecuteStageHandled(true);
      */
 	public String executeDialog(DialogContext dc)
 	{
