@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogManager.java,v 1.7 2002-12-23 04:41:14 shahid.shah Exp $
+ * $Id: DialogManager.java,v 1.8 2003-01-06 17:33:57 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -372,6 +372,7 @@ public class DialogManager extends XmlSource
                         if(tableDialogDefinition != null)
                         {
                             Element actualDialog = tableDialogDefinition.createDialogElement(pkgElem, defnElem);
+                            processTemplates(actualDialog);
                             actualDialog.setAttribute("table", matchedTableName);
                             DialogInfo dialogInfo = new DialogInfo(pkgElem.getAttribute("package"), actualDialog, matchedTableName);
                             dialogs.put(dialogInfo.getLookupName(), dialogInfo);
