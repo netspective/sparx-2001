@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ===================================================================
+
+Build file for XAF - for use with the Jakarta Ant java build tool
+
+
+Setup instructions:
+    Before running an Ant build, you must
+     - set the JAVA_HOME environment variable to the JDK root directory
+     - set the RESIN_HOME environment variable to the Resin root directory
+
+Build Instructions:
+   To build, run
+     build.bat (win32) or build.sh (unix) - optionally with a target arg as indicated below -
+   in the directory where this file is located.
+
+Build targets:
+    This build file supports the following targets:
+    - compile   compiles XAF in ../build/classes.
+    - jar       jars XAF classes from ../build/classes into ../lib/xaf.jar.
+    - xaf       creates ../lib/xaf.jar [the default target]
+
+
+Authors:
+    Aye Thu (with minor modifications by Shahid N. Shah)
+
+
+-->
+<project name="XAF" default="xaf" basedir=".">
+
+    <!-- ==================== Initialization properties ===================== -->
+    <property name="ant.home" value="${ant_home}"/>
+    <property name="debug" value="on"/>
+    <property name="optimize" value="true"/>
+    <property environment="env"/>
+    
+    <property name="xerces.jar" value="../3rdparty/xerces.jar" />
+    <property name="xalan.jar" value="../3rdparty/xalan.jar" />
+    
+    <property name="resin.libpath" value="${env.RESIN_HOME}/lib"/>
+    <property name="resin.jar" value="${resin.libpath}/resin.jar"/>
+    <property name="jsdk22.jar" value="${resin.libpath}/jsdk22.jar"/>
+    <property name="dom.jar" value="${resin.libpath}/dom.jar"/>
+    <property name="sax.jar" value="${resin.libpath}/sax.jar"/>
+    <property name="jaxp.jar" value="${resin.libpath}/jaxp.jar"/>
+    <property name="jndi" value="${resin.libpath}/jndi.jar"/>
+    <property name="jdbc-ext" value="${resin.libpath}/jdbc2_0-stdext.jar"/>
+
+    <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext}"/> 
+
+    <property name="name" value="xaf"/>
+    <property name="version" value="1_0"/>
+
+    <property name="build.dir" value="../build"/>
+    <property name="lib.dir" value="../lib"/>
+    <property name="doc.dir" value="../web-shared/docs"/>
+    <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
+
+    <property name="jar.prefix" value="${name}_${version}"/>
+    <property name="lib.jar" value="${jar.prefix}.jar"/>
+    <property name="src.jar" value="${jar.prefix}_src.jar"/>
+    <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
+
+    <!-- ============================= Prepare XAF ========================= -->
+    <target name="prepare">
+        <!-- Create destination directories -->
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${lib.dir}"/>
+    </target>
+    
+    <!-- ============================= Build XAF ========================= -->
+    <target name="compile" depends="prepare">
+
+        <!-- Compile XAF components -->
+        <javac srcdir="." destdir="${build.dir}/classes"
+            classpath="${classpath}"
+            debug="${debug}"
+            optimize="${optimize}"
+            deprecation="off" >
+        </javac>
+
+    </target>
+
+    <!-- ============================= Jar XAF ========================= -->
+    <target name="jar" depends="compile">
+
+        <!-- Create XAF BINARIES JAR file -->
+        <jar jarfile="${lib.dir}/${lib.jar}" basedir="${build.dir}/classes">
+            <include name="com/xaf/**" />
+        </jar>
+
+        <!-- Create XAF SOURCE JAR file -->
+        <jar jarfile="${lib.dir}/${src.jar}" basedir=".">
+            <include name="**" />
+        </jar>
+        
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- ============================= JavaDoc XAF ========================= -->
+    <!-- Add XAF internal javadoc -->
+    <target name="javadoc">
+        <mkdir dir="${javadoc.dir}" />
+        <javadoc packagenames="com.xaf.*"
+             classpath="${classpath}"
+             sourcepath="."
+             destdir="${javadoc.dir}"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="XAF API"
+             doctitle="XAF API Documentation"
+             bottom="Copyright &#169; 2001 Netspective. All Rights Reserved."
+        />
+        <jar jarfile="${lib.dir}/${doc.jar}" basedir="${javadoc.dir}" >
+            <include name="**" />
+        </jar>
+    </target>
+
+    <!-- ==================== Administrative targets  ======================= -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="xaf" depends="clean,compile,jar,javadoc"/>
+
+    <!-- =============================== Help =============================== -->
+    <target name="targets">
+        <echo message=""/>
+        <echo message="ANT build targets for XAF"/>
+        <echo message=""/>
+        <echo message="The following targets are available:"/>
+        <echo message="  xaf                  Clean, compile and then create JAR"/>
+        <echo message="  clean                Clean build and jar directories"/>
+        <echo message="  jar                  Create JAR"/>
+        <echo message="  compile              Compile XAF"/>
+    </target>
+</project>
