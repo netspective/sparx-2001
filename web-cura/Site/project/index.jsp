@@ -5,7 +5,7 @@
 
 <table width='100%' cellpadding='3' cellspacing='0'>
     <%
-    String createUrl = request.getContextPath() + "/project/index.jsp?cmd=dialog,project.registration,add";
+    String createUrl = request.getContextPath() + "/project/create.jsp";
     String searchUrl = "";
     if(request.getParameter("_d_exec") != null)
         searchUrl = request.getContextPath() + "/project/index.jsp";

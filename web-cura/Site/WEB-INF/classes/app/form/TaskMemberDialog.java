@@ -96,8 +96,7 @@ public class TaskMemberDialog   extends Dialog
         try
         {
             String task_id = dc.getRequest().getParameter("task_id");
-            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
-                dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+            ConnectionContext cc =  dc.getConnectionContext();
             String[] personList = (String[])dc.getValues("rel_person_id");
 
             cc.beginTransaction();

@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Iterator;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.io.Writer;
 
 public class ProjectDialog extends Dialog
@@ -97,8 +98,17 @@ public class ProjectDialog extends Dialog
         }
 
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-        String url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id") +
-            "&project_name=" + request.getAttribute("project_name");
+        String url = "";
+        if (request.getParameter("org_id") != null)
+        {
+            url = request.getContextPath() + "/account/home.jsp?org_id=" + request.getParameter("org_id") +
+                "&org_name=" + request.getParameter("org_name");
+        }
+        else
+        {
+            url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id") +
+                "&project_name=" + request.getAttribute("project_name");
+        }
         try
         {
             ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
@@ -153,11 +163,10 @@ public class ProjectDialog extends Dialog
      */
     protected void processEditData(DialogContext dc)
     {
+        ConnectionContext cc = null;
         try
         {
-            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
-                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
-
+            cc =  dc.getConnectionContext();
             cc.beginTransaction();
 
             // the dialog's context is represented by its own custom bean class
@@ -168,7 +177,9 @@ public class ProjectDialog extends Dialog
             projectRow.setProjectName(rc.getProjectName());
             projectRow.setProjectDescr(rc.getProjectDescr());
             projectRow.setProjectStatus(rc.getProjectStatusInt());
-            projectRow.setActualEndDate(new java.sql.Date(rc.getActualEndDate().getTime()));
+            if (rc.getActualEndDate() != null)
+                projectRow.setActualEndDate(new java.sql.Date(rc.getActualEndDate().getTime()));
+
             projectTable.update(cc, projectRow);
 
 			// every project added needs a 'owner' organization
@@ -195,6 +206,17 @@ public class ProjectDialog extends Dialog
         catch (Exception e)
         {
             e.printStackTrace();
+            if (cc != null)
+            {
+                try
+                {
+                    cc.rollbackTransaction();
+                }
+                catch (SQLException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 
@@ -218,8 +240,7 @@ public class ProjectDialog extends Dialog
         long mainProject = 0;
         try
         {
-            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
-                dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+            ConnectionContext cc =  dc.getConnectionContext();
 
 			// begin the transaction
             cc.beginTransaction();
@@ -248,7 +269,10 @@ public class ProjectDialog extends Dialog
             projRelRow.setCrPersonId(personId.longValue());
             projRelRow.setCrStampSqlExpr("sysdate");
             projRelRow.setRelBeginSqlExpr("sysdate");
-            projRelRow.setRelOrgId(Long.parseLong((String)dc.getValue("organization")));
+            if (dc.getValue("org_id") != null && dc.getValue("org_id").length() > 0)
+                projRelRow.setRelOrgId(Long.parseLong((String)dc.getValue("org_id")));
+            else
+                projRelRow.setRelOrgId(new Long((String)session.getAttribute("organization")));
             // assigning a project to person. Relationship not deifned yet so assign the creating user
             // NOTE: relationship types have not been defined yet. Insert dummy value
             projRelRow.setRelType(dal.table.ProjectOrgRelationTypeTable.EnumeratedItem.OWNER);

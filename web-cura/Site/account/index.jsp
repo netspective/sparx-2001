@@ -4,7 +4,7 @@
 <app:page title="Browse Accounts" heading="Browse Accounts">
 <table width='100%' cellpadding='3' cellspacing='0'>
     <%
-    String url = request.getContextPath() + "/account/index.jsp?cmd=dialog,org.registration,add";
+    String url = request.getContextPath() + "/account/create.jsp";
     String searchUrl = "";
     if(request.getParameter("_d_exec") != null)
         searchUrl = request.getContextPath() + "/account/index.jsp";

@@ -4,8 +4,8 @@
 <%
     request.setAttribute("data_cmd", "add");
 %>
-<app:page title="Add Account" heading="Add Account">
+<app:page title="Add Project" heading="Add Project">
 
-	<xaf:dialog name="org.registration"/>
-	
+	<xaf:dialog name="project.registration"/>
+
 </app:page>

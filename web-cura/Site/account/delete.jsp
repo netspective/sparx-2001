@@ -2,9 +2,9 @@
 <%@ taglib prefix="xaf" uri="/WEB-INF/tld/sparx.tld"%>
 
 <%
-    request.setAttribute("data_cmd", "edit");
+    request.setAttribute("data_cmd", "delete");
 %>
-<app:page title="Edit Account" heading="Edit Account">
+<app:page title="Delete Account" heading="Delete Account">
 
 	<xaf:dialog name="org.registration"/>
 
