@@ -46,6 +46,11 @@ abstract public class AbstractTask implements Task
 		}
 	}
 
-	abstract public void initialize(Element elem) throws TaskInitializeException;
+	public void initialize(Element elem) throws TaskInitializeException
+	{
+        if(elem.getAttribute("debug").equals("yes"))
+			setFlag(TASKFLAG_DEBUG);
+	}
+
 	abstract public void execute(TaskContext tc) throws TaskExecuteException;
 }

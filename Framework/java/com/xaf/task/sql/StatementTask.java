@@ -93,6 +93,8 @@ public class StatementTask extends AbstractTask
 
     public void initialize(Element elem) throws TaskInitializeException
     {
+		super.initialize(elem);
+
         stmtSourceId = elem.getAttribute("stmt-src");
         if(stmtSourceId.length() == 0) stmtSourceId = null;
 
@@ -110,9 +112,6 @@ public class StatementTask extends AbstractTask
         {
             stmtName = elem.getAttribute("name");
         }
-
-        if(elem.getAttribute("debug").equals("yes"))
-			setFlag(TASKFLAG_DEBUG);
 
         reportId = elem.getAttribute("report");
         if(reportId.length() == 0) reportId = null;
