@@ -1,9 +1,6 @@
 package com.netspective.sparx.ace.page;
 
-import com.netspective.sparx.xaf.form.Dialog;
-import com.netspective.sparx.xaf.form.DialogField;
-import com.netspective.sparx.xaf.form.DialogDirector;
-import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.*;
 import com.netspective.sparx.xaf.form.field.TextField;
 import com.netspective.sparx.xaf.requirement.RequirementTreeManager;
 import com.netspective.sparx.xaf.requirement.RequirementTreeManagerFactory;
@@ -12,20 +9,21 @@ import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
 import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
 
 import com.netspective.sparx.xaf.page.PageControllerServlet;
+import com.netspective.sparx.xaf.sql.StatementManager;
+import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
 import com.netspective.sparx.ace.AppComponentsExplorerServlet;
 
-import java.io.Writer;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +32,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Created by IntelliJ IDEA.
@@ -47,13 +46,7 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 	private int fieldSize = 80;
 	protected TextField outputFileField;
 	protected TextField inputFileField;
-	private AppRequirementsPage page;
 	private NavigationPathContext npc;
-
-	public void setPage(AppRequirementsPage p)
-	{
-		page = p;
-	}
 
 	public void setNavigationPathContext(NavigationPathContext c)
 	{
@@ -86,22 +79,66 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 		ServletContext context = dc.getServletContext();
 		RequirementTreeManager reqManager = RequirementTreeManagerFactory.getManager(context);
 		Document requirementsDoc = reqManager.getDocument();
-
-/*
 		NodeList requirements = requirementsDoc.getElementsByTagName("requirement");
+
+		String outFileName = dc.getValue(outputFileField);
+		FileWriter fw = new FileWriter(outFileName);
+		StreamResult streamResult = new StreamResult(fw);
+
+		transformNavigations(context, requirements, streamResult);
+		transformStatements(context, requirements, streamResult);
+		transformQueryDefs(context, requirements, streamResult);
+		transformDialogs(context, requirements, streamResult);
+
+		writer.write("<h4>Generated <b style='color:darkred'>'" + outFileName + "'</b></h4>");
+	}
+
+	public void transformDialogs(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException
+	{
+		DialogManager manager = DialogManagerFactory.getManager(context);
 		for (int i = 0; i < requirements.getLength(); i++)
 		{
 			Element requirement = (Element) requirements.item(i);
-			writer.write(requirement.getAttribute("label") + "<br>");
+			transform(npc, manager.getDocument(context, null), "app.requirements.dialog.xsl", streamResult,
+				"dialog", requirement.getAttribute("label"));
 		}
-*/
-
-		NavigationTreeManager manager = NavigationTreeManagerFactory.getManager(context);
-		manager.addMetaInfoOptions();
-		transform(npc, manager.getDocument(), "app.requirements.navigation.xsl", null);
 	}
 
-	public void transform(NavigationPathContext nc, Document doc, String styleSheetConfigName, String outputFileName) throws IOException
+	public void transformQueryDefs(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException
+	{
+		StatementManager manager = StatementManagerFactory.getManager(context);
+		for (int i = 0; i < requirements.getLength(); i++)
+		{
+			Element requirement = (Element) requirements.item(i);
+			transform(npc, manager.getDocument(context, null), "app.requirements.querydef.xsl", streamResult,
+				"querydef", requirement.getAttribute("label"));
+		}
+	}
+
+	public void transformStatements(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException
+	{
+		StatementManager manager = StatementManagerFactory.getManager(context);
+		for (int i = 0; i < requirements.getLength(); i++)
+		{
+			Element requirement = (Element) requirements.item(i);
+			transform(npc, manager.getDocument(context, null), "app.requirements.statement.xsl", streamResult,
+				"statement", requirement.getAttribute("label"));
+		}
+	}
+
+	public void transformNavigations(ServletContext context, NodeList requirements, StreamResult streamResult) throws IOException
+	{
+		NavigationTreeManager manager = NavigationTreeManagerFactory.getManager(context);
+		for (int i = 0; i < requirements.getLength(); i++)
+		{
+			Element requirement = (Element) requirements.item(i);
+			transform(npc, manager.getDocument(), "app.requirements.navigation.xsl", streamResult,
+				"navigation", requirement.getAttribute("label"));
+		}
+	}
+
+	public void transform(NavigationPathContext nc, Document doc, String styleSheetConfigName, StreamResult streamResult,
+		String codeType, String requirementLabel) throws IOException
 	{
 		AppComponentsExplorerServlet servlet = ((AppComponentsExplorerServlet) nc.getServlet());
 		Hashtable styleSheetParams = servlet.getStyleSheetParams();
@@ -126,18 +163,17 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 				}
 			}
 			styleSheetParams.put("config-items-added", new Boolean(true));
+			styleSheetParams.put("ace-url", nc.getRootUrl() + ((HttpServletRequest) nc.getRequest()).getServletPath());
+			styleSheetParams.put("root-url", nc.getActivePathFindResults().getMatchedPath().getAbsolutePath(nc));
 		}
-
-		styleSheetParams.put("ace-url", nc.getRootUrl() + ((HttpServletRequest) nc.getRequest()).getServletPath());
-		styleSheetParams.put("root-url", nc.getActivePathFindResults().getMatchedPath().getAbsolutePath(nc));
-		styleSheetParams.put("page-heading", page.getHeading(nc));
 
 		styleSheetParams.remove("detail-type");
 		styleSheetParams.remove("detail-name");
 		styleSheetParams.remove("sub-detail-name");
 
-		styleSheetParams.put("detail-type", "navigation");
-		styleSheetParams.put("detail-name", "GENERAL_REGISTRATION_RULES");
+		styleSheetParams.put("detail-type", codeType);
+		styleSheetParams.put("detail-name", requirementLabel);
+		styleSheetParams.put("sub-detail-name", "file");
 
 		String styleSheet = servlet.getAppConfig().getTextValue(nc, styleSheetConfigName);
 		PrintWriter out = nc.getResponse().getWriter();
@@ -153,18 +189,7 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 				transformer.setParameter((String) entry.getKey(), entry.getValue());
 			}
 
-			if (outputFileName == null)
-			{
-				transformer.transform
-					(new javax.xml.transform.dom.DOMSource(doc),
-						new javax.xml.transform.stream.StreamResult(out));
-			}
-			else
-			{
-				transformer.transform
-					(new javax.xml.transform.dom.DOMSource(doc),
-						new javax.xml.transform.stream.StreamResult(outputFileName));
-			}
+			transformer.transform(new javax.xml.transform.dom.DOMSource(doc), streamResult);
 		}
 		catch (TransformerConfigurationException e)
 		{
@@ -179,5 +204,4 @@ public class AppRequirementsGenMappingFileDialog extends Dialog
 			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
 		}
 	}
-
 }

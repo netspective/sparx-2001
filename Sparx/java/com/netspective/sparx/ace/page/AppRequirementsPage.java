@@ -111,8 +111,6 @@ public class AppRequirementsPage extends AceServletPage
 		DialogContext dc = dialog.createContext(nc.getServletContext(), nc.getServlet(), (HttpServletRequest) nc.getRequest(),
 			(HttpServletResponse) nc.getResponse(), SkinFactory.getInstance().getDialogSkin(nc));
 		dialog.prepareContext(dc);
-
-		dialog.setPage(this);
 		dialog.setNavigationPathContext(nc);
 
 		if (!dc.inExecuteMode())
