@@ -385,7 +385,8 @@ public class StandardDialogSkin implements DialogSkin
 		if(imageUrl == null)
 			imageUrl = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext()).getValue(dc, "framework.shared.dialog.field.popup-image-src");
 
-		return "&nbsp;<a style='cursor:hand;' onclick=\"javascript:"+ expression +"\"><img border='0' src='"+ imageUrl +"'></a>&nbsp;";
+		return "&nbsp;<a href='' style='cursor:hand;' onclick=\"javascript:"+ expression +";return false;\"><img border='0' src='"+ imageUrl +"'></a>&nbsp;";
+
 	}
 
 
@@ -602,7 +603,7 @@ public class StandardDialogSkin implements DialogSkin
 			"<tr><td><table "+innerTableAttrs+">" +
 			(heading == null ? "" :
 			"<tr "+frameHdRowAttrs+"><td colspan='"+dlgTableColSpan+"' align='"+ frameHdRowAlign +"'><font "+frameHdFontAttrs+"><b>"+ heading +"</b></font></td></tr>\n") +
-			"<form name='"+ dialogName +"' action='"+ actionURL +"' method='post' onsubmit='return(activeDialog.isValid())'>\n" +
+			"<form id='" + dialogName + "' name='"+ dialogName +"' action='"+ actionURL +"' method='post' onsubmit='return(activeDialog.isValid())'>\n" +
 			dc.getStateHiddens() + "\n" +
 			fieldsHtml +
 			"</form>\n" +
