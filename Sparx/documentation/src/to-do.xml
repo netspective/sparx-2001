@@ -1,106 +1,177 @@
 <?xml version="1.0"?>
 
 <page name="to-do">
-	<section heading="Sparx Work in Progress (WIP or To-do list)">
+	<section heading="Sparx Work in Progress (WIP or to-do list)">
 		<project>
+            <task>
+                <name>Defects</name>
 
-			<!--
-			<summary>
-				The eXtensible Application Framework (XAF) work in progress.
-			</summary>
-			<project-attribute name="Team Leader">Shahid N. Shah</project-attribute>
-			<project-attribute name="Last Update"/>
-			<project-attribute name="Resources"/>
-			-->
+                <task>
+                    <name>Critical</name>
+                    <task><name>Text input fields cannot display data which contains double quotes.</name></task>
+                </task>
 
-			<task>
-				<name>ACE</name>
-				<task><name>Add a dialog that connects to <a href="http://www.clarkware.com/software.html#JWhich">JWhich</a> to show where classes are coming from.</name></task>
-				<task><name>Install <a href="http://www.clarkware.com/software/JDepend.html">JDepend</a> to augment the metrics page with even more data.</name></task>
-				<task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
-				<task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
-				<task><name>SchemaDoc (XML) area of ACE needs to be color-coordinated with remainder of ACE.</name></task>
-				<task><name>Allow dialog testing/execution to specify/select a skin.</name></task>
-				<task><name>Add Database Explorer component to browse live databases (connected with SchemaDoc).</name></task>
-				<task><name>In "Framework Documents" need "active path" or "cookie crumbs" feature to indicate location of document.</name></task>
-			</task>
+                <task>
+                    <name>Major</name>
+                    <task><name>Now that docs directory has been moved to documentation, ACE's tagdoc and Sparx documentation menu items are broken</name></task>
+                    <task><name>Applications need to be able aggregated into .ear or .jar files and still work (due to the XML files, that may not be the case right now).</name></task>
+                    <task><name>Implement e-mail feature in output types for Query Builder and Query Select Dialogs.</name></task>
+                    <task><name>Implement file compression in output types for Query Builder and Query Select Dialogs.</name></task>
+                    <task><name>Query defn auto sorting is not carrying/retaining parameters.</name></task>
+                </task>
 
-			<task>
-				<name>User Interface Management</name>
-						<task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
-				<task><name>Optimize performance of DialogSkin by using Writer instead of String for HTML generation (like in ReportSkin).</name></task>
-				<task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
-				<task><name>Add ability to auto-generate "form bean" java classes from Dialog XML (at runtime).</name></task>
-				<task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
-				<task><name>Field persistence through cookies still needs to be implemented.</name></task>
-				<task><name>Implement e-mail feature in output types for Query Builder and Query Select Dialogs.</name></task>
-				<task><name>Implement file compression in output types for Query Builder and Query Select Dialogs.</name></task>
-				<task><name>When the Done button is pressed in Query Builder and Query Select Dialogs, close statements and result sets.</name></task>
-				<task><name>Implement new field type &lt;field.schema&gt; to create fields directly from SchemaDoc.</name></task>
-				<task><name>Create non-cacheable dialogs so that certain dialogs will always be created when called (allows for dynamic dialogs).</name></task>
-				<task><name>Allow skins to be modified through XML (dialog skins are mostly ok, report skins need implementation).</name></task>
-				<task><name>In reports, when a value is formatted (like, e.g. with commas or dollar signs) then the formatted value is also used in URLs. There should be an option to use an alternate value formatting and URLs.</name></task>
-				<task><name>Allow &lt;field.select&gt; and &lt;field.report&gt; to specify max number of selections a user can make.</name></task>
-				<task><name>Allow queries to generate editable grid fields (requires non-cacheable dialogs).</name></task>
-				<task><name>In ReportSkin, allow dynamic replacement of "no rows found" message with a user-supplied one.</name></task>
-				<task><name>Allow easier HTML embedding in dialogs and reports (right now it's too hard).</name></task>
-				<task><name>Conditionals require mandatory fields to work properly (the "data" attribute).</name></task>
-				<task><name>Implement popup JavaScript calendar for date/time fields.</name></task>
-				<task><name>Allow query select dialogs to return &lt;field.report&gt; dialog.</name></task>
-				<task><name>Allow an alternate default in &lt;field.select&gt; if a ListValueSource returns an empty list.</name></task>
-				<task><name>Allow navigator items to be shown/hidden dynamically.</name></task>
-				<task><name>Replace NULLs with blank or space in reports.</name></task>
-				<task><name>Remove all hard-coded instances of "/shared" in Framework code (use configuration instead).</name></task>
-				<task><name>Add options to FileSystemNavigator and ACE to automatically ignore "CVS" directory when scanning files.</name></task>
-				<task><name>Add ability to automatically figure out if CVS is being used and show version and log information from FileSystemNavigator and ACE.</name></task>
-			</task>
+                <task>
+                    <name>Minor</name>
+                    <task><name>field.zip not validated on browser &lt;field.zip ...> fields do not get validated on the browser. The validation always happens on the server (where it works). Consistency with &lt;field.ssn>, &lt;field.phone> would demand a browser side validation for &lt;field.zip> also.</name></task>
+                    <task><name>Dialogs with File fields not processed outside of Servlet Dialogs with File fields not processed outside of Servlet. When subclassing the dialog, none of the validation or executes are handled within the class.</name></task>
+                    <task><name>Javascript function doesn't get executed when called in text fields (defined in dialog) on is-valid event using js-expr tag.</name></task>
+                    <task><name>The executeAndGetSingleValue() method seems to be duplicated in each DatabasePolicy derivative.</name></task>
+                </task>
+            </task>
 
-			<task>
-				<name>Database Management</name>
-				<task><name>Add ability to generate XML from queries (should be a XmlReportSkin object).</name></task>
-				<task><name>Add Statement.close() in addition to ResultSet.close() and Connection.close().</name></task>
-				<task><name>Add sequences, composite forgeign keys to SchemaDoc.</name></task>
-				<task><name>Create cacheable ResultSets with configurable timeouts.</name></task>
-				<task><name>Add support for <a href="http://sourceforge.net/projects/csvjdbc/">CSV JDBC</a> Driver.</name></task>
-				<task><name>Add support for <a href="http://jrf.sourceforge.net/">jRelationalFramework</a> for Java-based access to RDBMS tables</name> (also see <a href="http://alzabo.sourceforge.net/">Alzabo</a> for Perl for examples)</task>
-				<task><name>Add support for <a href="http://www.markwatson.com/opensource/opensource.htm#nlbean">NLBean</a> for natural language processing (or create natural language interface to Query Definitions).</name></task>
-			</task>
+            <task>
+                <name>Enhancements</name>
 
-			<task>
-				<name>Architecture</name>
-				<task><name>XAF applications need to be able to be put into .ear or .jar files and still work (due to the XML files, that's not the case right now).</name></task>
-				<task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
-				<task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of constructing "source" references manually.</name></task>
-				<task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE.</name></task>
-				<task><name>Integrate <a href="http://www.servlets.com/cos/index.html">O'Reilly Servlet Package</a> into XAF (for MultiPart parsing), ServletUtils, and ParameterParser.</name></task>
-				<task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
-				<task><name>Add logging of SQL Query Definitions.</name></task>
-				<task><name>Add option to log the values of request parameters, forms when logging DialogContext.</name></task>
-				<task><name>Add auditing of user actions in dialogs, pages, and SQL (as opposed to just system logging).</name></task>
-				<task><name>Run JavaPureCheck on Sparx.</name></task>
-				<task><name>Test Sparx on Tomcat, JRun, and WebLogic.</name></task>
-				<task><name>Integrate the IBM BSF into value sources (create a javascript: value source).</name></task>
-				<task><name>Combine SingleValueSource and ListValueSource interfaces into just ValueSource (no need for two types).</name></task>
-				<task><name>Port Perl SDE::CVS module.</name></task>
-				<task><name>Add <a href="http://freshmeat.net/releases/51516/">Java Exception Notification</a> into framework.</name></task>
-				<task><name>Integrate <a href="http://httpunit.sourceforge.net/">HTTPUnit</a> for doing black-box unit testing of HTML generators (skins).</name></task>
-				<task><name>Integrate <a href="http://httpunit.sourceforge.net/doc/servletunit-intro.html">ServletUnit</a> or <a href="http://jakarta.apache.org/commons/cactus/">Jakarta Cactus</a> for doing black-box and white-box unit testing of servlets.</name></task>
-				<task><name>Integrate <a href="http://www.vaegar.f9.co.uk/java2html.html">Java2HTML</a> to allow colorized Java code to be viewed through browser (in addition to JavaDoc)</name></task>
-				<task><name>Create Netspective Core library patterned after <a href="http://www.generationjava.com/java/GenJavaCore.shtml">GenerationJava Core Library</a>.</name></task>
-			</task>
+                <task>
+                    <name>Architecture</name>
+                    <task><name>Create Ant task that will generate DDL from app-build.xml instead of forcing generation through ACE.</name></task>
+                    <task><name>Create Ant task that will allow the running of Metrics generator from app-build.xml and store results in a configurable file name (for scripting the execution of metrics).</name></task>
+                    <task><name>Allow debugging of XML after XSLT pre-processing (using &lt;pre-process debug="abc.xml"> or some other directive).</name></task>
+                    <task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
+                    <task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of constructing "source" references manually.</name></task>
+                    <task><name>Create Netspective Core library patterned after <a href="http://www.generationjava.com/java/GenJavaCore.shtml">GenerationJava Core Library</a>.</name></task>
+                    <task><name>Integrate <a href="http://httpunit.sourceforge.net/">HTTPUnit</a> for doing black-box unit testing of HTML generators (skins).</name></task>
+                    <task><name>Integrate <a href="http://httpunit.sourceforge.net/doc/servletunit-intro.html">ServletUnit</a> or <a href="http://jakarta.apache.org/commons/cactus/">Jakarta Cactus</a> for doing black-box and white-box unit testing of servlets.</name></task>
+                    <task><name>Integrate <a href="http://www.vaegar.f9.co.uk/java2html.html">Java2HTML</a> to allow colorized Java code to be viewed through browser (in addition to JavaDoc)</name></task>
 
-			<task>
-				<name>Security</name>
-				<task><name>When sessions time-out, set a flag so that login dialogs can indicate a timeout to the end user. Also add session timing out as a separate activity in the security monitor log.</name></task>
-				<task><name>Add basic User Management functionality to the Access Control framework. Use <a href="http://jakarta.apache.org/tomcat/tomcat-4.0-doc/config/realm.html">Realm</a> design pattern and find a way to use the HttpServletRequest.getUserPrincipal() and HttpServletRequest.isUserInRole() methods.</name></task>
-			</task>
+                    <task>
+                        <name>Loggin</name>
+                        <task><name>Add auditing of user actions in dialogs, pages, and SQL (as opposed to just system logging).</name></task>
+                        <task><name>Add <a href="http://freshmeat.net/releases/51516/">Java Exception Notification</a> into framework.</name></task>
+                    </task>
 
-			<task>
-				<name>Platform-specific</name>
-				<task><name>On Linux, the Work In Progress (Framework Documents) page is not working (XALAN problem?).</name></task>
-			</task>
+                    <task>
+                        <name>Configuration</name>
+                        <task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
+                    </task>
 
+                    <task>
+                        <name>Value Sources</name>
+                        <task><name>Integrate the IBM BSF into value sources (create a script: value source).</name></task>
+                        <task><name>Consider combining SingleValueSource and ListValueSource interfaces into just ValueSource (no need for two types?).</name></task>
+                    </task>
+
+                    <task>
+                        <name>Security</name>
+                        <task><name>When sessions time-out, set a flag so that login dialogs can indicate a timeout to the end user. Also add session timing out as a separate activity in the security monitor log.</name></task>
+                        <task><name>Add basic User Management functionality to the Access Control framework. Use <a href="http://jakarta.apache.org/tomcat/tomcat-4.0-doc/config/realm.html">Realm</a> design pattern and find a way to use the HttpServletRequest.getUserPrincipal() and HttpServletRequest.isUserInRole() methods.</name></task>
+                    </task>
+                </task>
+
+                <task>
+                    <name>Application Components Explorer (ACE)</name>
+                    <task><name>Add a dialog that connects to <a href="http://www.clarkware.com/software.html#JWhich">JWhich</a> to show where classes are coming from.</name></task>
+                    <task><name>Install <a href="http://www.clarkware.com/software/JDepend.html">JDepend</a> to augment the metrics page with even more data.</name></task>
+                    <task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
+                    <task><name>SchemaDoc (XML) area of ACE needs to be color-coordinated with remainder of ACE.</name></task>
+                    <task><name>Allow dialog testing/execution to specify/select a skin.</name></task>
+                    <task><name>Add Database Explorer component to browse live databases (connected with SchemaDoc).</name></task>
+                    <task><name>In "Framework Documents" need "active path" or "cookie crumbs" feature to indicate location of document.</name></task>
+                    <task><name>Add options to FileSystemNavigator and ACE to automatically ignore "CVS" directory when scanning files.</name></task>
+                    <task><name>Add ability to automatically figure out if CVS is being used and show version and log information from FileSystemNavigator and ACE.</name></task>
+                    <task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE.</name></task>
+                    <task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
+                    <task><name>Allow multiple SchemaDoc files to be viewed in ACE without requiring changes to configuration.xml.</name></task>
+                    <task><name>Automatically generate dialogs that will test SQL statements and parameters.</name></task>
+                </task>
+
+                <task>
+                    <name>eXtensible Application Framework (XAF)</name>
+                    <task>
+                        <name>Dialogs</name>
+                        <task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
+                        <task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
+                        <task><name>Implement client-side data persistence in fields using cookies (FLDFLAG_PERSIST).</name></task>
+                        <task><name>Implement new field type &lt;field.schema&gt; to create fields directly from SchemaDoc.</name></task>
+                        <task><name>Create non-cached dialogs so that certain dialogs will always be created when called (allows for dynamic dialogs).</name></task>
+                        <task><name>Allow &lt;field.select&gt; and &lt;field.report&gt; to specify max number of selections a user can make.</name></task>
+                        <task><name>Allow queries to generate editable grid fields (requires non-cached dialogs).</name></task>
+                        <task><name>Allow easier HTML embedding in dialogs and reports (right now it's too hard).</name></task>
+                        <task><name>Conditionals require mandatory fields to work properly using the "data" attribute (should allow otherwise).</name></task>
+                        <task><name>Allow an alternate default in &lt;field.select&gt; if a ListValueSource returns an empty list.</name></task>
+                        <task><name>Integrate <a href="http://www.servlets.com/cos/index.html">O'Reilly Servlet Package</a> into XAF (for MultiPart parsing), ServletUtils, and ParameterParser.</name></task>
+                        <task><name>Add option to log the values of request parameters, forms when logging DialogContext.</name></task>
+                        <task><name>For composite fields often times the label of the first member is left as null and the label of the composite doubles as the label of the first member. This aligns the composite field properly with the regular dialog fields. Problem: If the first member of such a composite is required, this can lead to the error message "null is required".</name></task>
+                        <task><name>Add support for multiple Partners in conditionals. This will allow multi-level conditions (if A then B, if B then C, etc.) to function correctly when collapsing an upper level field.</name></task>
+                        <task><name>The caption is still displayed on the screen when the conditional's action flag is set to 'hidden'. Example: (Displays Status:) &lt;field.select name="status" caption="Status" choices="Active=A;Inactive=D" default="A"> &lt;conditional action="apply-flag" flag="hidden" data-cmd="add"/> &lt;/field.select></name></task>
+                    </task>
+
+                    <task>
+                        <name>Navigator</name>
+                        <task><name>Allow navigator items to be shown/hidden dynamically.</name></task>
+                    </task>
+
+                    <task>
+                        <name>Static SQL Statements</name>
+                        <task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
+                        <task><name>For each SQL statement package, generate a class so that each SQL statement defined in the XML becomes a method of that class.</name></task>
+                    </task>
+
+                    <task>
+                        <name>Query Definitions</name>
+                        <task><name>Allow query select dialogs to return &lt;field.report&gt; dialog.</name></task>
+                        <task><name>Add support for <a href="http://www.markwatson.com/opensource/opensource.htm#nlbean">NLBean</a> for natural language processing (or create natural language interface to Query Definitions).</name></task>
+                        <task><name>Add logging of SQL Query Definitions.</name></task>
+                        <task><name>When we specify reports in querydefs, we have to refer to columns by number e.g. {10}. It becomes very difficult if someone added another colulmn later on. Is it possible to refer by field_id e.g. {proj_cd}</name></task>
+                        <task><name>The order-by-expr attribute in the field node of the query def XML needs quotes around the expression so SQL is generated correctly. SQL is generated correctly if the order by defaults to the column-expr attribute</name></task>
+                    </task>
+
+                    <task>
+                        <name>Reports</name>
+                        <task><name>Add ability to generate XML from queries (should be a XmlReportSkin object).</name></task>
+                        <task><name>In reports, when a value is formatted (like, e.g. with commas or dollar signs) then the formatted value is also used in URLs. There should be an option to use an alternate value formatting and URLs.</name></task>
+                        <task><name>Allow report skins to be modified through XML (dialog skins are mostly ok, report skins need implementation).</name></task>
+                        <task><name>In ReportSkin, allow dynamic replacement of "no rows found" message with a user-supplied one.</name></task>
+                        <task><name>Replace NULLs with blank or space in reports.</name></task>
+                        <task><name>The calc="sum" attribute when used with an ORACLE database view, produces incorrect results. The decimal values are not considered.</name></task>
+                    </task>
+
+                    <task>
+                        <name>Tasks</name>
+                        <task><name>exec-statement closing tag In populate-tasks tag, if we use exec-statement, and if we give a closing tag &lt;/exec-statement>, it gives an invalid SQL statement error. If we do not use the closing tag explicitly and if we use / to close in the exec-statement, then it works fine.</name></task>
+                    </task>
+                </task>
+
+                <task>
+                    <name>eXtensible Information Framework (XIF)</name>
+                    <task>
+                        <name>General</name>
+                        <task><name>The ConnectionContext class should become the de facto standard class for managing connections so that transactions can be shared across tasks and the DAL.</name></task>
+                    </task>
+
+                    <task>
+                        <name>SchemaDoc</name>
+                        <task><name>For each table in the SchemaDoc, automatically generate Query Definitions.</name></task>
+                        <task><name>For each table in the SchemaDoc, add/update/delete forms.</name></task>
+                        <task><name>Add SchemaDoc totals (tables, columns, etc) to the application Metrics.</name></task>
+                        <task><name>Add sequences, composite forgeign keys to SchemaDoc.</name></task>
+                        <task><name>Create cacheable ResultSets with configurable timeouts.</name></task>
+                        <task><name>Add support for <a href="http://sourceforge.net/projects/csvjdbc/">CSV JDBC</a> Driver.</name></task>
+                        <task><name>Add abbrev attribute for columns (just like tables).</name></task>
+                        <task><name>Allow sequence names to specified as an attribute of a column (instead of just being auto-generated).</name></task>
+                        <task><name>Consider creating a DDL skin that, instead of generating SQL DDL, generates Ant tasks that can create DDL for any database in a RDBMS-independent fashion.</name></task>
+                        <task><name>Create new tags that would allow SQL statements like StatementManager to be placed into SchemaDocs. These SQL statements would allow arbitrary SQL in DAL classes.</name></task>
+                    </task>
+
+                    <task>
+                        <name>Data Access Layer (DAL)</name>
+                        <task><name>Review <a href="http://jrf.sourceforge.net/">jRelationalFramework</a> and <a href="http://alzabo.sourceforge.net/">Alzabo</a> for new DAL features.</name></task>
+                        <task><name>For each getXXXByYYY() method add an existsXXXWithYYY() method to check for simple existence</name></task>
+                        <task><name>Try and catch maxlength and other DAL exceptions prior to the values getting to the JDBC driver.</name></task>
+                        <task><name>Implement bulk upload/download via XML or delimited files.</name></task>
+                    </task>
+                </task>
+            </task>
 		</project>
-
 	</section>
 </page>
