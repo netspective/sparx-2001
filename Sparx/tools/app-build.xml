@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.20 2002-09-28 04:20:20 shahid.shah Exp $
+$Id: app-build.xml,v 1.21 2002-09-29 01:01:18 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -334,7 +334,7 @@ $Id: app-build.xml,v 1.20 2002-09-28 04:20:20 shahid.shah Exp $
 
     <target name="dal-doc" depends="dal" if="app.schema.source-file-exists">
         <mkdir dir="${app.java.dal.doc.dir}" />
-        <javadoc packagenames="dal.*,com.netspective.sparx.xif.db.*,com.netspective.sparx.xif.dal.*,com.netspective.sparx.xaf.form.DialogContext,com.netspective.sparx.xaf.sql.DmlStatement"
+        <javadoc packagenames="app.dal.*,com.netspective.sparx.xif.db.*,com.netspective.sparx.xif.dal.*,com.netspective.sparx.xaf.form.DialogContext,com.netspective.sparx.xaf.sql.DmlStatement"
              destdir="${app.java.dal.doc.dir}"
              classpathref="project.class.path"
              author="true"
