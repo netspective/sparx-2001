@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.16 2003-01-29 04:31:01 shahid.shah Exp $
+ * $Id: NavigationPath.java,v 1.17 2003-01-29 15:48:12 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -629,6 +629,10 @@ public class NavigationPath
                 String visible = childElem.getAttribute("visible");
                 if (visible != null && "no".equals(visible))
                     childPath.setFlag(NAVGPATHFLAG_INVISIBLE);
+
+                String hidden = childElem.getAttribute("hidden");
+                if (hidden != null && "yes".equals(hidden))
+                    childPath.setFlag(NAVGPATHFLAG_HIDDEN);
 
                 String defaultChildId = childElem.getAttribute("default");
                 childPath.setDefaultChildId(defaultChildId);
