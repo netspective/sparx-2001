@@ -1,63 +1,50 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app> 
-	<!-- setup external classes -->
-    <!-- classpath id='D:\Projects\Framework\lib\xaf-1_2_8.jar'/>
-	<classpath id='C:\Projects\Framework\tools\idea\classes'/>
-
-	<classpath id='C:\Utils\jakarta-oro-2.0.3\jakarta-oro-2.0.3.jar'/>
-	<classpath id='C:\Utils\jakarta-log4j-1.1.2\dist\lib\log4j.jar'/>
-	<classpath id='C:\Utils\xerces-1_4_1\xerces.jar'/>
-	<classpath id='C:\Utils\xalan-j_2_1_0\bin\xalan.jar'/>
-	<classpath id='C:\Utils\oracle-jdbc\classes12.zip'/ -->
-    <!-- setup database connections -->
+    <!-- 
+    *********************************************************************
+    * Specify the default database connection - the default-data-source *  
+    * context-param's value is defined as a resource-ref in this        *
+    * web.xml file (see below).                                         *
+    *********************************************************************
+    -->    
     <context-param>
       <param-name>default-data-source</param-name>
       <param-value>jdbc/cura</param-value>
     </context-param>
 
-	<!-- setup application servlet aliases -->
-	<servlet>
-		<servlet-name>Navigator</servlet-name>
-		<servlet-class>com.xaf.navigate.NavigateFileSystemServlet</servlet-class>
-	</servlet>
+    <!-- 
+    *********************************************************************
+    * Setup ACE (administrative interface) servlet                      *  
+    *********************************************************************
+    -->    
     <servlet>
             <servlet-name>AppComponentsExplorer</servlet-name>
             <servlet-class>com.xaf.ace.AppComponentsExplorerServlet</servlet-class>
     </servlet>
-	<servlet-mapping>
-		<servlet-name>Navigator</servlet-name>
-		<url-pattern>/navigate/*</url-pattern>
-	</servlet-mapping>
 
-
-	<!-- setup utility servlet aliases -->
-
+    <!-- 
+    *********************************************************************
+    * Setup ACE (administrative interface) servlet mapping              *  
+    *********************************************************************
+    -->    
 	<servlet-mapping>
 		<servlet-name>AppComponentsExplorer</servlet-name>
 		<url-pattern>/ace/*</url-pattern>
 	</servlet-mapping>
     
+    <!-- 
+    *********************************************************************
+    * Setup database connections - the actual resource is defined in    *  
+    * in the Tomcat server.xml file                                     *
+    *********************************************************************
+    -->    
     <resource-ref>
         <description>CURA database on NETSPECTIVE</description>
         <res-ref-name>jdbc/cura</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>        
     </resource-ref>
-
-	<!-- resource-ref>
-	  <res-ref-name>jdbc/cura</res-ref-name>
-	  <res-type>javax.sql.DataSource</res-type>
-
-	  <init-param driver-name="oracle.jdbc.driver.OracleDriver"/>      
-      <init-param url="jdbc:oracle:thin:@10.161.34.246:1521:orcl"/>
-      <init-param user="system"/>
-      <init-param password="manager"/>
-	  <init-param max-connections="20"/>
-	  <init-param enable-transaction="false"/>
-	</resource-ref -->
-
 </web-app>
+
