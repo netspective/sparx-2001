@@ -90,7 +90,11 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
             this.processAddAction(dc);
             person_id = (String)request.getAttribute("person_id");
             person_name = (String) request.getAttribute("person_name");
-            url = request.getContextPath() + "/contact/home.jsp?person_id=" +  person_id +
+            // if an error occurred, return user to the contact report
+            if (person_id == null)
+                url = request.getContextPath() + "/contact/index.jsp?_d_exec=1";
+            else
+                url = request.getContextPath() + "/contact/home.jsp?person_id=" +  person_id +
                 "&person_name=" + URLEncoder.encode(person_name);
 
         }
@@ -143,7 +147,7 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
             // create the WHERE clause for the delete SQL statement
             whereExpr = "person_id = ?";
             dc.executeSqlRemove("person", null, null, whereExpr, "request:person_id");
-            dc.endSqlTransaction();
+            dc.commitSqlTransaction();
         }
         catch (Exception e)
         {
@@ -193,7 +197,7 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
                 String autoincStore = "request-attr:new_address_id";
                 dc.executeSqlInsert("person_address", fields, columns, autoinc, autoincStore);
             }
-            dc.endSqlTransaction();
+            dc.commitSqlTransaction();
 
 		}
 		catch (Exception e)
@@ -278,13 +282,22 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
                 dc.executeSqlInsert("person_contact", fields, columns, autoinc, autoincStore);
             }
             // end transaction
-            dc.endSqlTransaction();
+            dc.commitSqlTransaction();
             dc.getRequest().setAttribute("person_id", person_id.toString());
             dc.getRequest().setAttribute("person_name", fullName);
         }
         catch (TaskExecuteException tee)
         {
             tee.printStackTrace();
+            try
+            {
+                System.out.println("calling rollback!!");
+                dc.rollbackSqlTransaction();
+            }
+            catch (TaskExecuteException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

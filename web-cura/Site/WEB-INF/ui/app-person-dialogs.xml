@@ -3,7 +3,7 @@
 <xaf>
     <dialogs package="person">
         <dialog name="registration" heading="create-data-cmd-heading:Contact" retain-params="*" class="app.form.PersonDialog">
-            <field.separator heading="Profile Information"/>
+            <field.separator heading="Profile"/>
             <field.text name="person_id" caption="ID">
                 <conditional action="apply-flag" flag="invisible" data-cmd="add,edit,delete"/>
             </field.text>
@@ -32,7 +32,7 @@
                 <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
             </field.select>
 
-            <field.separator heading="Contact Methods"/>
+            <field.separator heading="Address"/>
             <!-- field.select name="method" caption="Method" choices="query:person.contact-methods"
                 prepend-blank="yes"/ -->
             <field.text name="line1" caption="Street Address 1" max-length="120" required="yes" />
@@ -41,9 +41,12 @@
             <field.text name="state" caption="State" max-length="2" uppercase="yes" required="yes"/>
             <field.zip name="zip" caption="Zip Code" required="yes"/>
             <field.text name="country" caption="Country" required="yes"/>
-            <field.email name="email" caption="Email"/>
+
+            <field.separator heading="Contact Information"/>
+            <field.phone name="phone" caption="Work Phone"/>
+            <field.email name="email" caption="Work Email"/>
             <field.text name="url" caption="URL"/>
-            <field.phone name="phone" caption="Phone"/>
+
 
         </dialog>
     </dialogs>

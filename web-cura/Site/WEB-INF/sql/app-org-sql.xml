@@ -15,14 +15,25 @@
                 org_name,
                 org_id
             from
-                org, org_ownership
+                org
+        </statement>
+
+        <statement name="parent-org">
+            select
+                org.org_name,
+                org.org_id
+
+            from
+                org,org_relationship
             where
-                org.ownership = org_ownership.id(+) and
-                org.org_name in (${param-list:0})
+                org_relationship.parent_id = ? and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type = 1000
 			<params>
-				<param values="request-attr:orgs"/>
+				<param value="request:org_id"/>
 			</params>
         </statement>
+
 		<statement name="registration">
 			select
 				org_code as "Code",

@@ -175,7 +175,7 @@ public class TaskMemberDialog   extends Dialog
 
             }
 
-            cc.endTransaction();
+            cc.commitTransaction();
         }
         catch (Exception e)
         {

@@ -16,6 +16,11 @@
 			<field.text name="ticker_symbol" caption="Ticker Symbol"/>
 			<field.integer name="employees" caption="Employees"/>
 			<field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
+
+            <field.separator heading="Relationships"/>
+            <field.select name="parent_org_id" caption="Parent Organization" choices="query:org.name-id-list"
+                prepend-blank="yes"/>
+
 			<populate-tasks data-cmd="edit,delete">
 				<exec-statement report="none" store-type="row-fields" store="form:*">
 					select * from org where org_id = ?
@@ -29,6 +34,8 @@
 				<exec-dml command="insert" table="org" auto-inc="org_id,org_org_id_seq" auto-inc-store="request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/>
 				<exec-dml command="insert" table="org_industry" columns="org_id=request-attr:org_id,system_id=custom-sql:oind_system_id_seq.nextval" fields="org_industry"/>
 				<exec-dml command="insert" table="org_type" columns="org_id=request-attr:org_id,system_id=custom-sql:otyp_system_id_seq.nextval" fields="org_type"/>
+                <exec-dml command="insert" table="org_relationship" auto-inc="system_id,OrgRel_system_id_SEQ"
+                    fields="parent_org_id=rel_org_id" columns="parent_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1000"/>
 				<exec-transaction command="end"/>
 				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
 			</execute-tasks>
@@ -46,14 +53,17 @@
 			</execute-tasks>
 		</dialog>
 
-        <dialog name="person_registeration" heading="Edit Organization Member(s)" retain-params="*" class="app.form.AccountMemberDialog">
+        <dialog name="person_registeration" heading="Import Organization Member(s)" retain-params="*" class="app.form.AccountMemberDialog">
             <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
             <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
             <field.integer name="org_id" hidden="yes" default="request:org_id"/>
-            <field.text name="org_name" caption="Organization" read-only="browser" default="request:org_name"/>
+
+            <!-- allow import from parent org only -->
+            <field.text name="org_name" caption="Organization" read-only="no" default="query:org.parent-org"/>
             <field.select name="rel_person_id" style="multidual" caption="Contacts" required="yes"
                 choices="query:org.selected-org-person-list" default="query:org.member-persons">
             </field.select>
+
         </dialog>
 	</dialogs>
 </xaf>

@@ -140,7 +140,7 @@ public class ProjectDialog extends Dialog
 
             // delete the row in the project table
             projectTable.delete(cc, projectRow);
-            cc.endTransaction();
+            cc.commitTransaction();
         }
         catch (Exception e)
         {
@@ -188,7 +188,7 @@ public class ProjectDialog extends Dialog
             }
 
 
-		    cc.endTransaction();
+		    cc.commitTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
             dc.getRequest().setAttribute("project_name", projectRow.getProjectName());
         }
@@ -257,7 +257,7 @@ public class ProjectDialog extends Dialog
 			// insert a new project relationship row
             projRelTable.insert(cc, projRelRow);
             // end the transaction
-            cc.endTransaction();
+            cc.commitTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
             dc.getRequest().setAttribute("project_name", projectRow.getProjectName());
         }

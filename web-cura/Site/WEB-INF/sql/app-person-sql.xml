@@ -91,10 +91,10 @@
                 <param value="request:person_id"/>
             </params>
             <report heading="Organization Memberships">
-				<banner style="horizontal">
+				<!-- banner style="horizontal">
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
-                </banner>
+                </banner -->
                 <column heading="ID" align="left"/>
                 <column heading="Name" align="left" url="create-app-url:/account/home.jsp?org_id=${0}&amp;org_name=%{1}"/>
                 <column display="no"/>
@@ -181,13 +181,21 @@
                 age,
                 person.gender "gender",
                 gender.caption,
-                marital_status.caption
+                marital_status.caption,
+                person_address.line1 "line1",
+                person_address.line2 "line2",
+                person_address.city "city",
+                person_address.state "state",
+                person_address.zip,
+                person_address.country
+
             from
-                person, gender, marital_status
+                person, gender, marital_status, person_address
             where
                 person_id = ? and
                 person.gender = gender.id and
-                person.marital_status = marital_status.id
+                person.marital_status = marital_status.id and
+                person_id = person_address.parent_id
 
 			<params>
 				<param value="request:person_id"/>
@@ -207,10 +215,15 @@
                 <column heading="Age"/>
                 <column display="no"/>
                 <column heading="Gender"/>
-                <column heading="Marital Status"/>
+                <column heading="Marital Status" column-break="1"/>
+                <column heading="Street Address 1"/>
+                <column heading="Street Address 2"/>
+                <column heading="City"/>
+                <column heading="State"/>
+                <column heading="Zip"/>
+                <column heading="Contry"/>
 			</report>
         </statement>
-
         <statement name="gender-list">
             select caption,id from gender
         </statement>

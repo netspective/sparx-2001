@@ -149,7 +149,7 @@ public class ProjectMemberDialog extends Dialog
             }
 
         }
-        cc.endTransaction();
+        cc.commitTransaction();
     }
 
 }

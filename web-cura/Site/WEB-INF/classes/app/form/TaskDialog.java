@@ -20,6 +20,7 @@ import java.util.Map;
 import java.math.BigDecimal;
 import java.io.Writer;
 import java.sql.SQLException;
+import java.net.URLEncoder;
 
 import dal.table.TaskTable;
 import dal.table.TaskPersonRelationTable;
@@ -32,6 +33,7 @@ import dal.domain.TaskType;
 import dal.domain.rows.TaskDependencyRows;
 import dal.DataAccessLayer;
 import dialog.context.task.RegistrationContext;
+import app.TaskHandler;
 
 public class TaskDialog extends Dialog
 {
@@ -79,22 +81,10 @@ public class TaskDialog extends Dialog
                 try
                 {
                     ConnectionContext cc = dc.getConnectionContext();
-                    // check to see if there are tasks dependent on this task. If so, don't allow the deletion
-                    // until the relationship have been cleared
-                    TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
-                    TaskDependencyRows tdRows = tdTable.getTaskDependencyRowsByParentId(cc, new Long(dc.getRequest().getParameter("task_id")));
-                    if (tdRows != null && tdRows.size() != 0)
-                    {
-                        // there are tasks that are dependent on this task!
-                        StringBuffer errMsg = new StringBuffer("The following tasks are dependent on this Task. Remove those relationships before removing this task.<br><ul>");
-                        for (int i=0; i < tdRows.size(); i++)
-                        {
-                            errMsg.append("<li>ID: " + ((TaskDependencyRow) tdRows.get(i)).getDependentId() + "</li>");
-                        }
-                        errMsg.append("</ul>");
-                        dc.addErrorMessage(errMsg.toString());
-                        return false;
-                    }
+                    TaskHandler taskHandler = new TaskHandler();
+                    isValid = taskHandler.checkDeleteStatus(cc, Long.parseLong(dc.getRequest().getParameter("task_id")));
+                    if (!isValid)
+                        dc.addErrorMessage(taskHandler.getErrMsg());
                     cc.returnConnection();
                 }
                 catch (Exception e)
@@ -103,7 +93,6 @@ public class TaskDialog extends Dialog
                 }
             }
         }
-
         return isValid;
     }
 
@@ -143,7 +132,8 @@ public class TaskDialog extends Dialog
         String url = "";
         if (request.getParameter("project_id") != null)
         {
-            url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getParameter("project_id");
+            url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getParameter("project_id") +
+                "&project_name=" + URLEncoder.encode(request.getParameter("project_name"));
         }
         else
         {
@@ -168,32 +158,9 @@ public class TaskDialog extends Dialog
         ConnectionContext cc = dc.getConnectionContext();
         cc.beginTransaction();
 
-        TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
-        // retrieve the task row
-        TaskRow taskRow = taskTable.getTaskByTaskId(cc, rc.getTaskId());
-        if (taskRow != null)
-        {
-            // remove this task from the task dependency list
-            TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
-            //TaskDependencyRows tdRows = tdTable.getTaskDependencyRowsByDependentId(cc, rc.getTaskId());
-            tdTable.deleteTaskDependencyRowsUsingDependentId(cc, rc.getTaskId());
-
-
-            if (taskRow.getParentTaskId() != null)
-            {
-                // Delete all the sub tasks belonging to this task
-
-            }
-
-            // remove person/task relationships
-            TaskPersonRelationTable tpRelationTable = dal.DataAccessLayer.instance.getTaskPersonRelationTable();
-            tpRelationTable.deleteTaskPersonRelationRowsUsingParentId(cc, new Long(rc.getTaskIdRequestParam()));
-
-            // delete the task row
-            taskTable.delete(cc, taskRow);
-        }
-        cc.endTransaction();
-
+        TaskHandler task = new TaskHandler();
+        task.deleteTask(cc, rc.getTaskId());
+        cc.commitTransaction();
     }
 
     /**
@@ -212,7 +179,7 @@ public class TaskDialog extends Dialog
         taskRow.populateDataByNames(dc);
         taskTable.update(cc, taskRow);
 
-        cc.endTransaction();
+        cc.commitTransaction();
         dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
     }
 
@@ -240,9 +207,10 @@ public class TaskDialog extends Dialog
             taskRow.populateDataByNames(rc);
 			// insert a row into the Task table
             taskTable.insert(cc, taskRow);
+            Long taskId = taskRow.getTaskId();
 
 
-            if (rc.getDependentTask() != null)
+            if (rc.getDependentTask() != null && rc.getDependentTask().length() > 0)
             {
                 // include entries into the task dependency table
                 TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
@@ -254,18 +222,15 @@ public class TaskDialog extends Dialog
                 tdRow.setDependentId( taskRow.getTaskId());
                 tdTable.insert(cc, tdRow);
             }
-
-            cc.endTransaction();
-
+            cc.commitTransaction();
             if (rc.getOwnerProjectIdRequestParam() != null)
             {
-                dc.getRequest().setAttribute("project_name","");
+                dc.getRequest().setAttribute("project_name",rc.getValue("project_name"));
                 dc.getRequest().setAttribute("project_id", rc.getOwnerProjectIdRequestParam());
             }
-            else
-            {
-                dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
-            }
+            dc.getRequest().setAttribute("task_id", taskId);
+
+
         }
         catch (Exception e)
         {

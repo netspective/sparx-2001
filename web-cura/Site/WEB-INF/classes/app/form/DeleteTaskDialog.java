@@ -24,6 +24,9 @@ import dal.domain.row.TaskRow;
 
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.sql.SQLException;
+
+import app.TaskHandler;
 
 public class DeleteTaskDialog extends Dialog
 {
@@ -67,9 +70,10 @@ public class DeleteTaskDialog extends Dialog
      */
     protected void processExecution(DialogContext dc)
     {
+        ConnectionContext cc = null;
         try
         {
-            ConnectionContext cc =  dc.getConnectionContext();
+            cc =  dc.getConnectionContext();
 
             cc.beginTransaction();
             // the dialog's context is represented by its own custom bean class
@@ -78,17 +82,31 @@ public class DeleteTaskDialog extends Dialog
             // check to see which task ids were selected for removal
             String[] taskList = rc.getRequest().getParameterValues("_dc.task_id.checkbox");
             TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+
+            TaskHandler taskHandler = new TaskHandler();
             for (int i=0; i < taskList.length; i++)
             {
-                TaskRow taskRow = taskTable.getTaskByTaskId(cc, new Long(taskList[i]));
-                if (taskRow != null)
-                    taskTable.delete(cc, taskRow);
+                if ( i > 1)
+                    throw new Exception();
+                //if (taskHandler.checkDeleteStatus(cc, Long.parseLong(taskList[i])))
+                    taskHandler.deleteTask(cc, Long.parseLong(taskList[i]));
             }
-            cc.endTransaction();
+            cc.commitTransaction();
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            try
+            {
+                if (cc != null)
+                {
+                    cc.rollbackTransaction();
+                }
+            }
+            catch (SQLException sqle)
+            {
+                sqle.printStackTrace();
+            }
         }
     }
 }
