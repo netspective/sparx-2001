@@ -39,7 +39,7 @@
 			<field.memo name="description" caption="Description"/>
 			<field.text name="url" caption="URL to get Picture"/>
 			<field.select name="picture_path" caption="Picture" choices="picture:*"/>
-			<populate-tasks data-cmd="edit">
+			<populate-tasks data-cmd="edit,delete">
 				<exec-statement name="Gift.GiftDetail" report="none" store-type="row-fields" store="form:"/>
 			</populate-tasks>
 			<execute-tasks data-cmd="edit">
@@ -51,6 +51,12 @@
 			<execute-tasks data-cmd="add">
 				<exec-transaction command="begin"/>
 				<exec-dml command="insert" table="gift" auto-inc="id,gift_id_seq" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form:age_range.unit" fields="name,category_id,status_id,user_id,picture_path,price,brand,url,description"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes"/>
+			</execute-tasks>
+            <execute-tasks data-cmd="delete">
+				<exec-transaction command="begin"/>
+				<exec-dml command="delete" table="gift" where="id = ?" where-bind="request:id"/>
 				<exec-transaction command="end"/>
 				<exec-redirect url="config-expr:${create-app-url:/AdminGiftList.jsp}?_dc.s_category=${request:s_category}&amp;_dc.s_status=${request:s_status}&amp;_d_exec=yes"/>
 			</execute-tasks>
@@ -92,12 +98,13 @@
             </field.composite>
 			<field.text name="price" caption="Estimated Price" size="3"/>
 			<field.text name="brand" caption="Brand"/>
-			<field.text name="url" caption="URL to get Picture"/>
+            <field.text name="reference" caption="Reference"/>
 			<field.memo name="description" caption="Description"/>
+            <field.text name="url" caption="URL to get Picture"/>
 			<field.text name="picture" hidden="yes" default="no_picture"/>
 			<execute-tasks>
 				<exec-transaction command="begin"/>
-				<exec-dml command="insert" table="gift" auto-inc="id,gift_id_seq" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form=age_range.unit" fields="name,category_id,status_id,user_id,price,brand,url,description,picture_path"/>
+				<exec-dml command="insert" table="gift" auto-inc="id,gift_id_seq" columns="begin_age_range=form:age_range.begin,end_age_range=form:age_range.end,unit_age_range=form=age_range.unit" fields="name,category_id,status_id,user_id,price,brand,reference,url,description,picture_path"/>
 				<exec-transaction command="end"/>
 			</execute-tasks>
 		</dialog>
@@ -148,20 +155,37 @@
 				<exec-transaction command="begin"/>
 				<exec-dml command="insert" table="user" auto-inc="id,user_id_seq" fields="first_name,middle_name,last_name,email_addr,phone,relationship_id"/>
 				<exec-transaction command="end"/>
-				<!-- exec-redirect url="reg-user:index.jsp"/ -->
                 <exec-redirect url="config-expr:${create-app-url:/index.jsp}?_dc.user_fname=${form:first_name}&amp;_dc.user_lname=${form:last_name}&amp;_d_exec=yes"/>
+			</execute-tasks>
+		</dialog>
+        <dialog name="UserEdit" heading="Edit User">
+			<field.text name="id" hidden="yes"/>
+			<field.text name="first_name" caption="First Name" required="yes"/>
+			<field.text name="middle_name" caption="Middle Name"/>
+			<field.text name="last_name" caption="Last Name" required="yes"/>
+			<field.text name="email_addr" caption="E-mail"/>
+			<field.text name="phone" caption="Contact Phone Number"/>
+			<field.select name="relationship_id" caption="Relationship" choices="schema-enum:Relationship"/>
+			<populate-tasks data-cmd="edit,delete">
+				<exec-statement name="User.UserDetail" report="none" store-type="row-fields" store="form:*"/>
+			</populate-tasks>
+			<execute-tasks data-cmd="add">
+				<exec-transaction command="begin"/>
+				<exec-dml command="insert" table="user" auto-inc="id,user_id_seq" fields="first_name,middle_name,last_name,email_addr,phone,relationship_id"/>
+				<exec-transaction command="end"/>
+                <exec-redirect url="config-expr:${create-app-url:/AdminUserList.jsp}"/>
 			</execute-tasks>
 			<execute-tasks data-cmd="edit">
 				<exec-transaction command="begin"/>
 				<exec-dml command="update" table="User" fields="first_name,middle_name,last_name,email_addr,phone,relationship_id" where="id = ?" where-bind="form:id"/>
 				<exec-transaction command="end"/>
-				<exec-redirect url="config-expr:${create-app-url:/UserList.jsp}"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminUserList.jsp}"/>
 			</execute-tasks>
 			<execute-tasks data-cmd="delete">
 				<exec-transaction command="begin"/>
 				<exec-dml command="delete" table="User" where="id = ?" where-bind="form:id"/>
 				<exec-transaction command="end"/>
-				<exec-redirect url="config-expr:${create-app-url:/UserList.jsp}"/>
+				<exec-redirect url="config-expr:${create-app-url:/AdminUserList.jsp}"/>
 			</execute-tasks>
 		</dialog>
 	</dialogs>
