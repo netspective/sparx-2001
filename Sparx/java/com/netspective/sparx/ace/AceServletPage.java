@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.3 2002-08-31 00:18:03 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.4 2002-09-02 22:52:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -67,6 +67,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -290,7 +291,7 @@ public class AceServletPage extends AbstractServletPage
             out.print("</map>");
             out.print("<table border='0' cellpadding='0' cellspacing='0' height='44'>");
             out.print("	<tr>");
-            out.print("		<td><a href='" + homeUrl + "'><img src='" + sharedImagesRootURL + "/ace/masthead-logo.gif' width='158' height='44' border='0'></a></td>");
+            out.print("		<td><a href='" + (((HttpServletRequest) pc.getRequest()).getContextPath()) + "'><img src='" + sharedImagesRootURL + "/ace/masthead-logo.gif' width='158' height='44' border='0'></a></td>");
             out.print("		<td><img src='" + sharedImagesRootURL + "/ace/masthead.gif' width='642' height='44' border='0' usemap='#menu_map'></td>");
             out.print("	</tr>");
             out.print("</table>");
