@@ -7,9 +7,14 @@ import com.xaf.form.*;
 import com.xaf.security.*;
 import com.xaf.skin.*;
 import com.xaf.value.*;
+import com.xaf.config.ConfigurationManager;
+import com.xaf.config.ConfigurationManagerFactory;
+import com.xaf.config.Configuration;
 
 public class LoginDialog extends com.xaf.security.LoginDialog
 {
+    private String LOGIN_ID_PROPERTY = "framework.ace.login.user-name";
+    private String PASSWORD_PROPERTY = "framework.ace.login.user-password";
 	protected StandardDialogSkin skin;
 
 	public void initialize()
@@ -53,4 +58,52 @@ public class LoginDialog extends com.xaf.security.LoginDialog
 		writer.write("	</center>");
 		writer.write("</body>");
 	}
+
+    public boolean isValid(DialogContext dc)
+    {
+		if(! super.isValid(dc))
+			return false;
+
+
+        DialogField userIdField = dc.getDialog().findField("user_id");
+        String user = dc.getValue(userIdField);
+        DialogField passwordField = dc.getDialog().findField("password");
+        String password = dc.getValue(passwordField);
+
+        if (user == null || user.length() == 0)
+        {
+            userIdField.invalidate(dc, "Please enter a user ID");
+            return false;
+        }
+        if (password == null || password.length() == 0)
+        {
+            passwordField.invalidate(dc, "Please enter a password");
+            return false;
+        }
+
+        ConfigurationManager cfgMgr = ConfigurationManagerFactory.getManager(dc.getServletContext());
+        Configuration appConfig = cfgMgr.getDefaultConfiguration();
+
+        String aceLoginID = appConfig.getValue(dc, this.LOGIN_ID_PROPERTY);
+        String acePassword = appConfig.getValue(dc, this.PASSWORD_PROPERTY);
+
+        if (user.equals(aceLoginID))
+        {
+            if (!password.equals(acePassword))
+            {
+                passwordField.invalidate(dc, "Password is invalid");
+                return false;
+            }
+        }
+        else
+        {
+            userIdField.invalidate(dc, "User ID is invalid");
+            return false;
+        }
+        // all checks were successful
+        return true;
+
+
+
+    }
 }
