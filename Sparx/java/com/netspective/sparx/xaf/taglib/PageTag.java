@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: PageTag.java,v 1.2 2002-08-24 05:37:39 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -86,6 +86,8 @@ import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QuerySelectDialog;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.config.Configuration;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 
 public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 {
@@ -442,5 +444,108 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
         com.netspective.sparx.util.log.LogManager.recordAccess(request, null, pageContext.getPage().getClass().getName(), request.getRequestURI(), startTime);
         org.apache.log4j.NDC.pop();
+    }
+
+    /**
+     * Used by Sparx sample applications to show the shell
+     */
+    public void doSamplePageBegin(String styleSheet) throws IOException
+    {
+        Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(pageContext.getServletContext());
+        ServletValueContext svc = new ServletValueContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
+
+        String sparxACEUrl = config.getTextValue(svc, "sparx.ace.root-url");
+        String sparxSampleImagesUrl = config.getTextValue(svc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url") + "/samples";
+
+        javax.servlet.jsp.JspWriter out = pageContext.getOut();
+        out.println("<html>");
+        out.println("	<head>");
+        out.println("		<meta http-equiv='content-type' content='text/html;charset=ISO-8859-1'>");
+        out.println("		<title>"+ getTitle() +"</title>");
+        if(styleSheet != null)
+            out.println("		<link rel='stylesheet' href='"+ styleSheet +"'>");
+        out.println("	</head>");
+        out.println("");
+        out.println("	<body bgcolor='#cccccc' leftmargin='5' marginheight='5' marginwidth='5' topmargin='5'>");
+        out.println("		<basefont face='Trebuchet MS' size=2>");
+        out.println("		<center>");
+        out.println("		<table width='100%' border='0' cellspacing='0' cellpadding='0' height='100%'>");
+        out.println("			<tr height='56'>");
+        out.println("				<td align='left' valign='top' height='56'>");
+        out.println("					<table width='100%' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("						<tr>");
+        out.println("							<td align='left' valign='top' width='412'><a href='http://www.netspective.com'><img src='"+ sparxSampleImagesUrl +"/sample-apps-01.gif' alt='' width='412' height='56' border='0'></a></td>");
+        out.println("							<td align='left' valign='top' width='100%'><img src='"+ sparxSampleImagesUrl +"/sample-apps-02.gif' alt='' width='100%' height='56' border='0'></td>");
+        out.println("							<td align='left' valign='top' width='181'>");
+        out.println("								<table width='64' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("									<tr>");
+        out.println("										<td align='left' valign='top'><img src='"+ sparxSampleImagesUrl +"/sample-apps-03.gif' alt='' width='181' height='9' border='0'></td>");
+        out.println("									</tr>");
+        out.println("									<tr>");
+        out.println("										<td align='left' valign='top'>");
+        out.println("											<table width='72' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("												<tr>");
+        out.println("													<td align='left' valign='top'><img src='"+ sparxSampleImagesUrl +"/sample-apps-04.gif' alt='' width='6' height='47' border='0'></td>");
+        out.println("													<td align='left' valign='top'>");
+        out.println("														<table width='64' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("															<tr height='17'>");
+        out.println("																<td align='center' valign='middle' bgcolor='white' height='17'><font size=1 face='Arial,Helvetica,Geneva,Swiss,SunSans-Regular'><a href='"+ sparxACEUrl +"'>Admin Console (ACE)</a></font></td>");
+        out.println("															</tr>");
+        out.println("															<tr>");
+        out.println("																<td align='left' valign='top'><img src='"+ sparxSampleImagesUrl +"/sample-apps-07.gif' alt='' width='156' height='30' border='0'></td>");
+        out.println("															</tr>");
+        out.println("														</table>");
+        out.println("													</td>");
+        out.println("													<td align='left' valign='top'><img src='"+ sparxSampleImagesUrl +"/sample-apps-06.gif' alt='' width='19' height='47' border='0'></td>");
+        out.println("												</tr>");
+        out.println("											</table>");
+        out.println("										</td>");
+        out.println("									</tr>");
+        out.println("								</table>");
+        out.println("							</td>");
+        out.println("						</tr>");
+        out.println("					</table>");
+        out.println("				</td>");
+        out.println("			</tr>");
+        out.println("			<tr height='100%'>");
+        out.println("				<td align='left' valign='top' height='100%'>");
+        out.println("					<table width='100%' border='0' cellspacing='0' cellpadding='0' height='100%'>");
+        out.println("						<tr height='100%'>");
+        out.println("							<td align='left' valign='top' width='15' height='100%' background='"+ sparxSampleImagesUrl +"/sample-apps-08.gif'><img src='"+ sparxSampleImagesUrl +"/sample-apps-spacer.gif' alt='' width='15' height='100%' border='0'></td>");
+        out.println("							<td align='left' valign='top' width='100%' height='100%' bgcolor='white'>");
+    }
+
+    /**
+     * Used by Sparx sample applications to show the shell
+     */
+    public void doSamplePageEnd() throws IOException
+    {
+        Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(pageContext.getServletContext());
+        ServletValueContext svc = new ServletValueContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
+        String sparxSampleImagesUrl = config.getTextValue(svc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url") + "/samples";
+
+        javax.servlet.jsp.JspWriter out = pageContext.getOut();
+        out.println("                         <p><center><font size=2 color=silver>"+ com.netspective.sparx.BuildConfiguration.getProductBuild() + "</font></center>");
+        out.println("							</td>");
+        out.println("							<td align='left' valign='top' width='19' height='100%' background='"+ sparxSampleImagesUrl +"/sample-apps-10.gif'><img src='"+ sparxSampleImagesUrl +"/sample-apps-spacer.gif' alt='' width='19' height='100%' border='0'></td>");
+        out.println("						</tr>");
+        out.println("					</table>");
+        out.println("				</td>");
+        out.println("			</tr>");
+        out.println("			<tr height='26'>");
+        out.println("				<td align='left' valign='top' height='26'>");
+        out.println("					<table width='100%' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("						<tr valign='bottom'>");
+        out.println("							<td align='left' valign='top' width='412'><a href='http://www.netspective.com'><img src='"+ sparxSampleImagesUrl +"/sample-apps-11.gif' alt='' width='412' height='26' border='0'></a></td>");
+        out.println("							<td align='left' valign='top' width='100%'><img src='"+ sparxSampleImagesUrl +"/sample-apps-12.gif' alt='' width='100%' height='26' border='0'></td>");
+        out.println("							<td align='left' valign='top' width='181'><a href='http://developer.netspective.com'><img src='"+ sparxSampleImagesUrl +"/sample-apps-13.gif' alt='' width='181' height='26' border='0'></a></td>");
+        out.println("						</tr>");
+        out.println("					</table>");
+        out.println("				</td>");
+        out.println("			</tr>");
+        out.println("		</table>");
+        out.println("		</center>");
+        out.println("	</body>");
+        out.println("</html>");
     }
 }
