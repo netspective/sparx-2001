@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SqlComparisonFactory.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: SqlComparisonFactory.java,v 1.2 2003-04-22 04:39:20 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -66,14 +66,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.factory.Factory;
-import com.netspective.sparx.xaf.querydefn.comparison.BinaryOpComparison;
-import com.netspective.sparx.xaf.querydefn.comparison.ContainsComparison;
-import com.netspective.sparx.xaf.querydefn.comparison.ContainsComparisonIgnoreCase;
-import com.netspective.sparx.xaf.querydefn.comparison.DateComparison;
-import com.netspective.sparx.xaf.querydefn.comparison.EndsWithComparison;
-import com.netspective.sparx.xaf.querydefn.comparison.InComparison;
-import com.netspective.sparx.xaf.querydefn.comparison.IsDefinedComparison;
-import com.netspective.sparx.xaf.querydefn.comparison.StartsWithComparison;
+import com.netspective.sparx.xaf.querydefn.comparison.*;
 
 public class SqlComparisonFactory implements Factory
 {
@@ -98,6 +91,8 @@ public class SqlComparisonFactory implements Factory
         addComparison(new DateComparison("lt-date", "<"), new String[]{"lt-date", "less-than-date"});
         addComparison(new DateComparison("gte-date", ">="), new String[]{"gte-date", "greater-than-equal-date"});
         addComparison(new DateComparison("gt-date", ">"), new String[]{"gt-date", "greater-than-date"});
+
+        addComparison(new LobContainsComparison(), null);
     }
 
     static public void addComparison(SqlComparison comp, String[] aliases)
