@@ -227,6 +227,7 @@ public class HtmlReportSkin implements ReportSkin
             writer.write("<tr><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>");
             for(int i = 0; i < dataColsCount; i++)
             {
+				int rowNum = rs.getRow();
                 ReportColumn column = columns.getColumn(i);
 				ReportContext.ColumnState state = states[i];
 
@@ -236,14 +237,14 @@ public class HtmlReportSkin implements ReportSkin
                 String data =
                     state.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
                         state.getOutputFormat() :
-                        column.getFormattedData(rc, rowData, true);
+                        column.getFormattedData(rc, rowNum, rowData, true);
 
                 String singleRow = "<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+
                     (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data) +
                     "</font></td><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>";
 
 				//writer.write(MessageFormat.format(singleRow, rowData));
-                writer.write(defn.replaceOutputPatterns(rc, rowData, singleRow));
+                writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
             }
 			writer.write("</tr>");
 
@@ -282,6 +283,7 @@ public class HtmlReportSkin implements ReportSkin
         for(int row = startDataRow; row < data.length; row++)
         {
             Object[] rowData = data[row];
+			int rowNum = row - startDataRow;
 
             writer.write("<tr><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>");
             for(int i = 0; i < dataColsCount; i++)
@@ -295,14 +297,14 @@ public class HtmlReportSkin implements ReportSkin
                 String colData =
                     state.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
                         state.getOutputFormat() :
-                        column.getFormattedData(rc, rowData, true);
+                        column.getFormattedData(rc, rowNum, rowData, true);
 
                 String singleRow = "<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+
                     (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ colData +"</a>" : colData) +
                     "</font></td><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>";
 
 				//writer.write(MessageFormat.format(singleRow, rowData));
-                writer.write(defn.replaceOutputPatterns(rc, rowData, singleRow));
+                writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
             }
 			writer.write("</tr>");
 
