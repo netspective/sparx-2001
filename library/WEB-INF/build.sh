@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.1 2002-08-09 21:03:42 shahid.shah Exp $
+# $Id: build.sh,v 1.2 2002-08-18 22:19:32 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
@@ -43,6 +43,7 @@ APP_BUILD_FILE=$BASEDIR/build.xml
 
 SPARX_JAR=$APP_LIB/sparx.jar
 ANT_JAR=$APP_LIB/ant.jar
+XMLAPIS_JAR=$APP_LIB/xml-apis.jar
 XERCES_JAR=$APP_LIB/xerces.jar
 XALAN_JAR=$APP_LIB/xalan.jar
 OROMATCHER_JAR=$APP_LIB/oro.jar
@@ -61,7 +62,7 @@ if [ -f $JAVA_HOME/lib/classes.zip ]; then
 	JAVACP=$JAVA_HOME/lib/classes.zip
 fi
 
-USE_CLASS_PATH=$APP_CLASSES:$XERCES_JAR:$SPARX_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR:$XALAN_JAR:$JAVACP:$ANT_JAR:$BSF_JAR:$BSF_JS_JAR
+USE_CLASS_PATH=$APP_CLASSES:$XMLAPIS_JAR:$XERCES_JAR:$SPARX_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR:$XALAN_JAR:$JAVACP:$ANT_JAR:$BSF_JAR:$BSF_JS_JAR
 
 # **************************************************************************
 # ** Now that all the variables are set, execute Ant                      **
