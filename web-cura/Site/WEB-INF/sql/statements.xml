@@ -3,6 +3,9 @@
 <xaf>
     <include file="app-security-sql.xml"/>
     <include file="app-person-sql.xml"/>
+    <include file="app-person-query-defns.xml"/>
     <include file="app-org-sql.xml"/>
     <include file="app-org-query-defns.xml"/>
+
+    <register-report-skin name="report" class="app.skin.AppReportSkin"/>
 </xaf>

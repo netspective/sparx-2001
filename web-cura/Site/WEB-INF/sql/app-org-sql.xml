@@ -10,6 +10,9 @@
 			</params>
 		</statement>
 
+        <statement name="name-id-list">
+            select org_name,org_id from org
+        </statement>
 		<statement name="registration">
 			select
 				org_code as "Code",

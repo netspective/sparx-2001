@@ -1,6 +1,58 @@
 <?xml version="1.0"?>
 
 <xaf>
+    <dialogs package="person">
+        <dialog name="registration" heading="create-data-cmd-heading:Contact" retain-params="*" class="app.form.PersonDialog">
+            <field.separator heading="Personal Information"/>
+            <field.select name="prefix" caption="Prefix" choices="Mr;Ms;Mrs" required="yes" />
+            <field.text name="last_name" caption="Last Name" required="yes"/>
+            <field.text name="first_name" caption="First Name" required="yes"/>
+            <field.text name="middle_name" caption="Middle Name" />
+            <field.date name="dob" caption="Date of Birth" />
+            <field.select name="gender" caption="Gender" choices="query:person.gender-list" required="yes"/>
+            <field.ssn name="ssn" caption="Social Security Number" />
+            <field.select name="organization" caption="Organization" choices="query:org.name-id-list" required="yes"/>
+
+            <field.separator heading="Contact Information"/>
+            <field.select name="method" caption="Method" choices="query:person.contact-methods"
+                prepend-blank="yes"/>
+
+            <field.text name="address1" caption="Street Address 1" max-length="120">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 1"/>
+            </field.text>
+            <field.text name="address2" caption="Street Address 2" max-length="120" >
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 1"/>
+            </field.text>
+            <field.text name="city" caption="City" >
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 1"/>
+            </field.text>
+            <field.text name="state" caption="State" max-length="2" upper="yes">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 1"/>
+            </field.text>
+            <field.zip name="zip" caption="Zip Code" >
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 1"/>
+            </field.zip>
+            <field.text name="country" caption="Country">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 1"/>
+            </field.text>
+            <field.select name="email_type" caption="Email Type" choices="query:person.contact-email-types">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 3"/>
+            </field.select>
+            <field.email name="email" caption="Email">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 3"/>
+            </field.email>
+            <field.text name="url" caption="URL">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 4"/>
+            </field.text>
+
+            <field.phone name="phone" caption="Phone">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 2"/>
+            </field.phone>
+            <field.phone name="fax" caption="fax">
+                <conditional action="display" partner="method" js-expr="control.selectedIndex == 2"/>
+            </field.phone>
+        </dialog>
+    </dialogs>
 	<dialogs package="org">
 		<dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
 			<field.debug visible="no"/>

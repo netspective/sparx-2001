@@ -10,7 +10,7 @@
 		</page>
 
 		<page caption="Contacts" url="/cura/contact/browse.jsp.jsp">
-			<page caption="Create New Contact" url="/cura/contact/index.jsp?cmd=dialog,person.registration,add"/>
+			<page caption="Create New Contact" url="/cura/contact/create.jsp"/>
 			<page caption="Review Contact(s)" url="/cura/contact/browse.jsp"/>
 		</page>
 

@@ -7,6 +7,19 @@
 			select * from person where person_id = ?
 		</statement>
 
+        <statement name="next-id">
+            select per_person_id_seq.nextval from dual
+        </statement>
+
+        <statement name="next-contact-id">
+            select PerCont_system_id_SEQ.nextval from dual
+        </statement>
+
+        <statement name="next-address-id">
+            select PerAddr_system_id_SEQ.nextval from dual
+        </statement>
+
+
 		<statement name="active-org-memberships">
 			select org.org_id, org.org_name
 			from org, personorg_relationship por
@@ -16,5 +29,41 @@
 			and por.rel_org_id = org.org_id /* join to get org_name */
 		</statement>
 
+        <statement name="contact-methods">
+            select caption,id from contact_method_type
+        </statement>
+
+        <statement name="contact-email-types">
+            select caption,id from contact_email_type
+        </statement>
+
+
+        <statement name="information">
+            select
+                person_id as "ID",
+                complete_name as "Name",
+                ssn as "SSN",
+                date_of_birth as "Birth Date",
+                age as "Age",
+                marital_status as "Marital Status"
+            from
+                person
+            where
+                person_id = ?
+
+			<params>
+				<param value="request:person_id"/>
+			</params>
+			<report heading="Contact Overview">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                </banner>
+			</report>
+        </statement>
+
+        <statement name="gender-list">
+            select caption,id from gender
+        </statement>
 	</sql-statements>
 </xaf>
