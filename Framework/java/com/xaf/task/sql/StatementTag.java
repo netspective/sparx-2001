@@ -13,6 +13,7 @@ import javax.servlet.jsp.tagext.*;
 import com.xaf.report.*;
 import com.xaf.task.*;
 import com.xaf.task.sql.*;
+import com.xaf.config.ConfigurationManagerFactory;
 
 public class StatementTag extends TagSupport
 {
@@ -59,9 +60,16 @@ public class StatementTag extends TagSupport
 		{
 			task.execute(tc);
 			if(tc.hasError())
-				out.write(tc.getErrorMessage());
+            {
+                if (!ConfigurationManagerFactory.isProductionEnvironment(pageContext.getServletContext()))
+				    out.write(tc.getErrorMessage());
+                else
+                    throw new JspException(tc.getErrorMessage());
+            }
 			else if(tc.hasResultMessage())
+            {
 				out.write(tc.getResultMessage());
+            }
 		}
 		catch(IOException e)
 		{
@@ -70,7 +78,21 @@ public class StatementTag extends TagSupport
 		catch(TaskExecuteException e)
 		{
 			req.removeAttribute(ReportContext.REQUESTATTRNAME_LISTENER);
-			try{ out.write(e.getDetailedMessage()); } catch(IOException ie) { throw new JspException(ie.getMessage()); }
+            if (!ConfigurationManagerFactory.isProductionEnvironment(pageContext.getServletContext()))
+            {
+                try
+                {
+                    out.write(e.getDetailedMessage());
+                }
+                catch(IOException ie)
+                {
+                    throw new JspException(ie.getMessage());
+                }
+            }
+            else
+            {
+                throw new JspException(e.getMessage());
+            }
 			return SKIP_PAGE;
 		}
 
