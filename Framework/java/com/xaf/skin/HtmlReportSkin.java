@@ -191,7 +191,11 @@ public class HtmlReportSkin implements ReportSkin
 			if(states[i].isHidden())
 				continue;
 
-			writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rs.getString(rcd.getColIndexInResultSet()) +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+			Object heading = rs.getString(rcd.getColIndexInResultSet());
+			if(heading != null)
+				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ heading.toString() +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+			else
+				writer.write("<td><font "+dataHdFontAttrs+"></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
 		}
 		if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
 			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='2' width='100%'></td></tr>");
