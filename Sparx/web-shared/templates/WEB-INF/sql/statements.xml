@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <sql-statements package="table">
+        <table-statements table="*" prefix-table="yes"/>
+    </sql-statements>
+
+    <table-query-defns table="*"/>
+</xaf>

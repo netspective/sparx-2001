@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.9 2002-10-20 16:00:36 shahid.shah Exp $
+ * $Id: dialog.js,v 1.10 2002-12-31 19:56:44 shahid.shah Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -330,6 +330,7 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
         this.getFieldAreaElem = DialogField_getFieldAreaElem_IE4;
     }
 
+    this.getAdjacentArea = DialogField_getAdjacentArea;
     this.evaluateConditionals = DialogField_evaluateConditionals;
     this.finalizeContents = DialogField_finalizeContents;
     this.isValid = DialogField_isValid;
@@ -349,6 +350,16 @@ function DialogField_isRequired()
 function DialogField_isReadOnly()
 {
     return ((this.flags & FLDFLAG_READONLY) != 0) || ((this.flags & FLDFLAG_BROWSER_READONLY) != 0);
+}
+
+function DialogField_getAdjacentArea(dialog)
+{
+    if((this.flags & FLDFLAG_CREATEADJACENTAREA) != 0)
+    {
+        return getControl(dialog, this.qualifiedName + "_adjacent");
+    }
+    else
+        return null;
 }
 
 /**

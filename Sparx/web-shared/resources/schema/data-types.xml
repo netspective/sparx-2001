@@ -187,7 +187,7 @@
 		<java-class package="java.lang">Object</java-class>
 		<sqldefn dbms="oracle">clob</sqldefn>
 		<sqldefn dbms="mssql">text</sqldefn>
-		<sqldefn dbms="hsqldb">text</sqldefn>
+		<sqldefn dbms="hsqldb">object</sqldefn>
 		<sqldefn dbms="postgres">bytea</sqldefn>
 	</datatype>
 

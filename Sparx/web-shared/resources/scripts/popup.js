@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: popup.js,v 1.3 2002-12-26 19:43:21 shahid.shah Exp $
+ * $Id: popup.js,v 1.4 2002-12-31 19:56:44 shahid.shah Exp $
  */
 
 //****************************************************************************
@@ -59,6 +59,7 @@
 //****************************************************************************
 
 var windowClasses = new Array();
+var adjacentAreaSuffix = "_adjacent";
 
 function DialogFieldPopupWindowClass(windowName, features)
 {
@@ -74,37 +75,47 @@ windowClasses["enum"] = new DialogFieldPopupWindowClass("EnumPopupWindow", "widt
 //****************************************************************************
 
 function PopulateControlInfo(sourceForm, sourceField, fieldName)
-{    
+{
 	this.dialog = activeDialog;
 	this.additive = false;
+	this.adjacentArea = null;
 	if(fieldName.charAt(0) == '+')
 	{
 		this.additive = true;
 		fieldName = fieldName.substring(1);
 	}
-	
+
 	this.fieldName = fieldName;
-	this.field = this.dialog.fieldsByQualName[fieldName];    
+	this.field = this.dialog.fieldsByQualName[fieldName];
 	if(this.field != null)
 		this.control = this.field.getControl(this.dialog);
-	else
+	else if(fieldName.indexOf(adjacentAreaSuffix) > 0)
 	{
-		this.control = this.field.getFieldAreaElement(this.dialog);
-		if(this.control == null)
-			alert("In DialogFieldPopup for " + sourceForm + "." + sourceField + ", fill field '" + fieldName + "' could not be found.");
+	    fieldName = fieldName.substring(0, fieldName.length - adjacentAreaSuffix.length);
+	    this.fieldName = fieldName;
+    	this.field = this.dialog.fieldsByQualName[fieldName];
+    	if(this.field != null)
+    	{
+    		this.adjacentArea = this.field.getAdjacentArea(this.dialog);
+	    	if(this.adjacentArea == null)
+		    	alert("In DialogFieldPopup for " + sourceForm + "." + sourceField + ", fill field '" + fieldName + "' could not be found [000].");
+		}
+		else
+    	    alert("In DialogFieldPopup for " + sourceForm + "." + sourceField + ", fill field '" + fieldName + "' could not be found [001].");
 	}
-	
+	else
+    	alert("In DialogFieldPopup for " + sourceForm + "." + sourceField + ", fill field '" + fieldName + "' could not be found [002].");
+
 	// the remaining are object-based methods
 	this.populateValue = PopulateControlInfo_populateValue;
 }
 
 function PopulateControlInfo_populateValue(value)
-{    
+{
 	if(this.additive)
 	{
 		if(this.field != null)
 		{
-        
 			this.control.value += "," + value;
 			if((this.field.typeName == "com.netspective.sparx.xaf.form.field.StaticField") || (this.field.flags & FLDFLAG_READONLY != 0))
 			{                
@@ -120,8 +131,12 @@ function PopulateControlInfo_populateValue(value)
 			this.control.innerHTML += "," + value;
 	}
 	else
-	{        
-		if(this.field != null)
+	{
+	    if(this.adjacentArea != null)
+	    {
+			this.adjacentArea.innerHTML = value;
+	    }
+		else if(this.field != null)
 		{                 
 			this.control.value = value;
 			if((this.field.typeName == "com.netspective.sparx.xaf.form.field.StaticField") || (this.field.flags & FLDFLAG_READONLY != 0))
@@ -131,10 +146,6 @@ function PopulateControlInfo_populateValue(value)
                     element.innerHTML = value;
             }
 		}
-		else
-        {
-			this.control.innerHTML = value;            
-        }
 	}
 }
 
@@ -186,15 +197,27 @@ function DialogFieldPopup_populateControl(value)
 		this.popupWindow.close();
 }
 
-function DialogFieldPopup_populateControls(values)
+function DialogFieldPopup_populateControls()
+{
+	// any number of arguments may be passed in, with each one being filled appropriately
+	var controls = this.controlsInfo;    
+    for(var i = 0; i < arguments.length; i++)
+    {
+        controls[i].populateValue(arguments[i]);
+	}	
+	if(this.closeAfterSelect)
+		this.popupWindow.close();
+}
+
+function DialogFieldPopup_populateControlsWithValues(values)
 {
 	// any number of values may be passed in, with each one being filled appropriately
-	
-	var controls = this.controlsInfo;    
+
+	var controls = this.controlsInfo;
     for(var i = 0; i < values.length; i++)
     {
         controls[i].populateValue(values[i]);
-	}	
+	}
 	if(this.closeAfterSelect)
 		this.popupWindow.close();
 }
@@ -209,5 +232,5 @@ function DialogFieldPopup_doPopup()
 function chooseItem()
 {
 	var popup = opener.activeDialogPopup;
-    popup.populateControls(arguments);
+    popup.populateControlsWithValues(arguments);
 }

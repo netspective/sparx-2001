@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <dialog-skin name="TestSkin">
+        <outer-table-attrs>
+            cellspacing='5' cellpadding='5' border='5'
+        </outer-table-attrs>
+        <frame-head-row-attrs>
+            bgcolor='#6495ed'
+        </frame-head-row-attrs>
+        <caption-cell-attrs>
+            style='font-family: Andale Mono'
+        </caption-cell-attrs>
+    </dialog-skin>
+</xaf>
