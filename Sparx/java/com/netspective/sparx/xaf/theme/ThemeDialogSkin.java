@@ -329,11 +329,11 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
         String rowAttr = fieldRowAttrs + " id='" + FIELDROW_PREFIX + field.getQualifiedName() + "' ";
         if(haveErrors)
             rowAttr = rowAttr + fieldRowErrorAttrs;
+        String accessKeyString = "";
 
         if(caption == null)
         {
             if (field instanceof SeparatorField)
-
                 fieldsHtml.append("<tr" + rowAttr + "><td class=\"dialog-fields-separator\" colspan='2'>" + controlHtml + "</td></tr>\n");
             else
                 fieldsHtml.append("<tr" + rowAttr + "><td colspan='2'>" + controlHtml + "</td></tr>\n");
@@ -345,9 +345,44 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
         }
         else
         {
-            fieldsHtml.append(
-                    "<tr><td " + captionClass + ">" + caption + "</td>" +
+            String accessKey = field.getAccessKey();
+            if (accessKey != null && accessKey.length() > 0)
+            {
+                int accessKeyPos = caption.toLowerCase().indexOf(accessKey.toLowerCase());
+                if (accessKeyPos > 0 && accessKeyPos < caption.length()-1)
+                {
+                    fieldsHtml.append("<tr " + rowAttr + "><td " + captionClass + "><label for=\"" + field.getId() + "\" accesskey=\"" +
+                        field.getAccessKey()+ "\">" + caption.substring(0, accessKeyPos) + "<span class=\"accesskey\">" +
+                        caption.substring(accessKeyPos, accessKeyPos+1) + "</span>" + caption.substring(accessKeyPos+1) + "</label></td>" +
+                        "<td "+ controlAreaClass + " width='100%'>" + controlHtml + "</td></tr>\n");
+                }
+                else if (accessKeyPos == caption.length()-1)
+                {
+                    fieldsHtml.append("<tr " + rowAttr + "><td " + captionClass + "><label for=\"" + field.getId() + "\" accesskey=\"" +
+                        field.getAccessKey()+ "\">" + caption.substring(0, accessKeyPos) + "<span class=\"accesskey\">" +
+                        caption.substring(accessKeyPos) + "</span></label></td>" +
+                        "<td "+ controlAreaClass + " width='100%'>" + controlHtml + "</td></tr>\n");
+                }
+                else if (accessKeyPos == 0)
+                {
+                    fieldsHtml.append("<tr " + rowAttr + "><td " + captionClass + "><label for=\"" + field.getId() + "\" accesskey=\"" +
+                        field.getAccessKey()+ "\">" + "<span class=\"accesskey\">" +
+                        caption.substring(0, 1) + "</span>"+ caption.substring(1) +"</label></td>" +
+                        "<td "+ controlAreaClass + " width='100%'>" + controlHtml + "</td></tr>\n");
+                }
+                else
+                {
+                    fieldsHtml.append(
+                    "<tr " + rowAttr + "><td " + captionClass + ">" + caption + "</td>" +
                     "<td "+ controlAreaClass + " width='100%'>" + controlHtml + "</td></tr>\n");
+                }
+            }
+            else
+            {
+                fieldsHtml.append(
+                    "<tr " + rowAttr + "><td " + captionClass + ">" + caption + "</td>" +
+                    "<td "+ controlAreaClass + " width='100%'>" + controlHtml + "</td></tr>\n");
+            }
             if (messagesHtml != null && messagesHtml.length() > 0)
             {
                 fieldsHtml.append("<tr><td>&nbsp;</td><td class=\"dialog-fields-hint-table\" align=\"left\" valign=\"top\" nowrap width=\"50%\">" +
