@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.13 2003-02-26 07:54:14 aye.thu Exp $
+ * $Id: QueryBuilderDialog.java,v 1.14 2003-03-05 23:14:25 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -117,6 +117,7 @@ public class QueryBuilderDialog extends Dialog
 
     private int maxConditions;
     private QueryDefinition queryDefn;
+    private String reportId;
 
     public static class ConditionField extends DialogField
     {
@@ -317,6 +318,7 @@ public class QueryBuilderDialog extends Dialog
         addField(sortFields);
     }
 
+
     public void createContents()
     {
         clearFields();
@@ -325,9 +327,18 @@ public class QueryBuilderDialog extends Dialog
         addResultsSepatorField();
         addOutputDestinationFields();
         addDisplayOptionsFields();
-
         addField(new DialogDirector());
         addField(new ResultSetNavigatorButtonsField());
+    }
+
+    public String getReportId()
+    {
+        return reportId;
+    }
+
+    public void setReportId(String reportId)
+    {
+        this.reportId = reportId;
     }
 
     public int getMaxConditions()
@@ -505,7 +516,12 @@ public class QueryBuilderDialog extends Dialog
                 String rowsPerPageStr = dc.getValue("rows_per_page");
                 if(rowsPerPageStr == null || rowsPerPageStr.length() == 0)
                     rowsPerPageStr = dc.getValue("output.rows_per_page");
-                state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select,
+                if (getReportId() != null)
+                    state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, getReportId(),
+                        pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize,
+                        ResultSetScrollState.SCROLLTYPE_USERESULTSET, skin);
+                else
+                    state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select,
                         pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize,
                         ResultSetScrollState.SCROLLTYPE_USERESULTSET, skin);
                 if(state.isValid())
