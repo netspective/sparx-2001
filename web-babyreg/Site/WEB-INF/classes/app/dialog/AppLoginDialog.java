@@ -80,11 +80,11 @@ public class AppLoginDialog extends LoginDialog
 		writer.write("	<center><br>");
 		writer.write("		<img src='"+ resourcesUrl +"/images/login.gif' border='0'>");
 		writer.write("		<p>");
-		writer.write("		Type your fist and last name to get into the site.");
+		writer.write("		Type your fist and last name to get into the site if you have already register.");
 		writer.write("		<br>The names are case sensitive.");
 		writer.write("		<p>");
         renderHtml(writer, dc, true);
-        writer.write("		<br><a href='NewUserRegistration.jsp?data_cmd=add'>New User</a>");
+        writer.write("		<br>Click <a href='NewUserRegistration.jsp?data_cmd=add'>here</a> to register as a new user.");
 		writer.write("	</center>");
 		writer.write("</body>");
 	}
@@ -135,6 +135,7 @@ public class AppLoginDialog extends LoginDialog
 	{
 		String personId = (String) dc.getRequest().getAttribute("user-person-id");
 		String personRelationship = null;
+        String isPersonAdmin = "no";
 
 		StatementManager.ResultInfo ri = null;
 		try
@@ -146,6 +147,18 @@ public class AppLoginDialog extends LoginDialog
             personRelationship = stmtMgr.getResultSetSingleRowAsStrings(ri.getResultSet())[0];
             //personRelationship = stmtMgr.getResultSetSingleRowAsMap(ri.getResultSet());
 			ri.close();
+
+           ri = stmtMgr.execute(dbc, dc, null, "User.adminRelationships", null);
+           String[] adminRelationships = stmtMgr.getResultSetSingleRowAsStrings(ri.getResultSet());
+           for (int i = 0; i < adminRelationships.length; i++) {
+              String adminRelationship = adminRelationships[i];
+              if (personRelationship.equals(adminRelationship)){
+                 isPersonAdmin = "yes";
+                 break;
+              }
+
+           }
+
 		}
 		catch(Exception e)
 		{
@@ -161,6 +174,7 @@ public class AppLoginDialog extends LoginDialog
 		AuthenticatedUser user = new BasicAuthenticatedUser(dc.getValue("user_id"), personRelationship);
 		user.setAttribute("person-id", personId);
 		user.setAttribute("relationship", personRelationship);
+        user.setAttribute("isPersonAdmin", isPersonAdmin);
 
         HttpServletRequest req = (HttpServletRequest) dc.getRequest();
 		req.getSession(true).setAttribute("person-id", personId);

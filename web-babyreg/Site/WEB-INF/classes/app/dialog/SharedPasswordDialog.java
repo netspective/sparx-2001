@@ -29,7 +29,7 @@ public class SharedPasswordDialog extends Dialog
         passwordField = new TextField("password","Shared Password");
         passwordField.setFlag(DialogField.FLDFLAG_REQUIRED);
         addField(passwordField);
-        setHeading("You're not a user yet!");
+        setHeading("Shared Secret");
         setName("Gift_PreUserRegistration");
         setDirector(new DialogDirector("NewUser"));
     }
