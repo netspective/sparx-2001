@@ -73,6 +73,17 @@ public class QueryDefinition
 		errors.add(group + ": " + message);
 	}
 
+	public QueryField[] getFieldsFromDelimitedNames(String names, String delim)
+	{
+		List result = new ArrayList();
+		StringTokenizer st = new StringTokenizer(names, delim);
+		while(st.hasMoreTokens())
+		{
+			result.add((QueryField) fieldsMap.get(st.nextToken()));
+		}
+		return (QueryField[]) result.toArray(new QueryField[result.size()]);
+	}
+
 	public void importFromXml(Element elem)
 	{
 		name = elem.getAttribute("id");

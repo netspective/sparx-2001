@@ -9,8 +9,9 @@ package com.xaf.sql.query;
  * @version 1.0
  */
 
-import java.util.*;
+import java.io.*;
 import java.sql.*;
+import java.util.*;
 import javax.naming.*;
 
 import org.w3c.dom.*;
@@ -148,10 +149,20 @@ public class QuerySelect
 		if(descending)
 			sortRef.setDescending();
 
-		if(sortRef.isStatic() && sortRef.getField(null) == null)
-			addError("query-select-addOrderBy", "field '"+ fieldName +"' not found");
-		else
-			addOrderBy(sortRef);
+		if(sortRef.isStatic())
+		{
+			QueryField[] fields = sortRef.getFields(null);
+			for(int i = 0; i < fields.length; i++)
+			{
+				if(fields[i] == null)
+				{
+					addError("query-select-addOrderBy", "field '"+ fieldName +"' not found");
+					break;
+				}
+			}
+		}
+
+		addOrderBy(sortRef);
 	}
 
 	public void addOrderBy(String[] fieldNames)

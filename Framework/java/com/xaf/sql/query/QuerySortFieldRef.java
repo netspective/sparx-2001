@@ -1,13 +1,16 @@
 package com.xaf.sql.query;
 
+import java.util.*;
 import com.xaf.value.*;
 
 public class QuerySortFieldRef
 {
+	static public final String MULTIFIELD_SORT_DELIM = ",";
+
 	private QueryDefinition queryDefn;
 	private SingleValueSource fieldNameSrc;
 	private boolean isStatic;
-	private QueryField field;
+	private QueryField[] fields;
 	private boolean descending;
 
     public QuerySortFieldRef(QueryDefinition queryDefn, String fieldName)
@@ -17,12 +20,12 @@ public class QuerySortFieldRef
 		if(fieldNameSrc instanceof StaticValue)
 		{
 			isStatic = true;
-			field = queryDefn.getField(fieldName);
+			fields = queryDefn.getFieldsFromDelimitedNames(fieldName, MULTIFIELD_SORT_DELIM);
 		}
 		else
 		{
 			isStatic = false;
-			field = null;
+			fields = null;
 		}
     }
 
@@ -37,13 +40,15 @@ public class QuerySortFieldRef
 	public boolean isStatic() { return isStatic; }
 	public SingleValueSource getFieldName() { return fieldNameSrc; }
 
-	public QueryField getField(ValueContext vc)
+	public QueryField[] getFields(ValueContext vc)
 	{
-		if(isStatic) return field;
+		if(isStatic) return fields;
 
 		String fieldName = fieldNameSrc.getValue(vc);
 		if(fieldName != null)
-			return queryDefn.getField(fieldName);
+		{
+			return queryDefn.getFieldsFromDelimitedNames(fieldName, MULTIFIELD_SORT_DELIM);
+		}
 		else
 			return null;
 	}
