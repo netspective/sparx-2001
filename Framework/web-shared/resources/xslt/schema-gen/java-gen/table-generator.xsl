@@ -263,7 +263,9 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		return get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
 	}
 
-	/** Deletes all the rows identified by the parent key as a primitive type **/
+	/** 
+	 * Deletes all the rows identified by the parent key as a primitive type (does a fast SQL delete, which does not generate interim rows and therefore does not call beforeDelete and afterDelete methods in Row)
+	 */
 	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException
 	{ 
 		delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
@@ -276,7 +278,7 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	}
 
 	/** 
-	* Deletes all the rows identified by the parent key 
+	* Deletes all the rows identified by the parent key (does a fast SQL delete, which does not generate interim rows and therefore does not call beforeDelete and afterDelete methods in Row)
 	**/
 	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
 	{ 
