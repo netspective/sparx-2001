@@ -115,7 +115,7 @@ public class HierarchicalMenu extends AbstractComponent
 	public void createEntriesJS(PageContext pc)
 	{
 		StringBuffer script = new StringBuffer();
-		DrawContext dc = (DrawContext) pc.getRequest().getAttribute(DrawContext.class.getName());
+		DrawContext dc = pc != null ? (DrawContext) pc.getRequest().getAttribute(DrawContext.class.getName()) : null;
 
 		if(dc == null || dc.firstMenu)
 		{
@@ -141,4 +141,156 @@ public class HierarchicalMenu extends AbstractComponent
 
 		writer.write(entriesJS);
 	}
+
+    public VirtualPath getEntries() {
+        return entries;
+    }
+
+    public void setEntries(VirtualPath entries) {
+        this.entries = entries;
+    }
+
+    public String getSharedScriptsRootURL() {
+        return sharedScriptsRootURL;
+    }
+
+    public void setSharedScriptsRootURL(String sharedScriptsRootURL) {
+        this.sharedScriptsRootURL = sharedScriptsRootURL;
+    }
+
+    public String getEntriesJS() {
+        return entriesJS;
+    }
+
+    public void setEntriesJS(String entriesJS) {
+        this.entriesJS = entriesJS;
+    }
+
+    public int getMenuNum() {
+        return menuNum;
+    }
+
+    public void setMenuNum(int menuNum) {
+        this.menuNum = menuNum;
+    }
+
+    public int getMenuWidth() {
+        return menuWidth;
+    }
+
+    public void setMenuWidth(int menuWidth) {
+        this.menuWidth = menuWidth;
+    }
+
+    public int getMenuTopPos() {
+        return menuTopPos;
+    }
+
+    public void setMenuTopPos(int menuTopPos) {
+        this.menuTopPos = menuTopPos;
+    }
+
+    public int getMenuLeftPos() {
+        return menuLeftPos;
+    }
+
+    public void setMenuLeftPos(int menuLeftPos) {
+        this.menuLeftPos = menuLeftPos;
+    }
+
+    public boolean isTopPermanent() {
+        return isTopPermanent;
+    }
+
+    public void setTopPermanent(boolean topPermanent) {
+        isTopPermanent = topPermanent;
+    }
+
+    public boolean isTopHorizontal() {
+        return isTopHorizontal;
+    }
+
+    public void setTopHorizontal(boolean topHorizontal) {
+        isTopHorizontal = topHorizontal;
+    }
+
+    public boolean isTreeHorizontal() {
+        return isTreeHorizontal;
+    }
+
+    public void setTreeHorizontal(boolean treeHorizontal) {
+        isTreeHorizontal = treeHorizontal;
+    }
+
+    public boolean isPositionUnder() {
+        return positionUnder;
+    }
+
+    public void setPositionUnder(boolean positionUnder) {
+        this.positionUnder = positionUnder;
+    }
+
+    public boolean isTopMoreImagesVisible() {
+        return topMoreImagesVisible;
+    }
+
+    public void setTopMoreImagesVisible(boolean topMoreImagesVisible) {
+        this.topMoreImagesVisible = topMoreImagesVisible;
+    }
+
+    public boolean isTreeMoreImagesVisible() {
+        return treeMoreImagesVisible;
+    }
+
+    public void setTreeMoreImagesVisible(boolean treeMoreImagesVisible) {
+        this.treeMoreImagesVisible = treeMoreImagesVisible;
+    }
+
+    public String getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(String fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public String getMouseOverFontColor() {
+        return mouseOverFontColor;
+    }
+
+    public void setMouseOverFontColor(String mouseOverFontColor) {
+        this.mouseOverFontColor = mouseOverFontColor;
+    }
+
+    public String getBgColor() {
+        return bgColor;
+    }
+
+    public void setBgColor(String bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public String getMouseOverBgColor() {
+        return mouseOverBgColor;
+    }
+
+    public void setMouseOverBgColor(String mouseOverBgColor) {
+        this.mouseOverBgColor = mouseOverBgColor;
+    }
+
+    public String getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(String borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public String getSeparatorColor() {
+        return separatorColor;
+    }
+
+    public void setSeparatorColor(String separatorColor) {
+        this.separatorColor = separatorColor;
+    }
 }

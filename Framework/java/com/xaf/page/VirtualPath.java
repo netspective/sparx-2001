@@ -3,8 +3,16 @@ package com.xaf.page;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import java.util.*;
 import com.xaf.value.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class VirtualPath
 {
@@ -87,6 +95,7 @@ public class VirtualPath
 	private String title;
 	private String heading;
 	private ServletPage page;
+    private String url;
 	private List childrenList = new ArrayList();
 	private Map childrenMap = new HashMap();
 	private Map absPathMap = new HashMap();
@@ -112,16 +121,83 @@ public class VirtualPath
 	public ServletPage getPage() { return page; }
 	public void setPage(ServletPage value) { page = value; }
 
+    public String getUrl() { return url; }
+	public void setUrl(String value) { url = value; }
+
 	public Map getAbsolutePathsMap() { return absPathMap; }
 
 	public String getCaption(PageContext pc) { return caption != null ? caption : (page != null ? page.getCaption(pc) : null); }
-	public void setCaption(String value) { caption = value; }
+	public void setCaption(String value) { caption = value != null && value.length() > 0 ? value : null; }
 
 	public String getTitle(PageContext pc) { return title != null ? title : (page != null ? page.getTitle(pc) : null); }
-	public void setTitle(String value) { title = value; }
+	public void setTitle(String value) { title = value != null && value.length() > 0 ? value : null; }
 
 	public String getHeading(PageContext pc) { return heading != null ? heading : (page != null ? page.getHeading(pc) : null); }
-	public void setHeading(String value) { heading = value; }
+	public void setHeading(String value) { heading = value != null && value.length() > 0 ? value : null; }
+
+    public static VirtualPath importFromXml(String xmlFile) throws ParserConfigurationException, SAXException, IOException
+    {
+        Document doc = null;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder parser = factory.newDocumentBuilder();
+        doc = parser.parse(xmlFile);
+        doc.normalize();
+
+        VirtualPath root = new VirtualPath();
+
+        Element rootElem = doc.getDocumentElement();
+        NodeList children = rootElem.getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
+        {
+            Node child = children.item(c);
+            if(child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            Element childElem = (Element) child;
+            if(childElem.getNodeName().equals("structure"))
+            {
+                importFromXml(childElem, root);
+            }
+        }
+
+        return root;
+    }
+
+    public static void importFromXml(Element elem, VirtualPath parent)
+    {
+        NodeList children = elem.getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
+        {
+            Node child = children.item(c);
+            if(child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            Element childElem = (Element) child;
+            if(childElem.getNodeName().equals("page"))
+            {
+                VirtualPath childPath = new VirtualPath();
+                childPath.setOwner(parent.getOwner());
+                childPath.setParent(parent);
+                childPath.setUrl(childElem.getAttribute("url"));
+                parent.getChildrenMap().put(childPath.getUrl(), childPath);
+                parent.getChildrenList().add(childPath);
+                parent.register(childPath);
+
+                String caption = childElem.getAttribute("caption");
+                childPath.setCaption(caption);
+
+                String heading = childElem.getAttribute("heading");
+                if(heading.length() == 0) heading = caption;
+                childPath.setHeading(heading);
+
+                String title = childElem.getAttribute("title");
+                if(title.length() == 0) title = caption;
+                childPath.setTitle(title);
+
+                importFromXml(childElem, childPath);
+            }
+        }
+    }
 
 	public FindResults findPath(String path)
 	{
@@ -130,6 +206,9 @@ public class VirtualPath
 
 	public String getAbsolutePath()
 	{
+        if(url != null)
+            return url;
+
 		StringBuffer path = name != null ? new StringBuffer(name) : new StringBuffer();
 		VirtualPath active = getParent();
 		while(active != null)
@@ -146,6 +225,9 @@ public class VirtualPath
 	public String getAbsolutePath(PageContext pc)
 	{
 		String absPath = getAbsolutePath();
+        if(pc == null)
+            return absPath;
+
 		HttpServletRequest request = (HttpServletRequest) pc.getRequest();
 		return request.getContextPath() + request.getServletPath() + absPath;
 	}
