@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<schema name="enumerations">
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+
+	<table name="Book_Type" abbrev="bkT" type="Enumeration">
+		<enum>Science Fiction</enum>
+		<enum>Mystery</enum>
+		<enum>Business</enum>
+		<enum>Information Technology</enum>
+		<enum>Nuclear Physics</enum>
+		<enum>Chemistry</enum>
+	</table>
+</schema>

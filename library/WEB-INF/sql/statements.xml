@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="library">
+		<statement name="sel_all_books">
+			select
+				book_info.id,
+				book_info.name,
+				book_type.caption as genre,
+				book_info.author,
+				book_info.isbn,
+				book_info.id
+			from
+				book_info,
+				book_type
+			where
+				book_info.type = book_type.id;
+			
+			<report>
+				<column align="center" heading=" " index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
+				<column index="1" output="&lt;a href=&quot;viewBook.jsp?bookid=${0}&quot;&gt;${1}&lt;/a&gt;"/>
+				<column heading="Genre" index="2"/>
+				<column align="center" heading=" " index="5" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=delete&amp;bookid=${0}&quot;&gt;delete&lt;/a&gt;"/>
+			</report>
+		</statement>
+
+		<statement name="sel_one_book">
+			select
+				book_info.id,
+				book_info.name,
+				book_type.caption as genre,
+				book_info.author,
+				book_info.isbn
+			from
+				book_info,
+				book_type
+			where
+				book_info.type = book_type.id and
+				book_info.id = ?;
+			
+			<params>
+				<param value="request:bookid"/>
+			</params>
+
+			<report>
+				<column heading="Action" index="0" output="&lt;a href=&quot;bookInfo.jsp?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
+				<column heading="Name" index="1"/>
+				<column heading="Genre" index="2"/>
+				<column heading="Author" index="3"/>
+			</report>
+		</statement>
+	</sql-statements>
+
+	<query-defn id="searchBooks">
+		<field id="book_id" caption="Book ID" join="Book_Info" column="id">
+			<report heading="ID"/>
+		</field>
+		
+		<field id="book_name" caption="Name" join="Book_Info" column="name"/>
+		<field id="book_author" caption="Author" join="Book_Info" column="author"/>
+		<field id="book_genre" caption="Genre" join="Book_Type" column="id" column-expr="Book_Type.caption"/>
+		<field id="book_isbn" caption="ISBN" join="Book_Info" column="ISBN"/>
+		
+		<join id="Book_Info" table="Book_Info" condition="Book_Info.type = Book_Type.id" imply-join="Book_Type"/>
+		<join id="Book_Type" table="Book_Type"/>
+		
+		<select-dialog name="searchDialog" heading="Search Books">
+			<field.text query-field="book_id"/>
+			<!--field.text query-field="book_genre"/-->
+			<field.select query-field="book_genre" choices="schema-enum:Book_Type" prepend-blank="yes"/>
+			<field.text query-field="book_name"/>
+			<field.text query-field="book_author"/>
+			<field.text query-field="book_isbn"/>
+			
+			<select heading="Book Search Results">
+				<display field="book_id"/>
+				<display field="book_genre"/>
+				<display field="book_name"/>
+				<display field="book_author"/>
+				<display field="book_isbn"/>
+				
+				<condition field="book_id" allow-null="no" comparison="starts-with" value="form:book_id" connector="and"/>
+				<condition field="book_genre" allow-null="no" comparison="contains" value="form:book_genre" connector="and"/>
+				<condition field="book_name" allow-null="no" comparison="contains" value="form:book_name" connector="and"/>
+				<condition field="book_author" allow-null="no" comparison="contains" value="form:book_author" connector="and"/>
+				<condition field="book_isbn" allow-null="no" comparison="contains" value="form:book_isbn" connector="and"/>
+			</select>
+		</select-dialog>
+	</query-defn>
+</xaf>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<dialogs package="library">
+		<dialog class="library.BookInfo" heading="create-data-cmd-heading:Book Information" name="bookInfo" retain-params="*">
+			<field.text caption="Book ID" name="bookId" required="yes" max-length="10"/>
+			<field.text caption="Name" name="bookName" required="yes"/>
+			<field.text caption="Author" name="bookAuthor" required="yes"/>
+			<field.select caption="Genre" choices="schema-enum:Book_Type" name="bookType" prepend-blank="yes" required="yes"/>
+			<field.text caption="ISBN" name="bookISBN" max-length="10" required="yes"  validate-msg="Please enter an ISBN of the form X-XXXX-XXXX-X i.e. with dashes, not spaces.  Thank you." validate-pattern="/^\d+$/"/>
+		</dialog>
+	</dialogs>
+</xaf>
