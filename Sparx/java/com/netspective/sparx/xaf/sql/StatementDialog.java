@@ -77,7 +77,9 @@ import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalDisplay;
 import com.netspective.sparx.xaf.form.field.SelectField;
+import com.netspective.sparx.xaf.form.field.ReportSelectedItemsField;
 import com.netspective.sparx.xaf.querydefn.ResultSetNavigatorButtonsField;
+import com.netspective.sparx.xaf.querydefn.QuerySelectScrollState;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.util.value.StaticValue;
@@ -111,6 +113,18 @@ public class StatementDialog extends Dialog
         setFlag(Dialog.DLGFLAG_HIDE_HEADING_IN_EXEC_MODE);
         navBtns = new ResultSetNavigatorButtonsField();
         addField(navBtns);
+        //addReportSelectionField();
+    }
+
+    /**
+     * Add a selection field that keeps track of selected rows of the report
+     */
+    public void addReportSelectionField()
+    {
+        ReportSelectedItemsField selectedItemsField = new ReportSelectedItemsField("selected_item_list", "Selected IDs");
+        selectedItemsField.setSize(5);
+        selectedItemsField.setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
+        addField(selectedItemsField);
     }
 
     public void setReportName(String reportName)
@@ -199,6 +213,8 @@ public class StatementDialog extends Dialog
 
             if(hideFields)
             {
+                //dc.clearFlag("selected_item_list", DialogField.FLDFLAG_INVISIBLE);
+                //dc.clearFlag("selected_item_list", DialogField.FLDFLAG_READONLY);
                 dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
                 if (this.getDirector() != null)
                     dc.setFlag("director", DialogField.FLDFLAG_INVISIBLE);
@@ -289,6 +305,9 @@ public class StatementDialog extends Dialog
                     rowsPerPageStr = dc.getValue("output.rows_per_page");
                 if(rowsPerPageStr != null && rowsPerPageStr.length() > 0)
                     rowsPerPage = Integer.parseInt(rowsPerPageStr);
+
+                if (rowsPerPage == 0)
+                    rowsPerPage = 10;
 
                 // create a new scroll state object for this query
                 DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), dc.getServletContext());
