@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportBanner.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: ReportBanner.java,v 1.2 2002-10-13 18:39:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -97,6 +97,13 @@ public class ReportBanner
         public Item(String caption)
         {
             this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
+        }
+
+        public Item(SingleValueSource caption, SingleValueSource url, SingleValueSource icon)
+        {
+            this.caption = caption;
+            this.url = url;
+            this.icon = icon;
         }
 
         public SingleValueSource getCaption()

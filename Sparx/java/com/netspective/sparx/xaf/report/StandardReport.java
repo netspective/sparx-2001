@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StandardReport.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: StandardReport.java,v 1.2 2002-10-13 18:39:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -225,13 +225,8 @@ public class StandardReport implements Report
         if(name.length() == 0)
             name = "default";
 
-        String heading = elem.getAttribute("heading");
-        String footing = elem.getAttribute("footing");
-        if(heading.length() > 0 || footing.length() > 0)
-        {
-            if(frame == null) frame = new ReportFrame();
-            frame.importFromXml(elem);
-        }
+        if(frame == null) frame = new ReportFrame();
+        frame.importFromXml(elem);
 
         if(elem.getAttribute("first-row").equals("column-headings"))
             setFlag(REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS);
@@ -305,6 +300,19 @@ public class StandardReport implements Report
             }
             else if(childName.equals("banner-item"))
                 throw new RuntimeException("The <banner-item> element is now called <item> and must be placed inside a <banner> element (since Version 1.2.8 Build 51)");
+        }
+
+        // if a record add caption/url was provided but no banner was created, go ahead and generate a banner automatically
+        // banners are automatically hidden by record-viewer and shown by record-editor skins
+        if(frame != null && banner == null)
+        {
+            SingleValueSource recordAddCaption = frame.getRecordAddCaption();
+            SingleValueSource recordAddUrl = frame.getRecordAddUrlFormat();
+            if(recordAddCaption != null && recordAddUrl != null)
+            {
+                banner = new ReportBanner();
+                banner.addItem(new ReportBanner.Item(recordAddCaption, recordAddUrl, ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/design/action-edit-add.gif")));
+            }
         }
     }
 

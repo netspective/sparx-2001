@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportFrame.java,v 1.2 2002-08-24 05:35:46 shahid.shah Exp $
+ * $Id: ReportFrame.java,v 1.3 2002-10-13 18:39:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -59,9 +59,11 @@ package com.netspective.sparx.xaf.report;
 import java.util.ArrayList;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.xml.XmlSource;
 
 public class ReportFrame
 {
@@ -108,12 +110,21 @@ public class ReportFrame
     private SingleValueSource heading;
     private SingleValueSource headingExtra;
     private SingleValueSource footing;
+    private SingleValueSource recordAddCaption;
+    private SingleValueSource recordAddUrlFormat;
+    private SingleValueSource recordEditUrlFormat;
+    private SingleValueSource recordDeleteUrlFormat;
     private ArrayList items;
 
     public ReportFrame()
     {
         heading = null;
         footing = null;
+    }
+
+    public boolean hasHeadingOrFooting()
+    {
+        return heading != null || footing != null;
     }
 
     public SingleValueSource getHeading()
@@ -172,10 +183,75 @@ public class ReportFrame
         items.add(item);
     }
 
+    public SingleValueSource getRecordAddCaption()
+    {
+        return recordAddCaption;
+    }
+
+    public void setRecordAddCaption(SingleValueSource recordItemName)
+    {
+        this.recordAddCaption = recordItemName;
+    }
+
+    public void setRecordAddCaption(String value)
+    {
+        setRecordAddCaption((value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
+    }
+
+    public SingleValueSource getRecordAddUrlFormat()
+    {
+        return recordAddUrlFormat;
+    }
+
+    public void setRecordAddUrlFormat(SingleValueSource RecordAddUrlFormat)
+    {
+        this.recordAddUrlFormat = RecordAddUrlFormat;
+    }
+
+    public void setRecordAddUrlFormat(String value)
+    {
+        setRecordAddUrlFormat((value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
+    }
+
+    public SingleValueSource getRecordDeleteUrlFormat()
+    {
+        return recordDeleteUrlFormat;
+    }
+
+    public void setRecordDeleteUrlFormat(SingleValueSource RecordDeleteUrlFormat)
+    {
+        this.recordDeleteUrlFormat = RecordDeleteUrlFormat;
+    }
+
+    public void setRecordDeleteUrlFormat(String value)
+    {
+        setRecordDeleteUrlFormat((value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
+    }
+
+    public SingleValueSource getRecordEditUrlFormat()
+    {
+        return recordEditUrlFormat;
+    }
+
+    public void setRecordEditUrlFormat(SingleValueSource RecordEditUrlFormat)
+    {
+        this.recordEditUrlFormat = RecordEditUrlFormat;
+    }
+
+    public void setRecordEditUrlFormat(String value)
+    {
+        setRecordEditUrlFormat((value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
+    }
+
     public void importFromXml(Element elem)
     {
-        setHeading(elem.getAttribute("heading"));
-        setHeadingExtra(elem.getAttribute("heading-extra"));
-        setFooting(elem.getAttribute("footing"));
+        setHeading(XmlSource.getAttrValueOrTagText(elem, "heading", null));
+        setHeadingExtra(XmlSource.getAttrValueOrTagText(elem, "heading-extra", null));
+        setFooting(XmlSource.getAttrValueOrTagText(elem, "footing", null));
+
+        setRecordAddCaption(XmlSource.getAttrValueOrTagText(elem, "record-add-caption", null));
+        setRecordAddUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-add-url", null));
+        setRecordEditUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-edit-url", null));
+        setRecordDeleteUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-delete-url", null));
     }
 }
