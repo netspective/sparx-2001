@@ -49,7 +49,7 @@ Build targets:
 	    <property environment="env"/>
 
 	    <property name="CLASSPATH" value="${env.CLASSPATH}"/>
-	    
+
 	    <!-- Compile the BuildConfiguration class -->
 	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"
 			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java"
@@ -66,6 +66,7 @@ Build targets:
         <mkdir dir="${lib-ext.dir}"/>
 
 	    <property name="web-shared.dir" value="../web-shared"/>
+	    <property name="web-shared.versioned.dirname" value="web-shared-${build.libitem.path.prefix}"/>
 	    <property name="doc.dir" value="${web-shared.dir}/docs"/>
 	    <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
 
@@ -133,8 +134,14 @@ Build targets:
     <!-- ============================= JavaDoc XAF ========================= -->
 
     <target name="web-shared">
-    	<zip zipfile="${lib-ext.dir}/${web-shared.zip}" basedir="${web-shared.dir}"/>
-        <copy file="${lib-ext.dir}/${web-shared.zip}" tofile="${lib.dir}/${web-shared.zip}"/>
+    	<!-- store two copies of the ZIP file:
+    	     1) a zip file with web-shared as the root (no path prefix)
+    	     2) a zip file with web-shared-[version] as the path prefix
+    	-->
+    	<zip zipfile="${lib.dir}/${web-shared.zip}" basedir="${web-shared.dir}"/>
+    	<zip zipfile="${lib-ext.dir}/${web-shared.zip}">
+    		<zipfileset dir="${web-shared.dir}" prefix="${web-shared.versioned.dirname}"/>
+    	</zip>
     </target>
 
     <!-- ==================== Administrative targets  ======================= -->
