@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.7 2002-12-23 04:29:56 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.8 2002-12-26 19:18:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -81,6 +81,7 @@ import org.w3c.dom.Text;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
 import com.netspective.sparx.xaf.html.Component;
+import com.netspective.sparx.xaf.html.ComponentCommandException;
 import com.netspective.sparx.xaf.html.component.HierarchicalMenu;
 import com.netspective.sparx.xaf.page.AbstractServletPage;
 import com.netspective.sparx.xaf.page.PageContext;
@@ -259,7 +260,7 @@ public class AceServletPage extends AbstractServletPage
             {
                 dc.firstMenu = i == 0;
                 dc.lastMenu = i == (menus.length - 1);
-                menus[i].printHtml(pc, out);
+                menus[i].renderHtml(pc, out);
             }
             out.print("</head>\n\n");
         }
