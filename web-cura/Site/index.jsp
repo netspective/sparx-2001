@@ -1,6 +1,14 @@
+<%@ page import="java.util.Map,
+                 com.xaf.security.AuthenticatedUser"%>
 <%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
 <%@ taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"%>
 
+
+<%
+    String orgId = request.getParameter("organization");
+    if (orgId != null)
+        session.setAttribute("organization", orgId);
+ %>
 <app:page title="Cura" heading="Welcome to Cura">
 
 

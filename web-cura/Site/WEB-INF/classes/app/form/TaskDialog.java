@@ -113,7 +113,7 @@ public class TaskDialog extends Dialog
             taskRow.setPriorityId(new Integer(rc.getPriorityId()));
             taskRow.setTaskStatus(new Integer(rc.getTaskStatus()));
             //taskRow.setTaskResolution(new Integer(rc.getTaskResolution()));
-            taskRow.setOwnerOrgId(new Long(rc.getOwnerOrgId()));
+            //taskRow.setOwnerOrgId(new Long(rc.getOwnerOrgId()));
             //taskRow.setOwnerPersonId(new Long());
             taskTable.update(cc, taskRow);
 

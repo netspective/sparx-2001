@@ -12,12 +12,12 @@ import com.xaf.security.AuthenticatedUser;
 import com.xaf.db.ConnectionContext;
 import com.xaf.db.DatabaseContextFactory;
 import dal.domain.Project;
-import dal.domain.rows.ProjectRelationRows;
+import dal.domain.rows.ProjectOrgRelationRows;
 import dal.domain.row.ProjectRow;
-import dal.domain.row.ProjectRelationRow;
+import dal.domain.row.ProjectOrgRelationRow;
 import dal.table.ProjectTable;
 import dal.table.RecordStatusTable;
-import dal.table.ProjectRelationTable;
+import dal.table.ProjectOrgRelationTable;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Iterator;
 import java.math.BigDecimal;
+import java.sql.Date;
 
 public class ProjectDialog extends Dialog
 {
@@ -124,8 +125,8 @@ public class ProjectDialog extends Dialog
             dialog.context.project.RegistrationContext rc = (dialog.context.project.RegistrationContext) dc;
 
             // remove all the relationships assigned to this project
-            ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
-            projRelTable.deleteProjectRelationRowsUsingParentId(cc, rc.getProjectId());
+            ProjectOrgRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectOrgRelationTable();
+            projRelTable.deleteProjectOrgRelationRowsUsingParentId(cc, rc.getProjectId());
 
             ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
             ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
@@ -158,16 +159,18 @@ public class ProjectDialog extends Dialog
             ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
             projectRow.setProjectName(rc.getProjectName());
             projectRow.setProjectDescr(rc.getProjectDescr());
+            projectRow.setProjectStatus(rc.getProjectStatusInt());
+            projectRow.setActualEndDate(new java.sql.Date(rc.getActualEndDate().getTime()));
             projectTable.update(cc, projectRow);
 
-			/*
-            ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
-            ProjectRelationRows projRelRows =  projectRow.getProjectRelationRows(cc);
+			// every project added needs a 'owner' organization
+            ProjectOrgRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectOrgRelationTable();
+            ProjectOrgRelationRows projRelRows =  projectRow.getProjectOrgRelationRows(cc);
 
             Iterator list = projRelRows.listIterator();
             while (list.hasNext())
             {
-                ProjectRelationRow projRelRow = (ProjectRelationRow)list.next();
+                ProjectOrgRelationRow projRelRow = (ProjectOrgRelationRow)list.next();
                 // NOTE: relationships have not been defined yet. Using 1 as a dummy
                 if (projRelRow.getRelType().intValue() == 1)
                 {
@@ -175,7 +178,7 @@ public class ProjectDialog extends Dialog
                     projRelTable.update(cc, projRelRow);
                 }
             }
-			*/
+
 
 		    cc.endTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
@@ -203,6 +206,7 @@ public class ProjectDialog extends Dialog
         String projectName = (String) dc.getValue("project_name");
         String projectCode = (String) dc.getValue("project_code");
         String organization = (String) dc.getValue("organization_id");
+
         long mainProject = 0;
         try
         {
@@ -219,6 +223,9 @@ public class ProjectDialog extends Dialog
             projectRow.setProjectName(projectName);
             projectRow.setProjectDescr(projectDescr);
             projectRow.setProjectCode(projectCode);
+            projectRow.setProjectStatus(new Integer(dc.getValue("project_status")));
+            projectRow.setStartDate((Date)dc.getValueForSqlBindParam("start_date"));
+            projectRow.setTargetEndDate((Date)dc.getValueForSqlBindParam("target_end_date"));
             // by default, set the record to be active
             projectRow.setRecordStatusId(RecordStatusTable.EnumeratedItem.ACTIVE);
             if (mainProject != 0)
@@ -227,24 +234,20 @@ public class ProjectDialog extends Dialog
             projectTable.insert(cc, projectRow);
 
             // insert the project relationships
-            /*
-            ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
-            ProjectRelationRow projRelRow = projRelTable.createProjectRelationRow();
+            ProjectOrgRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectOrgRelationTable();
+            ProjectOrgRelationRow projRelRow = projRelTable.createProjectOrgRelationRow();
             projRelRow.setParentId(projectRow.getProjectId());
             projRelRow.setCrPersonId(personId.longValue());
             projRelRow.setCrStampSqlExpr("sysdate");
             projRelRow.setRelBeginSqlExpr("sysdate");
             projRelRow.setRelOrgId(Long.parseLong((String)dc.getValue("organization")));
             // assigning a project to person. Relationship not deifned yet so assign the creating user
-            projRelRow.setRelPersonId(personId.longValue());
             // NOTE: relationship types have not been defined yet. Insert dummy value
-            projRelRow.setRelType(1);
+            projRelRow.setRelType(dal.table.ProjectOrgRelationTypeTable.EnumeratedItem.OWNER);
             if (dc.getValue("notify_email") != null)
                 projRelRow.setNotifyEmail(dc.getValue("notify_email"));
 			// insert a new project relationship row
             projRelTable.insert(cc, projRelRow);
-            */
-
             // end the transaction
             cc.endTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());

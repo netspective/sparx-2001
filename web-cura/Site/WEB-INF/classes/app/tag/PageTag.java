@@ -123,10 +123,13 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             //String personId = (String) user.getUserId();
             Map personRegistration = (Map) user.getAttribute("registration");
             BigDecimal personId = (BigDecimal) personRegistration.get("person_id");
-            req.setAttribute("person_id", personId);
+            //req.setAttribute("person_id", personId);
 
+            // get the list of organizations the user belongs to
             Map memberOrgs = (Map) user.getAttribute("member-orgs");
             int orgCount = memberOrgs.size();
+            // get the current organization selected
+            String currOrgId = (String)session.getAttribute("organization");
 
 
 			out.println("<html>");
@@ -135,6 +138,11 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			out.println("</head>");
 			out.println("<body  bgcolor='#FFFFFF'  text='#000000' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>");
             out.println("<link rel='stylesheet' href='"+ resourcesUrl +"/css/main.css'>");
+            out.println("<SCRIPT LANGUAGE='JavaScript'><!--");
+            out.println("function goto_URL(object) {");
+            out.println("   window.location.href = object.options[object.selectedIndex].value;");
+            out.println("}//--></SCRIPT>");
+
 			//mainMenu.printHtml(null, out);
 
             out.println("<table width='100%' border='0' cellpadding='0' cellspacing='0'>");
@@ -149,12 +157,15 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("<tr bgcolor='#4a74e7'>");
             out.println("   <td style='font-family: Trebuchet MS, Arial; font-size: 8pt;height:21px' align='left'><b><font color='#FFFFFF'>" + personRegistration.get("complete_name") + "</b></font></td>");
             out.println("   <td align='right' style='font-family: Trebuchet MS, Arial; font-size: 8pt'><font color='white'>Organization: &nbsp; ") ;
-            out.println("   <select name='active_org' size='" + orgCount + "' style='font-size: 7pt'>");
+            out.println("   <select name='active_org'  style='font-size: 7pt' onChange='goto_URL(this)'>");
             Iterator orgKeys = memberOrgs.keySet().iterator();
             while (orgKeys.hasNext())
             {
-                Object orgId = orgKeys.next();
-                out.println("       <option  value='"+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
+                String orgId = (String)orgKeys.next();
+                if (currOrgId.equals(orgId))
+                    out.println("       <option  selected value='" + rootPath + "/index.jsp?organization="+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
+                else
+                    out.println("       <option  value='" + rootPath + "/index.jsp?organization="+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
             }
             out.println("   </select></font></td");
             out.println("</tr>");

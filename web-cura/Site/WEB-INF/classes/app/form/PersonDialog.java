@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Map;
+import java.net.URL;
+import java.net.URLEncoder;
 
 public class PersonDialog   extends com.xaf.form.Dialog
 {
@@ -88,7 +90,8 @@ public class PersonDialog   extends com.xaf.form.Dialog
             this.processEditData(dc);
         }
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-        String url = request.getContextPath() + "/contact/home.jsp?person_id=" + request.getAttribute("person_id");
+        String url = request.getContextPath() + "/contact/home.jsp?person_id=" + request.getAttribute("person_id") +
+            "&person_name=" + URLEncoder.encode((String)request.getAttribute("person_name"));
         try
         {
             ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
@@ -167,11 +170,13 @@ public class PersonDialog   extends com.xaf.form.Dialog
             StatementManager sm = dc.getStatementManager();
             DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), dc.getServletContext());
 
+            String fullName = dc.getValue("name_first") + " " + dc.getValue("name_middle") + " " + dc.getValue("name_last");
+
             // fields represent a mapping for dialog fields to database column names
             String fields = "name_last,name_first,name_middle,name_prefix," +
                     "ssn,gender";
             // columns represent a mapping of database column names to literal values?
-            String columns = "cr_stamp=custom-sql:sysdate";
+            String columns = "cr_stamp=custom-sql:sysdate,complete_name=custom-sql:'" + fullName + "'";
             String autoinc = "person_id,per_person_id_seq";
             String autoincStore = "request-attr:new_person_id";
             dc.executeSqlInsert("person", fields, columns, autoinc, autoincStore);
@@ -229,6 +234,7 @@ public class PersonDialog   extends com.xaf.form.Dialog
             // end transaction
             dc.endSqlTransaction();
             dc.getRequest().setAttribute("person_id", person_id);
+            dc.getRequest().setAttribute("person_name", fullName);
         }
         catch (TaskExecuteException tee)
         {

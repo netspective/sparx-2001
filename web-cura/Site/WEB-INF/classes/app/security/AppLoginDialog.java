@@ -113,10 +113,17 @@ public class AppLoginDialog extends LoginDialog
 
 			ri = stmtMgr.execute(dbc, dc, null, "person.active-org-memberships", new Object[] { personId });
 			ResultSet rs = ri.getResultSet();
+            boolean orgSet = false;
 			while(rs.next())
 			{
 				/* col 1 is the org_id, col 2 is org_name */
 				memberOrgs.put(rs.getString(1), rs.getString(2));
+                // by default, select the first organization to be the pre-selected one
+                if (!orgSet)
+                {
+                    orgSet = true;
+                    dc.getSession().setAttribute("organization", rs.getString(1));
+                }
 			}
 			ri.close();
 
@@ -137,6 +144,7 @@ public class AppLoginDialog extends LoginDialog
 
 		AuthenticatedUser user = new BasicAuthenticatedUser(dc.getValue("user_id"), (String) personRegistration.get("complete_name"));
 		user.setAttribute("person-id", personId);
+        dc.getSession().setAttribute("person_id", personId);
 		user.setAttribute("registration", personRegistration);
 		user.setAttribute("member-orgs", memberOrgs);
 
