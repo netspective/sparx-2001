@@ -51,11 +51,34 @@
  */
 
 /**
- * $Id: DataModel.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
+ * $Id: UnsupportedAttributeException.java,v 1.1 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
 
-public interface DataModel
+public class UnsupportedAttributeException extends DataModelException
 {
+    /** The object that does not support the particular attribute name **/
+    private Object element;
+
+    /** The name of the attribute that is not supported **/
+    private String attrName;
+
+    public UnsupportedAttributeException(DataModelSchema.ParseContext pc, Object element, String attrName)
+    {
+        super("Class " + element.getClass().getName() + " does not support attribute '"+ attrName +"' ("+ pc.getLocator().getSystemId() +" line "+ pc.getLocator().getLineNumber() + ")");
+        this.element = element;
+        this.attrName = attrName;
+        setLocator(pc.getLocator());
+    }
+
+    public Object getElement()
+    {
+        return element;
+    }
+
+    public String getAttrName()
+    {
+        return attrName;
+    }
 }

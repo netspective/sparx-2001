@@ -52,7 +52,7 @@
  */
 
 /**
- * $Id: DataModelSchema.java,v 1.1 2002-02-25 02:57:01 snshah Exp $
+ * $Id: DataModelSchema.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -86,9 +86,17 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 /**
- * Helper class that collects the methods a task or nested element
- * holds to set attributes, create nested elements or hold PCDATA
- * elements.
+ * This class is used to introspect existing classes and allow parsing of XML
+ * and unmarshalling the XML elements into an exact replica of a Java object
+ * model. This is very useful when an XML structure needs to be unmarshalled
+ * into a set of java classes (called a DataModel) that mimics the XML.
+ * This class's original code (and indeed the very idea) was taken from the
+ * Jakarta Ant project and but this version is very generic (whereas the Ant
+ * code was specific to TaskDefs). The DataModelSchema is most appropriate
+ * for cases where unmarshalling of XML into a structured Java object model
+ * is critical; this class does not (yet) handle the marshalling of Java into
+ * XML using any particular rules (though it wouldn't be hard to add that
+ * capability).
  *
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
  * @author <a href="mailto:snshah@netspective.com">Shahid N. Shah</a>
@@ -97,10 +105,6 @@ public class DataModelSchema
 {
     public static final String ADD_TEXT_METHOD_NAME = "addText";
     private static final String lSep = System.getProperty("line.separator");
-
-    private static SAXParserFactory parserFactory = null;
-    private static XMLReader parser;
-    private static Locator locator;
 
     /**
      * holds the types of the attributes that could be set.
@@ -187,33 +191,30 @@ public class DataModelSchema
                     && !args[0].isArray())
             {
                 String propName = getPropertyName(name, "set");
-                AttributeSetter as = createAttributeSetter(m, args[0]);
+                AttributeSetter as = createAttributeSetter(m, propName, args[0]);
                 if (as != null)
                 {
                     attributeTypes.put(propName, args[0]);
                     attributeSetters.put(propName, as);
                 }
-                System.out.println(this.toString() + ": found '" + propName + "' in " + bean.getName());
             }
             else if (name.startsWith("create")
                     && !returnType.isArray()
                     && !returnType.isPrimitive()
                     && args.length == 0)
             {
-                String propName = getPropertyName(name, "create");
-                System.out.println(this.toString() + ": found nested '" + propName + "' in " + bean.getName());
+                // prevent infinite recursion for nested recursive elements
+                if(! returnType.getClass().equals(bean.getClass()))
+                    getSchema(returnType);
+                final String propName = getPropertyName(name, "create");
                 nestedTypes.put(propName, returnType);
                 nestedCreators.put(propName, new NestedCreator()
                 {
-                    public Object create(Object parent)
-                            throws InvocationTargetException,
-                            IllegalAccessException
+                    public Object create(Object parent) throws InvocationTargetException, IllegalAccessException
                     {
-
                         return m.invoke(parent, new Object[]{});
                     }
                 });
-                getSchema(returnType);
             }
             else if (name.startsWith("addConfigured")
                     && java.lang.Void.TYPE.equals(returnType)
@@ -224,16 +225,14 @@ public class DataModelSchema
             {
                 try
                 {
-                    final Constructor c =
-                            args[0].getConstructor(new Class[]{});
-                    String propName = getPropertyName(name, "addConfigured");
+                    final Constructor c = args[0].getConstructor(new Class[]{});
+                    final String propName = getPropertyName(name, "addConfigured");
                     nestedTypes.put(propName, args[0]);
                     nestedCreators.put(propName, new NestedCreator()
                     {
                         public Object create(Object parent)
                                 throws InvocationTargetException, IllegalAccessException, InstantiationException
                         {
-
                             Object o = c.newInstance(new Object[]{});
                             return o;
                         }
@@ -243,7 +242,6 @@ public class DataModelSchema
                         public void store(Object parent, Object child)
                                 throws InvocationTargetException, IllegalAccessException, InstantiationException
                         {
-
                             m.invoke(parent, new Object[]{child});
                         }
                     });
@@ -261,16 +259,17 @@ public class DataModelSchema
             {
                 try
                 {
-                    final Constructor c =
-                            args[0].getConstructor(new Class[]{});
-                    String propName = getPropertyName(name, "add");
+                    final Constructor c = args[0].getConstructor(new Class[]{});
+                    // prevent infinite recursion for nested recursive elements
+                    if(! args[0].getClass().equals(bean.getClass()))
+                        getSchema(args[0]);
+                    final String propName = getPropertyName(name, "add");
                     nestedTypes.put(propName, args[0]);
                     nestedCreators.put(propName, new NestedCreator()
                     {
                         public Object create(Object parent)
                                 throws InvocationTargetException, IllegalAccessException, InstantiationException
                         {
-
                             Object o = c.newInstance(new Object[]{});
                             m.invoke(parent, new Object[]{o});
                             return o;
@@ -284,97 +283,24 @@ public class DataModelSchema
         }
     }
 
-    private static SAXParserFactory getParserFactory()
-    {
-        if (parserFactory == null)
-            parserFactory = SAXParserFactory.newInstance();
-
-        return parserFactory;
-    }
-
-    /**
-     * Parses the project file.
-     */
-    private static void parse(DataModel dm, File srcFile, List errorMessages) throws DataModelException
-    {
-        FileInputStream inputStream = null;
-        InputSource inputSource = null;
-
-        try
-        {
-            SAXParser saxParser = getParserFactory().newSAXParser();
-            parser = saxParser.getXMLReader();
-
-            String uri = "file:" + srcFile.getAbsolutePath().replace('\\', '/');
-            for (int index = uri.indexOf('#'); index != -1; index = uri.indexOf('#'))
-            {
-                uri = uri.substring(0, index) + "%23" + uri.substring(index + 1);
-            }
-
-            inputStream = new FileInputStream(srcFile);
-            inputSource = new InputSource(inputStream);
-            inputSource.setSystemId(uri);
-
-            parser.setContentHandler(new DataModelHandler(null, dm, dm, errorMessages));
-            parser.parse(inputSource);
-        }
-        catch (ParserConfigurationException exc)
-        {
-            throw new DataModelException("Parser has not been configured correctly", exc);
-        }
-        catch (SAXParseException exc)
-        {
-            throw new DataModelException(exc.getMessage(), exc);
-        }
-        catch (SAXException exc)
-        {
-            Throwable t = exc.getException();
-            if (t instanceof DataModelException)
-            {
-                throw (DataModelException) t;
-            }
-            throw new DataModelException(exc.getMessage(), t);
-        }
-        catch (FileNotFoundException exc)
-        {
-            throw new DataModelException(exc);
-        }
-        catch (IOException exc)
-        {
-            throw new DataModelException("Error reading project file", exc);
-        }
-        finally
-        {
-            if (inputStream != null)
-            {
-                try
-                {
-                    inputStream.close();
-                }
-                catch (IOException ioe)
-                {
-                    // ignore this
-                }
-            }
-        }
-    }
-
     /**
      * Sets the named attribute.
      */
-    public void setAttribute(DataModel dm, Object element, String attributeName, String value, List errors) throws DataModelException
+    public void setAttribute(ParseContext pc, Object element, String attributeName, String value) throws DataModelException, UnsupportedAttributeException
     {
         AttributeSetter as = (AttributeSetter) attributeSetters.get(attributeName);
         if (as == null)
         {
-            String msg = getElementName(dm, element) + " doesn't support the \"" + attributeName + "\" attribute.";
-            errors.add(msg);
-            return;
-            //throw new DataModelException(msg);
+            UnsupportedAttributeException e = new UnsupportedAttributeException(pc, element, attributeName);
+            pc.addSyntaxError(e.getMessage());
+            if(pc.isThrowSyntaxErrorException())
+                throw e;
+            else
+                return;
         }
         try
         {
-            as.set(dm, element, value);
+            as.set(pc, element, value);
         }
         catch (IllegalAccessException ie)
         {
@@ -390,19 +316,27 @@ public class DataModelSchema
             }
             throw new DataModelException(t);
         }
+        catch (NumberFormatException nfe)
+        {
+            DataModelException e = new DataModelException(nfe);
+            e.setLocator(pc.getLocator());
+            throw e;
+        }
     }
 
     /**
      * Adds PCDATA areas.
      */
-    public void addText(DataModel dm, Object element, String text, List errors)
+    public void addText(ParseContext pc, Object element, String text) throws UnsupportedTextException
     {
         if (addText == null)
         {
-            String msg = getElementName(dm, element) + " doesn't support nested text data.";
-            errors.add(msg);
-            return;
-            //throw new DataModelException(msg);
+            UnsupportedTextException e = new UnsupportedTextException(pc, element);
+            pc.addSyntaxError(e.getMessage());
+            if(pc.isThrowSyntaxErrorException())
+                throw e;
+            else
+                return;
         }
         try
         {
@@ -427,18 +361,17 @@ public class DataModelSchema
     /**
      * Creates a named nested element.
      */
-    public Object createElement(DataModel dm, Object element, String elementName, List errors)
-            throws DataModelException
+    public Object createElement(ParseContext pc, Object element, String elementName) throws DataModelException, UnsupportedElementException
     {
-        //System.out.println(this.toString() + ": create-elem = "+ elementName);
-
         NestedCreator nc = (NestedCreator) nestedCreators.get(elementName);
         if (nc == null)
         {
-            String msg = getElementName(dm, element) + " doesn't support the nested \"" + elementName + "\" element.";
-            errors.add(msg);
-            return null;
-            //throw new DataModelException(msg);
+            UnsupportedElementException e = new UnsupportedElementException(pc, element, elementName);
+            pc.addSyntaxError(e.getMessage());
+            if(pc.isThrowSyntaxErrorException())
+                throw e;
+            else
+                return null;
         }
         try
         {
@@ -469,8 +402,7 @@ public class DataModelSchema
     /**
      * Creates a named nested element.
      */
-    public void storeElement(DataModel dm, Object element, Object child, String elementName)
-            throws DataModelException
+    public void storeElement(ParseContext pc, Object element, Object child, String elementName) throws DataModelException
     {
         if (elementName == null)
         {
@@ -563,19 +495,29 @@ public class DataModelSchema
     }
 
     /**
+     * returns the boolean equivalent of a string, which is considered true
+     * if either "on", "true", or "yes" is found, ignoring case.
+     */
+    public static boolean toBoolean(String s)
+    {
+        return (s.equalsIgnoreCase("yes") ||
+                s.equalsIgnoreCase("true") ||
+                s.equalsIgnoreCase("on") ||
+                s.equalsIgnoreCase("1"));
+    }
+
+    /**
      * Create a proper implementation of AttributeSetter for the given
      * attribute type.
      */
-    private AttributeSetter createAttributeSetter(final Method m,
-                                                  final Class arg)
+    private AttributeSetter createAttributeSetter(final Method m, final String attrName, final Class arg)
     {
-
         // simplest case - setAttribute expects String
         if (java.lang.String.class.equals(arg))
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new String[]{value});
@@ -589,7 +531,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Character[]{new Character(value.charAt(0))});
@@ -601,7 +543,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Byte[]{new Byte(value)});
@@ -613,7 +555,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Short[]{new Short(value)});
@@ -625,7 +567,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Integer[]{new Integer(value)});
@@ -637,7 +579,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Long[]{new Long(value)});
@@ -649,7 +591,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Float[]{new Float(value)});
@@ -661,7 +603,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     m.invoke(parent, new Double[]{new Double(value)});
@@ -670,17 +612,15 @@ public class DataModelSchema
             };
         }
         // boolean gets an extra treatment, because we have a nice method
-        // in XmlSource
         else if (java.lang.Boolean.class.equals(arg)
                 || java.lang.Boolean.TYPE.equals(arg))
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
-                    m.invoke(parent,
-                             new Boolean[]{new Boolean(XmlSource.toBoolean(value))});
+                    m.invoke(parent, new Boolean[]{new Boolean(toBoolean(value))});
                 }
 
             };
@@ -690,7 +630,7 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException, DataModelException
                 {
                     try
@@ -708,11 +648,11 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException
                 {
                     // resolve relative paths through DataModel
-                    m.invoke(parent, new File[]{dm.resolveFile(value)});
+                    m.invoke(parent, new File[]{pc.resolveFile(value)});
                 }
 
             };
@@ -721,13 +661,13 @@ public class DataModelSchema
         {
             return new AttributeSetter()
             {
-                public void set(DataModel dm, Object parent, String value)
+                public void set(ParseContext pc, Object parent, String value)
                         throws InvocationTargetException, IllegalAccessException, DataModelException
                 {
                     try
                     {
                         EnumeratedAttribute ea = (EnumeratedAttribute) arg.newInstance();
-                        ea.setValue(value);
+                        ea.setValue(pc, parent, attrName, value);
                         m.invoke(parent, new EnumeratedAttribute[]{ea});
                     }
                     catch (InstantiationException ie)
@@ -748,7 +688,7 @@ public class DataModelSchema
 
                 return new AttributeSetter()
                 {
-                    public void set(DataModel dm, Object parent,
+                    public void set(ParseContext pc, Object parent,
                                     String value)
                             throws InvocationTargetException, IllegalAccessException, DataModelException
                     {
@@ -771,11 +711,6 @@ public class DataModelSchema
         }
 
         return null;
-    }
-
-    protected String getElementName(DataModel dm, Object element)
-    {
-        return "Class " + (element != null ? element.getClass().getName() : "NULL");
     }
 
     /**
@@ -802,9 +737,158 @@ public class DataModelSchema
 
     private interface AttributeSetter
     {
-        public void set(DataModel dm, Object parent, String value)
+        public void set(ParseContext pc, Object parent, String value)
                 throws InvocationTargetException, IllegalAccessException,
                 DataModelException;
+    }
+
+    public static class ParseContext
+    {
+        private static SAXParserFactory parserFactory;
+
+        private File srcFile;
+        private DataModel dataModel;
+        private XMLReader parser;
+        private Locator locator;
+        private boolean throwSyntaxErrorException;
+        private List syntaxErrors;
+
+        public ParseContext(DataModel dataModel, File srcFile) throws ParserConfigurationException, SAXException
+        {
+            this.dataModel = dataModel;
+            this.srcFile = srcFile;
+            this.syntaxErrors = new ArrayList();
+
+            SAXParser saxParser = getParserFactory().newSAXParser();
+            parser = saxParser.getXMLReader();
+        }
+
+        private static SAXParserFactory getParserFactory()
+        {
+            if (parserFactory == null)
+                parserFactory = SAXParserFactory.newInstance();
+
+            return parserFactory;
+        }
+
+        public File resolveFile(String src)
+        {
+            return new File(src);
+        }
+
+        public void setThrowSyntaxErrorException(boolean throwSyntaxErrorException)
+        {
+            this.throwSyntaxErrorException = throwSyntaxErrorException;
+        }
+
+        public File getSrcFile()
+        {
+            return srcFile;
+        }
+
+        public DataModel getDataModel()
+        {
+            return dataModel;
+        }
+
+        public XMLReader getParser()
+        {
+            return parser;
+        }
+
+        public Locator getLocator()
+        {
+            return locator;
+        }
+
+        public void setLocator(Locator locator)
+        {
+            this.locator = locator;
+        }
+
+        public boolean isThrowSyntaxErrorException()
+        {
+            return throwSyntaxErrorException;
+        }
+
+        public void addSyntaxError(String message)
+        {
+            syntaxErrors.add(message);
+        }
+
+        public List getSyntaxErrors()
+        {
+            return syntaxErrors;
+        }
+    }
+
+    /**
+     * Parses the project file.
+     */
+    public static ParseContext parse(DataModel dm, File srcFile) throws DataModelException
+    {
+        FileInputStream inputStream = null;
+        InputSource inputSource = null;
+        ParseContext pc = null;
+
+        try
+        {
+            pc = new ParseContext(dm, srcFile);
+
+            String uri = "file:" + srcFile.getAbsolutePath().replace('\\', '/');
+            for (int index = uri.indexOf('#'); index != -1; index = uri.indexOf('#'))
+            {
+                uri = uri.substring(0, index) + "%23" + uri.substring(index + 1);
+            }
+
+            inputStream = new FileInputStream(srcFile);
+            inputSource = new InputSource(inputStream);
+            inputSource.setSystemId(uri);
+
+            pc.getParser().setContentHandler(new DataModelHandler(pc, null, dm));
+            pc.getParser().parse(inputSource);
+        }
+        catch (ParserConfigurationException exc)
+        {
+            throw new DataModelException("Parser has not been configured correctly", exc);
+        }
+        catch (SAXParseException exc)
+        {
+            throw new DataModelException(exc.getMessage(), exc);
+        }
+        catch (SAXException exc)
+        {
+            Throwable t = exc.getException();
+            if (t instanceof DataModelException)
+            {
+                throw (DataModelException) t;
+            }
+            throw new DataModelException(exc.getMessage(), t);
+        }
+        catch (FileNotFoundException exc)
+        {
+            throw new DataModelException(exc);
+        }
+        catch (IOException exc)
+        {
+            throw new DataModelException("Error reading project file", exc);
+        }
+        finally
+        {
+            if (inputStream != null)
+            {
+                try
+                {
+                    inputStream.close();
+                }
+                catch (IOException ioe)
+                {
+                    // ignore this
+                }
+            }
+        }
+
+        return pc;
     }
 
     /**
@@ -813,19 +897,18 @@ public class DataModelSchema
     private static class DataModelHandler implements ContentHandler
     {
         private DataModelHandler parentHandler;
-        private DataModel dataModel;
+        private ParseContext parseContext;
         private Object parent;
         private Object child;
         private List errors;
 
-        public DataModelHandler(DataModelHandler parentHandler, DataModel dm, Object parent, List errors)
+        public DataModelHandler(ParseContext pc, DataModelHandler parentHandler, Object parent)
         {
-            System.out.println(this.toString() + ": construct parent = "+ parent + " parentHandler = " + parentHandler);
             this.parentHandler = parentHandler;
-            this.dataModel = dm;
+            this.parseContext = pc;
             this.parent = parent;
             this.errors = errors;
-            parser.setContentHandler(this);
+            pc.getParser().setContentHandler(this);
         }
 
         public void characters(char[] buf, int start, int end) throws SAXParseException
@@ -833,42 +916,38 @@ public class DataModelSchema
             try
             {
                 String text = new String(buf, start, end);
-                if (text == null || text.trim().length() == 0)
-                    return;
-
-                DataModelSchema.getSchema(child.getClass()).addText(dataModel, child, text, errors);
+                if (child != null && text != null && text.trim().length() > 0)
+                    DataModelSchema.getSchema(child.getClass()).addText(parseContext, child, text);
             }
             catch (DataModelException exc)
             {
-                throw new SAXParseException(exc.getMessage(), locator, exc);
+                throw new SAXParseException(exc.getMessage(), parseContext.getLocator(), exc);
             }
         }
 
         public void startElement(String url, String localName, String qName, Attributes attributes) throws SAXException
         {
-            System.out.println(this.toString() + ": start " + qName + " parent = " + parent.toString());
             try
             {
                 DataModelSchema parentSchema = DataModelSchema.getSchema(parent.getClass());
-                child = parentSchema.createElement(dataModel, parent, qName.toLowerCase(), errors);
+                child = parentSchema.createElement(parseContext, parent, qName.toLowerCase());
                 if(child == null)
                     return;
-                System.out.println(this.toString() + ": child created = " + child.toString());
 
                 DataModelSchema childSchema = DataModelSchema.getSchema(child.getClass());
 
                 for (int i = 0; i < attributes.getLength(); i++)
                 {
-                    childSchema.setAttribute(dataModel, child, attributes.getQName(i).toLowerCase(), attributes.getValue(i), errors);
+                    childSchema.setAttribute(parseContext, child, attributes.getQName(i).toLowerCase(), attributes.getValue(i));
                 }
-                childSchema.storeElement(dataModel, parent, child, qName.toLowerCase());
+                childSchema.storeElement(parseContext, parent, child, qName.toLowerCase());
             }
             catch (DataModelException exc)
             {
-                throw new SAXParseException(exc.getMessage(), locator, exc);
+                throw new SAXParseException(exc.getMessage(), parseContext.getLocator(), exc);
             }
 
-            new DataModelHandler(this, dataModel, child, errors);
+            new DataModelHandler(parseContext, this, child);
         }
 
         public void endDocument() throws SAXException
@@ -878,7 +957,7 @@ public class DataModelSchema
         public void endElement(String s, String s1, String s2) throws SAXException
         {
             if(parentHandler != null)
-                parser.setContentHandler(parentHandler);
+                parseContext.getParser().setContentHandler(parentHandler);
         }
 
         public void endPrefixMapping(String s) throws SAXException
@@ -895,6 +974,7 @@ public class DataModelSchema
 
         public void setDocumentLocator(Locator locator)
         {
+            parseContext.setLocator(locator);
         }
 
         public void skippedEntity(String s) throws SAXException
@@ -910,45 +990,7 @@ public class DataModelSchema
         }
     }
 
-    public static String toString(DataModel dm) throws DataModelException
-    {
-        Set visited = new HashSet();
-        StringBuffer sb = new StringBuffer();
-        toString("ROOT", dm.getClass(), sb, visited);
-        return sb.toString();
-    }
-
-    public static void toString(String name, Class element, StringBuffer sb, Set visited) throws DataModelException
-    {
-        if (visited.contains(name))
-            return;
-        visited.add(name);
-
-        DataModelSchema schema = DataModelSchema.getSchema(element);
-
-        sb.append("<!ELEMENT ");
-        sb.append(name).append(" ");
-
-        if (schema.supportsCharacters())
-            sb.append("#PCDATA");
-
-        Map nested = schema.getNestedElements();
-        Iterator i = nested.entrySet().iterator();
-        while (i.hasNext())
-        {
-            Map.Entry entry = (Map.Entry) i.next();
-            toString(entry.getKey().toString(), entry.getClass(), sb, visited);
-        }
-        sb.append(">");
-
-        i = schema.getAttributes().iterator();
-        while (i.hasNext()) {
-            String attrName = (String) i.next();
-            sb.append(lSep).append("          ").append(attrName).append(" ");
-            Class type = schema.getAttributeType(attrName);
-        }
-        sb.append(">").append(lSep);
-    }
+    /************************ Unit Testing and Debugging Code ****************/
 
     static public class DataModelTest implements DataModel
     {
@@ -972,11 +1014,6 @@ public class DataModelSchema
         public void setRoot(RootTest root)
         {
             this.root = root;
-        }
-
-        public File resolveFile(String src)
-        {
-            return null;
         }
     }
 
@@ -1089,15 +1126,14 @@ public class DataModelSchema
 
     public static void main(String[] args)
     {
-        List errorMessages = new ArrayList();
-
         DataModelTest dmt = new DataModelTest();
         DataModelSchema.getSchema(DataModelTest.class);
         DataModelSchema tSchema = DataModelSchema.getSchema(DataModelTest.class);
         DataModelSchema rtSchema = DataModelSchema.getSchema(RootTest.class);
-        DataModelSchema.parse(dmt, new File("c:/test.xml"), errorMessages);
-        System.out.println(DataModelSchema.toString(dmt));
-        System.out.println(errorMessages.toString());
+
+        ParseContext pc = DataModelSchema.parse(dmt, new File("c:/test.xml"));
+
+        System.out.println(pc.getSyntaxErrors().toString());
         System.out.println(dmt.getRoot().getText());
         System.out.println(dmt.getRoot().getInteger());
         System.out.println(dmt.getRoot().getNested1().getText());

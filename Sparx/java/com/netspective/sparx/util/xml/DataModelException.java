@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DataModelException.java,v 1.1 2002-02-25 02:57:01 snshah Exp $
+ * $Id: DataModelException.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -59,10 +59,15 @@ package com.netspective.sparx.util.xml;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
+import org.xml.sax.Locator;
+
 public class DataModelException extends RuntimeException
 {
     /** Exception that might have caused this one. */
     private Throwable cause;
+
+    /** Exception that might have caused this one. */
+    private Locator locator;
 
     /**
      * Constructs a build exception with no descriptive information.
@@ -89,7 +94,7 @@ public class DataModelException extends RuntimeException
      */
     public DataModelException(String msg, Throwable cause)
     {
-        super(msg);
+        this(msg);
         this.cause = cause;
     }
 
@@ -99,7 +104,7 @@ public class DataModelException extends RuntimeException
      */
     public DataModelException(Throwable cause)
     {
-        super(cause.toString());
+        this(cause.toString());
         this.cause = cause;
     }
 
@@ -109,6 +114,22 @@ public class DataModelException extends RuntimeException
     public Throwable getException()
     {
         return cause;
+    }
+
+    /**
+     * Returns the parser locator (if one was provided)
+     */
+    public Locator getLocator()
+    {
+        return locator;
+    }
+
+    /**
+     * Sets the parser locator
+     */
+    public void setLocator(Locator locator)
+    {
+        this.locator = locator;
     }
 
     // Override stack trace methods to show original cause:
@@ -125,6 +146,8 @@ public class DataModelException extends RuntimeException
             if (cause != null)
             {
                 ps.println("--- Nested Exception ---");
+                if(locator != null)
+                    ps.println(locator.getSystemId() + " line " + locator.getLineNumber());
                 cause.printStackTrace(ps);
             }
         }
@@ -138,6 +161,8 @@ public class DataModelException extends RuntimeException
             if (cause != null)
             {
                 pw.println("--- Nested Exception ---");
+                if(locator != null)
+                    pw.println(locator.getSystemId() + " line " + locator.getLineNumber());
                 cause.printStackTrace(pw);
             }
         }

@@ -51,11 +51,34 @@
  */
 
 /**
- * $Id: DataModel.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
+ * $Id: UnsupportedElementException.java,v 1.1 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
 
-public interface DataModel
+public class UnsupportedElementException extends DataModelException
 {
+    /** The object that does not support the particular nested element name **/
+    private Object element;
+
+    /** The name of the nested element that is not supported **/
+    private String nestedElemName;
+
+    public UnsupportedElementException(DataModelSchema.ParseContext pc, Object element, String nestedElemName)
+    {
+        super("Class " + element.getClass().getName() + " does not support nested element '"+ nestedElemName +"' ("+ pc.getLocator().getSystemId() +" line "+ pc.getLocator().getLineNumber() + ")");
+        this.element = element;
+        this.nestedElemName = nestedElemName;
+        setLocator(pc.getLocator());
+    }
+
+    public Object getElement()
+    {
+        return element;
+    }
+
+    public String getNestedElemName()
+    {
+        return nestedElemName;
+    }
 }

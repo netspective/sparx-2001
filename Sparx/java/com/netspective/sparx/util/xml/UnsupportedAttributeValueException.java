@@ -51,11 +51,49 @@
  */
 
 /**
- * $Id: DataModel.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
+ * $Id: UnsupportedAttributeValueException.java,v 1.1 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
 
-public interface DataModel
+public class UnsupportedAttributeValueException extends DataModelException
 {
+    /** The enumerated attribute **/
+    private EnumeratedAttribute ea;
+
+    /** The name of the attribute that does not support value **/
+    private String attrName;
+
+    /** The value of the attribute that is not supported **/
+    private String attrValue;
+
+    public UnsupportedAttributeValueException(DataModelSchema.ParseContext pc, EnumeratedAttribute ea, Object element, String attrName, String attrValue)
+    {
+        super("Class " + element.getClass().getName() + " does not support attribute value '"+ attrValue +"' for attribute '"+ attrName +"'  ["+ ea.getClass().getName() +"] ("+ pc.getLocator().getSystemId() +" line "+ pc.getLocator().getLineNumber() + ")");
+        this.ea = ea;
+        this.attrName = attrName;
+        this.attrValue = attrValue;
+        setLocator(pc.getLocator());
+    }
+
+    public EnumeratedAttribute getEnumeratedAttribute()
+    {
+        return ea;
+    }
+
+    public void setEa(EnumeratedAttribute ea)
+    {
+        this.ea = ea;
+    }
+
+    public String getAttrName()
+    {
+        return attrName;
+    }
+
+    public Object getAttrValue()
+    {
+        return attrValue;
+    }
+
 }

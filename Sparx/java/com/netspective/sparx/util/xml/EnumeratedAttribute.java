@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: EnumeratedAttribute.java,v 1.1 2002-02-25 02:57:01 snshah Exp $
+ * $Id: EnumeratedAttribute.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -67,7 +67,6 @@ package com.netspective.sparx.util.xml;
  */
 public abstract class EnumeratedAttribute
 {
-
     protected String value;
 
     /**
@@ -81,14 +80,22 @@ public abstract class EnumeratedAttribute
     {
     }
 
-    /**
-     * Invoked by {@link DataModelSchema DataModelSchema}.
-     */
-    public final void setValue(String value) throws DataModelException
+    public void setValue(String value)
+    {
+        if (!containsValue(value))
+            throw new RuntimeException("Invalid enumeration value: " + value);
+        else
+            this.value = value;
+    }
+
+    public void setValue(DataModelSchema.ParseContext pc, Object element, String attribute, String value) throws DataModelException
     {
         if (!containsValue(value))
         {
-            throw new DataModelException(value + " is not a legal value for this attribute");
+            UnsupportedAttributeValueException e = new UnsupportedAttributeValueException(pc, this, element, attribute, value);
+            pc.addSyntaxError(e.getMessage());
+            if(pc.isThrowSyntaxErrorException())
+                throw e;
         }
         this.value = value;
     }

@@ -51,11 +51,25 @@
  */
 
 /**
- * $Id: DataModel.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
+ * $Id: UnsupportedTextException.java,v 1.1 2002-02-27 00:53:31 snshah Exp $
  */
 
 package com.netspective.sparx.util.xml;
 
-public interface DataModel
+public class UnsupportedTextException extends DataModelException
 {
+    /** The object that does not support the particular attribute name **/
+    private Object element;
+
+    public UnsupportedTextException(DataModelSchema.ParseContext pc, Object element)
+    {
+        super("Class " + element.getClass().getName() + " does not supported nested text data ("+ pc.getLocator().getSystemId() +" line "+ pc.getLocator().getLineNumber() + ")");
+        this.element = element;
+        setLocator(pc.getLocator());
+    }
+
+    public Object getElement()
+    {
+        return element;
+    }
 }
