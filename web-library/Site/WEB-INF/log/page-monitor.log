@@ -1,0 +1,71 @@
+2002-04-23 13:54:31,668	rasha	C66AEABA50821191F6D66619101018C2	com.netspective.sparx.xaf.form.DialogContext	login ([B@3ff38f14)	10	/library/ace
+2002-04-23 13:54:31,668	rasha	C66AEABA50821191F6D66619101018C2	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@3ff38f14)	0	/library/ace
+2002-04-23 13:54:39,560	rasha	C66AEABA50821191F6D66619101018C2	com.netspective.sparx.xaf.form.DialogContext	login ([B@3ff38f14)	0	/library/ace
+2002-04-23 13:54:39,740	rasha	C66AEABA50821191F6D66619101018C2	com.netspective.sparx.ace.page.HomePage	/library/ace	180	/library/ace
+2002-04-23 13:54:47,501	rasha	C66AEABA50821191F6D66619101018C2	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs	2343	/library/ace/application/dialogs
+2002-04-23 15:16:14,628	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	login ([B@984f13)	220	/library/ace/application/dialogs
+2002-04-23 15:16:15,330	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@984f13)	221	/library/ace/application/dialogs
+2002-04-23 15:16:18,294	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	login ([B@1e3a0f13)	0	/library/ace/application/white
+2002-04-23 15:16:18,294	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@1e3a0f13)	0	/library/ace/application/white
+2002-04-23 15:16:21,488	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	login ([B@984f13)	0	/library/ace/application/dialogs
+2002-04-23 15:16:31,603	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs	10135	/library/ace/application/dialogs
+2002-04-23 15:16:38,963	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/describe/library.bookInfo	3314	/library/ace/application/dialogs/describe/library.bookInfo
+2002-04-23 15:16:52,122	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@25074f15)	0	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:16:52,152	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@25074f15)	30	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:16:52,152	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	9053	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:17:00,254	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@25074f15)	0	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:17:00,605	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@25074f15)	0	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:17:00,605	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	351	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:21:31,003	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/describe/library.bookInfo	14280	/library/ace/application/dialogs/describe/library.bookInfo
+2002-04-23 15:21:52,514	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@635bcf11)	130	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:21:52,915	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@635bcf11)	371	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:21:52,955	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	1042	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:01,177	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@635bcf11)	60	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:09,669	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@635bcf11)	2003	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:09,729	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	9193	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:29,568	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@635bcf11)	20	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:29,858	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@635bcf11)	290	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:29,898	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	491	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:35,456	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@635bcf11)	0	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:35,496	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@635bcf11)	40	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:22:35,546	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	1051	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:23:09,265	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.form.DialogContext	library_bookInfo ([B@635bcf11)	0	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:23:41,741	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.xaf.skin.StandardDialogSkin	library_bookInfo ([B@635bcf11)	32466	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 15:23:41,802	rasha	47852C01601937474EEF84E736728539	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/test/library.bookInfo	32567	/library/ace/application/dialogs/test/library.bookInfo
+2002-04-23 20:24:58,985	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.xaf.form.DialogContext	login ([B@3605fce8)	10	/library/ace/application/dialogs/describe/library.bookInfo
+2002-04-23 20:24:59,035	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@3605fce8)	10	/library/ace/application/dialogs/describe/library.bookInfo
+2002-04-23 20:25:02,200	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.xaf.form.DialogContext	login ([B@7b3e7ce8)	0	/library/ace/application/dialogs/describe/white
+2002-04-23 20:25:02,200	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@7b3e7ce8)	0	/library/ace/application/dialogs/describe/white
+2002-04-23 20:25:03,592	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.xaf.form.DialogContext	login ([B@3605fce8)	0	/library/ace/application/dialogs/describe/library.bookInfo
+2002-04-23 20:25:05,825	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs/describe/library.bookInfo	2243	/library/ace/application/dialogs/describe/library.bookInfo
+2002-04-23 20:25:16,400	rasha	7C42AF50987BF0463B96E9EE7FAF4895	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	460	/library/ace/database/data-sources
+2002-04-23 22:17:17,304	rasha	21B78EDC529F552FD6756307D4B1087D	com.netspective.sparx.xaf.form.DialogContext	login ([B@3ba2ca05)	10	/library/ace
+2002-04-23 22:17:17,344	rasha	21B78EDC529F552FD6756307D4B1087D	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@3ba2ca05)	0	/library/ace
+2002-04-23 22:17:21,661	rasha	21B78EDC529F552FD6756307D4B1087D	com.netspective.sparx.xaf.form.DialogContext	login ([B@3ba2ca05)	0	/library/ace
+2002-04-23 22:17:21,841	rasha	21B78EDC529F552FD6756307D4B1087D	com.netspective.sparx.ace.page.HomePage	/library/ace	180	/library/ace
+2002-04-23 22:17:31,074	rasha	21B78EDC529F552FD6756307D4B1087D	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	1963	/library/ace/database/data-sources
+2002-04-23 22:30:25,968	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.xaf.form.DialogContext	login ([B@4acf0b90)	10	/library/ace
+2002-04-23 22:30:25,989	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@4acf0b90)	0	/library/ace
+2002-04-23 22:30:27,881	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.xaf.form.DialogContext	login ([B@4acf0b90)	0	/library/ace
+2002-04-23 22:30:28,041	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.ace.page.HomePage	/library/ace	170	/library/ace
+2002-04-23 22:30:33,609	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	1792	/library/ace/database/data-sources
+2002-04-23 22:30:36,604	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	190	/library/ace/database/data-sources
+2002-04-23 22:35:21,223	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	461	/library/ace/database/data-sources
+2002-04-23 22:35:23,426	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	310	/library/ace/database/data-sources
+2002-04-23 22:35:24,758	rasha	4B13062978B1CA1EDEA6680E890273D1	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	240	/library/ace/database/data-sources
+2002-04-23 22:35:59,869	rasha	FC1B3D11B562F3F1DEF33964EE469320	com.netspective.sparx.xaf.form.DialogContext	login ([B@2c2b8c35)	10	/library/ace
+2002-04-23 22:35:59,889	rasha	FC1B3D11B562F3F1DEF33964EE469320	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@2c2b8c35)	0	/library/ace
+2002-04-23 22:36:01,681	rasha	FC1B3D11B562F3F1DEF33964EE469320	com.netspective.sparx.xaf.form.DialogContext	login ([B@2c2b8c35)	0	/library/ace
+2002-04-23 22:36:01,821	rasha	FC1B3D11B562F3F1DEF33964EE469320	com.netspective.sparx.ace.page.HomePage	/library/ace	140	/library/ace
+2002-04-23 22:36:06,989	rasha	FC1B3D11B562F3F1DEF33964EE469320	com.netspective.sparx.ace.page.AppDialogsPage	/library/ace/application/dialogs	2233	/library/ace/application/dialogs
+2002-04-23 22:36:13,969	rasha	FC1B3D11B562F3F1DEF33964EE469320	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	471	/library/ace/database/data-sources
+2002-04-23 23:32:18,927	rasha	0A069D2B7572518CA9150AAD73D4958F	com.netspective.sparx.xaf.form.DialogContext	login ([B@5a3312c6)	10	/library/ace
+2002-04-23 23:32:19,028	rasha	0A069D2B7572518CA9150AAD73D4958F	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@5a3312c6)	91	/library/ace
+2002-04-23 23:32:20,319	rasha	0A069D2B7572518CA9150AAD73D4958F	com.netspective.sparx.xaf.form.DialogContext	login ([B@5a3312c6)	0	/library/ace
+2002-04-23 23:32:20,590	rasha	0A069D2B7572518CA9150AAD73D4958F	com.netspective.sparx.ace.page.HomePage	/library/ace	271	/library/ace
+2002-04-23 23:32:24,616	rasha	0A069D2B7572518CA9150AAD73D4958F	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	1312	/library/ace/database/data-sources
+2002-04-23 23:34:47,291	rasha	6D6276F127A69E1402C80BE8EC608E6B	com.netspective.sparx.xaf.form.DialogContext	login ([B@2f5c1301)	0	/library/ace
+2002-04-23 23:34:47,311	rasha	6D6276F127A69E1402C80BE8EC608E6B	com.netspective.sparx.xaf.skin.StandardDialogSkin	login ([B@2f5c1301)	0	/library/ace
+2002-04-23 23:34:52,188	rasha	6D6276F127A69E1402C80BE8EC608E6B	com.netspective.sparx.xaf.form.DialogContext	login ([B@2f5c1301)	0	/library/ace
+2002-04-23 23:34:52,348	rasha	6D6276F127A69E1402C80BE8EC608E6B	com.netspective.sparx.ace.page.HomePage	/library/ace	170	/library/ace
+2002-04-23 23:34:57,616	rasha	6D6276F127A69E1402C80BE8EC608E6B	com.netspective.sparx.ace.page.DataSourcesPage	/library/ace/database/data-sources	1843	/library/ace/database/data-sources

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <configuration>
+        <!--
+        **********************************************************************
+        * Required configuration parameters - these parameters setup the     *
+        * evaluation of the remainder of the properties in this file.        *
+        * You can use the Application's build script with the target         *
+        * 'setup-sparx' to automatically get the latest copy of this config  *
+        * file and it will set the {SPARX_HOME} and {APP_HOME} variables for *
+        * you.                                                               *
+        ********************************************************************** -->
+        <property name="sparx.home" value="{SPARX_HOME}"/>
+        <property name="sparx.shared.root-path" value="${sparx.home}/web-shared"/>
+        <property name="sparx.documentation.root-path" value="${sparx.home}/documentation"/>
+        <property name="sparx.shared.root-url" value="/shared"/>
+        <property name="app.project-root" value="{APP_HOME}"/>
+
+        <!--
+        **********************************************************************
+        * Sparx factory system properties                                    *
+        ********************************************************************** -->
+        <system-property name="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+        <system-property name="javax.xml.transform.TransformerFactory" value="org.apache.xalan.processor.TransformerFactoryImpl"/>
+        <system-property name="com.netspective.sparx.xif.db.DatabaseContext.class" value="com.netspective.sparx.xif.db.context.BasicDatabaseContext"/>
+
+        <!--
+        **********************************************************************
+        * Sparx shared components properites                                 *
+        ********************************************************************** -->
+        <property name="sparx.shared.docs-path" value="${sparx.shared.root-path}/docs"/>
+        <property name="sparx.shared.docs-url" value="${sparx.shared.root-url}/docs"/>
+        <property name="sparx.shared.resources-path" value="${sparx.shared.root-path}/resources"/>
+        <property name="sparx.shared.resources-url" value="${sparx.shared.root-url}/resources"/>
+        <property name="sparx.shared.css-path" value="${sparx.shared.resources-path}/css"/>
+        <property name="sparx.shared.css-url" value="${sparx.shared.resources-url}/css"/>
+        <property name="sparx.shared.images-path" value="${sparx.shared.resources-path}/images"/>
+        <property name="sparx.shared.images-url" value="${sparx.shared.resources-url}/images"/>
+        <property name="sparx.shared.scripts-path" value="${sparx.shared.resources-path}/scripts"/>
+        <property name="sparx.shared.scripts-url" value="${sparx.shared.resources-url}/scripts"/>
+        <property name="sparx.shared.xslt-path" value="${sparx.shared.resources-path}/xslt"/>
+        <property name="sparx.shared.xslt-url" value="${sparx.shared.resources-url}/xslt"/>
+        <property name="sparx.shared.dialog.field.popup-image-src" value="${sparx.shared.images-url}/dialog/magnifying-glass-sm.gif"/>
+
+        <!--
+        **********************************************************************
+        * Sparx ACE configuration properites                                 *
+        ********************************************************************** -->
+        <property name="sparx.ace.root-url" value="${create-app-url:/ace}"/>
+        <property name="sparx.ace.xslt-path" value="${sparx.shared.xslt-path}/ace"/>
+        <property name="sparx.ace.xslt-url" value="${sparx.shared.xslt-url}/ace"/>
+        <property name="sparx.ace.images-root-url" value="${sparx.shared.images-url}/ace"/>
+        <property name="sparx.ace.acl-browser-xsl" value="${sparx.ace.xslt-path}/acl-browser.xsl"/>
+        <property name="sparx.ace.config-browser-xsl" value="${sparx.ace.xslt-path}/config-browser.xsl"/>
+        <property name="sparx.ace.docs-browser-xsl" value="${sparx.ace.xslt-path}/docs-browser.xsl"/>
+        <property name="sparx.ace.metrics-browser-xsl" value="${sparx.ace.xslt-path}/metrics-browser.xsl"/>
+        <property name="sparx.ace.properties-browser-xsl" value="${sparx.ace.xslt-path}/properties-browser.xsl"/>
+        <property name="sparx.ace.query-defn-browser-xsl" value="${sparx.ace.xslt-path}/query-defn-browser.xsl"/>
+        <property name="sparx.ace.schema-browser-xsl" value="${sparx.ace.xslt-path}/schema-browser.xsl"/>
+        <property name="sparx.ace.sql-browser-xsl" value="${sparx.ace.xslt-path}/sql-browser.xsl"/>
+        <property name="sparx.ace.ui-browser-xsl" value="${sparx.ace.xslt-path}/dialogs-browser.xsl"/>
+        <properties name="sparx.ace.transform">
+            <property name="dml" value="${sparx.ace.xslt-path}/article-transform.xsl"/>
+            <property name="tpml" value="${sparx.ace.xslt-path}/test-plan-transform.xsl"/>
+        </properties>
+        <properties name="sparx.ace.bookmarks">
+            <property name="project,Application" value="${app.documents-root-path}"/>
+            <property name="sparx,Sparx Docs" value="${sparx.documentation.root-path}/index.html"/>
+        </properties>
+        <property name="sparx.ace.login.dialog-class" value="com.netspective.sparx.ace.LoginDialog"/>
+        <property name="sparx.ace.login.user-id.cookie-name" value="sparx-ace-user-id"/>
+        <property name="sparx.ace.login.user.session-attr-name" value="ace-authenticated-user"/>
+        <property name="sparx.ace.login.user-name" value="ace"/>
+        <property name="sparx.ace.login.user-password" value="ace"/>
+        <property name="sparx.ace.metrics.filesys.ignore-case" value="yes"/>
+        <property name="sparx.ace.metrics.filesys.code-extensions" value="asp,java,js,jsp,sql,xml,xsl"/>
+        <properties name="sparx.ace.monitor.logs">
+            <property name="sparx.debug.page" value="style-text"/>
+            <property name="sparx.debug.security" value="style-text"/>
+            <property name="sparx.debug.sql" value="style-text"/>
+            <property name="sparx.monitor.page" value="style-tab,Date,Host,NDC,Object,Object-id,Render-time,Source"/>
+            <property name="sparx.monitor.security" value="style-tab,Date,Host,NDC,Activity,App User,User Org,Remote User,Remote Host,Remote Addr,Permissions,Roles"/>
+            <property name="sparx.monitor.sql" value="style-tab,Date,Host,NDC,SQL Statement,Ok,Conn,Bind,SQL,Total,Source"/>
+        </properties>
+
+        <!--
+        **********************************************************************
+        * Sparx Application-specific configuration properites                *
+        ********************************************************************** -->
+        <property name="app.database-root-path" value="${app.project-root}/Database"/>
+        <property name="app.documents-root-path" value="${app.project-root}"/>
+        <property name="app.site-root-path" value="${app.project-root}/Site"/>
+        <property name="app.web-inf-root-path" value="${app.site-root-path}/WEB-INF"/>
+        <property name="app.site-temp-path" value="${app.site-root-path}/temp"/>
+        <property name="app.report-file-store-path" value="${app.site-temp-path}/reports"/>
+        <property name="app.report-file-download-url" value="${create-app-url:/temp/reports}"/>
+
+        <property name="app.ui.root-path" value="${app.web-inf-root-path}/ui"/>
+        <property name="app.ui.source-file" value="${app.ui.root-path}/dialogs.xml"/>
+        <property name="app.ui.structure-file" value="${app.ui.root-path}/structure.xml"/>
+
+        <property name="app.sql.root-path" value="${app.web-inf-root-path}/sql"/>
+        <property name="app.sql.source-file" value="${app.sql.root-path}/statements.xml"/>
+
+        <property name="app.security.root-path" value="${app.web-inf-root-path}/security"/>
+        <property name="app.security.acl-file" value="${app.security.root-path}/access-control.xml"/>
+
+        <property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/>
+        <property name="app.schema.source-file" value="${app.schema.source-path}/schema.xml"/>
+    </configuration>
+</xaf>

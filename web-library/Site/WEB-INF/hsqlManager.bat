@@ -1,0 +1,1 @@
+@java -classpath %classpath%;hsqldb.jar org.hsqldb.util.DatabaseManager

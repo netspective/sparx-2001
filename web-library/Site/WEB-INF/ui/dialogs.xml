@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<dialogs package="library">
+		<dialog heading="create-data-cmd-heading:Book Information" name="bookInfo">
+			<field.text caption="Name" name="bookName" required="yes"/>
+			<field.text caption="Author" name="bookAuthor" required="yes"/>
+			<field.text caption="Publisher" name="bookPublisher"/>
+			<field.text caption="ISBN" name="bookISBN" required="yes"  validate-msg="Please enter an ISBN of the form X-XXXX-XXXX-X i.e. with dashes, not spaces.  Thank you." validate-pattern="m/\d+\-\d+\-\d+\-\.+/i"/>
+		</dialog>
+	</dialogs>
+</xaf>
