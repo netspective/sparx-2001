@@ -23,15 +23,13 @@ public class DatabaseMetaDataToSchemaDocDialog extends Dialog
 		dsDriverField.setFlag(DialogField.FLDFLAG_REQUIRED | DialogField.FLDFLAG_PERSIST);
 
 		dsUrlField = new TextField("ds_url", "Database URL");
-		dsUrlField.setDefaultValue(new StaticValue("jdbc:oracle:thin:@BERMUDA:1521:BERMUDA"));
+		dsUrlField.setDefaultValue(new StaticValue("jdbc:oracle:thin:@aruba:1521:127.0.0.1"));
 		dsUrlField.setFlag(DialogField.FLDFLAG_REQUIRED | DialogField.FLDFLAG_PERSIST);
 
 		dsUserNameField = new TextField("ds_username", "User Name");
-		dsUserNameField.setDefaultValue(new StaticValue("IPMS"));
 		dsUserNameField.setFlag(DialogField.FLDFLAG_PERSIST);
 
 		dsPasswordField = new TextField("ds_password", "Password");
-		dsPasswordField.setDefaultValue(new StaticValue("IPMS"));
 		dsPasswordField.setFlag(TextField.FLDFLAG_MASKENTRY);
 		dsPasswordField.setFlag(DialogField.FLDFLAG_COLUMN_BREAK_AFTER);
 
@@ -39,11 +37,10 @@ public class DatabaseMetaDataToSchemaDocDialog extends Dialog
 		dsCatalogField.setFlag(DialogField.FLDFLAG_PERSIST);
 
 		dsSchemaField = new TextField("ds_schema", "Schema");
-		dsSchemaField.setDefaultValue(new StaticValue("IPMS"));
 		dsSchemaField.setFlag(DialogField.FLDFLAG_PERSIST);
 
 		outFileName = new TextField("out_file_name", "Output File");
-		outFileName.setDefaultValue(new StaticValue("c:\\temp.xml"));
+        outFileName.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.database-root-path}/schema-src/generated-schema.xml"));
 		outFileName.setFlag(DialogField.FLDFLAG_REQUIRED | DialogField.FLDFLAG_PERSIST);
 
 		addField(dsDriverField);

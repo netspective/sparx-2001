@@ -90,9 +90,10 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		pagesPath.registerPage("/database/sql", new DatabaseSqlPage());
 		pagesPath.registerPage("/database/query-defn", new DatabaseQueryDefnPage());
 		pagesPath.registerPage("/database/schema", new DatabaseSchemaDocPage());
-		pagesPath.registerPage("/database/meta-data", new DatabaseMetaDataPage());
 		pagesPath.registerPage("/database/generate-ddl", new DatabaseGenerateDDLPage());
+        pagesPath.registerPage("/database/generate-java", new DatabaseGenerateJavaPage());
 		pagesPath.registerPage("/database/data-sources", new DataSourcesPage());
+        pagesPath.registerPage("/database/meta-data", new DatabaseMetaDataPage());
 
 		Configuration appConfig = getAppConfig();
 		ValueContext vc = new ServletValueContext(config.getServletContext(), this, null, null);

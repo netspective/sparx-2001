@@ -677,6 +677,34 @@ public class SchemaDocument extends XmlSource
 		}
 	}
 
+    public void keepOnlyLastElement(Element parent, String childName)
+    {
+        NodeList elems = parent.getElementsByTagName(childName);
+        if(elems.getLength() > 1)
+        {
+            for(int i = 0; i < elems.getLength() - 1; i++)
+                parent.removeChild(elems.item(i));
+        }
+    }
+
+    public void doDataTypeInheritance()
+    {
+        for(Iterator i = dataTypeNodes.values().iterator(); i.hasNext(); )
+        {
+            Element elem = (Element) i.next();
+            inheritNodes(elem, dataTypeNodes);
+        }
+
+        for(Iterator i = dataTypeNodes.values().iterator(); i.hasNext(); )
+        {
+            Element dataType = (Element) i.next();
+            keepOnlyLastElement(dataType, "size");
+            keepOnlyLastElement(dataType, "default");
+            keepOnlyLastElement(dataType, "java-class");
+            keepOnlyLastElement(dataType, "java-type");
+        }
+    }
+
 	public void catalogNodes()
 	{
 		dataTypeNodes.clear();
@@ -739,6 +767,11 @@ public class SchemaDocument extends XmlSource
 		resolveReferences();
         createAuditTables();
 		createStructure();
+
+        // we do this at the very last so that duplicate inheritance doesn't occur in columns -- also,
+        // we want to be sure to do it so that data types that are generating Java can be "extended"
+        doDataTypeInheritance();
+
 		addMetaInformation();
 	}
 
