@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseContextFactory.java,v 1.2 2002-03-26 17:57:52 eoliphan Exp $
+ * $Id: DatabaseContextFactory.java,v 1.3 2002-03-26 22:52:41 snshah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -74,6 +74,7 @@ import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xif.db.policy.OracleDatabasePolicy;
 import com.netspective.sparx.xif.db.policy.SqlServerDatabasePolicy;
+import com.netspective.sparx.xif.db.policy.HSqlDbDatabasePolicy;
 import com.netspective.sparx.xif.db.context.BasicDatabaseContext;
 
 /**
@@ -93,6 +94,7 @@ public class DatabaseContextFactory implements Factory
     {
         addDatabasePolicy("Oracle", new OracleDatabasePolicy());
         addDatabasePolicy("Microsoft SQL Server", new SqlServerDatabasePolicy());
+        addDatabasePolicy("HSQL Database Engine", new HSqlDbDatabasePolicy());
     }
 
     static public void addDatabasePolicy(String databaseProductName, DatabasePolicy policy)

@@ -61,7 +61,7 @@ Build targets:
 	    <taskdef name="gblc" classname="com.netspective.sparx.util.ant.GenerateBuildLogClassTask" classpath="${build.classes.dir}"/>
 		<gblc package="${build.log.class.package}" class="${build.log.class.name}"/>
 		<echo message="Built on ${build.log.date} (host=${build.log.host.name}; ip=${build.log.host.ip})"/>
-		
+
 		<!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
 	    <taskdef name="config" classname="com.netspective.sparx.util.ant.BuildConfigurationTask" classpath="${build.classes.dir}"/>
 		<config/>
@@ -92,7 +92,7 @@ Build targets:
         <javac srcdir="." destdir="${build.classes.dir}"
             debug="${debug}"
             optimize="${optimize}"
-            deprecation="off" >
+            deprecation="on" >
         </javac>
 
     </target>
