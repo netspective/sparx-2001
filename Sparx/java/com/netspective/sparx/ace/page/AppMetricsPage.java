@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppMetricsPage.java,v 1.2 2002-02-02 00:00:30 snshah Exp $
+ * $Id: AppMetricsPage.java,v 1.3 2002-08-09 12:56:52 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -200,7 +200,7 @@ public class AppMetricsPage extends AceServletPage
         StatementManager smanager = StatementManagerFactory.getManager(context);
         smanager.getMetrics(metrics);
 
-        createFileSystemMetrics(metrics, config.getTextValue(pc, "app.project-root"));
+        createFileSystemMetrics(metrics, config.getTextValue(pc, "app.site-root-path"));
 
         try
         {
