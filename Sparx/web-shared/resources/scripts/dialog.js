@@ -361,6 +361,8 @@ function DialogField_finalizeContents(dialog)
 
 function DialogField_evaluateConditionals(dialog)
 {   
+    if(((this.flags & FLDFLAG_READONLY) != 0))
+        return;
 
     var control = this.getControl(dialog);
     if(control == null)
