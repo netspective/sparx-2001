@@ -24,6 +24,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 	protected HashSet excludeEntryNames = new HashSet();
 	protected Hashtable fileTypeIcons = new Hashtable();
 	protected LoginDialog loginDialog;
+	protected String sharedImagesUrl;
 
     public void init(ServletConfig config) throws javax.servlet.ServletException
 	{
@@ -38,6 +39,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 			throw new ServletException("Unable to obtain the default Configuration");
 
 		ValueContext vc = new ServletValueContext(context, this, null, null);
+		sharedImagesUrl = appConfig.getValue(vc, "framework.shared.images-url");
 		skinJspPageName = appConfig.getValue(vc, "app.navigate.skin-jsp");
 		rootURL = appConfig.getValue(vc, "app.navigate.root-url");
 		rootPath = appConfig.getValue(vc, "app.navigate.root-path");
@@ -99,12 +101,12 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 			{
 				FileSystemEntry entry = (FileSystemEntry) i.next();
 				if(entry.isRoot())
-					parentsHtml.append("<a class='nfs_parent' href='"+ rootURI + entry.getEntryURI() +"'><img src='/shared/resources/images/navigate/home-sm.gif' border='0'></a> <a href='"+ rootURI + entry.getEntryURI() +"'>Home</a>");
+					parentsHtml.append("<a class='nfs_parent' href='"+ rootURI + entry.getEntryURI() +"'><img src='"+ sharedImagesUrl +"/navigate/home-sm.gif' border='0'></a> <a href='"+ rootURI + entry.getEntryURI() +"'>Home</a>");
 				else
 					parentsHtml.append("<a class='nfs_parent' href='"+ rootURI + entry.getEntryURI() +"'>"+ entry.getEntryCaption() +"</a>");
 
 				if(i.hasNext())
-					parentsHtml.append("&nbsp;<img src='/shared/resources/images/navigate/parent-separator.gif'>&nbsp;");
+					parentsHtml.append("&nbsp;<img src='"+ sharedImagesUrl +"/navigate/parent-separator.gif'>&nbsp;");
 			}
 		}
 
@@ -125,11 +127,11 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 			{
 				FileSystemEntry entry = new FileSystemEntry(fsContext.getRootPath(), entries[i].getAbsolutePath());
 				if(entry.isDirectory())
-					folderRows.append("<tr><td><img src='/shared/resources/images/navigate/folder-orange-closed.gif' border='0'></td><td class='nfs_child_folder_caption'><a class='nfs_child_folder' href='"+ rootFolderURI + entry.getEntryURI() +"'>"+ entry.getEntryCaption() +"</a></td></tr>");
+					folderRows.append("<tr><td><img src='"+ sharedImagesUrl +"/navigate/folder-orange-closed.gif' border='0'></td><td class='nfs_child_folder_caption'><a class='nfs_child_folder' href='"+ rootFolderURI + entry.getEntryURI() +"'>"+ entry.getEntryCaption() +"</a></td></tr>");
 				else
 				{
 					String icon = (String) fileTypeIcons.get(entry.getEntryType());
-					if(icon == null) icon = "/shared/resources/images/navigate/page-yellow.gif";
+					if(icon == null) icon = ""+ sharedImagesUrl +"/navigate/page-yellow.gif";
 					fileRows.append("<tr><td><img src='"+ icon +"' border='0'></td><td class='nfs_child_file_caption'><a class='nfs_child_file' href='"+ rootFolderURI + entry.getEntryURI() +"'>"+ entry.getEntryCaption() +"</a></td></tr>");
 				}
 			}

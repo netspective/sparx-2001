@@ -61,6 +61,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 	protected Configuration appConfig;
 	protected String sharedImagesRootURL;
 	protected String sharedScriptsRootURL;
+	protected String sharedCssRootURL;
 
 	public String getConfigItemsPrefix()
 	{
@@ -90,6 +91,11 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 	public final String getSharedImagesRootURL()
 	{
 		return sharedImagesRootURL;
+	}
+
+	public final String getSharedCssRootURL()
+	{
+		return sharedCssRootURL;
 	}
 
     public void init(ServletConfig config) throws ServletException
@@ -141,6 +147,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		rediscoverParamName = appConfig.getValue(vc, configItemsPrefix + CONFIGITEM_DISCOVER_REDISCOVER, DEFAULT_REDISCOVER_PARAMNAME);
 		sharedImagesRootURL = appConfig.getValue(vc, "framework.shared.images-url");
 		sharedScriptsRootURL = appConfig.getValue(vc, "framework.shared.scripts-url");
+		sharedCssRootURL = appConfig.getValue(vc, "framework.shared.css-url");
 		registerPages(config);
     }
 

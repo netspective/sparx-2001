@@ -96,6 +96,7 @@ public class AceServletPage extends AbstractServletPage
 			return;
 
 		String sharedScriptsRootURL = ((PageControllerServlet) pc.getServlet()).getSharedScriptsRootURL();
+		String sharedCssRootURL = ((PageControllerServlet) pc.getServlet()).getSharedCssRootURL();
 		Component menu = ((AppComponentsExplorerServlet) pc.getServlet()).getMenuComponent();
 		try
 		{
@@ -104,7 +105,7 @@ public class AceServletPage extends AbstractServletPage
 			out.print("<title>");
 			out.print(getTitle(pc));
 			out.print("</title>\n");
-			out.print("<link rel='stylesheet' href='/shared/resources/css/ace.css'>\n");
+			out.print("<link rel='stylesheet' href='"+ sharedCssRootURL+ "/ace.css'>\n");
 			menu.printHtml(pc, out);
 			out.print("</head>\n\n");
 		}

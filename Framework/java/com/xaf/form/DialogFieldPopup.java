@@ -11,10 +11,9 @@ package com.xaf.form;
 
 public class DialogFieldPopup
 {
-	public final String DEFAULT_IMAGE = "/shared/resources/images/dialog/magnifying-glass-sm.gif";
 	public final String DEFAULT_WINDOW_CLASS = "default";
 
-	private String imgUrl = DEFAULT_IMAGE;
+	private String imgUrl;
 	private String windowClass = DEFAULT_WINDOW_CLASS;
 	private String actionUrl = null;
 	private String[] fillFields = null;

@@ -6,6 +6,7 @@ import javax.servlet.http.*;
 
 import org.w3c.dom.*;
 
+import com.xaf.config.*;
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 import com.xaf.value.*;
@@ -384,7 +385,11 @@ public class StandardDialogSkin implements DialogSkin
 			expression = expr.toString() + ")";
 		}
 
-		return "&nbsp;<a style='cursor:hand;' onclick=\"javascript:"+ expression +"\"><img border='0' src='"+ popup.getImageUrl() +"'></a>&nbsp;";
+		String imageUrl = popup.getImageUrl();
+		if(imageUrl == null)
+			imageUrl = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext()).getValue(dc, "framework.shared.dialog.field.popup-image-src");
+
+		return "&nbsp;<a style='cursor:hand;' onclick=\"javascript:"+ expression +"\"><img border='0' src='"+ imageUrl +"'></a>&nbsp;";
 	}
 
 	public String getJavaScriptDefn(DialogContext dc, DialogField field)
@@ -610,9 +615,12 @@ public class StandardDialogSkin implements DialogSkin
 		if(actionURL == null)
 			actionURL = ((HttpServletRequest) dc.getRequest()).getRequestURI();
 
+		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
+		String sharedScriptsUrl = appConfig.getValue(dc, "framework.shared.scripts-url");
+
 		return
 			(includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
-			"<link rel='stylesheet' href='/shared/resources/css/dialog.css'>\n"+
+			"<link rel='stylesheet' href='"+ appConfig.getValue(dc, "framework.shared.css-url") +"/dialog.css'>\n"+
 			(includePostStyleSheets != null ? includePostStyleSheets : EMPTY) +
 			(prependPreScript != null ? prependPreScript : EMPTY) +
 			"<script language='JavaScript'>var _version = 1.0;</script>\n"+
@@ -621,12 +629,12 @@ public class StandardDialogSkin implements DialogSkin
 			"<script language='JavaScript1.3'>_version = 1.3;</script>\n"+
 			"<script language='JavaScript1.4'>_version = 1.4;</script>\n"+
 			(includePreScripts != null ? includePreScripts : EMPTY) +
-			"<script src='/shared/resources/scripts/popup.js' language='JavaScript1.1'></script>\n"+
-			"<script src='/shared/resources/scripts/dialog.js' language='JavaScript1.2'></script>\n"+
+			"<script src='"+ sharedScriptsUrl +"/popup.js' language='JavaScript1.1'></script>\n"+
+			"<script src='"+ sharedScriptsUrl +"/dialog.js' language='JavaScript1.2'></script>\n"+
 			"<script>\n"+
 			"	if(typeof dialogLibraryLoaded == 'undefined')\n"+
 			"	{\n"+
-			"		alert('ERROR: /shared/resources/scripts/dialog.js could not be loaded');\n"+
+			"		alert('ERROR: "+ sharedScriptsUrl +"/dialog.js could not be loaded');\n"+
 			"	}\n"+
 			"</script>\n"+
 			(includePostScripts != null ? includePostScripts : EMPTY) +

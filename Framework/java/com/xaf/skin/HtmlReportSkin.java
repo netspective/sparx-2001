@@ -37,6 +37,7 @@ public class HtmlReportSkin implements ReportSkin
 	protected String dataHdFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
 	protected String dataFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;'";
 	protected String dataFtFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
+	protected String rowSepImgSrc = "/shared/resources/images/design/bar.gif";
 
     public HtmlReportSkin()
     {
@@ -172,7 +173,7 @@ public class HtmlReportSkin implements ReportSkin
 			}
 		}
 		if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
-			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='2' width='100%'></td></tr>");
+			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='"+rowSepImgSrc+"' height='2' width='100%'></td></tr>");
 	}
 
 	public void produceHeadingRow(Writer writer, ReportContext rc, ResultSet rs) throws IOException, SQLException
@@ -198,7 +199,7 @@ public class HtmlReportSkin implements ReportSkin
 				writer.write("<td><font "+dataHdFontAttrs+"></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
 		}
 		if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
-			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='2' width='100%'></td></tr>");
+			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='"+rowSepImgSrc+"' height='2' width='100%'></td></tr>");
 	}
 
 	/*
@@ -257,7 +258,7 @@ public class HtmlReportSkin implements ReportSkin
 			writer.write("</tr>");
 
             if(addRowSeps)
-                writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='1' width='100%'></td></tr>");
+                writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='"+rowSepImgSrc+"' height='1' width='100%'></td></tr>");
 
 			rowsWritten++;
             if(paging && rc.endOfPage())
@@ -317,7 +318,7 @@ public class HtmlReportSkin implements ReportSkin
 			writer.write("</tr>");
 
             if(addRowSeps)
-                writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='1' width='100%'></td></tr>");
+                writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='"+rowSepImgSrc+"' height='1' width='100%'></td></tr>");
 
 			rowsWritten++;
             if(paging && rc.endOfPage())
@@ -342,7 +343,7 @@ public class HtmlReportSkin implements ReportSkin
 		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
 
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
-    		writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='1' width='100%'></td></tr>");
+    		writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='"+rowSepImgSrc+"' height='1' width='100%'></td></tr>");
 		writer.write("<tr bgcolor='lightyellow'><td><font "+dataFtFontAttrs+">&nbsp;&nbsp;</font></td>");
 		for(int i = 0; i < dataColsCount; i++)
 		{
