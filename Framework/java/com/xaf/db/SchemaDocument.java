@@ -9,6 +9,8 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 import com.xaf.xml.*;
+import com.xaf.form.field.SelectChoicesList;
+import com.xaf.form.field.SelectChoice;
 
 /**
  * Provides the ability to fully describe an entire database
@@ -45,12 +47,13 @@ public class SchemaDocument extends XmlSource
     static HashSet replaceMacrosInTableNodes = null;
     static HashSet replaceMacrosInIndexNodes = null;
 
-	private Hashtable dataTypeNodes = new Hashtable();
-	private Hashtable tableTypeNodes = new Hashtable();
-	private Hashtable indexTypeNodes = new Hashtable();
-	private Hashtable tableNodes = new Hashtable();
-	private ArrayList columnTableNodes = new ArrayList();
-    private Hashtable tableParams = new Hashtable(); // key is table name, value is hash-table of key/value pairs
+	private Map dataTypeNodes = new HashMap();
+	private Map tableTypeNodes = new HashMap();
+	private Map indexTypeNodes = new HashMap();
+	private Map tableNodes = new HashMap();
+	private List columnTableNodes = new ArrayList();
+    private Map tableParams = new HashMap(); // key is table name, value is hash-table of key/value pairs
+    private Map enumTableDataChoices = new HashMap(); // key is an enum data table name, value is SelectChoicesList
 
 	public SchemaDocument()
 	{
@@ -98,17 +101,17 @@ public class SchemaDocument extends XmlSource
 
 		if(includeAudit)
 		{
-			for(Enumeration e = tableNodes.elements(); e.hasMoreElements(); )
+			for(Iterator i = tableNodes.values().iterator(); i.hasNext(); )
 			{
-				Element table = (Element) e.nextElement();
+				Element table = (Element) i.next();
 				tableNames.add(table.getAttribute("name"));
 			}
 		}
 		else
 		{
-			for(Enumeration e = tableNodes.elements(); e.hasMoreElements(); )
+            for(Iterator i = tableNodes.values().iterator(); i.hasNext(); )
 			{
-				Element table = (Element) e.nextElement();
+                Element table = (Element) i.next();
 				if(! table.getAttribute("is-audit").equals("yes"))
 					tableNames.add(table.getAttribute("name"));
 			}
@@ -120,7 +123,40 @@ public class SchemaDocument extends XmlSource
 		return result;
 	}
 
-	public void inheritNodes(Element element, Hashtable sourcePool)
+    public SelectChoicesList getEnumTableData(String tableName)
+    {
+        SelectChoicesList choices = (SelectChoicesList) enumTableDataChoices.get(tableName);
+        if(choices != null)
+            return choices;
+
+        choices = new SelectChoicesList();
+
+        Element tableElem = (Element) tableNodes.get(tableName.toUpperCase());
+        if(tableElem == null)
+        {
+            choices.add(new SelectChoice("Enumeration table '"+ tableName +"' not found in schema '"+ this.getSourceDocument().getFile().getAbsolutePath() +"'"));
+            return choices;
+        }
+
+        NodeList tableChildren = tableElem.getChildNodes();
+        int tableChildrenCount = tableChildren.getLength();
+        for(int c = 0; c < tableChildrenCount; c++)
+        {
+            Node node = tableChildren.item(c);
+            if("enum".equals(node.getNodeName()))
+            {
+                Element enumElem = (Element) node;
+                String id = enumElem.getAttribute("id");
+                String caption = enumElem.getFirstChild().getNodeValue();
+                choices.add(id.length() > 0 ? new SelectChoice(caption, id) : new SelectChoice(caption));
+            }
+        }
+
+        enumTableDataChoices.put(tableName, choices);
+        return choices;
+    }
+
+	public void inheritNodes(Element element, Map sourcePool)
 	{
 		inheritNodes(element, sourcePool, ATTRNAME_TYPE);
 	}
@@ -540,10 +576,10 @@ public class SchemaDocument extends XmlSource
 
 	public void resolveReferences()
 	{
-		Enumeration e = tableNodes.elements();
-		while(e.hasMoreElements())
+		Iterator i = tableNodes.values().iterator();
+		while(i.hasNext())
 		{
-			Element tableElem = (Element) e.nextElement();
+			Element tableElem = (Element) i.next();
             resolveTableReferences(tableElem);
 		}
 	}
@@ -554,10 +590,10 @@ public class SchemaDocument extends XmlSource
         int auditTablesCount = 0;
 
         Element docElem = xmlDoc.getDocumentElement();
-		Enumeration e = tableNodes.elements();
-		while(e.hasMoreElements())
+		Iterator i = tableNodes.values().iterator();
+		while(i.hasNext())
         {
-            Element mainTable = (Element) e.nextElement();
+            Element mainTable = (Element) i.next();
             if(mainTable.getAttribute("audit").equals("yes"))
             {
                 String mainTableName = mainTable.getAttribute("name");
@@ -590,9 +626,9 @@ public class SchemaDocument extends XmlSource
             }
         }
 
-        for(int i = 0; i < auditTablesCount; i++)
+        for(int t = 0; t < auditTablesCount; t++)
         {
-            Element auditTable = auditTables[i];
+            Element auditTable = auditTables[t];
             resolveTableReferences(auditTable);
             docElem.appendChild(auditTable);
             tableNodes.put(auditTable.getAttribute("name").toUpperCase(), auditTable);
@@ -614,10 +650,10 @@ public class SchemaDocument extends XmlSource
             tableStruct.setAttribute("child-col", connector.getAttribute("name"));
         }
 
-		Enumeration e = tableNodes.elements();
-		while(e.hasMoreElements())
+		Iterator i = tableNodes.values().iterator();
+		while(i.hasNext())
 		{
-			Element childTable = (Element) e.nextElement();
+			Element childTable = (Element) i.next();
 		    if(childTable.getAttribute("parent").equals(tableName))
 			{
 				addTableStructure(tableStruct, childTable, level+1);
@@ -630,10 +666,10 @@ public class SchemaDocument extends XmlSource
 		Element structure = xmlDoc.createElement("table-structure");
 		xmlDoc.getDocumentElement().appendChild(structure);
 
-		Enumeration e = tableNodes.elements();
-		while(e.hasMoreElements())
+		Iterator i = tableNodes.values().iterator();
+		while(i.hasNext())
 		{
-			Element table = (Element) e.nextElement();
+			Element table = (Element) i.next();
 		    if(table.getAttribute("parent").length() == 0)
 			{
 				addTableStructure(structure, table, 0);
@@ -681,9 +717,9 @@ public class SchemaDocument extends XmlSource
 				tableNodes.put(element.getAttribute("name").toUpperCase(), node);
 		}
 
-		Enumeration e = tableNodes.elements();
-		while(e.hasMoreElements())
-			fixupTableElement((Element) e.nextElement());
+		Iterator i = tableNodes.values().iterator();
+		while(i.hasNext())
+			fixupTableElement((Element) i.next());
 
 		/*
 		 * at this time, all the inheritance and macro replacements should
@@ -692,7 +728,7 @@ public class SchemaDocument extends XmlSource
 		 */
 
 		Node rootNode = xmlDoc.getDocumentElement();
-		Iterator i = columnTableNodes.iterator();
+		i = columnTableNodes.iterator();
 		while(i.hasNext())
 		{
 			Element columnTableElem = (Element) i.next();

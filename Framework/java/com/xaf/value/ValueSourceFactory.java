@@ -28,6 +28,7 @@ public class ValueSourceFactory
 		srcClasses.put("request-attr", RequestAttributeValue.class);
 		srcClasses.put("session", SessionAttributeValue.class);
 		srcClasses.put("schema-tables", SchemaDocTablesListValue.class);
+        srcClasses.put("schema-enum", SchemaDocEnumDataListValue.class);
         srcClasses.put("generate-id", GenerateIdValue.class);
         srcClasses.put("system-property", SystemPropertyValue.class);
         srcClasses.put("servlet-context-init-param", ServletContextInitParamValue.class);
