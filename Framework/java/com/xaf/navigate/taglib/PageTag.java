@@ -13,20 +13,20 @@ import com.xaf.security.*;
 import com.xaf.log.*;
 import com.xaf.skin.*;
 import com.xaf.value.*;
+import com.xaf.sql.StatementManager;
+import com.xaf.sql.StatementManagerFactory;
+import com.xaf.sql.query.QueryDefinition;
+import com.xaf.sql.query.QuerySelectDialog;
 
 public class PageTag extends TagSupport
 {
-	static public final String PAGE_COMMAND_REQUEST_PARAM_NAME = "page-cmd";
-	static public final String PAGECMD_DLG_DIALOGNAME_PARAM_NAME = "dlg-name";
-	static public final String PAGECMD_DLG_DIALOGSKIN_PARAM_NAME = "dlg-skin";
+	static public final String PAGE_COMMAND_REQUEST_PARAM_NAME = "cmd";
 	static public final String PAGE_SECURITY_MESSAGE_ATTRNAME = "security-message";
 	static public final String PAGE_DEFAULT_LOGIN_DIALOG_CLASS = "com.xaf.security.LoginDialog";
 
 	static public final String[] DIALOG_COMMAND_RETAIN_PARAMS =
 	{
-		PAGE_COMMAND_REQUEST_PARAM_NAME,
-		PAGECMD_DLG_DIALOGNAME_PARAM_NAME,
-		PAGECMD_DLG_DIALOGSKIN_PARAM_NAME
+		PAGE_COMMAND_REQUEST_PARAM_NAME
 	};
 
 	static private LoginDialog loginDialog;
@@ -165,11 +165,22 @@ public class PageTag extends TagSupport
 		return true;
 	}
 
-	public void handleDialogInBody() throws JspException
+    /**
+     * When cmd=dialog is called, the expected parameters are:
+     *   0 dialog name (required)
+     *   1 data command like add,edit,delete,confirm (optional, may be empty or set to "-" to mean "none")
+     *   2 skin name (optional, may be empty or set to "-" to mean "none")
+     */
+
+	public void handleDialogInBody(String[] params) throws JspException
 	{
 		HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
-		String dialogName = request.getParameter(PAGECMD_DLG_DIALOGNAME_PARAM_NAME);
-		String skinName = request.getParameter(PAGECMD_DLG_DIALOGSKIN_PARAM_NAME);
+		String dialogName = params[0];
+        String dataCmd = params.length > 1 ? ("-".equals(params[1]) ? null : params[1]) : null;
+		String skinName = params.length > 2 ? ("-".equals(params[2]) ? null : params[2]) : null;
+
+        if(dataCmd != null)
+            pageContext.getRequest().setAttribute(Dialog.PARAMNAME_DATA_CMD_INITIAL, dataCmd);
 
 		try
 		{
@@ -220,16 +231,100 @@ public class PageTag extends TagSupport
 		}
 	}
 
+    /**
+     * When cmd=qd-dialog is called, the expected parameters are:
+     *   0 query definition name (required)
+     *   1 dialog name (required)
+     *   2 skin name (optional, may be empty or set to "-" to mean "none")
+     */
+
+    public void handleQuerySelectDialogInBody(String[] params) throws JspException
+	{
+		HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
+        String source = params[0];
+        String dialogName = params[1];
+		String skinName = params.length > 2 ? ("-".equals(params[2]) ? null : params[2]) : null;
+
+        try
+		{
+			JspWriter out = pageContext.getOut();
+			ServletContext context = pageContext.getServletContext();
+
+    		StatementManager manager = StatementManagerFactory.getManager(context);
+            if(manager == null)
+            {
+                out.write("StatementManager not found in ServletContext");
+                return;
+            }
+
+    		QueryDefinition queryDefn = manager.getQueryDefn(source);
+            if(queryDefn == null)
+            {
+                out.write("QueryDefinition '"+source+"' not found in StatementManager");
+                return;
+            }
+
+	    	QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogName);
+            if(dialog == null)
+            {
+                out.write("QuerySelectDialog '"+dialogName+"' not found in QueryDefinition '"+ source +"'");
+                return;
+            }
+
+			DialogSkin skin = skinName == null ? SkinFactory.getDialogSkin() : SkinFactory.getDialogSkin(skinName);
+			if(skin == null)
+			{
+				out.write("DialogSkin '"+skinName+"' not found in skin factory.");
+				return;
+			}
+
+			DialogContext dc = dialog.createContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), skin);
+            dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
+			dialog.prepareContext(dc);
+
+			out.write(dialog.getHtml(dc, true));
+			return;
+		}
+		catch(IOException e)
+		{
+			throw new JspException(e.toString());
+		}
+	}
+
 	public boolean handleDefaultBodyItem() throws JspException
 	{
 		HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
-		String pageCmd = request.getParameter(PAGE_COMMAND_REQUEST_PARAM_NAME);
-		if(pageCmd == null)
+		String pageCmdParam = request.getParameter(PAGE_COMMAND_REQUEST_PARAM_NAME);
+		if(pageCmdParam == null)
 			return false;
+
+        StringTokenizer st = new StringTokenizer(pageCmdParam, ",");
+        String pageCmd = st.nextToken();
+        List pageCmdParamsList = new ArrayList();
+        while(st.hasMoreTokens())
+            pageCmdParamsList.add(st.nextToken());
+
+        String[] pageCmdParamsArray = null;
+        if(pageCmdParamsList.size() > 0)
+            pageCmdParamsArray = (String[]) pageCmdParamsList.toArray(new String[pageCmdParamsList.size()]);
 
 		// a "standard" page command needs to be handled
 		if(pageCmd.equals("dialog"))
-		    handleDialogInBody();
+		    handleDialogInBody(pageCmdParamsArray);
+        else if(pageCmd.equals("qd-dialog"))
+            handleQuerySelectDialogInBody(pageCmdParamsArray);
+        else
+        {
+            try
+            {
+                pageContext.getResponse().getWriter().write("Page command '"+ pageCmd +"' not recognized.");
+            }
+            catch(IOException e)
+            {
+                throw new JspException(e);
+            }
+            return false;
+        }
 
 		return true;
 	}
