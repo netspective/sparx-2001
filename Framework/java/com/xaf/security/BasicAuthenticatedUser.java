@@ -10,11 +10,20 @@ public class BasicAuthenticatedUser implements AuthenticatedUser
 	private String userPassword;
 	private String[] userRoles;
 	private BitSet userPermissions;
+	private String userOrgName;
+	private String userOrgId;
 
     public BasicAuthenticatedUser(String name, String id)
     {
 		userName = name;
 		userId = id;
+    }
+
+    public BasicAuthenticatedUser(String name, String id, String orgName, String orgId)
+    {
+		this(name, id);
+		userOrgName = orgName;
+		userOrgId = orgId;
     }
 
 	public String getUserName()
@@ -30,6 +39,16 @@ public class BasicAuthenticatedUser implements AuthenticatedUser
 	public String getUserId()
 	{
 		return userId;
+	}
+
+	public String getUserOrgName()
+	{
+		return userOrgName;
+	}
+
+	public String getUserOrgId()
+	{
+		return userOrgId;
 	}
 
 	public BitSet getUserPermissions()

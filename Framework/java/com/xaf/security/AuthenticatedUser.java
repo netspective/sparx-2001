@@ -9,6 +9,10 @@ public interface AuthenticatedUser extends Principal
 {
 	public String getUserName();
 	public String getUserId();
+
+	public String getUserOrgName();
+	public String getUserOrgId();
+
 	public BitSet getUserPermissions();
 	public String[] getUserRoles();
 

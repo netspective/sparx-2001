@@ -41,6 +41,7 @@ public class LoginDialog extends Dialog
 	{
 		TextField result = new TextField("user_id", "User ID");
 		result.setFlag(DialogField.FLDFLAG_REQUIRED);
+		result.setFlag(DialogField.FLDFLAG_INITIAL_FOCUS);
 		return result;
 	}
 
@@ -105,7 +106,8 @@ public class LoginDialog extends Dialog
 
 	public void storeUserData(DialogContext dc, AuthenticatedUser user)
 	{
-		((HttpServletRequest) dc.getRequest()).getSession(true).setAttribute(userInfoSessionAttrName, user);
+		HttpServletRequest req = (HttpServletRequest) dc.getRequest();
+		req.getSession(true).setAttribute(userInfoSessionAttrName, user);
 
 		Cookie cookie = new Cookie(userNameCookieName, dc.getValue(userIdField));
 		cookie.setPath("/");
@@ -116,7 +118,17 @@ public class LoginDialog extends Dialog
 		{
 			String userId = user.getUserId();
 			StringBuffer info = new StringBuffer();
+			info.append("login");
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
 			info.append(userId);
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(user.getUserOrgId());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(req.getRemoteUser());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(req.getRemoteHost());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(req.getRemoteAddr());
 			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
 			BitSet perms = user.getUserPermissions();
 			info.append(perms != null ? user.getUserPermissions().toString() : "{}");
@@ -131,13 +143,14 @@ public class LoginDialog extends Dialog
 					info.append(roles[r]);
 				}
 			}
+			cat.info(info);
 		}
 
 		cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SECURITY);
 		if(cat.isDebugEnabled())
 		{
 			String userId = user.getUserId();
-			cat.debug("User '"+ userId +"' ("+ user.getUserName() +") is now authenticated for Session ID '"+ ((HttpServletRequest) dc.getRequest()).getSession(true).getId() +"'");
+			cat.debug("User '"+ userId +"' ("+ user.getUserName() +") is now authenticated for Session ID '"+ req.getSession(true).getId() +"'");
 
 			BitSet perms = user.getUserPermissions();
 			if(perms != null)
@@ -158,7 +171,43 @@ public class LoginDialog extends Dialog
 
 	public void clearUserData(ValueContext vc)
 	{
-		((HttpServletRequest) vc.getRequest()).getSession(true).removeAttribute(userInfoSessionAttrName);
+		HttpServletRequest req = (HttpServletRequest) vc.getRequest();
+		AuthenticatedUser user = (AuthenticatedUser) req.getSession(true).getAttribute(userInfoSessionAttrName);
+
+		AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_SECURITY);
+		if(user != null && cat.isInfoEnabled())
+		{
+			String userId = user.getUserId();
+			StringBuffer info = new StringBuffer();
+			info.append("logout");
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(userId);
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(user.getUserOrgId());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(req.getRemoteUser());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(req.getRemoteHost());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			info.append(req.getRemoteAddr());
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			BitSet perms = user.getUserPermissions();
+			info.append(perms != null ? user.getUserPermissions().toString() : "{}");
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			String[] roles = user.getUserRoles();
+			if(roles != null)
+			{
+				for(int r = 0; r < roles.length; r++)
+				{
+					if(r > 0)
+						info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+					info.append(roles[r]);
+				}
+			}
+			cat.info(info);
+		}
+
+		req.getSession(true).removeAttribute(userInfoSessionAttrName);
 		Cookie cookie = new Cookie(userNameCookieName, "");
 		cookie.setPath("/");
 		cookie.setMaxAge(-1);
