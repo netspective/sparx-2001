@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogFieldFactory.java,v 1.3 2002-06-30 17:24:23 shahid.shah Exp $
+ * $Id: DialogFieldFactory.java,v 1.4 2002-07-08 21:27:45 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -90,6 +90,10 @@ import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalData;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalDisplay;
 import com.netspective.sparx.xaf.querydefn.ResultSetNavigatorButtonsField;
 
+/**
+ * Dialog field factory class for registering and retrieving dialog field objects (including
+ * conditional fields).
+ */
 public class DialogFieldFactory implements Factory
 {
     static Map fieldClasses = new HashMap();
@@ -131,11 +135,22 @@ public class DialogFieldFactory implements Factory
         conditionalsClasses.put("set-value", DialogFieldConditionalApplyFlag.class);
     }
 
+    /**
+     * Gets the list of  dialog field classes as a map
+     *
+     * @return Map
+     */
     public static Map getFieldClasses()
     {
         return fieldClasses;
     }
 
+    /**
+     * Add a new dialog field type
+     *
+     * @param tagName XML tag name
+     * @param cls Class name for the new field
+     */
     public static void addFieldType(String tagName, Class cls)
     {
         fieldClasses.put(tagName, cls);

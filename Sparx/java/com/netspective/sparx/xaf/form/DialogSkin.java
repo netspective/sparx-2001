@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogSkin.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DialogSkin.java,v 1.2 2002-07-08 21:27:45 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -64,20 +64,52 @@ import org.w3c.dom.Element;
 import com.netspective.sparx.xaf.form.field.GridField;
 import com.netspective.sparx.xaf.form.field.SeparatorField;
 
+/**
+ * The <code>DialogSkin</code> interface describes methods available for
+ * creating the HTML/DHTML string for displaying the dialog and its contents. All implementing
+ * classes
+ */
 public interface DialogSkin
 {
+    /**
+     * Write out the complete HTML string for the dialog
+     */
     public void renderHtml(Writer writer, DialogContext dc) throws IOException;
 
     public void renderCompositeControlsHtml(Writer writer, DialogContext dc, DialogField field) throws IOException;
 
+    /**
+     * Write out the HTML fragment for the grid area of the dialog
+     */
     public void renderGridControlsHtml(Writer writer, DialogContext dc, GridField gridField) throws IOException;
 
+    /**
+     * Write out the HTML gragment for the separator in the dialog
+     */
     public void renderSeparatorHtml(Writer writer, DialogContext dc, SeparatorField field) throws IOException;
 
+    /**
+     * Gets the default control attributes for each of the dialog field
+     * (the control string for the &lt;input&gt; HTML tag)
+     *
+     * @return String
+     */
     public String getDefaultControlAttrs();
 
+    /**
+     * Gets the string that is appended to the &lt;font&gt; HTML tag of the control area
+     * (&lt;font&gt; HTML tag before the &lt;input&gt; HTML tag)
+     *
+     * @return String
+     */
     public String getControlAreaFontAttrs();
 
+    /**
+     * Gets the string that is appended as a style to the control area
+     * (&lt;font&gt; HTML tag before the &lt;input&gt; HTML tag)
+     *
+     * @return String
+     */
     public String getControlAreaStyleAttrs();
 
     public void importFromXml(Element elem);
