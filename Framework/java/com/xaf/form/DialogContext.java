@@ -823,12 +823,12 @@ public class DialogContext extends ServletValueContext
 
     public void populateValuesFromSql(String sql)
 	{
-		populateValuesFromStatement(null, sql, null);
+		populateValuesFromSql(null, sql, null);
 	}
 
 	public void populateValuesFromSql(String sql, Object[] params)
 	{
-		populateValuesFromStatement(null, sql, params);
+		populateValuesFromSql(null, sql, params);
 	}
 
 	public void populateValuesFromSql(String dataSourceId, String sql, Object[] params)
@@ -843,7 +843,7 @@ public class DialogContext extends ServletValueContext
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException(e.toString());
+			throw new RuntimeException(e.toString() + " [" + sql + "]");
 		}
 	}
 
