@@ -428,6 +428,13 @@ public final class DialogContext extends Hashtable implements ValueContext
 		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
 		if(state.errorMessages == null)
 			state.errorMessages = new ArrayList();
+
+		for(Iterator i = state.errorMessages.iterator(); i.hasNext(); )
+		{
+			if(((String) i.next()).equals(message))
+				return;
+		}
+
 		state.errorMessages.add(message);
 	}
 
