@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DmlTask.java,v 1.5 2002-08-18 21:08:31 shahid.shah Exp $
+ * $Id: DmlTask.java,v 1.6 2002-09-02 22:56:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -664,8 +664,8 @@ public class DmlTask extends BasicTask
                 if(stmt != null) stmt.close();
                 if(conn != null && ! connIsShared)
                 {
-                        conn.close();
-                        AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) tc.getRequest()).getServletPath() + " closing connection: " + conn);
+                    conn.close();
+                    conn = null;
                 }
             }
             catch(SQLException e)

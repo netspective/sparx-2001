@@ -59,7 +59,6 @@ public class ResultInfo
         {
             if(conn.getAutoCommit() == true)
             {
-                AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " closing connection: " + conn);
                 conn.close();
                 conn = null;
             }
