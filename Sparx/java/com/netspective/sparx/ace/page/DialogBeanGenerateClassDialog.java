@@ -51,14 +51,12 @@
  */
 
 /**
- * $Id: DialogBeanGenerateClassDialog.java,v 1.3 2002-08-18 20:58:06 shahid.shah Exp $
+ * $Id: DialogBeanGenerateClassDialog.java,v 1.4 2002-12-23 04:29:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.Writer;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,7 +109,7 @@ public class DialogBeanGenerateClassDialog extends Dialog
     public void execute(Writer writer, DialogContext dc) throws IOException
     {
         DialogManager manager = DialogManagerFactory.getManager(dc.getServletContext());
-        Map dialogsInfo = manager.getDialogs();
+        Map dialogsInfo = manager.getDialogs(dc.getServletContext(), null);
 
         String outputPath = dc.getValue(outputPathField);
         String pkgPrefix = dc.getValue(generatedPkgPrefixField);
