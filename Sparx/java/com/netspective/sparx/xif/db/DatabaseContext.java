@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseContext.java,v 1.2 2002-08-17 15:04:38 shahid.shah Exp $
+ * $Id: DatabaseContext.java,v 1.3 2002-08-30 00:26:35 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -64,6 +64,8 @@ import javax.naming.NamingException;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.DataSourceEntriesListValue;
+import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 
 /**
  * Provides an interface for obtaining a default or named JDBC Connection object;
@@ -146,4 +148,9 @@ public interface DatabaseContext
      * tab.
      */
     public void createCatalog(ValueContext vc, Element parent) throws NamingException;
+
+    /**
+     * Given a filter criteria, get a list of all the available data sources suitable for a selection from the UI.
+     */
+    public void populateDataSources(ValueContext vc, SelectChoicesList scl, DataSourceEntriesListValue dselv);
 }

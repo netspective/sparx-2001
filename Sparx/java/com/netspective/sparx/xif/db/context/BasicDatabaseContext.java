@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: BasicDatabaseContext.java,v 1.3 2002-08-18 20:57:17 shahid.shah Exp $
+ * $Id: BasicDatabaseContext.java,v 1.4 2002-08-30 00:26:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -76,9 +76,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.DataSourceEntriesListValue;
 import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
+import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.form.field.SelectChoice;
 
 /**
  * The reference DatabaseContext implementation for a servlet or JSP using XAF
@@ -178,6 +181,24 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
                 DatabaseContextFactory.addText(doc, propertyElem, "value", ex.toString());
             }
             parent.appendChild(propertyElem);
+        }
+    }
+
+    public void populateDataSources(ValueContext vc, SelectChoicesList scl, DataSourceEntriesListValue dselv)
+    {
+        try
+        {
+            Context env = (Context) new InitialContext().lookup("java:comp/env/jdbc");
+            for(NamingEnumeration e = env.list(""); e.hasMore(); )
+            {
+                NameClassPair entry = (NameClassPair) e.nextElement();
+                if(dselv.accept(entry))
+                    scl.add(new SelectChoice("jdbc/" + entry.getName()));
+            }
+        }
+        catch(NamingException ne)
+        {
+            scl.add(new SelectChoice("Error in BasicDatabaseContext.populateDataSources: " + ne.toString()));
         }
     }
 }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractDatabaseContext.java,v 1.4 2002-08-18 20:57:17 shahid.shah Exp $
+ * $Id: AbstractDatabaseContext.java,v 1.5 2002-08-30 00:26:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -68,11 +68,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.DataSourceEntriesListValue;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
+import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 
 public abstract class AbstractDatabaseContext implements DatabaseContext
 {
@@ -169,6 +171,11 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
     }
 
     public void createCatalog(ValueContext vc, Element parent) throws NamingException
+    {
+        throw new RuntimeException("Not implemented");
+    }
+
+    public void populateDataSources(ValueContext vc, SelectChoicesList scl, DataSourceEntriesListValue dselv)
     {
         throw new RuntimeException("Not implemented");
     }
