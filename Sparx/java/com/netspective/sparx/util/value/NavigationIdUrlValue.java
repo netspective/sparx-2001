@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationIdUrlValue.java,v 1.4 2003-01-22 06:26:31 roque.hernandez Exp $
+ * $Id: NavigationIdUrlValue.java,v 1.5 2003-01-28 20:24:26 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -60,9 +60,8 @@ import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
 import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 
-public class NavigationIdUrlValue extends ValueSource
+public class NavigationIdUrlValue extends NavigationPageUrlCmdValue
 {
-    private String source;
 
     public NavigationIdUrlValue()
     {
@@ -78,18 +77,6 @@ public class NavigationIdUrlValue extends ValueSource
                 "NavigationTreeManager named source-name in the default configuration file.",
                 new String[]{"navigation-id", "source-name/navigation-id"}
         );
-    }
-
-    public void initializeSource(String srcParams)
-    {
-        int delimPos = srcParams.indexOf('/');
-        if(delimPos > 0)
-        {
-            source = srcParams.substring(0, delimPos);
-            valueKey = srcParams.substring(delimPos + 1);
-        }
-        else
-            valueKey = srcParams;
     }
 
     public String getValue(ValueContext vc)
@@ -111,10 +98,31 @@ public class NavigationIdUrlValue extends ValueSource
                 return "No '" + source + "' Configuration found in " + getId();
         }
 
-        NavigationPath result = (NavigationPath) navTree.getAbsolutePathsMap().get(valueKey);
-        if(result != null)
-            return result.getUrl(vc);
-        else
-            return "Navigation id '"+ valueKey +"' not found.";
+        NavigationPath result = (NavigationPath) navTree.getAbsolutePathsMap().get(navId);
+
+        String navUrlAndParams = result.getUrl(vc);
+
+        int endOfNavUrlPos = navUrlAndParams.indexOf('?') < 0 ? navUrlAndParams.length() : navUrlAndParams.indexOf('?') ;
+
+        String navUrl = navUrlAndParams.substring(0, endOfNavUrlPos);
+
+        String navUrlParams = null;
+
+        if (endOfNavUrlPos < 0 ) {
+            navUrlParams = "";
+        } else {
+             navUrlParams = navUrlAndParams.substring(navUrlAndParams.indexOf('?') + 1);
+
+        }
+
+        String localParams = "";
+            if (reqParams != null) {
+                localParams = reqParams.getValue(vc);
+            }
+
+        String finalParams = resolveRequestPrameters(navUrlParams, localParams);
+
+        return navUrl + (finalParams != null && finalParams.length() > 0 ? "?" + finalParams : "");
+
     }
 }
