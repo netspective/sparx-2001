@@ -36,6 +36,13 @@ public class <xsl:value-of select="$rows-name"/> extends AbstractRows
 		this.table = table;
 	}
 	
+<xsl:if test="@_gen-table-orig-class-name">
+	public <xsl:value-of select="$rows-name"/>(<xsl:value-of select="@_gen-table-orig-class-name"/> table)
+	{
+		super();
+		this.table = (<xsl:value-of select="@_gen-table-class-name"/>) table;
+	}
+</xsl:if>	
 	public void populateDataByIndexes(ResultSet resultSet) throws SQLException
 	{
 		super.populateDataByIndexes(resultSet);

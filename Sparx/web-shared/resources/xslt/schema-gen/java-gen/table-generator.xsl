@@ -162,13 +162,19 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		initializeDefn();
 	}
 
+	public <xsl:value-of select="$table-name"/>(Schema schema, String tableName)
+	{
+		super(schema, tableName);
+		initializeDefn();
+	}
+
 	public void initializeDefn()
 	{
 <xsl:for-each select="column">
 	<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
 <xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 <xsl:if test="@type = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
-		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="$table-abbrev"/>_<xsl:value-of select="@name"/>_SEQ&quot;);
+		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="@_gen-sequence-name"/>&quot;);
 </xsl:if>
 <xsl:if test="(@type != 'autoinc' or @type != 'guid32') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
 </xsl:if>
@@ -184,19 +190,9 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="default"/>);
 	</xsl:when>
 </xsl:choose>
-<!-- Added by SJ -->
 <xsl:for-each select="default">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);
 </xsl:for-each>
-<!--xsl:choose>
-	<xsl:when test="@default">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@default"/>&quot;);
-	</xsl:when>
-	<xsl:when test="default[not(@type)]">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="default"/>&quot;);
-	</xsl:when>
-</xsl:choose -->
-<!-- End of Addition -->
 <xsl:if test="size and size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="size"/>);
 </xsl:if>
 <xsl:if test="@size and @size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="@size"/>);
