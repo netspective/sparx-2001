@@ -15,12 +15,12 @@ import com.xaf.sql.query.*;
 
 public class Generator
 {
-	static public class Sequence
+	static public class CustomSql
 	{
-		String seqName;
-		public Sequence(String name)
+		String customSql;
+		public CustomSql(String sql)
 		{
-			seqName = name;
+			customSql = sql;
 		}
 	}
 
@@ -30,12 +30,10 @@ public class Generator
 		public String tableName;
 		public Object[] columns;
 		public long bindColFlags;
-		public long seqColFlags;
 
 		public String toString()
 		{
 			StringBuffer bind = new StringBuffer();
-			StringBuffer seq = new StringBuffer();
 
 			for(int c = 0; c < columns.length; c++)
 			{
@@ -44,13 +42,9 @@ public class Generator
 				{
 					bind.append((c / 2) + ": " + columns[c] + " ("+ columns[c].getClass() +")\n");
 				}
-				if((seqColFlags & valueIndexFlag) != 0)
-				{
-					seq.append((c / 2) + ": " + columns[c] + " ("+ columns[c].getClass() +")\n");
-				}
 			}
 
-			return "SQL\n" + sql + "\n\nBIND\n" + bind + "\nSEQUENCES\n" + seq;
+			return "SQL\n" + sql + "\n\nBIND\n" + bind;
 		}
 	}
 
@@ -77,11 +71,9 @@ public class Generator
 			long indexFlag = (long) java.lang.Math.pow(2.0, (double) valueIndex);
 			Object value = columns[valueIndex];
 
-			if(value instanceof Sequence)
+			if(value instanceof CustomSql)
 			{
-				values.append("?");
-			    stmt.bindColFlags |= indexFlag;
-			    stmt.seqColFlags |= indexFlag;
+				values.append(((CustomSql) value).customSql);
 			}
 			else
 			{
@@ -119,15 +111,23 @@ public class Generator
 
             sets.append(columns[i * 2]);
             sets.append(" = ");
-            if(value == null)
-            {
-                sets.append("NULL");
-            }
-            else
-            {
-                sets.append("?");
-                stmt.bindColFlags |= indexFlag;
-            }
+
+			if(value instanceof CustomSql)
+			{
+				sets.append(((CustomSql) value).customSql);
+			}
+			else
+			{
+				if(value == null)
+				{
+					sets.append("NULL");
+				}
+				else
+				{
+					sets.append("?");
+					stmt.bindColFlags |= indexFlag;
+				}
+			}
 		}
 
 		stmt.sql = "update "+tableName+" set " + sets;
