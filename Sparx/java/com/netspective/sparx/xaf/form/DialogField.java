@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.14 2002-12-23 04:39:40 shahid.shah Exp $
+ * $Id: DialogField.java,v 1.15 2003-01-14 23:15:52 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1287,7 +1287,7 @@ public class DialogField
         return validateFieldsCount > 0 ? true : false;
     }
 
-    public boolean isValid(DialogContext dc)
+    public boolean defaultIsValid(DialogContext dc)
     {
         if(flagIsSet(FLDFLAG_HAS_CONDITIONAL_DATA))
         {
@@ -1315,6 +1315,11 @@ public class DialogField
                 invalidFieldsCount++;
         }
         return invalidFieldsCount == 0 ? true : false;
+    }
+
+    public boolean isValid(DialogContext dc)
+    {
+        return defaultIsValid(dc);
     }
 
     /**

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectField.java,v 1.4 2003-01-06 17:34:27 shahbaz.javeed Exp $
+ * $Id: SelectField.java,v 1.5 2003-01-14 23:15:52 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -68,7 +68,6 @@ import org.w3c.dom.NodeList;
 
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
-import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogFieldPopup;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.StringsListValue;
@@ -93,7 +92,6 @@ public class SelectField extends TextField
     private ListValueSource listSource;
     private ListValueSource defaultValue;
     private int style;
-    private int size = 4;
     private int multiDualWidth = 125;
     private String multiDualCaptionLeft = "Available";
     private String multiDualCaptionRight = "Selected";
@@ -248,6 +246,7 @@ public class SelectField extends TextField
 
     public void importFromXml(Element elem)
     {
+
         super.importFromXml(elem);
 
         String styleValue = elem.getAttribute("style");
@@ -328,7 +327,7 @@ public class SelectField extends TextField
         {
             case SELECTSTYLE_POPUP:
                 // we're just going to let the super method take care of us
-                break;
+                return super.isValid(dc);
 
             case SELECTSTYLE_COMBO:
             case SELECTSTYLE_LIST:
@@ -339,7 +338,7 @@ public class SelectField extends TextField
                     invalidate(dc, getCaption(dc) + " is required.");
                     return false;
                 }
-                break;
+                return defaultIsValid(dc);
 
             case SELECTSTYLE_MULTILIST:
             case SELECTSTYLE_MULTICHECK:
@@ -350,10 +349,11 @@ public class SelectField extends TextField
                     invalidate(dc, getCaption(dc) + " is required.");
                     return false;
                 }
-                break;
-        }
+                return defaultIsValid(dc);
 
-        return super.isValid(dc);
+            default:
+                throw new RuntimeException("It should never get here");
+        }
     }
 
     public void populateValue(DialogContext dc, int formatType)
@@ -391,6 +391,7 @@ public class SelectField extends TextField
 
     public String getMultiDualControlHtml(DialogContext dc, SelectChoicesList choices)
     {
+        int size = getSize();
         String dialogName = dc.getDialog().getName();
 
         String width = multiDualWidth + " pt";
@@ -522,6 +523,7 @@ public class SelectField extends TextField
         StringBuffer options = new StringBuffer();
         int itemIndex = 0;
         Iterator i = choices.getIterator();
+
         switch(style)
         {
             case SELECTSTYLE_RADIO:
@@ -597,11 +599,11 @@ public class SelectField extends TextField
                             break;
 
                         case SELECTSTYLE_LIST:
-                            writer.write("<select name='" + id + "' size='" + size + "' " + defaultControlAttrs + ">" + options + "</select>");
+                            writer.write("<select name='" + id + "' size='" + getSize() + "' " + defaultControlAttrs + ">" + options + "</select>");
                             break;
 
                         case SELECTSTYLE_MULTILIST:
-                            writer.write("<select name='" + id + "' size='" + size + "' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>");
+                            writer.write("<select name='" + id + "' size='" + getSize() + "' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>");
                             break;
                     }
 
