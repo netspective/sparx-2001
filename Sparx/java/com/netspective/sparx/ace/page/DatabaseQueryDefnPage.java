@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseQueryDefnPage.java,v 1.3 2002-09-23 03:47:27 shahid.shah Exp $
+ * $Id: DatabaseQueryDefnPage.java,v 1.4 2002-12-26 19:21:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -118,7 +118,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
         StatementManager manager = StatementManagerFactory.getManager(context);
         manager.updateExecutionStatistics();
         manager.addMetaInfoOptions();
-        transform(pc, manager.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "query-defn-browser-xsl");
+        transform(pc, manager.getDocument(pc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "query-defn-browser-xsl");
     }
 
     public void handleTestQueryDefn(PageContext pc, String queryDefnId) throws ServletException, IOException

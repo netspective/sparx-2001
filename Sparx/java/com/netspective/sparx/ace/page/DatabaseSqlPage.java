@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.7 2002-11-30 16:32:00 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.8 2002-12-26 19:21:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -125,7 +125,7 @@ public class DatabaseSqlPage extends AceServletPage
             StatementManager manager = StatementManagerFactory.getManager(context);
             manager.updateExecutionStatistics();
             manager.addMetaInfoOptions();
-            transform(pc, manager.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
+            transform(pc, manager.getDocument(pc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
         }
     }
 
@@ -136,7 +136,7 @@ public class DatabaseSqlPage extends AceServletPage
 
         PrintWriter out = pc.getResponse().getWriter();
 
-        StatementInfo si = manager.getStatement(stmtId);
+        StatementInfo si = manager.getStatement(pc.getServletContext(), null, stmtId);
         if(si != null)
         {
             out.write("<h1>SQL Unit Test: " + stmtId + "</h1>");
@@ -165,7 +165,7 @@ public class DatabaseSqlPage extends AceServletPage
         DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
 
         out.write("<h1>SQL: " + stmtId + "</h1>");
-        StatementInfo si = manager.getStatement(stmtId);
+        StatementInfo si = manager.getStatement(pc.getServletContext(), null, stmtId);
         try
         {
             if ("yes".equals(pc.getRequest().getParameter("pageable")))
@@ -199,7 +199,7 @@ public class DatabaseSqlPage extends AceServletPage
                 }
             }
             else
-                manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null);
+                manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null, null);
         }
         catch(Exception e)
         {
@@ -212,6 +212,7 @@ public class DatabaseSqlPage extends AceServletPage
             out.write(msg.toString());
             out.write("</pre>");
         }
+        out.write("<br>");
         out.write(si.getDebugHtml(pc, false, false, null));
     }
 }
