@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SelectField.java,v 1.9 2003-04-18 00:07:29 aye.thu Exp $
+ * $Id: SelectField.java,v 1.10 2003-04-18 16:03:06 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -667,11 +667,36 @@ public class SelectField extends TextField
     }
 
     /**
-     * Empty method. Overwritten by extending classes needing to to extra Javascript work.
+     * Produce select field specific Javascript definitions
+     * @param dc
+     * @return String
      */
     public String getCustomJavaScriptDefn(DialogContext dc)
     {
-        return (super.getCustomJavaScriptDefn(dc) + "field.style = " + getStyle() + ";\n");
+        StringBuffer buf = new StringBuffer(super.getCustomJavaScriptDefn(dc));
+        buf.append("field.style = " + getStyle() + ";\n");
+
+        if (getStyle() == SELECTSTYLE_POPUP)
+        {
+            SelectChoicesList choices = listSource.getSelectChoices(dc);
+            Iterator i = choices.getIterator();
+            StringBuffer captionBuf = new StringBuffer();
+            StringBuffer valueBuf = new StringBuffer();
+            int count = 0;
+            captionBuf.append("field.choicesCaption = new Array(");
+            valueBuf.append("field.choicesValue = new Array(");
+            while (i.hasNext())
+            {
+                SelectChoice sc = (SelectChoice) i.next();
+                captionBuf.append((count != 0 ? ", \"" : "\"") + sc.getCaption() + "\"");
+                valueBuf.append((count != 0 ? ", \"" : "\"") + sc.getValue() + "\"");
+                count++;
+            }
+            captionBuf.append(");\n");
+            valueBuf.append(");\n");
+            buf.append(captionBuf.toString() + valueBuf.toString());
+        }
+        return buf.toString();
     }
 
     /*
