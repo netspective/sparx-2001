@@ -25,6 +25,7 @@ public class Dialog
 	static public final String PARAMNAME_EXECSEQ       = ".exec_sequence";
 	static public final String PARAMNAME_ORIG_REFERER  = ".orig_referer";
 	static public final String PARAMNAME_TRANSACTIONID = ".transaction_id";
+	static public final String PARAMNAME_RESETCONTEXT  = ".reset_context";
 
 	/*
 	   the Data Command when first passed in (start of dialog, run seq == 1)
@@ -85,6 +86,7 @@ public class Dialog
 	public final String getRunSequenceParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_RUNSEQ; }
 	public final String getExecuteSequenceParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_EXECSEQ; }
 	public final String getTransactionIdParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_TRANSACTIONID; }
+	public final String getResetContextParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_RESETCONTEXT; }
 	public final String getValuesRequestAttrName() { return "dialog-" + name + "-field-values"; }
 	public final String getDataCmdParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_DATA_CMD; }
 
@@ -93,7 +95,9 @@ public class Dialog
 	public final ArrayList getFields() { return fields; }
 	public final boolean retainRequestParams() { return retainAllRequestParams || (retainRequestParams != null); }
 	public final String[] getRetainRequestParams() { return retainRequestParams; }
+	public final void setRetainRequestParams(String[] value) { retainRequestParams = value; }
 	public final boolean retainAllRequestParams() { return retainAllRequestParams; }
+	public final void setRetainAlLRequestParams(boolean value) { retainAllRequestParams = true; }
 
 	public final DialogDirector getDirector() { return director; }
 	public void setDirector(DialogDirector value) { director = value; }

@@ -77,6 +77,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 	static public final int STATECALCSTAGE_FINAL   = 1;
 
 	private List listeners = new ArrayList();
+	private boolean resetContext;
 	private String transactionId;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -123,6 +124,14 @@ public final class DialogContext extends Hashtable implements ValueContext
 			execSequence = new Integer(execSeqValue).intValue();
 		else
 			execSequence = 0; // we have not executed at all yet
+
+		String resetContext = request.getParameter(dialog.getResetContextParamName());
+		if(resetContext != null)
+		{
+			runSequence = 1;
+			execSequence = 0;
+			this.resetContext = true;
+		}
 
 		if(runSequence == 1)
 		{
@@ -223,7 +232,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 		{
 			activeMode = dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
 		}
-		else
+		else if (! resetContext)
 		{
 			String modeParamValue = request.getParameter(dialog.getActiveModeParamName());
 			if(modeParamValue != null)
@@ -260,6 +269,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 	}
 
 	public final String getTransactionId() { return transactionId; }
+	public final boolean contextWasReset() { return resetContext; }
 	public final int getRunSequence() { return runSequence; }
 	public final int getExecuteSequence() { return execSequence; }
 	public final boolean isInitialEntry() { return runSequence == 1; }
