@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.8 2002-10-13 18:42:01 shahid.shah Exp $
+ * $Id: HtmlReportSkin.java,v 1.9 2002-11-25 14:49:41 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -446,10 +446,10 @@ public class HtmlReportSkin implements ReportSkin
     }
 
     /*
-	  This method and the next one (produceDataRows with Object[][] data) are almost
-	  identical except for their data sources (ResultSet vs. Object[][]). Be sure to
-	  modify that method when this method changes, too
-	*/
+      This method and the next one (produceDataRows with Object[][] data) are almost
+      identical except for their data sources (ResultSet vs. Object[][]). Be sure to
+      modify that method when this method changes, too
+    */
 
     public void produceDataRows(Writer writer, ReportContext rc, ResultSet rs) throws SQLException, IOException
     {
@@ -513,7 +513,7 @@ public class HtmlReportSkin implements ReportSkin
                 }
 
                 String singleRow = "<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'>"+ dataTagsBegin +"<font " + dataFontAttrs + ">" +
-                        (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='" + state.getUrl() + "' " + state.getUrlAnchorAttrs() + ">" + data + "</a>" : data) +
+                        (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href=\"" + state.getUrl() + "\" " + state.getUrlAnchorAttrs() + ">" + data + "</a>" : data) +
                         "</font>"+ dataTagsEnd +"</td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
 
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
@@ -547,10 +547,10 @@ public class HtmlReportSkin implements ReportSkin
     }
 
     /*
-	  This method and the previous one (produceDataRows with ResultSet) are almost
-	  identical except for their data sources (Object[][] vs. ResultSet). Be sure to
-	  modify that method when this method changes, too.
-	*/
+      This method and the previous one (produceDataRows with ResultSet) are almost
+      identical except for their data sources (Object[][] vs. ResultSet). Be sure to
+      modify that method when this method changes, too.
+    */
 
     public void produceDataRows(Writer writer, ReportContext rc, Object[][] data, int startDataRow) throws IOException
     {
