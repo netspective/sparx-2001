@@ -94,6 +94,15 @@ public class BasicDatabaseContext implements DatabaseContext
 				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Version " + dbmd.getDriverVersion());
 				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "URL: " + dbmd.getURL());
 				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "User: " + dbmd.getUserName());
+
+				String resultSetType = "unknown";
+				if(dbmd.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE))
+				    resultSetType = "scrollable (insensitive)";
+				else if(dbmd.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE))
+				    resultSetType = "scrollable (sensitive)";
+				else if(dbmd.supportsResultSetType(ResultSet.TYPE_FORWARD_ONLY))
+				    resultSetType = "non-scrollabe (forward only)";
+				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "ResultSet Type: " + resultSetType);
 			}
 			catch(Exception ex)
 			{
