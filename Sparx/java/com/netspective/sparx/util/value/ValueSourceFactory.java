@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.2 2002-08-30 00:22:20 shahid.shah Exp $
+ * $Id: ValueSourceFactory.java,v 1.3 2002-09-02 22:55:08 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -65,8 +65,14 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.factory.Factory;
 
+/**
+ * Factory that creates instances of ValueSource classes.
+ */
 public class ValueSourceFactory implements Factory
 {
+    public final static char VALUE_SOURCE_ID_DELIM = ':';
+    public final static char VALUE_SOURCE_ID_DELIM_ESCAPE = '\\';
+
     private static Map srcClasses = new HashMap();
     private static Map srcInstances = new HashMap();
 
@@ -167,22 +173,98 @@ public class ValueSourceFactory implements Factory
         }
     }
 
-    public static SingleValueSource getSingleValueSource(String source)
+    public static class ValueSourceTokens
     {
-        SingleValueSource vs = (SingleValueSource) srcInstances.get(source);
-        if(vs != null)
-            return vs;
+        private String source;
+        private int delimPos;
+        private String idOrClassName;
+        private String params;
+        private boolean valid;
+        private boolean escaped;
 
-        int delimPos = source.indexOf(':');
-        if(delimPos < 0)
-            return null;
+        public ValueSourceTokens(String source)
+        {
+            this.source = source;
+            delimPos = source.indexOf(VALUE_SOURCE_ID_DELIM);
+            valid = delimPos >= 0;
 
-        String srcType = source.substring(0, delimPos);
-        Class vsClass = (Class) srcClasses.get(srcType);
+            if(valid)
+            {
+                if(delimPos > 0 && source.charAt(delimPos-1) == VALUE_SOURCE_ID_DELIM_ESCAPE)
+                {
+                    escaped = true;
+                    valid = false;
+                }
+                else
+                {
+                    idOrClassName = source.substring(0, delimPos);
+                    params = source.substring(delimPos + 1);
+                }
+            }
+        }
+
+        public StaticValue getStaticValueSource()
+        {
+            StaticValue result = null;
+            if(escaped)
+            {
+                StringBuffer sb = new StringBuffer(source);
+                sb.deleteCharAt(delimPos - 1);
+                result = new StaticValue(sb.toString());
+            }
+            else
+                result = new StaticValue(source);
+            return result;
+        }
+
+        public String getSource()
+        {
+            return source;
+        }
+
+        public int getDelimPos()
+        {
+            return delimPos;
+        }
+
+        public String getIdOrClassName()
+        {
+            return idOrClassName;
+        }
+
+        public String getParams()
+        {
+            return params;
+        }
+
+        public boolean isValid()
+        {
+            return valid;
+        }
+
+        public boolean isEscaped()
+        {
+            return escaped;
+        }
+    }
+
+    /**
+     * Given a string of the format abc:def, parse the string into a value source Id ('abc') and value source
+     * parameters ('def'). If the string contains a '\' (backslash) immediately prior to the ':' then the string is
+     * not considered a value source string. Once parsed, check to see if 'abc' is an ID found in the srcClasses
+     * private Map that contains value source Id keys that are mapped to ValueSource classes. If it's found, create
+     * a new instance, pass along the parameters, and cache it. If the ID is not found in the map, check to if it is
+     * a valid Java class that is found in the classpath -- if abc is a valid class, instantiate it and pass in the
+     * value source parameters.
+     */
+    private static SingleValueSource getSingleValueSource(ValueSourceTokens vst)
+    {
+        SingleValueSource vs;
+        Class vsClass = (Class) srcClasses.get(vst.idOrClassName);
         try
         {
             if(vsClass == null)
-                vsClass = Class.forName(srcType);
+                vsClass = Class.forName(vst.idOrClassName);
         }
         catch(ClassNotFoundException cnfe)
         {
@@ -191,15 +273,15 @@ public class ValueSourceFactory implements Factory
 
         if(vsClass == null)
         {
-            return new StaticValue("Value source '" + srcType + "' class not found in '"+ source  +"'.");
+            return new StaticValue("Value source '" + vst.idOrClassName + "' class not found in '"+ vst.source  +"'.");
         }
         else
         {
             try
             {
                 vs = (SingleValueSource) vsClass.newInstance();
-                vs.initializeSource(source.substring(delimPos + 1));
-                srcInstances.put(source, vs);
+                vs.initializeSource(vst.params);
+                srcInstances.put(vst.source, vs);
             }
             catch(Exception e)
             {
@@ -210,6 +292,21 @@ public class ValueSourceFactory implements Factory
         }
     }
 
+    public static SingleValueSource getSingleValueSource(String source)
+    {
+        SingleValueSource vs = (SingleValueSource) srcInstances.get(source);
+        if(vs != null)
+            return vs;
+        else
+        {
+            ValueSourceTokens vst = new ValueSourceTokens(source);
+            if(vst.valid)
+                return getSingleValueSource(vst);
+            else
+                return null;
+        }
+    }
+
     public static SingleValueSource getStoreValueSource(String source)
     {
         return getSingleValueSource(source);
@@ -217,34 +314,37 @@ public class ValueSourceFactory implements Factory
 
     public static SingleValueSource getSingleOrStaticValueSource(String source)
     {
-        SingleValueSource result;
-        if(source.startsWith("\\") && source.length() > 2)
-            result = new StaticValue(source.substring(2));
+        ValueSourceTokens vst = new ValueSourceTokens(source);
+        if(vst.valid)
+            return getSingleValueSource(vst);
         else
-        {
-            result = getSingleValueSource(source);
-            if(result == null)
-                result = new StaticValue(source);
-        }
-        return result;
+            return vst.getStaticValueSource();
     }
 
+    /**
+     * Given a string of the format abc:def, parse the string into a value source Id ('abc') and value source
+     * parameters ('def'). If the string contains a '\' (backslash) immediately prior to the ':' then the string is
+     * not considered a value source string. Once parsed, check to see if 'abc' is an ID found in the srcClasses
+     * private Map that contains value source Id keys that are mapped to ValueSource classes. If it's found, create
+     * a new instance, pass along the parameters, and cache it. If the ID is not found in the map, check to if it is
+     * a valid Java class that is found in the classpath -- if abc is a valid class, instantiate it and pass in the
+     * value source parameters.
+     */
     public static ListValueSource getListValueSource(String source)
     {
         ListValueSource vs = (ListValueSource) srcInstances.get(source);
         if(vs != null)
             return vs;
 
-        int delimPos = source.indexOf(':');
-        if(delimPos < 0)
+        ValueSourceTokens vst = new ValueSourceTokens(source);
+        if(! vst.valid)
             return null;
 
-        String srcType = source.substring(0, delimPos);
-        Class vsClass = (Class) srcClasses.get(srcType);
+        Class vsClass = (Class) srcClasses.get(vst.idOrClassName);
         try
         {
             if(vsClass == null)
-                vsClass = Class.forName(srcType);
+                vsClass = Class.forName(vst.idOrClassName);
         }
         catch(ClassNotFoundException cnfe)
         {
@@ -253,15 +353,15 @@ public class ValueSourceFactory implements Factory
 
         if(vsClass == null)
         {
-            return new ErrorListSource("List source '" + srcType + "' class not found.");
+            return new ErrorListSource("List source '" + vst.idOrClassName + "' class not found.");
         }
         else
         {
             try
             {
                 vs = (ListValueSource) vsClass.newInstance();
-                vs.initializeSource(source.substring(delimPos + 1));
-                srcInstances.put(source, vs);
+                vs.initializeSource(vst.params);
+                srcInstances.put(vst.idOrClassName, vs);
             }
             catch(Exception e)
             {
