@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BasicDatabasePolicy.java,v 1.2 2002-01-28 10:09:54 jruss Exp $
+ * $Id: BasicDatabasePolicy.java,v 1.3 2002-04-16 22:27:18 eoliphan Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -61,10 +61,21 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.guid.RandomGUID;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 
 public class BasicDatabasePolicy implements DatabasePolicy
 {
+    String curGUID=null;
+    private synchronized void setCurGUID(String curGUID)
+    {
+        this.curGUID = curGUID;
+    }
+    private String getCurGUID()
+    {
+        return curGUID;
+    }
+
     public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
         return null;
@@ -92,6 +103,43 @@ public class BasicDatabasePolicy implements DatabasePolicy
 
     public boolean retainAutoIncColInDml()
     {
-				return true;
-		}
+        return true;
+    }
+
+    public Object handleGUIDPreDmlExecute(Connection conn, String seqOrTableName, String GUIDColumnName) throws SQLException
+    {
+        String guid = new RandomGUID().toString();
+        setCurGUID(guid);
+        return guid;
+    }
+
+    public Object handleGUIDPostDmlExecute(Connection conn, String seqOrTableName, String GUIDColumnName, Object GUIDColumnValue) throws SQLException
+    {
+        return getCurGUID();
+    }
+
+    public Object handleGUIDPreDmlExecute(Connection conn, ValueContext vc, String seqOrTableName,
+                                          String GUIDColumnName, List columnNames, List columnValues) throws SQLException
+    {
+        String guid = new RandomGUID().toString();
+        setCurGUID(guid);
+        return getCurGUID();
+    }
+
+    public Object handleGUIDPostDmlExecute(Connection conn, ValueContext vc, String seqOrTableName,
+                                           String GUIDColumnName, Object GUIDColumnValue) throws SQLException
+    {
+        return getCurGUID();
+    }
+
+    public Object getGUIDCurrentValue(Connection conn, ValueContext vc, String seqOrTableName,
+                                      String GUIDColumnName) throws SQLException
+    {
+        return getCurGUID();
+    }
+
+    public boolean retainGUIDColInDml()
+    {
+        return true;
+    }
 }
