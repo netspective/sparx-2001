@@ -1,8 +1,12 @@
 <%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
 <%@ taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"%>
 
-<app:page title="Add Project Member" heading="Add Project Memeber">
+<%
+    String heading = "Project: " + request.getParameter("project_name");
+    request.setAttribute("data_cmd", "edit");
+%>
+<app:page title="Add Project Member" heading="<%= heading %>">
 
-    <xaf:dialog name="project.relation" />
+    <xaf:dialog name="project.person_registeration" />
 
 </app:page>
