@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DmlTask.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: DmlTask.java,v 1.2 2002-02-07 02:54:38 thua Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -70,12 +70,20 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogFieldConditionalAction;
+import com.netspective.sparx.xaf.form.DialogFieldFactory;
+import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalData;
+import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalApplyFlag;
 import com.netspective.sparx.xaf.sql.DmlStatement;
+import com.netspective.sparx.xaf.sql.StatementInfo;
+import com.netspective.sparx.xaf.sql.DmlStatementConditionalAction;
 import com.netspective.sparx.xaf.task.BasicTask;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
@@ -104,6 +112,7 @@ public class DmlTask extends BasicTask
     private SingleValueSource whereCond;
     private String whereCondBindParams;
     private String dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
+    private List conditionalActions;
 
     public DmlTask()
     {
@@ -125,6 +134,16 @@ public class DmlTask extends BasicTask
         dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
         autoIncDefn = null;
         autoIncStoreValueSource = null;
+    }
+
+    public List getConditionalActions()
+    {
+        return conditionalActions;
+    }
+
+    public void setConditionalActions(List conditionalActions)
+    {
+        this.conditionalActions = conditionalActions;
     }
 
     public int getCommand()
@@ -289,6 +308,55 @@ public class DmlTask extends BasicTask
         setDialogContextAttrName(elem.getAttribute("dialog-context-attr"));
         setInsertCheckValueSource(elem.getAttribute("insert-check"));
         setUpdateCheckValueSource(elem.getAttribute("update-check"));
+
+        // handle conditionals if they exist
+        NodeList children = elem.getChildNodes();
+        for(int n = 0; n < children.getLength(); n++)
+        {
+            Node node = children.item(n);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            String childName = node.getNodeName();
+            if (childName.equals("conditional"))
+            {
+                importConditionalFromXml((Element) node);
+            }
+        }
+    }
+    /**
+     * Attributes allowed:
+     *  1. action = "execute"
+     *  2. has-value
+     *  3. has-permission
+     *  4. is-true
+     */
+    public void importConditionalFromXml(Element elem) throws TaskInitializeException
+    {
+        System.out.println("importConditionalFromXml");
+        String action = elem.getAttribute("action");
+        if(action == null || action.length() == 0)
+        {
+            throw new TaskInitializeException("In DmlTag, no 'action' specified for conditional.");
+        }
+        DmlStatementConditionalAction actionInst =  new  DmlStatementConditionalAction();
+        if (actionInst.importFromXml(elem))
+        {
+            System.out.println("Condition added");
+            addConditionalAction(actionInst);
+        }
+    }
+
+    /**
+     * Add the condition to the list of conditions for the DML statement
+     *
+     * @param      DmlStatementConditionalAction
+     */
+    public void addConditionalAction(DmlStatementConditionalAction action)
+    {
+        if (this.conditionalActions == null)
+            this.conditionalActions = new ArrayList();
+
+        this.conditionalActions.add(action);
     }
 
     public void populateFieldsDmlItems(TaskContext tc, List columnNames, List columnValues)
@@ -413,6 +481,18 @@ public class DmlTask extends BasicTask
 
     public void execute(TaskContext tc) throws TaskExecuteException
     {
+        // check all the conditionals
+        if (this.conditionalActions != null)
+        {
+            int conditionalCount = this.conditionalActions.size();
+            for (int i=0; i < conditionalCount; i++)
+            {
+                DmlStatementConditionalAction action = (DmlStatementConditionalAction) conditionalActions.get(i);
+                if (!action.checkCondtionals(tc))
+                    return;
+            }
+        }
+
         tc.registerTaskExecutionBegin(this);
 
         ServletContext context = tc.getServletContext();
