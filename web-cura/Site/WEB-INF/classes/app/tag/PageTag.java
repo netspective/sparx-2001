@@ -78,6 +78,8 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 		HttpServletResponse resp = (HttpServletResponse) pageContext.getResponse();
 		ServletContext servletContext = pageContext.getServletContext();
 
+        HttpSession session = req.getSession();
+
 		try
 		{
 			if(doLogin(servletContext, (Servlet) pageContext.getPage(), req, resp))
@@ -105,13 +107,19 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 				if(menuStructure == null)
 					throw new Exception("Unable to create menu structure");
 
-				mainMenu = new HierarchicalMenu(1, 10, 125, 75, menuStructure, appConfig.getValue(null, "framework.shared.scripts-url"));
+				mainMenu = new HierarchicalMenu(1, 5, 125, 60, menuStructure, appConfig.getValue(null, "framework.shared.scripts-url"));
 				mainMenu.setTopPermanent(true);
 				mainMenu.setTopHorizontal(true);
 				mainMenu.setTopMoreImagesVisible(false);
 				mainMenu.setBgColor("#AFD997");
 				mainMenu.setBorderColor("navy");
 			}
+            AuthenticatedUser user =
+                    (AuthenticatedUser) session.getAttribute(com.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
+            String personId = (String) user.getUserId();
+            Map personRegistration = (Map) user.getAttribute("registration");
+            req.setAttribute("personId", user.getAttribute("person-id"));
+
 
 			out.println("<html>");
 			out.println("<head>");
@@ -122,19 +130,22 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			mainMenu.printHtml(null, out);
 
             out.println("<table width='100%' border='0' cellpadding='0' cellspacing='0'>");
-            out.println("<tr bgcolor='#AFD997'>");
+            out.println("<tr >");
             out.println("   <td align='left' valign='top' background='"+ resourcesUrl +"/images/design/logo-background.jpg'>");
             out.println("   <img src='"+ resourcesUrl +"/images/design/masthead.jpg'  border='0' alt='Header Image'>");
             out.println("   </td>");
             out.println("   <td align='right' valign='top' background='"+ resourcesUrl +"/images/design/logo-background.jpg'>");
             out.println("   <img src='"+ resourcesUrl +"/images/design/sublogo.jpg'  border='0' alt='Header Image'>");
             out.println("   </td>");
-
             out.println("</tr>");
-            out.println("</table><p><center>");
+            out.println("<tr bgcolor='#8080FF'>");
+            out.println("   <td align='left'><b><font face='verdana' color='#FFFFFF' size=2>" + personRegistration.get("complete_name") + "</font></b></td>");
+            out.println("   <td align='right'><b><font face='verdana' color='#FFFFFF' size=2>" +  "</font></b></td>");
+            out.println("</tr>");
+            out.println("</table>");
 
-			out.print("<table width='100%' cellpadding='5' cellspacing='0'><tr><td align='center'><font face='verdana' size=2>");
-
+			out.println("<table width='100%' cellpadding='3' cellspacing='0'>");
+            out.println("   <tr><td colspan='2' align='left'><font face='verdana' size=2>");
 			String heading = getHeading();
 			if(heading != null)
 			{
@@ -161,7 +172,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 		try
 		{
 			out.print("</font></td></tr></table>");
-			out.print("</center></body>");
+			out.print("</body>");
 			out.print("</html>");
 		}
 		catch(IOException e)

@@ -1,13 +1,24 @@
+/*
+ * Description: app.skin.AppDetailReportSkin
+ * @author ThuA
+ * @created Dec 28, 2001 1:20:48 PM
+ * @version 
+ */
 package app.skin;
 
-import com.xaf.skin.HtmlReportSkin;
+import com.xaf.skin.HtmlSingleRowReportSkin;
 
-public class AppReportSkin   extends HtmlReportSkin
+public class AppDetailReportSkin   extends HtmlSingleRowReportSkin
 {
-    public AppReportSkin()
+    public AppDetailReportSkin()
     {
-        super();
-	    outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
+        this(1, true);
+    }
+
+    public AppDetailReportSkin(int tableCols, boolean horizontalLayout)
+    {
+        super(tableCols, horizontalLayout);
+        outerTableAttrs = "width='300' border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	    innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
 	    frameHdRowAttrs = "bgcolor='#8080FF'";
 	    frameHdFontAttrs = "face='Arial' size=2 color=white";
@@ -20,6 +31,6 @@ public class AppReportSkin   extends HtmlReportSkin
 	    dataFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;'";
 	    dataFtFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
 	    rowSepImgSrc = "/shared/resources/images/design/bar.gif";
-    }
 
+    }
 }
