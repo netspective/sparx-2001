@@ -16,6 +16,8 @@ import com.xaf.sql.*;
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 
+import javax.servlet.ServletRequest;
+
 public class DialogFieldValue extends ValueSource implements ListValueSource
 {
     public DialogFieldValue()
@@ -24,7 +26,21 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
 
     public String getValue(ValueContext vc)
     {
-		return vc.getRequest().getParameter(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+        if (vc instanceof DialogContext)
+        {
+            return ((DialogContext)vc).getValue(valueKey);
+        }
+        else
+        {
+            ServletRequest request = vc.getRequest();
+            DialogContext dc = (DialogContext) request.getAttribute(DialogContext.DIALOG_CONTEXT_ATTR_NAME);
+            if (dc != null)
+            {
+                return dc.getValue(valueKey);
+            }
+            else
+		        return vc.getRequest().getParameter(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+        }
     }
 
     public SelectChoicesList getSelectChoices(ValueContext vc)
