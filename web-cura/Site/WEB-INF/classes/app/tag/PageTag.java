@@ -162,7 +162,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
             out.println("       " + personRegistration.get("complete_name") + " @ <a class='Menu' href='" + rootPath + "/account/home.jsp?org_id=" + currOrgId + "&org_name="+
                     URLEncoder.encode(currOrgName) +"'>" + currOrgName  + "</a></b></font>");
             out.println("   </td>");
-            out.println("   <td align='right' style='font-family: Trebuchet MS, Arial; font-size: 8pt'><font color='white'>Organization: &nbsp; ") ;
+            out.println("   <td align='right' style='font-family: Trebuchet MS, Arial; font-size: 8pt'><font color='white'>Account: &nbsp; ") ;
             out.println("   <select name='active_org'  style='font-size: 7pt' onChange='goto_URL(this)'>");
             out.println("       <option></option>");
             Iterator orgKeys = memberOrgs.keySet().iterator();
