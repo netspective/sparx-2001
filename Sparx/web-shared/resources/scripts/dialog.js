@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.11 2003-02-13 21:32:25 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.12 2003-03-05 23:44:41 aye.thu Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -148,6 +148,7 @@ function radioButtonSelected(fieldName, value)
 
     return control.checked;
 }
+
 
 //****************************************************************************
 // FieldType class
@@ -657,6 +658,71 @@ function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
                 control.checked = isChecked;
         }
     }
+}
+
+/**
+ * THsi function changes the color of the parent row of the passed in source item
+ */
+function highlightRow(source, color)
+{
+    while (source.tagName.toUpperCase() != 'TR' && source != null)
+        source = document.all ? source.parentElement : source.parentNode;
+    if (source)
+        source.bgColor = color;
+}
+
+
+/**
+ * This function allows you to select a row by clicking on a checkbox. THe value assigned to the
+ * checkbox is saved to a 'selected items' list.
+ */
+function handleRowCheckEvent(source, fieldName, value)
+{
+    // fieldName  is the name of the dialog field where the list of selected items are stored
+    // and value is the value to add to or remove from the list
+	var fieldId = DIALOGFIELD_PREFIX + "." + fieldName;
+	var control = getControl(activeDialog, fieldId);
+	if(control == null)
+	{
+		alert("Field '" + fieldId + "' not found in active dialog -- can't check for selected values");
+		return false;
+	}
+	var intLength = control.options.length;
+	if (source.checked)
+	{
+	    var newOption = true;
+	    for (var i=0; i < intLength; i++)
+        {
+            if(control.options[i] != null && control.options[i].value == value)
+            {
+                newOption = false;
+            }
+        }
+
+        if (newOption == true)
+        {
+            // create a new entry to the selected item list
+            var objNewOpt = new Option();
+            objNewOpt.value = value;
+            objNewOpt.text = value;
+            objNewOpt.selected = true;
+            control.options[control.options.length] = objNewOpt;
+        }
+        highlightRow(source, "#ccd9e5");
+    }
+    else
+    {
+        highlightRow(source, "#ffffff");
+        // remove entry from the selected item list
+        for (var i=0; i < intLength; i++)
+        {
+            if(control.options[i] != null && control.options[i].value == value)
+            {
+                control.options[i] = null;
+            }
+        }
+    }
+	return true;
 }
 
 //****************************************************************************
