@@ -45,7 +45,7 @@
                     <task><name>Integrate <a href="http://www.vaegar.f9.co.uk/java2html.html">Java2HTML</a> to allow colorized Java code to be viewed through browser (in addition to JavaDoc)</name></task>
 
                     <task>
-                        <name>Loggin</name>
+                        <name>Logging</name>
                         <task><name>Add auditing of user actions in dialogs, pages, and SQL (as opposed to just system logging).</name></task>
                         <task><name>Add <a href="http://freshmeat.net/releases/51516/">Java Exception Notification</a> into framework.</name></task>
                     </task>
@@ -149,6 +149,7 @@
                     <task>
                         <name>General</name>
                         <task><name>The ConnectionContext class should become the de facto standard class for managing connections so that transactions can be shared across tasks and the DAL.</name></task>
+			<task><name>Catch and notify user of undefined datatypes, etc. when generating schema/DAL</name></task>
                     </task>
 
                     <task>
