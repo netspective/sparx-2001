@@ -1,19 +1,19 @@
 <chapter>
     <title>Querying Relational Data: Static Queries</title>
 
-    <section>
+    <section id="Query">
         <title>Overview</title>
         <para>
             XAF provides a centralized location to create and store all static SQL statements
             with bind parameters in a single repository:
-            <filename class="conf">WEB-INF/ui/statement.xml</filename>.
+            <filename class="conf">web-app/Site/WEB-INF/ui/statement.xml</filename>.
             The XML file also provides the flexibility of defining sql statements for
             multiple data sources in one centralized location.
 
         </para>
     </section>
 
-    <section>
+    <section id="Creating-Query">
         <title>Creating a static query</title>
         <para>
         All static queries regardless of their data source are defined in 
@@ -135,7 +135,7 @@
 
     </section>
 
-    <section>
+    <section id="Testing-Query">
         <title>Testing the static query</title>
         <section>
             <title>Unit Testing</title>
@@ -147,7 +147,7 @@
                     <guimenu>SQL Statements</guimenu>
                 </menuchoice>             
                 menu entry in ACE displays all the SQL statements defined in 
-                <filename class="conf">WEB-INF/ui/statement.xml</filename> as shown below. 
+                <filename class="conf">web-app/Site/WEB-INF/ui/statement.xml</filename> as shown below. 
              </para>
              <para>
                 <mediaobject>
@@ -174,7 +174,7 @@
         </section>
     </section>
 
-    <section>
+    <section id="Using-Query">
         <title>Using the static query</title>
         <para>
             Static queries can be used in different ways inside a JSP file: to display reports,

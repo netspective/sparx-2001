@@ -30,6 +30,8 @@
 <!ENTITY framework-lib-dir-ref "<emphasis>Framework Library</emphasis> directory">
 <!ENTITY web-shared-dir-lit "&framework-dir-lit;\web-shared">
 <!ENTITY web-shared-dir-ref "<emphasis>Shared</emphasis> directory">
+<!ENTITY users-guide-dir-ref "&web-shared-dir-lit;\docs\users-guide">
+<!ENTITY users-guide-image-dir-ref "&users-guide-dir-ref;\resources\images">
 <!ENTITY jdk-dir-ref "<emphasis>JDK Home</emphasis> directory">
 <!ENTITY java-dir-lit "&win32-default-drive;\utils\java">
 <!ENTITY java-dir-ref "<emphasis>Java Libraries</emphasis> directory">
@@ -37,10 +39,10 @@
 <!ENTITY appservers-dir-ref "<emphasis>Application Servers</emphasis> directory">
 <!ENTITY resin-dir-ref "<emphasis>Resin Home</emphasis> directory">
 <!ENTITY product-name "<trademark>Sparx</trademark>">
-<!ENTITY framework-name "<trademark class='registered'>XAF</trademark>">
+<!ENTITY framework-name "<trademark>XAF</trademark>">
 <!ENTITY explorer-name "ACE">
 <!ENTITY valuesource "Value Source">
-<!ENTITY schema-name "<trademark class='registered'>XIF</trademark>">
+<!ENTITY schema-name "<trademark>XIF</trademark>">
 ]>
 
 <book>

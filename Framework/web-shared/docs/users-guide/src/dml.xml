@@ -1,6 +1,6 @@
 <chapter>
     <title>Manipulating Relational Data: Inserts, Updates, and Deletes </title>
-    <section>
+    <section id="DML" xreflabel="Manipulating Relational Data">
         <title>Overview</title>
         <para>
         &product-name; provides a JSP custom tag called <emphasis role="bold">&lt;xaf:dml&gt;</emphasis>

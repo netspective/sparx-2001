@@ -1,6 +1,6 @@
 <chapter>
 	<title>Querying Relational Data: Dynamic Queries</title>
-    <section>
+    <section id="Dynamic-Query" xreflabel="Querying Relational Data">
         <title>Overview</title>
         <para>
             One of &product-name;'s powerful features is to generate dynamic SQL statements
@@ -13,7 +13,7 @@
         </para>
     </section>
 
-    <section>
+    <section id="Creating-Dynamic-Query">
         <title>Creating a dynamic query</title>
         <para>
             All dynamic query configurations are stored in the same repository as the static queries
@@ -104,11 +104,32 @@
                     <listitem>
                         <para>
                         Represents a query definition dialog object containing fields for entering values of the
-                        bind parameters. When the <sgmltag class="attribute">allow-debug</sgmltag>
-                        attribute is set to <quote>yes</quote>, the dialog object displays a debug check box. When
-                        this checkbox is checked and the dialog is submitted, the generated SQL
-                        with its bind parameters will be displayed for debugging purposes
-                        instead of execution of the generated SQL.
+                        bind parameters. The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">allow-debug</sgmltag>:&nbsp;
+                                when attribute is set to <quote>yes</quote>, the dialog object displays a debug check box. 
+                                When  this checkbox is checked and the dialog is submitted, the generated SQL
+                                with its bind parameters will be displayed for debugging purposes
+                                instead of execution of the generated SQL.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">show-output-dests</sgmltag>: &nbsp; 
+                                The attribute is used to give the user
+                                several output options: HTML output (pageable report and row count per page), CSV output format,
+                                tab delimited format.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">heading</sgmltag>: &nbsp; The title of the query definition                                
+                                dialog.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
                         </para>
                     </listitem>
                 </varlistentry>
@@ -160,7 +181,7 @@
         </para>
     </section>
 
-    <section>
+    <section id="Testing-Dynamic-Query">
         <title>Testing the dynamic query</title>
         <section>
             <title>Unit Testing</title>
@@ -174,31 +195,30 @@
             </menuchoice>
             menu item:
             </para>
-            <mediaobject>
-            <imageobject align="left">
-                <imagedata fileref="./resources/images/statements/ace-querydefs.jpg" format="JPEG"/>
-            </imageobject>
-            </mediaobject>
-
+            
+            <para>            
+                <screenshot><graphic fileref="./resources/images/statements/ace-querydefs.jpg"></graphic></screenshot>            
+            </para>
+            
             <para>
             By clicking on the name of the query definition, all the entries of the query
             definition can be viewed:
             </para>
-            <mediaobject>
-            <imageobject align="left">
-                <imagedata fileref="./resources/images/statements/ace-querydefs2.jpg" format="JPEG"/>
-            </imageobject>
-            </mediaobject>
+            
+            <para>            
+                <screenshot><graphic fileref="./resources/images/statements/ace-querydefs2.jpg"/></screenshot> 
+            </para>
+            
             <para>
             Clicking on the Action(<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_dialog.gif" format="GIF"/>
             </imageobject>) icon in the Select Table shown above displays the query
             definition dialog represented by the <sgmltag class="element">select-dialog</sgmltag> tag.
             </para>
-            <mediaobject>
-            <imageobject align="left">
-                <imagedata fileref="./resources/images/statements/ace-querydefs3.jpg" format="JPEG"/>
-            </imageobject>
-            </mediaobject>
+            
+            <para>
+                <screenshot><graphic fileref="./resources/images/statements/ace-querydefs3.jpg"/></screenshot> 
+            </para>
+            
             <para>
             The debug checkbox is very useful to debug the dynamic query which is being generated
             according to the user's configuration.
@@ -212,21 +232,24 @@
             For example, the following entry displays a query definition dialog inside a JSP :
             <programlisting>
             <![CDATA[
-<xaf:query-select-dialog source="Order" name="region_order_search">
+<xaf:query-select-dialog source="Order" name="region_order_search"/>
             ]]>
             </programlisting>
             </para>
         </section>
 
     </section>
-    <section>
+    <section id="Using-Dynamic-Query">
         <title>Using the dynamic query</title>
         <para>
-        A dynamic query statement is generated from the query definition dialog and the resulting report
-        can be configured in different ways.
-        The attribute <sgmltag class="attribute">show-output-dests</sgmltag> is used to give the user
-        several options: HTML output (pageable report and row count per page), CSV output format,
-        tab delimited format.
+            A dynamic query statement is generated from the query definition dialog and the resulting report
+            can be configured in different ways.
+            <programlisting>
+            <![CDATA[
+<xaf:query-select-dialog source="Order" name="region_order_search"/>
+            ]]>
+            </programlisting>        
+
 
 
 

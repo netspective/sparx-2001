@@ -27,48 +27,50 @@
 		<title>ACE Pages</title>
 		<itemizedlist>
 			<listitem>
+                <para>
 				The <literal>Home</literal> page shows
 				<itemizedlist>
-					<listitem><emphasis>Execution Environment</emphasis> (Development, Testing, or Production)</listitem>
-					<listitem>Sparx version</listitem>
-					<listitem>Operating system Sparx is running on</listitem>
-					<listitem>Java JDK version and vendor</listitem>
-					<listitem>Java VM version and vendor</listitem>
+					<listitem><para><emphasis>Execution Environment</emphasis> (Development, Testing, or Production)</para></listitem>
+					<listitem><para>Sparx version</para></listitem>
+					<listitem><para>Operating system Sparx is running on</para></listitem>
+					<listitem><para>Java JDK version and vendor</para></listitem>
+					<listitem><para>Java VM version and vendor</para></listitem>
 				</itemizedlist>
+                </para>
 			</listitem>
-			<listitem>
+			<listitem><para>
 				The <literal>Application</literal> menu contains
 				<itemizedlist>
-					<listitem>Dialogs</listitem>
-					<listitem>Configuration</listitem>
-					<listitem>Servlet Context</listitem>
-					<listitem>Access Control</listitem>
-					<listitem>System Properties</listitem>
-					<listitem>Metrics</listitem>
-					<listitem>Factories</listitem>
-					<listitem>Logs</listitem>
+					<listitem><para>Dialogs</para></listitem>
+					<listitem><para>Configuration</para></listitem>
+					<listitem><para>Servlet Context</para></listitem>
+					<listitem><para>Access Control</para></listitem>
+					<listitem><para>System Properties</para></listitem>
+					<listitem><para>Metrics</para></listitem>
+					<listitem><para>Factories</para></listitem>
+					<listitem><para>Logs</para></listitem>
 				</itemizedlist>
-			</listitem>
-			<listitem>
+			</para></listitem>
+			<listitem><para>
 				The <literal>Database</literal> menu contains
 				<itemizedlist>
-					<listitem>SQL Statements</listitem>
-					<listitem>SQL Query Definitions</listitem>
-					<listitem>Schema (XML)</listitem>
-					<listitem>DB Meta Data</listitem>
-					<listitem>Generate DDL</listitem>
-					<listitem>Data Sources</listitem>
+					<listitem><para>SQL Statements</para></listitem>
+					<listitem><para>SQL Query Definitions</para></listitem>
+					<listitem><para>Schema (XML)</para></listitem>
+					<listitem><para>DB Meta Data</para></listitem>
+					<listitem><para>Generate DDL</para></listitem>
+					<listitem><para>Data Sources</para></listitem>
 				</itemizedlist>
-			</listitem>
-			<listitem>
+			</para></listitem>
+			<listitem><para>
 				The <literal>Documents</literal> menu contains
 				<itemizedlist>
-					<listitem>Tag Documentation</listitem>
-					<listitem>Java Documentation</listitem>
-					<listitem>Project Documentation</listitem>
-					<listitem>Framework Documentation</listitem>
+					<listitem><para>Tag Documentation</para></listitem>
+					<listitem><para>Java Documentation</para></listitem>
+					<listitem><para>Project Documentation</para></listitem>
+					<listitem><para>Framework Documentation</para></listitem>
 				</itemizedlist>
-			</listitem>
+			</para></listitem>
 		</itemizedlist>
 	</section>
 
@@ -125,7 +127,7 @@
         <para>
         <mediaobject>
         <imageobject align="left">
-            <imagedata fileref="./resources/images/ace/servletcontext.jpg" format="JPEG"/>
+            <imagedata fileref="resources/images/ace/servletcontext.jpg" format="JPEG"/>
         </imageobject>
         </mediaobject>              
         </para>            
@@ -144,11 +146,13 @@
         </para>
         
         <para>
-        <mediaobject>
-        <imageobject align="left">
-            <imagedata fileref="./resources/images/ace/acl.jpg" format="JPEG"/>
-        </imageobject>
-        </mediaobject>              
+        <screenshot>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="resources/images/ace/acl.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject> 
+        </screenshot>
         </para>        
 	</section>
 

@@ -49,9 +49,9 @@
             for use in many places throughout &product-name;. The format of a value source is similar to a URL (name:params).
             For example:
         <itemizedlist>
-            <listitem>request:abc</listitem>
-            <listitem>session-attr:abc</listitem>
-            <listitem>form:abc</listitem>
+            <listitem><para>request:abc</para></listitem>
+            <listitem><para>session-attr:abc</para></listitem>
+            <listitem><para>form:abc</para></listitem>
         </itemizedlist>
         All available &product-name; value sources can be seen in &explorer-name; submenu item
             <menuchoice role="bold">
@@ -63,12 +63,11 @@
                 <guisubmenu>Value Sources </guisubmenu>
             </menuchoice>       
          as shown below:
-            <mediaobject>
-            <imageobject align="left">
-                <imagedata fileref="./resources/images/statements/ace-valuesource.jpg" format="JPEG"/>
-            </imageobject>
-            </mediaobject>                 
-           
+         </para>
+         <para>
+            <screenshot>
+                <graphic  fileref="./resources/images/statements/ace-valuesource.jpg" />
+            </screenshot>
         </para>
         <section>
             <title>Single Value Sources (SVS)</title>
@@ -83,7 +82,7 @@
                     <term> <filename>config-expr</filename> </term>
                     <listitem>
                         <para>
-                        configuration item defined in <filename class="conf">WEB-INF/configuration.xml</filename>
+                        configuration item defined in <filename class="conf">web-app/Site/WEB-INF/configuration.xml</filename>
                         </para>
                     </listitem>
                 </varlistentry>
@@ -101,10 +100,7 @@
                         <para>
                         Used for DML tasks(using either <emphasis role="bold">&lt;xaf:dml&gt;</emphasis> 
                         custom tag or <emphasis role="bold">&lt;exec-dml&gt;</emphasis> XML tag)
-                        when one needs to specify a customized SQL expression for a column. For example:
-                        <programlisting>
-&lt;exec-dml command="insert" table="org" columns="cdate=custom-sql:to_char('MM/dd/YYYY', sysdate)"/&gt;
-                        </programlisting>
+                        when one needs to specify a customized SQL expression for a column.                        
                         </para>
                     </listitem>
                 </varlistentry>          
@@ -113,11 +109,7 @@
                     <term><filename>request-param</filename></term>
                     <listitem>
                         <para>
-                        Retrieves a request parameter value. For example, the following dialog
-                        text field is filled with the value of <emphasis>myval</emphasis>request parameter:
-                        <programlisting>
-&lt;field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/&gt;
-                        </programlisting>                        
+                        Retrieves a request parameter value. 
                         </para>
                     </listitem>
                 </varlistentry>                 
@@ -133,7 +125,7 @@
                     <term><filename>servlet-context-path</filename></term>                                        
                     <listitem>
                         <para>
-                        Retrieves the application's servlet context path.
+                         Retrieves the application's servlet context path.
                         </para>
                     </listitem>
                 </varlistentry>   
@@ -169,7 +161,7 @@
                     <term> <filename>form</filename> </term>                    
                     <listitem>
                         <para>
-                        configuration item defined in <filename class="conf">WEB-INF/configuration.xml</filename>
+                        The value source returns one or more values from a dialog depending on the field name.
                         </para>
                     </listitem>
                 </varlistentry>
@@ -177,7 +169,8 @@
                     <term><filename>formOrRequest</filename></term>                    
                     <listitem>
                         <para>
-                        The application's root URL
+                        The value source returns one or more values from a dialog depending on the field name
+                        or from a request parameter with the same name
                         </para>
                     </listitem>
                 </varlistentry>     
@@ -185,11 +178,7 @@
                     <term><filename>query</filename></term>                    
                     <listitem>
                         <para>
-                        Result column value(s) from a query. For example, the following dialog field 
-                        select list's options are filled with the result set of the query <emphasis>enum-types-all</emphasis>:
-                        <programlisting>
-&lt;field.select name="org_type" caption="Type" choices="query:org.enum-types-all"/&gt;
-                        </programlisting>
+                        Result column value(s) from a query. 
                         </para>
                     </listitem>
                 </varlistentry>                    
@@ -236,6 +225,117 @@
                     </listitem>
                 </varlistentry>              
             </variablelist>            
+            </para>
+        </section>
+        
+        <section>
+            <title>Example</title>
+            <para>
+                <example>
+                    <title> config SVS </title>
+                    <para> 
+                    The following dialog field uses a configuration parameter called <emphasis>framework.root-path</emphasis>
+                    as its' default value:
+                    <programlisting>
+                    <![CDATA[
+<dialog name="TestConfigSVS" heading="Test Config SVS">                            
+<field.text name="framework_path" caption="The framework root path" default="config:framework.root-path"/>
+</dialog>        
+                    ]]>
+                    </programlisting>
+                    The dialog is displayed as:
+                    <screenshot>
+                        <graphic fileref="./resources/images/key-concepts/svs-config.jpg" />
+                    </screenshot>
+                    </para>
+                </example>
+                <example>
+                    <title>create-app-url</title>
+                    <para>
+                    The URL for &explorer-name; is defined in <filename class="conf">web-app/Site/WEB-INF/configuration.xml</filename>
+                    as:
+                    <programlisting>
+                    <![CDATA[
+<property name="framework.ace.root-url" value="${create-app-url:/ace}"/>
+                    ]]>
+                    </programlisting>
+                    This will append <literal>/ace</literal> to the applications root URL to
+                    create the URL for &explorer-name;.
+                    </para>
+                </example>            
+                <example>
+                    <title>custom-sql</title>
+                    <para>                        
+                    <programlisting>
+                    <![CDATA[
+<exec-dml command="insert" table="org" columns="cdate=custom-sql:to_char('MM/dd/YYYY', sysdate)"/>
+                    ]]>
+                    </programlisting>
+                    </para>
+                </example>   
+                <example>
+                    <title>request</title>
+                    <para>     
+                    The following dialog text field is filled with the value of 
+                    <emphasis>myval</emphasis>request parameter:
+                    <programlisting>
+                    <![CDATA[
+<field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/>
+                    ]]>
+                    </programlisting>                        
+                    </para>
+                </example>  
+                <example>
+                    <title>servlet-context-path</title>
+                    <para>                             
+                    The value for <literal>app.navigate.root-path</literal> property is defined in 
+                    <filename class="conf">web-app/Site/WEB-INF/configuration.xml</filename>
+                    as:
+                    <programlisting>
+                    <![CDATA[
+<property name="app.navigate.root-path" value="${servlet-context-path:/}" final="yes"/>
+                     ]]>
+                    </programlisting>
+                    </para>
+                </example> 
+                <example>
+                    <title>form</title>
+                    <para>
+                    The following SQL query retrieves its' bind parameter from a dialog:
+                    <programlisting>
+                    <![CDATA[
+<statement name="user_info">
+select
+    u.userid as "user_id",
+    u.lname as "user_last_name",
+    u.fname as "user_first_name"
+from
+    Users u
+where
+    u.userid = ? and
+<params>
+    <param value="form:user_id"/>
+</params>
+</statement>                            
+                    ]]>
+                    </programlisting>
+                    The <literal>u.userid</literal> is substituted with the <literal>user_id</literal>
+                    field's value. 
+                    <important> The query will only work if it is within the dialog custom tags!</important>
+                    </para>
+                </example>          
+                <example>
+                    <title>query</title>
+                    <para>
+                    For example, the following dialog field 
+                    select list's options are filled with the result set of the query <emphasis>enum-types-all</emphasis>:
+                    <programlisting>
+                    <![CDATA[
+<field.select name="org_type" caption="Type" choices="query:org.enum-types-all"/>
+                    ]]>
+                    </programlisting>
+                    </para>
+                </example>                                  
             </para>
         </section>
     </section>

@@ -37,20 +37,20 @@
         data processing and it also provides the ability to create new fields or modify existing ones. Currently the
         following general fields are available:
         <itemizedlist>
-            <listitem>Text</listitem>
-            <listitem>Integer</listitem>
-            <listitem>Float</listitem>
-            <listitem>Date and Time</listitem>
-            <listitem>List</listitem>
-            <listitem>Checkbox</listitem>
-            <listitem>Radio Buttons</listitem>
+            <listitem><para>Text</para></listitem>
+            <listitem><para>Integer</para></listitem>
+            <listitem><para>Float</para></listitem>
+            <listitem><para>Date and Time</para></listitem>
+            <listitem><para>List</para></listitem>
+            <listitem><para>Checkbox</para></listitem>
+            <listitem><para>Radio Buttons</para></listitem>
         </itemizedlist>
 
         Based on the fields listed above, there are fields which serve a more specific role also:
         <itemizedlist>
-            <listitem>Blood Pressure</listitem>
-            <listitem>Social Security Number</listitem>
-            <listitem>Phone Number</listitem>
+            <listitem><para>Blood Pressure</para></listitem>
+            <listitem><para>Social Security Number</para></listitem>
+            <listitem><para>Phone Number</para></listitem>
         </itemizedlist>
         All available fields can be seen in &explorer-name;:
         </para>
@@ -437,7 +437,7 @@ public class NewField extends com.xaf.form.DialogField
                     </programlisting>
                     The above example displays a dialog with a text field named <emphasis>text_field_2</emphasis>
                     which cannot be filled in by the user but can only be filled in from a popup box associated with it.
-                    By clicking on the popup icon (<imageobject align="left"><imagedata fileref="../../resources/images/dialog/magnifying-glass-sm.gif" format="GIF"/></imageobject>)
+                    By clicking on the popup icon (<inlinemediaobject><imageobject align="left"><imagedata fileref="../../resources/images/dialog/magnifying-glass-sm.gif" format="GIF"/></imageobject></inlinemediaobject>)
                     the URL defined as the action, <literal>textJS.html</literal>, will be displayed in a popup window.
                     The process through a value or multiple values  being returned into the <emphasis>text_field_2</emphasis>
                     is to invoke a Javascript method called <literal>populateValues()</literal> provided by &product-name;.

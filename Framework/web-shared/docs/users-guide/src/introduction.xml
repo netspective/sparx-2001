@@ -24,24 +24,24 @@
 	<section>
 		<title>Benefits</title>
 		<itemizedlist>
-			<listitem>
+			<listitem><para>
 				Application Programmers spend time on real features significant to end-users instead
 				of infrastructure issues significant only to programmers.
-			</listitem>
-			<listitem>
+			</para></listitem>
+			<listitem><para>
 				Most of the user interface and database logic is coded in a declarative style using
 				XML instead of programmatic style using Java. This significantly reduces the amount
 				of code (as much as 50-75% of code can be eliminated)
-			</listitem>
-			<listitem>
+			</para></listitem>
+			<listitem><para>
 				Applications are built by assembling declared UI (forms/dialogs) and database (SQL)
 				components combined with application-specific business logic.
-			</listitem>
-			<listitem>
+			</para></listitem>
+			<listitem><para>
 				Sparx is not a templating system that simply generates HTML but a feature-rich
 				framework that significantly reduces the time to produce high-quality data-intensive
 				thin-client applications.
-			</listitem>
+			</para></listitem>
 		</itemizedlist>
 	</section>
 
@@ -297,5 +297,7 @@
 				</para>
 			</section>
 		</section>
+
+
 	</section>
 </chapter>
