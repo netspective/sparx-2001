@@ -12,6 +12,7 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
 	protected int tableCols;
 	protected boolean horizontalLayout;
     protected String breakFontAttrs = "face='verdana,arial,helvetica' size=2 color=navy";
+    protected String captionCellAttrs = "";
 
     public HtmlSingleRowReportSkin(int tableCols, boolean horizontalLayout)
     {
@@ -56,7 +57,7 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
                         state.getOutputFormat() :
                         column.getFormattedData(rc, 1, rowData, true);
 
-				dataTable.append("<td align='right'><font "+dataHdFontAttrs+">"+
+				dataTable.append("<td " + captionCellAttrs + "><font "+dataHdFontAttrs+">"+
                         column.getHeading().getValue(rc)+  ":</font></td>");
 				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'"+ state.getUrlAnchorAttrs() +">"+ data +"</a>" : data)+"</font></td>");
 
