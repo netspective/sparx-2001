@@ -2,6 +2,7 @@ package app.tag;
 
 import java.io.*;
 import java.util.*;
+import java.math.BigDecimal;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -93,7 +94,9 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             String rootPath = req.getContextPath();
 			String resourcesUrl = rootPath + "/resources";
 
-			if(menuStructure == null)
+			// The dynamic HTML menu is temporarily disabled
+            /*
+            if(menuStructure == null)
 			{
 				Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(servletContext);
 				if(appConfig == null)
@@ -114,11 +117,13 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 				mainMenu.setBgColor("#AFD997");
 				mainMenu.setBorderColor("navy");
 			}
+            */
             AuthenticatedUser user =
                     (AuthenticatedUser) session.getAttribute(com.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
-            String personId = (String) user.getUserId();
+            //String personId = (String) user.getUserId();
             Map personRegistration = (Map) user.getAttribute("registration");
-            req.setAttribute("personId", user.getAttribute("person-id"));
+            BigDecimal personId = (BigDecimal) personRegistration.get("person_id");
+            req.setAttribute("person_id", personId);
 
 
 			out.println("<html>");
@@ -127,7 +132,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			out.println("</head>");
 			out.println("<body  bgcolor='#FFFFFF' link='#cc0000' vlink='#336699' text='#000000' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>");
 
-			mainMenu.printHtml(null, out);
+			//mainMenu.printHtml(null, out);
 
             out.println("<table width='100%' border='0' cellpadding='0' cellspacing='0'>");
             out.println("<tr >");
@@ -139,13 +144,53 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("   </td>");
             out.println("</tr>");
             out.println("<tr bgcolor='#8080FF'>");
-            out.println("   <td align='left'><b><font face='verdana' color='#FFFFFF' size=2>" + personRegistration.get("complete_name") + "</font></b></td>");
-            out.println("   <td align='right'><b><font face='verdana' color='#FFFFFF' size=2>" +  "</font></b></td>");
+            out.println("   <td colspan='2' align='left' height='25' background='"+ resourcesUrl +"/images/design/profile-background.jpg'><b><font face='verdana' color='#FFFFFF' size=2>" + personRegistration.get("complete_name") + "</font></b></td>");
             out.println("</tr>");
             out.println("</table>");
 
-			out.println("<table width='100%' cellpadding='3' cellspacing='0'>");
-            out.println("   <tr><td colspan='2' align='left'><font face='verdana' size=2>");
+			out.println("<table width='100%' height='100%' cellpadding='0' cellspacing='0'>");
+            out.println("   <tr height='100%'>");
+            out.println("       <td height='100%' width='120' align='left' valign='top' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            // This is the static main menu
+            out.println("       <table  width='100%' cellpadding='0' cellspacing='0'>");
+            /*
+            out.println("       <style type='text/css'>");
+            out.println("       <!--                   ");
+            out.println("           a:link  { color: white; text-decoration: none }   ");
+            out.println("           a:active  { color: white; text-decoration: none }   ");
+            out.println("           a:visited  { color: white; text-decoration: none }   ");
+            out.println("           a:hover { color: yellow; text-decoration: none } ");
+            out.println("        -->                   ");
+            out.println("       </style>               ");
+            */
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>&nbsp;</td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>&nbsp;</td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='a:hover { color: yellow; text-decoration: none } a:link  { color: white; text-decoration: none } a:visited  { color: white; text-decoration: none }' href='" + rootPath + "/index.jsp'>Home</a></font></b>");
+            out.println("           </td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/account/index.jsp'>Accounts</a></font></b>");
+            out.println("           </td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/contact/index.jsp'>Contacts</a></font></b>");
+            out.println("           </td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/project/index.jsp'>Projects</a></font></b>");
+            out.println("           </td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/task/index.jsp'>Tasks</a></font></b>");
+            out.println("           </td></tr>");
+            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+            out.println("       </table>");
+            out.println("       </td>");
+            out.println("       <td align='left'  valign='top'>");
+            out.println("       <table  width='100%' cellpadding='3' cellspacing='0'>");
+            out.println("           <tr><td align='left'><font face='tahoma' size=2>");
 			String heading = getHeading();
 			if(heading != null)
 			{
@@ -171,7 +216,8 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 		JspWriter out = pageContext.getOut();
 		try
 		{
-			out.print("</font></td></tr></table>");
+			out.println("</font></td></tr></table>");
+            out.println("</td></tr></table>");
 			out.print("</body>");
 			out.print("</html>");
 		}

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <dialogs package="task">
+        <dialog name="registration" heading="create-data-cmd-heading:Task" retain-params="*" class="app.form.TaskDialog">
+            <field.separator heading="Information"/>
+            <field.text name="task_type" caption="Task Type"  required="yes"/>
+            <field.text name="task_summary" caption="Summary" required="yes"/>
+            <field.memo name="task_descr" caption="Description" />
+            <field.text name="priority_id" caption="Priority" required="yes" />
+            <field.text name="task_status" caption="Status" >
+                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
+            </field.text>
+            <field.text name="task_resolution" caption="Resolution" >
+                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
+            </field.text>
+
+            <field.separator heading="Assign Task Owner"/>
+            <field.select name="ownder_org_id" caption="Organization" choices="query:person.active-org-memberships-name-id" prepend-blank="yes">
+                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+            </field.select>
+            <field.select name="ownder_project_id" caption="Project" choices="" >
+                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+            </field.select>
+
+        </dialog>
+    </dialogs>
+</xaf>

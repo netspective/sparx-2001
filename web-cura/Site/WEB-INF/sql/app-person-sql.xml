@@ -19,6 +19,44 @@
             select PerAddr_system_id_SEQ.nextval from dual
         </statement>
 
+        <statement name="active-projects">
+            select
+                project_code,
+                project_name
+            from
+                project, project_relation, person
+            where
+                person.person_id = ? and
+                project_relation.parent_id = project.project_id and
+                person.person_id = project_relation.rel_person_id
+            <params>
+                <param value="request-attr:person_id"/>
+            </params>
+            <report heading="My Active Projects">
+                <column heading="Code" align="center"/>
+                <column heading="Name" align="center"/>
+            </report>
+        </statement>
+        <statement name="active-tasks">
+            select
+                task_id,
+                priority_id,
+                task_status
+            from
+                task, task_relation, person
+            where
+                person.person_id = ? and
+                task_relation.parent_id = task.task_id and
+                person.person_id = task_relation.rel_person_id
+            <params>
+                <param value="request-attr:person_id"/>
+            </params>
+            <report heading="My Active Tasks">
+                <column heading="ID" align="center"/>
+                <column heading="Priority" align="center"/>
+                <column heading="Status" align="center"/>
+            </report>
+        </statement>
 
 		<statement name="active-org-memberships">
 			select org.org_id, org.org_name
@@ -49,7 +87,7 @@
 			and por.rel_org_id = org.org_id /* join to get org_name */
 
             <params>
-                <param value="request-attr:personId"/>
+                <param value="request-attr:person_id"/>
             </params>
 		</statement>
 

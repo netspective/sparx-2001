@@ -7,7 +7,7 @@ public class AppReportSkin   extends HtmlReportSkin
     public AppReportSkin()
     {
         super();
-	    outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
+	    outerTableAttrs = "width='300' border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	    innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
 	    frameHdRowAttrs = "bgcolor='#8080FF'";
 	    frameHdFontAttrs = "face='Arial' size=2 color=white";

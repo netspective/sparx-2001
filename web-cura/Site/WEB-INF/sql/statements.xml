@@ -8,6 +8,7 @@
     <include file="app-org-query-defns.xml"/>
     <include file="app-project-sql.xml"/>
     <include file="app-project-query-defns.xml"/>
+    <include file="app-task-query-defns.xml"/>
 
     <register-report-skin name="report" class="app.skin.AppReportSkin"/>
     <register-report-skin name="detail" class="app.skin.AppDetailReportSkin"/>

@@ -1,17 +1,18 @@
-<jsp:directive.taglib prefix="app" uri="/WEB-INF/tld/page.tld"/>
+<%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
+<%@ taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"%>
 
 <app:page title="Cura" heading="Welcome to Cura">
 
-	<b>Accounts</b><br/>
-	&nbsp;&nbsp;<app:link url="/account/index.jsp?cmd=dialog,org.registration,add">Create new Account</app:link><br/>
-	&nbsp;&nbsp;<app:link url="/account/browse.jsp">Review Accounts</app:link><br/>
-	<b>Contacts</b><br/>
-	&nbsp;&nbsp;<app:link url="/resources/pages">Create new Contact</app:link><br/>
-	&nbsp;&nbsp;<app:link url="/resources/pages">Review Contacts</app:link><br/>
 
-	<p>
-	<app:link url="/resources/pages">Leads</app:link><br/>
-	<app:link url="/resources/pages">Opportunities</app:link><br>
-	<app:link url="/resources/pages">Projects</app:link><p>
+<table width='100%' cellpadding='5' cellspacing='0'>
+    <tr>
+        <td align='left' valign='top'><xaf:query name="person.active-tasks" skin="report" debug="no"/></td>
+    </tr>
+    <tr>
+        <td align='left' valign='top'><xaf:query name="person.active-projects" skin="report" debug="no"/></td>
+    </tr>
+
+</table>
+
 
 </app:page>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<query-defn id="Task">
+        <field id="task_type" caption="Task Type" join="task" column="task_type">
+            <report heading="Type" />
+        </field>
+        <field id="task_id" caption="Task ID" join="task" column="task_id">
+            <report heading="ID" url="create-app-url:/task/home.jsp?task_id=${.}" align="right"/>
+        </field>
+        <field id="priority_id" caption="Priority" join="task" column="priority_id">
+            <report heading="Priority" />
+        </field>
+        <field id="task_status" caption="Status" join="task" column="task_status">
+            <report heading="Task" />
+        </field>
+
+        <field id="owner_project_id" caption="Project (Owner)" join="task" column="owner_project_id">
+            <report heading="Project" />
+        </field>
+        <field id="owner_org_id" caption="Organization (Owner)" join="task" column="owner_org_id">
+            <report heading="Organization" />
+        </field>
+        <field id="owner_person_id" caption="Contact (Owner)" join="task" column="owner_person_id">
+            <report heading="Contact" />
+        </field>
+
+        <join id="task" table="task" auto-include="yes"/>
+		<select-dialog name="task_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Task(s)">
+			<field.text query-field="task_id"/>
+			<field.text query-field="task_status"/>
+			<field.text query-field="priority_id"/>
+			<field.select query-field="owner_org_id" choices="query:person.active-org-memberships-name-id"  prepend-blank="yes"/>
+			<field.select name="sort_order"
+					caption="Sort By"
+					style="combo"
+					choices="Priority=priority_id;Status=task_status"/>
+			<select heading="Task Search Results">
+				<display field="task_id"/>
+                <display field="priority_id"/>
+				<display field="task_status"/>
+                <display field="owner_project_id"/>
+                <display field="owner_org_id"/>
+                <display field="owner_person_id"/>
+				<order-by field="form:sort_order"/>
+
+				<condition field="priority_id" allow-null="no" comparison="equals" value="form:priority_id" connector="and" />
+				<condition field="task_status" allow-null="no" comparison="equals" value="form:task_status" connector="and" />
+                <condition field="owner_person_id" allow-null="no" comparison="equals" value="form:owner_person_id" connector="and" />
+				<condition field="owner_org_id" allow-null="no" comparison="equals" value="form:owner_org_id" connector="and" />
+                <condition field="owner_project_id" allow-null="no" comparison="equals" value="form:owner_project_id" connector="and" />
+			</select>
+			<director cancel-url="index.jsp" submit-caption="Search"/>
+		</select-dialog>
+
+    </query-defn>
+
+</xaf>
