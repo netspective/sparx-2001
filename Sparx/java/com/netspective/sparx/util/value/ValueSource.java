@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSource.java,v 1.3 2002-12-26 19:32:09 shahid.shah Exp $
+ * $Id: ValueSource.java,v 1.4 2002-12-31 19:33:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -64,9 +64,9 @@ import java.io.IOException;
 
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.report.*;
-import com.netspective.sparx.xaf.report.column.GeneralColumn;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.form.field.SelectChoice;
 
 abstract public class ValueSource implements SingleValueSource
 {
@@ -195,7 +195,7 @@ abstract public class ValueSource implements SingleValueSource
 
     public Report getReport()
     {
-        return ListSource.selectChoicesReport;
+        return SelectChoicesList.selectChoicesReport;
     }
 
     public ReportContext getReportContext(ValueContext vc, ReportSkin skin)
@@ -203,7 +203,25 @@ abstract public class ValueSource implements SingleValueSource
         return new ReportContext(vc, getReport(), skin == null ? SkinFactory.getDefaultReportSkin() : skin);
     }
 
-    public void renderChoicesHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException
+    // TODO: needs to be optimized to not grab the entire list each time -- very important performance issue for queries and the like
+    public String getAdjacentCaptionForValue(ValueContext vc, String id)
+    {
+        if(this instanceof ListValueSource)
+        {
+            SelectChoicesList scl = ((ListValueSource) this).getSelectChoices(vc);
+            if(scl != null)
+            {
+                SelectChoice choice = scl.get(id);
+                return choice != null ? choice.getCaption() : null;
+            }
+            else
+                return null;
+        }
+        else
+            return null;
+    }
+
+    public void renderItemsHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException
     {
         if(this instanceof ListValueSource)
         {

@@ -51,12 +51,14 @@
  */
  
 /**
- * $Id: ListValueSource.java,v 1.2 2002-12-26 19:32:09 shahid.shah Exp $
+ * $Id: ListValueSource.java,v 1.3 2002-12-31 19:33:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.report.ReportSkin;
 
 import java.io.Writer;
@@ -95,6 +97,12 @@ public interface ListValueSource
     public SelectChoicesList getSelectChoices(ValueContext vc);
 
     /**
+     * Returns the caption for a given Id only (should not load the entire list, just return the caption). This
+     * method is used for displaying adjacent areas next to popup fields.
+     */
+    public String getAdjacentCaptionForValue(ValueContext vc, String id);
+
+    /**
      * Returns the contents of this list as a string list.
      */
     public String[] getValues(ValueContext vc);
@@ -107,5 +115,5 @@ public interface ListValueSource
      * @param isPopup true if this rendering is being done for a popup windows, false if not
      * @throws java.io.IOException
      */
-    public void renderChoicesHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException;
+    public void renderItemsHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException;
 }

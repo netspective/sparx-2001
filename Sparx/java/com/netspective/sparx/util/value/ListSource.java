@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ListSource.java,v 1.3 2002-12-26 19:32:09 shahid.shah Exp $
+ * $Id: ListSource.java,v 1.4 2002-12-31 19:33:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -63,25 +63,12 @@ import java.io.Writer;
 import java.io.IOException;
 
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.report.*;
-import com.netspective.sparx.xaf.report.column.GeneralColumn;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 
 public class ListSource implements ListValueSource, SingleValueSource
 {
-    static public Report selectChoicesReport = new StandardReport();
-
-    static
-    {
-        ReportColumn[] columns = new ReportColumn[]
-        {
-            new GeneralColumn(0, "ID", ReportColumn.COLFLAG_HIDDEN),
-            new GeneralColumn(1, "Caption")
-        };
-        selectChoicesReport.initialize(columns, null);
-        selectChoicesReport.setFlag(StandardReport.REPORTFLAG_HIDE_HEADING);
-    }
-
     private SelectChoicesList choices;
     private String[] values;
     protected String valueKey;
@@ -104,6 +91,19 @@ public class ListSource implements ListValueSource, SingleValueSource
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
         return choices;
+    }
+
+    // TODO: needs to be optimized to not grab the entire list each time -- very important performance
+    public String getAdjacentCaptionForValue(ValueContext vc, String id)
+    {
+        SelectChoicesList scl = getSelectChoices(vc);
+        if(scl != null)
+        {
+            SelectChoice choice = scl.get(id);
+            return choice != null ? choice.getCaption() : null;
+        }
+        else
+            return null;
     }
 
     public String[] getValues(ValueContext vc)
@@ -182,7 +182,7 @@ public class ListSource implements ListValueSource, SingleValueSource
 
     public Report getReport()
     {
-        return selectChoicesReport;
+        return SelectChoicesList.selectChoicesReport;
     }
 
     public ReportContext getReportContext(ValueContext vc, ReportSkin skin)
@@ -190,19 +190,13 @@ public class ListSource implements ListValueSource, SingleValueSource
         return new ReportContext(vc, getReport(), skin == null ? SkinFactory.getDefaultReportSkin() : skin);
     }
 
-    public void renderChoicesHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException
+    public void renderItemsHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException
     {
         SelectChoicesList scl = getSelectChoices(vc);
         if(scl != null)
         {
-            ReportContext rc = getReportContext(vc, skin);
-            if(urlFormats != null)
-            {
-                ReportContext.ColumnState[] state = rc.getStates();
-                for(int i = 0; i < urlFormats.length; i++)
-                    state[i].setUrl(urlFormats[i]);
-            }
-            rc.produceReport(writer, scl.getChoicesForReport());
+            ReportContext rc = scl.getReportContext(vc, getReport(), skin);
+            scl.renderChoicesHtml(writer, rc, urlFormats, isPopup);
         }
         else
             writer.write("No choices.");
