@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DirectorNextActionsSelectField.java,v 1.3 2002-11-28 21:11:07 shahid.shah Exp $
+ * $Id: DirectorNextActionsSelectField.java,v 1.4 2002-11-28 21:30:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -148,7 +148,7 @@ public class DirectorNextActionsSelectField extends SelectField
 
     public void setDisplayOneItemOnly(boolean displayOneItemOnly)
     {
-        displayOneItemOnly = displayOneItemOnly;
+        this.displayOneItemOnly = displayOneItemOnly;
     }
 
 
