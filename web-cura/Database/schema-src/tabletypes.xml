@@ -39,7 +39,7 @@
 	</table>
 
 	<tabletype name="Enumeration" parent="Reference_Item">
-		<param name="capsize">64</param>
+		<param name="capsize">96</param>
 		<param name="abbrevsize">32</param>
 
 		<column name="id" type="integer" primarykey="yes" descr="The value associated with a single enum"/>
