@@ -14,6 +14,8 @@ import com.xaf.db.DatabaseContext;
 import com.xaf.db.DatabaseContextFactory;
 
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
@@ -82,6 +84,17 @@ public class PersonDialog   extends com.xaf.form.Dialog
         if (dc.editingData())
         {
             // dialog is in the edit data command mode
+        }
+        HttpServletRequest request = (HttpServletRequest)dc.getRequest();
+        String url = request.getContextPath() + "/contact/home.jsp?person_id=" + request.getAttribute("person_id");
+        try
+        {
+            ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "Failed to create response URL.";
         }
 
         return "";
@@ -162,6 +175,7 @@ public class PersonDialog   extends com.xaf.form.Dialog
             }
             // end transaction
             dc.endSqlTransaction();
+            dc.getRequest().setAttribute("person_id", person_id);
         }
         catch (TaskExecuteException tee)
         {

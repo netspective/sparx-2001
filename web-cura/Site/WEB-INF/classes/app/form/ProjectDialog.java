@@ -161,12 +161,9 @@ public class ProjectDialog extends Dialog
         String projectName = (String) dc.getValue("project_name");
         String projectCode = (String) dc.getValue("project_code");
         String organization = (String) dc.getValue("organization_id");
-        int projectType = Integer.parseInt((String)dc.getValue("project_type"));
+
 
         long mainProject = 0;
-        if (projectType == SUBPROJECT_TYPE)
-            mainProject = Long.parseLong((String)dc.getValue("main_project"));
-
         try
         {
             ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
