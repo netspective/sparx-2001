@@ -41,6 +41,7 @@ public class DialogManager extends XmlSource
 			this.dialog = null;
 			this.lookupName = pkgName != null ? (pkgName + "." + elem.getAttribute("name")) : elem.getAttribute("name");
 
+			boolean autoFind = false;
 			String dialogClassName = defnElement.getAttribute("class");
 			if(dialogClassName == null || dialogClassName.length() == 0)
             {
@@ -48,6 +49,7 @@ public class DialogManager extends XmlSource
                 if(pkgName != null)
                     dialogClassName += pkgName + ".";
                 dialogClassName += com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true);
+				autoFind = true;
             }
 
             defnElement.setAttribute("qualified-name", lookupName);
@@ -60,8 +62,10 @@ public class DialogManager extends XmlSource
                 defnElement.setAttribute("_class-name", dialogClass.getName());
                 defnElement.setAttribute("_class-file-name", com.xaf.BuildConfiguration.getClassFileName(dialogClass.getName()));
 			}
-		    catch(Exception e)
+		    catch(ClassNotFoundException e)
 			{
+				if(! autoFind)
+	                defnElement.setAttribute("_class-name", e.toString());
 				dialogClass = Dialog.class;
 			}
 		}
@@ -74,12 +78,19 @@ public class DialogManager extends XmlSource
 
         public void findDialogContextClass()
         {
-            dialogContextClass = Dialog.findDialogContextClass(pkgName, defnElement);
-            if(dialogContextClass != DialogContext.class)
-            {
-                defnElement.setAttribute("_dc-class-name", dialogContextClass.getName());
-                defnElement.setAttribute("_dc-class-file-name", com.xaf.BuildConfiguration.getClassFileName(dialogContextClass.getName()));
-            }
+			try
+			{
+	            dialogContextClass = Dialog.findDialogContextClass(pkgName, defnElement);
+				if(dialogContextClass != DialogContext.class)
+				{
+					defnElement.setAttribute("_dc-class-name", dialogContextClass.getName());
+					defnElement.setAttribute("_dc-class-file-name", com.xaf.BuildConfiguration.getClassFileName(dialogContextClass.getName()));
+				}
+			}
+			catch(ClassNotFoundException e)
+			{
+				defnElement.setAttribute("_dc-class-name", e.toString());
+			}
         }
 
 		public Dialog getDialog()

@@ -705,7 +705,6 @@ public class DialogField
 	public DialogContextMemberInfo createDialogContextMemberInfo(String dataTypeName)
 	{
 		DialogContextMemberInfo mi = new DialogContextMemberInfo(this.getQualifiedName(), dataTypeName);
-        mi.addImportModule("com.xaf.form.*");
 
         String memberName = mi.getMemberName();
         String fieldName = mi.getFieldName();
@@ -714,7 +713,7 @@ public class DialogField
         mi.addJavaCode("\tpublic boolean is" + memberName + "FlagSet(long flag) { return flagIsSet(\""+ fieldName +"\", flag); }\n");
 		mi.addJavaCode("\tpublic void set" + memberName + "Flag(long flag) { setFlag(\""+ fieldName +"\", flag); }\n");
         mi.addJavaCode("\tpublic void clear" + memberName + "Flag(long flag) { clearFlag(\""+ fieldName +"\", flag); }\n");
-        mi.addJavaCode("\tpublic String get" + memberName + "RequestParam(long flag) { return request.getParameter(\""+ Dialog.PARAMNAME_CONTROLPREFIX + fieldName +"\"); }\n");
+        mi.addJavaCode("\tpublic String get" + memberName + "RequestParam() { return request.getParameter(\""+ Dialog.PARAMNAME_CONTROLPREFIX + fieldName +"\"); }\n");
         mi.addJavaCode("\tpublic DialogField get" + memberName + "Field() { return getField(\""+ fieldName +"\"); }\n");
         mi.addJavaCode("\tpublic DialogContext.DialogFieldState get" + memberName + "FieldState() { return getFieldState(\""+ fieldName +"\"); }\n");
         mi.addJavaCode("\tpublic void add" + memberName + "ErrorMsg(String msg) { addErrorMessage(\""+ fieldName +"\", msg); }\n");

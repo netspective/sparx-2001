@@ -121,7 +121,7 @@ public class Dialog
 	public final DialogDirector getDirector() { return director; }
 	public void setDirector(DialogDirector value) { director = value; }
 
-	public static Class findDialogContextClass(String packageName, Element elem)
+	public static Class findDialogContextClass(String packageName, Element elem) throws ClassNotFoundException
 	{
 		Class dcClass = null;
 
@@ -129,29 +129,24 @@ public class Dialog
 		// if a specific dc-class is provided, use it or try and find one
 		// with the same name as the dialog in "dialog.context." package
 		String dcClassName = elem.getAttribute("dc-class");
-		try
+
+		if(dcClassName != null && dcClassName.length() > 0)
+			dcClass = Class.forName(dcClassName);
+		else
 		{
-			if(dcClassName != null && dcClassName.length() > 0)
-				dcClass = Class.forName(dcClassName);
-			else
+			String elemName = com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true);
+			String dlgName = packageName != null ? (packageName + "." + elemName) : elemName;
+			dcClassName = "dialog.context." + dlgName + "Context";
+			try
 			{
-				String elemName = com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true);
-				String dlgName = packageName != null ? (packageName + "." + elemName) : elemName;
-				dcClassName = "dialog.context." + dlgName + "Context";
-				try
-				{
-					dcClass = Class.forName(dcClassName);
-				}
-				catch(Exception e)
-				{
-					dcClass = DialogContext.class;
-				}
+				dcClass = Class.forName(dcClassName);
+			}
+			catch(ClassNotFoundException e)
+			{
+				dcClass = DialogContext.class;
 			}
 		}
-		catch(Exception e)
-		{
-			dcClass = DialogContext.class;
-		}
+
 		return dcClass;
 	}
 
