@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.27 2003-04-24 16:37:59 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.28 2003-04-24 18:06:49 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -2095,8 +2095,13 @@ function documentOnKeyUp()
 		var beginPattern = new RegExp("^" + field.scanStartCode, field.scanCodeIgnoreCase);
 		if(control.value.search(beginPattern) != -1)
 		{
-			if(adjustedVal.length == field.autoBlurLength + field.scanStartCode.length +
-				field.scanStopCode.length && field.numCharsEntered >= field.autoBlurLength -1)
+			var startCodeLength = field.scanStartCode.indexOf("|") != -1 ?
+				field.scanStartCode.indexOf("|") : field.scanStartCode.length;
+			var stopCodeLength  = field.scanStopCode.indexOf("|") != -1 ?
+				field.scanStopCode.indexOf("|") : field.scanStopCode.length;
+
+			if((adjustedVal.length == field.autoBlurLength + startCodeLength + stopCodeLength)
+				 && field.numCharsEntered >= field.autoBlurLength -1)
 			{
 				field.numCharsEntered = 0;
 
