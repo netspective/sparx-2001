@@ -546,7 +546,14 @@
 			<xsd:element name="params" minOccurs="0">
 				<xsd:complexType>
 					<xsd:choice>
-						<xsd:element name="param" maxOccurs="unbounded"/>
+						<xsd:element name="param" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="value" type="single-value-source" use="optional"/>
+								<xsd:attribute name="values" type="list-value-source" use="optional"/>
+								<xsd:attribute name="replace-fmt" type="xsd:string" use="optional"/>
+								<xsd:attribute name="type" type="statement-param-type-enum" use="optional"/>
+							</xsd:complexType>
+						</xsd:element>
 					</xsd:choice>
 				</xsd:complexType>
 			</xsd:element>
@@ -603,6 +610,17 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="data"/>
 			<xsd:enumeration value="column-headings"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="statement-param-type-enum">
+		<xsd:annotation>
+			<xsd:documentation>Values for the param tag in sql statements</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="text"/>
+			<xsd:enumeration value="integer"/>
+			<xsd:enumeration value="double"/>
+			<xsd:enumeration value="varchar"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>
