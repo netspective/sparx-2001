@@ -25,7 +25,7 @@ import com.xaf.form.*;
 import com.xaf.sql.*;
 import com.xaf.value.*;
 
-public class <xsl:value-of select="$row-name"/> extends AbstractRow
+public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <xsl:value-of select="@_gen-domain-class-name"/>
 {
 <xsl:for-each select="column">	final static public int <xsl:value-of select="@_gen-member-name"/>ResultSetIndex = <xsl:value-of select="position()"/>;
 </xsl:for-each>

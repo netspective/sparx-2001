@@ -919,20 +919,25 @@ public class SchemaDocument extends XmlSource
     {
         private String destRoot;
         private String dataTypesPkg;
-        private String dataTypesGeneratorStyleSheet;
+        private String tableTypesPkg;
         private String tablesPkg;
-        private String tablesGeneratorStyleSheet;
+        private String domainsPkg;
         private String rowsPkg;
-        private String rowsGeneratorStyleSheet;
         private String rowsListPkg;
-        private String rowsListGeneratorStyleSheet;
         private String schemaPkg;
         private String schemaClassName;
+
+        private String dataTypesGeneratorStyleSheet;
+        private String tableTypesGeneratorStyleSheet;
+        private String tablesGeneratorStyleSheet;
+        private String domainsGeneratorStyleSheet;
+        private String rowsGeneratorStyleSheet;
+        private String rowsListGeneratorStyleSheet;
         private String schemaGeneratorStyleSheet;
 
         private int dataTypesGeneratedCount;
+        private int tableTypesGeneratedCount;
         private int tablesGeneratedCount;
-        private int rowsGeneratedCount;
 
         public ObjectRelationalGenerator()
         {
@@ -944,26 +949,20 @@ public class SchemaDocument extends XmlSource
         public String getDataTypesPkg() { return dataTypesPkg; }
         public void setDataTypesPkg(String dataTypesPkg) { this.dataTypesPkg = dataTypesPkg; }
 
-        public String getDataTypesGeneratorStyleSheet() { return dataTypesGeneratorStyleSheet; }
-        public void setDataTypesGeneratorStyleSheet(String dataTypesGeneratorStyleSheet) { this.dataTypesGeneratorStyleSheet = dataTypesGeneratorStyleSheet; }
+        public String getTableTypesPkg() { return tableTypesPkg; }
+        public void setTableTypesPkg(String tableTypesPkg) { this.tableTypesPkg = tableTypesPkg; }
 
         public String getTablesPkg() { return tablesPkg; }
         public void setTablesPkg(String tablesPkg) { this.tablesPkg = tablesPkg; }
 
-        public String getTablesGeneratorStyleSheet() { return tablesGeneratorStyleSheet; }
-        public void setTablesGeneratorStyleSheet(String tablesGeneratorStyleSheet) { this.tablesGeneratorStyleSheet = tablesGeneratorStyleSheet; }
+        public String getDomainsPkg() { return domainsPkg; }
+        public void setDomainsPkg(String domainsPkg) { this.domainsPkg = domainsPkg; }
 
         public String getRowsPkg() { return rowsPkg; }
         public void setRowsPkg(String rowsPkg) { this.rowsPkg = rowsPkg; }
 
-        public String getRowsGeneratorStyleSheet() { return rowsGeneratorStyleSheet; }
-        public void setRowsGeneratorStyleSheet(String rowsGeneratorStyleSheet) { this.rowsGeneratorStyleSheet = rowsGeneratorStyleSheet; }
-
         public String getRowsListPkg() { return rowsListPkg; }
         public void setRowsListPkg(String rowsListPkg) { this.rowsListPkg = rowsListPkg; }
-
-        public String getRowsListGeneratorStyleSheet() { return rowsListGeneratorStyleSheet; }
-        public void setRowsListGeneratorStyleSheet(String rowsListGeneratorStyleSheet) { this.rowsListGeneratorStyleSheet = rowsListGeneratorStyleSheet; }
 
         public String getSchemaPkg() { return schemaPkg; }
         public void setSchemaPkg(String schemaPkg) { this.schemaPkg = schemaPkg; }
@@ -971,14 +970,32 @@ public class SchemaDocument extends XmlSource
         public String getSchemaClassName() { return schemaClassName; }
         public void setSchemaClassName(String schemaClassName) { this.schemaClassName = schemaClassName; }
 
+        public String getDataTypesGeneratorStyleSheet() { return dataTypesGeneratorStyleSheet; }
+        public void setDataTypesGeneratorStyleSheet(String dataTypesGeneratorStyleSheet) { this.dataTypesGeneratorStyleSheet = dataTypesGeneratorStyleSheet; }
+
+        public String getTableTypesGeneratorStyleSheet() { return tableTypesGeneratorStyleSheet; }
+        public void setTableTypesGeneratorStyleSheet(String tableTypesGeneratorStyleSheet) { this.tableTypesGeneratorStyleSheet = tableTypesGeneratorStyleSheet; }
+
+        public String getTablesGeneratorStyleSheet() { return tablesGeneratorStyleSheet; }
+        public void setTablesGeneratorStyleSheet(String tablesGeneratorStyleSheet) { this.tablesGeneratorStyleSheet = tablesGeneratorStyleSheet; }
+
+        public String getDomainsGeneratorStyleSheet() { return domainsGeneratorStyleSheet; }
+        public void setDomainsGeneratorStyleSheet(String domainsGeneratorStyleSheet) { this.domainsGeneratorStyleSheet = domainsGeneratorStyleSheet; }
+
+        public String getRowsGeneratorStyleSheet() { return rowsGeneratorStyleSheet; }
+        public void setRowsGeneratorStyleSheet(String rowsGeneratorStyleSheet) { this.rowsGeneratorStyleSheet = rowsGeneratorStyleSheet; }
+
+        public String getRowsListGeneratorStyleSheet() { return rowsListGeneratorStyleSheet; }
+        public void setRowsListGeneratorStyleSheet(String rowsListGeneratorStyleSheet) { this.rowsListGeneratorStyleSheet = rowsListGeneratorStyleSheet; }
+
         public String getSchemaGeneratorStyleSheet() { return schemaGeneratorStyleSheet; }
         public void setSchemaGeneratorStyleSheet(String schemaGeneratorStyleSheet) { this.schemaGeneratorStyleSheet = schemaGeneratorStyleSheet; }
 
         public int getDataTypesGeneratedCount() { return dataTypesGeneratedCount; }
+        public int getTableTypesGeneratedCount() { return tableTypesGeneratedCount; }
         public int getTablesGeneratedCount() { return tablesGeneratedCount; }
-        public int getRowsGeneratedCount() { return rowsGeneratedCount; }
 
-        public void createDataTypesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap) throws TransformerConfigurationException, TransformerException
+        public void createDataTypesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap, Map  tableTypesClassMap) throws TransformerConfigurationException, TransformerException
         {
             dataTypesGeneratedCount = 0;
             String dataTypesPkgDirName = dataTypesPkg.replace('.', '/');
@@ -1029,42 +1046,25 @@ public class SchemaDocument extends XmlSource
             }
         }
 
-        public void createTablesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap) throws TransformerConfigurationException, TransformerException
+        public void createTableTypesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap, Map  tableTypesClassMap) throws TransformerConfigurationException, TransformerException
         {
-            String tablesPkgDirName = tablesPkg.replace('.', '/');
-            File tablesDir = new File(destRoot + "/" + tablesPkgDirName);
-            tablesDir.mkdirs();
-
-            String rowsPkgDirName = rowsPkg.replace('.', '/');
-            File rowsDir = new File(destRoot + "/" + rowsPkgDirName);
-            rowsDir.mkdirs();
-
-            String rowsListPkgDirName = rowsListPkg.replace('.', '/');
-            File rowsListDir = new File(destRoot + "/" + rowsListPkgDirName);
-            rowsListDir.mkdirs();
+            String tableTypesPkgDirName = tableTypesPkg.replace('.', '/');
+            File tableTypesDir = new File(destRoot + "/" + tableTypesPkgDirName);
+            tableTypesDir.mkdirs();
 
             TransformerFactory tFactory = TransformerFactory.newInstance();
-            Transformer tablesTransformer = tFactory.newTransformer(new StreamSource(tablesGeneratorStyleSheet));
-            tablesTransformer.setParameter("package-name", tablesPkg);
-            Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsGeneratorStyleSheet));
-            rowsTransformer.setParameter("package-name", rowsPkg);
-            Transformer rowsListTransformer = tFactory.newTransformer(new StreamSource(rowsListGeneratorStyleSheet));
-            rowsListTransformer.setParameter("package-name", rowsListPkg);
+            Transformer tableTypesTransformer = tFactory.newTransformer(new StreamSource(tableTypesGeneratorStyleSheet));
 
-            Map tables = schemaDoc.getTables();
+            Map tableTypes = schemaDoc.getTableTypes();
 
-            TABLES:
-            for(Iterator i = tables.values().iterator(); i.hasNext(); )
+            for(Iterator i = tableTypes.values().iterator(); i.hasNext(); )
             {
-                Element tableElem = (Element) i.next();
-                String tableName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Table";
-                String tableFile = tablesDir.getAbsolutePath() + "/" + tableName + ".java";
-                String rowName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Row";
-                String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
-                String rowListName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Rows";
-                String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
+                Element tableTypeElem = (Element) i.next();
+                String tableTypeClassName = XmlSource.xmlTextToJavaIdentifier(tableTypeElem.getAttribute("name"), true);
+                String tableTypeFile = tableTypesDir.getAbsolutePath() + "/" + tableTypeClassName + ".java";
+                tableTypesClassMap.put(tableTypeElem.getAttribute("name"), tableTypesPkg + "." + tableTypeClassName);
 
-                NodeList children = tableElem.getChildNodes();
+                NodeList children = tableTypeElem.getChildNodes();
                 for(int c = 0; c < children.getLength(); c++)
                 {
                     Node child = children.item(c);
@@ -1085,26 +1085,134 @@ public class SchemaDocument extends XmlSource
                     }
                 }
 
-                tableElem.setAttribute("_gen-table-class-name", tablesPkg + "." + tableName);
+                tableTypesTransformer.setParameter("package-name", tableTypesPkg);
+                tableTypesTransformer.setParameter("table-type-name", tableTypeClassName);
+                tableTypesTransformer.setParameter("table-type-class-name", tableTypesPkg + "." + tableTypeClassName);
+                tableTypesTransformer.transform
+                    (new javax.xml.transform.dom.DOMSource(tableTypeElem), new javax.xml.transform.stream.StreamResult(tableTypeFile));
+                tableTypesGeneratedCount++;
+            }
+        }
+
+        public void createTablesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap, Map  tableTypesClassMap) throws TransformerConfigurationException, TransformerException
+        {
+            String tablesPkgDirName = tablesPkg.replace('.', '/');
+            File tablesDir = new File(destRoot + "/" + tablesPkgDirName);
+            tablesDir.mkdirs();
+
+            String domainsPkgDirName = domainsPkg.replace('.', '/');
+            File domainsDir = new File(destRoot + "/" + domainsPkgDirName);
+            domainsDir.mkdirs();
+
+            String rowsPkgDirName = rowsPkg.replace('.', '/');
+            File rowsDir = new File(destRoot + "/" + rowsPkgDirName);
+            rowsDir.mkdirs();
+
+            String rowsListPkgDirName = rowsListPkg.replace('.', '/');
+            File rowsListDir = new File(destRoot + "/" + rowsListPkgDirName);
+            rowsListDir.mkdirs();
+
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            Transformer tablesTransformer = tFactory.newTransformer(new StreamSource(tablesGeneratorStyleSheet));
+            tablesTransformer.setParameter("entire-schema", schemaDoc.getDocument());
+            tablesTransformer.setParameter("package-name", tablesPkg);
+            Transformer domainsTransformer = tFactory.newTransformer(new StreamSource(domainsGeneratorStyleSheet));
+            domainsTransformer.setParameter("package-name", domainsPkg);
+            Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsGeneratorStyleSheet));
+            rowsTransformer.setParameter("package-name", rowsPkg);
+            Transformer rowsListTransformer = tFactory.newTransformer(new StreamSource(rowsListGeneratorStyleSheet));
+            rowsListTransformer.setParameter("package-name", rowsListPkg);
+
+            Map tables = schemaDoc.getTables();
+            for(Iterator i = tables.values().iterator(); i.hasNext(); )
+            {
+                Element tableElem = (Element) i.next();
+
+                String tableClassName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Table";
+                String tableFile = tablesDir.getAbsolutePath() + "/" + tableClassName + ".java";
+                String domainName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true);
+                String domainFile = domainsDir.getAbsolutePath() + "/" + domainName + ".java";
+                String rowName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Row";
+                String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
+                String rowListName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Rows";
+                String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
+                StringBuffer tableTypesList = new StringBuffer();
+
+                NodeList children = tableElem.getChildNodes();
+                for(int c = 0; c < children.getLength(); c++)
+                {
+                    Node child = children.item(c);
+                    if(child.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    String childName = child.getNodeName();
+                    if("column".equals(childName))
+                    {
+                        Element columnElem = (Element) child;
+                        columnElem.setAttribute("_gen-member-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), false));
+                        columnElem.setAttribute("_gen-method-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), true));
+                        columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
+
+                        NodeList jtnl = columnElem.getElementsByTagName("java-type");
+                        if(jtnl.getLength() > 0)
+                            columnElem.setAttribute("_gen-java-type-init-cap", XmlSource.xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
+                    }
+                    else if("extends".equals(childName))
+                    {
+                        if(tableTypesList.length() > 0)
+                            tableTypesList.append(", ");
+                        tableTypesList.append((String) tableTypesClassMap.get(child.getFirstChild().getNodeValue()));
+                    }
+                }
+
+                if(tableTypesList.length() > 0)
+                    tableElem.setAttribute("_implements-table-types", tableTypesList.toString());
+                tableElem.setAttribute("_gen-domain-name", domainName);
+                tableElem.setAttribute("_gen-domain-class-name", domainsPkg + "." + domainName);
+                tableElem.setAttribute("_gen-domain-member-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), false));
+                tableElem.setAttribute("_gen-domain-method-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true));
+                tableElem.setAttribute("_gen-table-name", tableClassName);
+                tableElem.setAttribute("_gen-table-class-name", tablesPkg + "." + tableClassName);
                 tableElem.setAttribute("_gen-table-member-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), false));
                 tableElem.setAttribute("_gen-table-method-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true));
+                tableElem.setAttribute("_gen-row-name", rowName);
                 tableElem.setAttribute("_gen-row-class-name", rowsPkg + "." + rowName);
+                tableElem.setAttribute("_gen-rows-name", rowListName);
+                tableElem.setAttribute("_gen-rows-class-name", rowsListPkg + "." + rowListName);
+            }
 
-                tablesTransformer.setParameter("table-name", tableName);
+            for(Iterator i = tables.values().iterator(); i.hasNext(); )
+            {
+                Element tableElem = (Element) i.next();
+
+                String tableClassName = tableElem.getAttribute("_gen-table-name");
+                String domainName = tableElem.getAttribute("_gen-domain-name");
+                String rowName = tableElem.getAttribute("_gen-row-name");
+                String rowListName = tableElem.getAttribute("_gen-rows-name");
+
+                String tableFile = tablesDir.getAbsolutePath() + "/" + tableClassName + ".java";
+                String domainFile = domainsDir.getAbsolutePath() + "/" + domainName + ".java";
+                String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
+                String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
+
+                tablesTransformer.setParameter("table-name", tableClassName);
                 tablesTransformer.transform
                     (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(tableFile));
                 tablesGeneratedCount++;
 
+                domainsTransformer.setParameter("domain-name", domainName);
+                domainsTransformer.setParameter("domain-class-name", domainsPkg + "." + domainName);
+                domainsTransformer.transform
+                    (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(domainFile));
+
                 rowsTransformer.setParameter("row-name", rowName);
                 rowsTransformer.transform
                     (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(rowFile));
-                rowsGeneratedCount++;
 
                 rowsListTransformer.setParameter("row-name", rowName);
                 rowsListTransformer.setParameter("rows-name", rowListName);
                 rowsListTransformer.transform
                     (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(rowListFile));
-                rowsGeneratedCount++;
             }
         }
 
@@ -1127,10 +1235,12 @@ public class SchemaDocument extends XmlSource
         public void generate(SchemaDocument schemaDoc) throws TransformerConfigurationException, TransformerException
         {
             Map dataTypesClassMap = new HashMap();
+            Map tableTypesClassMap = new HashMap();
             new File(destRoot).mkdirs();
 
-            createDataTypesClasses(schemaDoc, dataTypesClassMap);
-            createTablesClasses(schemaDoc, dataTypesClassMap);
+            createDataTypesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
+            createTableTypesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
+            createTablesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
             createSchemaClass(schemaDoc);
         }
     }

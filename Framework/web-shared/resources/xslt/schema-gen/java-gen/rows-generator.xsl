@@ -20,7 +20,7 @@ import java.util.*;
 import com.xaf.db.*;
 import com.xaf.db.schema.*;
 
-public class <xsl:value-of select="$rows-name"/> extends ArrayList
+public class <xsl:value-of select="$rows-name"/> extends AbstractRows
 {
 	private <xsl:value-of select="@_gen-table-class-name"/> table;
 	
@@ -32,6 +32,7 @@ public class <xsl:value-of select="$rows-name"/> extends ArrayList
 	
 	public void populateData(ResultSet resultSet) throws SQLException
 	{
+		super.populateData(resultSet);
 		<xsl:value-of select="@_gen-row-class-name"/> row = null;
 		while(resultSet.next())
 		{
@@ -40,6 +41,11 @@ public class <xsl:value-of select="$rows-name"/> extends ArrayList
 			add(row);
 		}
 	}
+	
+	public <xsl:value-of select="@_gen-domain-class-name"/> get<xsl:value-of select="@_gen-domain-method-name"/>(int rowNum)
+	{
+		return (<xsl:value-of select="@_gen-domain-class-name"/>) get(rowNum);
+	}	
 	
 	public <xsl:value-of select="@_gen-row-class-name"/> get<xsl:value-of select="$row-name"/>(int rowNum)
 	{

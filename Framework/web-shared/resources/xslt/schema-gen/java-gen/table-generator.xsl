@@ -3,6 +3,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="text"/>
 
+<xsl:param name="entire-schema"/>
 <xsl:param name="package-name"/>
 <xsl:param name="table-name"/>
 <xsl:variable name="default-text-size">32</xsl:variable>
@@ -10,7 +11,7 @@
 <xsl:template match="table">
 <xsl:variable name="_gen-table-method-name"><xsl:value-of select="@_gen-table-method-name"/></xsl:variable>
 <xsl:variable name="_gen-table-row-class-name"><xsl:value-of select="@_gen-row-class-name"/></xsl:variable>
-<xsl:variable name="table-simple-name"><xsl:value-of select="@name"/></xsl:variable>
+<xsl:variable name="_gen-table-row-name"><xsl:value-of select="@_gen-row-name"/></xsl:variable>
 <xsl:variable name="table-abbrev"><xsl:value-of select="@abbrev"/></xsl:variable>
 package <xsl:value-of select="$package-name"/>;
 
@@ -24,7 +25,7 @@ import com.xaf.db.*;
 import com.xaf.db.schema.*;
 import com.xaf.value.*;
 
-public class <xsl:value-of select="$table-name"/> extends AbstractTable
+public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if test="@_implements-table-types">implements <xsl:value-of select="@_implements-table-types"/></xsl:if>
 {
 <xsl:for-each select="column">	protected <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
 </xsl:for-each>
@@ -85,9 +86,19 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable
 		return new <xsl:value-of select="$_gen-table-row-class-name"/>(this);
 	}
 	
-	public <xsl:value-of select="$_gen-table-row-class-name"/> create<xsl:value-of select="$table-simple-name"/>Row()
+	public Rows createRows()
+	{
+		return new <xsl:value-of select="@_gen-rows-class-name"/>(this);
+	}
+	
+	public <xsl:value-of select="$_gen-table-row-class-name"/> create<xsl:value-of select="$_gen-table-row-name"/>()
 	{
 		return new <xsl:value-of select="$_gen-table-row-class-name"/>(this);
+	}
+	
+	public <xsl:value-of select="@_gen-rows-class-name"/> create<xsl:value-of select="@_gen-rows-name"/>()
+	{
+		return new <xsl:value-of select="@_gen-rows-class-name"/>(this);
 	}
 	
 <xsl:for-each select="column">	public <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text>get<xsl:value-of select="@_gen-method-name"/>Column() { return <xsl:value-of select="@_gen-member-name"/>; }
@@ -98,18 +109,30 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable
 <xsl:variable name="java-type-init-cap"><xsl:value-of select="@_gen-java-type-init-cap"/></xsl:variable>
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:if test="java-type and @primarykey = 'yes'">
-	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException { return (<xsl:value-of select="$_gen-table-row-class-name"/>) get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value)); }
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException 
+	{ 
+		return get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value)); 
+	}
 </xsl:if><xsl:if test="@primarykey = 'yes'">
-	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException { return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null); }
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
+	{ 
+		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null); 
+	}
+</xsl:if>
+<xsl:if test="@reftype = 'parent'">
+<xsl:if test="java-type">
+	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException
+	{
+		return get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
+	}
+</xsl:if>
+	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
+	{ 
+		return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, &quot;<xsl:value-of select="@refcol"/>&quot;, value, null); 
+	}
 </xsl:if>
 </xsl:for-each>
 }
 </xsl:template>
 
 </xsl:stylesheet>
-
-
-
-
-
-

@@ -43,6 +43,9 @@ public interface Table
     public Column getColumn(String name);
     public Column getColumn(int index);
 
+    public Row createRow();
+    public Rows createRows();
+
     public void registerForeignKeyDependency(ForeignKey fKey);
 
     public void refreshData(ConnectionContext cc, Row row) throws NamingException, SQLException;

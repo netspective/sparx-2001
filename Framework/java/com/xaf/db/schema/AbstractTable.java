@@ -133,6 +133,7 @@ public abstract class AbstractTable implements Table
     }
 
     abstract public Row createRow();
+    abstract public Rows createRows();
 
     public void refreshData(ConnectionContext cc, Row row) throws NamingException, SQLException
     {
@@ -174,6 +175,42 @@ public abstract class AbstractTable implements Table
             catch(SQLException e)
             {
                 throw new SQLException(e.toString() + " ["+ selectByPrimaryKeySql +" (bind = "+ (pkValue != null ? "'" + pkValue + "' {"+ pkValue.getClass().getName() + "}" : "none") +")]");
+            }
+            finally
+            {
+                if(stmt != null) stmt.close();
+            }
+        }
+        finally
+        {
+            cc.returnConnection();
+        }
+    }
+
+    protected Rows getRecordsByEquality(ConnectionContext cc, String colName, Object colValue, Rows rows) throws NamingException, SQLException
+    {
+        Rows result = rows;
+        String selectSql = "select " + getColumnNamesForSelect() + " from " + getName() + " where " + colName + " = ?";
+
+        Connection conn = cc.getConnection();
+        try
+        {
+            PreparedStatement stmt = null;
+            try
+            {
+                stmt = conn.prepareStatement(selectSql);
+                stmt.setObject(1, colValue);
+                if(stmt.execute())
+                {
+                    ResultSet rs = stmt.getResultSet();
+                    if(result == null) result = createRows();
+                    result.populateData(rs);
+                }
+                return result;
+            }
+            catch(SQLException e)
+            {
+                throw new SQLException(e.toString() + " ["+ selectSql +" (bind = "+ (colValue != null ? "'" + colValue + "' {"+ colValue.getClass().getName() + "}" : "none") +")]");
             }
             finally
             {
