@@ -14,6 +14,7 @@
 <xsl:variable name="generate-seq">yes</xsl:variable>
 <xsl:variable name="statement-terminator">;
 </xsl:variable>
+<xsl:variable name="system-date-function">sysdate</xsl:variable>
 
 <xsl:template match="schema">
 	<xsl:for-each select="table">
@@ -190,7 +191,14 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="column"/>
 
 	<xsl:text> DEFAULT </xsl:text>
-	<xsl:value-of select="$column/@default"/>
+	<xsl:choose>
+		<xsl:when test="($column/@default = 'sysdate') and ($system-date-function)">
+			<xsl:value-of select="$system-date-function"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$column/@default"/>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <xsl:template name="index-definition">
