@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ===================================================================
 
-Build file for XAF - for use with the Jakarta Ant java build tool
+Build file for SparX - for use with the Jakarta Ant java build tool
 
 
 Setup instructions:
@@ -26,54 +26,69 @@ Authors:
 
 
 -->
-<project name="XAF" default="xaf" basedir=".">
+<project name="SparX" default="xaf" basedir=".">
 
-    <!-- ==================== Initialization properties ===================== -->
-    <property name="ant.home" value="${ant_home}"/>
-    <property name="debug" value="on"/>
-    <property name="optimize" value="true"/>
-    
-    <property environment="env"/>
-    <property file="build.properties"/>
-    
-    <property name="resin.libpath" value="${env.RESIN_HOME}/lib"/>
-    <property name="resin.jar" value="${resin.libpath}/resin.jar"/>
-    <property name="jsdk22.jar" value="${resin.libpath}/jsdk22.jar"/>
-    <property name="dom.jar" value="${resin.libpath}/dom.jar"/>
-    <property name="sax.jar" value="${resin.libpath}/sax.jar"/>
-    <property name="jaxp.jar" value="${resin.libpath}/jaxp.jar"/>
-    <property name="jndi" value="${resin.libpath}/jndi.jar"/>
-    <property name="jdbc-ext" value="${resin.libpath}/jdbc2_0-stdext.jar"/>
+    <target name="init">
+	    <property name="build.dir" value="../build"/>
+	    <property name="build.classes.dir" value="${build.dir}/classes"/>
+	    <property name="lib.dir" value="../lib"/>
 
-    <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi}"/> 
-
-    <property name="build.dir" value="../build"/>
-    <property name="lib.dir" value="../lib"/>
-    <property name="lib-ext.dir" value="${lib.dir}/${build.product.id}-${build.version.major}_${build.version.minor}_${build.number}"/>
-    <property name="web-shared.dir" value="../web-shared"/>
-    <property name="doc.dir" value="${web-shared.dir}/docs"/>
-    <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
-
-    <property name="jar.prefix" value="${build.product.id}-${build.version.major}_${build.version.minor}"/>
-    <property name="lib.jar" value="${jar.prefix}.jar"/>
-    <property name="src.jar" value="${jar.prefix}_src.jar"/>
-    <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
-    <property name="web-shared.zip" value="${jar.prefix}_web-shared.zip"/>
-    
-    <!-- ============================= Prepare XAF ========================= -->
-    <target name="prepare">
-        <!-- Create destination directories -->
+		<delete dir="${build.dir}"/>
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${lib.dir}"/>
+        
+	    <property name="ant.home" value="${env.ANT_HOME}"/>
+	    <property name="ant.lib.dir" value="${ant.home}/lib"/>
+	    <property name="ant.jar" value="${ant.lib.dir}/ant.jar"/>
+
+	    <property name="debug" value="on"/>
+	    <property name="optimize" value="true"/>
+
+	    <property environment="env"/>
+
+	    <property name="resin.lib.dir" value="${env.RESIN_HOME}/lib"/>
+	    <property name="resin.jar" value="${resin.lib.dir}/resin.jar"/>
+	    <property name="jsdk22.jar" value="${resin.lib.dir}/jsdk22.jar"/>
+	    <property name="dom.jar" value="${resin.lib.dir}/dom.jar"/>
+	    <property name="sax.jar" value="${resin.lib.dir}/sax.jar"/>
+	    <property name="jaxp.jar" value="${resin.lib.dir}/jaxp.jar"/>
+	    <property name="jndi" value="${resin.lib.dir}/jndi.jar"/>
+	    <property name="jdbc-ext" value="${resin.lib.dir}/jdbc2_0-stdext.jar"/>
+
+	    <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi};${ant.jar}"/> 
+
+	    <!-- Compile the BuildConfiguration class -->
+	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"
+			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java"
+			classpath="${classpath}"
+			debug="${debug}"
+			optimize="${optimize}"
+			deprecation="off"/>
+
+		<!-- put the build configuration items into the properties (com.xaf.ant.BuildConfigurationTask) -->
+	    <taskdef name="config" classname="com.xaf.ant.BuildConfigurationTask" classpath="${build.classes.dir}"/>
+		<config/>
+
+	    <property name="lib-ext.dir" value="${lib.dir}/${build.libitem.path.prefix}"/>
         <mkdir dir="${lib-ext.dir}"/>
-    </target>
+
+	    <property name="web-shared.dir" value="../web-shared"/>
+	    <property name="doc.dir" value="${web-shared.dir}/docs"/>
+	    <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
+
+	    <property name="jar.prefix" value="${build.libitem.file.prefix}"/>
+	    <property name="lib.jar" value="${jar.prefix}.jar"/>
+	    <property name="src.jar" value="${jar.prefix}_src.jar"/>
+	    <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
+	    <property name="web-shared.zip" value="${jar.prefix}_web-shared.zip"/>
+    </target>	   
     
     <!-- ============================= Build XAF ========================= -->
-    <target name="compile" depends="prepare">
+    <target name="compile">
 
         <!-- Compile XAF components -->
-        <javac srcdir="." destdir="${build.dir}/classes"
+        <javac srcdir="." destdir="${build.classes.dir}"
             classpath="${classpath}"
             debug="${debug}"
             optimize="${optimize}"
@@ -85,11 +100,8 @@ Authors:
     <!-- ============================= Jar XAF ========================= -->
     <target name="jar" depends="compile">
 
-        <!-- Create XAF BINARIES JAR file -->
-        <copy file="build.properties" todir="${build.dir}/classes"/>
-        
-        <jar jarfile="${lib-ext.dir}/${lib.jar}" basedir="${build.dir}/classes">
-            <include name="build.properties"/>
+        <!-- Create XAF BINARIES JAR file -->        
+        <jar jarfile="${lib-ext.dir}/${lib.jar}" basedir="${build.classes.dir}">
             <include name="com/xaf/**"/>
         </jar>
         
@@ -101,8 +113,6 @@ Authors:
         </jar>
         
         <copy file="${lib-ext.dir}/${src.jar}" tofile="${lib.dir}/${src.jar}"/>
-        
-        <delete dir="${build.dir}"/>
     </target>
 
     <!-- ============================= JavaDoc XAF ========================= -->
@@ -140,7 +150,7 @@ Authors:
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="xaf" depends="clean,compile,jar,javadoc,web-shared"/>
+    <target name="xaf" depends="init,compile,jar,javadoc,web-shared,clean"/>
 
     <!-- =============================== Help =============================== -->
     <target name="targets">

@@ -11,6 +11,7 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
+import com.xaf.*;
 import com.xaf.config.*;
 import com.xaf.db.*;
 import com.xaf.form.*;
@@ -37,7 +38,6 @@ public class AppComponentExplorerServlet extends HttpServlet
 	private String aceHomeStyleSheet;
 	private SchemaGeneratorDialog dialog;
 	private FileSystemContext projectFSContext;
-	private Properties buildProperties;
 
 	public class GenerateDDLOptions
 	{
@@ -69,29 +69,6 @@ public class AppComponentExplorerServlet extends HttpServlet
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
-
-		buildProperties = new Properties();
-		try
-		{
-		    ClassLoader cl = ClassLoader.getSystemClassLoader();
-		    java.net.URL url = cl.getResource("build.properties");
-			if(url != null)
-			{
-				InputStream is = url.openStream();
-				buildProperties.load(is);
-				is.close();
-			}
-			else
-				throw new IOException("file not found.");
-		}
-		catch(IOException e)
-		{
-			buildProperties.setProperty("build.product.name", "build.properties not found");
-			buildProperties.setProperty("build.version.major", "0");
-			buildProperties.setProperty("build.version.minor", "0");
-			buildProperties.setProperty("build.number", "0");
-			buildProperties.setProperty("build.date", "unknown");
-		}
 
 		ServletContext context = config.getServletContext();
 		manager = ConfigurationManagerFactory.getManager(context);
@@ -620,14 +597,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 			else
 			{
 				preparePage(request, response, null);
-				out.write("<p><br>&nbsp;&nbsp;<b><font color='red'>" +
-					buildProperties.getProperty("build.product.name") + " version " +
-					buildProperties.getProperty("build.version.major") + "." +
-					buildProperties.getProperty("build.version.minor") + "." +
-					buildProperties.getProperty("build.number") + " built " +
-					buildProperties.getProperty("build.date") +
-					"</font>"
-					);
+				out.write("<p><br>&nbsp;&nbsp;<b><font color='red'>" + BuildConfiguration.getProductBuild() + "</font>");
 			}
 		}
     }
