@@ -92,6 +92,7 @@ public class StatementDialog extends Dialog
     static public final int STMTDLGFLAG_ALLOW_MULTIPLE_QSSS = STMTDLGFLAG_ALWAYS_SHOW_RSNAV * 2; // allow multiple query select scroll states to be active
 
     static public final String STMTDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME = "active-statement-scroll-state";
+    static public final String STMTDIALOG_NAME = "statementDialog";
 
     private String stmtName;
     private int rowsPerPage;
@@ -101,19 +102,35 @@ public class StatementDialog extends Dialog
     private String[] urlFormats;
     private ResultSetNavigatorButtonsField navBtns;
 
+    public StatementDialog()
+    {
+        initialize();
+    }
+
     public StatementDialog(StatementInfo si, String reportName, String skinName, String[] urlFormats)
     {
-        setName("statementDialog");
-        setLoopEntries(true);
-        setRetainAllRequestParams(true);
+        initialize();
         setStatementInfo(si);
         setSkinName(skinName);
         setReportName(reportName);
         setUrlFormats(urlFormats);
+
+        //addReportSelectionField();
+    }
+
+
+    /**
+     * Initializes the statement dialog with default flags and components
+     */
+    protected void initialize()
+    {
+        setName(STMTDIALOG_NAME);
+        setLoopEntries(true);
+        setRetainAllRequestParams(true);
         setFlag(Dialog.DLGFLAG_HIDE_HEADING_IN_EXEC_MODE);
         navBtns = new ResultSetNavigatorButtonsField();
         addField(navBtns);
-        //addReportSelectionField();
+        //setDirector(new DialogDirector());
     }
 
     /**
