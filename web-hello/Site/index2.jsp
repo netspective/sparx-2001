@@ -7,7 +7,7 @@
 	</head>
 
 	<body bgcolor='white'  text='black' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>
-		<table width='100%' border='0' cellpadding='0' cellspacing='0'>");
+		<table width='100%' border='0' cellpadding='0' cellspacing='0'>
 			<tr>
 				<td align='center' bgcolor='#660000' valign='center' width='750'>
 					<font size='+3' color='white'>Tutorial I, Part II: Hello World</font></td>
