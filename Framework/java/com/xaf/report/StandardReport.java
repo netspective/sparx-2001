@@ -23,6 +23,7 @@ public class StandardReport implements Report
 
     private String name;
 	private ReportColumnsList columns = new ReportColumnsList();
+	private boolean contentsFinalized;
     private ReportFrame frame = null;
     private ReportBanner banner = null;
 	private int visibleColsCount = -1;
@@ -38,7 +39,6 @@ public class StandardReport implements Report
 
 	public ReportColumnsList getColumns() { return columns; }
 	public ReportColumn getColumn(int i) { return columns.getColumn(i); }
-	public int getVisibleColsCount() { return visibleColsCount < 0 ? calcVisibleColsCount() : visibleColsCount; }
 
 	public final long getFlags() { return flags; }
 	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }
@@ -63,24 +63,9 @@ public class StandardReport implements Report
 		if(defnElem != null)
 			importFromXml(defnElem);
 
-        calcVisibleColsCount();
+		finalizeContents();
 		setFlag(REPORTFLAG_INITIALIZED);
 	}
-
-    private int calcVisibleColsCount()
-    {
-		visibleColsCount = 0;
-		for(int c = 0; c < columns.size(); c++)
-		{
-			ReportColumn colDefn = columns.getColumn(c);
-			if(! colDefn.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
-				visibleColsCount++;
-
-            if(colDefn.flagIsSet(ReportColumn.COLFLAG_HASPLACEHOLDERS))
-                setFlag(this.REPORTFLAG_HASPLACEHOLDERS);
-		}
-        return visibleColsCount;
-    }
 
     public void initialize(ReportColumn[] cols, Element defnElem)
     {
@@ -92,7 +77,21 @@ public class StandardReport implements Report
 
 		if(defnElem != null)
 			importFromXml(defnElem);
+
+		finalizeContents();
     }
+
+	public void finalizeContents()
+	{
+		for(int c = 0; c < columns.size(); c++)
+		{
+			ReportColumn colDefn = columns.getColumn(c);
+			colDefn.finalizeContents(this);
+
+            if(colDefn.flagIsSet(ReportColumn.COLFLAG_HASPLACEHOLDERS))
+                setFlag(this.REPORTFLAG_HASPLACEHOLDERS);
+		}
+	}
 
 	public void importFromXml(Element elem)
 	{
@@ -210,6 +209,29 @@ public class StandardReport implements Report
         return replacedIn.toString();
     }
 
+	public void makeStateChanges(ReportContext rc, ResultSet rs)
+	{
+		rc.callOnMakeStateChanges(rs);
+	}
+
+	public void makeStateChanges(ReportContext rc, Object[][] data)
+	{
+		rc.callOnMakeStateChanges(data);
+	}
+
+	/*
+	public void produceReport(Writer writer, ResultSet rs, ReportContext rc) throws SQLException, IOException
+	{
+        ReportContext rc = new ReportContext(null, null, null, this, skin);
+		skin.produceReport(writer, rc, rs);
+	}
+
+	public void produceReport(Writer writer, Object[][] data, ReportContext rc) throws IOException
+	{
+        ReportContext rc = new ReportContext(null, null, null, this, skin);
+		skin.produceReport(writer, rc, data);
+	}
+
 	public void produceReport(Writer writer, ResultSet rs, ReportSkin skin) throws SQLException, IOException
 	{
         ReportContext rc = new ReportContext(null, null, null, this, skin);
@@ -221,4 +243,5 @@ public class StandardReport implements Report
         ReportContext rc = new ReportContext(null, null, null, this, skin);
 		skin.produceReport(writer, rc, data);
 	}
+	*/
 }

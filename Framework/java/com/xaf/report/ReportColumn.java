@@ -18,8 +18,8 @@ import org.w3c.dom.*;
 
 public interface ReportColumn
 {
-	static public final long COLFLAG_INVISIBLE = 1;
-    static public final long COLFLAG_HASPLACEHOLDERS = COLFLAG_INVISIBLE * 2;
+	static public final long COLFLAG_HIDDEN = 1;
+    static public final long COLFLAG_HASPLACEHOLDERS = COLFLAG_HIDDEN * 2;
     static public final long COLFLAG_HASOUTPUTPATTERN = COLFLAG_HASPLACEHOLDERS * 2;
 	static public final long COLFLAG_WRAPURL = COLFLAG_HASOUTPUTPATTERN * 2;
 	static public final long COLFLAG_CUSTOMSTART = COLFLAG_WRAPURL * 2;
@@ -74,4 +74,5 @@ public interface ReportColumn
 
 	public void importFromColumn(ReportColumn rc);
 	public void importFromXml(Element elem);
+	public void finalizeContents(Report report);
 }

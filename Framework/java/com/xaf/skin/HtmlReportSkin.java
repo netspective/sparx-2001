@@ -140,8 +140,9 @@ public class HtmlReportSkin implements ReportSkin
 	public void produceHeadingRow(Writer writer, ReportContext rc, Object[] headings) throws IOException
 	{
 		ReportColumnsList columns = rc.getColumns();
+		ReportContext.ColumnState[] states = rc.getStates();
 		int dataColsCount = columns.size();
-		int tableColsCount = (rc.getReport().getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
 
 		writer.write("<tr bgcolor="+frameHdTableRowBgcolorAttrs+"><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
 		if(headings == null)
@@ -149,7 +150,7 @@ public class HtmlReportSkin implements ReportSkin
 			for(int i = 0; i < dataColsCount; i++)
 			{
 				ReportColumn rcd = columns.getColumn(i);
-				if(rcd.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+				if(states[i].isHidden())
 					continue;
 
 				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rcd.getHeading() +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
@@ -160,7 +161,7 @@ public class HtmlReportSkin implements ReportSkin
 			for(int i = 0; i < dataColsCount; i++)
 			{
 				ReportColumn rcd = columns.getColumn(i);
-				if(rcd.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+				if(states[i].isHidden())
 					continue;
 
 				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ headings[rcd.getColIndexInArray()] +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
@@ -173,8 +174,9 @@ public class HtmlReportSkin implements ReportSkin
 	public void produceHeadingRow(Writer writer, ReportContext rc, ResultSet rs) throws IOException, SQLException
 	{
 		ReportColumnsList columns = rc.getColumns();
+		ReportContext.ColumnState[] states = rc.getStates();
 		int dataColsCount = columns.size();
-		int tableColsCount = (rc.getReport().getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
 
 		if(! rs.next()) return;
 
@@ -182,7 +184,7 @@ public class HtmlReportSkin implements ReportSkin
 		for(int i = 0; i < dataColsCount; i++)
 		{
 			ReportColumn rcd = columns.getColumn(i);
-			if(rcd.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+			if(states[i].isHidden())
 				continue;
 
 			writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rs.getString(rcd.getColIndexInResultSet()) +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
@@ -201,30 +203,16 @@ public class HtmlReportSkin implements ReportSkin
 	{
         Report defn = rc.getReport();
 		ReportColumnsList columns = rc.getColumns();
+		ReportContext.ColumnState[] states = rc.getStates();
+
         boolean addRowSeps = flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS);
 		int rowsWritten = 0;
 		int dataColsCount = columns.size();
-		int tableColsCount = (defn.getVisibleColsCount() * 2) + 1;
+		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1;
 		boolean paging = rc.scrollingResults();
 
         ResultSetMetaData rsmd = rs.getMetaData();
         int resultSetColsCount = rsmd.getColumnCount();
-
-		String[] outputFormats = new String[dataColsCount];
-		String[] urls = new String[dataColsCount];
-
-        for(int i = 0; i < dataColsCount; i++)
-        {
-            ReportColumn column = columns.getColumn(i);
-            if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
-                continue;
-
-            if(column.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN))
-				outputFormats[i] = column.resolvePattern(column.getOutput());
-
-			if(column.flagIsSet(ReportColumn.COLFLAG_WRAPURL))
-				urls[i] = column.resolvePattern(column.getUrl());
-        }
 
         while(rs.next())
         {
@@ -240,16 +228,18 @@ public class HtmlReportSkin implements ReportSkin
             for(int i = 0; i < dataColsCount; i++)
             {
                 ReportColumn column = columns.getColumn(i);
-                if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+				ReportContext.ColumnState state = states[i];
+
+                if(state.isHidden())
                     continue;
 
                 String data =
-                    column.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
-                        outputFormats[i] :
+                    state.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
+                        state.getOutputFormat() :
                         column.getFormattedData(rc, rowData, true);
 
                 String singleRow = "<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+
-                    (column.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ urls[i] +"'>"+ data +"</a>" : data) +
+                    (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data) +
                     "</font></td><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>";
 
 				//writer.write(MessageFormat.format(singleRow, rowData));
@@ -281,27 +271,13 @@ public class HtmlReportSkin implements ReportSkin
 	{
         Report defn = rc.getReport();
 		ReportColumnsList columns = rc.getColumns();
+		ReportContext.ColumnState[] states = rc.getStates();
+
         boolean addRowSeps = flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS);
 		int rowsWritten = 0;
 		int dataColsCount = columns.size();
-		int tableColsCount = (defn.getVisibleColsCount() * 2) + 1;
+		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1;
 		boolean paging = rc.scrollingResults();
-
-		String[] outputFormats = new String[dataColsCount];
-		String[] urls = new String[dataColsCount];
-
-        for(int i = 0; i < dataColsCount; i++)
-        {
-            ReportColumn column = columns.getColumn(i);
-            if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
-                continue;
-
-            if(column.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN))
-				outputFormats[i] = column.resolvePattern(column.getOutput());
-
-			if(column.flagIsSet(ReportColumn.COLFLAG_WRAPURL))
-				urls[i] = column.resolvePattern(column.getUrl());
-        }
 
         for(int row = startDataRow; row < data.length; row++)
         {
@@ -311,16 +287,18 @@ public class HtmlReportSkin implements ReportSkin
             for(int i = 0; i < dataColsCount; i++)
             {
                 ReportColumn column = columns.getColumn(i);
-                if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+				ReportContext.ColumnState state = states[i];
+
+                if(state.isHidden())
                     continue;
 
                 String colData =
-                    column.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
-                        outputFormats[i] :
+                    state.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
+                        state.getOutputFormat() :
                         column.getFormattedData(rc, rowData, true);
 
                 String singleRow = "<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+
-                    (column.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ urls[i] +"'>"+ colData +"</a>" : colData) +
+                    (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ colData +"</a>" : colData) +
                     "</font></td><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>";
 
 				//writer.write(MessageFormat.format(singleRow, rowData));
@@ -348,10 +326,10 @@ public class HtmlReportSkin implements ReportSkin
         if(calcsCount == 0)
             return;
 
-        ColumnDataCalculator[] calcs = rc.getCalcs();
+        ReportContext.ColumnState[] states = rc.getStates();
 		ReportColumnsList columns = rc.getColumns();
 		int dataColsCount = columns.size();
-		int tableColsCount = (rc.getReport().getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+		int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
 
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
     		writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='1' width='100%'></td></tr>");
@@ -359,10 +337,10 @@ public class HtmlReportSkin implements ReportSkin
 		for(int i = 0; i < dataColsCount; i++)
 		{
 			ReportColumn column = columns.getColumn(i);
-			if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+			if(states[i].isHidden())
 				continue;
 
-			writer.write("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFtFontAttrs+"><b>"+ column.getFormattedData(rc, calcs[i]) +"</b></font></td><td><font "+dataFtFontAttrs+">&nbsp;&nbsp;</font></td>");
+			writer.write("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFtFontAttrs+"><b>"+ column.getFormattedData(rc, states[i].getCalc()) +"</b></font></td><td><font "+dataFtFontAttrs+">&nbsp;&nbsp;</font></td>");
 		}
 		writer.write("</tr>");
     }

@@ -23,7 +23,6 @@ public interface Report
 
 	public ReportColumnsList getColumns();
 	public ReportColumn getColumn(int i);
-	public int getVisibleColsCount();
 
 	public long getFlags();
 	public boolean flagIsSet(long flag);
@@ -36,6 +35,12 @@ public interface Report
 	public void importFromXml(Element elem);
     public String replaceOutputPatterns(ReportContext rc, Object[] rowData, String row);
 
+	public void makeStateChanges(ReportContext rc, ResultSet rs);
+	public void makeStateChanges(ReportContext rc, Object[][] data);
+	/*
+	public void produceReport(Writer writer, ResultSet rs, ReportContext rc) throws SQLException, IOException;
+	public void produceReport(Writer writer, Object[][] data, ReportContext rc) throws IOException;
 	public void produceReport(Writer writer, ResultSet rs, ReportSkin skin) throws SQLException, IOException;
 	public void produceReport(Writer writer, Object[][] data, ReportSkin skin) throws IOException;
+	*/
 }

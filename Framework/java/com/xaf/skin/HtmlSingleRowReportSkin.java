@@ -26,22 +26,7 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
         Report defn = rc.getReport();
 		ReportColumnsList columns = rc.getColumns();
 		int dataColsCount = columns.size();
-
-		String[] outputFormats = new String[dataColsCount];
-		String[] urls = new String[dataColsCount];
-
-        for(int i = 0; i < dataColsCount; i++)
-        {
-            ReportColumn column = columns.getColumn(i);
-            if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
-                continue;
-
-            if(column.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN))
-				outputFormats[i] = column.resolvePattern(column.getOutput());
-
-			if(column.flagIsSet(ReportColumn.COLFLAG_WRAPURL))
-				urls[i] = column.resolvePattern(column.getUrl());
-        }
+		ReportContext.ColumnState[] states = rc.getStates();
 
 		StringBuffer dataTable = new StringBuffer();
 		if(horizontalLayout)
@@ -52,16 +37,18 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
 			for(int i = 0; i < dataColsCount; i++)
 			{
                 ReportColumn column = columns.getColumn(i);
-                if(column.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+				ReportContext.ColumnState state = states[i];
+
+                if(state.isHidden())
                     continue;
 
                 String data =
-                    column.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
-                        outputFormats[i] :
+                    state.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
+                        state.getOutputFormat() :
                         column.getFormattedData(rc, rowData, true);
 
 				dataTable.append("<td align='right'><font "+dataHdFontAttrs+">"+column.getHeading()+":</font></td>");
-				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(column.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ urls[i] +"'>"+ data +"</a>" : data)+"</font></td>");
+				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data)+"</font></td>");
 
 				colCount++;
 				if(colCount >= tableCols)
