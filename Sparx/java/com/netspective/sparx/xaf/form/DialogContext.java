@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.4 2002-02-07 02:42:14 thua Exp $
+ * $Id: DialogContext.java,v 1.5 2002-02-08 22:16:12 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -69,12 +69,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.naming.NamingException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 
 import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.util.log.AppServerCategory;
@@ -90,6 +97,10 @@ import com.netspective.sparx.xaf.task.sql.DmlTask;
 import com.netspective.sparx.xaf.task.sql.TransactionTask;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.SingleValueSource;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
+import org.apache.oro.text.perl.Perl5Util;
 
 public class DialogContext extends ServletValueContext
 {
@@ -146,6 +157,68 @@ public class DialogContext extends ServletValueContext
         {
             return field.getValueAsObject(value);
         }
+
+        public void importFromXml(Element fieldElem)
+        {
+            String valueType = fieldElem.getAttribute("value-type");
+            if(valueType.equals("strings"))
+            {
+                NodeList valuesNodesList = fieldElem.getElementsByTagName("values");
+                if(valuesNodesList.getLength() > 0)
+                {
+                    NodeList valueNodesList = ((Element) valuesNodesList.item(0)).getElementsByTagName("value");
+                    int valuesCount = valueNodesList.getLength();
+                    if(valuesCount > 0)
+                    {
+                        values = new String[valuesCount];
+                        for(int i = 0; i < valuesCount; i++)
+                        {
+                            Element valueElem = (Element) valueNodesList.item(i);
+                            if(valueElem.getChildNodes().getLength() > 0)
+                                values[i] = valueElem.getFirstChild().getNodeValue();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                NodeList valueList = fieldElem.getElementsByTagName("value");
+                if(valueList.getLength() > 0)
+                {
+                    Element valueElem = (Element) valueList.item(0);
+                    if(valueElem.getChildNodes().getLength() > 0)
+                        value = valueElem.getFirstChild().getNodeValue();
+                }
+            }
+        }
+
+        public void exportToXml(Element parent)
+        {
+            Document doc = parent.getOwnerDocument();
+            Element fieldElem = doc.createElement("field");
+            fieldElem.setAttribute("name", field.getQualifiedName());
+            if(values != null)
+            {
+                fieldElem.setAttribute("value-type", "strings");
+                Element valuesElem = doc.createElement("values");
+                for(int i = 0; i < values.length; i++)
+                {
+                    Element valueElem = doc.createElement("value");
+                    valueElem.appendChild(doc.createTextNode(values[i]));
+                    valuesElem.appendChild(valueElem);
+                }
+                fieldElem.appendChild(valuesElem);
+                parent.appendChild(fieldElem);
+            }
+            else if(value != null && value.length() > 0)
+            {
+                fieldElem.setAttribute("value-type", "string");
+                Element valueElem = doc.createElement("value");
+                valueElem.appendChild(doc.createTextNode(value));
+                fieldElem.appendChild(valueElem);
+                parent.appendChild(fieldElem);
+            }
+        }
     }
 
     static public final char DIALOGMODE_UNKNOWN = ' ';
@@ -168,6 +241,7 @@ public class DialogContext extends ServletValueContext
     static public final int VALSTAGE_NOT_PERFORMED = 0;
     static public final int VALSTAGE_PERFORMED_FAILED = 1;
     static public final int VALSTAGE_PERFORMED_SUCCEEDED = 2;
+    static public final int VALSTAGE_IGNORE = 3;
 
     static public final int STATECALCSTAGE_INITIAL = 0;
     static public final int STATECALCSTAGE_FINAL = 1;
@@ -372,6 +446,99 @@ public class DialogContext extends ServletValueContext
         return dialog.getName() + " (" + transactionId + ")";
     }
 
+    /**
+     * Using a Document or element that was serialized using the exportToXml method in this class,
+     * reconstruct the DialogFieldStates hash map. This is basically a data deserialization method.
+     */
+    public void importFromXml(Element parent)
+    {
+        NodeList dcList = parent.getElementsByTagName("dialog-context");
+        if(dcList.getLength() > 0)
+        {
+            Element dcElem = (Element) dcList.item(0);
+            NodeList children = dcElem.getChildNodes();
+            for(int n = 0; n < children.getLength(); n++)
+            {
+                Node node = children.item(n);
+                if(node.getNodeName().equals("field"))
+                {
+                    Element fieldElem = (Element) node;
+                    String fieldName = fieldElem.getAttribute("name");
+                    DialogFieldState state = (DialogFieldState) fieldStates.get(fieldName);
+                    if(state != null)
+                        state.importFromXml(fieldElem);
+                }
+            }
+        }
+    }
+
+    /**
+     * Export all the data in DialogFieldStates hash map into an XML document for later retrieval.
+     * This is basically a data serialization method.
+     */
+    public void exportToXml(Element parent)
+    {
+        Element dcElem = parent.getOwnerDocument().createElement("dialog-context");
+        dcElem.setAttribute("name", dialog.getNameFromXml());
+        dcElem.setAttribute("transaction", transactionId);
+        for(Iterator i = fieldStates.values().iterator(); i.hasNext();)
+        {
+            DialogFieldState state = (DialogFieldState) i.next();
+            state.exportToXml(dcElem);
+        }
+        parent.appendChild(dcElem);
+    }
+
+    public void setFromXml(String xml) throws ParserConfigurationException, SAXException, IOException
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        InputStream is = new java.io.ByteArrayInputStream(xml.getBytes());
+        Document doc = builder.parse(is);
+        importFromXml(doc.getDocumentElement());
+    }
+
+    public String getAsXml() throws ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.newDocument();
+        Element root = doc.createElement("xaf");
+        doc.appendChild(root);
+
+        exportToXml(doc.getDocumentElement());
+
+        /* we use reflection so that org.apache.xml.serialize.* is not a package requirement */
+
+        Class serializerCls = Class.forName("org.apache.xml.serialize.XMLSerializer");
+        Class outputFormatCls = Class.forName("org.apache.xml.serialize.OutputFormat");
+
+        Constructor serialCons = serializerCls.getDeclaredConstructor(new Class[]{OutputStream.class, outputFormatCls});
+        Constructor outputCons = outputFormatCls.getDeclaredConstructor(new Class[]{Document.class});
+
+        OutputStream os = new java.io.ByteArrayOutputStream();
+
+        Object outputFormat = outputCons.newInstance(new Object[]{doc});
+        Method indenting = outputFormatCls.getMethod("setIndenting", new Class[]{boolean.class});
+        indenting.invoke(outputFormat, new Object[]{new Boolean(true)});
+        Method omitXmlDecl = outputFormatCls.getMethod("setOmitXMLDeclaration", new Class[]{boolean.class});
+        omitXmlDecl.invoke(outputFormat, new Object[]{new Boolean(true)});
+
+        Object serializer = serialCons.newInstance(new Object[]{os, outputFormat});
+        Method serialize = serializerCls.getMethod("serialize", new Class[]{Document.class});
+        serialize.invoke(serializer, new Object[]{doc});
+
+        return os.toString();
+    }
+
+    /**
+     * Given a map of values, assign the value to each field. Each key in the map is
+     * a case-sensitive field name (should be the same fully qualified name as the field)
+     * and the value is either a String[] or an Object. If the value is an Object, then
+     * the toString() method will be called on the object to get a single value. If the
+     * value is a String[] then the assignment will be made directly (by reference).
+     */
     public void assignFieldValues(Map values)
     {
         for(Iterator i = values.keySet().iterator(); i.hasNext();)
@@ -380,9 +547,14 @@ public class DialogContext extends ServletValueContext
             DialogFieldState state = (DialogFieldState) fieldStates.get(keyName);
             if(state != null)
             {
-                Object keyObj = (Object) values.get(keyName);
+                Object keyObj = values.get(keyName);
                 if(keyObj != null)
-                    state.value = values.get(keyName).toString();
+                {
+                    if(keyObj instanceof String[])
+                        state.values = (String[]) keyObj;
+                    else
+                        state.value = keyObj.toString();
+                }
                 else
                     state.value = null;
             }
@@ -417,6 +589,10 @@ public class DialogContext extends ServletValueContext
     {
         activeMode = DIALOGMODE_INPUT;
         dialog.makeStateChanges(this, STATECALCSTAGE_INITIAL);
+
+        String ignoreVal = request.getParameter(Dialog.PARAMNAME_IGNORE_VALIDATION);
+        if(ignoreVal != null && !ignoreVal.equals("no"))
+            setValidationStage(VALSTAGE_IGNORE);
 
         String autoExec = request.getParameter(Dialog.PARAMNAME_AUTOEXECUTE);
         if(autoExec != null && !autoExec.equals("no"))
@@ -520,6 +696,14 @@ public class DialogContext extends ServletValueContext
     public final boolean inExecuteMode()
     {
         return activeMode == DIALOGMODE_EXECUTE;
+    }
+
+    /**
+     * Return true if the "pending" button was pressed in the dialog.
+     */
+    public final boolean isPending()
+    {
+        return validationStage == VALSTAGE_IGNORE;
     }
 
     public final String getOriginalReferer()
@@ -1230,15 +1414,31 @@ public class DialogContext extends ServletValueContext
             }
         }
 
+        String XML = null;
+        try
+        {
+            XML = getAsXml();
+            Perl5Util perl5 = new Perl5Util();
+            XML = perl5.substitute("s/</&lt;/g", XML);
+        }
+        catch(Exception e)
+        {
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+            XML = e.toString() + stack.toString();
+        }
+
         return "<table border=1 cellspacing=0 cellpadding=4>" +
                 "<tr><td><b>Dialog</b></td><td>" + dialog.getName() + "</td></tr>" +
                 "<tr><td><b>Run Sequence</b></td><td>" + runSequence + "</td></tr>" +
                 "<tr><td><b>Active/Next Mode</b></td><td>" + activeMode + " -> " + nextMode + "</td></tr>" +
                 "<tr><td><b>Validation Stage</b></td><td>" + validationStage + "</td></tr>" +
+                "<tr><td><b>Is Pending</b></td><td>" + isPending() + "</td></tr>" +
                 "<tr><td><b>Data Command</b></td><td>" + getDataCmdTextForCmdId(this.getDataCommand()) + "</td></tr>" +
                 "<tr><td><b>Populate Tasks</b></td><td>" + (dialog.getPopulateTasks() != null ? dialog.getPopulateTasks().getDebugHtml(this) : "none") + "</td></tr>" +
                 "<tr><td><b>Execute Tasks</b></td><td>" + (dialog.getExecuteTasks() != null ? dialog.getExecuteTasks().getDebugHtml(this) : "none") + "</td></tr>" +
                 values.toString() +
+                "<tr><td><b>XML Representation</b></td><td><pre>" + XML + "</pre></td></tr>" +
                 "</table>";
     }
 
