@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.9 2002-12-16 21:04:10 shahbaz.javeed Exp $
+ * $Id: TextField.java,v 1.10 2002-12-23 04:42:08 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -463,11 +463,8 @@ public class TextField extends DialogField
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { return getValue(\"" + fieldName + "\", defaultValue); }\n");
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "OrBlank() { return getValue(\"" + fieldName + "\", \"\"); }\n");
 
-        mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "Object() { return getValue(\"" + fieldName + "\"); }\n");
-        mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "Object(" + dataType + " defaultValue) { return getValue(\"" + fieldName + "\", defaultValue); }\n");
-
-        mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "String() { return getValue(\"" + fieldName + "\"); }\n");
-        mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "String(" + dataType + " defaultValue) { return getValue(\"" + fieldName + "\", defaultValue); }\n");
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object() { return getValueAsObject(\"" + fieldName + "\"); }\n");
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object(Object defaultValue) { return getValueAsObject(\"" + fieldName + "\", defaultValue); }\n");
 
         mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", value); }\n");
 

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: FloatField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: FloatField.java,v 1.2 2002-12-23 04:42:08 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -179,7 +179,10 @@ public class FloatField extends TextField
 
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { Float o = (Float) getValueAsObject(\"" + fieldName + "\"); return o == null ? (float) 0.0 : o.floatValue(); }\n");
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { Float o = (Float) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.floatValue(); }\n");
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object() { return getValueAsObject(\"" + fieldName + "\"); }\n");
+        mi.addJavaCode("\tpublic Object get" + memberName + "Object(Object defaultValue) { return getValueAsObject(\"" + fieldName + "\", defaultValue); }\n");
         mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", Float.toString(value)); }\n");
+        mi.addJavaCode("\tpublic void set" + memberName + "(Object value) { setValue(\"" + fieldName + "\", value != null ? value.toString() : null); }\n");
 
         return mi;
     }
