@@ -20,7 +20,7 @@ public class ColumnCountCalculator implements ColumnDataCalculator
         count = 0;
     }
 
-    public void addValue(double value) { count++; }
-    public void addValue(String value) { count++; }
-    public double getValue() { return count; }
+    public void addValue(ReportContext rc, ReportColumn columnInfo, long rowNum, Object[] rowData, double value) { count++; }
+    public void addValue(ReportContext rc, ReportColumn columnInfo, long rowNum, Object[] rowData, String value) { count++; }
+    public double getValue(ReportContext rc) { return count; }
 }

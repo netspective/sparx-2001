@@ -11,8 +11,8 @@ package com.xaf.report;
 
 public interface ColumnDataCalculator
 {
-    public void addValue(String value);
-    public void addValue(double value);
+    public void addValue(ReportContext rc, ReportColumn columnInfo, long rowNum, Object[] rowData, String value);
+    public void addValue(ReportContext rc, ReportColumn columnInfo, long rowNum, Object[] rowData, double value);
 
-    public double getValue();
+    public double getValue(ReportContext rc);
 }

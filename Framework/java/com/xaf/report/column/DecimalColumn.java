@@ -39,7 +39,7 @@ public class DecimalColumn extends NumericColumn
         {
             ColumnDataCalculator calc = rc.getCalc(colIndex);
             if(calc != null)
-                calc.addValue(value);
+                calc.addValue(rc, this, rowNum, rowData, value);
         }
 		return data;
 	}

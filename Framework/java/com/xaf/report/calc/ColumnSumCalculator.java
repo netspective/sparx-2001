@@ -19,7 +19,7 @@ public class ColumnSumCalculator implements ColumnDataCalculator
     {
     }
 
-    public void addValue(double value) { sum += value; }
-    public void addValue(String value) { sum += Double.parseDouble(value); }
-    public double getValue() { return sum; }
+    public void addValue(ReportContext rc, ReportColumn columnInfo, long rowNum, Object[] rowData, double value) { sum += value; }
+    public void addValue(ReportContext rc, ReportColumn columnInfo, long rowNum, Object[] rowData, String value) { sum += Double.parseDouble(value); }
+    public double getValue(ReportContext rc) { return sum; }
 }

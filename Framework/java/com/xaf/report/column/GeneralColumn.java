@@ -153,7 +153,7 @@ public class GeneralColumn implements ReportColumn
         {
             ColumnDataCalculator calc = rc.getCalc(getColIndexInArray());
             if(calc != null)
-                calc.addValue(data);
+                calc.addValue(rc, this, rowNum, rowData, data);
         }
 		return data;
 	}
@@ -163,9 +163,9 @@ public class GeneralColumn implements ReportColumn
         if(calc != null)
         {
             if(formatter != null)
-                return formatter.format(new Double(calc.getValue()));
+                return formatter.format(new Double(calc.getValue(rc)));
             else
-                return rc.generalNumberFmt.format(calc.getValue());
+                return rc.generalNumberFmt.format(calc.getValue(rc));
         }
         else
             return "";

@@ -35,6 +35,12 @@ public class ColumnDataCalculatorFactory
         haveDefaultCalcs = true;
     }
 
+    /**
+     * Returns a freshly instantiated ColumnDataCalculator named "cmd". If "cmd" is an already-existing named
+     * class it will return a newInstance() of that class. If the "cmd" is a class name, a newInstance() of that
+     * particular class will be created and the class will be cached in the calcsClasses Map.
+     */
+
     static public ColumnDataCalculator createDataCalc(String cmd)
     {
         if(! haveDefaultCalcs)
@@ -42,7 +48,17 @@ public class ColumnDataCalculatorFactory
 
         Class cls = (Class) calcsClasses.get(cmd);
         if(cls == null)
-            return null;
+        {
+            try
+            {
+                cls = Class.forName(cmd);
+                addColumnDataCalc(cmd, cls);
+            }
+            catch(ClassNotFoundException e)
+            {
+                return null;
+            }
+        }
 
         try
         {
