@@ -51,6 +51,7 @@ public class Dialog
 	static public final String PARAMVALUE_DATA_CMD_EDIT    = "edit";
 	static public final String PARAMVALUE_DATA_CMD_DELETE  = "delete";
 	static public final String PARAMVALUE_DATA_CMD_CONFIRM = "confirm";
+    static public final String PARAMVALUE_DATA_CMD_PRINT = "print";
 
     // This flag is used to search for a session parameter indicating whether or not
     // the dialog is being used in an application or ACE.

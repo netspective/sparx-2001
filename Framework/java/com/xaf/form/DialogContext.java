@@ -59,6 +59,7 @@ public class DialogContext extends ServletValueContext
 
 				case DATA_CMD_CONFIRM:
 				case DATA_CMD_DELETE:
+                case DATA_CMD_PRINT:
 					// when in "delete" mode, all the fields should be read-only
 					flags |= DialogField.FLDFLAG_READONLY;
 					break;
@@ -82,7 +83,8 @@ public class DialogContext extends ServletValueContext
 	static public final int DATA_CMD_EDIT    = DATA_CMD_ADD * 2;
 	static public final int DATA_CMD_DELETE  = DATA_CMD_EDIT * 2;
 	static public final int DATA_CMD_CONFIRM = DATA_CMD_DELETE * 2;
-    static public final int DATA_CMD_CUSTOM_START = DATA_CMD_CONFIRM * 2;
+    static public final int DATA_CMD_PRINT = DATA_CMD_CONFIRM * 2;
+    static public final int DATA_CMD_CUSTOM_START = DATA_CMD_PRINT * 2;
 
 	static public final int VALSTAGE_NOT_PERFORMED       = 0;
 	static public final int VALSTAGE_PERFORMED_FAILED    = 1;
@@ -213,6 +215,8 @@ public class DialogContext extends ServletValueContext
                     result |= DATA_CMD_DELETE;
                 else if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_CONFIRM))
                     result |= DATA_CMD_CONFIRM;
+                else if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_PRINT))
+                    result |= DATA_CMD_PRINT;
             }
 		}
         return result;
@@ -245,12 +249,17 @@ public class DialogContext extends ServletValueContext
             dataCmdText.append(Dialog.PARAMVALUE_DATA_CMD_CONFIRM);
         }
 
+        if ((dataCmd & DATA_CMD_PRINT) != 0)
+        {
+            if(dataCmdText.length() > 0) dataCmdText.append(",");
+            dataCmdText.append(Dialog.PARAMVALUE_DATA_CMD_PRINT);
+        }
         return dataCmdText.toString();
     }
 
     public int getLastDataCmd()
     {
-        return DATA_CMD_CONFIRM;
+        return DATA_CMD_PRINT;
     }
 
     /**
@@ -413,6 +422,7 @@ public class DialogContext extends ServletValueContext
     public final boolean editingData() { return (dataCmd & DATA_CMD_EDIT) == 0 ? false : true; }
     public final boolean deletingData() { return (dataCmd & DATA_CMD_DELETE) == 0 ? false : true; }
     public final boolean confirmingData() { return (dataCmd & DATA_CMD_CONFIRM) == 0 ? false : true; }
+    public final boolean printingData() { return (dataCmd & DATA_CMD_PRINT) == 0 ? false : true; }
 
 	public final DatabaseContext getDatabaseContext() { return dbContext; }
 	public final void setDatabaseContext(DatabaseContext value) { dbContext = value; }

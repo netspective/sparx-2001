@@ -114,7 +114,8 @@ public class MemoField extends DialogField
 		String id = getId();
 		if(isReadOnly(dc))
 		{
-			return "<input type='hidden' name='"+ id +"' value='" + (value != null ? value : "") + "'>" + value;
+            String valueStr =  value != null ? value : "";
+			return "<input type='hidden' name='"+ id +"' value='" + valueStr + "'>" + valueStr;
 		}
 		else
 		{
