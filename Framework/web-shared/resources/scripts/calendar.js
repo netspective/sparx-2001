@@ -84,7 +84,7 @@
 // calDateFormat = "DD.MM.YY";     // FORMAT UNSUPPORTED BY JAVASCRIPT -- REQUIRES CUSTOM PARSING
 //
 
-calDateFormat    = "MM/dd/yyyy";
+calDateFormat    = "MM/DD/yyyy";
 
 // CALENDAR COLORS
 topBackground    = "white";         // BG COLOR OF THE TOP FRAME
