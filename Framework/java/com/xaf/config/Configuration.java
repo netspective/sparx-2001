@@ -97,7 +97,7 @@ public class Configuration extends HashMap
 	{
 		if(name == null)
 		{
-			String name = elem.getAttribute("package");
+			String name = elem.getAttribute("name");
 			if(name.length() == 0)
 				name = null;
 		}
