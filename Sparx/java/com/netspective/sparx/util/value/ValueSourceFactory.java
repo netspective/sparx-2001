@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: ValueSourceFactory.java,v 1.2 2002-08-30 00:22:20 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -72,6 +72,7 @@ public class ValueSourceFactory implements Factory
 
     static
     {
+        srcClasses.put("data-source-entries", DataSourceEntriesListValue.class);
         srcClasses.put("form", DialogFieldValue.class);
         srcClasses.put("formOrRequest", DialogFieldOrRequestParameterValue.class);
         srcClasses.put("formOrRequestAttr", DialogFieldOrRequestAttributeValue.class);
@@ -98,6 +99,7 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("create-app-url", ServletContextUriValue.class);
         srcClasses.put("config", ConfigurationValue.class);
         srcClasses.put("config-expr", ConfigurationExprValue.class);
+        srcClasses.put("simple-expr", ConfigurationExprValue.class);
         srcClasses.put("filesystem-entries", FilesystemEntriesListValue.class);
         srcClasses.put("create-data-cmd-heading", DialogDataCmdExprValue.class);
         srcClasses.put("custom-sql", CustomSqlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
@@ -177,9 +179,19 @@ public class ValueSourceFactory implements Factory
 
         String srcType = source.substring(0, delimPos);
         Class vsClass = (Class) srcClasses.get(srcType);
+        try
+        {
+            if(vsClass == null)
+                vsClass = Class.forName(srcType);
+        }
+        catch(ClassNotFoundException cnfe)
+        {
+            vsClass = null;
+        }
+
         if(vsClass == null)
         {
-            return new StaticValue("Value source '" + srcType + "' class not found.");
+            return new StaticValue("Value source '" + srcType + "' class not found in '"+ source  +"'.");
         }
         else
         {
@@ -229,6 +241,16 @@ public class ValueSourceFactory implements Factory
 
         String srcType = source.substring(0, delimPos);
         Class vsClass = (Class) srcClasses.get(srcType);
+        try
+        {
+            if(vsClass == null)
+                vsClass = Class.forName(srcType);
+        }
+        catch(ClassNotFoundException cnfe)
+        {
+            vsClass = null;
+        }
+
         if(vsClass == null)
         {
             return new ErrorListSource("List source '" + srcType + "' class not found.");
