@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Row.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: Row.java,v 1.2 2002-08-04 15:19:54 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -72,6 +72,18 @@ import com.netspective.sparx.xaf.sql.DmlStatement;
 
 public interface Row
 {
+    /**
+     * Passed into methods when the value of a NULL variable should be ignored and not assigned
+     * to a column.
+     */
+    public final static int VALUEHANDLE_NULLIGNORE = 0;
+
+    /**
+     * Passed into methods when the value of a NULL variable should be not be ignored and instead
+     * a null value should be assisgned to a column.
+     */
+    public final static int VALUEHANDLE_ASSIGN = 1;
+
     /**
      * Returns an array of all the column definitions in the order in which they were specified
      * for table creation.
@@ -118,7 +130,31 @@ public interface Row
     /**
      * Given a DialogContext, populate the Row's column values with the values of the fields
      * in the DialogContext that match the names of the columns. For each column in the Row, if
+     * a matching field value is not found, the value of the column will remain unchanged. If
+     * valueHandling is set to VALUEHANDLE_NULLIGNORE then nulls will not be assigned
+     * (use VALUEHANDLE_ASSIGN to set).
+     */
+    public void populateDataByNames(DialogContext dc, int valueHandling);
+
+    /**
+     * Given a DialogContext, populate the Row's column values with the values of the fields
+     * in the DialogContext that match the names of the columns. For each column in the Row, the
+     * colNameFieldNameMap is checked for the mapping of a column name to a field name. If a
+     * matching field name is found in the map, it is used. If a matching name is not found in
+     * the map, then a field name the same as the column name will be located. In the
+     * colNameFieldNameMap, the key is the column name and the value of
+     * the key is the name of field that column's value comes from. If no matching column is
+     * found either in the map or the regular field name, the column's current value is maintained. If
+     * valueHandling is set to VALUEHANDLE_NULLIGNORE then nulls will not be assigned
+     * (use VALUEHANDLE_ASSIGN to set).
+     */
+    public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap, int valueHandling);
+
+    /**
+     * Given a DialogContext, populate the Row's column values with the values of the fields
+     * in the DialogContext that match the names of the columns. For each column in the Row, if
      * a matching field value is not found, the value of the column will remain unchanged.
+     * By default, this method simply calls populateDataByNames(dc, VALUEHANDLE_NULLIGNORE).
      */
     public void populateDataByNames(DialogContext dc);
 
@@ -131,6 +167,7 @@ public interface Row
      * colNameFieldNameMap, the key is the column name and the value of
      * the key is the name of field that column's value comes from. If no matching column is
      * found either in the map or the regular field name, the column's current value is maintained.
+     * By default, this method simply calls populateDataByNames(dc, colNameFieldNameMap, VALUEHANDLE_NULLIGNORE).
      */
     public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap);
 

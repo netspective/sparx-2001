@@ -228,26 +228,56 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:for-each>		}
 	}
 
-	public void populateDataByNames(DialogContext dc)
+	public void populateDataByNames(DialogContext dc, int valueHandling)
 	{
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		Map fieldStates = dc.getFieldStates();
 		DialogContext.DialogFieldState state = null;
+        switch(valueHandling)
+        {
+            case VALUEHANDLE_NULLIGNORE:
 <xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		state = (DialogContext.DialogFieldState) fieldStates.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:text>      </xsl:text>if(state != null &amp;&amp; state.value != null &amp;&amp; state.value.length() > 0) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
-</xsl:for-each>
+<xsl:text>            </xsl:text>if(state != null &amp;&amp; state.value != null &amp;&amp; state.value.length() > 0) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
+</xsl:for-each>      break;
+
+            case VALUEHANDLE_ASSIGN:
+<xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		state = (DialogContext.DialogFieldState) fieldStates.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
+<xsl:text>            </xsl:text>if(state != null) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
+</xsl:for-each>      break;
+        }
 	}
 
-	public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap)
+	public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap, int valueHandling)
 	{
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		Map fieldStates = dc.getFieldStates();
 		String fieldName = null;
 		DialogContext.DialogFieldState state = null;
-<xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		fieldName = (String) colNameFieldNameMap.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-		state = (DialogContext.DialogFieldState) fieldStates.get(fieldName != null ? fieldName : COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:text>		</xsl:text>if(state != null &amp;&amp; state.value != null &amp;&amp; state.value.length() > 0) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
-</xsl:for-each>
+
+        switch(valueHandling)
+        {
+            case VALUEHANDLE_NULLIGNORE:
+<xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		    fieldName = (String) colNameFieldNameMap.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
+                    state = (DialogContext.DialogFieldState) fieldStates.get(fieldName != null ? fieldName : COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
+<xsl:text>				</xsl:text>if(state != null &amp;&amp; state.value != null &amp;&amp; state.value.length() > 0) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
+</xsl:for-each>         break;
+
+            case VALUEHANDLE_ASSIGN:
+<xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		    fieldName = (String) colNameFieldNameMap.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
+                    state = (DialogContext.DialogFieldState) fieldStates.get(fieldName != null ? fieldName : COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
+<xsl:text>				</xsl:text>if(state != null) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
+</xsl:for-each>         break;
+        }
+	}
+
+	public void populateDataByNames(DialogContext dc)
+	{
+        populateDataByNames(dc, VALUEHANDLE_NULLIGNORE);
+	}
+
+	public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap)
+	{
+        populateDataByNames(dc, colNameFieldNameMap, VALUEHANDLE_NULLIGNORE);
 	}
 
 	public void setData(DialogContext dc)
