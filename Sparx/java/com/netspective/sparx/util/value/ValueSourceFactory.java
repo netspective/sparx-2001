@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.4 2002-10-02 03:42:30 shahid.shah Exp $
+ * $Id: ValueSourceFactory.java,v 1.5 2002-10-13 18:34:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -110,6 +110,8 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("simple-expr", ConfigurationExprValue.class);
         srcClasses.put("filesystem-entries", FilesystemEntriesListValue.class);
         srcClasses.put("create-data-cmd-heading", DialogDataCmdExprValue.class);
+        srcClasses.put("create-record-add-text", RecordAddExprValue.class);
+        srcClasses.put("report-record-url", RecordEditorUrlValue.class);
         srcClasses.put("custom-sql", CustomSqlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
     }
 
