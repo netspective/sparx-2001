@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: TransactionTask.java,v 1.2 2002-01-30 03:40:35 thua Exp $
+ * $Id: TransactionTask.java,v 1.3 2002-03-31 14:00:54 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -175,7 +175,6 @@ public class TransactionTask extends BasicTask
             {
                 // get the connection and rollback the transaction
                 Connection conn = (Connection) request.getAttribute(dataSourceId);
-                System.out.println("ROLLBACK ROLLBACK");
                 conn.rollback();
                 conn.setAutoCommit(true);
                 request.removeAttribute(dataSourceId);

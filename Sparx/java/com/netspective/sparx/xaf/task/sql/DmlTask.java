@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DmlTask.java,v 1.2 2002-02-07 02:54:38 thua Exp $
+ * $Id: DmlTask.java,v 1.3 2002-03-31 14:00:37 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -332,7 +332,6 @@ public class DmlTask extends BasicTask
      */
     public void importConditionalFromXml(Element elem) throws TaskInitializeException
     {
-        System.out.println("importConditionalFromXml");
         String action = elem.getAttribute("action");
         if(action == null || action.length() == 0)
         {
@@ -341,7 +340,6 @@ public class DmlTask extends BasicTask
         DmlStatementConditionalAction actionInst =  new  DmlStatementConditionalAction();
         if (actionInst.importFromXml(elem))
         {
-            System.out.println("Condition added");
             addConditionalAction(actionInst);
         }
     }
