@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.5 2002-12-23 04:23:18 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.6 2002-12-26 19:21:21 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -71,6 +71,9 @@ import com.netspective.sparx.xaf.form.DialogManagerFactory;
 import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.page.VirtualPath;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.html.command.DialogComponentCommand;
+import com.netspective.sparx.xaf.html.ComponentCommandFactory;
+import com.netspective.sparx.xaf.html.ComponentCommandException;
 
 public class AppDialogsPage extends AceServletPage
 {
@@ -124,12 +127,19 @@ public class AppDialogsPage extends AceServletPage
         if(testItem != null)
         {
             PrintWriter out = pc.getResponse().getWriter();
-            DialogManagerFactory.DialogCommands dcmd = DialogManagerFactory.getCommands(testItem);
+            DialogComponentCommand dcmd = (DialogComponentCommand) ComponentCommandFactory.getDialogCommand(testItem);
             VirtualPath.FindResults path = pc.getActivePath();
 
             handleUnitTestPageBegin(pc, "Form (Dialog) Unit Test");
             out.write("<h1>Form (Dialog) Unit Test: " + dcmd.getDialogName() + "</h1><p>");
-            dcmd.handleDialog(pc, true);
+            try
+            {
+                dcmd.handleCommand(pc, pc.getResponse().getWriter(), true);
+            }
+            catch (ComponentCommandException e)
+            {
+                throw new ServletException(e);
+            }
             out.write("<p>");
             out.write("Try out additional options by using the following format:<br>");
             out.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/dialogId,data-cmd,skin-name,debug-flags</code><p>");
@@ -137,12 +147,12 @@ public class AppDialogsPage extends AceServletPage
             dcmd.setDataCmd("add");
             dcmd.setSkinName("standard");
             out.write("For example, to try the dialog in 'add' mode using the 'standard' skin:<br>");
-            out.write("<a href='"+ dcmd.generateCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.generateCommand() + "</a><p>");
+            out.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
 
             dcmd.setDataCmd("edit");
             dcmd.setSkinName(null);
             out.write("To try the dialog in 'edit' mode using the default skin:<br>");
-            out.write("<a href='"+ dcmd.generateCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.generateCommand() + "</a><p>");
+            out.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
             handleUnitTestPageEnd(pc);
         }
         else
