@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.22 2003-04-17 14:49:52 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.23 2003-04-18 00:03:18 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -103,11 +103,12 @@ public class DialogField
     static public final int FLDFLAG_IDENTIFIER = FLDFLAG_BROWSER_READONLY * 2;
     static public final int FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA = FLDFLAG_IDENTIFIER * 2;
     static public final int FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
-		static public final int FLDFLAG_DOUBLEENTRY = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
-		static public final int FLDFLAG_SCANNABLE = FLDFLAG_DOUBLEENTRY * 2;
-		static public final int FLDFLAG_AUTOBLUR = FLDFLAG_SCANNABLE * 2;
-		static public final int FLDFLAG_SUBMIT_ONBLUR = FLDFLAG_AUTOBLUR * 2;
-		static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_SUBMIT_ONBLUR * 2; // all DialogField "children" will use this
+    static public final int FLDFLAG_DOUBLEENTRY = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
+    static public final int FLDFLAG_SCANNABLE = FLDFLAG_DOUBLEENTRY * 2;
+    static public final int FLDFLAG_AUTOBLUR = FLDFLAG_SCANNABLE * 2;
+    static public final int FLDFLAG_SUBMIT_ONBLUR = FLDFLAG_AUTOBLUR * 2;
+    static public final int FLDFLAG_CREATEADJACENTAREA_HIDDEN = FLDFLAG_SUBMIT_ONBLUR *2;
+    static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_CREATEADJACENTAREA_HIDDEN * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -146,13 +147,13 @@ public class DialogField
     private String columnName;
     private Column column;
     private Map dalProperties;
-		private String scanStartCode;
-		private String scanStopCode;
-		private String scanPartnerField;
-		private int autoBlurLength;
-		private String autoBlurExcludeRegExp;
-		private String submitOnBlurPartnerField;
-		private String submitOnBlurCustomScript;
+    private String scanStartCode;
+    private String scanStopCode;
+    private String scanPartnerField;
+    private int autoBlurLength;
+    private String autoBlurExcludeRegExp;
+    private String submitOnBlurPartnerField;
+    private String submitOnBlurCustomScript;
 
     /**
      * Creates a dialog field
@@ -524,7 +525,36 @@ public class DialogField
                 fillFields = new String[]{fill};
         }
 
+        String extractFields[] = null;
+        String extract = elem.getAttribute("extract");
+        if(extract != null && extract.length() > 0)
+        {
+            if(extract.indexOf(",") > 0)
+            {
+                int fillCount = 0;
+                StringTokenizer st = new StringTokenizer(extract, ",");
+                while(st.hasMoreTokens())
+                {
+                    st.nextToken();
+                    fillCount++;
+                }
+
+                int extractIndex = 0;
+                fillFields = new String[fillCount];
+                st = new StringTokenizer(extract, ",");
+                while(st.hasMoreTokens())
+                {
+                    extractFields[extractIndex] = st.nextToken();
+                    extractIndex++;
+                }
+            }
+            else
+                extractFields = new String[]{extract};
+        }
+
         popup = new DialogFieldPopup(action, fillFields);
+        if (extractFields != null)
+            popup.setExtractFields(extractFields);
         String imgsrc = elem.getAttribute("image-src");
         if(imgsrc.length() > 0)
             popup.setImageUrl(imgsrc);
