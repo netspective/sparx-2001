@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppInitParamsPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppInitParamsPage.java,v 1.2 2002-08-25 17:33:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -171,13 +171,17 @@ public class AppInitParamsPage extends AceServletPage
         rootElem.appendChild(propertiesElem);
 
         propertyElem = doc.createElement("property");
+        String className = javax.xml.parsers.DocumentBuilderFactory.newInstance().getClass().getName();
         addText(propertyElem, "name", "XML Document Builder Factory");
-        addText(propertyElem, "value", javax.xml.parsers.DocumentBuilderFactory.newInstance().getClass().getName());
+        addText(propertyElem, "value", className);
+        addText(propertyElem, "value-detail", BuildConfiguration.getClassFileName(className));
         propertiesElem.appendChild(propertyElem);
 
         propertyElem = doc.createElement("property");
+        className = javax.xml.transform.TransformerFactory.newInstance().getClass().getName();
         addText(propertyElem, "name", "XSLT Transformer Factory");
-        addText(propertyElem, "value", javax.xml.transform.TransformerFactory.newInstance().getClass().getName());
+        addText(propertyElem, "value", className);
+        addText(propertyElem, "value-detail", BuildConfiguration.getClassFileName(className));
         propertiesElem.appendChild(propertyElem);
 
         transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
