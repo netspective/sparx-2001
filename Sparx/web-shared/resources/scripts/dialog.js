@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.10 2002-12-31 19:56:44 shahid.shah Exp $
+ * $Id: dialog.js,v 1.11 2003-02-13 21:32:25 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -60,9 +60,13 @@ var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
 var FIELDNAME_IGNORE_VALIDATION = DIALOGFIELD_PREFIX + ".ignore_val";
 
-var ALLOW_CLIENT_VALIDATION        = true;
-var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
-var ENABLE_KEYPRESS_FILTERS        = true;
+var ALLOW_CLIENT_VALIDATION            = true;
+var TRANSLATE_ENTER_KEY_TO_TAB_KEY     = false;
+var ENABLE_KEYPRESS_FILTERS            = true;
+var SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE = false;
+
+var anyControlChangedEventCalled = false;
+var submittedDialogValid = false;
 
 function setAllowValidation(value)
 {
@@ -133,16 +137,16 @@ function getControl(dialog, id)
 
 function radioButtonSelected(fieldName, value)
 {
-	// radio buttons are named {fieldName}{value} like "_dc.fieldName0" and "_dc.fieldName1", etc
-	var fieldId = DIALOGFIELD_PREFIX + "." + fieldName + value;
-	var control = getControl(activeDialog, fieldId);
-	if(control == null)
-	{
-		alert("Field '" + fieldId + "' not found in active dialog -- can't check for radio button value");
-		return false;
-	}
+    // radio buttons are named {fieldName}{value} like "_dc.fieldName0" and "_dc.fieldName1", etc
+    var fieldId = DIALOGFIELD_PREFIX + "." + fieldName + value;
+    var control = getControl(activeDialog, fieldId);
+    if(control == null)
+    {
+        alert("Field '" + fieldId + "' not found in active dialog -- can't check for radio button value");
+        return false;
+    }
 
-	return control.checked;
+    return control.checked;
 }
 
 //****************************************************************************
@@ -235,16 +239,17 @@ function Dialog_isValid()
         }
     }
 
+    if (isValid) submittedDialogValid = true;
     return isValid;
 }
 
 function Dialog_getFieldControl(qualifiedName)
 {
-	var field = this.fieldsByQualName[qualifiedName];
-	if(field != null)
-		return field.getControl(this);
-	else
-		return null;
+    var field = this.fieldsByQualName[qualifiedName];
+    if(field != null)
+        return field.getControl(this);
+    else
+        return null;
 }
 
 var activeDialog = null;
@@ -276,7 +281,8 @@ var FLDFLAG_BROWSER_READONLY                   = FLDFLAG_COLUMN_BREAK_AFTER * 2;
 var FLDFLAG_IDENTIFIER                         = FLDFLAG_BROWSER_READONLY * 2;
 var FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA    = FLDFLAG_IDENTIFIER * 2;
 var FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
-var FLDFLAG_STARTCUSTOM                        = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;// all DialogField "children" will use this
+var FLDFLAG_DOUBLEENTRY                        = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
+var FLDFLAG_STARTCUSTOM                        = FLDFLAG_DOUBLEENTRY * 2;// all DialogField "children" will use this
 // These constants MUST be kept identical to what is in com.netspective.sparx.form.field.SelectField
 
 var SELECTSTYLE_RADIO      = 0;
@@ -412,11 +418,11 @@ function DialogField_getControlByQualifiedName_NS4(dialog)
 
 function DialogField_finalizeContents(dialog)
 {
-	if(this.type != null)
-	{
-		if(this.type.finalizeDefn != null)
-			this.type.finalizeDefn(dialog, this);
-	}
+    if(this.type != null)
+    {
+        if(this.type.finalizeDefn != null)
+            this.type.finalizeDefn(dialog, this);
+    }
 
     if(this.style != null && this.style == SELECTSTYLE_MULTIDUAL)
         this.requiresPreSubmit = true;
@@ -468,11 +474,11 @@ function DialogField_alertRequired(control)
 {
     if (this.caption == "null")
     {
-	alert("This field is required.");
+	    alert("This field is required.");
     }
     else
     {
-    	alert(this.caption + " is required.");
+  	  alert(this.caption + " is required.");
     }
     control.focus();
 }
@@ -716,6 +722,20 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     }
 }
 
+
+function evaluateQuestions(control, field)
+{
+    var listString = control.value;
+    // Split string at the comma
+	var questionList = listString.split(",");
+	// Begin loop through the querystring
+	for(var i = 0; i < questionList.length; i++)
+	{
+	    if (questionList[i] == field.source)
+	    return true;
+    }
+    return false;
+}
 //****************************************************************************
 // SelectField MultiDual support functions
 //****************************************************************************
@@ -894,6 +914,7 @@ function controlOnFocus(control, event)
 
 function controlOnChange(control, event)
 {
+	  anyControlChangedEventCalled = true;
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null) return;
     if(field.dependentConditions.length > 0)
@@ -965,34 +986,34 @@ var COLON_KEY_RANGE        = [58, 58];
 
 function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 {
-	if(! ENABLE_KEYPRESS_FILTERS)
-		return true;
+    if(! ENABLE_KEYPRESS_FILTERS)
+        return true;
 
-	// if the default document keypress handler handled the event,
-	// it returns "FALSE" so we don't want to bother with the event
-	if(! documentOnKeyDown())
-		return true;
+    // if the default document keypress handler handled the event,
+    // it returns "FALSE" so we don't want to bother with the event
+    if(! documentOnKeyDown())
+        return true;
     // the event should have been passed in here but for some reason
     // its null, look for it in the window object (works only in IE)
     if (event == null || typeof event == "undefined")
         event = window.event;
-	for (i in acceptKeyRanges)
-	{
-		var keyCodeValue = null;
+    for (i in acceptKeyRanges)
+    {
+        var keyCodeValue = null;
         if (event.keyCode)
-			keyCodeValue = event.keyCode;
-		else
-			keyCodeValue = event.which;
+            keyCodeValue = event.keyCode;
+        else
+            keyCodeValue = event.which;
 
-		var keyInfo = acceptKeyRanges[i];
-		if(keyCodeValue >= keyInfo[0] && keyCodeValue <= keyInfo[1])
-			return true;
-	}
+        var keyInfo = acceptKeyRanges[i];
+        if(keyCodeValue >= keyInfo[0] && keyCodeValue <= keyInfo[1])
+            return true;
+    }
 
-	// if we get to here, it means we didn't accept any of the ranges
+    // if we get to here, it means we didn't accept any of the ranges
     window.event.cancelBubble = true;
     window.event.returnValue = false;
-	return false;
+    return false;
 }
 
 //****************************************************************************
@@ -1056,6 +1077,18 @@ function TextField_valueChanged(field, control)
     {
         control.value = control.value.toUpperCase();
     }
+    if (control.value.length > 0)
+    {
+        if (field.text_format_pattern != null && (typeof field.text_format_pattern != "undefined"))
+        {
+            var test = testText(field, control);
+            if (test == false)
+            {
+                field.alertMessage(control, field.text_format_err_msg);
+                return false;
+            }
+        }
+    }
     return true;
 }
 
@@ -1064,6 +1097,25 @@ function TextField_onKeyPress(field, control, event)
     if (field.identifier == 'yes')
     {
         return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, UPPER_ALPHA_KEYS_RANGE, UNDERSCORE_KEY_RANGE], event);
+    }
+    return true;
+}
+
+function TextField_isValid(field, control)
+{
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
+    if (control.value.length > 0 && field.text_format_pattern != '')
+    {
+        var test = testText(field, control);
+        if (test == false)
+        {
+            field.alertMessage(control, field.text_format_err_msg);
+            return false;
+        }
     }
     return true;
 }
@@ -1118,55 +1170,55 @@ function SocialSecurityField_isValid(field, control)
 
 function IntegerField_onKeyPress(field, control, event)
 {
-	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE], event);
+    return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE], event);
 }
 
 function IntegerField_isValid(field, control)
 {
-	if(field.isRequired() && control.value.length == 0)
-	{
-		field.alertRequired(control);
-		return false;
-	}
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
 
-	var intValue = control.value - 0;
-	if(isNaN(intValue))
-	{
-		field.alertMessage(control, "'"+ control.value +"' is an invalid integer.");
-		return false;
-	}
-	return true;
+    var intValue = control.value - 0;
+    if(isNaN(intValue))
+    {
+        field.alertMessage(control, "'"+ control.value +"' is an invalid integer.");
+        return false;
+    }
+    return true;
 }
 
 function FloatField_onKeyPress(field, control, event)
 {
-	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE], event);
+    return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE], event);
 }
 
 function FloatField_isValid(field, control)
 {
-	if(field.isRequired() && control.value.length == 0)
-	{
-		field.alertRequired(control);
-		return false;
-	}
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
 
-	var floatValue = control.value - 0;
-	if(isNaN(floatValue))
-	{
-		field.alertMessage(control, "'"+ control.value +"' is an invalid decimal.");
-		return false;
-	}
-	return true;
+    var floatValue = control.value - 0;
+    if(isNaN(floatValue))
+    {
+        field.alertMessage(control, "'"+ control.value +"' is an invalid decimal.");
+        return false;
+    }
+    return true;
 }
 
 function MemoField_isValid(field, control)
 {
-	if(field.isRequired() && control.value.length == 0)
-	{
-		field.alertRequired(control);
-		return false;
-	}
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
 
     maxlimit = field.maxLength;
     if (control.value.length > maxlimit)
@@ -1190,27 +1242,27 @@ function MemoField_onKeyPress(field, control, event)
 
 function DateField_popupCalendar()
 {
-	showCalendar(this.getControl(activeDialog), 0);
+    showCalendar(this.getControl(activeDialog), 0);
 }
 
 function DateField_finalizeDefn(dialog, field)
 {
-	field.popupCalendar = DateField_popupCalendar;
-   	field.dateFmtIsKnownFormat = false;
-   	field.dateItemDelim = null;
-   	field.dateItemDelimKeyRange = null;
+    field.popupCalendar = DateField_popupCalendar;
+    field.dateFmtIsKnownFormat = false;
+    field.dateItemDelim = null;
+    field.dateItemDelimKeyRange = null;
     if (field.dateDataType == DATE_DTTYPE_DATEONLY)
     {
         if (field.dateFormat == "MM/dd/yyyy" || field.dateFormat == "MM/dd/yy")
         {
             field.dateItemDelim = '/';
-		   	field.dateItemDelimKeyRange = SLASH_KEY_RANGE;
+            field.dateItemDelimKeyRange = SLASH_KEY_RANGE;
             field.dateFmtIsKnownFormat = true;
         }
         else if (field.dateFormat == "MM-dd-yyyy" || field.dateFormat == "MM-dd-yy")
         {
             field.dateItemDelim = '-';
-		   	field.dateItemDelimKeyRange = DASH_KEY_RANGE;
+            field.dateItemDelimKeyRange = DASH_KEY_RANGE;
             field.dateFmtIsKnownFormat = true;
         }
     }
@@ -1218,11 +1270,11 @@ function DateField_finalizeDefn(dialog, field)
 
 function DateField_isValid(field, control)
 {
-	if(field.isRequired() && control.value.length == 0)
-	{
-		field.alertRequired(control);
-		return false;
-	}
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
 
     return DateField_valueChanged(field, control);
 }
@@ -1247,7 +1299,7 @@ function DateField_onKeyPress(field, control, event)
 {
     if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
     {
-		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange], event);
+        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange], event);
     }
     else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
     {
@@ -1278,11 +1330,11 @@ function SelectField_isValid(field, control)
         }
         else if(style == SELECTSTYLE_COMBO)
         {
-        	if(field.isRequired() && control.options[control.selectedIndex].value.length == 0)
-		{
-			field.alertRequired(control);
-			return false;
-		}
+            if(field.isRequired() && control.options[control.selectedIndex].value.length == 0)
+        {
+            field.alertRequired(control);
+            return false;
+        }
         }
         else if(style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
         {
@@ -1345,6 +1397,7 @@ addFieldType("com.netspective.sparx.xaf.form.field.FloatField", null, FloatField
 addFieldType("com.netspective.sparx.xaf.form.field.SocialSecurityField", null, SocialSecurityField_isValid, SocialSecurityField_valueChanged, null, null, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.PhoneField", null, PhoneField_isValid, PhoneField_valueChanged, null, null, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.CurrencyField", null, CurrencyField_isValid, CurrencyField_valueChanged, null, null, null, null);
+addFieldType("org.redcross.nbcs.common.form.field.WbnField", null, TextField_isValid, TextField_valueChanged, TextField_onFocus, null, null, null);
 
 //****************************************************************************
 // Date Formatting
@@ -1365,6 +1418,14 @@ function padZeros(number, count)
     if (number.length > count)
         number = number.substring((number.length - count));
     return number;
+}
+
+function testText(field, control)
+{
+    var pattern = field.text_format_pattern;
+    if (control.value == '' || pattern == '')
+        return true;
+    return pattern.test(control.value) ;
 }
 
 function testCurrency(field, control)
@@ -1656,6 +1717,28 @@ function splitNotInArray(strString, arrArray)
     return a;
 }
 
+var dbEntry_firstEntry = null;
+function validateDoubleEntry(field, control)
+{
+	if (control.value == "") return true;
+	// if (ScanField_changeDisplayValue(field, control)) return true;
+
+	if(dbEntry_firstEntry == null)
+	{
+		dbEntry_firstEntry = control.value;
+		control.value = "";
+		control.focus();
+	}
+	else
+	{
+		if (dbEntry_firstEntry != control.value)
+		{
+			field.alertMessage(control, "Double Entries do not match.  Please re-enter.");
+		}
+		dbEntry_firstEntry = null;
+	}
+}
+
 //****************************************************************************
 // Event handlers
 //****************************************************************************
@@ -1684,7 +1767,14 @@ function documentOnKeyDown()
     return true;
 }
 
+function documentOnLeave()
+{
+	  if(SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE && anyControlChangedEventCalled && ! submittedDialogValid)
+			return "You have changed data on this page. If you leave, you will lose the data.";
+}
+
 document.onkeydown = documentOnKeyDown;
+window.onbeforeunload = documentOnLeave;
 
 dialogLibraryLoaded = true;
 
