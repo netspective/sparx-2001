@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.18 2003-04-08 19:33:18 thai.nguyen Exp $
+ * $Id: StandardDialogSkin.java,v 1.19 2003-04-18 00:10:14 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -519,21 +519,34 @@ public class StandardDialogSkin implements DialogSkin
         DialogFieldPopup popup = field.getPopup();
         if(popup == null)
             return null;
-
-        String expression = "new DialogFieldPopup('" + dc.getDialog().getName() + "', '" + field.getQualifiedName() + "', '" + popup.getActionUrl(dc) + "', '" + popup.getPopupWindowClass() + "', " + popup.closeAfterSelect() + ", " + popup.allowMultiSelect();
-        ;
+        String expression = "new DialogFieldPopup('" + dc.getDialog().getName() + "', '" + field.getQualifiedName() +
+                "', '" + popup.getActionUrl(dc) + "', '" + popup.getPopupWindowClass() + "', " + popup.closeAfterSelect() +
+                ", " + popup.allowMultiSelect();
         String[] fillFields = popup.getFillFields();
-        if(fillFields.length == 1)
+
+        StringBuffer expr = new StringBuffer(expression);
+        expr.append(", new Array(");
+        for(int i = 0; i < fillFields.length; i++)
         {
-            expression += ", '" + fillFields[0] + "')";
+            expr.append("'" + fillFields[i] + (i < fillFields.length-1 ? "', " : "'"));
         }
-        else
+        expr.append(")");
+        expression = expr.toString();
+
+        String[] extractFields = popup.getExtractFields();
+        // append the list of extract fields if they exist
+        if (extractFields != null && extractFields.length > 0)
         {
-            StringBuffer expr = new StringBuffer(expression);
-            for(int i = 0; i < fillFields.length; i++)
-                expr.append(", '" + fillFields[i] + "'");
-            expression = expr.toString() + ")";
+            StringBuffer buf = new StringBuffer(expression);
+            buf.append(", new Array(");
+            for (int i=0; i < extractFields.length; i++)
+            {
+                buf.append("'" + extractFields[i] + (i < extractFields.length-1 ? "', " : "'"));
+            }
+            buf.append(")");
+            expression = buf.toString();
         }
+        expression += ")";
 
         String imageUrl = popup.getImageUrl(dc);
         if(imageUrl == null)
@@ -591,6 +604,12 @@ public class StandardDialogSkin implements DialogSkin
         {
             String adjValue = dc.getAdjacentAreaValue(field);
             controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'>"+ (adjValue != null ? adjValue : "") +"</span>");
+        }
+        if (field.flagIsSet(DialogField.FLDFLAG_CREATEADJACENTAREA_HIDDEN))
+        {
+            String adjValue = dc.getAdjacentAreaValue(field);
+            controlHtml.write("&nbsp;<span style='visibility: hidden' id='" + field.getQualifiedName() + "_adjacent'>"+ (adjValue != null ? adjValue : "") +"</span>");
+            //controlHtml.write("&nbsp;<input type='hidden' id='" + field.getId() + "_adjacent' value='"+ (adjValue != null ? adjValue : "") +"'>");
         }
 
         StringBuffer messagesHtml = new StringBuffer();
