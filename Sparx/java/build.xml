@@ -105,7 +105,11 @@ Build targets:
             <include name="com/netspective/sparx/**"/>
         </jar>
 
+		<!-- copy the version-specific jar -->
         <copy file="${lib-ext.dir}/${lib.jar}" tofile="${lib.dir}/${lib.jar}"/>
+
+		<!-- copy the latest jar (for people who don't care about the version) -->
+        <copy file="${lib-ext.dir}/${lib.jar}" tofile="${lib.dir}/sparx.jar"/>
     </target>
 
     <!-- ============================= JavaDoc XAF ========================= -->
