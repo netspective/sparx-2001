@@ -1,18 +1,8 @@
-/*
- * Title:       MenuXml 
- * Description: MenuXml
- * Copyright:   Copyright (c) 2001
- * Company:     
- * @author      ThuA
- * @created     Nov 5, 2001 12:15:03 PM
- * @version     1.0
- */
-package com.netspective.product.cura.xml;
+package app.tag;
 
 import com.xaf.xml.XmlSource;
 import com.xaf.config.*;
 import com.xaf.value.*;
-
 
 import java.util.*;
 import java.io.File;
@@ -111,7 +101,7 @@ public class MenuXml
             this.appendSubMenuString(sb, mi, mainIndex, appPath, imagePath);
             mainIndex++;
         }
-        
+
         return sb.toString();
     }
 

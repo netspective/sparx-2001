@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="org">
+
+		<statement name="name-only">
+			select org_name from org where org_id = ?
+			<params>
+				<param value="request:org_id"/>
+			</params>
+		</statement>
+
+		<statement name="registration">
+			select
+				org_code as "Code",
+				org_abbrev as "Abbrev",
+				org_ownership.caption as "Ownership",
+				ticker_symbol as "Ticker",
+				sic_code as "SIC",
+				employees as "Employees",
+				time_zone as "Time Zone"
+			from org, org_ownership
+			where org_id = ?
+			and org.ownership = org_ownership.id (+)
+			<params>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Overview">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                </banner>
+			</report>
+		</statement>
+
+		<statement name="classification">
+			select 'Industry', ind_enum.caption
+			from org, org_industry ind, org_industry_enum ind_enum
+			where org.org_id = ?
+			and org.org_id = ind.org_id
+			and ind.org_industry = ind_enum.id
+			union
+			select 'Type', typ_enum.caption
+			from org, org_type typ, org_type_enum typ_enum
+			where org.org_id = ?
+			and org.org_id = typ.org_id
+			and typ.org_type = typ_enum.id
+			<params>
+				<param value="request:org_id"/>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Classification"/>
+		</statement>
+	</sql-statements>
+</xaf>

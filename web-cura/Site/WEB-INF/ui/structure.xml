@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<structure>
+		<page caption="Home" url="/cura/index.jsp"/>
+
+		<page caption="Accounts" url="/cura/account/browse.jsp">
+			<page caption="Create New Account" url="/cura/account/index.jsp?cmd=dialog,org.registration,add"/>
+			<page caption="Review Account(s)" url="/cura/account/browse.jsp"/>
+		</page>
+
+		<page caption="Contacts" url="/cura/contact/browse.jsp.jsp">
+			<page caption="Create New Contact" url="/cura/contact/index.jsp?cmd=dialog,person.registration,add"/>
+			<page caption="Review Contact(s)" url="/cura/contact/browse.jsp"/>
+		</page>
+
+		<page caption="Projects" url="project/browse.jsp">
+			<page caption="Create New Contact" url="/cura/project/index.jsp?cmd=dialog,project.registration,add"/>
+			<page caption="Review Contact(s)" url="/cura/project/browse.jsp"/>
+		</page>
+	</structure>
+</xaf>

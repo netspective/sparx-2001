@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="person">
+
+		<statement name="registration">
+			select * from person where person_id = ?
+		</statement>
+
+		<statement name="active-org-memberships">
+			select org.org_id, org.org_name
+			from org, personorg_relationship por
+			where por.parent_id = ?
+			and por.record_status_id = 1  /* active status only */
+			and por.rel_type = 0       /* member of organization */
+			and por.rel_org_id = org.org_id /* join to get org_name */
+		</statement>
+
+	</sql-statements>
+</xaf>

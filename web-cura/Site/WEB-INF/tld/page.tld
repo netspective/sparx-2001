@@ -11,7 +11,7 @@
 
 	<tag>
 		<name>page</name>
-		<tag-class>com.netspective.product.cura.tag.PageTag</tag-class>
+		<tag-class>app.tag.PageTag</tag-class>
 
 		<attribute>
 			<name>title</name>
@@ -31,7 +31,7 @@
 
 	<tag>
 		<name>link</name>
-		<tag-class>app.AnchorTag</tag-class>
+		<tag-class>app.tag.AnchorTag</tag-class>
 
 		<attribute>
 			<name>url</name>

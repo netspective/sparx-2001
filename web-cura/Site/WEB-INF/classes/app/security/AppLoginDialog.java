@@ -1,4 +1,4 @@
-package com.netspective.product.cura.security;
+package app.security;
 
 import java.io.*;
 import java.util.*;

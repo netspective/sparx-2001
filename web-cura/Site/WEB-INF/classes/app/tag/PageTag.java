@@ -1,23 +1,30 @@
-package com.netspective.product.cura.tag;
+package app.tag;
 
 import java.io.*;
+import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
+import com.xaf.config.*;
 import com.xaf.form.*;
+import com.xaf.html.*;
+import com.xaf.html.component.*;
 import com.xaf.navigate.*;
+import com.xaf.page.*;
 import com.xaf.security.*;
 import com.xaf.skin.*;
 import com.xaf.value.*;
-import com.netspective.product.cura.xml.MenuXml;
-import com.netspective.product.cura.security.AppLoginDialog;
+
+import app.security.AppLoginDialog;
 
 public class PageTag extends com.xaf.navigate.taglib.PageTag
 {
 	static private AppLoginDialog loginDialog;
+	static private HierarchicalMenu mainMenu;
+	static private VirtualPath menuStructure;
 
 	protected boolean doLogin(ServletContext servletContext, Servlet page, HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
@@ -83,8 +90,26 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			}
             String rootPath = req.getContextPath();
 			String resourcesUrl = rootPath + "/resources";
-            MenuXml menu = new MenuXml();
-            String jsString = menu.getMenuString(pageContext);
+
+			if(menuStructure == null)
+			{
+				Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(servletContext);
+				if(appConfig == null)
+					throw new Exception("Unable to get default configuration manager");
+
+				String structFile = appConfig.getValue(null, "app.navigate.structure-file");
+				if(structFile == null)
+					throw new Exception("Unable to retrieve structure file from configuration variable 'app.navigate.structure-file'");
+
+				menuStructure = VirtualPath.importFromXml(structFile);
+				if(menuStructure == null)
+					throw new Exception("Unable to create menu structure");
+
+				mainMenu = new HierarchicalMenu(1, 171, 110, 38, menuStructure, appConfig.getValue(null, "framework.shared.scripts-url"));
+				mainMenu.setTopPermanent(true);
+				mainMenu.setTopHorizontal(true);
+				mainMenu.setTopMoreImagesVisible(false);
+			}
 
 			out.println("<html>");
 			out.println("<head>");
@@ -92,15 +117,8 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			out.println("</head>");
 			out.println("<body  bgcolor='#FFFFFF' link='#cc0000' vlink='#336699' text='#000000' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>");
 
-            out.println("<script language='JavaScript1.2' src='"+ rootPath +"/resources/scripts/coolmenus/coolmenus3.js'>");
-            out.println("</script>");
-            out.println("<script language='JavaScript1.2' src='"+ rootPath +"/resources/scripts/coolmenus/xmenu.js' type='text/javascript'>");
-            out.println("</script>");
+			mainMenu.printHtml(null, out);
 
-            out.println("<script language='JavaScript1.2' type='text/javascript'>");
-            out.println(jsString);
-            out.println("oCMenu.makeStyle(); oCMenu.construct();");
-            out.println("</script>");
             out.println("<table width='100%' border='0' cellpadding='0' cellspacing='0'>");
             out.println("<tr bgcolor='#AFD997'>");
             out.println("   <td align='left' valign='top' background='"+ resourcesUrl +"/images/design/logo-background.jpg'>");
@@ -113,7 +131,6 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("</tr>");
             out.println("</table><p>");
 
-
 			out.print("<table><tr><td><font face='verdana' size=2>");
 
 			String heading = getHeading();
@@ -123,9 +140,11 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			}
 
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
-			throw new JspException(e.toString());
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			throw new JspException(e.toString() + stack.toString());
 		}
 
 		if(handleDefaultBodyItem())

@@ -2,7 +2,7 @@
 
 <xaf>
     <configuration>
-        <property name="system.projects-root" value="D:/Projects"/>
+        <property name="system.projects-root" value="c:/Projects"/>
         <property name="framework.root-path" value="${system.projects-root}/Framework"/>
         <property name="app.project-root" value="${system.projects-root}/web-cura"/>
 
@@ -72,9 +72,10 @@
         <property name="app.navigate.root-caption" value="Welcome to CURA"/>
         <property name="app.navigate.root-path" value="${servlet-context-path:/}" final="yes"/>
         <property name="app.navigate.root-url" value="${create-app-url:/}"/>
+        <property name="app.navigate.structure-file" value="${app.ui.root-path}/structure.xml"/>
         <property name="app.navigate.skin-jsp" value="navigate-skin.jsp"/>
-		<property name="app.navigate.login.dialog-class" value="com.netspective.product.cura.security.AppLoginDialog"/>
-        <property name="app.navigate.login.user-id.cookie-name" value="xaf_user_id_02"/>
+		<property name="app.navigate.login.dialog-class" value="app.security.AppLoginDialog"/>
+        <property name="app.navigate.login.user-id.cookie-name" value="app-user-id"/>
         <property name="app.navigate.login.user.session-attr-name" value="authenticated-user"/>
 
         <property name="app.ui.root-path" value="${app.web-inf-root-path}/ui"/>
@@ -87,7 +88,7 @@
         <property name="app.security.acl-file" value="${app.security.root-path}/access-control.xml"/>
 
         <!-- property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/ -->
-        <property name="app.schema.source-path" value="D:\Projects\web-cura\Database\schema-src"/>
+        <property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/>
         <property name="app.schema.source-file" value="${app.schema.source-path}/schema.xml"/>
 
         <property name="app.xml.root-path" value="${app.web-inf-root-path}/xml"/>
@@ -104,7 +105,6 @@
         <property name="app.jndi.ldap.security-authentication" value="simple"/>
         <property name="app.jndi.ldap.environment" value="Software Engineering"/>
         <property name="app.jndi.ldap.database-context" value="ou=Software Engineering,ou=Environment,ou=eimo,ou=Applications,ou=NBCS-DC,dc=arc,dc=org"/>
-
 
         <!-- <property name="app.data-src.default" value="jdbc/otrack"/> -->
     </configuration>
