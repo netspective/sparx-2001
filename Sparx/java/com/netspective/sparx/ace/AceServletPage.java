@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.5 2002-09-08 02:08:11 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.6 2002-09-16 02:07:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -256,6 +256,7 @@ public class AceServletPage extends AbstractServletPage
             out.print(getTitle(pc));
             out.print("</title>\n");
             out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
+            out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
             for(int i = 0; i < menus.length; i++)
             {
                 dc.firstMenu = i == 0;
@@ -315,6 +316,7 @@ public class AceServletPage extends AbstractServletPage
     public void handleUnitTestPageBegin(PageContext pc, String category) throws IOException
     {
         AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) pc.getServlet();
+        String sharedCssRootURL = ((PageControllerServlet) pc.getServlet()).getSharedCssRootURL();
         String unitTestsImagesPrefix = servlet.getSharedImagesRootURL() + "/ace/unit-test/unit-test-";
         String homeUrl = servlet.getHomePath().getAbsolutePath(pc);
 
@@ -323,6 +325,7 @@ public class AceServletPage extends AbstractServletPage
         out.println("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
         out.println("		<basefont face='Trebuchet MS' size=2>");
         out.println("		<style>h1 { font-size: 14pt; color: darkred; border-bottom: 1px solid #FF0000; } </style>");
+        out.println("       <link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
         out.println("		<table width='100%' border='0' cellspacing='0' cellpadding='0'>");
         out.println("			<tr>");
         out.println("				<td align='left' valign='top' width='412'><a href='"+ homeUrl +"'><img src='"+ unitTestsImagesPrefix +"01.gif' alt='' width='412' height='56' border='0'></a></td>");

@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.18 2002-09-07 22:17:45 shahid.shah Exp $
+$Id: app-build.xml,v 1.19 2002-09-16 02:09:40 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -193,6 +193,7 @@ $Id: app-build.xml,v 1.18 2002-09-07 22:17:45 shahid.shah Exp $
         <copy file="${sparx.lib.dir}/redist/log4j.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/js.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/oro.jar" todir="${app.lib.dir}"/>
+        <copy file="${sparx.lib.dir}/redist/syntax.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/xalan.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/xml-apis.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/xerces.jar" todir="${app.lib.dir}"/>

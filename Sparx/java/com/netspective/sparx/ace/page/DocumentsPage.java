@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DocumentsPage.java,v 1.5 2002-08-25 20:37:26 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.6 2002-09-16 02:07:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -60,6 +60,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -78,6 +82,7 @@ import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.ace.AppComponentsExplorerServlet;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
+import com.netspective.sparx.xaf.html.SyntaxHighlight;
 import com.netspective.sparx.xaf.navigate.FileSystemContext;
 import com.netspective.sparx.xaf.navigate.FileSystemEntry;
 import com.netspective.sparx.xaf.page.PageContext;
@@ -92,6 +97,7 @@ public class DocumentsPage extends AceServletPage
     private FileSystemContext fsContext;
     private boolean transformersMapInitialized;
     private Map transformersMap;
+    /*
     static private Map documentHandlerMap;
 
     static
@@ -106,6 +112,7 @@ public class DocumentsPage extends AceServletPage
         documentHandlerMap.put("xsl", xmlHandler);
         documentHandlerMap.put("jsp", xmlHandler);
     }
+    */
 
     public DocumentsPage()
     {
@@ -189,16 +196,8 @@ public class DocumentsPage extends AceServletPage
                 String servletPath = pc.getServletContext().getRealPath("");
                 if(browseFilePath.startsWith(servletPath))
                 {
-                    String fileName = browseFile.getName();
-                    String fileType = fileName.substring(fileName.lastIndexOf('.')+1);
-                    DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(fileType);
-                    if(docContentHandler != null)
-                    {
-                        handleDocument(pc, docContentHandler, browseFile, true);
-                        return;
-                    }
-                    else
-                        throw new ServletException("File type '"+fileType+"' not known.");
+                    if(! handleDocument(pc, browseFile, true))
+                        throw new ServletException("Don't know how to render " + browseFilePath);
                 }
                 else
                     throw new ServletException("File '"+ browseFilePath +"' is not within the context path '"+ servletPath +"'.");
@@ -250,12 +249,7 @@ public class DocumentsPage extends AceServletPage
             }
             else
             {
-                DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(activeEntry.getEntryType());
-                if(docContentHandler != null)
-                {
-                    handleDocument(pc, docContentHandler, activeEntry, false);
-                }
-                else
+                if(! handleDocument(pc, activeEntry, false))
                 {
                     if(transformersMap != null)
                     {
@@ -281,8 +275,12 @@ public class DocumentsPage extends AceServletPage
         }
     }
 
-    private void handleDocument(PageContext pc, DocumentContentHandler docContentHandler, File activeEntry, boolean browsing) throws ServletException, IOException
+    private boolean handleDocument(PageContext pc, File activeEntry, boolean browsing) throws ServletException, IOException
     {
+        StringWriter html = new StringWriter();
+        if(! SyntaxHighlight.emitHtml(activeEntry, html))
+            return false;
+
         handlePageMetaData(pc);
         handlePageHeader(pc);
 
@@ -307,9 +305,14 @@ public class DocumentsPage extends AceServletPage
             transform(pc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
         }
 
-        pc.getResponse().getOutputStream().print("&nbsp;&nbsp;<b><code>"+ activeEntry.getAbsolutePath() +"</code></b>");
-        docContentHandler.generateHtml(pc, new FileInputStream(activeEntry));
+        PrintWriter out = pc.getResponse().getWriter();
+        out.print("&nbsp;&nbsp;<b><code>"+ activeEntry.getAbsolutePath() +"</code></b>");
+        out.print("<table border=0 cellspacing=5><tr><td>");
+        out.print(html.toString());
+        out.print("</td</tr></table>");
 
         handlePageFooter(pc);
+
+        return true;
     }
 }

@@ -166,7 +166,7 @@
     </ul>
 	<h1>SQL</h1>
 	<pre>
-		<xsl:value-of select="text()"/>
+		<xsl:value-of select="sql-html" disable-output-escaping="yes"/>
 	</pre>
 	<xsl:if test="params">
 	<h1>Bind Parameters</h1>

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.3 2002-09-07 23:06:15 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.4 2002-09-16 02:07:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -64,10 +64,15 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.io.StringReader;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 import org.apache.oro.text.perl.Perl5Util;
 
 import com.netspective.sparx.util.config.Configuration;
@@ -79,6 +84,7 @@ import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.xaf.html.SyntaxHighlight;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogDirector;
@@ -149,6 +155,23 @@ public class StatementInfo
             this.sql = perlUtil.substitute("s/" + replStr + "/\n/g", sql);
 
         this.sql = this.sql.trim();
+
+        if(stmtElem != null)
+        {
+            Document doc = stmtElem.getOwnerDocument();
+            Element sqlText = doc.createElement("sql-html");
+            StringWriter highlSql = new StringWriter();
+            try
+            {
+                SyntaxHighlight.emitHtml("sql", new StringReader(this.sql), highlSql);
+            }
+            catch (Exception e)
+            {
+                highlSql.write(e.getMessage());
+            }
+            sqlText.appendChild(doc.createTextNode(highlSql.toString()));
+            stmtElem.appendChild(sqlText);
+        }
 
         sqlLinesCount = 0;
         sqlMaxLineSize = 0;
@@ -443,7 +466,18 @@ public class StatementInfo
     {
         StringBuffer html = new StringBuffer();
         html.append("<pre>");
-        html.append(getSql(vc));
+
+        StringWriter highlSql = new StringWriter();
+        try
+        {
+            SyntaxHighlight.emitHtml("sql", new StringReader(this.sql), highlSql);
+        }
+        catch (Exception e)
+        {
+            highlSql.write(e.getMessage());
+        }
+
+        html.append(highlSql.toString());
         html.append("</pre>");
         if(parameters != null)
         {
