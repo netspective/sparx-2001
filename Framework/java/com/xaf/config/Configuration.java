@@ -169,6 +169,14 @@ public class Configuration extends HashMap
 					manager.addError("Unknown property type '"+propType+"'");
 				}
 			}
+			else if(childName.equals("system-property"))
+			{
+				Element propertyElem = (Element) childNode;
+				Property prop = new StringProperty();
+				prop.importFromXml(propertyElem);
+
+				System.setProperty(prop.getName(), prop.getValue(null));
+			}
 			else if(childName.equals("properties"))
 			{
 				Element propertiesElem = (Element) childNode;
