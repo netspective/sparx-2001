@@ -37,6 +37,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 	private String aceHomeStyleSheet;
 	private SchemaGeneratorDialog dialog;
 	private FileSystemContext projectFSContext;
+	private Properties buildProperties;
 
 	public class GenerateDDLOptions
 	{
@@ -68,6 +69,30 @@ public class AppComponentExplorerServlet extends HttpServlet
     public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
+
+		buildProperties = new Properties();
+		try
+		{
+		    ClassLoader cl = ClassLoader.getSystemClassLoader();
+		    java.net.URL url = cl.getResource("build.properties");
+			if(url != null)
+			{
+				InputStream is = url.openStream();
+				buildProperties.load(is);
+				is.close();
+			}
+			else
+				throw new IOException("file not found.");
+		}
+		catch(IOException e)
+		{
+			buildProperties.setProperty("build.product.name", "build.properties not found");
+			buildProperties.setProperty("build.version.major", "0");
+			buildProperties.setProperty("build.version.minor", "0");
+			buildProperties.setProperty("build.number", "0");
+			buildProperties.setProperty("build.date", "unknown");
+		}
+
 		ServletContext context = config.getServletContext();
 		manager = ConfigurationManagerFactory.getManager(context);
 		if(manager == null)
@@ -76,7 +101,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		if(appConfig == null)
 			throw new ServletException("Unable to obtain the default Configuration");
 
-		ValueContext vc = new ServletValueContext(null, null, context);
+		ValueContext vc = new ServletValueContext(context, null, null, null);
 		aceHomeStyleSheet = appConfig.getValue(vc, "app.ace.browse-xsl");
 		try
 		{
@@ -172,13 +197,13 @@ public class AppComponentExplorerServlet extends HttpServlet
 			dialog = new SchemaGeneratorDialog();
 
 		ServletContext context = getServletContext();
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 		SchemaDocument schema = SchemaDocFactory.getDoc(appConfig.getValue(vc, "app.schema.source-file"));
 
 		out.write("<table class='heading' border='0' cellspacing='0' cellpadding='5'><tr class='heading'><td class='heading'>Generate DDL</td></tr>");
 		out.write("<tr class='heading_rule'><td height='1' colspan='2'></td></tr><table>");
 
-		DialogContext dc = new DialogContext(request, response, getServletContext(), dialog, SkinFactory.getDialogSkin());
+		DialogContext dc = new DialogContext(context, this, request, response, dialog, SkinFactory.getDialogSkin());
 		dialog.prepareContext(dc);
 		if(! dc.inExecuteMode())
 		{
@@ -230,7 +255,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath());
 
 		ServletContext context = getServletContext();
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 
 		for(Iterator i = appConfig.entrySet().iterator(); i.hasNext(); )
 		{
@@ -253,7 +278,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		preparePage(request, response, "/config");
 
 		ServletContext context = getServletContext();
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 
 		Document configDoc = null;
 		try
@@ -308,7 +333,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		preparePage(request, response, "/factories");
 
 		ServletContext context = getServletContext();
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 
 		Document facDoc = null;
 		try
@@ -343,7 +368,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		preparePage(request, response, "/schema");
 
 		ServletContext context = getServletContext();
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 		SchemaDocument schema = SchemaDocFactory.getDoc(appConfig.getValue(vc, "app.schema.source-file"));
 		String styleSheet = appConfig.getValue(vc, "app.ace.schema-browser-xsl");
 
@@ -357,7 +382,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 
 		ServletContext context = getServletContext();
 		DialogManager manager = DialogManagerFactory.getManager(context);
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 		String styleSheet = appConfig.getValue(vc, "app.ace.ui-browser-xsl");
 
         PrintWriter out = response.getWriter();
@@ -370,7 +395,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 
 		ServletContext context = getServletContext();
 		StatementManager manager = StatementManagerFactory.getManager(context);
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 		String styleSheet = appConfig.getValue(vc, "app.ace.sql-browser-xsl");
 
         PrintWriter out = response.getWriter();
@@ -380,7 +405,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 	public void doProject(HttpServletRequest request, HttpServletResponse response, String relativePath) throws ServletException, IOException
 	{
 		ServletContext context = getServletContext();
-		ValueContext vc = new ServletValueContext(request, response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 		if(projectFSContext == null)
 		{
 			projectFSContext = new FileSystemContext(
@@ -432,7 +457,7 @@ public class AppComponentExplorerServlet extends HttpServlet
         PrintWriter out = response.getWriter();
 		out.write("<h1>Dialog: "+dialogId+"</h1>");
 		out.write("<p>&nbsp;<center>");
-		out.write(dialog.getHtml((HttpServletRequest) request, (HttpServletResponse) response, context, SkinFactory.getDialogSkin()));
+		out.write(dialog.getHtml(context, this, (HttpServletRequest) request, (HttpServletResponse) response, SkinFactory.getDialogSkin()));
 		out.write("</center>");
 	}
 
@@ -443,7 +468,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 
         PrintWriter out = response.getWriter();
 		DatabaseContext dbc = DatabaseContextFactory.getContext(request, context);
-		ValueContext vc = new ServletValueContext((HttpServletRequest) request, (HttpServletResponse) response, context);
+		ValueContext vc = new ServletValueContext(context, this, request, response);
 
 		out.write("<h1>SQL: "+stmtId+"</h1>");
 		try
@@ -476,7 +501,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 
 		QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
 		QueryBuilderDialog dialog = queryDefn.getBuilderDialog();
-		out.print(dialog.getHtml(request, response, context, SkinFactory.getDialogSkin()));
+		out.print(dialog.getHtml(context, this, request, response, SkinFactory.getDialogSkin()));
 	}
 
 	public void doTestQueryDefnSelectDialog(HttpServletRequest request, HttpServletResponse response, String queryDefnId, String dialogId) throws ServletException, IOException
@@ -490,7 +515,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 
 		QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
 		QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogId);
-		out.print(dialog.getHtml(request, response, context, SkinFactory.getDialogSkin()));
+		out.print(dialog.getHtml(context, this, request, response, SkinFactory.getDialogSkin()));
 	}
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -573,7 +598,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		}
 		else
 		{
-			ValueContext vc = new ServletValueContext(request, response, context);
+			ValueContext vc = new ServletValueContext(context, this, request, response);
 			if("javadoc".equals(area))
 				response.sendRedirect(appConfig.getValue(vc, "app.ace.javadoc-url"));
 			else if("tagdoc".equals(area))
@@ -595,6 +620,14 @@ public class AppComponentExplorerServlet extends HttpServlet
 			else
 			{
 				preparePage(request, response, null);
+				out.write("<p><br>&nbsp;&nbsp;<b><font color='red'>" +
+					buildProperties.getProperty("build.product.name") + " version " +
+					buildProperties.getProperty("build.version.major") + "." +
+					buildProperties.getProperty("build.version.minor") + "." +
+					buildProperties.getProperty("build.number") + " built " +
+					buildProperties.getProperty("build.date") +
+					"</font>"
+					);
 			}
 		}
     }
