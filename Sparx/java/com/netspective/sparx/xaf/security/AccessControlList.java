@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AccessControlList.java,v 1.3 2002-11-30 16:39:44 shahid.shah Exp $
+ * $Id: AccessControlList.java,v 1.4 2002-12-11 21:43:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -274,7 +274,7 @@ public class AccessControlList extends XmlSource implements FactoryListener
                 for(Iterator i = context.inheritors.iterator(); i.hasNext();)
                 {
                     Element inheritor = (Element) i.next();
-                    inheritNodes(inheritor, context.permissions, INHERIT_ATTR_NAME);
+                    inheritNodes(inheritor, context.permissions, INHERIT_ATTR_NAME, defaultExcludeElementsFromInherit);
 
                     // make sure the full-names have the right parent names
                     String inhFullName = inheritor.getAttribute("full-name");
