@@ -228,6 +228,14 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 <xsl:variable name="java-type-init-cap"><xsl:value-of select="@_gen-java-type-init-cap"/></xsl:variable>
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:if test="java-type and @primarykey = 'yes'">
+    /** 
+     * Updates the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type
+     */
+    public boolean updateBy<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Row row, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException 
+    {
+        return update(cc, row, &quot;<xsl:value-of select="@_gen-member-name"/> = ?&quot;, new <xsl:value-of select="$java-class-spec"/>(value));
+    }
+    
 	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException 
 	{ 
@@ -318,8 +326,17 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 <xsl:for-each select="java-dal-accessor[@type='equality' and @name]">
     /** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by keys <xsl:value-of select="@columns"/> **/
     public <xsl:value-of select="../@_gen-rows-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>(ConnectionContext cc, <xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/java-class"/><xsl:text> </xsl:text> <xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>) throws NamingException, SQLException
-    { 
-        return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, new String[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="../../column[@name=$index-column]/@_gen-constant-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, new Object[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, null);        
+    {         
+        <xsl:for-each select="column">
+            <xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable>
+            <xsl:if test="../../column[@name=$index-column]/@required and ../../column[@name=$index-column]/@required='yes'">
+        if (<xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/> == null)
+        {
+            throw new SQLException("'" + <xsl:value-of select="../../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="../../column[@name=$index-column]/@_gen-constant-name"/> + "' column is a required field.");
+        }
+            </xsl:if>
+        </xsl:for-each> 
+        return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, new String[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="../../column[@name=$index-column]/@_gen-constant-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, new Object[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, null, true);
     }    
 </xsl:for-each>
 
