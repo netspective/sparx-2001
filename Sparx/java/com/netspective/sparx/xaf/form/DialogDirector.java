@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogDirector.java,v 1.2 2002-02-08 21:50:20 snshah Exp $
+ * $Id: DialogDirector.java,v 1.3 2002-08-17 15:14:51 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -229,9 +229,17 @@ public class DialogDirector extends DialogField
         writer.write("' ");
         if(cancelActionUrl == null)
         {
-            writer.write("onclick=\"document.location = '");
-            writer.write(dc.getOriginalReferer());
-            writer.write("'\" ");
+            String referer = dc.getOriginalReferer();
+            if(referer != null)
+            {
+                writer.write("onclick=\"document.location = '");
+                writer.write(referer);
+                writer.write("'\" ");
+            }
+            else
+            {
+                writer.write("onclick=\"history.back()\" ");
+            }
         }
         else
         {
