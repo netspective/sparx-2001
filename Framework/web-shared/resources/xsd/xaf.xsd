@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Shahid N. Shah (Netspective Communications Corporation) -->
+<!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Aye Thu (TRW) -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2000/10/XMLSchema" elementFormDefault="qualified">
 	<xsd:element name="xaf">
 		<xsd:annotation>
@@ -344,6 +344,14 @@
 					</xsd:complexContent>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="field.email" type="field.textType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="field.zip" block="extension" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
 		</xsd:choice>
 	</xsd:group>
 	<xsd:complexType name="field.textType">
@@ -358,6 +366,9 @@
 				<xsd:attribute name="lowercase" type="yes-no-enum" use="optional" value="no"/>
 				<xsd:attribute name="trim" type="yes-no-enum" use="optional" value="no"/>
 				<xsd:attribute name="mask-entry" type="yes-no-enum" use="optional" value="no"/>
+				<xsd:attribute name="validate-pattern" type="xsd:string" use="optional"/>
+				<xsd:attribute name="validate-msg" type="xsd:short" use="optional"/>
+				<xsd:attribute name="format-pattern" type="xsd:string" use="optional"/>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -366,14 +377,20 @@
 			<xsd:documentation>The base complex type for all datetime fields</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexContent>
-			<xsd:extension base="field.textType"/>
+			<xsd:extension base="field.textType">
+				<xsd:attribute name="min" type="xsd:string" use="optional"/>
+				<xsd:attribute name="max" type="xsd:string" use="optional"/>
+				<xsd:attribute name="future-only" type="yes-no-enum" use="optional" value="no"/>
+				<xsd:attribute name="past-only" type="yes-no-enum" use="optional" value="no"/>
+				<xsd:attribute name="strict-year" type="yes-no-enum" use="optional" value="yes"/>
+			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
 	<xsd:attributeGroup name="report-column">
 		<xsd:annotation>
 			<xsd:documentation>Attributes that are common to all report columns</xsd:documentation>
 		</xsd:annotation>
-		<xsd:attribute name="heading" type="xsd:string" use="optional"/>
+		<xsd:attribute name="heading" type="single-value-source" use="optional"/>
 		<xsd:attribute name="url" type="xsd:uriReference" use="optional"/>
 		<xsd:attribute name="align" use="optional" value="left">
 			<xsd:simpleType>
@@ -485,6 +502,7 @@
 		<xsd:attribute name="value" type="single-value-source" use="required"/>
 		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional"/>
 		<xsd:attribute name="allow-null" type="yes-no-enum" use="optional"/>
+		<xsd:attribute name="bind-expr" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 	<xsd:simpleType name="query-defn-comparison-id">
 		<xsd:annotation>
@@ -501,6 +519,19 @@
 			<xsd:enumeration value="less-than-equal"/>
 		</xsd:restriction>
 	</xsd:simpleType>
+	<xsd:complexType name="query-defn-field-type">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition field element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="id" type="query-defn-field-id" use="required"/>
+		<xsd:attribute name="join" type="query-defn-join-id" use="required"/>
+		<xsd:attribute name="caption" type="xsd:string" use="optional"/>
+		<xsd:attribute name="column-expr" type="xsd:string" use="optional"/>
+		<xsd:attribute name="column" type="xsd:string" use="required"/>
+		<xsd:attribute name="where-expr" type="xsd:string" use="optional"/>
+		<xsd:attribute name="order-by-expr" type="xsd:string" use="optional"/>
+		<xsd:attribute name="allow-display" type="yes-no-enum" use="optional" value="yes"/>
+	</xsd:complexType>
 	<xsd:simpleType name="query-defn-condition-connector-enum">
 		<xsd:annotation>
 			<xsd:documentation>Query Definition condition connector enumeration</xsd:documentation>
@@ -525,11 +556,19 @@
 					<xsd:attribute name="field" type="single-value-source" use="required"/>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="condition" type="query-defn-conditionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="condition" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="query-defn-conditionType">
+							<xsd:attribute name="bind-expr" type="xsd:string" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="where-expr" type="query-defn-where-exprType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:choice>
 		<xsd:attribute name="id" type="xsd:string" use="required"/>
-		<xsd:attribute name="caption" type="xsd:string" use="required"/>
+		<xsd:attribute name="heading" type="xsd:string" use="required"/>
 		<xsd:attribute name="distinct" type="yes-no-enum" use="optional" value="yes"/>
 	</xsd:complexType>
 	<xsd:complexType name="query-defn-where-exprType">
