@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ComponentCommandFactory.java,v 1.5 2003-02-03 00:42:26 shahid.shah Exp $
+ * $Id: ComponentCommandFactory.java,v 1.6 2003-04-07 15:27:33 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -65,6 +65,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.io.IOException;
+import java.io.Writer;
+import java.io.StringWriter;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
@@ -73,6 +75,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.PageContext;
 
 public class ComponentCommandFactory
 {
@@ -220,6 +225,48 @@ public class ComponentCommandFactory
             return false;
         }
     }
+
+/**
+     * Process the page context for component commands
+     * @param pageContext
+     * @param writer
+     * @return
+     * @throws ComponentCommandException
+     * @throws IOException
+     */
+    public static boolean handleDefaultBodyItem(PageContext pageContext, Writer writer) throws ComponentCommandException, IOException
+    {
+        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
+        HttpServletResponse resp = (HttpServletResponse) pageContext.getResponse();
+        if (writer == null)
+            writer = new StringWriter();
+        String pageCmdReqParamValue = req.getParameter(ComponentCommand.PAGE_COMMAND_REQUEST_PARAM_NAME);
+        if(pageCmdReqParamValue == null)
+            return false;
+
+        String pageCmd = "unknown";
+        String pageCmdParam = null;
+        int cmdDelimPos = pageCmdReqParamValue.indexOf(CMDNAME_AND_PARAM_DELIM);
+        if(cmdDelimPos != -1)
+        {
+            pageCmd = pageCmdReqParamValue.substring(0, cmdDelimPos);
+            pageCmdParam = pageCmdReqParamValue.substring(cmdDelimPos+1);
+        }
+
+        ComponentCommand command = ComponentCommandFactory.getCommand(pageCmd, pageCmdParam);
+        if(command != null)
+        {
+            command.handleCommand(new ServletValueContext(pageContext.getServletContext(),
+                    (Servlet) pageContext.getPage(), req, resp), writer, false);
+            return true;
+        }
+        else
+        {
+            writer.write("Page command '" + pageCmd + "' not recognized.");
+            return false;
+        }
+    }
+
 
     public static void createCatalog(Element parent)
     {
