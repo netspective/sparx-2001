@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: popup.js,v 1.4 2002-12-31 19:56:44 shahid.shah Exp $
+ * $Id: popup.js,v 1.5 2003-04-18 00:29:43 aye.thu Exp $
  */
 
 //****************************************************************************
@@ -91,11 +91,13 @@ function PopulateControlInfo(sourceForm, sourceField, fieldName)
 		this.control = this.field.getControl(this.dialog);
 	else if(fieldName.indexOf(adjacentAreaSuffix) > 0)
 	{
+	    // this is the adjacent field so get the actual field's name
 	    fieldName = fieldName.substring(0, fieldName.length - adjacentAreaSuffix.length);
 	    this.fieldName = fieldName;
     	this.field = this.dialog.fieldsByQualName[fieldName];
     	if(this.field != null)
     	{
+    	    // the  actual field exist so get the adjacent area control
     		this.adjacentArea = this.field.getAdjacentArea(this.dialog);
 	    	if(this.adjacentArea == null)
 		    	alert("In DialogFieldPopup for " + sourceForm + "." + sourceField + ", fill field '" + fieldName + "' could not be found [000].");
@@ -165,6 +167,7 @@ function DialogFieldPopup(sourceForm, sourceField, actionURL, windowClass, close
 	this.windowClass = windowClasses[windowClass];
 	this.popupWindow = null;
 	this.controlsInfo = new Array();
+	this.extractInfo = new Array();
     this.dialog = activeDialog;
     
 	// every arg after allowMultiSelect is a field name that should be "filled"
@@ -174,13 +177,33 @@ function DialogFieldPopup(sourceForm, sourceField, actionURL, windowClass, close
 	var argsLen = arguments.length;
     
 	var controls = this.controlsInfo;
+	/*
 	for(var i = startFillArg; i < argsLen; i++)
 	{
 		var fieldName = arguments[i];
 		var realIndex = i - startFillArg;
 		controls[realIndex] = new PopulateControlInfo(sourceForm, sourceField, fieldName);
 	}
-	
+	*/
+	// expecting the seventh argument to be an array object with the fill field names
+	var fillArray = arguments[startFillArg];
+    if (fillArray != null && fillArray.length != null)
+    {
+        for (var i=0; i < fillArray.length; i++)
+        {
+            var fieldName = fillArray[i];
+            controls[i] = new PopulateControlInfo(sourceForm, sourceField, fieldName);
+        }
+    }
+	if (argsLen == 8)
+	{
+	    this.appendActionUrl = DialogFieldPopup_appendActionUrl;
+        // expecting the last variable as an array object containing field names from which to extract values and
+	    // append to the popup URL
+	    var extractArray = arguments[startFillArg+1];
+	    //this.appendActionUrl(extractArray);
+    }
+
 	// the remaining are object-based methods
 	this.populateControl = DialogFieldPopup_populateControl;
 	this.populateControls = DialogFieldPopup_populateControls;
@@ -189,6 +212,27 @@ function DialogFieldPopup(sourceForm, sourceField, actionURL, windowClass, close
 	this.doPopup();
 }
 
+/*
+function DialogFieldPopup_appendActionUrl(valueArray)
+{
+    // test to make sure it is an array
+    if (valueArray != null && valueArray.length != null)
+    {
+        for (var i=0; i < valueArray.length; i++)
+        {
+            fieldName = valueArray[i];
+            field= activeDialog.fieldsByQualName[fieldName];
+            if(field != null)
+            {
+		        control = field.getControl(this.dialog);
+		        // check if the Url already contains a '?'
+		        this.actionUrl = this.actionUrl + control.value;
+
+		    }
+        }
+    }
+}
+*/
 function DialogFieldPopup_populateControl(value)
 {    
 	this.controlsInfo[0].populateValue(value);
@@ -233,4 +277,14 @@ function chooseItem()
 {
 	var popup = opener.activeDialogPopup;
     popup.populateControlsWithValues(arguments);
+}
+
+function createArray()
+{
+    var newArray =  new Array(arguments.length);
+    for(var i = 0; i < arguments.length; i++)
+	{
+		newArray[i] = arguments[i];
+	}
+	return newArray;
 }
