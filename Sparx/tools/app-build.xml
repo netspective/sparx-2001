@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: app-build.xml,v 1.26 2002-11-05 03:45:31 shahid.shah Exp $
+$Id: app-build.xml,v 1.27 2002-12-04 17:58:15 shahbaz.javeed Exp $
 -->
 
 <project name="app" default="all">
@@ -123,6 +123,7 @@ $Id: app-build.xml,v 1.26 2002-11-05 03:45:31 shahid.shah Exp $
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
         <property name="app.java.dal.jar.name" value="${app.name}-dal.jar"/>
         <property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
+        <property name="app.java.customdal.dir" value="${config.app.customdal.src.path}"/>
         <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.java.dal.jar.name}"/>
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
 
@@ -338,7 +339,7 @@ $Id: app-build.xml,v 1.26 2002-11-05 03:45:31 shahid.shah Exp $
         <dal schema="${config.app.schema.source-file}" dest="${app.java.dal.dir}" stylesheetroot="${java.dal.stylesheet.root.dir}"/>
         <property name="dal.temp.build.dir" value="${app.java.dal.dir}/classes"/>
         <mkdir dir="${dal.temp.build.dir}"/>
-        <javac srcdir="${app.java.dal.dir}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
+        <javac srcdir="${app.java.dal.dir}:${app.java.customdal.dir}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
         <jar jarfile="${app.java.dal.jar}" basedir="${dal.temp.build.dir}">
             <include name="**"/>
         </jar>
