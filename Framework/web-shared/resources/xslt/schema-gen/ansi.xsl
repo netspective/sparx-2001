@@ -64,7 +64,7 @@
 <xsl:if test="$generate-drop-table">
 drop table <xsl:value-of select="$table/@name"/><xsl:value-of select="$statement-terminator"/>
 </xsl:if>
-<xsl:if test="$generate-seq">
+<xsl:if test="$generate-seq = 'yes'">
 <xsl:for-each select="$table/column[@type = 'autoinc']">
 	<xsl:call-template name="sequence-definition">
 		<xsl:with-param name="table" select="$table"/>
