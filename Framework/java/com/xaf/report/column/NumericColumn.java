@@ -43,7 +43,7 @@ public class NumericColumn extends GeneralColumn
         {
             value = ((Number) oData).longValue();
 			NumberFormat fmt = (NumberFormat) getFormatter();
-			data = fmt == null ? data : fmt.format(value);
+			data = fmt == null ? Long.toString(value) : fmt.format(value);
         }
 
         if(doCalc)

@@ -180,7 +180,9 @@ public class GeneralColumn implements ReportColumn
 		setAlignStyle(rc.getAlignStyle());
 		setWidth(rc.getWidth());
 		setCalcCmd(rc.getCalcCmd());
-		setFormatter(rc.getFormatter());
+		Format fmt = rc.getFormatter();
+        if (fmt != null)
+            setFormatter(fmt);
 		setOutput(rc.getOutput());
 	}
 

@@ -8,12 +8,12 @@ public class BuildConfiguration
 	public static final int releaseNumber = 1;
 	public static final int versionMajor = 2;
 	public static final int versionMinor = 8;
-	public static final int buildNumber = 21;
+	public static final int buildNumber = 22;
 
 	static public final int getReleaseNumber() { return releaseNumber; }
 	static public final int getVersionMajor() { return versionMajor; }
 	static public final int getVersionMinor() { return versionMinor; }
-	static public final int getBVuildNumber() { return buildNumber; }
+	static public final int getBuildNumber() { return buildNumber; }
 
 	static public final String getBuildPathPrefix()
 	{

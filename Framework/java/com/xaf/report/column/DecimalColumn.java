@@ -32,7 +32,7 @@ public class DecimalColumn extends NumericColumn
         {
             value = ((Number) oData).doubleValue();
 			NumberFormat fmt = (NumberFormat) getFormatter();
-			data = fmt == null ? data : fmt.format(value);
+			data = fmt == null ? Double.toString(value) : fmt.format(value);
         }
 
         if(doCalc)
