@@ -385,7 +385,10 @@ public abstract class AbstractTable implements Table
         stmt = conn.prepareStatement(sqlString);
         for (int k = 0; k < colValues.length; k++)
         {
-            stmt.setObject(k+1, colValues[k]);
+            // NULL values are never bound so if they are in the list, its probably because
+            // the list has empty entries at the end
+            if (colValues[k] != null)
+                stmt.setObject(k+1, colValues[k]);
         }
         if(stmt.execute())
         {
@@ -412,6 +415,7 @@ public abstract class AbstractTable implements Table
     protected String createPreparedStatmentString(String[] colNames, Object[] colValues)
     {
         Object[] bindValues = new Object[colValues.length];
+        String[] bindColumns = new String[colNames.length];
         StringBuffer selectSqlBuffer = new StringBuffer("select " + getColumnNamesForSelect() + " from " + getName() + " where ");
 
         int newIndex = 0;
@@ -422,6 +426,7 @@ public abstract class AbstractTable implements Table
                 selectSqlBuffer.append(colNames[i] + " = ? ");
                 // Need this column value as a bind parameter
                 bindValues[newIndex] = colValues[i];
+                bindColumns[newIndex] = colNames[i];
                 newIndex++;
             }
             else
@@ -434,6 +439,8 @@ public abstract class AbstractTable implements Table
                 selectSqlBuffer.append("and ");
         }
         colValues = bindValues;
+        colNames = bindColumns;
+
         return selectSqlBuffer.toString();
     }
 
