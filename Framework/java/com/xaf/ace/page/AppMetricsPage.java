@@ -124,13 +124,13 @@ public class AppMetricsPage extends AceServletPage
 
 		Metric metrics = new Metric(null, "Application Metrics", Metric.METRIC_TYPE_GROUP);
 
-		createFileSystemMetrics(metrics, config.getValue(pc, "app.project-root"));
-
 		DialogManager dmanager = DialogManagerFactory.getManager(context);
 		dmanager.getMetrics(metrics);
 
 		StatementManager smanager = StatementManagerFactory.getManager(context);
 		smanager.getMetrics(metrics);
+
+		createFileSystemMetrics(metrics, config.getValue(pc, "app.project-root"));
 
 		try
 		{
