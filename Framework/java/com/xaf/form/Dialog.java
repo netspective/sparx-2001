@@ -36,6 +36,8 @@ public class Dialog
 	private String loopSeparator = "<p>";
 	private boolean contentsFinalized;
 	private int layoutColumnsCount = 1;
+	private boolean retainAllRequestParams;
+	private String[] retainRequestParams;
 
 	public Dialog()
 	{
@@ -75,6 +77,9 @@ public class Dialog
 	public final String getValuesRequestAttrName() { return "dialog-" + name + "-field-values"; }
 
 	public final ArrayList getFields() { return fields; }
+	public final boolean retainRequestParams() { return retainAllRequestParams || (retainRequestParams != null); }
+	public final String[] getRetainRequestParams() { return retainRequestParams; }
+	public final boolean retainAllRequestParams() { return retainAllRequestParams; }
 
 	public final DialogDirector getDirector() { return director; }
 	public void setDirector(DialogDirector value) { director = value; }
@@ -107,6 +112,28 @@ public class Dialog
 
 		if(director == null)
 			director = new DialogDirector();
+
+		String retainRequestParamsStr = elem.getAttribute("retain-params");
+		if(retainRequestParamsStr.length() > 0)
+		{
+			if(retainRequestParamsStr.equals("*"))
+				retainAllRequestParams = true;
+			else
+			{
+				ArrayList paramNames = new ArrayList();
+				StringTokenizer st = new StringTokenizer(retainRequestParamsStr, ",");
+				while(st.hasMoreTokens())
+					paramNames.add(st.nextToken());
+				retainRequestParams = new String[paramNames.size()];
+				paramNames.toArray(retainRequestParams);
+				paramNames = null;
+			}
+		}
+		else
+		{
+			retainAllRequestParams = false;
+			retainRequestParams = null;
+		}
 
 		NodeList children = elem.getChildNodes();
 		for(int n = 0; n < children.getLength(); n++)

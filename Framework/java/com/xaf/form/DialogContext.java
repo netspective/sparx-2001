@@ -221,13 +221,50 @@ public final class DialogContext extends Hashtable implements ValueContext
 
 	public String getStateHiddens()
 	{
-		return
-			"<input type='hidden' name='"+ dialog.getOriginalRefererParamName() +"' value='"+ originalReferer +"'>\n" +
-			"<input type='hidden' name='"+ dialog.getTransactionIdParamName() +"' value='"+ transactionId +"'>\n" +
-			"<input type='hidden' name='"+ dialog.getRunSequenceParamName() +"' value='"+ (runSequence + 1) +"'>\n" +
-			"<input type='hidden' name='"+ dialog.getExecuteSequenceParamName() +"' value='"+ execSequence +"'>\n" +
-			"<input type='hidden' name='"+ dialog.getActiveModeParamName() +"' value='"+ nextMode +"'>\n" +
-			"<input type='hidden' name='"+ dialog.PARAMNAME_DIALOGQNAME +"' value='"+ (runSequence > 1 ? request.getParameter(Dialog.PARAMNAME_DIALOGQNAME) : request.getParameter(DialogManager.REQPARAMNAME_DIALOG)) +"'>\n";
+		StringBuffer hiddens = new StringBuffer();
+		hiddens.append("<input type='hidden' name='"+ dialog.getOriginalRefererParamName() +"' value='"+ originalReferer +"'>\n");
+		hiddens.append("<input type='hidden' name='"+ dialog.getTransactionIdParamName() +"' value='"+ transactionId +"'>\n");
+		hiddens.append("<input type='hidden' name='"+ dialog.getRunSequenceParamName() +"' value='"+ (runSequence + 1) +"'>\n");
+		hiddens.append("<input type='hidden' name='"+ dialog.getExecuteSequenceParamName() +"' value='"+ execSequence +"'>\n");
+		hiddens.append("<input type='hidden' name='"+ dialog.getActiveModeParamName() +"' value='"+ nextMode +"'>\n");
+		hiddens.append("<input type='hidden' name='"+ dialog.PARAMNAME_DIALOGQNAME +"' value='"+ (runSequence > 1 ? request.getParameter(Dialog.PARAMNAME_DIALOGQNAME) : request.getParameter(DialogManager.REQPARAMNAME_DIALOG)) +"'>\n");
+
+		if(dialog.retainRequestParams())
+		{
+			if(dialog.retainAllRequestParams())
+			{
+				for(Enumeration e = request.getParameterNames(); e.hasMoreElements(); )
+				{
+					String paramName = (String) e.nextElement();
+					if( paramName.startsWith(Dialog.PARAMNAME_DIALOGPREFIX) ||
+						paramName.startsWith(Dialog.PARAMNAME_CONTROLPREFIX))
+						continue;
+
+					hiddens.append("<input type='hidden' name='");
+					hiddens.append(paramName);
+					hiddens.append("' value='");
+					hiddens.append(request.getParameter(paramName));
+					hiddens.append("'>\n");
+				}
+			}
+			else
+			{
+				String[] retainParams = dialog.getRetainRequestParams();
+				int retainParamsCount = retainParams.length;
+
+				for(int i = 0; i < retainParamsCount; i++)
+				{
+					String paramName = retainParams[i];
+					hiddens.append("<input type='hidden' name='");
+					hiddens.append(paramName);
+					hiddens.append(" value='");
+					hiddens.append(request.getParameter(paramName));
+					hiddens.append("'>\n");
+				}
+			}
+		}
+
+		return hiddens.toString();
 	}
 
 	public boolean flagIsSet(String fieldQName, long flag)
