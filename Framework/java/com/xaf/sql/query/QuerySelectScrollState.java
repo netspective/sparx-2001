@@ -64,7 +64,7 @@ public class QuerySelectScrollState extends ResultSetScrollState
 					rcl.getColumn(i).importFromColumn(rc);
 			}
 
-			this.skin = new HtmlReportSkin();
+			this.skin = SkinFactory.getReportSkin("report");
 			this.resultSetValid = true;
 		}
         else
