@@ -53,7 +53,17 @@ public class IntegerField extends TextField
 
 	public Object getValueForSqlBindParam(String value)
 	{
-        return new Integer(value);
+        Integer ret = null;
+
+        try
+        {
+            ret = new Integer(value);
+        }
+        catch (NumberFormatException e)
+        {
+            ret = null;
+        }
+        return ret;
 	}
 
 	public boolean isValid(DialogContext dc)
