@@ -18,21 +18,19 @@
 		<column name="project_descr" type="text" size="4000" descr="Project details"/>
 	</table>
 
-	<table name="Project_Relationship_Type" abbrev="PrjRelTy" type="Relationship_Type">
-        <enum id="0" abbrev="Lead">Leader</enum>
-        <enum id="1" abbrev="SE">Member - Software Engineering</enum>
-        <enum id="2" abbrev="RM">Member - Requirements</enum>
-        <enum id="3" abbrev="CM">Member - Configuration Management</enum>
-        <enum id="4" abbrev="QA">Member - Quality Assurance</enum>
-        <enum id="5" abbrev="TE">Member - Test Engineering</enum>
+	<table name="ProjectOrg_Relationship_Type" abbrev="PrjRelTy" type="Relationship_Type">
+        <!-- enums for Project/Org relationship -->
+        <enum id="1" abbrev="Owner">Owner</enum>
+        <enum id="2" abbrev="mainc">Main contractor</enum>
+        <enum id="3" abbrev="subc">Sub contractor</enum>
 	</table>
 
 	<table name="Project_Relationship_Status" abbrev="PrjRelSt" type="Relationship_Status"/>
 
-	<table name="Project_Relation" abbrev="PrjRel" type="PersonOrg_Relationship">
+	<table name="Project_Relation" abbrev="PrjRel" type="ProjectOrg_Relationship">
 		<param name="parent-ref">Project.project_id</param>
 		<param name="record-status-enum">Project_Relationship_Status</param>
-		<param name="relationship-type-enum">Project_Relationship_Type</param>
+		<param name="relationship-type-enum">ProjectOrg_Relationship_Type</param>
 		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
 	</table>
 

@@ -8,7 +8,7 @@
 		<enum id="0" abbrev="I">Inactive</enum>
 		<enum id="1" abbrev="A">Active</enum>
 		<enum id="99" abbrev="U">Unknown</enum>
-	</tabletype>    
+	</tabletype>
 
 	<table name="Record_Status" type="Status">
 		<!-- nothing here yet, just a placeholder for later enhancements -->
@@ -99,6 +99,9 @@
 		<column name="rel_org_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
 	</tabletype>
 
+	<tabletype name="ProjectOrg_Relationship" type="Org_Relationship">
+		<description>Basic information required for an entity that may be related to a project/org combination.</description>
+	</tabletype>
 	<!--
 	*********************************************************************
 	** Contact Methods Tables and Enumerations
