@@ -340,7 +340,7 @@
 				</xsd:element>
 				<xsd:element name="configuration" minOccurs="0" maxOccurs="unbounded">
 					<xsd:annotation>
-						<xsd:documentation>Defines configuration properties. This tag is used in WEB-INF/configuration.xml.</xsd:documentation>
+						<xsd:documentation>Defines configuration properties. This tag is used in WEB-INF/conf/sparx.xml.</xsd:documentation>
 					</xsd:annotation>
 					<xsd:complexType>
 						<xsd:choice>
@@ -391,7 +391,7 @@
 				</xsd:element>
 				<xsd:element name="register-value-source" minOccurs="0" maxOccurs="unbounded">
 					<xsd:annotation>
-						<xsd:documentation>Registers a new value source class for use by other XML resources. This tag is used in WEB-INF/configuration.xml.</xsd:documentation>
+						<xsd:documentation>Registers a new value source class for use by other XML resources. This tag is used in WEB-INF/conf/sparx.xml.</xsd:documentation>
 					</xsd:annotation>
 					<xsd:complexType>
 						<xsd:attribute name="name" type="xsd:string" use="required"/>

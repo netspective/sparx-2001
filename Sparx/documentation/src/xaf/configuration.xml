@@ -56,7 +56,7 @@
 	<channel xsdn-element="/xaf/configuration" describe-children="/*"/>
 
 	<channel
-		heading="Extended examples (standard configuration.xml file)"
+		heading="Extended examples (standard WEB-INF/conf/sparx.xml file)"
 		type="xml-source"
-		sample-app-file="/WEB-INF/configuration.xml"/>
+		sample-app-file="/WEB-INF/conf/sparx.xml"/>
 </page>

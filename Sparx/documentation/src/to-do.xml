@@ -81,7 +81,7 @@
                     <task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE.</name></task>
                     <task><name>Integrate JSP documentation features from <a href=" http://opensource.yourdecor.ca/jspdoc">JSPDoc</a> into ACE.</name></task>
                     <task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
-                    <task><name>Allow multiple SchemaDoc files to be viewed in ACE without requiring changes to configuration.xml.</name></task>
+                    <task><name>Allow multiple SchemaDoc files to be viewed in ACE without requiring changes to WEB-INF/conf/sparx.xml.</name></task>
                     <task><name>Automatically generate dialogs that will test SQL statements and parameters.</name></task>
                     <task><name>When documenting SQL statements, show &lt;report> tag documentation too.</name></task>
                     <task><name>For all pages that show Java classes (DCB, dialog handlers, etc) link the class sources to new code documentation system with syntax highlighting.</name></task>
