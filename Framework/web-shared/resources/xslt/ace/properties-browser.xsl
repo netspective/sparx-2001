@@ -51,11 +51,16 @@
 		<td class="heading"><xsl:value-of select="@name"/>&#160;<font color="black">Factory</font></td>
 	</tr>
 	<tr class="heading_rule">
+		<td height="2" ></td>
+	</tr>
+	<tr bgcolor="#EEEEEE">
+		<td><xsl:value-of select="@class"/></td>
+	</tr>
+	<tr class="heading_rule">
 		<td height="1" ></td>
 	</tr>
 	</table>
 	<br/>
-	<h1><xsl:value-of select="@class"/></h1>
 	<table cellspacing="0" cellpadding="2">
 		<tr bgcolor="beige">
 			<th>Name</th>
