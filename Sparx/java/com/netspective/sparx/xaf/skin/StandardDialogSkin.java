@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.13 2003-01-16 16:18:32 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.14 2003-02-03 00:49:49 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -113,6 +113,7 @@ public class StandardDialogSkin implements DialogSkin
     protected String controlAttrs;
     protected String separatorFontAttrs;
     protected String separatorHtml;
+    protected String separatorBannerTextFontAttrs;
     protected String hintFontAttrs;
     protected String errorMsgFontAttrs;
     protected String captionSuffix;
@@ -149,6 +150,7 @@ public class StandardDialogSkin implements DialogSkin
         controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this, event)' onchange='controlOnChange(this, event)' " +
                 "onblur='controlOnBlur(this, event)' onkeypress='controlOnKeypress(this, event)' onclick='controlOnClick(this, event) '";
         separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
+        separatorBannerTextFontAttrs = "face='arial' size=2 color=#555555";
         separatorHtml = "<hr size=1 color=#555555>";
         hintFontAttrs = "color='navy'";
         errorMsgFontAttrs = "color='red'";
@@ -219,6 +221,8 @@ public class StandardDialogSkin implements DialogSkin
                 controlAttrs = nodeText;
             else if(nodeName.equals("separator-font-attrs") && nodeText != null)
                 separatorFontAttrs = nodeText;
+            else if(nodeName.equals("separator-banner-text-font-attrs"))
+                separatorBannerTextFontAttrs = nodeText;
             else if(nodeName.equals("separator-html") && nodeText != null)
                 separatorHtml = nodeText;
             else if(nodeName.equals("hint-font-attrs") && nodeText != null)
@@ -801,6 +805,12 @@ public class StandardDialogSkin implements DialogSkin
         if(heading != null)
         {
             String sep = "<font " + separatorFontAttrs + "><a name=\"" + URLEncoder.encode(heading) + "\"><b>" + heading + "</b></a></font>";
+            if(field.getBannerText() != null)
+            {
+                sep += "<br><font " + separatorBannerTextFontAttrs + ">";
+                sep += field.getBannerText();
+                sep += "</font>";
+            }
             if(!field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE))
                 sep += separatorHtml;
 
