@@ -2,7 +2,7 @@
 <%@ taglib prefix="xaf" uri="/WEB-INF/tld/sparx.tld"%>
 
 <%
- String heading = request.getParameter("person_name");
+ String heading = "Contact: " + request.getParameter("person_name");
  %>
 <app:page title="Contact Home" heading="<%= heading %>">
 <table width='100%' cellpadding='3' cellspacing='0'>
