@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogDirector.java,v 1.3 2002-08-17 15:14:51 shahid.shah Exp $
+ * $Id: DialogDirector.java,v 1.4 2002-10-13 18:45:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -60,9 +60,11 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.xaf.form.field.DirectorNextActionsSelectField;
 
 public class DialogDirector extends DialogField
 {
@@ -72,6 +74,7 @@ public class DialogDirector extends DialogField
     private SingleValueSource submitActionUrl;
     private SingleValueSource cancelActionUrl;
     private SingleValueSource pendingActionUrl;
+    private DirectorNextActionsSelectField nextActionsField;
 
     public DialogDirector()
     {
@@ -145,6 +148,21 @@ public class DialogDirector extends DialogField
         this.pendingActionUrl = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
     }
 
+    public DirectorNextActionsSelectField getNextActionsField()
+    {
+        return nextActionsField;
+    }
+
+    public void setNextActionsField(DirectorNextActionsSelectField nextActionsField)
+    {
+        this.nextActionsField = nextActionsField;
+    }
+
+    public String getNextActionUrl(DialogContext dc)
+    {
+        return nextActionsField == null ? null : nextActionsField.getSelectedActionUrl(dc);
+    }
+
     public void importFromXml(Element elem)
     {
         super.importFromXml(elem);
@@ -182,6 +200,20 @@ public class DialogDirector extends DialogField
         value = elem.getAttribute("cancel-url");
         if(value.length() != 0)
             this.setCancelActionUrl(value);
+
+        NodeList nextActionsNL = elem.getElementsByTagName("next-actions");
+        if(nextActionsNL != null && nextActionsNL.getLength() == 1)
+        {
+            nextActionsField = new DirectorNextActionsSelectField();
+            nextActionsField.importFromXml((Element) nextActionsNL.item(0));
+        }
+    }
+
+    public void makeStateChanges(DialogContext dc, int stage)
+    {
+        super.makeStateChanges(dc, stage);
+        if(nextActionsField != null)
+            nextActionsField.makeStateChanges(dc, stage);
     }
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
@@ -191,7 +223,8 @@ public class DialogDirector extends DialogField
         String submitCaption = this.submitCaption.getValue(dc);
         String cancelCaption = this.cancelCaption.getValue(dc);
 
-        switch(dc.getDataCommand())
+        int dataCmd = dc.getDataCommand();
+        switch(dataCmd)
         {
             case DialogContext.DATA_CMD_ADD:
             case DialogContext.DATA_CMD_EDIT:
@@ -209,6 +242,16 @@ public class DialogDirector extends DialogField
         }
 
         writer.write("<center>");
+
+        if(nextActionsField != null && nextActionsField.isVisible(dc))
+        {
+            String caption = nextActionsField.getCaption(dc);
+            if(caption != null)
+                writer.write(caption);
+            nextActionsField.renderControlHtml(writer, dc);
+            writer.write("&nbsp;&nbsp;");
+        }
+
         writer.write("<input type='submit' value='");
         writer.write(submitCaption);
         writer.write("' ");

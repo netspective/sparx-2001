@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.19 2002-10-10 22:38:57 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.20 2002-10-13 18:45:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -419,7 +419,7 @@ public class DialogContext extends ServletValueContext
 
         dataCmd = getDataCmdIdForCmdText(dataCmdStr);
         debugFlags = getDebugFlagsForText(debugFlagsStr);
-        createStateFields(dialog.getFields());
+        createStateFields();
 
         DialogDirector director = dialog.getDirector();
         if(director != null)
@@ -432,6 +432,13 @@ public class DialogContext extends ServletValueContext
         LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
     }
 
+    /**
+     * Return the next action url (where to redirect after execute) based on user input or other method.
+     */
+    public String getNextActionUrl(String defaultUrl)
+    {
+        return dialog.getNextActionUrl(this, defaultUrl);
+    }
 
     /**
      * Accept a single or multiple (pipe-separated) debug flags and return a bitmapped set of flags that
@@ -783,6 +790,32 @@ public class DialogContext extends ServletValueContext
         }
     }
 
+    public void createStateFields()
+    {
+        createStateFields(dialog.getFields());
+
+        DialogDirector director = dialog.getDirector();
+        if(director != null)
+        {
+            DialogField field = director.getNextActionsField();
+            if(field != null)
+            {
+                String qName = field.getQualifiedName();
+                if(qName != null)
+                    fieldStates.put(qName, new DialogFieldState(field, dataCmd));
+            }
+        }
+
+        if(runSequence == 1)
+        {
+            Map values = (Map) request.getAttribute(dialog.getValuesRequestAttrName());
+            if(values == null)
+                values = (Map) request.getAttribute(DIALOG_FIELD_VALUES_ATTR_NAME);
+            if(values != null)
+                assignFieldValues(values);
+        }
+    }
+
     public void createStateFields(List fields)
     {
         int fieldsCount = fields.size();
@@ -795,15 +828,6 @@ public class DialogContext extends ServletValueContext
             List children = field.getChildren();
             if(children != null)
                 createStateFields(children);
-        }
-
-        if(runSequence == 1)
-        {
-            Map values = (Map) request.getAttribute(dialog.getValuesRequestAttrName());
-            if(values == null)
-                values = (Map) request.getAttribute(DIALOG_FIELD_VALUES_ATTR_NAME);
-            if(values != null)
-                assignFieldValues(values);
         }
     }
 

@@ -51,67 +51,57 @@
  */
 
 /**
- * $Id: BuildConfiguration.java,v 1.69 2002-10-13 18:45:10 shahid.shah Exp $
+ * $Id: DirectorNextActionsSelectField.java,v 1.1 2002-10-13 18:45:11 shahid.shah Exp $
  */
 
-package com.netspective.sparx;
+package com.netspective.sparx.xaf.form.field;
 
-public class BuildConfiguration
+import org.w3c.dom.Element;
+
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogFieldConditionalAction;
+import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalApplyFlag;
+import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.SingleValueSource;
+
+public class DirectorNextActionsSelectField extends SelectField
 {
-    public static final String productName = "Sparx";
-    public static final String productId = "sparx";
+    public static final String DEFAULT_NAME = "director_next_actions";
 
-    public static final int releaseNumber = 2;
-    public static final int versionMajor = 1;
-    public static final int versionMinor = 9;
-
-    static public final int getReleaseNumber()
+    public void importFromXml(Element elem)
     {
-        return releaseNumber;
+        super.importFromXml(elem);
+
+        if(getSimpleName() == null)
+            setSimpleName(DEFAULT_NAME);
+
+        if(getConditionalActions() == null)
+        {
+            // this field is invisible by default and we turn it "on" and make it visible in ADD mode only
+            setFlag(DialogField.FLDFLAG_INVISIBLE);
+
+            DialogFieldConditionalApplyFlag action = new DialogFieldConditionalApplyFlag(this, DialogField.FLDFLAG_INVISIBLE);
+            action.setClearFlag(true);
+            action.setDataCmd(DialogContext.DATA_CMD_ADD);
+
+            addConditionalAction(action);
+        }
     }
 
-    static public final int getVersionMajor()
+    /**
+     * The next actions field is a SelectField which has a caption and a value. The caption is displayed to the
+     * user and the value is a URL which indicates where they want to go next. The URL can be either a String or
+     * a SingleValueSource that can dynamically compute the next location.
+     */
+    public String getSelectedActionUrl(DialogContext dc)
     {
-        return versionMajor;
-    }
-
-    static public final int getVersionMinor()
-    {
-        return versionMinor;
-    }
-
-    static public final int getBuildNumber()
-    {
-        return BuildLog.BUILD_NUMBER;
-    }
-
-    static public final String getBuildPathPrefix()
-    {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor + "_" + BuildLog.BUILD_NUMBER;
-    }
-
-    static public final String getBuildFilePrefix()
-    {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor;
-    }
-
-    static public final String getVersion()
-    {
-        return releaseNumber + "." + versionMajor + "." + versionMinor;
-    }
-
-    static public final String getVersionAndBuild()
-    {
-        return "Version " + getVersion() + " Build " + BuildLog.BUILD_NUMBER;
-    }
-
-    static public final String getProductBuild()
-    {
-        return productName + " Version " + getVersion() + " Build " + BuildLog.BUILD_NUMBER;
-    }
-
-    static public final String getVersionAndBuildShort()
-    {
-        return "v" + getVersion() + " b" + BuildLog.BUILD_NUMBER;
+        String value = dc.getRequest().getParameter(getId());
+        if(value == null)
+            return null;
+        SingleValueSource svs = ValueSourceFactory.getSingleOrStaticValueSource(value);
+        if(svs == null)
+            return null;
+        return svs.getValue(dc);
     }
 }

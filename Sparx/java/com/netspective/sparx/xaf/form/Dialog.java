@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.9 2002-10-03 14:54:54 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.10 2002-10-13 18:45:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -493,7 +493,19 @@ public class Dialog
         return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS);
     }
 
-    public final DialogDirector getDirector()
+    public String getNextActionUrl(DialogContext dc, String defaultUrl)
+    {
+        if(director == null)
+            return defaultUrl;
+
+        String result = director.getNextActionUrl(dc);
+        if(result == null)
+            return defaultUrl;
+
+        return result;
+    }
+
+    public DialogDirector getDirector()
     {
         return director;
     }
@@ -901,6 +913,9 @@ public class Dialog
             DialogField field = (DialogField) i.next();
             field.makeStateChanges(dc, stage);
         }
+        DialogDirector director = getDirector();
+        if(director != null)
+            director.makeStateChanges(dc, stage);
     }
 
     /**

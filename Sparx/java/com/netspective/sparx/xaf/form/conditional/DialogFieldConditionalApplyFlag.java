@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldConditionalApplyFlag.java,v 1.4 2002-02-02 00:00:30 snshah Exp $
+ * $Id: DialogFieldConditionalApplyFlag.java,v 1.5 2002-10-13 18:45:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.conditional;
@@ -201,6 +201,11 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
     public int getDataCmd()
     {
         return dataCmd;
+    }
+
+    public void setDataCmd(int dataCmd)
+    {
+        this.dataCmd = dataCmd;
     }
 
     public void setDataCmd(String dataCmdStr)
