@@ -5,14 +5,14 @@ echo.
 set SAVECP=%CLASSPATH%
 echo classpath at start is '%CLASSPATH%'
 
-if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\jdk1.3
-if "%ANT_HOME%" == "" set ANT_HOME=C:\utils\java\jakarta-ant-1.3
-if "%XERCES_JAR%" == "" set XERCES_JAR=C:\Utils\java\xerces-1_4_1\xerces.jar
-if "%XALAN_JAR%" == "" set XALAN_JAR=C:\Utils\java\xalan-j_2_1_0\bin\xalan.jar
-if "%OROMATCHER_JAR%" == "" set OROMATCHER_JAR=C:\utils\java\jakarta-oro-2.0.2\jakarta-oro-2.0.2.jar
-if "%LOG4J_JAR%" == "" set LOG4J_JAR=C:\utils\java\jakarta-log4j-1.1.3\dist\lib\log4j.jar
-if "%SERVLETAPI_JAR%" == "" set SERVLETAPI_JAR=C:\utils\resin-1.2.5\lib\jsdk22.jar
-if "%JDBC2X_JAR%" == "" set JDBC2X_JAR=C:\utils\resin-1.2.5\lib\jdbc2_0-stdext.jar
+set JAVA_HOME=C:\utils\java\jdk1.3.1
+set ANT_HOME=C:\utils\java\jakarta-ant-1.3
+set XERCES_JAR=C:\utils\java\xerces-1_4_2\xerces.jar
+set XALAN_JAR=C:\utils\java\xalan-j_2_2_D6\bin\xalan.jar
+set OROMATCHER_JAR=C:\utils\java\jakarta-oro-2.0.3\jakarta-oro-2.0.3.jar
+set LOG4J_JAR=C:\utils\java\jakarta-log4j-1.1.3\dist\lib\log4j.jar
+set SERVLETAPI_JAR=C:\utils\java\resin-1.2.7\lib\jsdk22.jar
+set JDBC2X_JAR=C:\utils\java\resin-1.2.7\lib\jdbc2_0-stdext.jar
 
 REM === Automatically add system classes to CLASSPATH ===
 if exist "%JAVA_HOME%\lib\tools.jar" set CLASSPATH=%JAVA_HOME%\lib\tools.jar
