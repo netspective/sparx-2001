@@ -492,104 +492,6 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
     }
 </xsl:if>
 
-    /* COMMENTED OUT BY SHAHID N. SHAH IN SPARX 2.2.1 -- REMOVE FROM row-generator.xsl AFTER TESTING IS COMPLETE
-<xsl:if test="column[@_gen-create-id]">
-	public boolean _beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
-	{
-		if(! super.beforeInsert(cc, dml))
-			return false;
-
-		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
-		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
-		String dbms = databasePolicy.getDBMSName();
-		Object value;
-
-<xsl:for-each select="column[@_gen-create-id = 'autoinc']">
-		if (databasePolicy.retainAutoIncColInDml())
-		{
-<xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
-<xsl:text>		</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-<xsl:text>		</xsl:text>value = databasePolicy.handleAutoIncPreDmlExecute(cc.getConnection(), <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName(), <xsl:value-of select="@_gen-member-name"/>Col.getName());
-<xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, dbms, value);
-<xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
-		} else {
-			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-			dml.createSql(dbms);
-		}
-</xsl:for-each>
-
-<xsl:for-each select="column[@_gen-create-id = 'guid32']">
-		if (databasePolicy.retainGUIDColInDml())
-		{
-<xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
-<xsl:text>		</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-<xsl:text>		</xsl:text>value = databasePolicy.handleGUIDPreDmlExecute(cc.getConnection(), table.getName(), <xsl:value-of select="@_gen-member-name"/>Col.getName());
-<xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, dbms, value);
-<xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
-		} else {
-			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-			dml.createSql(dbms);
-		}
-</xsl:for-each>
-		return true;
-	}
-
-	public boolean _beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
-	{
-		if(! super.beforeUpdate(cc, dml))
-			return false;
-
-		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
-		String dbms = databasePolicy.getDBMSName();
-
-<xsl:for-each select="column[@_gen-create-id = 'autoinc']">
-		if (!databasePolicy.retainAutoIncColInDml())
-		{
-			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-			dml.createSql(dbms);
-		}
-</xsl:for-each>
-<xsl:for-each select="column[@_gen-create-id = 'guid32']">
-		if (!databasePolicy.retainGUIDColInDml())
-		{
-			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-			dml.createSql(dbms);
-		}
-</xsl:for-each>
-		return true;
-	}
-
-	public void _afterInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
-	{
-		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
-		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
-		Object value;
-    String seqOrTableName = "";
-<xsl:for-each select="column[@_gen-create-id = 'autoinc']">
-<xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
-<xsl:text>	</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-		if (databasePolicy.retainAutoIncColInDml())
-		{
-				seqOrTableName = <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName();
-		} else {
-				seqOrTableName = table.getName();
-		}
-<xsl:text>	</xsl:text>value = databasePolicy.handleAutoIncPostDmlExecute(cc.getConnection(), seqOrTableName, <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());
-<xsl:text>	</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
-</xsl:for-each>
-
-<xsl:for-each select="column[@_gen-create-id = 'guid32']">
-<xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
-<xsl:text>	</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-<xsl:text>	</xsl:text>value = databasePolicy.handleGUIDPostDmlExecute(cc.getConnection(), table.getName(), <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());
-<xsl:text>	</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
-</xsl:for-each>
-
-		super.afterInsert(cc, dml);
-	}
-</xsl:if>
-    */
-
 <xsl:for-each select="column">
 <xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
 <xsl:variable name="array-index">COLAI_<xsl:value-of select="@_gen-constant-name"/></xsl:variable>
@@ -655,6 +557,15 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		<xsl:value-of select="@_gen-rows-member-name"/> = table.get<xsl:value-of select="@_gen-rows-name"/>By<xsl:value-of select="@child-col-_gen-method-name"/>(cc, get<xsl:value-of select="../column[@name = $parent-col]/@_gen-method-name"/>());
 		return <xsl:value-of select="@_gen-rows-member-name"/>;
 	}
+
+    /** Executes the SQL necessary to remove the children rows from <xsl:value-of select="@name"/> connected to this row by <xsl:value-of select="@parent-col"/> = <xsl:value-of select="@child-col"/>.
+        Note that this performs a fast SQL delete which means that DAL-based triggers will NOT be called. **/
+    public <xsl:value-of select="@_gen-rows-class-name"/><xsl:value-of select="' '"/>delete<xsl:value-of select="@_gen-rows-name"/>(ConnectionContext cc) throws NamingException, SQLException
+    {
+        <xsl:value-of select="@_gen-table-class-name"/> table = ((<xsl:value-of select="$schema-class-name"/>) getTable().getParentSchema()).get<xsl:value-of select="@_gen-table-name"/>();
+        table.delete<xsl:value-of select="@_gen-rows-name"/>Using<xsl:value-of select="@child-col-_gen-method-name"/>(cc, get<xsl:value-of select="../column[@name = $parent-col]/@_gen-method-name"/>());
+        return <xsl:value-of select="@_gen-rows-member-name"/>;
+    }
 </xsl:for-each>
 }
 </xsl:template>

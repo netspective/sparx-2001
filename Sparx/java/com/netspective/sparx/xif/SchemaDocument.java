@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.24 2002-12-30 18:08:51 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.25 2003-01-12 22:40:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -65,7 +65,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +125,7 @@ public class SchemaDocument extends XmlSource
     public static final String STMTNAME_DEFAULT = "default";
     public static final String QUERYDEFID_DEFAULT = "default";
 
-    public static final String[] MACROSIN_COLUMNNODES = {"name", "parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default", "descr"};
+    public static final String[] MACROSIN_COLUMNNODES = {"name", "parentref", "lookupref", "selfref", "usetype", "sequence-name", "sqldefn", "size", "decimals", "default", "descr"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
@@ -874,6 +873,7 @@ public class SchemaDocument extends XmlSource
             if (nodeName.equals("table"))
             {
                 columnTableNodes.add(childNode);
+                fixupChildTableElement(column, (Element) childNode);
                 fixupTableElement((Element) childNode);
             }
             else if (nodeName.equals("sqldefn"))
@@ -899,10 +899,8 @@ public class SchemaDocument extends XmlSource
                 replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "${decimals}", decimals);
         }
 
-        String customSequence = column.getAttribute("sequence-name");
         String tableAbbrev = table.getAttribute("abbrev");
-
-        if (0 == tableAbbrev.length()) tableAbbrev = table.getAttribute("name");
+        String customSequence = column.getAttribute("sequence-name");
 
         // If we are given a custom sequence name, use it.  Otherwise generate it
         if (0 == customSequence.length()) customSequence = (tableAbbrev + "_" + column.getAttribute("name") + "_SEQ").toUpperCase();
@@ -1106,10 +1104,44 @@ public class SchemaDocument extends XmlSource
         }
     }
 
+    public void fixupChildTableElement(Element parentColumn, Element table)
+    {
+        Element parentColTable = (Element) parentColumn.getParentNode();
+        String parentColTableName = parentColTable.getAttribute("name");
+
+        Map expressionVariables = new HashMap();
+        expressionVariables.put("parentColumn", parentColumn);
+        expressionVariables.put("parentColTable", parentColTable);
+
+        String primaryKey = getPrimaryKey(parentColTable);
+        if (primaryKey != null)
+        {
+            table.setAttribute("_gen-parent-column-table-pri-key-column", primaryKey);
+            table.setAttribute("_gen-parent-column-table-pri-key-ref", parentColTableName + "." + primaryKey);
+        }
+
+        replaceNodeMacros(table, replaceMacrosInTableNodes, expressionVariables);
+
+        if (table.getAttribute("abbrev").length() == 0)
+            table.setAttribute("abbrev", table.getAttribute("abbrev"));
+
+        Element generatedInfo = parentColumn.getOwnerDocument().createElement("generated-child-table");
+        generatedInfo.setAttribute("name", table.getAttribute("name"));
+        generatedInfo.setAttribute("abbrev", table.getAttribute("abbrev"));
+        parentColumn.appendChild(generatedInfo);
+
+        table.setAttribute("is-generated-table", "yes");
+        table.setAttribute("generated-table-for-column", parentColTableName + "." + parentColumn.getAttribute("name"));
+    }
+
     public void fixupTableElement(Element table)
     {
         Map params = new HashMap();
+
         String tableName = table.getAttribute("name");
+        if (table.getAttribute("abbrev").length() == 0)
+            table.setAttribute("abbrev", tableName);
+
         tableParams.put(tableName, params);
         inheritNodes(table, tableTypeNodes, ATTRNAME_TYPE, defaultExcludeElementsFromInherit);
 
@@ -1156,20 +1188,6 @@ public class SchemaDocument extends XmlSource
         Map expressionVariables = new HashMap();
         expressionVariables.put("params", params);
         expressionVariables.put("table", table);
-
-        Element tableParentElem = (Element) table.getParentNode();
-        if (tableParentElem != null && tableParentElem.getNodeName().equals("column"))
-        {
-            Element parentColumn = tableParentElem;
-            Element parentColTable = (Element) parentColumn.getParentNode();
-
-            expressionVariables.put("parentColTable", parentColTable);
-            expressionVariables.put("parentColumn", tableParentElem);
-
-            String primaryKey = getPrimaryKey(parentColTable);
-            if (primaryKey != null)
-                expressionVariables.put("parentColTablePriKey", primaryKey);
-        }
 
         replaceNodeMacros(table, replaceMacrosInTableNodes, expressionVariables);
 
@@ -1251,8 +1269,6 @@ public class SchemaDocument extends XmlSource
         }
 
         if (lastColumnSeen != null) lastColumnSeen.setAttribute("is-last", "yes");
-        if (table.getAttribute("abbrev").length() == 0)
-            table.setAttribute("abbrev", tableName);
 
         if (isEnum && !isLookup)
             table.setAttribute("is-enum", "yes");
@@ -2538,7 +2554,7 @@ public class SchemaDocument extends XmlSource
                     {
                         Element columnElem = (Element) child;
                         String refTableName = columnElem.getAttribute("reftbl");
-                        if (refTableName.length() > 0l)
+                        if (refTableName.length() > 0)
                         {
                             Element refTableElem = (Element) getTables().get(refTableName.toUpperCase());
                             if (refTableElem != null)
@@ -2552,12 +2568,42 @@ public class SchemaDocument extends XmlSource
                             }
                         }
 
-                        NodeList triggerElems = columnElem.getElementsByTagName("trigger");
-                        if(triggerElems.getLength() > 0)
+                        NodeList columnChildren = columnElem.getChildNodes();
+                        for(int columnChildIndex = 0; columnChildIndex < columnChildren.getLength(); columnChildIndex++)
                         {
-                            for(int te = 0; te < triggerElems.getLength(); te++)
+                            Node columnChildNode = columnChildren.item(columnChildIndex);
+                            if(columnChildNode.getNodeType() != Node.ELEMENT_NODE)
+                                continue;
+
+                            String columnChildElemName = columnChildNode.getNodeName();
+                            if("generated-child-table".equals(columnChildElemName))
                             {
-                                Element triggerElem = (Element) triggerElems.item(te);
+                                Element genChildTableRefElem = (Element) columnChildNode;
+                                Element genChildTable = (Element) tableNodes.get(genChildTableRefElem.getAttribute("name").toUpperCase());
+                                NamedNodeMap attrs = genChildTable.getAttributes();
+                                for (int a = 0; a < attrs.getLength(); a++)
+                                {
+                                    // copy all the "generated" names/values for each child table so searches don't have
+                                    // to be performed later
+                                    Node attr = attrs.item(a);
+                                    String attrName = attr.getNodeName();
+                                    if (attrName.startsWith("_gen"))
+                                        genChildTableRefElem.setAttribute(attrName, attr.getNodeValue());
+                                }
+                            }
+                        }
+
+                        // we do this in a separate loop because child table parameters would not have been copied until above loop completes
+                        for(int columnChildIndex = 0; columnChildIndex < columnChildren.getLength(); columnChildIndex++)
+                        {
+                            Node columnChildNode = columnChildren.item(columnChildIndex);
+                            if(columnChildNode.getNodeType() != Node.ELEMENT_NODE)
+                                continue;
+
+                            String columnChildElemName = columnChildNode.getNodeName();
+                            if("trigger".equals(columnChildElemName))
+                            {
+                                Element triggerElem = (Element) columnChildNode;
                                 Map variables = new HashMap();
                                 variables.put("table", tableElem);
                                 variables.put("column", columnElem);

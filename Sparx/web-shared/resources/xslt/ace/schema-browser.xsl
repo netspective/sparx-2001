@@ -282,9 +282,15 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="table_info_caption">Extends (Inherits):</td>
+			<td class="table_info_caption">Extends (inherits):</td>
 			<td class="table_info_value"><xsl:value-of select="@type"/></td>
 		</tr>
+        <xsl:if test="@is-generated-table = 'yes'">
+        <tr>
+            <td class="table_info_caption">Generated for column:</td>
+            <td class="table_info_value"><xsl:value-of select="@generated-table-for-column"/></td>
+        </tr>
+        </xsl:if>
 	</table>
 	<p/>
 	<table border="0" cellspacing="0">
@@ -628,7 +634,7 @@
 	<xsl:for-each select="@*[not(starts-with(name(), 'dal-') or starts-with(name(), '_gen'))]">
 		<tr><td class="column_attr_caption"><xsl:value-of select="name()"/>:</td><td class="column_attr_value"><xsl:value-of select="."/></td></tr>
 	</xsl:for-each>
-	<xsl:for-each select="*[name() != 'referenced-by' and name() != 'trigger' and name() != 'validate']">
+	<xsl:for-each select="*[name() != 'referenced-by' and name() != 'trigger' and name() != 'validate' and name() != 'generated-child-table']">
 		<tr>
 			<td class="column_elem_caption">
 			<xsl:value-of select="name()"/>:
@@ -638,6 +644,7 @@
 			</td>
 		</tr>
 	</xsl:for-each>
+
 	<xsl:if test="referenced-by">
 		<tr valign="top">
 			<td class="column_elem_caption">Referenced by:</td>
@@ -657,6 +664,46 @@
 		</tr>
 	</xsl:if>
 	</table>
+
+    <xsl:if test="generated-child-table">
+    <p/><h1>Generated Child Tables</h1>
+        <table>
+        <xsl:for-each select="generated-child-table">
+            <tr>
+                <td valign="top">
+                    <nobr><b><a href="{concat($root-url, '/table/', @name)}"><xsl:value-of select="@name"/></a></b></nobr>
+                </td>
+                <td>
+                    <table border="0" cellspacing="0">
+                    <tr bgcolor="beige">
+                        <th>Name</th>
+                        <th>&#160;</th>
+                        <th>Value</th>
+                    </tr>
+                    <xsl:for-each select="@*">
+                        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+                        <tr>
+                        <td><xsl:value-of select="name()"/></td>
+                        <td></td>
+                        <td><xsl:value-of select="."/></td>
+                        </tr>
+                        </xsl:if>
+                    </xsl:for-each>
+                    <xsl:for-each select="*">
+                        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+                        <tr>
+                        <td><xsl:value-of select="name()"/></td>
+                        <td></td>
+                        <td><xsl:value-of select="."/></td>
+                        </tr>
+                        </xsl:if>
+                    </xsl:for-each>
+                    </table>
+                </td>
+            </tr>
+        </xsl:for-each>
+        </table>
+    </xsl:if>
 
     <xsl:if test="validate">
     <p/><h1>Validation</h1>
