@@ -22,6 +22,9 @@ public class StringsListValue extends ListSource
     {
     }
 
+	public void setChoiceDelim(String value) { selectChoiceDelim = value; }
+	public void setValueDelim(String value) { selectValueDelim = value; }
+
     public void initializeSource(String srcParams)
     {
 		super.initializeSource(srcParams);
@@ -55,5 +58,6 @@ public class StringsListValue extends ListSource
 		}
 
 		setChoices(choices);
+		setValues(choices.getCaptions());
     }
 }
