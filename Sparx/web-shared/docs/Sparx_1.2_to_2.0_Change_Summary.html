@@ -590,7 +590,7 @@ table.MsoTableGrid
      getTextValue(String)</span> and will now produce an error if the property
      does not exist.</li>
  <li class=MsoNormal style='mso-list:l3 level1 lfo6;tab-stops:list .5in'>In
-     com.netspective.sparx.form.Dialog.java (and all sublasses), the <span
+     <span style='font-size:10.0pt;font-family:"Courier New"'>com.netspective.sparx.form.Dialog.java</span> (and all subclasses), the <span
      style='font-size:10.0pt;font-family:"Courier New"'>String
      getHtml(DialogContext)</span> method has been replaced with <span
      style='font-size:10.0pt;font-family:"Courier New"'>void renderHtml(Writer,
@@ -600,7 +600,13 @@ table.MsoTableGrid
      string. This is a major change to the way dialogs are rendered and it <b
      style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:normal'>will
      break </i></b>your current WEB-INF/classes/…/AppLoginDialog.java file and
-     PageTag.java file. It is very simple to change the API and recompile,
+     PageTag.java file. Also the method <span style='font-size:10.0pt;font-family:"Courier New"'>
+
+     void execute(DialogContext)</span> has been replaced with <span style='font-size:10.0pt;font-family:"Courier New"'>
+
+     void execute(Writer, DialogContext)</span> method. All application dialog classes overwriting this method
+
+     needs to be updated. It is very simple to change the API and recompile,
      though.</li>
  <li class=MsoNormal style='mso-list:l3 level1 lfo6;tab-stops:list .5in'>In <span
      style='font-size:10.0pt;font-family:"Courier New"'>com.netspective.sparx.xaf.form.DialogField.java</span>
