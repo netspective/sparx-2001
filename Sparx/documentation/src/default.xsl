@@ -399,6 +399,15 @@
 		<xsl:when test="@http">
 			<a class="body"><xsl:attribute name="href"><xsl:value-of select="concat('http://', @http)"/></xsl:attribute><xsl:if test="@image"><img border="0"><xsl:attribute name="src"><xsl:value-of select="concat($images-dir, @image)"/></xsl:attribute></img></xsl:if><xsl:apply-templates/></a>
 		</xsl:when>
+		<xsl:when test="@class">
+			<xsl:variable name="qualified-name">
+				<xsl:choose>
+					<xsl:when test="@package"><xsl:value-of select="@package"/>.<xsl:value-of select="@class"/></xsl:when>
+					<xsl:otherwise>com.netspective.<xsl:value-of select="@class"/></xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<a class="body" href="{concat($root-dir, 'javadoc', '/', translate($qualified-name, '.', '/'), '.html')}" target="{concat('javadoc', '-', $qualified-name)}"><code><xsl:value-of select="$qualified-name"/></code></a>
+		</xsl:when>
 	</xsl:choose>
 </xsl:template>
 

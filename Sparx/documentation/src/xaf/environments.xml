@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<page name="xaf/environments">
+	<summary>
+	Sparx supports the notion of <i>environments</i> like Development, Testing, and Production.
+	When in development environment, XML-based resource files like dialogs, schemas, SQL, and others
+	are automatically reloaded. In Testing and Production environments automatic reloading is not
+	enabled. Your applications can use the environment setting to make appropriate decisions about
+	data sources and other environment-specific settings.
+	</summary>
+
+	<section heading="How to specify the execution environment">
+		The environment is specified in <code>WEB-INF/web.xml</code> by setting the context parameter
+		variable <code>app-exec-environment</code>. That variable can have one of the following values
+		(these values are case-sensitive):
+		<ul>
+			<li><code>Production</code></li>
+			<li><code>Testing</code></li>
+			<li><code>Development</code></li>
+		</ul>
+	</section>
+
+	<channel heading="Sample WEB-INF/web.xml">
+<pre>
+&lt;?xml version="1.0"?>
+
+&lt;web-app>
+
+    &lt;-- setup execution environment -->
+    &lt;context-param>
+        &lt;param-name>app-exec-environment&lt;/param-name>
+        &lt;!-- &lt;param-value>Production&lt;/param-value> -->
+        &lt;!-- &lt;param-value>Testing&lt;/param-value> -->
+        &lt;param-value>Development&lt;/param-value>
+    &lt;/context-param>
+
+&lt;/web-app>
+</pre>
+	</channel>
+</page>

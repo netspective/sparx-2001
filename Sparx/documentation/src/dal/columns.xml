@@ -2,8 +2,8 @@
 
 <page name="dal/columns">
 	<summary>
-	Each datatype becomes a Java class that extends the com.xaf.db.schema.AbstractColumn class and implements the
-	com.xaf.db.schema.Column interface. For example, the "text" datatype becomes a schema.column.TextColumn class;
+	Each datatype becomes a Java class that extends the <link class="sparx.xif.dal.AbstractColumn"/> class and implements the
+	<link class="sparx.xif.dal.Column"/> interface. For example, the "text" datatype becomes a schema.column.TextColumn class;
 	the "integer" datatype becomes the schema.column.IntegerColumn class; etc.
 	</summary>
 	<section>

@@ -10,9 +10,9 @@
 	</summary>
 	<section>
 		The method of specifying datasources is dependent upon the application server being used.
-		XAF's Java class <code>com.xaf.db.BasicDatabaseContext</code> uses the JNDI provider to provide pooled database
+		XAF's Java class <link class="sparx.xif.db.context.BasicDatabaseContext"/> uses the JNDI provider to provide pooled database
 		connections. For other application servers, XAF provides an interface called
-		<code>com.xaf.db.DatabaseContext</code> which can be used to implement a new database connection system dependent
+		<link class="sparx.xif.db.DatabaseContext"/> which can be used to implement a new database connection system dependent
 		upon the application server's preferred way of obtaining datasources. The way to register
 		the application server specific database object is to set the property in <code>WEB-INF/configuration.xml</code>:
 

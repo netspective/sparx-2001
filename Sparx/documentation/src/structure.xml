@@ -38,6 +38,7 @@
 			<page level="2" name="xaf/exec-spec" caption="Exec Specs" heading="Executable Specifications"/>
 			<page level="2" name="xaf/value-sources" caption="Value Sources" heading="Value Sources"/>
 			<page level="2" name="xaf/configuration" caption="Configuration" heading="Centralized Configuration"/>
+			<page level="2" name="xaf/environments" caption="Environments"/>
 			<page level="2" name="xaf/dialogs" caption="Dialogs" heading="Advanced forms/dialogs">
 				<page level="3" name="xaf/dialogs/xml" caption="XML" heading="XML Declarations"/>
 				<page level="3" name="xaf/dialogs/controls" caption="Controls"/>
