@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.2 2002-08-17 15:11:24 shahid.shah Exp $
+ * $Id: StatementTask.java,v 1.3 2002-08-24 05:38:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -77,6 +77,7 @@ import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.sql.StatementNotFoundException;
+import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.xaf.task.BasicTask;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
@@ -366,6 +367,16 @@ public class StatementTask extends BasicTask
                     stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
                 else
                     stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
+            }
+            else // we're not producing a report nor are we storing values so just execute and leave (could be DML)
+            {
+                ResultInfo ri = null;
+                if(statementInfo != null)
+                    ri = stmtManager.execute(dbContext, tc, dataSourceId, statementInfo, null);
+                else
+                    ri = stmtManager.execute(dbContext, tc, dataSourceId, stmtName, null);
+                if(ri != null)
+                    ri.close();
             }
         }
         catch(IOException e)
