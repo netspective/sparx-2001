@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementComponentCommand.java,v 1.4 2003-01-20 05:33:06 roque.hernandez Exp $
+ * $Id: StatementComponentCommand.java,v 1.5 2003-02-10 16:46:55 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -263,7 +263,7 @@ public class StatementComponentCommand extends AbstractComponentCommand
             DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), context);
             try
             {
-                manager.produceReport(writer, dbContext, vc, null, skin, statementName, null, null, urlFormats);
+                manager.produceReport(writer, dbContext, vc, null, skin, statementName, null, reportId, urlFormats);
             }
             catch (StatementNotFoundException e)
             {
