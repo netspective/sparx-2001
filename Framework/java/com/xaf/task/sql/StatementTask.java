@@ -27,7 +27,7 @@ public class StatementTask extends AbstractTask
 	private String dataSourceId;
 	private String reportId;
 	private String storeValueName;
-	private SingleValueSource skinValueSource;
+	private SingleValueSource skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
 	private SingleValueSource storeValueSource;
 	private SingleValueSource reportDestValueSource;
 	private boolean produceReport = true;
