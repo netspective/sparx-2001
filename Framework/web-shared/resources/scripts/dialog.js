@@ -368,7 +368,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
         alert("control is null in DialogFieldConditionalDisplay.evaluate(control)");
         return;
     }
-    alert(this.source);
+   
     var fieldAreaId = FIELDROW_PREFIX + this.source;
     var fieldAreaElem = document.all.item(fieldAreaId);
     if(fieldAreaElem == null)
@@ -388,7 +388,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
             }
         }
     }
-    alert(control.checked);
+    
     // now that we have the fieldArea that we want to show/hide go ahead
     // and evaluate the js expression to see if the field should be shown
     // or hidden. remember, the expression is evaluted in the current context
