@@ -227,9 +227,9 @@ public class StatementTask extends AbstractTask
             if(produceReport && storeValueSource == null)
             {
                 if(statementInfo != null)
-                    stmtManager.produceReport(out, dbContext, tc, reportSkin, statementInfo, null, reportId);
+                    stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, statementInfo, null, reportId);
                 else
-                    stmtManager.produceReport(out, dbContext, tc, reportSkin, stmtName, null, reportId);
+                    stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId);
             }
             else if(!produceReport && storeValueSource != null)
             {
@@ -241,9 +241,9 @@ public class StatementTask extends AbstractTask
             else if(produceReport && storeValueSource != null)
             {
                 if(statementInfo != null)
-                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
+                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
                 else
-                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
+                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
             }
 
 			out.close();

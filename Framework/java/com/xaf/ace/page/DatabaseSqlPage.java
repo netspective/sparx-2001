@@ -60,7 +60,7 @@ public class DatabaseSqlPage extends AceServletPage
 		{
 			StatementInfo si = manager.getStatement(stmtId);
 			out.write(si.getDebugHtml(pc));
-			manager.produceReport(out, dbc, pc, SkinFactory.getReportSkin("report"), stmtId, null, null);
+			manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null);
 		}
 		catch(Exception e)
 		{

@@ -525,15 +525,15 @@ public class StatementManager extends XmlSource
 			return null;
 	}
 
-	public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, String statementId, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+	public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
 	{
-		ResultInfo ri = execute(dc, vc, null, statementId, params);
+		ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
 		produceReport(ri, writer, dc, vc, skin, params, reportId);
 	}
 
-	public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, StatementInfo si, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+	public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, StatementInfo si, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
 	{
-		ResultInfo ri = execute(dc, vc, null, si, params);
+		ResultInfo ri = execute(dc, vc, dataSourceId, si, params);
 		produceReport(ri, writer, dc, vc, skin, params, reportId);
 	}
 
@@ -562,21 +562,20 @@ public class StatementManager extends XmlSource
 		conn.close();
 	}
 
-	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
+	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
 	{
-		ResultInfo ri = execute(dc, vc, null, statementId, params);
+		ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         produceReportAndStoreResultSet(writer, dc, vc, skin, ri, params, reportId, vs, storeType);
 	}
 
-	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, StatementInfo si, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
+	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, StatementInfo si, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
 	{
-		ResultInfo ri = execute(dc, vc, null, si, params);
+		ResultInfo ri = execute(dc, vc, dataSourceId, si, params);
         produceReportAndStoreResultSet(writer, dc, vc, skin, ri, params, reportId, vs, storeType);
 	}
 
 	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, ResultInfo ri, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
 	{
-		//ResultInfo ri = execute(dc, vc, null, statementId, params);
 		ResultSet rs = ri.getResultSet();
 
 		// get the ResultSet into a matrix so that we can stash it away later
