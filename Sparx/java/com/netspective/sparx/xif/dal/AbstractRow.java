@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractRow.java,v 1.7 2002-12-23 05:07:01 shahid.shah Exp $
+ * $Id: AbstractRow.java,v 1.8 2002-12-30 18:07:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -626,15 +626,15 @@ public abstract class AbstractRow implements Row
         return true;
     }
 
-    public void afterInsert(ConnectionContext cc) throws NamingException, SQLException
+    public void afterInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
     {
     }
 
-    public void afterUpdate(ConnectionContext cc) throws NamingException, SQLException
+    public void afterUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
     {
     }
 
-    public void afterDelete(ConnectionContext cc) throws NamingException, SQLException
+    public void afterDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
     {
     }
 
@@ -647,7 +647,6 @@ public abstract class AbstractRow implements Row
     {
     }
 
-
     public boolean isValid()
     {
         RowValidationResult brvResult = getValidationResult();
@@ -657,5 +656,38 @@ public abstract class AbstractRow implements Row
         return brvResult.isValid();
     }
 
+    public String toString()
+    {
+        List columns = rowTable.getColumnsList();
+
+        StringBuffer str = new StringBuffer();
+        str.append("Class = ");
+        str.append(this.getClass().getName());
+        str.append(", Primary Key = ");
+        str.append(getActivePrimaryKeyValue());
+        str.append("\n");
+        for(int columnIndex = 0; columnIndex < columns.size(); columnIndex++)
+        {
+            Column column = (Column) columns.get(columnIndex);
+            Object value = getDataByColumn(column);
+            Object valueForBindParam = column.getValueForSqlBindParam(value);
+            str.append(column.getName());
+            str.append(" = ");
+            if(value != null)
+            {
+                str.append(value.toString() + " (" + value.getClass().getName() + ")");
+                if(! value.getClass().getName().equals(valueForBindParam.getClass().getName()))
+                    str.append("[BIND AS "+ valueForBindParam.getClass().getName() +"]");
+            }
+            else
+                str.append("NULL");
+
+            String customSqlExpr = sqlExprDataToString(column.getIndexInRow());
+            if(customSqlExpr != null)
+                str.append(" [SQL Expr: '" + customSqlExpr + "']");
+            str.append("\n");
+        }
+        return str.toString();
+    }
 
 }

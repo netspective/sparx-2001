@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Row.java,v 1.7 2002-12-23 05:07:01 shahid.shah Exp $
+ * $Id: Row.java,v 1.8 2002-12-30 18:07:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -395,17 +395,17 @@ public interface Row
     /**
      * This method is executed immediately after a successful insert action on this row.
      */
-    public void afterInsert(ConnectionContext cc) throws NamingException, SQLException;
+    public void afterInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
     /**
      * This method is executed immediately after a successful update action on this row.
      */
-    public void afterUpdate(ConnectionContext cc) throws NamingException, SQLException;
+    public void afterUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
     /**
      * This method is executed immediately after a successful delete action on this row.
      */
-    public void afterDelete(ConnectionContext cc) throws NamingException, SQLException;
+    public void afterDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
     /**
      * Return true if this row has the ability to contain children. This method only returns
