@@ -4,5 +4,5 @@
 
 <app:page title="Browse Contacts" heading="Browse Contacts">
 
-
+    <xaf:query-select-dialog source="Person" name="person_search"/>
 </app:page>

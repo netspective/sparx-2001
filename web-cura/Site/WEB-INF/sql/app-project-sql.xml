@@ -13,8 +13,8 @@
                 project_id = ?
             <report heading="Overview">
 				<banner>
-                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;org_id=${request:project_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;org_id=${request:project_id}"/>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;project_id=${request:project_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;project_id=${request:project_id}"/>
                 </banner>
                 <column heading="ID" align="left"/>
                 <column heading="Name" align="left"/>
@@ -38,7 +38,7 @@
             <params>
                 <param value="request:project_id"/>
             </params>
-            <report heading="Overview">
+            <report heading="Project Members">
 				<banner>
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;org_id=${request:project_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;org_id=${request:project_id}"/>

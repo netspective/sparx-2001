@@ -12,6 +12,7 @@ import com.xaf.security.AuthenticatedUser;
 import com.xaf.db.ConnectionContext;
 import com.xaf.db.DatabaseContextFactory;
 import dal.domain.Project;
+import dal.domain.rows.ProjectRelationRows;
 import dal.domain.row.ProjectRow;
 import dal.domain.row.ProjectRelationRow;
 import dal.table.ProjectTable;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Iterator;
 import java.math.BigDecimal;
 
 public class ProjectDialog extends Dialog
@@ -36,16 +38,16 @@ public class ProjectDialog extends Dialog
 
         // you should almost always call dc.isInitialEntry() to ensure that you're not
         // populating data unless the user is seeing the data for the first time
-        //if (!dc.isInitialEntry())
-        //    return;
+        if (!dc.isInitialEntry())
+            return;
 
         // now do the populating using DialogContext methods
-        //if (dc.editingData())
-        //{
-            //String personId = dc.getRequest().getParameter("project_id");
-            //dc.populateValuesFromStatement("person.information", new Object[] {personId});
+        if (dc.editingData())
+        {
+            String projectId = dc.getRequest().getParameter("project_id");
+            dc.populateValuesFromStatement("project.information", new Object[] {new Long(projectId)});
             //dc.populateValuesFromStatement("person.address-by-id", new Object[] {personId});
-        //}
+        }
     }
 
     public void makeStateChanges(DialogContext dc, int stage)
@@ -75,26 +77,73 @@ public class ProjectDialog extends Dialog
         {
             // dialog is in the add data command mode
             this.processAddData(dc);
-            HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-            String url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id");
-            try
-            {
-                ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                return "Failed to create response URL.";
-            }
         }
 
-        /*
+
         if (dc.editingData())
         {
             // dialog is in the edit data command mode
+            this.processEditData(dc);
         }
-        */
+        HttpServletRequest request = (HttpServletRequest)dc.getRequest();
+        String url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id");
+        try
+        {
+            ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "Failed to create response URL.";
+        }
+
         return "";
+    }
+
+    /**
+     * process the updated data
+     */
+    protected void processEditData(DialogContext dc)
+    {
+        try
+        {
+            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
+                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+
+            cc.beginTransaction();
+
+            // the dialog's context is represented by its own custom bean class
+            dialog.context.project.RegistrationContext rc = (dialog.context.project.RegistrationContext) dc;
+
+            ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
+            ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
+            projectRow.setProjectName(rc.getProjectName());
+            projectRow.setProjectDescr(rc.getProjectDescr());
+            projectTable.update(cc, projectRow);
+
+            ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
+            ProjectRelationRows projRelRows =  projectRow.getProjectRelationRows(cc);
+
+            Iterator list = projRelRows.listIterator();
+            while (list.hasNext())
+            {
+                ProjectRelationRow projRelRow = (ProjectRelationRow)list.next();
+                // NOTE: relationships have not been defined yet. Using 1 as a dummy
+                if (projRelRow.getRelType().intValue() == 1)
+                {
+                    projRelRow.setNotifyEmail(rc.getNotifyEmail());
+                    projRelTable.update(cc, projRelRow);
+                }
+            }
+
+
+            cc.endTransaction();
+            dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -150,7 +199,7 @@ public class ProjectDialog extends Dialog
             projRelRow.setRelOrgId(Long.parseLong((String)dc.getValue("organization")));
             // assigning a project to person. Relationship not deifned yet so assign the creating user
             projRelRow.setRelPersonId(personId.longValue());
-            // relationship types have not been defined yet. Insert dummy value
+            // NOTE: relationship types have not been defined yet. Insert dummy value
             projRelRow.setRelType(1);
             if (dc.getValue("notify_email") != null)
                 projRelRow.setNotifyEmail(dc.getValue("notify_email"));

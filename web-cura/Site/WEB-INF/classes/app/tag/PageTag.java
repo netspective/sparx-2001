@@ -130,62 +130,71 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 			out.println("<head>");
 			out.println("	<title>"+ getTitle() +"</title>");
 			out.println("</head>");
-			out.println("<body  bgcolor='#FFFFFF' link='#cc0000' vlink='#336699' text='#000000' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>");
-
+			out.println("<body  bgcolor='#FFFFFF'  text='#000000' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>");
+            out.println("<link rel='stylesheet' href='"+ resourcesUrl +"/css/main.css'>");
 			//mainMenu.printHtml(null, out);
 
             out.println("<table width='100%' border='0' cellpadding='0' cellspacing='0'>");
-            out.println("<tr >");
+            out.println("<tr>");
             out.println("   <td align='left' valign='top' background='"+ resourcesUrl +"/images/design/logo-background.jpg'>");
-            out.println("   <img src='"+ resourcesUrl +"/images/design/masthead.jpg'  border='0' alt='Header Image'>");
-            out.println("   </td>");
+            out.println("   <img src='"+ resourcesUrl +"/images/design/masthead.jpg'  border='0' alt='Header Image'></td>");
+
             out.println("   <td align='right' valign='top' background='"+ resourcesUrl +"/images/design/logo-background.jpg'>");
-            out.println("   <img src='"+ resourcesUrl +"/images/design/sublogo.jpg'  border='0' alt='Header Image'>");
-            out.println("   </td>");
+            out.println("   <img src='"+ resourcesUrl +"/images/design/sublogo.jpg'  border='0' alt='Header Image'></td>");
+
             out.println("</tr>");
-            out.println("<tr bgcolor='#8080FF'>");
-            out.println("   <td colspan='2' align='left' height='25' background='"+ resourcesUrl +"/images/design/profile-background.jpg'><b><font face='verdana' color='#FFFFFF' size=2>" + personRegistration.get("complete_name") + "</font></b></td>");
+            out.println("<tr bgcolor='#4a74e7'>");
+            out.println("   <td style='height:21px' colspan='2' align='left'><b><font face='verdana' color='#FFFFFF' size=2>" + personRegistration.get("complete_name") + "</b></font></td>");
             out.println("</tr>");
             out.println("</table>");
 
 			out.println("<table width='100%' height='100%' cellpadding='0' cellspacing='0'>");
             out.println("   <tr height='100%'>");
-            out.println("       <td height='100%' width='120' align='left' valign='top' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("       <td height='100%' width='158' align='left' valign='top' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
             // This is the static main menu
             out.println("       <table  width='100%' cellpadding='0' cellspacing='0'>");
-            /*
-            out.println("       <style type='text/css'>");
-            out.println("       <!--                   ");
-            out.println("           a:link  { color: white; text-decoration: none }   ");
-            out.println("           a:active  { color: white; text-decoration: none }   ");
-            out.println("           a:visited  { color: white; text-decoration: none }   ");
-            out.println("           a:hover { color: yellow; text-decoration: none } ");
-            out.println("        -->                   ");
-            out.println("       </style>               ");
-            */
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>&nbsp;</td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>&nbsp;</td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='a:hover { color: yellow; text-decoration: none } a:link  { color: white; text-decoration: none } a:visited  { color: white; text-decoration: none }' href='" + rootPath + "/index.jsp'>Home</a></font></b>");
+            out.println("           <tr bgcolor='#AFD997'><td style='height:50px;width:158px;' align='left'>");
+            out.println("           <label class='Font8pt'><b>Search for:</b></label><br><input name='SearchText' type='text' Class='Font8pt' maxlength='50' size='11' Align='AbsBottom' style='width:120px;' />");
+            out.println("           <input type='image' title='Begin your search' alt='Begin your search' src='"+ resourcesUrl +"/images/design/go.gif' ID='GoButton' Border='0' Align='AbsBottom'/>");
             out.println("           </td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/account/index.jsp'>Accounts</a></font></b>");
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>&nbsp;</td></tr>");
+
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/index.jsp'>Home</a></font></b>");
             out.println("           </td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/contact/index.jsp'>Contacts</a></font></b>");
+
+            out.println("           <tr><td>");
+            out.println("           <img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'");
             out.println("           </td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/project/index.jsp'>Projects</a></font></b>");
+
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/account/index.jsp'>Accounts</a></font></b>");
             out.println("           </td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font face='tahoma' color='#ffffff'><img src='"+ resourcesUrl +"/images/design/menu-arrow.gif'><a style='color: white; text-decoration: none' href='" + rootPath + "/task/index.jsp'>Tasks</a></font></b>");
+
+            out.println("           <tr><td>");
+            out.println("           <img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'");
             out.println("           </td></tr>");
-            out.println("           <tr><td align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'><img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'></td></tr>");
+
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/contact/index.jsp'>Contacts</a></font></b>");
+            out.println("           </td></tr>");
+
+            out.println("           <tr><td>");
+            out.println("           <img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'");
+            out.println("           </td></tr>");
+
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/project/index.jsp'>Projects</a></font></b>");
+            out.println("           </td></tr>");
+
+            out.println("           <tr><td>");
+            out.println("           <img src='"+ resourcesUrl +"/images/design/menu-divider.jpg'");
+            out.println("           </td></tr>");
+
+            out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
+            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/task/index.jsp'>Tasks</a></font></b>");
+            out.println("           </td></tr>");
+
             out.println("       </table>");
             out.println("       </td>");
             out.println("       <td align='left'  valign='top'>");

@@ -9,8 +9,8 @@ public class AppReportSkin   extends HtmlReportSkin
         super();
 	    outerTableAttrs = "width='300' border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	    innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
-	    frameHdRowAttrs = "bgcolor='#8080FF'";
-	    frameHdFontAttrs = "face='Arial' size=2 color=white";
+	    frameHdRowAttrs = "bgcolor='#4a74e7'";
+	    frameHdFontAttrs = "face='verdana' color=white";
         frameHdTableRowBgcolorAttrs = "#F4F8FA";
         frameFtRowAttrs = "bgcolor='#c4d6ec'";
         frameFtFontAttrs = "face='verdana,arial,helvetica' size=2 color='#000000'";

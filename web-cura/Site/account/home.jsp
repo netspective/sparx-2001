@@ -14,6 +14,9 @@
 			<td><xaf:query name="org.registration" skin="detail"/></td>
 			<td><xaf:query name="org.classification" skin="component"/></td>
 		</tr>
+        <tr valign="top">
+            <td colspan="2"><xaf:query name="org.contact-list" skin="report"/></td>
+        </tr>
 	</table>
-	
+
 </app:page>

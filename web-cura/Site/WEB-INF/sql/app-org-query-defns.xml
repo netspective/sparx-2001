@@ -34,7 +34,7 @@
 					caption="Sort By"
 					style="combo"
 					choices="Name=org_name;Abbreviation=org_abbrev"/>
-			<select>
+			<select heading="Account Search Results">
 				<display field="org_id"/>
 				<display field="org_code"/>
 				<display field="org_name"/>

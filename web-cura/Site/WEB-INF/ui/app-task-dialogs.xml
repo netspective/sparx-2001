@@ -4,7 +4,10 @@
     <dialogs package="task">
         <dialog name="registration" heading="create-data-cmd-heading:Task" retain-params="*" class="app.form.TaskDialog">
             <field.separator heading="Information"/>
-            <field.text name="task_type" caption="Task Type"  required="yes"/>
+            <field.integer name="task_id" caption="ID" read-only="browser">
+                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
+            </field.integer>
+            <field.text name="task_type" caption="Type"  required="yes"/>
             <field.text name="task_summary" caption="Summary" required="yes"/>
             <field.memo name="task_descr" caption="Description" />
             <field.text name="priority_id" caption="Priority" required="yes" />
@@ -15,13 +18,15 @@
                 <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
             </field.text>
 
-            <field.separator heading="Assign Task Owner"/>
-            <field.select name="ownder_org_id" caption="Organization" choices="query:person.active-org-memberships-name-id" prepend-blank="yes">
-                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+            <field.separator heading="Assign Task"/>
+            <field.select name="owner_org_id" caption="Organization" choices="query:person.active-org-memberships-name-id"
+                prepend-blank="yes" required="yes">
             </field.select>
-            <field.select name="ownder_project_id" caption="Project" choices="" >
-                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+            <field.select name="owner_project_id" caption="Project" choices="" >
             </field.select>
+            <field.text name="owner_person_id" caption="Person" >
+                <popup action="config-app-url:/org/index.jsp?panel,org." fill="owner_person_id"/>
+            </field.text>
 
         </dialog>
     </dialogs>

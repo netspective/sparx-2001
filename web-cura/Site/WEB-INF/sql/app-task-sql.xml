@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="task">
+        <statement name="information">
+            select
+                task_id,
+                task_type,
+                task_summary,
+                task_status,
+                priority_id
+            from
+                task
+            where
+                task_id = ?
+            <report heading="Overview">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Type" align="left"/>
+                <column heading="Summary" align="left"/>
+                <column heading="Status" align="left"/>
+                <column heading="Priority" align="left"/>
+            </report>
+            <params>
+                <param value="request:task_id"/>
+            </params>
+        </statement>
+    </sql-statements>
+</xaf>

@@ -64,5 +64,28 @@
 			</params>
 			<report heading="Classification"/>
 		</statement>
+
+        <statement name="contact-list">
+			select
+                person.person_id,
+                person.name_last,
+                person.name_first
+			from
+                personorg_relationship por, person
+			where
+                por.rel_org_id = ? and
+                por.parent_id = person.person_id and
+                por.record_status_id = 1 and
+                por.rel_type = 0
+            <params>
+                <param value="request:org_id"/>
+            </params>
+            <report heading="Organization Members">
+                <column heading="ID" align="center"/>
+                <column heading="Last Name" align="center"/>
+                <column heading="First Name" align="center"/>
+            </report>
+
+        </statement>
 	</sql-statements>
 </xaf>

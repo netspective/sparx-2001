@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 
 import dal.table.TaskTable;
 import dal.domain.row.TaskRow;
+import dialog.context.task.RegistrationContext;
 
 public class TaskDialog extends Dialog
 {
@@ -30,16 +31,15 @@ public class TaskDialog extends Dialog
 
         // you should almost always call dc.isInitialEntry() to ensure that you're not
         // populating data unless the user is seeing the data for the first time
-        //if (!dc.isInitialEntry())
-        //    return;
+        if (!dc.isInitialEntry())
+            return;
 
         // now do the populating using DialogContext methods
-        //if (dc.editingData())
-        //{
-            //String personId = dc.getRequest().getParameter("project_id");
-            //dc.populateValuesFromStatement("person.information", new Object[] {personId});
-            //dc.populateValuesFromStatement("person.address-by-id", new Object[] {personId});
-        //}
+        if (dc.editingData())
+        {
+            String taskId = dc.getRequest().getParameter("task_id");
+            dc.populateValuesFromStatement("task.information", new Object[] {new Long(taskId)});
+        }
     }
 
     public void makeStateChanges(DialogContext dc, int stage)
@@ -69,27 +69,61 @@ public class TaskDialog extends Dialog
         {
             // dialog is in the add data command mode
             this.processAddData(dc);
-            HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-            String url = request.getContextPath() + "/task/home.jsp?task_id=" + request.getAttribute("task_id");
-            try
-            {
-                ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                return "Failed to create response URL.";
-            }
         }
 
-        /*
+
         if (dc.editingData())
         {
             // dialog is in the edit data command mode
+            this.processEditData(dc);
         }
-        */
+        HttpServletRequest request = (HttpServletRequest)dc.getRequest();
+        String url = request.getContextPath() + "/task/home.jsp?task_id=" + request.getAttribute("task_id");
+        try
+        {
+            ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "Failed to create response URL.";
+        }
+
         return "";
     }
+
+    /**
+     * Process the new updated data
+     */
+    protected void processEditData(DialogContext dc)
+    {
+        try
+        {
+            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
+                dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+
+            cc.beginTransaction();
+            dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
+            // update the Task table
+            TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+            TaskRow taskRow = taskTable.getTaskByTaskId(cc, rc.getTaskId());
+            taskRow.setTaskDescr(rc.getTaskDescr());
+            taskRow.setPriorityId(rc.getPriorityId());
+            taskRow.setTaskStatus(rc.getTaskStatus());
+            taskRow.setTaskResolution(rc.getTaskResolution());
+            taskRow.setOwnerOrgId(new Long(rc.getOwnerOrgId()));
+            //taskRow.setOwnerPersonId(new Long());
+            taskTable.update(cc, taskRow);
+
+            cc.endTransaction();
+            dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Process the new data
      */
@@ -107,13 +141,14 @@ public class TaskDialog extends Dialog
                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
 
             cc.beginTransaction();
+            // insert a row into the Task table
             TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
             TaskRow taskRow = taskTable.createTaskRow();
             taskRow.populateDataByNames(dc);
 
             taskTable.insert(cc, taskRow);
             cc.endTransaction();
-            dc.getRequest().setAttribute("project_id", taskRow.getTaskId());
+            dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
         }
         catch (Exception e)
         {
