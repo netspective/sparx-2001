@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationContext.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationContext.java,v 1.3 2002-12-27 00:25:09 shahid.shah Exp $
  */
 package com.netspective.sparx.xaf.page;
 
@@ -69,9 +69,9 @@ public class NavigationContext extends PageContext
     private boolean popup;
     private Map navigationStates = new HashMap();
 
-    public NavigationContext(VirtualPath pagesPath, ServletContext aServletContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, String NavTreeId, NavigationSkin skin)
+    public NavigationContext(VirtualPath pagesPath, ServletContext aServletContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, String navTreeId, NavigationSkin skin)
     {
-        super(pagesPath, aServletContext, aServlet, aRequest, aResponse, NavTreeId);
+        super(pagesPath, aServletContext, aServlet, aRequest, aResponse, navTreeId);
         this.owner = (NavigationTree) pagesPath;
         this.skin = skin;
     }
