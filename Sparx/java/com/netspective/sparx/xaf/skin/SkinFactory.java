@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.5 2002-10-16 03:14:57 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.6 2002-12-26 19:23:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -66,11 +66,13 @@ import org.w3c.dom.Element;
 import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.report.ReportSkin;
+import com.netspective.sparx.xaf.page.NavigationSkin;
 
 public class SkinFactory implements Factory
 {
     private static Map reportSkins = new HashMap();
     private static Map dialogSkins = new HashMap();
+    private static Map navigationSkins = new HashMap();
 
     static
     {
@@ -118,7 +120,7 @@ public class SkinFactory implements Factory
 
     public static ReportSkin getDefaultReportSkin()
     {
-        return getReportSkin("report");
+        return getReportSkin("report-compressed");
     }
 
     public static void addDialogSkin(String id, DialogSkin skin)
@@ -142,6 +144,27 @@ public class SkinFactory implements Factory
         return getDialogSkin("default");
     }
 
+    public static void addNavigationSkin(String id, NavigationSkin skin)
+    {
+        navigationSkins.put(id, skin);
+    }
+
+    public static void addNavigationSkin(String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
+    {
+        Class skinClass = Class.forName(className);
+        addNavigationSkin(id, (NavigationSkin) skinClass.newInstance());
+    }
+
+    public static NavigationSkin getNavigationSkin(String id)
+    {
+        return (NavigationSkin) navigationSkins.get(id);
+    }
+
+    public static NavigationSkin getNavigationSkin()
+    {
+        return getNavigationSkin("default");
+    }
+
     public static void createCatalog(Element parent)
     {
         Document doc = parent.getOwnerDocument();
@@ -155,7 +178,7 @@ public class SkinFactory implements Factory
 
             Element childElem = doc.createElement("dialog-skin");
             childElem.setAttribute("name", (String) entry.getKey());
-            childElem.setAttribute("class", ((DialogSkin) entry.getValue()).getClass().getName());
+            childElem.setAttribute("class", (entry.getValue()).getClass().getName());
             factoryElem.appendChild(childElem);
         }
 
@@ -169,7 +192,7 @@ public class SkinFactory implements Factory
 
             Element childElem = doc.createElement("report-column-format");
             childElem.setAttribute("name", (String) entry.getKey());
-            childElem.setAttribute("class", ((ReportSkin) entry.getValue()).getClass().getName());
+            childElem.setAttribute("class", (entry.getValue()).getClass().getName());
             factoryElem.appendChild(childElem);
         }
     }
