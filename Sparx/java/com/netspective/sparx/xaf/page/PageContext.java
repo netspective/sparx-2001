@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageContext.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: PageContext.java,v 1.2 2002-09-23 03:47:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -81,7 +81,7 @@ public class PageContext extends ServletValueContext
         super(aServlet.getServletContext(), aServlet, aRequest, aResponse);
 
         pageContextNum++;
-        activePath = aServlet.getPagesPath().findPath(aRequest.getPathInfo());
+        activePath = aServlet.getPagesPath().findPath(aServlet.getActivePathToFind(aRequest));
 
         try
         {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: VirtualPath.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: VirtualPath.java,v 1.2 2002-09-23 03:47:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -62,6 +62,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
@@ -269,15 +270,18 @@ public class VirtualPath
         heading = value != null && value.length() > 0 ? value : null;
     }
 
-    public static VirtualPath importFromXml(String xmlFile) throws ParserConfigurationException, SAXException, IOException
+    public void importFromXml(String xmlFile) throws ParserConfigurationException, SAXException, IOException
+    {
+        importFromXml(xmlFile, this);
+    }
+
+    public static VirtualPath importFromXml(String xmlFile, VirtualPath root) throws ParserConfigurationException, SAXException, IOException
     {
         Document doc = null;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
         doc = parser.parse(xmlFile);
         doc.normalize();
-
-        VirtualPath root = new VirtualPath();
 
         Element rootElem = doc.getDocumentElement();
         NodeList children = rootElem.getChildNodes();
@@ -325,8 +329,23 @@ public class VirtualPath
                 childPath.setHeading(heading);
 
                 String title = childElem.getAttribute("title");
-                if(title.length() == 0) title = caption;
+                if(title.length() == 0) title = heading;
                 childPath.setTitle(title);
+
+                String pageClass = childElem.getAttribute("class");
+                if(pageClass.length() != 0)
+                {
+                    try
+                    {
+                        Class cls = Class.forName(pageClass);
+                        ServletPage page = (ServletPage) cls.newInstance();
+                        childPath.setPage(page);
+                    }
+                    catch (Exception e)
+                    {
+                        childPath.setCaption(caption + " (" + e.toString() + ")");
+                    }
+                }
 
                 importFromXml(childElem, childPath);
             }
@@ -427,6 +446,33 @@ public class VirtualPath
     public Map getChildrenMap()
     {
         return childrenMap;
+    }
+
+    public String getDebugHtml(PageContext pc)
+    {
+        return getDebugHtml(pc, this);
+    }
+
+    static public String getDebugHtml(PageContext pc, VirtualPath parent)
+    {
+        if(parent.childrenList == null || parent.childrenList.size() == 0)
+            return null;
+
+        StringBuffer html = new StringBuffer("<ol>");
+        Iterator i = parent.childrenList.iterator();
+        while(i.hasNext())
+        {
+            VirtualPath path = (VirtualPath) i.next();
+            html.append("<li>");
+            html.append(path.getAbsolutePath() + ": " + path.getCaption(pc) + ", " + path.getHeading(pc) + ", " + path.getTitle(pc));
+            String children = getDebugHtml(pc, path);
+            if(children != null)
+                html.append(children);
+            html.append("</li>");
+        }
+        html.append("</ol>");
+
+        return html.toString();
     }
 
     static public String[] getPathItems(String path)

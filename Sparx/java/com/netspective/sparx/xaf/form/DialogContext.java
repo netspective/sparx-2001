@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.16 2002-09-18 17:49:38 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.17 2002-09-23 03:47:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1102,7 +1102,7 @@ public class DialogContext extends ServletValueContext
      */
     public DatabaseContext getDatabaseContext()
     {
-        return dbContext == null ? DatabaseContextFactory.getContext(this) : dbContext;
+        return dbContext;
     }
 
     /**

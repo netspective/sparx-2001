@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.4 2002-09-08 02:08:11 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.5 2002-09-23 03:47:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -73,6 +73,7 @@ import javax.servlet.ServletException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.jsp.JspException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -450,6 +451,15 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         return true;
     }
 
+    /**
+     * Return the active path that should be located by the VirtualPath.findResults method in PageContext constructor.
+     * This is provided as a method to allow overriding by children that may want to prepend servlets or contexts when
+     * searching for active Path.
+     */
+    public String getActivePathToFind(HttpServletRequest req)
+    {
+        return req.getPathInfo();
+    }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
@@ -498,7 +508,9 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         }
         else
         {
-            resp.getWriter().print("Unable to find a ServletPage to match this URL path.");
+            resp.getWriter().print("Unable to find a ServletPage to match this URL path. ("+ activePathResults.getSearchedForPath() +")");
+            if(ConfigurationManagerFactory.isDevelopmentEnvironment(getServletContext()))
+                resp.getWriter().print(pagesPath.getDebugHtml(pc));
         }
 
         LogManager.recordAccess(req, monitorLog, page != null ? page.getClass().getName() : this.getClass().getName(), req.getRequestURI(), startTime);
