@@ -13,5 +13,6 @@ import java.sql.SQLException;
 
 public interface Rows
 {
-    public void populateData(ResultSet resultSet) throws SQLException;
+    public void populateDataByIndexes(ResultSet resultSet) throws SQLException;
+    public void populateDataByNames(ResultSet resultSet) throws SQLException;
 }

@@ -24,7 +24,6 @@ public interface <xsl:value-of select="$domain-name"/>
 	public <xsl:value-of select="$java-class-spec"/> get<xsl:value-of select="@_gen-method-name"/>(<xsl:value-of select="$java-class-spec"/> defaultValue);
 	public <xsl:value-of select="$java-class-spec"/> get<xsl:value-of select="@_gen-method-name"/>();
 	public void set<xsl:value-of select="@_gen-method-name"/>(<xsl:value-of select="$java-class-spec"/> value);
-	public void set<xsl:value-of select="@_gen-method-name"/>SqlExpr(String value);
 </xsl:for-each>
 }
 </xsl:template>

@@ -21,6 +21,7 @@ import java.util.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.sql.ResultSetMetaData;
 
 public abstract class AbstractRow implements Row
 {
@@ -70,10 +71,29 @@ public abstract class AbstractRow implements Row
     abstract public Object[] getData();
     abstract public List getDataForDmlStatement();
 
-    abstract public void populateData(ResultSet rs) throws SQLException;
-    abstract public void populateData(DialogContext dc);
+    /**
+     * Given a ResultSet, return a Map of all the column names in the ResultSet
+     * in lowercase as the key and the index of the column as the value.
+     */
+    public static Map getColumnNamesIndexMap(ResultSet rs) throws SQLException
+    {
+        Map map = new HashMap();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int colsCount = rsmd.getColumnCount();
+        for(int i = 1; i <= colsCount; i++)
+        {
+            map.put(rsmd.getColumnName(i).toLowerCase(), new Integer(i));
+        }
+        return map;
+    }
+
+    abstract public void populateDataByIndexes(ResultSet resultSet) throws SQLException;
+    abstract public void populateDataByNames(ResultSet resultSet, Map colNameIndexMap) throws SQLException;
+    abstract public void populateDataByNames(DialogContext dc);
+    abstract public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap);
 
     abstract public void setData(DialogContext dc);
+    abstract public void setData(DialogContext dc, Map colNameFieldNameMap);
 
     public boolean valuesAreEqual(Object primary, Object compareTo)
     {

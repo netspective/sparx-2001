@@ -422,6 +422,9 @@ public class SchemaDocument extends XmlSource
 
         replaceNodeMacros((Node) table, replaceMacrosInTableNodes, params);
 
+        boolean isEnum = false;
+        boolean isLookup = false;
+
 		Element lastColumnSeen = null;
 		int lastEnumId = 0;
         columns = table.getChildNodes();
@@ -446,12 +449,18 @@ public class SchemaDocument extends XmlSource
 			}
             else if (nodeName.equals("extends"))
             {
-                if(node.getFirstChild().getNodeValue().equals("Audit"))
+                String tableType = node.getFirstChild().getNodeValue();
+                if(tableType.equals("Audit"))
                     table.setAttribute("audit", "yes");
+                else if(tableType.equals("Enumeration"))
+                    isEnum = true;
+                else if(tableType.equals("Lookup"))
+                    isLookup = true;
             }
 			else if (nodeName.equals("enum"))
 			{
 				Element enumElem = (Element) node;
+                enumElem.setAttribute("java-constant-name", xmlTextToJavaConstant(enumElem.getFirstChild().getNodeValue()));
 				String enumId = enumElem.getAttribute("id");
 				if(enumId.length() == 0)
 				{
@@ -472,6 +481,11 @@ public class SchemaDocument extends XmlSource
 		if(lastColumnSeen != null) lastColumnSeen.setAttribute("is-last", "yes");
 		if(table.getAttribute("abbrev").length() == 0)
 			table.setAttribute("abbrev", tableName);
+
+        if(isEnum && ! isLookup)
+            table.setAttribute("is-enum", "yes");
+        else if(isLookup)
+            table.setAttribute("is-lookup", "yes");
 
 		resolveIndexes(table);
     }
@@ -1119,6 +1133,7 @@ public class SchemaDocument extends XmlSource
             Transformer domainsTransformer = tFactory.newTransformer(new StreamSource(domainsGeneratorStyleSheet));
             domainsTransformer.setParameter("package-name", domainsPkg);
             Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsGeneratorStyleSheet));
+            rowsTransformer.setParameter("entire-schema", schemaDoc.getDocument());
             rowsTransformer.setParameter("package-name", rowsPkg);
             Transformer rowsListTransformer = tFactory.newTransformer(new StreamSource(rowsListGeneratorStyleSheet));
             rowsListTransformer.setParameter("package-name", rowsListPkg);
@@ -1151,6 +1166,7 @@ public class SchemaDocument extends XmlSource
                         Element columnElem = (Element) child;
                         columnElem.setAttribute("_gen-member-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), false));
                         columnElem.setAttribute("_gen-method-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), true));
+                        columnElem.setAttribute("_gen-constant-name", columnElem.getAttribute("name").toUpperCase());
                         columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
 
                         NodeList jtnl = columnElem.getElementsByTagName("java-type");
@@ -1184,6 +1200,32 @@ public class SchemaDocument extends XmlSource
             for(Iterator i = tables.values().iterator(); i.hasNext(); )
             {
                 Element tableElem = (Element) i.next();
+
+                NodeList children = tableElem.getChildNodes();
+                for(int c = 0; c < children.getLength(); c++)
+                {
+                    Node child = children.item(c);
+                    if(child.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    String childName = child.getNodeName();
+                    if("column".equals(childName))
+                    {
+                        Element columnElem = (Element) child;
+                        String refTableName = columnElem.getAttribute("reftbl");
+                        if(refTableName.length() > 0l)
+                        {
+                            Element refTableElem = (Element) schemaDoc.getTables().get(refTableName.toUpperCase());
+                            if(refTableElem != null)
+                            {
+                                if("yes".equals(refTableElem.getAttribute("is-enum")))
+                                    columnElem.setAttribute("_gen-ref-table-is-enum", "yes");
+                                columnElem.setAttribute("_gen-ref-table-name", refTableElem.getAttribute("_gen-table-name"));
+                                columnElem.setAttribute("_gen-ref-table-class-name", refTableElem.getAttribute("_gen-table-class-name"));
+                            }
+                        }
+                    }
+                }
 
                 String tableClassName = tableElem.getAttribute("_gen-table-name");
                 String domainName = tableElem.getAttribute("_gen-domain-name");

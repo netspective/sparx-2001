@@ -29,6 +29,80 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 {
 <xsl:for-each select="column">	protected <xsl:value-of select="@_gen-data-type-class"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-member-name"/>;
 </xsl:for-each>
+
+<xsl:if test="@is-enum = 'yes'">
+	public static class EnumeratedItem implements com.xaf.db.schema.EnumeratedItem
+	{
+		protected static final Map captionsMap = new HashMap();
+		protected static final Map abbrevsMap = new HashMap();
+<xsl:for-each select="enum[@abbrev]">		public static final EnumeratedItem <xsl:value-of select="@java-constant-name"/> = new EnumeratedItem(<xsl:value-of select="@id"/>, &quot;<xsl:value-of select="."/>&quot;, &quot;<xsl:value-of select="@abbrev"/>&quot;);
+</xsl:for-each>
+<xsl:for-each select="enum[not(@abbrev)]">		public static final EnumeratedItem <xsl:value-of select="@java-constant-name"/> = new EnumeratedItem(<xsl:value-of select="@id"/>, &quot;<xsl:value-of select="."/>&quot;);
+</xsl:for-each>
+		static 
+		{			
+<xsl:for-each select="enum">			captionsMap.put(<xsl:value-of select="@java-constant-name"/>.getCaption().toUpperCase(), <xsl:value-of select="@java-constant-name"/>);
+</xsl:for-each>
+<xsl:for-each select="enum[@abbrev]">			abbrevsMap.put(<xsl:value-of select="@java-constant-name"/>.getAbbrev().toUpperCase(), <xsl:value-of select="@java-constant-name"/>);
+</xsl:for-each>		};
+		
+		public static EnumeratedItem getEnum(int id)
+		{
+			switch(id)
+			{
+<xsl:for-each select="enum">				case <xsl:value-of select="@id"/>: return <xsl:value-of select="@java-constant-name"/>;
+</xsl:for-each>			}
+			return null;
+		}
+		
+		public static EnumeratedItem getItemById(Integer id)
+		{
+			if(id == null) return null;
+			return getEnum(id.intValue());
+		}
+
+		public static EnumeratedItem getItemById(Long id)
+		{
+			if(id == null) return null;
+			return getEnum((int) id.longValue());
+		}
+		
+		public static EnumeratedItem getItemByCaption(String caption)
+		{
+			return (EnumeratedItem) captionsMap.get(caption.toUpperCase());
+		}
+
+		public static EnumeratedItem getItemByAbbrev(String abbrev)
+		{
+			return (EnumeratedItem) abbrevsMap.get(abbrev.toUpperCase());
+		}
+	
+		private int id;
+		private Integer idObject;
+		private String caption;
+		private String abbrev;
+	
+		private EnumeratedItem(int id, String caption, String abbrev)
+		{
+			this.id = id;
+			this.idObject = new Integer(id);
+			this.caption = caption;
+			this.abbrev = abbrev;
+		}
+
+		private EnumeratedItem(int id, String caption)
+		{
+			this(id, caption, null);
+		}
+		
+		public int getId() { return id; }
+		public Integer getIdAsInteger() { return idObject; }
+		public String getCaption() { return caption; }
+		public String getAbbrev() { return abbrev; }
+		public String getAbbrevOrCaption() { return abbrev != null ? abbrev : caption; }
+	}
+</xsl:if>
+
 	public <xsl:value-of select="$table-name"/>(Schema schema)
 	{
 		super(schema, &quot;<xsl:value-of select="@name"/>&quot;);
@@ -39,7 +113,7 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 <xsl:for-each select="column">	
 	<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
-<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, &quot;<xsl:value-of select="@name"/>&quot;);
+<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 <xsl:if test="@type = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
 		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="$table-abbrev"/>_<xsl:value-of select="@name"/>_SEQ&quot;);
 </xsl:if>

@@ -167,7 +167,7 @@ public abstract class AbstractTable implements Table
                     if(rs.next())
                     {
                         if(result == null) result = createRow();
-                        result.populateData(rs);
+                        result.populateDataByIndexes(rs);
                     }
                 }
                 return result;
@@ -204,7 +204,7 @@ public abstract class AbstractTable implements Table
                 {
                     ResultSet rs = stmt.getResultSet();
                     if(result == null) result = createRows();
-                    result.populateData(rs);
+                    result.populateDataByIndexes(rs);
                 }
                 return result;
             }

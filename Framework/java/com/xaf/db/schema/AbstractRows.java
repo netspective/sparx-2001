@@ -14,7 +14,12 @@ import java.sql.SQLException;
 
 public abstract class AbstractRows extends ArrayList implements Rows
 {
-    public void populateData(ResultSet resultSet) throws SQLException
+    public void populateDataByIndexes(ResultSet resultSet) throws SQLException
+    {
+        clear();
+    }
+
+    public void populateDataByNames(ResultSet resultSet) throws SQLException
     {
         clear();
     }

@@ -30,14 +30,27 @@ public class <xsl:value-of select="$rows-name"/> extends AbstractRows
 		this.table = table;
 	}
 	
-	public void populateData(ResultSet resultSet) throws SQLException
+	public void populateDataByIndexes(ResultSet resultSet) throws SQLException
 	{
-		super.populateData(resultSet);
+		super.populateDataByIndexes(resultSet);
 		<xsl:value-of select="@_gen-row-class-name"/> row = null;
 		while(resultSet.next())
 		{
 			row = table.create<xsl:value-of select="$row-name"/>();
-			row.populateData(resultSet);
+			row.populateDataByIndexes(resultSet);
+			add(row);
+		}
+	}
+
+	public void populateDataByNames(ResultSet resultSet) throws SQLException
+	{
+		super.populateDataByNames(resultSet);
+		Map colNameIndexMap = AbstractRow.getColumnNamesIndexMap(resultSet);
+		<xsl:value-of select="@_gen-row-class-name"/> row = null;
+		while(resultSet.next())
+		{
+			row = table.create<xsl:value-of select="$row-name"/>();
+			row.populateDataByNames(resultSet, colNameIndexMap);
 			add(row);
 		}
 	}
