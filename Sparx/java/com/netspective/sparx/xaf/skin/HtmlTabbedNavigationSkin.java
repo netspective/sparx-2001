@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.11 2003-01-07 10:46:05 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.12 2003-01-07 11:30:57 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -225,7 +225,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
         writer.write("<!-- App Tabs Ends -->");
 
         writer.write("	        </TD>");
-        writer.write("         <TD class=\"inner-apptab-separator\"><IMG height=15 alt=\"\" src=\"" + nc.getRootUrl() + getLevel1DividerImageFileName() + "\" width=\"100%\"></TD>");
+        writer.write("         <TD class=\"inner_level1_tabs_separator\"><IMG height=15 alt=\"\" src=\"" + nc.getRootUrl() + getLevel1DividerImageFileName() + "\" width=\"100%\"></TD>");
         writer.write("      </TR>");
         writer.write("   </TABLE>");
     }
@@ -458,7 +458,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
             this.outerSeparatorImgClass = "";
 
             this.innerSeparatorAttrs = "";
-            this.innerSeparatorClass = "class=\"inner-apptab-separator\"";
+            this.innerSeparatorClass = "class=\"inner_level1_tabs_separator\"";
             this.innerSeparatorImgAttrs = "height=8 width=10 border=0 alt=\"\"";
             this.innerSeparatorImgClass = "";
 
@@ -466,11 +466,11 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
             this.containerClass = "";
 
             this.navAttrs = "nowrap";
-            this.navClass = "class=\"app_tab_";
+            this.navClass = "class=\"level1_tabs_";
             this.navImgAttrs = "";
 
             this.navLinkAttrs = "";
-            this.navLinkClass = "class=\"apptab_navigation_";
+            this.navLinkClass = "class=\"level1_tabs_navigation_";
 
             this.flags = NAVFLAG_EXPAND_MARGIN_RIGHT;
         }
@@ -516,7 +516,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
     public class Level2Style extends NavigationStyle {
         public Level2Style() {
             this.tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\"";
-            this.tableClass = "class=\"function_tabs\"";
+            this.tableClass = "class=\"level2_tabs\"";
 
             this.outerSeparatorAttrs = "colspan=\"50\" width=\"100%\"";
             this.outerSeparatorClass = "";
@@ -532,11 +532,11 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
             this.containerClass = "";
 
             this.navAttrs = "nowrap";
-            this.navClass = "class=\"function_tab_";
+            this.navClass = "class=\"level2_tabs_";
             this.navImgAttrs = "";
 
             this.navLinkAttrs = "";
-            this.navLinkClass = "class=\"tab_navigation_";
+            this.navLinkClass = "class=\"level2_tabs_navigation_";
 
             this.flags = NAVFLAG_EXPAND_MARGIN_RIGHT;
         }
@@ -586,16 +586,16 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
             tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
             tableClass = "";
             outerSeparatorAttrs = "";
-            outerSeparatorClass = "class=\"sidenav_off\"";
+            outerSeparatorClass = "class=\"level3_tabs_off\"";
             outerSeparatorImgAttrs = "height=34 width=1 border=0 alt=\"\"";
             outerSeparatorImgClass = "";
             innerSeparatorAttrs = "colSpan=3";
-            innerSeparatorClass = "class=\"sidenav_div\"";
+            innerSeparatorClass = "class=\"level3_tabs_div\"";
             innerSeparatorImgAttrs = "height=1 width=1 border=0 alt=\"\"";
             innerSeparatorImgClass = "";
             navAttrs = "width=75";
-            navClass = "class=\"sidenav_";
-            navLinkClass = "class=\"sidenav_";
+            navClass = "class=\"level3_tabs_";
+            navLinkClass = "class=\"level3_tabs_";
             navImgAttrs = "height=17 width=10 border=0 alt=\"\"";
         }
 
