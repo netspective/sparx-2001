@@ -98,7 +98,7 @@ public class DialogTag extends TagSupport
 			// are attached
 			if(dc.inExecuteMode())
 			{
-				dialog.execute(dc);
+				String html = dialog.execute(dc);
 				if(! dc.executeStageHandled())
 				{
 					// these two attributes are set because they are defined by
@@ -111,7 +111,11 @@ public class DialogTag extends TagSupport
 					return EVAL_BODY_INCLUDE;
 				}
 				else
+				{
+					if(html != null)
+						out.write(html);
 					return SKIP_BODY;
+				}
 			}
 			else
 			{
