@@ -51,10 +51,13 @@
  */
  
 /**
- * $Id: DialogFieldPopup.java,v 1.3 2002-07-10 20:56:24 aye.thu Exp $
+ * $Id: DialogFieldPopup.java,v 1.4 2002-11-27 16:49:49 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
+
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.value.ValueSourceFactory;
 
 /**
  * <code>DialogFieldPopup</code> class represents a dialog field with up a pop up window associated with it.
@@ -63,9 +66,9 @@ public class DialogFieldPopup
 {
     public final String DEFAULT_WINDOW_CLASS = "default";
 
-    private String imgUrl;
+    private SingleValueSource imgUrl;
     private String windowClass = DEFAULT_WINDOW_CLASS;
-    private String actionUrl = null;
+    private SingleValueSource actionUrl = null;
     private String[] fillFields = null;
     private boolean allowMulti = false;
     private boolean closeAfter = true;
@@ -78,7 +81,7 @@ public class DialogFieldPopup
      */
     public DialogFieldPopup(String action, String[] fill)
     {
-        actionUrl = action;
+        actionUrl = action != null ? ValueSourceFactory.getSingleOrStaticValueSource(action) : null;
         fillFields = fill;
     }
     /**
@@ -89,7 +92,7 @@ public class DialogFieldPopup
      */
     public DialogFieldPopup(String action, String fill)
     {
-        actionUrl = action;
+        actionUrl = action != null ? ValueSourceFactory.getSingleOrStaticValueSource(action) : null;
         fillFields = new String[]{fill};
     }
 
@@ -103,19 +106,33 @@ public class DialogFieldPopup
         windowClass = value;
     }
 
-    public final String getImageUrl()
+    /**
+     * Get the URL for the image
+     * @param dc
+     * @return image URL string
+     */
+    public final String getImageUrl(DialogContext dc)
     {
-        return imgUrl;
+        return imgUrl != null ? imgUrl.getValue(dc) : null;
     }
 
+    /**
+     * Set the URL for the image. The URL string can be a single value source.
+     * @param value  Single or static value source string
+     */
     public void setImageUrl(String value)
     {
-        imgUrl = value;
+        imgUrl = value != null ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
     }
 
-    public final String getActionUrl()
+    /**
+     * Get the action URL for the popup
+     * @param dc
+     * @return action URL string
+     */
+    public final String getActionUrl(DialogContext dc)
     {
-        return actionUrl;
+        return actionUrl != null ? actionUrl.getValue(dc) : null;
     }
 
     public final String[] getFillFields()

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.9 2002-10-14 14:24:36 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.10 2002-11-27 16:49:49 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -472,7 +472,7 @@ public class StandardDialogSkin implements DialogSkin
         if(popup == null)
             return null;
 
-        String expression = "new DialogFieldPopup('" + dc.getDialog().getName() + "', '" + field.getQualifiedName() + "', '" + popup.getActionUrl() + "', '" + popup.getPopupWindowClass() + "', " + popup.closeAfterSelect() + ", " + popup.allowMultiSelect();
+        String expression = "new DialogFieldPopup('" + dc.getDialog().getName() + "', '" + field.getQualifiedName() + "', '" + popup.getActionUrl(dc) + "', '" + popup.getPopupWindowClass() + "', " + popup.closeAfterSelect() + ", " + popup.allowMultiSelect();
         ;
         String[] fillFields = popup.getFillFields();
         if(fillFields.length == 1)
@@ -487,7 +487,7 @@ public class StandardDialogSkin implements DialogSkin
             expression = expr.toString() + ")";
         }
 
-        String imageUrl = popup.getImageUrl();
+        String imageUrl = popup.getImageUrl(dc);
         if(imageUrl == null)
             imageUrl = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext()).getTextValue(dc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "dialog.field.popup-image-src");
 
