@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.4 2002-11-30 17:14:34 shahid.shah Exp $
+ * $Id: QuerySelectScrollState.java,v 1.5 2002-12-03 15:49:56 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -217,7 +217,6 @@ public class QuerySelectScrollState extends ResultSetScrollState
 
         if(primaryOrderByColIndex != -1)
             rc.getState(primaryOrderByColIndex).setFlag(sortFieldInfo.isDescending() ? ReportColumn.COLFLAG_SORTED_DESCENDING : ReportColumn.COLFLAG_SORTED_ASCENDING);
-
-        skin.produceReport(writer, rc, getResultSet());
+        rc.produceReport(writer, getResultSet());
     }
 }
