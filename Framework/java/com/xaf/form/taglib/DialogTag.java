@@ -92,10 +92,12 @@ public class DialogTag extends TagSupport
 			}
 			dialog.prepareContext(dc);
 
-		    // if the dialog class has not been overridden (base class) then
+		    // if the dialog class has not been overridden (base class) and
+			// there are no listeners attached and there are no execut tasks then
 			// we will handle the "execute" portion in the JSP unless listeners
 			// are attached
 			if(dc.inExecuteMode() && dc.getListeners().size() == 0 &&
+				dc.getDialog().getExecuteTasks() == null &&
 				"com.xaf.form.Dialog".equals(dialog.getClass().getName()))
 			{
 				// these two attributes are set because they are defined by

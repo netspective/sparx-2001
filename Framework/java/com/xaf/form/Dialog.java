@@ -77,6 +77,8 @@ public class Dialog
 	public final String getTransactionIdParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_TRANSACTIONID; }
 	public final String getValuesRequestAttrName() { return "dialog-" + name + "-field-values"; }
 
+	public final Task[] getExecuteTasks() { return executeTasks; }
+
 	public final ArrayList getFields() { return fields; }
 	public final boolean retainRequestParams() { return retainAllRequestParams || (retainRequestParams != null); }
 	public final String[] getRetainRequestParams() { return retainRequestParams; }
