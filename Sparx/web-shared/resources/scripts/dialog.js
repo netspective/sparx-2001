@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.28 2003-04-24 18:06:49 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.29 2003-04-24 21:12:26 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -2113,8 +2113,6 @@ function documentOnKeyUp()
 					if(! validScan)
 					{
 						control.value = "";
-						event.cancelBubble = true;
-						event.returnValue = false;
 						return false;
 					}
 				}
