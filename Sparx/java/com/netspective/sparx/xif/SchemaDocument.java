@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.15 2002-12-04 17:49:26 shahbaz.javeed Exp $
+ * $Id: SchemaDocument.java,v 1.16 2002-12-05 03:47:54 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -511,9 +511,12 @@ public class SchemaDocument extends XmlSource
 
 
         String customSequence = column.getAttribute("sequence-name");
+        String tableAbbrev = table.getAttribute("abbrev");
+
+        if (0 == tableAbbrev.length()) tableAbbrev = table.getAttribute("name");
 
         // If we are given a custom sequence name, use it.  Otherwise generate it
-        if (0 == customSequence.length()) customSequence = table.getAttribute("abbrev") + "_" + column.getAttribute("name") + "SEQ";
+        if (0 == customSequence.length()) customSequence = tableAbbrev + "_" + column.getAttribute("name") + "_SEQ";
         column.setAttribute("_gen-sequence-name", customSequence);
     }
 
