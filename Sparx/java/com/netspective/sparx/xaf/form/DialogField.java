@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.18 2003-03-11 16:19:52 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.19 2003-03-19 20:46:36 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -105,7 +105,8 @@ public class DialogField
     static public final int FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
 		static public final int FLDFLAG_DOUBLEENTRY = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
 		static public final int FLDFLAG_SCANNABLE = FLDFLAG_DOUBLEENTRY * 2;
-		static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_SCANNABLE * 2; // all DialogField "children" will use this
+		static public final int FLDFLAG_AUTOBLUR = FLDFLAG_SCANNABLE * 2;
+		static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_AUTOBLUR * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -147,6 +148,8 @@ public class DialogField
 		private String scanStartCode;
 		private String scanStopCode;
 		private String scanPartnerField;
+		private int autoBlurLength;
+		private String autoBlurExcludeRegExp;
 
     /**
      * Creates a dialog field
@@ -355,8 +358,22 @@ public class DialogField
 								setFlag(DialogField.FLDFLAG_SCANNABLE);
 								importScanEntryFromXml((Element) node);
 						}
+						else if(childName.equals("auto-blur"))
+						{
+								setFlag(DialogField.FLDFLAG_AUTOBLUR);
+								importAutoBlurFromXml((Element) node);
+						}
         }
     }
+
+	public void importAutoBlurFromXml(Element elem)
+	{
+		String length = elem.getAttribute("length");
+		autoBlurLength = (length == null || length.length() == 0) ? 0 : Integer.parseInt(length);
+
+		String excExpr = elem.getAttribute("exclude-expr");
+		autoBlurExcludeRegExp = (excExpr == null || excExpr.length() == 0) ? "" : excExpr;
+	}
 
 	public void importScanEntryFromXml(Element elem)
 	{
@@ -1030,10 +1047,9 @@ public class DialogField
 
 				if(flagIsSet(DialogField.FLDFLAG_DOUBLEENTRY))
 					this.setupDoubleEntry();
-
     }
 
-		private void setupDoubleEntry()
+		public void setupDoubleEntry()
 		{
       this.setHint("Double Entry");
 			DialogFieldClientJavascript doubleEntryJS = new DialogFieldClientJavascript();
@@ -1576,6 +1592,15 @@ public class DialogField
 				sb.append("field.isScanned = false;\n");
 				sb.append("field.scanPartner = '" + scanPartnerField + "';\n");
 			}
+
+			if(flagIsSet(FLDFLAG_AUTOBLUR))
+			{
+				sb.append("field.autoBlur = 'yes';\n");
+				sb.append("field.autoBlurLength = " + autoBlurLength + ";\n");
+				sb.append("field.autoBlurExcRegExp = '" + autoBlurExcludeRegExp + "';\n");
+				sb.append("field.numCharsEntered = 0;\n");
+			}
+
 			return sb.toString();
     }
 
