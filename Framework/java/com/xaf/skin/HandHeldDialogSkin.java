@@ -223,7 +223,10 @@ public class HandHeldDialogSkin implements DialogSkin
 		String heading = field.getHeading();
 		if(heading != null)
 		{
-			String sep =  "<font "+separatorFontAttrs+"><b>"+ heading +"</b></font>"+separatorHtml;
+			String sep = "<font "+separatorFontAttrs+"><b>"+ heading +"</b></font>";
+			if(! field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE))
+				sep += separatorHtml;
+
 			if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
 				return sep;
 			else
@@ -234,8 +237,7 @@ public class HandHeldDialogSkin implements DialogSkin
 			if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
 				return "";
 			else
-				return "<hr size=1 color=silver>";
+				return field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE) ? "<br>" : "<hr size=1 color=silver>";
 		}
 	}
-
 }

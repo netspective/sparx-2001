@@ -6,6 +6,7 @@ import com.xaf.form.*;
 
 public class SeparatorField extends DialogField
 {
+	static public final long FLDFLAG_HIDERULE = DialogField.FLDFLAG_STARTCUSTOM;
 	protected String heading;
 
 	public SeparatorField()
@@ -34,6 +35,9 @@ public class SeparatorField extends DialogField
 
 		heading = elem.getAttribute("heading");
 		if(heading.length() == 0) heading = null;
+
+		if(elem.getAttribute("rule").equals("no"))
+			setFlag(FLDFLAG_HIDERULE);
 	}
 
 	public String getControlHtml(DialogContext dc)
