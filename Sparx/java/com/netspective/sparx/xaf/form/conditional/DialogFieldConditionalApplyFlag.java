@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldConditionalApplyFlag.java,v 1.2 2002-01-28 09:29:43 thua Exp $
+ * $Id: DialogFieldConditionalApplyFlag.java,v 1.3 2002-01-31 11:04:27 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.conditional;
@@ -98,16 +98,15 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
     private SingleValueSource conditionalValueSource;
 
     public static Map dialogFieldNameValueMap = new HashMap();
-    public static boolean flagNameMapIsAvail = false;
 
-    public static void setupDialogFieldNameValueMap()
+    static
     {
         dialogFieldNameValueMap.put("invisible", new Integer(DialogField.FLDFLAG_INVISIBLE));
         dialogFieldNameValueMap.put("read-only", new Integer(DialogField.FLDFLAG_READONLY));
         dialogFieldNameValueMap.put("browser-read-only", new Integer(DialogField.FLDFLAG_BROWSER_READONLY));
         dialogFieldNameValueMap.put("hidden", new Integer(DialogField.FLDFLAG_INPUT_HIDDEN));
         dialogFieldNameValueMap.put("required", new Integer(DialogField.FLDFLAG_REQUIRED));
-        flagNameMapIsAvail = true;
+        dialogFieldNameValueMap.put("initial-focus", new Integer(DialogField.FLDFLAG_INITIAL_FOCUS));
     }
 
     public DialogFieldConditionalApplyFlag()
@@ -154,7 +153,6 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
             return false;
 
         String flagName = elem.getAttribute("flag");
-        if(!flagNameMapIsAvail) setupDialogFieldNameValueMap();
         Integer fieldFlagValue = (Integer) dialogFieldNameValueMap.get(flagName);
         //if(fieldFlagValue == null)
         //    sourceField.addErrorMessage("Conditional " + conditionalItem + " has has an invalid 'flag' attribute (" + flagName + ").");
