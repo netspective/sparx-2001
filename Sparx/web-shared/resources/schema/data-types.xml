@@ -13,18 +13,24 @@
 		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
 		<size>32</size>
+
+		<field.text size="20"/>
 	</datatype>
 
-	<datatype name="text_set">
+	<datatype name="text-set">
 		<java-class package="java.lang">String</java-class>
 		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
 		<size>255</size>
+
+		<field.text size="20"/>
 	</datatype>
 
 	<datatype name="char">
 		<java-class package="java.lang">String</java-class>
 		<sqldefn dbms="ansi">varchar(1)</sqldefn>
+
+		<field.text size="1" max-length="1"/>
 	</datatype>
 
 	<datatype name="float">
@@ -32,6 +38,8 @@
 		<java-class package="java.lang">Float</java-class>
 		<sqldefn dbms="ansi">float</sqldefn>
 		<sqldefn dbms="oracle">number(20,6)</sqldefn>
+
+		<field.float size="16" min="0.0"/>
 	</datatype>
 
 	<datatype name="integer">
@@ -39,6 +47,8 @@
 		<java-class package="java.lang">Integer</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(8)</sqldefn>
+
+		<field.integer size="16" min="0" max="99999999"/>
 	</datatype>
 
 	<datatype name="smallint">
@@ -46,6 +56,8 @@
 		<java-class package="java.lang">Integer</java-class>
 		<sqldefn dbms="ansi">smallint</sqldefn>
 		<sqldefn dbms="oracle">number(4)</sqldefn>
+
+		<field.integer size="16" min="0" max="9999"/>
 	</datatype>
 
 	<datatype name="longint">
@@ -53,6 +65,8 @@
 		<java-class package="java.lang">Long</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(16)</sqldefn>
+
+		<field.integer size="16" min="0"/>
 	</datatype>
 
 	<datatype name="boolean">
@@ -62,6 +76,8 @@
 		<sqldefn dbms="oracle">number(1)</sqldefn>
 		<sqldefn dbms="mssql">bit</sqldefn>
 		<sqldefn dbms="hsqldb">bit</sqldefn>
+
+		<field.boolean size="16" style="radio"/>
 	</datatype>
 
 	<datatype name="currency">
@@ -71,6 +87,8 @@
 		<sqldefn dbms="oracle">number(12,2)</sqldefn>
 		<sqldefn dbms="mssql">money</sqldefn>
 		<sqldefn dbms="postgres">numeric(12,2)</sqldefn>
+
+		<field.currency size="16"/>
 	</datatype>
 
 	<datatype name="percentage">
@@ -78,6 +96,8 @@
 		<java-class package="java.lang">Float</java-class>
 		<sqldefn dbms="ansi">float</sqldefn>
 		<sqldefn dbms="oracle">number(5,2)</sqldefn>
+
+		<field.float size="16" min="0.0" max="100.0"/>
 	</datatype>
 
 	<datatype name="lookup">
@@ -85,6 +105,8 @@
 		<java-class package="java.lang">Integer</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(8)</sqldefn>
+
+		<field.select/>
 	</datatype>
 
 	<datatype name="date">
@@ -92,6 +114,8 @@
 		<java-date-format-instance>java.text.DateFormat.getDateInstance()</java-date-format-instance>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
+
+		<field.date size="16" format="MM-dd-yyyy" min="01-01-1900"/>
 	</datatype>
 
 	<datatype name="stamp">
@@ -99,6 +123,8 @@
 		<java-date-format-instance>java.text.DateFormat.getDateTimeInstance()</java-date-format-instance>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
+
+		<field.datetime size="16" format="MM-dd-yyyy H:mm" min="01-01-1900 00:00"/>
 	</datatype>
 
 	<datatype name="time">
@@ -106,12 +132,16 @@
 		<java-date-format-instance>java.text.DateFormat.getTimeInstance()</java-date-format-instance>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
+
+		<field.time size="16" format="H:mm" min="00:00"/>
 	</datatype>
 
 	<datatype name="autoinc" type="longint">
 		<copytype>longint</copytype>
 		<sqldefn dbms="mssql">integer IDENTITY</sqldefn>
 		<sqldefn dbms="hsqldb">integer IDENTITY</sqldefn>
+
+		<field.integer size="16" min="0"/>
 	</datatype>
 
 	<datatype name="datablock">
@@ -124,6 +154,8 @@
 
 	<datatype name="email" type="text">
 		<size>64</size>
+
+		<field.email size="20"/>
 	</datatype>
 
 	<datatype name="guidtext">
@@ -131,10 +163,14 @@
 		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
 		<size>36</size>
+
+		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
 	</datatype>
 
 	<datatype name="guid32" type="guidtext">
 		<copytype>guidtext</copytype>
+
+		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
 	</datatype>
 
 	<datatype name="duration">
@@ -148,15 +184,6 @@
 		<composite>
 			<column name="$name$_begin_stamp" type="stamp"/>
 			<column name="$name$_end_stamp" type="stamp"/>
-		</composite>
-	</datatype>
-
-	<datatype name="survey">
-		<composite>
-			<column name="$name$_id" lookupref="$survey-type-enum$" descr="The text of the question"/>
-			<column name="$name$_value_int" type="integer"/>
-			<column name="$name$_value_date" type="date"/>
-			<column name="$name$_value_text" type="text"/>
 		</composite>
 	</datatype>
 
