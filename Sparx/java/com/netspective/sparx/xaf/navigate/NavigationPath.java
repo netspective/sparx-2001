@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.6 2003-01-09 20:59:56 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.7 2003-01-19 00:11:43 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -193,7 +193,7 @@ public class NavigationPath
         }
     }
 
-    private NavigationPath owner;
+    private NavigationTree owner;
     private NavigationPath parent;
     private long flags;
     private String id;
@@ -203,6 +203,8 @@ public class NavigationPath
     private String heading;
     private String actionImageUrl;
     private String entityImageUrl;
+    private String controllerName;
+    private NavigationController controller;
     private List childrenList = new ArrayList();
     private Map childrenMap = new HashMap();
     private Map absPathMap = new HashMap();
@@ -290,12 +292,12 @@ public class NavigationPath
         heading = value != null && value.length() > 0 ? value : null;
     }
 
-    public NavigationPath getOwner()
+    public NavigationTree getOwner()
     {
         return owner;
     }
 
-    public void setOwner(NavigationPath value)
+    public void setOwner(NavigationTree value)
     {
         owner = value;
     }
@@ -490,7 +492,11 @@ public class NavigationPath
                     childElem.setAttribute("class", childPath.getClass().getName());
                 }
 
-                childPath.setOwner(parent.getOwner());
+                if (parent.isRoot())
+                    childPath.setOwner((NavigationTree) parent);
+                else
+                    childPath.setOwner(parent.getOwner());
+
                 childPath.setParent(parent);
                 String id = childElem.getAttribute("id");
                 childPath.setId(id);
@@ -526,10 +532,31 @@ public class NavigationPath
                 }
                 childPath.setTitle(title);
 
+                String controllerName = childElem.getAttribute("controller");
+                NavigationController controller = null;
+
+                if (controllerName != null && controllerName.length() > 0)
+                {
+                    controller = childPath.getOwner().getControllerByName(controllerName);
+
+                } else {
+                    controllerName = childPath.getParent().getControllerName();
+                    controller =  childPath.getParent().getController();
+                }
+
+                if (controller == null){
+                    controllerName = "default";
+                    controller = childPath.getOwner().getControllerByName(controllerName);
+                    //TODO: see if it would be usefull to try the parent's controllerName before going to the default.
+                }
+
+                childPath.setControllerName(controllerName);
+                childPath.setController(controller);
+
                 String url = childElem.getAttribute("url");
                 if (url == null || url.length() == 0)
                 {
-                    url = id;
+                    url = controller.getUrl() + id; //TODO: I think that it would be useful for every page should be able to defin retain-params.
                     childElem.setAttribute("url", id);
                 }
                 childPath.setUrl(url);
@@ -758,7 +785,12 @@ public class NavigationPath
      */
     public String getUrl(ValueContext vc)
     {
-        return url != null ? url.getValue(vc) : ((HttpServletRequest) vc.getRequest()).getContextPath() + ((HttpServletRequest) vc.getRequest()).getServletPath() + getAbsolutePath();
+        String startOfUrl = url != null ? url.getValue(vc) : ((HttpServletRequest) vc.getRequest()).getContextPath() + ((HttpServletRequest) vc.getRequest()).getServletPath() + getAbsolutePath();
+
+        String params = controller.getRetainParamsValue(vc);
+        //TODO: This code will need to be smarter in order to NOT double parameters that have already been included as part of the URL
+        //      For example, the url defines param a and the controller does as well, then currently this param will show up twice in the request.
+        return startOfUrl + (params != null && params.length() > 0 ? "?" + params : "");
     }
 
     /**
@@ -835,6 +867,23 @@ public class NavigationPath
     {
         this.ancestorMap = ancestorMap;
     }
+
+    public String getControllerName() {
+        return controllerName;
+    }
+
+    public void setControllerName(String controllerName) {
+        this.controllerName = controllerName;
+    }
+
+    public NavigationController getController() {
+        return controller;
+    }
+
+    public void setController(NavigationController controller) {
+        this.controller = controller;
+    }
+
 
     /**
      * Returns a boolean that describes wether the current item of the NavigationPath should be displayed or not.

@@ -50,77 +50,35 @@
  * @author Shahid N. Shah
  */
 
+/**
+ * $Id: NavigationController.java,v 1.1 2003-01-19 00:11:43 roque.hernandez Exp $
+ */
+
 package com.netspective.sparx.xaf.navigate;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.io.File;
+import org.w3c.dom.Element;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.ValueSource;
 
-public class NavigationTree extends NavigationPage
-{
-    protected Map resources;
-    protected Map controllers;
+public interface NavigationController {
 
-    public void discoverResources(String appRoot, String rootUrl, Map inheritResources)
-    {
-        if (resources == null)
-            resources = new HashMap();
+    public String getName() ;
 
-        File dir = new File(appRoot + rootUrl);
-        discoverResources(inheritResources, rootUrl, "/", dir);
-    }
+    public void setName(String name);
 
-    protected void discoverResources(Map inheritResources, String rootUrl, String currentPathId, File dir)
-    {
+    public String getUrl() ;
 
-        File[] files = dir.listFiles();
+    public void setUrl(String url);
 
-        Map singlePathResources = (inheritResources == null ? new HashMap() : (inheritResources.get(currentPathId) == null ? new HashMap() : (Map) inheritResources.get(currentPathId)));
+    public String getRetainParamsValue(ValueContext vc);
 
-        for (int i = 0; files != null && i < files.length; i++)
-        {
-            File file = files[i];
-            if (file.isDirectory())
-            {
-                discoverResources(inheritResources, rootUrl, currentPathId + (currentPathId.endsWith("/") ? "" : "/") + file.getName(), file);
-            }
-            else
-            {
-                String fileName = file.getName();
-                int extnIndex = fileName.lastIndexOf(".");
-                String justNameNoExtn = extnIndex == -1 ? fileName : fileName.substring(0, extnIndex);
-                singlePathResources.put(justNameNoExtn, rootUrl + currentPathId + (currentPathId.endsWith("/") ? "" : "/") + fileName);
-            }
-        }
-        resources.put(currentPathId, singlePathResources);
-    }
+    public void setRetainParamsSource(String retainParams);
 
-    public Map getResources()
-    {
-        return resources;
-    }
+    public String getRetainParamsSource();
 
-    public void resolveResources()
-    {
-        List children = this.getChildrenList();
-        for (int i = 0; i < children.size(); i++)
-        {
-            NavigationPath navPath = (NavigationPath) children.get(i);
-            navPath.resolveResources(getResources());
-        }
-    }
+    public ValueSource getRetainParams();
 
-    public Map getControllers() {
-        return controllers;
-    }
+    public void setRetainParams(ValueSource vs);
 
-    public void setControllers(Map controllers) {
-        this.controllers = controllers;
-    }
-
-    public NavigationController getControllerByName(String controllerName){
-        return (NavigationController) controllers.get(controllerName);
-    }
-
+    public void importFromXml(Element elem);
 }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.4 2003-01-07 10:46:05 roque.hernandez Exp $
+ * $Id: NavigationTreeManager.java,v 1.5 2003-01-19 00:11:43 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -91,6 +91,10 @@ public class NavigationTreeManager extends XmlSource
         if(xmlDoc == null)
             return;
 
+        Map controllers = new HashMap();
+        NavigationController defaultController = new BasicNavigationController(NAME_DEFAULT, "/index.jsp", "");
+        controllers.put(NAME_DEFAULT, defaultController);
+
         NodeList children = xmlDoc.getDocumentElement().getChildNodes();
         for(int c = 0; c < children.getLength(); c++)
         {
@@ -98,12 +102,29 @@ public class NavigationTreeManager extends XmlSource
             if(child.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
+
             Element childElem = (Element) child;
-            if(childElem.getNodeName().equals("structure"))
+
+            if (childElem.getNodeName().equals("controllers")){
+                NodeList controllerNodes = childElem.getChildNodes();
+                for (int i = 0; i < controllerNodes.getLength(); i++){
+                    Node controllerNode = controllerNodes.item(i);
+                    if (controllerNode.getNodeType() == Node.ELEMENT_NODE && controllerNode.getNodeName().equals("controller")) {
+                        ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), BasicNavigationController.class, true);
+                        NavigationController controller = (NavigationController) instanceGen.getInstance();
+                        controller.importFromXml((Element)controllerNode);
+                        controllers.put(controller.getName(), controller);
+                    }
+                }
+            }
+            else if(childElem.getNodeName().equals("structure"))
             {
                 setAttrValueDefault(childElem, "name", NAME_DEFAULT);
                 ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationTree.class, true);
                 NavigationTree tree = (NavigationTree) instanceGen.getInstance();
+                tree.setControllers(controllers);
+                tree.setControllerName(NAME_DEFAULT);
+                tree.setController(defaultController);
                 tree.setRoot(true);
                 tree.importFromXml(childElem, tree);
                 structures.put(childElem.getAttribute("name"), tree);
