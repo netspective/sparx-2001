@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.11 2002-09-28 04:19:57 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.12 2002-10-02 03:42:30 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -155,7 +155,6 @@ public class StatementManager extends XmlSource
 
     static private Hashtable dynamicSql = new Hashtable();
 
-    private String defaultStyleSheet = null;
     private Hashtable statements = new Hashtable();
     private Hashtable queryDefns = new Hashtable();
     private Hashtable reports = new Hashtable();
@@ -255,11 +254,8 @@ public class StatementManager extends XmlSource
 
     public void catalogNodes()
     {
-
         statements.clear();
-        //reports.clear();
         queryDefns.clear();
-        defaultStyleSheet = null;
 
         if(SQL_TYPES_MAP.size() == 0)
         {
@@ -283,7 +279,6 @@ public class StatementManager extends XmlSource
             if(nodeName.equals("sql-statements"))
             {
                 Element statementsElem = (Element) node;
-                defaultStyleSheet = statementsElem.getAttribute("style-sheet");
                 String stmtPkg = statementsElem.getAttribute("package");
                 String stmtPkgDataSrc = statementsElem.getAttribute("data-source");
                 if(stmtPkgDataSrc.length() == 0)
