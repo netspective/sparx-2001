@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateDDLDialog.java,v 1.3 2002-01-27 21:01:27 snshah Exp $
+ * $Id: DatabaseGenerateDDLDialog.java,v 1.4 2002-08-09 11:53:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -97,7 +97,7 @@ public class DatabaseGenerateDDLDialog extends Dialog
         outputFileField = new TextField("output_file", "Output file");
         outputFileField.setSize(60);
         outputFileField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        outputFileField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.database-root-path}/schema/complete.sql"));
+        outputFileField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.schema.root-path}/ddl/complete.sql"));
 
         generatorsList = new FilesystemEntriesListValue();
         generatorsList.setRootPath("config-expr:${"+ com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX +"xslt-path}/schema-gen");

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseMetaDataToSchemaDocDialog.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabaseMetaDataToSchemaDocDialog.java,v 1.2 2002-08-09 11:53:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -99,7 +99,7 @@ public class DatabaseMetaDataToSchemaDocDialog extends Dialog
         dsSchemaField.setFlag(DialogField.FLDFLAG_PERSIST);
 
         outFileName = new TextField("out_file_name", "Output File");
-        outFileName.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.database-root-path}/schema-src/generated-schema.xml"));
+        outFileName.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.schema.root-path}/generated-schema.xml"));
         outFileName.setFlag(DialogField.FLDFLAG_REQUIRED | DialogField.FLDFLAG_PERSIST);
 
         addField(dsDriverField);

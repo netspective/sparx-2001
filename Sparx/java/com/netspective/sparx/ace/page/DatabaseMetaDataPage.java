@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseMetaDataPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabaseMetaDataPage.java,v 1.2 2002-08-09 11:53:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -88,12 +88,12 @@ public class DatabaseMetaDataPage extends AceServletPage
 
     public final String getCaption(PageContext pc)
     {
-        return "DB Meta Data";
+        return "Reverse Engineer";
     }
 
     public final String getHeading(PageContext pc)
     {
-        return "Database Meta Data";
+        return "Reverse Engineer SchemaDoc";
     }
 
     public void handlePageBody(PageContext pc) throws ServletException, IOException

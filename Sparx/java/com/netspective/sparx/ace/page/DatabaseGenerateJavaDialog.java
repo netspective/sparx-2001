@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateJavaDialog.java,v 1.2 2002-01-22 12:46:35 jruss Exp $
+ * $Id: DatabaseGenerateJavaDialog.java,v 1.3 2002-08-09 11:53:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -117,7 +117,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         destRootField = new TextField("dest_root", "Destination Root");
         destRootField.setSize(50);
         destRootField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        destRootField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.database-root-path}/java"));
+        destRootField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.schema.root-path}/java"));
 
         dataTypesPkgField = new TextField("data_types_pkg", "Datatypes Package");
         dataTypesPkgField.setSize(40);
