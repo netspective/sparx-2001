@@ -620,6 +620,7 @@
 								<xsd:enumeration value="browser-read-only"/>
 								<xsd:enumeration value="hidden"/>
 								<xsd:enumeration value="required"/>
+								<xsd:enumeration value="initial-focus"/>
 							</xsd:restriction>
 						</xsd:simpleType>
 					</xsd:attribute>
