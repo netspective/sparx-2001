@@ -45,10 +45,47 @@ public class BookInfo   extends Dialog
     /**
      * This is the class that you do your entire dialog validation with
      */
-    public boolean isValid(DialogContext dc)
-    {
+    public boolean isValid(DialogContext dc) {
         return super.isValid(dc);
     }
+
+
+    public void populateValues(DialogContext dc, int i) {
+        // make sure to call the parent method to ensure default behavior
+        super.populateValues(dc, i);
+
+        // you should almost always call dc.isInitialEntry() to ensure that you're not
+        // populating data unless the user is seeing the data for the first time
+        if (!dc.isInitialEntry())
+            return;
+
+        // now do the populating using DialogContext methods
+        if (dc.editingData() || dc.deletingData()) {
+			BookInfoContext dcb = (BookInfoContext) dc;
+            String bookId = dc.getRequest().getParameter("bookid");
+
+			BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
+
+			try {
+				ConnectionContext cc = dcb.getConnectionContext();
+
+				// Grab the information from the BookInfo table into a new BookInfoRow ...
+				BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
+
+				dcb.setBookId(bkInfoRow.getId());
+				dcb.setBookAuthor(bkInfoRow.getAuthor());
+				dcb.setBookName(bkInfoRow.getName());
+				dcb.setBookType(bkInfoRow.getTypeInt());
+				dcb.setBookISBN(bkInfoRow.getIsbn());
+			} catch (NamingException ne) {
+				ne.printStackTrace();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+        }
+    }
+
+
 
     /**
      *  This is where you perform all your actions. Whatever you return as the function result will be shown
@@ -61,73 +98,79 @@ public class BookInfo   extends Dialog
         // super.execute(dc);
 
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
+		String redirectURL = request.getContextPath() + "/index.jsp";
+		String executeStatus;
 
 		// What to do if the dialog is in add mode ...
-        if (dc.addingData())
-        {
+        if (dc.addingData()) {
 			boolean status = processAddAction(writer, dc);
-			String theStatus = status ? "Success!" : "Failure!";
-
-			try {
-				writer.write(theStatus + "<br>");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
         }
 
 		// What to do if the dialog is in edit mode ...
-        if (dc.editingData())
-        {
-			try {
-				writer.write("Data edited<br>");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-            // processEditAction(dc);
+        if (dc.editingData()) {
+			boolean status = processEditAction(writer, dc);
         }
 
 		// What to do if the dialog is in delete mode ...
-        if (dc.deletingData())
-        {
-			try {
-				writer.write("Data deleted<br>");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-            // processDeleteAction(dc);
-
+        if (dc.deletingData()) {
+			boolean status = processEditAction(writer, dc);
         }
+
+		try	{
+			((HttpServletResponse)dc.getResponse()).sendRedirect(redirectURL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     /**
      * Process the delete action
      */
-    protected void processDeleteAction(DialogContext dc)
-    {
-    }
-
-    /**
-     * Process the update action
-     */
-	protected boolean processEditAction(DialogContext dc)
-	{
+    protected boolean processDeleteAction(Writer writer, DialogContext dc) {
 		BookInfoContext dcb = (BookInfoContext) dc;
 		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
 		boolean status = false;
+		String bookId = dc.getRequest().getParameter("bookid");
 
 		try {
 			ConnectionContext cc = dcb.getConnectionContext();
 
 			// Create a new BookInfo record and insert it...
-			BookInfoRow bkInfoRow = bkInfoTbl.createBookInfoRow();
+			BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
+
+			status = bkInfoTbl.delete(cc, bkInfoRow);
+			cc.commitTransaction();
+		} catch (NamingException ne) {
+			ne.printStackTrace();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+
+		return status;
+    }
+
+    /**
+     * Process the update action
+     */
+	protected boolean processEditAction(Writer writer, DialogContext dc) {
+		BookInfoContext dcb = (BookInfoContext) dc;
+		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
+		boolean status = false;
+		String bookId = dc.getRequest().getParameter("bookid");
+
+		try {
+			ConnectionContext cc = dcb.getConnectionContext();
+
+			// Create a new BookInfo record and insert it...
+			BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
 			bkInfoRow.setId(dcb.getBookId());
-			bkInfoRow.setAuthor(dcb.getBookName());
-			bkInfoRow.setName(dcb.getBookAuthor());
+			bkInfoRow.setAuthor(dcb.getBookAuthor());
+			bkInfoRow.setName(dcb.getBookName());
 			bkInfoRow.setType(dcb.getBookTypeInt());
 			bkInfoRow.setIsbn(dcb.getBookISBN());
 
-			status = bkInfoTbl.insert(cc, bkInfoRow);
+			status = bkInfoTbl.update(cc, bkInfoRow);
+			cc.commitTransaction();
 		} catch (NamingException ne) {
 			ne.printStackTrace();
 		} catch (SQLException se) {
@@ -140,8 +183,7 @@ public class BookInfo   extends Dialog
     /**
      * Process the new data
      */
-    protected boolean processAddAction(Writer writer, DialogContext dc)
-    {
+    protected boolean processAddAction(Writer writer, DialogContext dc) {
 		BookInfoContext dcb = (BookInfoContext) dc;
 		BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
 		boolean status = false;
@@ -151,153 +193,19 @@ public class BookInfo   extends Dialog
 
 			// Create a new BookInfo record and insert it...
 			BookInfoRow bkInfoRow = bkInfoTbl.createBookInfoRow();
-			bkInfoRow.setCrStamp(new Date());
+			bkInfoRow.setCrStamp(null);
 			bkInfoRow.setId(dcb.getBookId());
-			bkInfoRow.setAuthor(dcb.getBookName());
-			bkInfoRow.setName(dcb.getBookAuthor());
+			bkInfoRow.setAuthor(dcb.getBookAuthor());
+			bkInfoRow.setName(dcb.getBookName());
 			bkInfoRow.setType(dcb.getBookTypeInt());
 			bkInfoRow.setIsbn(dcb.getBookISBN());
 
-			DmlStatement dml = bkInfoRow.createInsertDml(bkInfoTbl);
-			bkInfoTbl.validateDmlValues(dml);
-
-			writer.write (bkInfoRow.toString() + "<br>");
-			writer.write (dml.toString() + "<br>");
-
-			if (!bkInfoRow.beforeInsert(cc, dml)) {
-				status = false;
-				writer.write ("bkInfoRow.beforeInsert() returned false!<br>");
-			} else {
-				writer.write ("bkInfoRow.beforeInsert() returned true!<br>");
-			}
-
-
-
-
-
-
-
-
-
-
-
-
-			boolean result = false;
-			PreparedStatement stmt = null;
-			try
-			{
-				stmt = cc.getConnection().prepareStatement(dml.getSql());
-
-				int columnNum = 1;
-				boolean[] bindValues = dml.getBindValues();
-				List columnValues = dml.getColumnValues();
-				if(bindValues != null)
-				{
-									// Need to use columnValues.size() since the dml may have removed
-									// columns if autoinc columns are not included in the SQL
-					for(int c = 0; c < columnValues.size(); c++)
-					{
-						if(bindValues[c])
-						{
-							stmt.setObject(columnNum, columnValues.get(c));
-							columnNum++;
-						}
-					}
-				}
-
-/*
-				Object[] additionalBindParams = null;
-
-				if(additionalBindParams != null)
-				{
-					for(int i = 0; i < additionalBindParams.length; i++)
-					{
-						stmt.setObject(columnNum, additionalBindParams[i]);
-						columnNum++;
-					}
-				}
-*/
-				int numRowsUpdated = stmt.executeUpdate();
-				writer.write ("stmt.executeUpdate returned" + numRowsUpdated + "<br>");
-				if (numRowsUpdated > 0) result = true;
-				writer.write ("stmt.execute() returned " + (result ? "true!" : "false!") + "<br>");
-			}
-			catch(SQLException e)
-			{
-				StringBuffer bindParams = new StringBuffer();
-				int columnNum = 1;
-				boolean[] bindValues = dml.getBindValues();
-				List columnValues = dml.getColumnValues();
-				if(bindValues != null)
-				{
-					for(int c = 0; c < columnValues.size(); c++)
-					{
-						if(bindValues[c])
-						{
-							Object value = columnValues.get(c);
-							if(columnNum > 1)
-								bindParams.append(", ");
-							bindParams.append(columnNum);
-							bindParams.append(": ");
-							bindParams.append(value == null ? "NULL" : (value.toString() + " {" + value.getClass().getName() + "}"));
-							columnNum++;
-						}
-					}
-				}
-/*
-				if(additionalBindParams != null)
-				{
-					for(int i = 0; i < additionalBindParams.length; i++)
-					{
-						Object value = additionalBindParams[i];
-						if(columnNum > 1)
-							bindParams.append(", ");
-						bindParams.append(columnNum);
-						bindParams.append(": ");
-						bindParams.append(value == null ? "NULL" : (value.toString() + " {" + value.getClass().getName() + "}"));
-						columnNum++;
-					}
-				}
-*/
-				throw new SQLException(e.toString() + " [" + dml.getSql() + "\n(bind " + (bindParams.length() > 0 ? bindParams.toString() : "none") + ")\n" + bkInfoRow.toString() + "]");
-			}
-			finally
-			{
-				if(stmt != null) stmt.close();
-			}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			boolean successful = result;
-//	        boolean successful = bkInfoTbl.executeDml(cc, bkInfoRow, dml, null);
-	        writer.write ("executeDml " + (successful ? "succeeded" : "failed") + "!<br>");
-
-	        bkInfoRow.afterInsert(cc);
-
-       		cc.returnConnection();
-        	status = successful;
-
-//			status = bkInfoTbl.insert(cc, bkInfoRow);
+			status = bkInfoTbl.insert(cc, bkInfoRow);
 			cc.commitTransaction();
 		} catch (NamingException ne) {
 			ne.printStackTrace();
 		} catch (SQLException se) {
 			se.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 
