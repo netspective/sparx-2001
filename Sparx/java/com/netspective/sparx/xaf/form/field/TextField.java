@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.4 2002-04-22 09:06:30 jruss Exp $
+ * $Id: TextField.java,v 1.5 2002-04-22 09:47:32 jruss Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -316,8 +316,7 @@ public class TextField extends DialogField
         String readonlyStyle = dc.getSkin().getControlAreaStyleAttrs();
         if(isReadOnly(dc))
         {
-						value = dc.getValue(this); // Reset value if field is read only
-            writer.write("<input type='hidden' name='" + getId() + "' value=\"" + value + "\"><span id='" + getQualifiedName() + "'>" + value + "</span>");
+            writer.write("<input type='hidden' name='" + getId() + "' value=\"" + value + "\"><span id='" + getQualifiedName() + "'>" + dc.getValue(this) + "</span>");
         }
         else if(isBrowserReadOnly(dc))
         {
