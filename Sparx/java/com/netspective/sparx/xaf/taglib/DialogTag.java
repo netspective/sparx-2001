@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogTag.java,v 1.2 2002-12-15 18:03:18 shahid.shah Exp $
+ * $Id: DialogTag.java,v 1.3 2002-12-23 04:44:00 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -126,7 +126,7 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
                 }
             }
 
-            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(pageContext.getServletContext(), name);
+            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(pageContext.getServletContext(), null, name);
             if(dialog == null)
             {
                 out.write("Dialog '" + name + "' not found in manager '" + manager + "'.");

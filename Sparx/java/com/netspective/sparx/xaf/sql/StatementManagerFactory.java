@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementManagerFactory.java,v 1.5 2002-10-16 03:14:57 shahid.shah Exp $
+ * $Id: StatementManagerFactory.java,v 1.6 2002-12-23 04:43:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -227,7 +227,7 @@ public class StatementManagerFactory implements Factory
             return sb.toString();
         }
 
-        public void handleStatement(ValueContext vc) throws IOException, StatementNotFoundException, NamingException, SQLException
+        public void handleStatement(ValueContext vc, boolean unitTest) throws IOException, StatementNotFoundException, NamingException, SQLException
         {
             PrintWriter out = vc.getResponse().getWriter();
             javax.servlet.ServletContext context = vc.getServletContext();
@@ -264,7 +264,7 @@ public class StatementManagerFactory implements Factory
             if(dialogCommands != null)
             {
                 out.write("</td><td>");
-                dialogCommands.handleDialog(vc);
+                dialogCommands.handleDialog(vc, unitTest);
                 out.write("</td></tr></td></table>");
             }
         }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.7 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.8 2002-12-23 04:43:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -438,7 +438,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         if(pageCmd.equals("dialog"))
         {
             DialogManagerFactory.DialogCommands dcmd = DialogManagerFactory.getCommands(pageCmdParam);
-            dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp));
+            dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp), false);
         }
         else if(pageCmd.equals("qd-dialog"))
         {
@@ -448,7 +448,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         else if(pageCmd.equals("statement"))
         {
             StatementManagerFactory.StatementCommands scmd = StatementManagerFactory.getStatementCommands(pageCmdParam);
-            scmd.handleStatement(new ServletValueContext(context, servlet, req, resp));
+            scmd.handleStatement(new ServletValueContext(context, servlet, req, resp), false);
         }
         else
         {
