@@ -34,7 +34,7 @@ public class PageTag extends TagSupport
 	public final String[] getPermissions() { return permissions; }
 	public void setPermission(String value)
 	{
-		if(value.indexOf(",") != -1)
+		if(value.indexOf(",") == -1)
 		{
 			permissions = new String[] { value };
 		}
