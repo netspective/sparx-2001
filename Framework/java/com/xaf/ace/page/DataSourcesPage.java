@@ -77,13 +77,5 @@ public class DataSourcesPage extends AceServletPage
 			out.write(e.toString());
 			e.printStackTrace(out);
 		}
-		for(Enumeration e = context.getInitParameterNames(); e.hasMoreElements(); )
-		{
-			Element propertyElem = doc.createElement("property");
-			String paramName = (String) e.nextElement();
-			addText(propertyElem, "name", paramName);
-			addText(propertyElem, "value", context.getInitParameter(paramName));
-			propertiesElem.appendChild(propertyElem);
-		}
 	}
 }

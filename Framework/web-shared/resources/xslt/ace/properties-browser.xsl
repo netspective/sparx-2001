@@ -45,4 +45,33 @@
 	</table>
 </xsl:template>
 
+<xsl:template match="xaf/factory">
+	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
+	<tr class="heading">
+		<td class="heading"><xsl:value-of select="@name"/>&#160;<font color="black">Factory</font></td>
+	</tr>
+	<tr class="heading_rule">
+		<td height="1" ></td>
+	</tr>
+	</table>
+	<br/>
+	<h1><xsl:value-of select="@class"/></h1>
+	<table cellspacing="0" cellpadding="2">
+		<tr bgcolor="beige">
+			<th>Name</th>
+			<th>Class</th>
+		</tr>
+		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		<xsl:for-each select="*">
+			<xsl:sort select="@name"/>
+			<tr valign="top">
+				<td><xsl:value-of select="@name"/></td>
+				<td><font color="green"><xsl:value-of select="@class"/></font></td>
+			</tr>
+			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+		</xsl:for-each>
+	</table>
+	<p/>
+</xsl:template>
+
 </xsl:stylesheet>

@@ -56,6 +56,13 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		pagesPath.registerPage("/application/config", new AppConfigurationPage());
 		pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
 
+		pagesPath.registerPage("/application/factory", new AppFactoryPage());
+		pagesPath.registerPage("/application/factory/value-sources", new AppFactoryPage("value-sources", "Value Sources", AppFactoryPage.FACTORY_VALUESOURCE));
+		pagesPath.registerPage("/application/factory/dialog-fields", new AppFactoryPage("dialog-fields", "Dialog Fields", AppFactoryPage.FACTORY_DIALOG_FIELD));
+		pagesPath.registerPage("/application/factory/report-comps", new AppFactoryPage("report-comps", "Report Components", AppFactoryPage.FACTORY_REPORT_COMPS));
+		pagesPath.registerPage("/application/factory/tasks", new AppFactoryPage("tasks", "Tasks", AppFactoryPage.FACTORY_TASK));
+		pagesPath.registerPage("/application/factory/skins", new AppFactoryPage("skins", "Skins", AppFactoryPage.FACTORY_SKIN));
+
 		pagesPath.registerPage("/database", new DatabasePage());
 		pagesPath.registerPage("/database/sql", new DatabaseSqlPage());
 		pagesPath.registerPage("/database/schema", new DatabaseSchemaDocPage());

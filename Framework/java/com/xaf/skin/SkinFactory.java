@@ -10,6 +10,7 @@ package com.xaf.skin;
  */
 
 import java.util.*;
+import org.w3c.dom.*;
 import com.xaf.form.*;
 import com.xaf.report.*;
 
@@ -87,4 +88,40 @@ public class SkinFactory
 	{
 		return getDialogSkin("default");
 	}
+
+	public static void createCatalog(Element parent)
+	{
+		if(! haveReportSkinsDefaults) setupReportSkinsDefaults();
+		if(! haveDialogSkinsDefaults) setupDialogSkinsDefaults();
+
+		Document doc = parent.getOwnerDocument();
+		Element factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Dialog Skins");
+		factoryElem.setAttribute("class", SkinFactory.class.getName());
+		for(Iterator i = dialogSkins.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("dialog-skin");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((DialogSkin) entry.getValue()).getClass().getName());
+			factoryElem.appendChild(childElem);
+		}
+
+		factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Report Skins");
+		factoryElem.setAttribute("class", SkinFactory.class.getName());
+		for(Iterator i = reportSkins.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("report-column-format");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((ReportSkin) entry.getValue()).getClass().getName());
+			factoryElem.appendChild(childElem);
+		}
+	}
+
 }

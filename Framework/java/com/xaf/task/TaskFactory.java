@@ -41,4 +41,25 @@ public class TaskFactory
 
         return task;
     }
+
+	public static void createCatalog(Element parent)
+	{
+		if(! defaultsAvailable) setupDefaults();
+
+		Document doc = parent.getOwnerDocument();
+		Element factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Tasks");
+		factoryElem.setAttribute("class", TaskFactory.class.getName());
+		for(Iterator i = taskMap.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("task");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((Class) entry.getValue()).getName());
+			factoryElem.appendChild(childElem);
+		}
+	}
+
 }
