@@ -282,8 +282,12 @@
 		<th></th>
 		<th>Java Type</th>
 		<th></th>
+        <th>Gen ID</th>
+        <th></th>
+        <th>Seq Name</th>
+        <th></th>
 	</tr>
-	<tr><td colspan="16"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="20"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	<xsl:for-each select="column">
 	<tr>
 		<xsl:if test="@primarykey='yes'">
@@ -376,14 +380,32 @@
 			</xsl:choose>
 		</td>
 		<td width="4"></td>
+        <td class="column_sql">
+            <xsl:choose>
+                <xsl:when test="@_gen-create-id">
+                    <xsl:value-of select="@_gen-create-id"/>
+                </xsl:when>
+                <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
+        </td>
+        <td width="4"></td>
+        <td class="column_sql">
+            <xsl:choose>
+                <xsl:when test="@_gen-create-id = 'autoinc' and @_gen-sequence-name">
+                    <xsl:value-of select="@_gen-sequence-name"/>
+                </xsl:when>
+                <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
+        </td>
+        <td width="4"></td>
 	</tr>
 	<tr>
 		<xsl:if test="@primarykey='yes'">
 			<xsl:attribute name="bgcolor">#EEEEEE</xsl:attribute>
 		</xsl:if>
-		<td colspan="14" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
+		<td colspan="18" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
 	</tr>
-	<tr><td colspan="16"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="20"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	</xsl:for-each>
 	</table>
 
