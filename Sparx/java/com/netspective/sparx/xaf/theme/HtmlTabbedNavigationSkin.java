@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.7 2003-03-21 05:49:37 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.8 2003-04-08 19:44:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -68,6 +68,9 @@ import com.netspective.sparx.util.config.ConfigurationManager;
 import org.w3c.dom.Element;
 
 import javax.servlet.Servlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
@@ -187,6 +190,21 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 (Servlet) jspPageContext.getPage(),
                 jspPageContext.getRequest(),
                 jspPageContext.getResponse(),
+                this, navTreeId);
+        if (popup) result.setPopup(true);
+
+        // associate a theme with this context
+        theme = SkinFactory.getInstance().getCurrentTheme(result);
+        return result;
+    }
+
+    public NavigationPathContext createContext(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response,
+                                                   NavigationTree tree, String navTreeId, boolean popup)
+    {
+        NavigationPathContext result = new NavigationPathContext(tree, request.getSession().getServletContext(),
+                servlet,
+                request,
+                response,
                 this, navTreeId);
         if (popup) result.setPopup(true);
 

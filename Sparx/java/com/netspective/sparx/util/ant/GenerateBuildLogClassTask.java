@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: GenerateBuildLogClassTask.java,v 1.3 2003-04-07 15:43:10 aye.thu Exp $
+ * $Id: GenerateBuildLogClassTask.java,v 1.4 2003-04-08 19:44:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -117,7 +117,7 @@ public class GenerateBuildLogClassTask extends Task
             writer.write("  public final static String BUILD_JAVA_VENDOR = \"" + System.getProperty("java.vendor") + "\";\n\n");
             writer.write("  public final static String BUILD_VM_NAME = \"" + System.getProperty("java.vm.name").replace('\"', ' ')  + "\";\n");
             writer.write("  public final static String BUILD_VM_VERSION = \"" + System.getProperty("java.vm.version") + "\";\n");
-            writer.write("  public final static String BUILD_VM_VENDOR = \"" + System.getProperty("java.vm.vendor") + "\";\n\n");
+            writer.write("  public final static String BUILD_VM_VENDOR = \"" + System.getProperty("java.vm.vendor").replace('\"', ' ') + "\";\n\n");
 
             writer.write("  public final static String[] BUILD_CLASS_PATH = new String[] {\n");
             ClassPath.ClassPathInfo[] cpi = ClassPath.getClassPaths();

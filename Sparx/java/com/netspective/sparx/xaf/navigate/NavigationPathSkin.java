@@ -51,12 +51,15 @@
  */
 
 /**
- * $Id: NavigationPathSkin.java,v 1.3 2003-01-07 10:46:05 roque.hernandez Exp $
+ * $Id: NavigationPathSkin.java,v 1.4 2003-04-08 19:44:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
 
 import javax.servlet.jsp.PageContext;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -70,7 +73,7 @@ public interface NavigationPathSkin
      * @return NavigationContext
      */
     public NavigationPathContext createContext(PageContext jspPageContext, NavigationTree tree, String navTreeId, boolean popup);
-
+    public NavigationPathContext createContext(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response, NavigationTree tree, String navTreeId, boolean popup);
     /**
      * Render the meta data like <html>, <head>, <script> etc.
      * @param writer The output destination
