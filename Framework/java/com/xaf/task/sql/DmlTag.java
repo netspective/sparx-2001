@@ -23,11 +23,15 @@ public class DmlTag extends TagSupport
 	}
 
 	public void setDebug(String value) { if(value.equals("yes")) task.setFlag(Task.TASKFLAG_DEBUG); }
+    public void setDataCmd(String value) { task.setDataCmdCondition(value); }
 	public void setCommand(String value) { task.setCommand(value); }
 	public void setTable(String value) { task.setTable(value); }
+    public void setAutoInc(String value) { task.setAutoInc(value); }
+    public void setAutoIncStore(String value) { task.setAutoIncStore(value); }
 	public void setDataSource(String value) { task.setDataSource(value); }
 	public void setFields(String value) { task.setFields(value); }
-	public void setWhere(String value) { task.setWhere(value); }
+	public void setWhere(String value) { task.setWhereCond(value); }
+    public void setWhereBind(String value) { task.setWhereCondBindParams(value); }
 	public void setColumns(String value) { task.setColumns(value); }
     public void setContext(String value) { task.setDialogContextAttrName(value); }
     public void setInsertchk(String value) { task.setInsertCheckValueSource(value); }
