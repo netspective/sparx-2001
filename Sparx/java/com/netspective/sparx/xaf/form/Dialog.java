@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.16 2002-12-23 04:33:59 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.17 2003-01-01 19:26:44 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -183,6 +183,13 @@ public class Dialog
      * Print data command
      */
     static public final String PARAMVALUE_DATA_CMD_PRINT = "print";
+
+    /**
+     * The valid data commands as a string list
+     */
+    static public final String[] VALID_DATA_COMMANDS = new String[] {
+        PARAMVALUE_DATA_CMD_ADD, PARAMVALUE_DATA_CMD_EDIT, PARAMVALUE_DATA_CMD_DELETE,
+        PARAMVALUE_DATA_CMD_CONFIRM, PARAMVALUE_DATA_CMD_PRINT };
 
     /**
      * This flag is used to search for a session parameter indicating whether or not
