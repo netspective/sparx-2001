@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementComponentCommand.java,v 1.7 2003-02-26 07:54:14 aye.thu Exp $
+ * $Id: StatementComponentCommand.java,v 1.8 2003-03-05 23:31:39 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -61,6 +61,7 @@ import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import com.netspective.sparx.xaf.sql.StatementDialog;
+import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.html.ComponentCommandFactory;
@@ -70,6 +71,8 @@ import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.util.ArrayList;
@@ -247,15 +250,24 @@ public class StatementComponentCommand extends AbstractComponentCommand
 
         if(rowsPerPage > 0 && rowsPerPage < UNLIMITED_ROWS)
         {
-            // Special Case: This static query must produce a report that is pageable
-            StatementDialog stmtDialog = new StatementDialog(manager.getStatement(vc.getServletContext(), null, statementName), reportId, skinName, urlFormats);
-            stmtDialog.setRowsPerPage(rowsPerPage);
-            DialogSkin dialogSkin = com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin();
-            DialogContext dc = stmtDialog.createContext(context, vc.getServlet(),
-                    (javax.servlet.http.HttpServletRequest) vc.getRequest(),
-                    (javax.servlet.http.HttpServletResponse) vc.getResponse(), dialogSkin);
-            stmtDialog.prepareContext(dc);
-            stmtDialog.renderHtml(writer, dc, false);
+            StatementInfo si = manager.getStatement(vc.getServletContext(), null, statementName);
+            if (si != null)
+            {
+                StatementDialog stmtDialog = new StatementDialog(si, reportId, skinName, urlFormats);
+                if(stmtDialog != null)
+                {
+                    stmtDialog.setRowsPerPage(rowsPerPage);
+                    DialogContext dc = stmtDialog.createContext(context, vc.getServlet(), (HttpServletRequest) vc.getRequest(),
+                            (HttpServletResponse) vc.getResponse(), SkinFactory.getInstance().getDialogSkin());
+                    stmtDialog.prepareContext(dc);
+                    stmtDialog.renderHtml(writer, dc, true);
+                }
+            }
+            else
+            {
+                writer.write("Statement " + statementName + " not found.");
+                return;
+            }
         }
         else
         {
