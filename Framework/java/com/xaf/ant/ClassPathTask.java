@@ -36,7 +36,7 @@ public class ClassPathTask extends Task
             for(int i = 0; i < cpi.length; i++)
             {
                 BuildConfiguration.ClassPathInfo info = cpi[i];
-                log(info.getClassPath().getAbsolutePath() + (info.isValid() ? " (valid)" : " (not found)"));
+                log(info.getClassPath().getAbsolutePath() + (info.isValid() ? "" : " (INVALID)"));
             }
         }
 
