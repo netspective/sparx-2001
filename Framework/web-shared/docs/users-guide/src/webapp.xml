@@ -5,37 +5,36 @@
         <title>Overview</title>
         <para>
         A Web application is a collection of HTML/XML documents, Web components (servlets and JSP pages), and 
-        other resources such as images and scripts in a directory structure. &product-name;
-        provides the &framework-name; libraries to produce a web application that delivers dynamically 
-        generated content. 
-        It is recommended that the following directory structures are created when building 
-        the web application (replace <filename class='directory'>web-app</filename> with
-        the web application name):
-        <itemizedlist>
-            <listitem><para><filename class='directory'>web-app/Database</filename></para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site</filename>            </para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site/WEB-INF</filename></para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site/WEB-INF/classes</filename></para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site/WEB-INF/ui</filename></para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site/WEB-INF/sql</filename></para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site/WEB-INF/security</filename></para></listitem>
-            <listitem><para><filename class='directory'>web-app/Site/WEB-INF/tld</filename></para></listitem>
-        </itemizedlist>
-        The two main configuration files, <filename class="conf">web-app/Site/WEB-INF/web.xml</filename> 
-        and <filename class="conf">web-app/Site/WEB-INF/configuration.xml</filename>, must also exist for
-        a web application using &framework-name; libraries.  
+        other resources such as images and scripts in a directory structure.         
+        &framework-name; libraries support using different methodologies based on different
+        building blocks such as JSP pages, custom tags, JavaBeans components, 
+        and servlets to produce a web application that delivers dynamically generated content. &framework-name;.
+        
+        Based on application requirements, developers can pursue a design which is purely
+        servlet based or they can pursue a design which is a combination of JSPs and servlets (also
+        known as the <quote>Model 2</quote> design). &framework-name; also provides a more XML-centric 
+        approach where most business logic can be defined with the forms themselves so that the JSPs 
+        can purely concentrate on the presentation.
+        </para>
+        
+        <para>
+        This chapter describes the different approaches described above so that developers can choose
+        dependent upon application specific requirements. The different approaches have their own
+        benefits and failings and it is up to the developer to decide which is the best way to
+        use to create and deliver a web application. 
+        
+        
         </para>
 
     </section>
     <section id="Servlet">
-        <title>Servlet</title>
-        <para>
-        A sophisticated Web application can consist of JSP pages, custom tags, JavaBeans components, and
-        servlets. Although JSP pages can be used for most presentation purposes, there are some circumstances 
+        <title>Servlets</title>
+        <para>       
+        Although JSP pages can be used for  most presentation purposes, there are some circumstances  
         such as low-level application functions that don't require frequent modification
-        where servlets are more appropriate.  
+        where servlets are more appropriate. Thus &framework-name; does not restrict the use of Servlets 
+        and fully supports both servlets and JSPs.
         
-        Thus &product-name; does not restrict the use of Servlets and fully supports both servlets and JSPs.
         Following the common web application atchitecture, all custom servlet Java classes must exist 
         under <filename class="directory">web-app/Site/WEB-INF/classes</filename> (if JAR files are used,
         they must exist under <filename class="directory">web-app/Site/WEB-INF/lib</filename> 
@@ -57,6 +56,79 @@
         </programlisting>
         The above example is a built-in navigation servlet provided by &framework-name; and can be used
         to display directory listings.
+        </para>
+        
+        <para>
+        &framework-name; provides an interface called <classname>com.xaf.page.ServletPage</classname>
+        and an implementing class called <classname>com.xaf.page.AbstractServletPage</classname>
+        to create web pages purely in Java. The <classname>AbstractServletPage</classname> class should be 
+        extended since it does not define any behavior (the methods are empty).         
+        For example, &explorer-name; 
+        uses a class called <classname>com.xaf.ace.AceServletPage</classname> which overwrites
+        the methods defined in <classname>AbstractServletPage</classname> such as <methodname>handlePageHeader</methodname>
+        and <methodname>handlePageMetaData</methodname>. It also defines other methods such as 
+        <methodname>transform</methodname> which can be used by other subclasses.
+        
+        Developers should create classes extending <classname>com.xaf.page.AbstractServletPage</classname>
+        and then overwrite the various methods to define the  functionality of each page. 
+        The following is an example of the dialogs listing page in &explorer-name;:
+        <example>
+            <title> <classname>com.xaf.ace.AppDialogsPage </classname> class</title>
+            <para>
+            <programlisting>
+            <![CDATA[
+    public class AppDialogsPage extends AceServletPage
+    {
+        ...
+
+        public void handlePageBody(PageContext pc) throws ServletException, IOException
+        {
+            ServletContext context = pc.getServletContext();
+            DialogManager manager = DialogManagerFactory.getManager(context);
+            manager.addMetaInfoOptions();
+
+            String testItem = getTestCommandItem(pc);
+            if(testItem != null)
+            {
+                ...
+            }
+            else
+            {
+                ...
+            }
+        }
+    }
+            ]]>
+            </programlisting>
+            
+            The example above describes how a web page can be created by overwriting the various methods 
+            available in <classname>com.xaf.ace.AceServletPage</classname> which extends the 
+            <classname>com.xaf.page.AbstractServletPage</classname>.  The <classname>com.xaf.ace.AceServletPage</classname>
+            defines the functionality common to all pages in &explorer-name; and the <classname>AppDialogsPage</classname> base 
+            class extending this class can define content specific to the page itself.
+            </para>
+        </example>
+        </para>
+        <para>
+        All pages created using <classname>com.xaf.page.AbstractServletPage</classname> as a super class
+        must be registered so that they can be navigated to through a servlet. &framework-name; provides a servlet class called
+        <classname>com.xaf.page.PageControllerServlet</classname>. This servlet class contains a method
+        called <methodname>registerPages</methodname> which is used to register the Java defined web pages.
+        For example, &explorer-name; registers its pages through a servlet called <classname>com.xaf.ace.AppComponentsExplorerServlet</classname>
+        and the servlet is registered in <filename class="conf">web.xml</filename>:
+        <programlisting>
+        <![CDATA[
+    <servlet>
+        <servlet-name>AppComponentsExplorer</servlet-name>
+        <servlet-class>com.xaf.ace.AppComponentsExplorerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AppComponentsExplorer</servlet-name>
+        <url-pattern>/ace/*</url-pattern>
+    </servlet-mapping>        
+        ]]>
+        </programlisting>
+        
         </para>
     </section>
     
