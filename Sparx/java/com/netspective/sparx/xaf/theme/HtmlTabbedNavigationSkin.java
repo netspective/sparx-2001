@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.3 2003-03-03 07:16:14 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.4 2003-03-12 06:33:45 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -82,9 +82,6 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
     static public final String TAB_ON_IMAGE = "tab-on";
     static public final String TAB_OFF_IMAGE = "tab-off";
 
-    protected NavigationStyle levelOneStyle;
-    protected NavigationStyle levelTwoStyle;
-    protected NavigationStyle levelThreeStyle;
     protected String cssFileName;
     protected String headerMarkerImageFileName;
     protected String headerSpacerImageFileName;
@@ -103,9 +100,6 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
     public HtmlTabbedNavigationSkin()
     {
-        levelOneStyle = new Level1Style();
-        levelTwoStyle = new Level2Style();
-        levelThreeStyle = new Level3Style();
     }
 
     /**
@@ -313,7 +307,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 "</td>\n");
         //writer.write("                              <td class=\"masthead-logo\" align=\"left\" valign=\"middle\">" + (nc.getApplicationName(nc) == null ? "Application Name" : nc.getApplicationName(nc)) + "</td>\n");
         writer.write("                              <td class=\"masthead-logo\" align=\"left\" valign=\"middle\">" +
-                "<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" width=\"100%\" height=\"18\"></td>\n");
+                "<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/spacer.gif\" width=\"200\" height=\"18\"></td>\n");
         writer.write("                          </tr>\n");
         writer.write("                      </table>\n");
         writer.write("                  </td>\n");
@@ -323,12 +317,18 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("                  <td align=\"left\" valign=\"bottom\">\n");
     }
 
+    /**
+     * Render the Level one menu
+     * @param writer
+     * @param nc
+     * @throws IOException
+     */
     public void renderPageMenusLevelOne(Writer writer, NavigationPathContext nc) throws IOException
     {
         writer.write("<!-- Level 1 Begins -->\n");
         NavigationPath activePath = nc.getActivePath();
-        levelOneStyle.renderHtml(writer,
-                activePath.getLevel() == 1 ? activePath : (NavigationPath) nc.getActivePath().getAncestorsList().get(1), nc);
+        String html = generateLevelOneHtml(activePath.getLevel() == 1 ? activePath : (NavigationPath) nc.getActivePath().getAncestorsList().get(1), nc);
+        writer.write(html);
         writer.write("<!-- Level 1 Ends -->\n");
 
         writer.write("                    </td>\n");
@@ -357,45 +357,75 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 List activePathChildren = activePath.getChildrenList();
                 if (activePath.getMaxLevel() > 1 && activePathChildren.size() > 0)
                 {
-                    levelTwoStyle.renderHtml(writer, (NavigationPath) activePath.getChildrenList().get(0), nc);
+                    writer.write(generateLevelTwoHtml((NavigationPath) activePath.getChildrenList().get(0), nc));
+
+                    writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+                    writer.write("  <tr>");
+                    writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() +
+                            getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
+                            "width=\"12\" height=\"12\" border=\"0\"></td>");
+                    writer.write("      <td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() +
+                            getThemeImagePath() + "/body/spacer-big.gif\" " +
+                            "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
+                    writer.write("  </tr>");
+                    writer.write("</table>");
                 }
                 else
                 {
                     // even if there are no level two menu items display the level two background bar
-                    writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" height=\"10\">");
+                    writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" height=\"27\">");
                     writer.write("	<tr>");
                     writer.write("	<td class=\"menu-level-2-table\" align=\"left\" valign=\"middle\">");
                     writer.write("	</td>");
                     writer.write("	</tr>");
                     writer.write("</table>");
-                    /*
+
                     writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-                    writer.write("  	<tr>");
-                    writer.write("	<td class=\"menu-level-3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
-                            "<img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" width=\"150\" height=\"12\" border=\"0\"></td>");
-                    writer.write("	<td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
+                    writer.write("  <tr>");
+                    writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() +
+                            getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
                             "width=\"12\" height=\"12\" border=\"0\"></td>");
-                    writer.write("	<td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() + getThemeImagePath() + "/body/spacer-big.gif\" " +
+                    writer.write("      <td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() +
+                            getThemeImagePath() + "/body/spacer-big.gif\" " +
                             "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
-                    writer.write("	</tr>");
+                    writer.write("  </tr>");
                     writer.write("</table>");
-                    */
+
                 }
                 break;
 
             case 2:
-                levelTwoStyle.renderHtml(writer, activePath, nc);
+                writer.write(generateLevelTwoHtml(activePath, nc));
+                if (activePath.getMaxLevel() == 2)
+                {
+                    writer.write("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+                    writer.write("  <tr>");
+                    writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\"" + nc.getRootUrl() +
+                            getThemeImagePath() + "/body/spacer-big.gif\" alt=\"\" " +
+                            "width=\"12\" height=\"12\" border=\"0\"></td>");
+                    writer.write("      <td align=\"left\" valign=\"top\"><img src=\"" + nc.getRootUrl() +
+                            getThemeImagePath() + "/body/spacer-big.gif\" " +
+                            "alt=\"\" height=\"12\" width=\"100%\" border=\"0\"></td>");
+                    writer.write("  </tr>");
+                    writer.write("</table>");
+                }
                 break;
 
             case 3:
             case 4:
-                levelTwoStyle.renderHtml(writer, (NavigationPath) activePath.getAncestorsList().get(2), nc);
+                writer.write(generateLevelTwoHtml((NavigationPath) activePath.getAncestorsList().get(2), nc));
                 break;
 
         }
         writer.write("<!-- Level Two Ends -->");
     }
 
+    /**
+     *
+     * @param writer
+     * @param nc
+     * @throws IOException
+     */
     public void renderPageMenusLevelThree(Writer writer, NavigationPathContext nc) throws IOException
     {
         NavigationPath activePath = nc.getActivePath();
@@ -406,7 +436,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 if (activePath.getMaxLevel() > 2 && activePathChildren.size() > 0)
                 {
                     writer.write("  <tr>\n");
-                    writer.write("      <td class=\"menu-level3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
+                    writer.write("      <td class=\"menu-level-3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
                         "<img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" alt=\"\" width=\"150\" height=\"12\" border=\"0\"></td>\n");
                     writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" " +
                         "alt=\"\" width=\"12\" height=\"12\" border=\"0\"></td>\n");
@@ -415,14 +445,14 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                     writer.write("  </tr>\n");
                     writer.write("  <tr>\n");
                     writer.write("      <td class=\"menu-table\" align=\"left\" valign=\"top\" width=\"150\" height=\"100%\">\n");
-                    levelThreeStyle.renderHtml(writer, (NavigationPath) activePath.getChildrenList().get(0), nc);
+                    writer.write(generateLevelThreeHtml((NavigationPath) activePath.getChildrenList().get(0), nc));
                     writer.write("      </td>\n");
                 }
                 break;
 
             case 3:
                 writer.write("  <tr>\n");
-                writer.write("      <td class=\"menu-level3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
+                writer.write("      <td class=\"menu-level-3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
                     "<img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" alt=\"\" width=\"150\" height=\"12\" border=\"0\"></td>\n");
                 writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" " +
                     "alt=\"\" width=\"12\" height=\"12\" border=\"0\"></td>\n");
@@ -431,13 +461,13 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 writer.write("  </tr>\n");
                 writer.write("  <tr>\n");
                 writer.write("      <td class=\"menu-table\" align=\"left\" valign=\"top\" width=\"150\" height=\"100%\">\n");
-                levelThreeStyle.renderHtml(writer, activePath, nc);
+                writer.write(generateLevelThreeHtml(activePath, nc));
                 writer.write("      </td>\n");
                 break;
 
             case 4:
                 writer.write("  <tr>\n");
-                writer.write("      <td class=\"menu-level3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
+                writer.write("      <td class=\"menu-level-3-separator\" align=\"left\" valign=\"top\" width=\"150\">" +
                     "<img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" alt=\"\" width=\"150\" height=\"12\" border=\"0\"></td>\n");
                 writer.write("      <td class=\"body-top-left\" width=\"12\"><img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" " +
                     "alt=\"\" width=\"12\" height=\"12\" border=\"0\"></td>\n");
@@ -446,7 +476,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 writer.write("  </tr>\n");
                 writer.write("  <tr>\n");
                 writer.write("      <td class=\"menu-table\" align=\"left\" valign=\"top\" width=\"150\" height=\"100%\">\n");
-                levelThreeStyle.renderHtml(writer, (NavigationPath) activePath.getAncestorsList().get(3), nc);
+                writer.write(generateLevelThreeHtml((NavigationPath) activePath.getAncestorsList().get(3), nc));
                 writer.write("      </td>\n");
                 break;
             default:
@@ -460,6 +490,12 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         }
     }
 
+    /**
+     *
+     * @param writer
+     * @param nc
+     * @throws IOException
+     */
     public void renderPageHeader(Writer writer, NavigationPathContext nc) throws IOException
     {
         if (nc.isPopup())
@@ -573,317 +609,186 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 		writer.write("		</td>");
 		writer.write("	</tr>");
 		writer.write("</table>");
-        /*
-        writer.write("   </TD></TR>");
-        writer.write("   <tr><td valign=bottom align=center class=\"page_content\"><table cellpadding=3>");
-        writer.write("        <tr>");
-        writer.write("                <td align=center class=\"power_by_sparx_footer\"> ");
-        writer.write("                        <a target=\"netspective\" href=\"http://www.netspective.com/\"> ");
-        writer.write("                        <img border=\"0\" alt=\"Powered by Netspective Sparx\" src=\"" + sparxResourcesUrl + "/images/powered-by-sparx.gif\">");
-        writer.write("                        </a>");
-        writer.write("                </td> ");
-        writer.write("                <td align=center class=\"copyright_footer\"> ");
-        writer.write("                        <a href='" + nc.getRootUrl() + "/ace'>" + BuildConfiguration.getVersionAndBuild() + "</a>. &copy; Netspective.");
-        writer.write("                </td> ");
-        writer.write("        </tr></table>");
-        writer.write("   </td></tr></table>");
-        */
         writer.write("</body>");
     }
 
-    abstract public class NavigationStyle
+    /**
+     * Generates the HTML for the Level one navigation
+     * @param currentNavTree
+     * @param nc
+     * @throws IOException
+     */
+    protected String generateLevelOneHtml(NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
     {
-        static public final int NAVFLAG_VERTICAL_DISPLAY = 1;
-        static public final int NAVFLAG_USE_IMAGES = NAVFLAG_VERTICAL_DISPLAY * 2;
-        static public final int NAVFLAG_EXPAND_MARGIN_LEFT = NAVFLAG_USE_IMAGES * 2;
-        static public final int NAVFLAG_EXPAND_MARGIN_RIGHT = NAVFLAG_EXPAND_MARGIN_LEFT * 2;
+        StringBuffer buffer = new StringBuffer();
+        List tabElements = currentNavTree.getSibilingList();
 
-        protected String tableAttrs;
-        protected String tableClass;
-
-        protected String innerSeparatorAttrs;
-        protected String innerSeparatorClass;
-        protected String innerSeparatorImgClass;
-        protected String innerSeparatorImgAttrs;
-
-        protected String outerSeparatorAttrs;
-        protected String outerSeparatorClass;
-        protected String outerSeparatorImgClass;
-        protected String outerSeparatorImgAttrs;
-
-        protected String containerAttrs;
-        protected String containerClass;
-
-        protected String navAttrs;
-        protected String navClass;
-        protected String navImgAttrs;
-        protected String navLinkAttrs;
-        protected String navLinkClass;
-
-        protected String prependHtml;
-        protected String appendHtml;
-
-        protected long flags;
-
-        public NavigationStyle()
+        if (tabElements == null || tabElements.isEmpty())
         {
-            this.tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\"";
-            this.tableClass = "class=\"function_tabs\"";
-
-            this.outerSeparatorAttrs = "colspan=\"50\" width=\"100%\"";
-            this.outerSeparatorClass = "";
-            this.outerSeparatorImgAttrs = "height=2 width=10 border=0 alt=\"\"";
-            this.outerSeparatorImgClass = "";
-
-            this.innerSeparatorAttrs = "";
-            this.innerSeparatorClass = "";
-            this.innerSeparatorImgAttrs = "height=8 width=10 border=0 alt=\"\"";
-            this.innerSeparatorImgClass = "";
-
-            this.containerAttrs = "";
-            this.containerClass = "";
-
-            this.navAttrs = "nowrap";
-            this.navClass = "class=\"function_tab_";
-            this.navImgAttrs = "";
-
-            this.navLinkAttrs = "";
-            this.navLinkClass = "class=\"tab_navigation_";
-
-            this.flags = NAVFLAG_VERTICAL_DISPLAY | NAVFLAG_EXPAND_MARGIN_RIGHT;
+            return "";
         }
-
-        public void importFromXml(Element element)
+        buffer.append("            <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n");
+        buffer.append("                <tr>\n");
+        buffer.append("                <td class=\"menu-level-1-start\" valign=\"bottom\" nowrap><img src=\"" +
+                nc.getRootUrl()  + getThemeImagePath() + "/login/spacer.gif\" width=\"10\" height=\"10\"></td>");
+        for (int i = 0; i < tabElements.size(); i++)
         {
-        }
-
-        public final boolean flagIsSet(long flag)
-        {
-            return (flags & flag) == 0 ? false : true;
-        }
-
-
-        public final void setFlag(long flag)
-        {
-            flags |= flag;
-        }
-
-        public final void clearFlag(long flag)
-        {
-            flags &= ~flag;
-        }
-
-        public final void updateFlag(long flag, boolean set)
-        {
-            if (set) flags |= flag; else flags &= ~flag;
-        }
-
-        abstract public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException;
-    }
-
-    public class Level1Style extends NavigationStyle
-    {
-        public Level1Style()
-        {
-            this.navAttrs = "valign=\"bottom\" nowrap";
-            this.navClass = "class=\"menu-level1-tab-";
-            this.navImgAttrs = "";
-
-            this.navLinkAttrs = "";
-            this.navLinkClass = "class=\"menu-level1-";
-
-            this.flags = NAVFLAG_EXPAND_MARGIN_RIGHT;
-        }
-
-        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
-        {
-            List tabElements = currentNavTree.getSibilingList();
-
-            if (tabElements == null || tabElements.isEmpty())
+            NavigationPath tabElement = (NavigationPath) tabElements.get(i);
+            if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE) &&
+                    !nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
             {
-                return;
-            }
-            writer.write("            <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n");
-            writer.write("                <tr>\n");
-            writer.write("                <td class=\"menu-level1-start\" valign=\"bottom\" nowrap><img src=\"" +
-                    nc.getRootUrl()  + getThemeImagePath() + "/login/spacer.gif\" width=\"10\" height=\"10\"></td>");
-            for (int i = 0; i < tabElements.size(); i++)
-            {
-                NavigationPath tabElement = (NavigationPath) tabElements.get(i);
-                if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE) &&
-                        !nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
+                if ( i == 0)
                 {
-                    if ( i == 0)
+                    if (tabElement.isInActivePath(nc))
                     {
-                        if (tabElement.isInActivePath(nc))
-                        {
-                            writer.write("                <td class=\"menu-level1-tab-start-on\" valign=\"bottom\" nowrap>" +
-                                    "<span class=\"menu-level-1\">&nbsp;&nbsp;&nbsp;</span></td>");
-                            writer.write("                    <td " + navClass + "on\" " + navAttrs + ">");
-                            writer.write("<a " + navLinkAttrs + " " + navLinkClass + "on" +
-                                    "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
-                        }
-                        else
-                        {
-                            writer.write("                <td class=\"menu-level1-tab-start-off\" valign=\"bottom\" nowrap>" +
-                                    "<span class=\"menu-level-1\">&nbsp;&nbsp;&nbsp;</span></td>");
-                            writer.write("                    <td " + navClass + "off\" " + navAttrs + ">");
-                            writer.write("<a " + navLinkAttrs + " " + navLinkClass + "off" +
-                                    "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
-                        }
+                        buffer.append("                <td class=\"menu-level-1-active-start\" valign=\"bottom\" nowrap>" +
+                                "<span class=\"menu-level-1\">&nbsp;&nbsp;&nbsp;</span></td>");
+                        buffer.append("                    <td class=\"menu-level-1-table-active\" valign=\"bottom\" nowrap>");
+                        buffer.append("<a class=\"menu-level-1-active\"" +
+                                " href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
                     }
                     else
                     {
-                        if (tabElement.isInActivePath(nc))
-                        {
-                                writer.write("                    <td class=\"menu-level1-tab-end-on\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
-                                    "&nbsp;&nbsp;&nbsp;</span></td>\n");
+                        buffer.append("                <td class=\"menu-level-1-table-start\" valign=\"bottom\" nowrap>" +
+                                "<span class=\"menu-level-1\">&nbsp;&nbsp;&nbsp;</span></td>");
+                        buffer.append("                    <td class=\"menu-level-1-table\" valign=\"bottom\" nowrap>");
+                        buffer.append("<a class=\"menu-level-1\"" +
+                                " href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
+                    }
+                }
+                else
+                {
+                    if (tabElement.isInActivePath(nc))
+                    {
+                            buffer.append("                    <td class=\"menu-level-1-active-end\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
+                                "&nbsp;</span></td>\n");
 
-                            writer.write("                    <td " + navClass + "on\" " + navAttrs + ">");
-                            writer.write("<a " + navLinkAttrs + " " + navLinkClass + "on" +
-                                    "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
-                        }
-                        else
-                        {
-                                writer.write("                    <td class=\"menu-level1-tab-end-off\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
-                                    "&nbsp;&nbsp;&nbsp;</span></td>\n");
+                        buffer.append("                    <td class=\"menu-level-1-table-active\" valign=\"bottom\" nowrap>");
+                        buffer.append("<a class=\"menu-level-1-active\"" +
+                                " href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
+                    }
+                    else
+                    {
+                            buffer.append("                    <td class=\"menu-level-1-table-end\" valign=\"bottom\" nowrap><span class=\"menu-level-1\">" +
+                                "&nbsp;&nbsp;&nbsp;</span></td>\n");
 
-                            writer.write("                    <td " + navClass + "off\" " + navAttrs + ">");
-                            writer.write("<a " + navLinkAttrs + " " + navLinkClass + "off" +
-                                    "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
-                        }
+                        buffer.append("                    <td class=\"menu-level-1-table\" valign=\"bottom\" nowrap>");
+                        buffer.append("<a class=\"menu-level-1\"" +
+                                " href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></td>\n");
                     }
                 }
             }
-            writer.write("              <td class=\"menu-level1-end\" valign=\"bottom\" nowrap><span class=\"menu-level1\">&nbsp;</span></td>");
-            //writer.write("              <td class=\"menu-level1-fill\" align=\"left\" valign=\"top\" width=\"100%\">" +
-            //        "<img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer.gif\"  width=\"100%\"></td>\n");
-            writer.write("               </tr>\n");
-            writer.write("           </table>\n");
         }
+        buffer.append("              <td class=\"menu-level-1-end\" valign=\"bottom\" nowrap><span>&nbsp;&nbsp;</span></td>");
+        buffer.append("               </tr>\n");
+        buffer.append("           </table>\n");
+
+        return buffer.toString();
     }
 
-
-    public class Level2Style extends NavigationStyle
+    /**
+     * Generates the HTML for the level two navigation level
+     * @param currentNavTree
+     * @param nc
+     * @return
+     * @throws IOException
+     */
+    protected String generateLevelTwoHtml(NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
     {
-        public Level2Style()
+        StringBuffer writer = new StringBuffer();
+        List tabElements = currentNavTree.getSibilingList();
+
+        if (tabElements == null || tabElements.isEmpty())
         {
-            this.tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" height=\"27\"";
-            this.tableClass = "class=\"menu-level2-table\"";
-
-            this.outerSeparatorAttrs = "colspan=\"50\" width=\"100%\"";
-            this.outerSeparatorClass = "";
-            this.outerSeparatorImgAttrs = "height=2 width=10 border=0 alt=\"\"";
-            this.outerSeparatorImgClass = "";
-
-            this.innerSeparatorAttrs = "align=\"center\" nowrap";
-            this.innerSeparatorClass = "";
-            this.innerSeparatorImgAttrs = "height=8 width=10 border=0 alt=\"\"";
-            this.innerSeparatorImgClass = "";
-
-            this.containerAttrs = "";
-            this.containerClass = "";
-
-            this.navAttrs = "nowrap";
-            this.navClass = "class=\"menu-level2-tab-";
-            this.navImgAttrs = "";
-
-            this.navLinkAttrs = "";
-            this.navLinkClass = "class=\"menu-level2-";
-
-            this.flags = NAVFLAG_EXPAND_MARGIN_RIGHT;
+            return "";
         }
 
-        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
+        writer.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" height=\"27\">\n");
+        writer.append("<tr>\n");
+        writer.append("	<td class=\"menu-level-2-table\" align=\"left\" valign=\"middle\">\n");
+        writer.append("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
+        writer.append("			<tr>\n");
+        writer.append("			    <td align=\"center\" nowrap><a class=\"menu-level-2\">&nbsp;&nbsp;</a></td>\n");
+        int size = tabElements.size();
+        for (int i = 0; i < size; i++)
         {
-            List tabElements = currentNavTree.getSibilingList();
-
-            if (tabElements == null || tabElements.isEmpty())
+            NavigationPath tabElement = (NavigationPath) tabElements.get(i);
+            if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE) &&
+                    !nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
             {
-                return;
-            }
-
-            writer.write("<table " + tableAttrs + ">\n");
-            writer.write("<tr>\n");
-            writer.write("	<td " + tableClass + " align=\"left\" valign=\"middle\">\n");
-            writer.write("		<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
-            writer.write("			<tr>\n");
-            writer.write("			    <td align=\"center\" nowrap><a class=\"menu-level2\">&nbsp;&nbsp;</a></td>\n");
-
-            for (int i = 0; i < tabElements.size(); i++)
-            {
-                NavigationPath tabElement = (NavigationPath) tabElements.get(i);
-                if (!nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE) &&
-                        !nc.flagIsSet(tabElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
+                if (tabElement.isInActivePath(nc))
                 {
-                    writer.write("<td " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
-                    writer.write("<a " + navLinkAttrs + " " + navLinkClass + (tabElement.isInActivePath(nc) ? "on" : "off") +
+                    writer.append("<td nowrap align=\"center\" class=\"menu-level-2-active\">");
+                    writer.append("<a class=\"menu-level-2-active\" href=\"" + tabElement.getUrl(nc) + "\">&nbsp;&nbsp;" +
+                            tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></TD>\n");
+                }
+                else
+                {
+                    writer.append("<td nowrap align=\"center\" " + (i != size - 1 ? "class=\"menu-level-2-separator\"" : "") + ">");
+                    writer.append("<a class=\"menu-level-2" +
                             "\" href=\"" + tabElement.getUrl(nc) + "\">&nbsp;&nbsp;" + tabElement.getCaption(nc) + "&nbsp;&nbsp;</a></TD>\n");
                 }
             }
-            //writer.write("			    <td align=\"center\" nowrap><a class=\"menu-level2\">&nbsp;&nbsp;</a></td>\n");
-            writer.write("            </tr>\n");
-            writer.write("        </table>\n");
-            writer.write("    </td>\n");
-            writer.write("</tr>\n");
-            writer.write("</table>\n");
         }
+        //writer.write("			    <td align=\"center\" nowrap><a class=\"menu-level2\">&nbsp;&nbsp;</a></td>\n");
+        writer.append("            </tr>\n");
+        writer.append("        </table>\n");
+        writer.append("    </td>\n");
+        writer.append("</tr>\n");
+        writer.append("</table>\n");
+        return writer.toString();
     }
 
-    public class Level3Style extends NavigationStyle
+    /**
+     * Generates the html for the third navaigation level
+     * @param currentNavTree
+     * @param nc
+     * @return
+     * @throws IOException
+     */
+    protected String generateLevelThreeHtml(NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
     {
-        public Level3Style()
+        StringBuffer writer = new StringBuffer();
+        List sideBarElements = currentNavTree.getSibilingList();
+        if (sideBarElements == null || sideBarElements.isEmpty())
         {
-            flags = NavigationStyle.NAVFLAG_VERTICAL_DISPLAY;
-            tableAttrs = "width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" height=\"100%\"";
-            tableClass = "";
-            navAttrs = "align=\"left\" valign=\"middle\"";
-            navClass = "class=\"menu-level3-tab-";
-            navLinkClass = "class=\"menu-level3\"";
+            return "";
         }
 
-        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
+        writer.append("      <!-- Level 3 Begins -->\n");
+        writer.append("      <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" height=\"100%\" >\n");
+
+        for (int i = 0; i < sideBarElements.size(); i++)
         {
-            List sideBarElements = currentNavTree.getSibilingList();
-            if (sideBarElements == null || sideBarElements.isEmpty())
+            NavigationPath sideBarElement = (NavigationPath) sideBarElements.get(i);
+            if (!nc.flagIsSet(sideBarElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE) &&
+                    !nc.flagIsSet(sideBarElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
             {
-                return;
-            }
-
-			writer.write("      <!-- Level 3 Begins -->\n");
-			writer.write("      <table "+ tableClass + " " + tableAttrs + " >\n");
-
-            for (int i = 0; i < sideBarElements.size(); i++)
-            {
-                NavigationPath sideBarElement = (NavigationPath) sideBarElements.get(i);
-                if (!nc.flagIsSet(sideBarElement.getId(), NavigationPath.NAVGPATHFLAG_INVISIBLE) &&
-                        !nc.flagIsSet(sideBarElement.getId(), NavigationPath.NAVGPATHFLAG_HIDDEN))
+                if (sideBarElement.isInActivePath(nc))
                 {
-                        if (sideBarElement.isInActivePath(nc))
-                        {
-                            writer.write("      <tr>\n");
-							writer.write("          <td " + navClass + "on\" "+ navAttrs + ">" +
-                                    "<nobr>" + sideBarElement.getCaption(nc) + "</nobr></td>\n");
-						    writer.write("      </tr>\n");
-                        }
-                        else
-                        {
-                            writer.write("      <tr>\n");
-						    writer.write("          <td " + navClass + "off\" "+ navAttrs + ">" +
-                                "<a " + navLinkClass + " href=\"" + sideBarElement.getUrl(nc) + "\"><nobr>" +
-                                    sideBarElement.getCaption(nc) + "</nobr></a></td>\n");
-						    writer.write("      </tr>\n");
-                        }
+                    writer.append("      <tr>\n");
+                    writer.append("          <td class=\"menu-level-3-active\" align=\"left\" valign=\"middle\">" +
+                            "<nobr>" + sideBarElement.getCaption(nc) + "</nobr></td>\n");
+                    writer.append("      </tr>\n");
+                }
+                else
+                {
+                    writer.append("      <tr>\n");
+                    writer.append("          <td class=\"menu-level-3-table\" align=\"left\" valign=\"middle\">" +
+                        "<a class=\"menu-level-3\" href=\"" + sideBarElement.getUrl(nc) + "\"><nobr>" +
+                            sideBarElement.getCaption(nc) + "</nobr></a></td>\n");
+                    writer.append("      </tr>\n");
                 }
             }
-            writer.write("          <tr height=\"100%\">\n");
-			writer.write("              <td class=\"menu-table-end\" align=\"left\" valign=\"top\" height=\"100%\">" +
-                    "<img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" height=\"100%\" width=\"100%\"></td>\n");
-			writer.write("          </tr>\n");
-			writer.write("      </table>\n");
-            writer.write("      <!-- Level 3 Ends -->\n");
         }
+        writer.append("          <tr height=\"100%\">\n");
+        writer.append("              <td class=\"menu-table-end\" align=\"left\" valign=\"top\" height=\"100%\">" +
+                "<img src=\""+ nc.getRootUrl() + getThemeImagePath()+ "/spacer-big.gif\" height=\"100%\" width=\"100%\"></td>\n");
+        writer.append("          </tr>\n");
+        writer.append("      </table>\n");
+        writer.append("      <!-- Level 3 Ends -->\n");
+        return writer.toString();
     }
-
-
 }
+
+
