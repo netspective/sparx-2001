@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.3 2002-08-09 16:20:31 shahid.shah Exp $
+# $Id: build.sh,v 1.4 2002-08-09 16:22:52 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
@@ -25,7 +25,7 @@ if [ ! -d $SPARX_HOME ]; then
 	SPARX_HOME=$BASEDIR/../../Sparx
 fi	
 
-SPARX_REDIST_HOME=$SPARX_HOME\lib\redist
+SPARX_REDIST_HOME=$SPARX_HOME/lib/redist
 APP_CLASSES=$BASEDIR/classes
 APP_LIB=$BASEDIR/lib
 APP_BUILD_FILE=$BASEDIR/build.xml
