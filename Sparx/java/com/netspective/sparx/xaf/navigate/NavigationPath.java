@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.5 2003-01-07 10:46:05 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.6 2003-01-09 20:59:56 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -949,24 +949,29 @@ public class NavigationPath
 
     public void resolveResources(Map resources){
 
-        boolean resourcesFound = true;
-        if (resources.get(this.getId()) == null ) {
-            resourcesFound = false;
-            for (int i = ancestorsList.size() - 1; i >= 0 ; i--) {
-                NavigationPath ancestor = (NavigationPath) ancestorsList.get(i);
-                Map parentResources = (Map) resources.get(ancestor.getId());
-                if (parentResources != null) {
-                    resources.put(this.getId(), parentResources);
-                    resourcesFound = true;
-                    break;
-                }
-            }
+		Map pageResources = (Map) resources.get(this.getId());
+		Map parentPageResources = (Map) resources.get(this.getParent().getId());
+        if (parentPageResources == null) {
+            //This will only happen for the first level where there is no parent and
+            //we need to get the root resources.
+            parentPageResources = (Map) resources.get("/");
         }
 
-        if (!resourcesFound) {
-            Map ownerResources = (Map) resources.get("/");
-            resources.put(this.getId(), ownerResources);
-        }
+        if (pageResources == null ) {
+            //We do not need to look at every ancestor and figure out, because the
+            //the recursiveness occurs from top to bottom, so all of the parents should
+            //have resolved their resources by the time we get to this point.
+            resources.put(this.getId(), parentPageResources);
+        } else {
+
+            Map currentPageResources = new HashMap();
+
+            if (parentPageResources != null)
+                currentPageResources.putAll(parentPageResources);
+
+            currentPageResources.putAll(pageResources);
+            resources.put(this.getId(), currentPageResources);
+		}
 
         if (this.childrenList != null) {
             for (int i = 0; i < childrenList.size(); i++) {
