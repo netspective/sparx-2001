@@ -24,6 +24,7 @@ public class SelectField extends DialogField
 	static public final int SELECTSTYLE_MULTIDUAL  = 5;
 
     private ListValueSource listSource;
+	private ListValueSource defaultValue;
 	private int style;
 	private int size = 4;
 	private int multiDualWidth = 125;
@@ -71,6 +72,9 @@ public class SelectField extends DialogField
 	public final int getSize() { return size; }
 	public void setSize(int value) { size = value; }
 
+	public final ListValueSource getDefaultListValue() { return defaultValue; }
+	public void setDefaultListValue(ListValueSource value) { defaultValue = value; }
+
 	public final void setMultiDualCaptions(String left, String right)
 	{
 		multiDualCaptionLeft = left;
@@ -104,6 +108,14 @@ public class SelectField extends DialogField
 	public void importFromXml(Element elem)
 	{
 		super.importFromXml(elem);
+
+		String defaultv = elem.getAttribute("default");
+		if(defaultv.length() > 0)
+		{
+			defaultValue = ValueSourceFactory.getListValueSource(defaultv);
+		}
+		else
+			defaultValue = null;
 
 		String styleValue = elem.getAttribute("style");
 		if(styleValue.length() > 0)
@@ -184,7 +196,21 @@ public class SelectField extends DialogField
 	{
 		if(isMulti())
 		{
-			dc.setValues(this, dc.getRequest().getParameterValues(getId()));
+			String[] values = dc.getValues(this);
+			if(values == null)
+				values = dc.getRequest().getParameterValues(getId());
+
+			if(dc.getRunSequence() == 1)
+			{
+				if((values != null && values.length == 0 && defaultValue != null) ||
+					(values == null && defaultValue != null))
+				{
+					SelectChoicesList list = defaultValue.getSelectChoices(dc, null);
+					dc.setValues(this, list.getValues());
+				}
+			}
+			else
+				dc.setValues(this, values);
 		}
 		else
 			super.populateValue(dc);
@@ -193,10 +219,6 @@ public class SelectField extends DialogField
 	public String getMultiDualControlHtml(DialogContext dc, SelectChoicesList choices)
 	{
 		String dialogName = dc.getDialog().getName();
-        //SingleValueSource defaultValueSource = getDefaultValue();
-        //String defaultValue = null;
-        //if(defaultValueSource != null)
-        //    defaultValue = defaultValueSource.getValue(dc);
 
 		String width = multiDualWidth + " pt";
 		String sorted = flagIsSet(FLDFLAG_SORTCHOICES) ? "true" : "false";
@@ -210,7 +232,6 @@ public class SelectField extends DialogField
 		while(i.hasNext())
 		{
 			SelectChoice choice = (SelectChoice) i.next();
-			//if(choice.isSelected() || (defaultValue != null && defaultValue.equals(choice.getValue())))
 			if(choice.selected)
 				selectOptionsSelected.append("<option value='"+ choice.value +"'>"+ choice.caption +"</option>\n");
 			else
