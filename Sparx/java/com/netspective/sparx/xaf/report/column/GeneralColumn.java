@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: GeneralColumn.java,v 1.3 2002-02-10 16:31:24 snshah Exp $
+ * $Id: GeneralColumn.java,v 1.4 2002-12-26 19:39:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report.column;
@@ -118,6 +118,16 @@ public class GeneralColumn implements ReportColumn
         colIndexInResultSet = colIndex + 1;
         setHeading(colHeading);
         setUrl(colURL);
+        dataType = Types.VARCHAR;
+        alignStyle = ALIGN_LEFT;
+    }
+
+    public GeneralColumn(int colIndex, String colHeading, long flags)
+    {
+        this.flags = flags;
+        colIndexInArray = colIndex;
+        colIndexInResultSet = colIndex + 1;
+        setHeading(colHeading);
         dataType = Types.VARCHAR;
         alignStyle = ALIGN_LEFT;
     }
