@@ -51,13 +51,19 @@
  */
  
 /**
- * $Id: Schema.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: Schema.java,v 1.4 2002-10-20 15:58:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
 import java.util.Map;
 import java.io.File;
+import java.io.Writer;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+
+import org.xml.sax.InputSource;
+import org.w3c.dom.Document;
 
 import com.netspective.sparx.xif.dal.xml.ImportException;
 import com.netspective.sparx.xif.dal.xml.ParseContext;
@@ -88,5 +94,7 @@ public interface Schema
 
     public ForeignKey getForeignKey(Column srcColumn, short type, String ref);
 
-    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws ImportException;
+    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws ImportException, FileNotFoundException, IOException;
+
+    public ParseContext importFromXml(ConnectionContext cc, InputSource inputSource) throws ImportException, IOException;
 }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ParseContext.java,v 1.2 2002-08-30 00:30:12 shahid.shah Exp $
+ * $Id: ParseContext.java,v 1.3 2002-10-20 15:58:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
@@ -80,7 +80,6 @@ public class ParseContext
     private static SAXParserFactory parserFactory;
 
     private ConnectionContext cc;
-    private File srcFile;
     private Schema schema;
     private XMLReader parser;
     private Locator locator;
@@ -88,10 +87,9 @@ public class ParseContext
     private List errors;
     private Map statistics; // key is table name, value is a TableImportStatistic object
 
-    public ParseContext(Schema schema, File srcFile, ConnectionContext cc) throws ParserConfigurationException, SAXException
+    public ParseContext(Schema schema, ConnectionContext cc) throws ParserConfigurationException, SAXException
     {
         this.schema = schema;
-        this.srcFile = srcFile;
         this.cc = cc;
         this.errors = new ArrayList();
         this.statistics = new HashMap();
@@ -138,11 +136,6 @@ public class ParseContext
     public void setThrowSyntaxErrorException(boolean throwSyntaxErrorException)
     {
         this.throwSyntaxErrorException = throwSyntaxErrorException;
-    }
-
-    public File getSrcFile()
-    {
-        return srcFile;
     }
 
     public Schema getSchema()

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractSchema.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: AbstractSchema.java,v 1.4 2002-10-20 15:58:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -65,6 +65,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -77,6 +78,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Attributes;
+import org.w3c.dom.Document;
 
 import com.netspective.sparx.xif.dal.xml.ImportException;
 import com.netspective.sparx.xif.dal.xml.ParseContext;
@@ -208,28 +210,40 @@ public abstract class AbstractSchema implements Schema
         return null;
     }
 
-    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws ImportException
+    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws ImportException, FileNotFoundException, IOException
     {
-        FileInputStream inputStream = null;
-        InputSource inputSource = null;
+        String uri = "file:" + srcFile.getAbsolutePath().replace('\\', '/');
+        for (int index = uri.indexOf('#'); index != -1; index = uri.indexOf('#'))
+        {
+            uri = uri.substring(0, index) + "%23" + uri.substring(index + 1);
+        }
+
+        FileInputStream inputStream = new FileInputStream(srcFile);
+        InputSource inputSource = new InputSource();
+        inputSource.setSystemId(uri);
+
+        try
+        {
+            return importFromXml(cc, inputSource);
+        }
+        finally
+        {
+            if (inputStream != null)
+                inputStream.close();
+        }
+    }
+
+    public ParseContext importFromXml(ConnectionContext cc, InputSource inputSource) throws ImportException, IOException
+    {
         ParseContext pc = null;
 
         try
         {
-            pc = new ParseContext(this, srcFile, cc);
+            pc = new ParseContext(this, cc);
 
-            String uri = "file:" + srcFile.getAbsolutePath().replace('\\', '/');
-            for (int index = uri.indexOf('#'); index != -1; index = uri.indexOf('#'))
-            {
-                uri = uri.substring(0, index) + "%23" + uri.substring(index + 1);
-            }
-
-            inputStream = new FileInputStream(srcFile);
-            inputSource = new InputSource(inputStream);
-            inputSource.setSystemId(uri);
-
-            pc.getParser().setContentHandler(new SchemaImportHandler(pc));
-            pc.getParser().parse(inputSource);
+            XMLReader parser = pc.getParser();
+            parser.setContentHandler(new SchemaImportHandler(pc));
+            parser.parse(inputSource);
         }
         catch (ParserConfigurationException exc)
         {
@@ -247,28 +261,6 @@ public abstract class AbstractSchema implements Schema
                 throw (ImportException) t;
             }
             throw new ImportException(exc.getMessage(), t);
-        }
-        catch (FileNotFoundException exc)
-        {
-            throw new ImportException(exc);
-        }
-        catch (IOException exc)
-        {
-            throw new ImportException("Error reading XML file", exc);
-        }
-        finally
-        {
-            if (inputStream != null)
-            {
-                try
-                {
-                    inputStream.close();
-                }
-                catch (IOException ioe)
-                {
-                    // ignore this
-                }
-            }
         }
 
         return pc;
