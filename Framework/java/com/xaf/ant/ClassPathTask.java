@@ -34,7 +34,10 @@ public class ClassPathTask extends Task
         {
             BuildConfiguration.ClassPathInfo[] cpi = BuildConfiguration.getClassPaths();
             for(int i = 0; i < cpi.length; i++)
-                log(cpi[i].getClassPath().getAbsolutePath());
+            {
+                BuildConfiguration.ClassPathInfo info = cpi[i];
+                log(info.getClassPath().getAbsolutePath() + (info.isValid() ? " (valid)" : " (not found)"));
+            }
         }
 
         if(showLocOfClass != null)
