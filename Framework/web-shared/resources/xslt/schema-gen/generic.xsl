@@ -181,11 +181,11 @@ create table <xsl:value-of select="$table/@name"/>
 	<xsl:value-of select="$table/@name"/>
 	<xsl:text> modify (</xsl:text>
 	<xsl:value-of select="$column/@name"/>
-	<xsl:text> constraint (</xsl:text>
+	<xsl:text> constraint </xsl:text>
 	<xsl:value-of select="$table/@abbrev"/>
 	<xsl:text>_</xsl:text>
 	<xsl:value-of select="$column/@name"/>
-	<xsl:text>_REQ NOT NULL </xsl:text>
+	<xsl:text>_REQ NOT NULL</xsl:text>
 	<!-- line break -->
 	<xsl:text>);
 </xsl:text>
