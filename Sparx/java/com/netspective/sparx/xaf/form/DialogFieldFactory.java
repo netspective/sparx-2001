@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogFieldFactory.java,v 1.2 2002-01-28 09:29:43 thua Exp $
+ * $Id: DialogFieldFactory.java,v 1.3 2002-06-30 17:24:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -73,6 +73,7 @@ import com.netspective.sparx.xaf.form.field.EmailField;
 import com.netspective.sparx.xaf.form.field.FileField;
 import com.netspective.sparx.xaf.form.field.FloatField;
 import com.netspective.sparx.xaf.form.field.GridField;
+import com.netspective.sparx.xaf.form.field.HtmlField;
 import com.netspective.sparx.xaf.form.field.IntegerField;
 import com.netspective.sparx.xaf.form.field.MemoField;
 import com.netspective.sparx.xaf.form.field.PhoneField;
@@ -120,6 +121,7 @@ public class DialogFieldFactory implements Factory
         fieldClasses.put("field.currency", CurrencyField.class);
         fieldClasses.put("field.file", FileField.class);
         fieldClasses.put("field.rs-navigator", ResultSetNavigatorButtonsField.class);
+        fieldClasses.put("field.html", HtmlField.class);
 
         conditionalsClasses.put("display", DialogFieldConditionalDisplay.class); // legacy
         conditionalsClasses.put("display-on-js-expr", DialogFieldConditionalDisplay.class);
