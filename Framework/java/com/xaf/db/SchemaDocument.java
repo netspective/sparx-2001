@@ -937,8 +937,16 @@ public class SchemaDocument extends XmlSource
 		root.setAttribute("name", "generated");
 		xmlDoc.appendChild(root);
 		//initializeConnection(conn);
+                DatabaseMetaData dbmd = null;;
+                try
+                {
+		    dbmd = conn.getMetaData();
+                }
+                catch (Exception e)
+                {
+                    System.out.println("DB MetaData not supported "+ e.toString());
 
-		DatabaseMetaData dbmd = conn.getMetaData();
+                }
 		Map types = new HashMap();
 		ResultSet typesRS = dbmd.getTypeInfo();
 		while(typesRS.next())
@@ -946,8 +954,15 @@ public class SchemaDocument extends XmlSource
 			types.put(typesRS.getString(2), typesRS.getString(1));
 		}
 		typesRS.close();
-
-		ResultSet tables = dbmd.getTables(catalog, schemaPattern, null, new String[] { "TABLE" });
+                ResultSet tables = null;
+                try
+                {
+		    tables = dbmd.getTables(catalog, schemaPattern, null, new String[] { "TABLE" });
+                }
+                catch (Exception e)
+                {
+                        //System.out.println("driver not supported "+ e.toString());
+                }
 		while(tables.next())
 		{
 			/* make the table name title cased (cap each letter after _) */
@@ -973,6 +988,26 @@ public class SchemaDocument extends XmlSource
 			table.setAttribute("name", tableName);
 			root.appendChild(table);
 
+
+
+                        Map fKeys = new HashMap();
+			try
+			{
+				ResultSet fkRS = dbmd.getImportedKeys(null, null, tableNameOrig);
+				while(fkRS.next())
+				{
+					fKeys.put(fkRS.getString(8),(fkRS.getString(3)+"."+fkRS.getString(4)).toLowerCase());
+ 				}
+				fkRS.close();
+			}
+			catch(Exception e)
+			{
+				// driver may not support this function
+			}
+
+
+
+
 			Map primaryKeys = new HashMap();
 			try
 			{
@@ -987,8 +1022,7 @@ public class SchemaDocument extends XmlSource
 			{
 				// driver may not support this function
 			}
-
-			ResultSet columns = dbmd.getColumns(null, null, tableNameOrig, null);
+			ResultSet columns = dbmd.getColumns(null, schemaPattern, tableNameOrig, null);
 			while(columns.next())
 			{
 				String columnNameOrig = columns.getString(4);
@@ -997,11 +1031,14 @@ public class SchemaDocument extends XmlSource
 				try
 				{
 					setAttribute(column, "name", columnName);
-					setAttribute(column, "type", columns.getString(6));
+					setAttribute(column, "type", columns.getString(6).toLowerCase());
 					if(primaryKeys.containsKey(columnNameOrig))
 						setAttribute(column, "primarykey", "yes");
 
-					String sqlDefn = columns.getString(5);
+					if(fKeys.containsKey(columnNameOrig))
+						setAttribute(column, "lookupref", (String)fKeys.get(columnNameOrig));
+
+                                        String sqlDefn = columns.getString(5);
 					String size = columns.getString(7);
 
 					sqlDefn = (sqlDefn == null ? columns.getString(6) : (String) types.get(sqlDefn));
@@ -1013,6 +1050,7 @@ public class SchemaDocument extends XmlSource
 				}
 				catch(Exception e)
 				{
+                                    System.out.println("Driver not supported "+ e.toString());
 				}
 
 				table.appendChild(column);
