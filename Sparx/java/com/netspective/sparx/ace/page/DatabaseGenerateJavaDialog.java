@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateJavaDialog.java,v 1.6 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: DatabaseGenerateJavaDialog.java,v 1.7 2002-10-20 15:51:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -106,6 +106,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
     protected SelectField rowsGeneratorField;
     protected SelectField rowsListGeneratorField;
     protected SelectField schemaGeneratorField;
+    protected SelectField xsdGeneratorField;
 
     public DatabaseGenerateJavaDialog()
     {
@@ -195,6 +196,9 @@ public class DatabaseGenerateJavaDialog extends Dialog
         schemaGeneratorField = new SelectField("schema_gen", "Schema Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
         schemaGeneratorField.setDefaultValue(new StaticValue("schema-generator.xsl"));
 
+        xsdGeneratorField = new SelectField("xsd_gen", "XSD Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
+        xsdGeneratorField.setDefaultValue(new StaticValue("xsd-generator.xsl"));
+
         //ListValueSource allTables = ValueSourceFactory.getListValueSource("schema-tables:.*");
         //tablesField = new SelectField("tables", "Tables", SelectField.SELECTSTYLE_MULTIDUAL, allTables);
         //tablesField.setFlag(DialogField.FLDFLAG_REQUIRED);
@@ -222,6 +226,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         addField(rowsGeneratorField);
         addField(rowsListGeneratorField);
         addField(schemaGeneratorField);
+        addField(xsdGeneratorField);
 
         setDirector(new DialogDirector());
     }
@@ -255,6 +260,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         orGenerator.setRowsGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_gen"));
         orGenerator.setRowsListGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_list_gen"));
         orGenerator.setSchemaGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("schema_gen"));
+        orGenerator.setXsdGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("xsd_gen"));
 
         StringBuffer output = new StringBuffer("<p align='center'>");
         try

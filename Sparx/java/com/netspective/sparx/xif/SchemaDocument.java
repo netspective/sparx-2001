@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.13 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.14 2002-10-20 15:51:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -1479,6 +1479,7 @@ public class SchemaDocument extends XmlSource
         private String rowsGeneratorStyleSheet;
         private String rowsListGeneratorStyleSheet;
         private String schemaGeneratorStyleSheet;
+        private String xsdGeneratorStyleSheet;
 
         private int dataTypesGeneratedCount;
         private int tableTypesGeneratedCount;
@@ -1670,9 +1671,19 @@ public class SchemaDocument extends XmlSource
             return schemaGeneratorStyleSheet;
         }
 
+        public String getXsdGeneratorStyleSheet()
+        {
+            return xsdGeneratorStyleSheet;
+        }
+
         public void setSchemaGeneratorStyleSheet(String schemaGeneratorStyleSheet)
         {
             this.schemaGeneratorStyleSheet = schemaGeneratorStyleSheet;
+        }
+
+        public void setXsdGeneratorStyleSheet(String xsdGeneratorStyleSheet)
+        {
+            this.xsdGeneratorStyleSheet = xsdGeneratorStyleSheet;
         }
 
         public int getDataTypesGeneratedCount()
@@ -2040,9 +2051,15 @@ public class SchemaDocument extends XmlSource
             schemaTransformer.setParameter("class-name", schemaClassName);
             String schemaFile = schemaDir.getAbsolutePath() + "/" + schemaClassName + ".java";
 
-            messages.add(new String("Applying stylesheet '"+ schemaFile +"' to schema"));
+            messages.add(new String("Generating '"+ schemaFile +"'"));
             schemaTransformer.transform
                     (new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()), new javax.xml.transform.stream.StreamResult(schemaFile));
+
+            Transformer xsdTransformer = tFactory.newTransformer(new StreamSource(xsdGeneratorStyleSheet));
+            String xsdFile = schemaDir.getAbsolutePath() + "/" + schemaClassName + ".xsd";
+            messages.add(new String("Generating '"+ xsdFile +"'"));
+            xsdTransformer.transform
+                    (new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()), new javax.xml.transform.stream.StreamResult(xsdFile));
         }
 
         public void generate(SchemaDocument schemaDoc) throws TransformerConfigurationException, TransformerException

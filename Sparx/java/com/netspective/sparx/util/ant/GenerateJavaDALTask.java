@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GenerateJavaDALTask.java,v 1.4 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: GenerateJavaDALTask.java,v 1.5 2002-10-20 15:53:48 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -89,6 +89,7 @@ public class GenerateJavaDALTask extends Task
     private String rowsGeneratorStyleSheet = "row-generator.xsl";
     private String rowsListGeneratorStyleSheet = "rows-generator.xsl";
     private String schemaGeneratorStyleSheet = "schema-generator.xsl";
+    private String xsdGeneratorStyleSheet = "xsd-generator.xsl";
 
     public GenerateJavaDALTask()
     {
@@ -159,29 +160,34 @@ public class GenerateJavaDALTask extends Task
         this.tableTypesGeneratorStyleSheet = tableTypesGeneratorStyleSheet;
     }
 
-    public void setTablesgeneratorstylesheet(String tablesGeneratorStyleSheet)
+    public void setTablesGeneratorStyleSheet(String tablesGeneratorStyleSheet)
     {
         this.tablesGeneratorStyleSheet = tablesGeneratorStyleSheet;
     }
 
-    public void setDomainsgeneratorstylesheet(String domainsGeneratorStyleSheet)
+    public void setDomainsGeneratorStyleSheet(String domainsGeneratorStyleSheet)
     {
         this.domainsGeneratorStyleSheet = domainsGeneratorStyleSheet;
     }
 
-    public void setRowsgeneratorstylesheet(String rowsGeneratorStyleSheet)
+    public void setRowsGeneratorStyleSheet(String rowsGeneratorStyleSheet)
     {
         this.rowsGeneratorStyleSheet = rowsGeneratorStyleSheet;
     }
 
-    public void setRowslistgeneratorstylesheet(String rowsListGeneratorStyleSheet)
+    public void setRowslistGeneratorStyleSheet(String rowsListGeneratorStyleSheet)
     {
         this.rowsListGeneratorStyleSheet = rowsListGeneratorStyleSheet;
     }
 
-    public void setSchemageneratorstylesheet(String schemaGeneratorStyleSheet)
+    public void setSchemaGeneratorStyleSheet(String schemaGeneratorStyleSheet)
     {
         this.schemaGeneratorStyleSheet = schemaGeneratorStyleSheet;
+    }
+
+    public void setXsdGeneratorStyleSheet(String xsdGeneratorStyleSheet)
+    {
+        this.xsdGeneratorStyleSheet = xsdGeneratorStyleSheet;
     }
 
     public void execute() throws BuildException
@@ -219,6 +225,7 @@ public class GenerateJavaDALTask extends Task
         orGenerator.setRowsGeneratorStyleSheet(styleSheetRoot + "/" + rowsGeneratorStyleSheet);
         orGenerator.setRowsListGeneratorStyleSheet(styleSheetRoot + "/" + rowsListGeneratorStyleSheet);
         orGenerator.setSchemaGeneratorStyleSheet(styleSheetRoot + "/" + schemaGeneratorStyleSheet);
+        orGenerator.setXsdGeneratorStyleSheet(styleSheetRoot + "/" + xsdGeneratorStyleSheet);
 
         try
         {
