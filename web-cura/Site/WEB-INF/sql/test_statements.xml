@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <query-defn id="Order" data-src="request:src">
+		<!-- Fields -->
+        <field id="customer_id" caption="Customer ID" join="o" column="custid">
+            <report display="no"/>
+        </field>
+        <field id="customer_name" caption="Customer Name" join="cust" column="name" >
+            <report display="no"/>
+        </field>
+        <field id="order_id" allow-display="yes" caption="Order ID" join="o" column="orderid">
+            <report type="default" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/order_summary.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+        <field id="nbcs_id" allow-display="yes" caption="NBCS ID" join="o" column="nbcsref">
+            <report type="numeric" format="plain"/>
+        </field>
+
+        <field id="stat_id" caption="Status ID" join="o" column="statid">
+            <report display="no"/>
+        </field>
+        <field id="status" caption="Status" join="stat" column="name" />
+
+        <field id="date_needed" caption="Date Needed" join="o"
+            where-expr="to_date(to_char(o.dateneeded,'MM/DD/YYYY'), 'MM/DD/YYYY')"
+            column="dateneeded"
+            column-expr="TO_CHAR(o.dateneeded,'MM/DD/YYYY HH:mm')" />
+        <field id="date_needed2" caption="Date Needed" join="o"
+            where-expr="to_date(to_char(o.dateneeded,'MM/DD/YYYY'), 'MM/DD/YYYY')"
+            column="dateneeded"
+            column-expr="o.dateneeded" />
+        <field id="summary_link" caption="Summary" column-expr="'summary'">
+            <report type="numeric" url="create-app-url:/Ad Hoc Orders/View Orders/order_summary.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+        <field id="rbc_req_qty" caption="RBC Req" join="old" column-expr="SUM(DECODE(pg.id, 1, DECODE(old.type, 'R', old.qty)))">
+            <report type="numeric" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/red_blood_cells.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+        <field id="rbc_ship_qty" caption="RBC Shp" join="old" column-expr="SUM(DECODE(pg.id, 1, DECODE(old.type, 'S', old.qty)))">
+            <report type="numeric" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/red_blood_cells.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+
+        <field id="plt_req_qty" caption="Platelets Req" join="old" column-expr="SUM(DECODE(pg.id, 2, DECODE(old.type, 'R', old.qty)))">
+            <report type="numeric" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/platelets.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+        <field id="plt_ship_qty" caption="Platelets Shp" join="old" column-expr="SUM(DECODE(pg.id, 2, DECODE(old.type, 'S', old.qty)))">
+            <report type="numeric" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/platelets.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+        <field id="fp_req_qty" caption="FP Req" join="old" column-expr="SUM(DECODE(pg.id, 3, DECODE(old.type, 'R', old.qty)))">
+            <report type="numeric" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/frozen_products.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+        <field id="fp_ship_qty" caption="FP Shp" join="old" column-expr="SUM(DECODE(pg.id, 3, DECODE(old.type, 'S', old.qty)))">
+            <report type="numeric" format="plain" url="create-app-url:/Ad Hoc Orders/View Orders/frozen_products.jsp?order_id=${1}&amp;cust_id=${0}"/>
+        </field>
+
+        <field id="pg_id" caption="Product Group" join="pg" column="id">
+            <report type="numeric" display="no"/>
+        </field>
+        <field id="prod_name" caption="Product" join="p" column="name">
+            <report display="no"/>
+        </field>
+        <field id="prod_id" caption="Product ID" join="ol" column="prodid">
+            <report display="no"/>
+        </field>
+
+		<!-- Joins -->
+        <join id="o"    table="orders" auto-include="yes" />
+        <join id="old"  table="order_line_details"  condition="ol.orderlineid = old.orderlineid"  imply-join="ol" />
+        <join id="ol"   table="order_lines" condition="o.orderid = ol.orderid"
+             imply-join="p" />
+        <join id="pg"   table="product_groups" condition="p.prodgroupid = pg.id"/>
+        <join id="p"    table="products"  condition="ol.prodid = p.id" imply-join="pg"/>
+        <join id="cust" table="customers" condition="o.custid = cust.custid"/>
+        <join id="stat" table="status" condition="o.statid = stat.id"/>
+        <join id="region" table="regions" condition="region.regionid = cust.regionid (+)"/>
+
+        <select-dialog hide-readonly-hints="yes" allow-debug="yes" show-output-dests="no" name="region_order_search"
+         heading="Search Order(s)">
+            <!-- field.text name="rows_per_page" hidden="yes" default="10" / -->
+            <field.select name="cust_id" caption="Customer" choices="query:region.customer_list"
+                default="request-attr:cust_id" uppercase="yes" required="yes" prepend-blank="yes">
+                <conditional action="apply-flag" flag="invisible" lack-permission="/app/orders/search_order/customer_any"/>
+            </field.select>
+            <field.integer name="order_id" caption="Order ID" max-length="5"/>
+            <field.select name="status" style="multilist" size='10'
+                max-length="10"
+                caption="Order Status"
+                prepend-blank="yes"
+                choices="query:eimo.status_list"/>
+            <field.duration name="date_range" caption="Date Range" begin-min-value="10/20/1900" end-max-value="today"
+                hint="Start and End Date" />
+            <field.select name="sort" caption="Sort by" default="date_needed2" choices="Date Needed=date_needed2;Order Status=stat_id;Order ID=order_id"/>
+
+            <!-- director cancel-url="/eimo" submit-caption="Search"/ -->
+            <select id="search_results" heading="Region Order Search Results" distinct="no">
+
+                <display field="customer_id"/>
+                <display field="order_id"/>
+                <display field="nbcs_id"/>
+                <display field="date_needed"/>
+                <display field="status"/>
+                <display field="rbc_req_qty"/>
+                <display field="rbc_ship_qty"/>
+                <display field="plt_req_qty"/>
+                <display field="plt_ship_qty"/>
+                <display field="fp_req_qty"/>
+                <display field="fp_ship_qty"/>
+
+                <!-- display field="summary_link"/ -->
+
+                <condition field="customer_id" allow-null="no" comparison="starts-with" bind-expr="upper(?)" value="formOrRequestAttr:cust_id" connector="and"/>
+                <condition field="order_id" allow-null="no" comparison="equals" value="form:order_id" connector="and"/>
+                <condition field="stat_id" allow-null="no" comparison="in" value="form:status" connector="and"/>
+                <condition field="date_needed" allow-null="no" comparison="greater-than-equal"
+                    value="form:date_range.date_range_begin"
+                    bind-expr="to_date(?, 'MM/DD/YYYY')"
+                    connector="and">
+                    <condition field="date_needed" allow-null="no" comparison="less-than-equal"
+                    value="form:date_range.date_range_end"
+                    bind-expr="to_date(?, 'MM/DD/YYYY')"/>
+                </condition>
+                <order-by field="form:sort" descending="yes"/>
+                <group-by field="customer_id"/>
+                <group-by field="order_id"/>
+                <group-by field="nbcs_id"/>
+                <group-by field="date_needed"/>
+                <group-by field="status"/>
+
+            </select>
+            <director submit-caption="Submit"/>
+        </select-dialog>
+	</query-defn>
+
+</xaf>
