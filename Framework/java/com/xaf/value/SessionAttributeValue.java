@@ -14,6 +14,14 @@ public class SessionAttributeValue extends ValueSource implements ListValueSourc
 		super();
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides access to HTTP session attributes. Intelligently handles object of types String, String[], and List",
+            "attribute-name"
+        );
+    }
+
     public String getValue(ValueContext vc)
     {
 		Object o = ((HttpServletRequest) vc.getRequest()).getSession().getAttribute(valueKey);

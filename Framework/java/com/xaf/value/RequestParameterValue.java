@@ -11,6 +11,14 @@ public class RequestParameterValue extends ValueSource implements ListValueSourc
 		super();
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides access to HTTP servlet request parameters. All parameter values are returned as String objects.",
+            "parameter-name"
+        );
+    }
+
     public String getValue(ValueContext vc)
     {
 		return vc.getRequest().getParameter(valueKey);

@@ -34,14 +34,14 @@ public class SkinFactory
 
 	public static void setupReportSkinsDefaults()
 	{
-		addReportSkin("report", new HtmlReportSkin());
+        if(! reportSkins.containsKey("report"))
+		    addReportSkin("report", new HtmlReportSkin());
 		addReportSkin("component", new HtmlComponentSkin());
 		addReportSkin("detail", new HtmlSingleRowReportSkin(1, true));
 		addReportSkin("detail-2col", new HtmlSingleRowReportSkin(2, true));
 		addReportSkin("data-only", new HtmlSingleRowReportNoCaptionSkin(1, true));
 		addReportSkin("text-csv", new TextReportSkin(".csv", ",", "\"", true));
 		addReportSkin("text-tab", new TextReportSkin(".txt", "  ", null, true));
-		addReportSkin("data-only", new HtmlSingleRowReportNoCaptionSkin(1, true));
 		haveReportSkinsDefaults = true;
 	}
 

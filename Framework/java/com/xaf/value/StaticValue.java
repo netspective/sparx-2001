@@ -23,7 +23,17 @@ public class StaticValue extends ValueSource
 		valueKey = v;
     }
 
-	public void initializeSource(String strParams)
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Used to explicitly specify a value instead of obtaining the value from a parameter name. For example, " +
+            "if the <code>static-string</code> is <code><u>myfile.xml</u></code> then this string is literally taken " +
+            "as the value instead of searching for a parameter.",
+            "static-string"
+        );
+    }
+
+    public void initializeSource(String strParams)
 	{
 		valueKey = strParams;
 	}

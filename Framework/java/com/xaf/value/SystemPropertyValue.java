@@ -19,6 +19,14 @@ public class SystemPropertyValue extends ValueSource
 		super();
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides access to the system property indicated by the specified key. ",
+            "property-name"
+        );
+    }
+
     public String getValue(ValueContext vc)
     {
 		return System.getProperty(valueKey, null);
