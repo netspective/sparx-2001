@@ -3,24 +3,62 @@
     <section>
         <title>Overview</title>
         <para>
-            XAF provides a centralized location to create and store all dynamic SQL statements
-            with bind parameters in a single repository:
-            <filename class="conf">WEB-INF/ui/statement.xml</filename>.
-            The XML file also provides the flexibility of defining sql statements for
-            multiple data sources in one centralized location.
-
+            Sparx provides a centralized location to create and store all dynamic SQL statements
+            in a single repository: <filename class="conf">WEB-INF/ui/statement.xml</filename>.
         </para>
     </section>
 
     <section>
         <title>Creating a dynamic query</title>
         <para>
-        ...
+            Sparx provides a very powerful dynamic SQL query generator which can generate either
+            pageable reports with configurable rows per page or comma seperated
+            value(CSV) reports.
         </para>
         <section>
             <title>Defining the query</title>
             <para>
-            ...
+            A dynamic query in Sparx is defined with the <emphasis role="bold">&lt;query-defn&gt;</emphasis>
+            XML tag. Within this XML node,  column data fields, join tables and conditions,
+            dialog for the bind parameter values, conditions, and order fields are defined.
+            The following is a sample dynamic query definition:
+            <programlisting>
+                &lt;query-defn id="Organization"&gt;
+
+                    &lt;!-- Fields --&gt;
+                    &lt;field id="org_id" caption="Account ID" join="org" column="org_id"&gt;
+                        &lt;report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}"/&gt;
+                    &lt;/field&gt;
+                    ...
+                    ...
+                    &lt;field id="org_code" caption="Account Code" join="org" column="org_code"&gt;
+                        &lt;report heading="Code"/&gt;
+                    &lt;/field&gt;
+
+                    &lt;!-- Joins --&gt;
+                    &lt;join id="org" table="org" auto-include="yes"/&gt;
+                    &lt;join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)"/&gt;
+
+                    &lt;select-dialog name="org_search" allow-debug="yes" show-output-dests="no" hide-readonly-hints="yes" heading="Search Accounts"&gt;
+                        &lt;field.text query-field="org_code"/&gt;
+                        ...
+                        ...
+                        &lt;select&gt;
+                            &lt;display field="org_id"/&gt;
+                            &lt;display field="org_code"/&gt;
+                            ...
+                            ...
+                            &lt;order-by field="form:sort_order"/&gt;
+
+                            &lt;condition field="org_name" allow-null="no" comparison="starts-with" value="form:org_name" connector="and" bind-expr="upper(?)"/&gt;
+                            &lt;condition field="org_abbrev" allow-null="no" comparison="starts-with" value="form:org_abbrev" connector="and" bind-expr="upper(?)"/&gt;
+                            &lt;condition field="org_industry" allow-null="no" comparison="equals" value="form:org_industry" connector="and"/&gt;
+                        &lt;/select>
+                        &lt;director cancel-url="index.jsp" submit-caption="Search"/&gt;
+                    &lt;/select-dialog&gt;
+
+                &lt;/query-defn&gt;
+            </programlisting>
             </para>
         </section>
 
