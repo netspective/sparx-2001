@@ -18,6 +18,7 @@ import com.xaf.skin.*;
 public class DatabaseSchemaDocPage extends AceServletPage
 {
 	public final String getName() { return "schema-doc"; }
+	public final String getPageIcon() { return "schema.gif"; }
 	public final String getCaption(PageContext pc) { return "Schema (XML)"; }
 	public final String getHeading(PageContext pc) { return "Database Schema (XML Source)"; }
 

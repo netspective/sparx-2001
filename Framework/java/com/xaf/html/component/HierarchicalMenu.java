@@ -9,27 +9,39 @@ import com.xaf.value.*;
 
 public class HierarchicalMenu extends AbstractComponent
 {
+	static public class DrawContext
+	{
+		public boolean firstMenu;
+		public boolean lastMenu;
+
+		public DrawContext()
+		{
+		}
+	}
+
 	private VirtualPath entries;
 	private String sharedScriptsRootURL;
 	private String entriesJS;
+	private int menuNum = 0;
 	private int menuWidth = 100;
 	private int menuTopPos = 10;
 	private int menuLeftPos = 10;
-	private boolean isTopPermanent = true;
-	private boolean isTopHorizontal = true;
+	private boolean isTopPermanent = false;
+	private boolean isTopHorizontal = false;
 	private boolean isTreeHorizontal = false;
 	private boolean positionUnder = true;
-	private boolean topMoreImagesVisible = false;
+	private boolean topMoreImagesVisible = true;
 	private boolean treeMoreImagesVisible = true;
 	private String fontColor = "black";
 	private String mouseOverFontColor = "white";
-	private String bgColor = "#E5E2C9";
+	private String bgColor = "#FEC740";
 	private String mouseOverBgColor = "navy";
-	private String borderColor = "#A1A289";
-	private String separatorColor = "#A1A289";
+	private String borderColor = "#FDF43F";
+	private String separatorColor = "#FDF43F";
 
-	public HierarchicalMenu(int left, int width, int top, VirtualPath entries, String sharedScriptsRootURL)
+	public HierarchicalMenu(int menuNum, int left, int width, int top, VirtualPath entries, String sharedScriptsRootURL)
 	{
+		this.menuNum = menuNum;
 		this.menuLeftPos = left;
 		this.menuWidth = width;
 		this.menuTopPos = top;
@@ -42,7 +54,7 @@ public class HierarchicalMenu extends AbstractComponent
 		script.append("HM_Array");
 		script.append(levelInfo);
 		script.append(" = [\n");
-		if(levelInfo.equals("1"))
+		if(levelInfo.length() == 1) // top-level menu
 		{
 			script.append("[");
 			script.append(menuWidth); script.append(", ");
@@ -103,11 +115,21 @@ public class HierarchicalMenu extends AbstractComponent
 	public void createEntriesJS(PageContext pc)
 	{
 		StringBuffer script = new StringBuffer();
-		script.append("<script>\n<!--\n");
-		script.append("var SHARED_SCRIPTS_URL = '" + sharedScriptsRootURL + "';\n");
-		createMenuJS(pc, entries, script, "1");
-		script.append("-->\n</script>\n");
-		script.append("<script src='"+sharedScriptsRootURL+"/hiermenus/HM_Loader.js' language='JavaScript1.2' type='text/javascript'></script>\n");
+		DrawContext dc = (DrawContext) pc.getRequest().getAttribute(DrawContext.class.getName());
+
+		if(dc == null || dc.firstMenu)
+		{
+			script.append("<script>\n<!--\n");
+			script.append("var SHARED_SCRIPTS_URL = '" + sharedScriptsRootURL + "';\n");
+		}
+
+		createMenuJS(pc, entries, script, Integer.toString(menuNum));
+
+		if(dc == null || dc.lastMenu)
+		{
+			script.append("-->\n</script>\n");
+			script.append("<script src='"+sharedScriptsRootURL+"/hiermenus/HM_Loader.js' language='JavaScript1.2' type='text/javascript'></script>\n");
+		}
 
 		entriesJS = script.toString();
 	}

@@ -21,6 +21,7 @@ import com.xaf.skin.*;
 public class DataSourcesPage extends AceServletPage
 {
 	public final String getName() { return "data-sources"; }
+	public final String getPageIcon() { return "data_source.gif"; }
 	public final String getCaption(PageContext pc) { return "Data Sources"; }
 	public final String getHeading(PageContext pc) { return "Application Data Sources"; }
 

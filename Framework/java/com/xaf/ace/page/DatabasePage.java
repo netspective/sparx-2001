@@ -11,6 +11,7 @@ import com.xaf.page.*;
 public class DatabasePage extends AceServletPage
 {
 	public final String getName() { return "database"; }
+	public final String getPageIcon() { return "sql.gif"; }
 	public final String getCaption(PageContext pc) { return "Database"; }
 	public final String getHeading(PageContext pc) { return "ACE - Database"; }
 

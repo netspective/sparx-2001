@@ -97,7 +97,12 @@ public class AceServletPage extends AbstractServletPage
 
 		String sharedScriptsRootURL = ((PageControllerServlet) pc.getServlet()).getSharedScriptsRootURL();
 		String sharedCssRootURL = ((PageControllerServlet) pc.getServlet()).getSharedCssRootURL();
-		Component menu = ((AppComponentsExplorerServlet) pc.getServlet()).getMenuComponent();
+
+		HierarchicalMenu.DrawContext dc = new HierarchicalMenu.DrawContext();
+		pc.getRequest().setAttribute(HierarchicalMenu.DrawContext.class.getName(), dc);
+
+
+		Component[] menus = ((AppComponentsExplorerServlet) pc.getServlet()).getMenuBar();
 		try
 		{
 			PrintWriter out = pc.getResponse().getWriter();
@@ -106,7 +111,12 @@ public class AceServletPage extends AbstractServletPage
 			out.print(getTitle(pc));
 			out.print("</title>\n");
 			out.print("<link rel='stylesheet' href='"+ sharedCssRootURL+ "/ace.css'>\n");
-			menu.printHtml(pc, out);
+			for(int i = 0; i < menus.length; i++)
+			{
+				dc.firstMenu = i == 0;
+				dc.lastMenu = i == (menus.length - 1);
+				menus[i].printHtml(pc, out);
+			}
 			out.print("</head>\n\n");
 		}
 		catch(IOException e)
@@ -120,17 +130,36 @@ public class AceServletPage extends AbstractServletPage
 		if(getTestCommandItem(pc) != null)
 			return;
 
-		String sharedImagesRootURL = ((PageControllerServlet) pc.getServlet()).getSharedImagesRootURL();
+		AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) pc.getServlet();
+		String sharedImagesRootURL = servlet.getSharedImagesRootURL();
+		String homeUrl = servlet.getHomePath().getAbsolutePath(pc);
+
 		try
 		{
 			PrintWriter out = pc.getResponse().getWriter();
-			out.print("<body><table width=100%><tr><td width=25><img src='");
-			out.print(sharedImagesRootURL);
-			out.print("/ace/ace-logo.gif'></td>");
-			out.print("<td align=right><img src='");
-			out.print(sharedImagesRootURL);
-			out.print("/design/sparx-logo-sm.gif'></td>");
-			out.print("</tr></table>");
+			out.print("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
+			out.print("<map name='menu_map'>");
+			out.print(" <area shape='rect' coords='14,19,76,41' href='"+ homeUrl +"'>");
+			out.print(" <area shape='rect' coords='79,20,140,41' onMouseOver=\"popUp('HM_Menu2',event)\" onMouseOut=\"popDown('HM_Menu2')\">");
+			out.print(" <area shape='rect' coords='144,21,207,41' onMouseOver=\"popUp('HM_Menu3',event)\" onMouseOut=\"popDown('HM_Menu3')\">");
+			out.print(" <area shape='rect' coords='211,21,275,41' onMouseOver=\"popUp('HM_Menu4',event)\" onMouseOut=\"popDown('HM_Menu4')\">");
+			out.print("</map>");
+			out.print("<table border='0' cellpadding='0' cellspacing='0' height='44'>");
+			out.print("	<tr>");
+			out.print("		<td><a href='"+homeUrl+"'><img src='"+ sharedImagesRootURL +"/ace/Homepage_01.gif' width='158' height='44' border='0'></a></td>");
+			out.print("		<td><img src='"+ sharedImagesRootURL +"/ace/masthead.gif' width='642' height='44' border='0' usemap='#menu_map'></td>");
+			out.print("	</tr>");
+			out.print("</table>");
+			out.print("<table border='0' cellpadding='0' cellspacing='0' height='38' width='100%'>");
+			out.print("	<tr>");
+			out.print("		<td width='107'><img src='"+ sharedImagesRootURL +"/ace/Homepage_03.gif' width='107' height='38' border='0'></td>");
+			out.print("		<td width='32' bgcolor='white' valign='middle' align='center'><img src='"+ sharedImagesRootURL +"/ace/page-icons/"+ getPageIcon() +"' width='32' height='32' border='0'></td>");
+			out.print("		<td width='18'><img src='"+ sharedImagesRootURL +"/ace/Homepage_05.gif' width='18' height='38' border='0'></td>");
+			out.print("		<td background='"+ sharedImagesRootURL +"/ace/2tone.gif' class='subheads' valign='middle' align='left'><nobr>"+ getHeading(pc) +"</nobr></td>");
+			out.print("		<td background='"+ sharedImagesRootURL +"/ace/2tone.gif' class='subheads' valign='middle' align='left' width='166'><img src='"+ sharedImagesRootURL +"/ace/Homepage_20.gif' width='166' height='38' border='0'></td>");
+			out.print("	</tr>");
+			out.print(" <tr bgcolor='#003366' height='2'><td bgcolor='#003366' height='2' colspan='5'></td></tr>");
+			out.print("</table>");
 		}
 		catch(IOException e)
 		{

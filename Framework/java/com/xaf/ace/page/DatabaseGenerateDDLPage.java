@@ -18,6 +18,7 @@ import com.xaf.skin.*;
 public class DatabaseGenerateDDLPage extends AceServletPage
 {
 	public final String getName() { return "generate-ddl"; }
+	public final String getPageIcon() { return "ddl.gif"; }
 	public final String getCaption(PageContext pc) { return "Generate DDL"; }
 	public final String getHeading(PageContext pc) { return "Generate SQL Data Definition"; }
 
@@ -64,9 +65,6 @@ public class DatabaseGenerateDDLPage extends AceServletPage
 
 		ServletContext context = pc.getServletContext();
 		SchemaDocument schema = getSchemaDocument(pc);
-
-		out.write("<table class='heading' border='0' cellspacing='0' cellpadding='5'><tr class='heading'><td class='heading'>Generate DDL</td></tr>");
-		out.write("<tr class='heading_rule'><td height='1' colspan='2'></td></tr><table>");
 
 		DialogContext dc = new DialogContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), dialog, SkinFactory.getDialogSkin());
 		dialog.prepareContext(dc);

@@ -20,17 +20,31 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 {
 	protected static final String CONFIGITEM_DEFAULT_PREFIX = "framework.ace.";
 	private Hashtable styleSheetParams = new Hashtable();
-	private Component menu;
+	private Component[] menus;
+	private VirtualPath homePath;
 
     public void init(ServletConfig config) throws ServletException
 	{
         super.init(config);
-		menu = new HierarchicalMenu(85, 90, 22, getPagesPath(), getSharedScriptsRootURL());
+
+		List menuBar = new ArrayList();
+
+		List mainMenu = getPagesPath().getChildrenList();
+		int menuNum = 1;
+		for(Iterator i = mainMenu.iterator(); i.hasNext(); )
+		{
+			VirtualPath path = (VirtualPath) i.next();
+			if(path.getChildrenList().size() > 0)
+				menuBar.add(new HierarchicalMenu(menuNum, 171 + (66 * (menuNum-1)), 110, 38, path, getSharedScriptsRootURL()));
+			menuNum++;
+		}
+
+		menus = (Component[]) menuBar.toArray(new Component[menuBar.size()]);
 	}
 
-	public Component getMenuComponent()
+	public Component[] getMenuBar()
 	{
-		return menu;
+		return menus;
 	}
 
 	public Hashtable getStyleSheetParams()
@@ -43,19 +57,25 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		return CONFIGITEM_DEFAULT_PREFIX;
 	}
 
+	public VirtualPath getHomePath()
+	{
+		return homePath;
+	}
+
 	public void registerPages(ServletConfig config) throws ServletException
 	{
 		VirtualPath pagesPath = getPagesPath();
 
 		ServletPage homePage = new HomePage();
-		pagesPath.registerPage("/", homePage);
+		homePath = pagesPath.registerPage("/", homePage);
 		pagesPath.registerPage("/home", homePage);
 
 		pagesPath.registerPage("/application", new RedirectPage("application", "Application", null));
 		pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
-		pagesPath.registerPage("/application/servlet-context", new AppInitParamsPage());
 		pagesPath.registerPage("/application/config", new AppConfigurationPage());
+		pagesPath.registerPage("/application/servlet-context", new AppInitParamsPage());
 		pagesPath.registerPage("/application/acl", new AppAccessControlListPage());
+		pagesPath.registerPage("/application/system-properties", new SystemPropertiesPage());
 
 		pagesPath.registerPage("/application/factory", new AppFactoryPage());
 		pagesPath.registerPage("/application/factory/value-sources", new AppFactoryPage("value-sources", "Value Sources", AppFactoryPage.FACTORY_VALUESOURCE));

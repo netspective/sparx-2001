@@ -52,6 +52,11 @@ public class AppFactoryPage extends AceServletPage
 		return name == null ? "factory" : name;
 	}
 
+	public final String getPageIcon()
+	{
+		return "factories.gif";
+	}
+
 	public final String getCaption(PageContext pc)
 	{
 		return caption == null ? "Factories" : caption;

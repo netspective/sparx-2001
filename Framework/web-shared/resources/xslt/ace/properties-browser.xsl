@@ -12,41 +12,44 @@
 <xsl:param name="framework.ace.images-root-url"/>
 
 <xsl:template match="xaf/properties">
-	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
-	<tr class="heading">
-		<td class="heading">
-			<xsl:if test="@name">
-				<xsl:value-of select="@name"/>
+	<xsl:choose>
+		<xsl:when test="@name and (@name != $page-heading)">
+			<div class="content">
+			<div class="content_head">
+				<xsl:if test="@name">
+					<xsl:value-of select="@name"/>
+				</xsl:if>
+				<xsl:if test="not(@name)">
+					<xsl:value-of select="$page-heading"/>
+				</xsl:if>
+			</div>
+			<xsl:if test="@class">
+				<div class="content_subhead">
+					Source: <xsl:value-of select="@class"/>
+				</div>
 			</xsl:if>
-			<xsl:if test="not(@name)">
-				<xsl:value-of select="$page-heading"/>
+			</div>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:if test="@class">
+				<div class="page_source">
+					Source: <xsl:value-of select="@class"/>
+				</div>
 			</xsl:if>
-		</td>
-	</tr>
-	<tr class="heading_rule">
-		<td height="1" ></td>
-	</tr>
-	<xsl:if test="@class">
-		<tr class="heading_detail">
-			<td><xsl:value-of select="@class"/></td>
+		</xsl:otherwise>
+	</xsl:choose>
+
+	<div class="content">
+	<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+		<tr class="data_table_header">
+			<th class="data_table">Name</th>
+			<th class="data_table">Value</th>
 		</tr>
-		<tr class="heading_rule">
-			<td height="1" ></td>
-		</tr>
-	</xsl:if>
-	</table>
-	<br/>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>Name</th>
-			<th>Value</th>
-		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="*">
 			<xsl:sort select="name"/>
-			<tr valign="top">
-				<td><xsl:value-of select="name"/></td>
-				<td>
+			<tr valign="top" class="data_table">
+				<td class="data_table"><xsl:value-of select="name"/></td>
+				<td class="data_table">
 					<font color="green">
 					<xsl:value-of select="value"/>
 					<xsl:for-each select="value-detail">
@@ -55,44 +58,31 @@
 					</font>
 				</td>
 			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
-	<p/>
+	</div>
 </xsl:template>
 
 <xsl:template match="xaf/factory">
-	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
-	<tr class="heading">
-		<td class="heading"><xsl:value-of select="@name"/>&#160;<font color="black">Factory</font></td>
-	</tr>
-	<tr class="heading_rule">
-		<td height="2" ></td>
-	</tr>
-	<tr class="heading_detail">
-		<td><xsl:value-of select="@class"/></td>
-	</tr>
-	<tr class="heading_rule">
-		<td height="1" ></td>
-	</tr>
-	</table>
-	<br/>
-	<table cellspacing="0" cellpadding="2">
-		<tr bgcolor="beige">
-			<th>Name</th>
-			<th>Class</th>
+	<div class="page_source">
+		Source: <xsl:value-of select="@class"/>
+	</div>
+	
+	<div class="content">
+	<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+		<tr class="data_table_header">
+			<th class="data_table">Name</th>
+			<th class="data_table">Class</th>
 		</tr>
-		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="*">
 			<xsl:sort select="@name"/>
-			<tr valign="top">
-				<td><xsl:value-of select="@name"/></td>
-				<td><font color="green"><xsl:value-of select="@class"/></font></td>
+			<tr valign="top" class="data_table">
+				<td class="data_table"><xsl:value-of select="@name"/></td>
+				<td class="data_table"><font color="green"><xsl:value-of select="@class"/></font></td>
 			</tr>
-			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
-	<p/>
+	</div>
 </xsl:template>
 
 </xsl:stylesheet>

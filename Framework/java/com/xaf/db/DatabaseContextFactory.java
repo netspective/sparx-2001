@@ -57,7 +57,6 @@ public class DatabaseContextFactory
         Document doc = parent.getOwnerDocument();
 		Element dataSourcesElem = doc.createElement("properties");
 		parent.appendChild(dataSourcesElem);
-		dataSourcesElem.setAttribute("name", "Data Sources");
 		dataSourcesElem.setAttribute("class", dc != null ? dc.getClass().getName() : "No DatabaseContext found.");
 
 		if(dc != null)

@@ -1,13 +1,28 @@
 body { font-family: verdana; font-size: 9pt; }
-h1 { font-family: arial; font-size: 12pt; font-weight: bold; color: darkred; }
+h1 { font-family: arial; font-size: 12pt; font-weight: bold; color: navy; }
 th { font-family: verdana; font-size: 9pt; font-weight: bold; color: darkred; }
 td { font-family: tahoma; font-size: 8pt; }
 
 table.heading { width: 100%; }
-tr.heading { background-color: #389cce; }
+tr.heading { background-color:#D9E1E8; }
 tr.heading_detail { background-color: #EEEEEE; }
-tr.heading_rule { background-color: black; }
-td.heading { color: lightyellow; font-size: 14pt; font-weight: bold; font-family: arial,helvetica; }
+tr.heading_rule { background-color: navy; }
+td.heading { color: black; font-size: 14pt; font-weight: bold; font-family: arial,helvetica; }
+
+div.page_source { background-color:#D9E1E8; padding: 5; border-bottom: 1 solid navy; font-family: tahoma; font-size: 8pt; }
+
+div.content_head { font-family: arial; font-size: 12pt; font-weight: bold; color: navy; padding-top: 20px; padding-bottom: 4px; }
+div.content_subhead { background-color:#EEEEEE; padding: 5; border-bottom: 1 solid #AAAAAA; }
+div.content { margin: 10; }
+span.content_menu { text-align: right; }
+
+table.data_table { }
+tr.data_table_header { background-color: #EEEEEE; }
+th.data_table { border-bottom: 2 solid black; font-family: tahoma; font-size: 8pt; font-weight: bold; color: navy; margin: 0; padding: 3; }
+td.data_table { border-bottom: 1 solid #EEEEEE; padding-bottom: 4px; margin: 0; padding-left: 5px; padding-right: 5px; padding-top: 2px; padding-bottom: 2px;}
+td.data_table_no_sep { padding-bottom: 4px; margin: 0; padding: 3; }
+a.data_table { text-decoration: none; }
+a.data_table:hover { text-decoration: underline; }
 
 td.param_name { font-weight: bold; text-align:right; }
 td.param_value { color: green; }
@@ -16,6 +31,7 @@ a.column_name { text-decoration: none; color: navy; }
 a.column_name:hover { text-decoration: underline; }
 a.column_references { text-decoration: none; color: red; }
 a.column_references:hover { text-decoration: underline; }
+
 td.column_name { font-weight: bold; }
 td.column_domain { color: green; }
 td.column_default { color: #AAAAAA; font-family: lucida console, courier; }
@@ -28,6 +44,7 @@ td.column_attr_caption { text-align: right; font-style: italic; }
 td.column_attr_value { color: navy}
 td.column_elem_caption { text-align: right; }
 td.column_elem_value { color: navy}
+
 select { font-family: tahoma; font-size: 8pt; }
 p.description { font-family: verdana; font-size: 9pt; background-color: lightyellow; padding: 5;}
 div.table_struct_closed { font-family: tahoma; font-size: 8pt; display: 'none'; padding-left: 5pt; padding-top: 2pt; cursor: hand; }
@@ -37,3 +54,11 @@ span.table_struct_name { cursor: hand; }
 span.table_struct_menu { cursor: hand; font-family: webdings; font-size: 8pt; color: navy; }
 a.table_struct { text-decoration: none; color: navy; }
 a.table_struct:hover { text-decoration: underline; }
+
+
+.bodycopy { color: black; font-weight: 200; font-size: 14px; line-height: 22px; font-family: "Times New Roman", Times; text-align: left }
+.list  { color: white; font-size: 9px; font-family: Verdana; text-align: left; padding-top: 5pt; padding-bottom: 5pt; padding-left: 5pt }
+.bodyheader { color: #666; font-style: italic; font-weight: bold; font-size: 10pt; font-family: Verdana; text-decoration: none; text-align: left }
+.bodysubject { color: #191970; font-variant: small-caps; font-weight: bold; font-size: 10pt; font-family: Verdana; text-align: left; letter-spacing: 200%; border-bottom: 4pt solid #696969 }
+.bodycopyEmphasis { color: #4169e1; font-style: italic; font-size: 10pt; font-family: Verdana; text-align: left }
+.subHeads   { color: white; font-weight: 800; font-size: 25px; font-family: Verdana; text-decoration: none; text-align: left }

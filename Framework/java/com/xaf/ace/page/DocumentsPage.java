@@ -49,6 +49,11 @@ public class DocumentsPage extends AceServletPage
 		return name == null ? "documents" : name;
 	}
 
+	public final String getPageIcon()
+	{
+		return "docs_project.gif";
+	}
+
 	public final String getCaption(PageContext pc)
 	{
 		return caption == null ? "Documents" : caption;

@@ -16,6 +16,7 @@ import com.xaf.value.*;
 public class AppConfigurationPage extends AceServletPage
 {
 	public final String getName() { return "config"; }
+	public final String getPageIcon() { return "configuration.gif"; }
 	public final String getCaption(PageContext pc) { return "Configuration"; }
 	public final String getHeading(PageContext pc) { return "Application Configuration"; }
 

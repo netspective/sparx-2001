@@ -13,12 +13,12 @@ import com.xaf.form.*;
 import com.xaf.page.*;
 import com.xaf.skin.*;
 
-public class AppInitParamsPage extends AceServletPage
+public class SystemPropertiesPage extends AceServletPage
 {
-	public final String getName() { return "servlet-context"; }
+	public final String getName() { return "system-properties"; }
 	public final String getPageIcon() { return "servlet_context.gif"; }
-	public final String getCaption(PageContext pc) { return "Servlet Context"; }
-	public final String getHeading(PageContext pc) { return "Application Servlet Context"; }
+	public final String getCaption(PageContext pc) { return "System Properties"; }
+	public final String getHeading(PageContext pc) { return "System Properties"; }
 
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
@@ -39,15 +39,24 @@ public class AppInitParamsPage extends AceServletPage
 		doc.appendChild(rootElem);
 
 		Element propertiesElem = doc.createElement("properties");
-		propertiesElem.setAttribute("name", "Init Parameters");
 		rootElem.appendChild(propertiesElem);
 
-		for(Enumeration e = context.getInitParameterNames(); e.hasMoreElements(); )
+		for(Enumeration e = System.getProperties().keys(); e.hasMoreElements(); )
 		{
 			Element propertyElem = doc.createElement("property");
 			String paramName = (String) e.nextElement();
 			addText(propertyElem, "name", paramName);
-			addText(propertyElem, "value", context.getInitParameter(paramName));
+			if(paramName.endsWith(".path"))
+			{
+				StringTokenizer st = new StringTokenizer(System.getProperty("java.class.path"), System.getProperty("path.separator"));
+				addText(propertyElem, "value", st.nextToken());
+				while(st.hasMoreTokens())
+				{
+					addText(propertyElem, "value-detail", st.nextToken());
+				}
+			}
+			else
+				addText(propertyElem, "value", System.getProperty(paramName));
 			propertiesElem.appendChild(propertyElem);
 		}
 

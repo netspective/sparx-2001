@@ -20,6 +20,7 @@ import com.xaf.skin.*;
 public class DatabaseSqlPage extends AceServletPage
 {
 	public final String getName() { return "sql"; }
+	public final String getPageIcon() { return "sql.gif"; }
 	public final String getCaption(PageContext pc) { return "SQL"; }
 	public final String getHeading(PageContext pc) { return "SQL Components"; }
 

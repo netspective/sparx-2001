@@ -14,6 +14,7 @@ import com.xaf.security.*;
 public class AppAccessControlListPage extends AceServletPage
 {
 	public final String getName() { return "acl"; }
+	public final String getPageIcon() { return "access.gif"; }
 	public final String getCaption(PageContext pc) { return "Access Control"; }
 	public final String getHeading(PageContext pc) { return "Access Control List"; }
 

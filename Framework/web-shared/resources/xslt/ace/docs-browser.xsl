@@ -12,36 +12,24 @@
 <xsl:param name="ace-navigate-images-root-url"><xsl:value-of select="$framework.shared.images-url"/>/navigate</xsl:param>
 
 <xsl:template match="xaf/path">
-	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
-	<tr class="heading">
-		<td class="heading"><xsl:value-of select="@caption"/></td>
-	</tr>
-	<tr class="heading_rule">
-		<td height="1" ></td>
-	</tr>
-	</table>
-	<table bgcolor="#EEEEEE" border="0" cellspacing="0" cellpadding="3" width="100%">		
-		<tr>
-		<td>
-		<xsl:for-each select="parents/parent">
-			<xsl:if test="@isroot = 'true'">
-				<img border='0'>
-					<xsl:attribute name="src"><xsl:value-of select="$ace-navigate-images-root-url"/>/home-sm.gif</xsl:attribute>
-				</img>
-			</xsl:if>
-			&#160;<a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a>
-			<xsl:if test="@islast != 'true'">
-				&#160;<img border='0'>
-					<xsl:attribute name="src"><xsl:value-of select="$ace-navigate-images-root-url"/>/parent-separator.gif</xsl:attribute>
-				</img>				
-			</xsl:if>
-		</xsl:for-each>
-		</td>
-		</tr>
-		<tr class="heading_rule">
-			<td height="1" bgcolor="#999999"></td>
-		</tr>
-	</table>
+	<xsl:if test="parents/parent">
+		<div class="page_source">
+			<xsl:for-each select="parents/parent">
+				<xsl:if test="@isroot = 'true'">
+					<img border='0'>
+						<xsl:attribute name="src"><xsl:value-of select="$ace-navigate-images-root-url"/>/home-sm.gif</xsl:attribute>
+					</img>
+				</xsl:if>
+				&#160;<a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:value-of select="@caption"/></a>
+				<xsl:if test="@islast != 'true'">
+					&#160;<img border='0'>
+						<xsl:attribute name="src"><xsl:value-of select="$ace-navigate-images-root-url"/>/parent-separator.gif</xsl:attribute>
+					</img>				
+				</xsl:if>
+			</xsl:for-each>
+		</div>
+	</xsl:if>
+
 	<table cellspacing="5">
 	<tr><td>
 	

@@ -14,49 +14,47 @@
 <xsl:param name="framework.ace.images-root-url"/>
 
 <xsl:template match="xaf">
-	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
-	<tr class="heading">
-		<td class="heading"><xsl:value-of select="$page-heading"/></td>
-	</tr>
-	<tr class="heading_rule">
-		<td height="2" ></td>
-	</tr>
-	<tr class="heading_detail">
-		<td>Source: <xsl:value-of select="meta-info/source-files/source-file/@abs-path"/></td>
-	</tr>
-	<tr class="heading_rule">
-		<td height="1"></td>
-	</tr>
-	</table>
-	<p/>
+	<div class="page_source">
+		Source: <xsl:value-of select="meta-info/source-files/source-file/@abs-path"/>
+	</div>
+
+	<div class="content">
 	<ul>
 		<xsl:apply-templates select="access-control/permission"/>
 	</ul>
-
-	<h1>Source Files</h1>
-	<ol>
+	
+	<div class="content_head">Source Files</div>
+	<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+	<tr class="data_table_header">
+		<th class="data_table">File</th>
+		<th class="data_table">Included-from</th>
+	</tr>
 	<xsl:for-each select="meta-info/source-files/source-file">
-		<li>
-			<a>
+		<tr class="data_table">
+			<td class="data_table">
+			<a class="data_table">
 			<xsl:attribute name="href"><xsl:value-of select="@abs-path"/></xsl:attribute>
 			<xsl:value-of select="@abs-path"/>
 			</a>
-			<xsl:if test="@included-from">
-				(from <xsl:value-of select="@included-from"/>)
-			</xsl:if>
-		</li>
+			</td>
+			<td class="data_table">
+				<xsl:value-of select="@included-from"/>
+				<xsl:if test="not(@included-from)">&#160;</xsl:if>
+			</td>
+		</tr>
 	</xsl:for-each>
-	</ol>
+	</table>
 
 	<p/>
 	<xsl:if test="meta-info/errors">
-		<h1>Errors</h1>
+		<div class="content_head">Errors</div>
 		<ol>
 		<xsl:for-each select="meta-info/errors/error">
 			<li><xsl:value-of select="."/></li>
 		</xsl:for-each>
 		</ol>
 	</xsl:if>
+	</div>
 </xsl:template>
 
 <xsl:template match="permission">

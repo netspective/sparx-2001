@@ -13,6 +13,7 @@ import com.xaf.skin.*;
 public class AppDialogsPage extends AceServletPage
 {
 	public final String getName() { return "dialogs"; }
+	public final String getPageIcon() { return "dialogs.gif"; }
 	public final String getCaption(PageContext pc) { return "Dialogs"; }
 	public final String getHeading(PageContext pc) { return "Application Dialogs"; }
 
