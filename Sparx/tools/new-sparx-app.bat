@@ -1,6 +1,6 @@
 @echo off
 
-REM $Id: new-sparx-app.bat,v 1.1 2002-08-22 01:34:14 shahid.shah Exp $
+REM $Id: new-sparx-app.bat,v 1.2 2002-09-04 21:44:30 aye.thu Exp $
 
 REM **************************************************************************
 REM ** This must be be run from the SPARX_HOME/tools directory.             **
@@ -38,7 +38,7 @@ REM ** Now that we've bootstrapped the required libraries, run the build    **
 REM ** target in the Jakarta Ant build.xml file.                            **
 REM **************************************************************************
 
-cd %APP_WEBINF_ROOT%
+cd /D %APP_WEBINF_ROOT%
 build start-sparx-app
 
 goto END
