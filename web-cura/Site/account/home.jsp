@@ -7,7 +7,7 @@
 %>
 <app:page title="<%= org_name %>" heading="<%= org_name %>">
 
-	<table>
+	<table width='100%' cellpadding='1' cellspacing='0'>
 		<tr valign="top">
 			<td><xaf:query name="org.registration" skin="detail"/></td>
 			<td><xaf:query name="org.classification" skin="component"/></td>

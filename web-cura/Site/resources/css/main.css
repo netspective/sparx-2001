@@ -23,29 +23,30 @@ A:Hover
 {
     font-size: 8pt;
     background: #AFD997;
-    color: #ff3300;
+    color: #000000;
     font-family: Trebuchet MS;
     Text-decoration: underline
 }
 A.Menu:Link
 {
     font-size: 8pt;
-    color: #4A74E7;
+    background: #0000A0;
+    color: #FFFFFF;    
     font-family: Trebuchet MS;
     Text-decoration: none
 }
 A.Menu:Hover
 {
-    font-size: 8pt;
-    background: #FFFFFF;
-    color: #4A74E7;
-    font-family: Trebuchet MS;
-    Text-decoration: none
+    font-size: 9pt;
+    //background: #0000A0;
+    color: yellow;
+    font-family: Trebuchet MS, Arial;
+    Text-decoration: underline
 }
 A.Menu:Visited
 {
     font-size: 8pt;
-    color: #4A74E7;
+    color: #FFFFFF;
     font-family: Trebuchet MS;
     Text-decoration: none
 }

@@ -6,17 +6,32 @@
             <report heading="Type" />
         </field>
         <field id="task_id" caption="Task ID" join="task" column="task_id">
-            <report heading="ID" url="create-app-url:/task/home.jsp?task_id=${.}" align="right"/>
+            <report heading="ID"  align="left"/>
         </field>
-        <field id="priority_id" caption="Priority" join="task" column="priority_id">
-            <report heading="Priority" />
-        </field>
-        <field id="task_status" caption="Status" join="task" column="task_status">
-            <report heading="Task" />
+        <field id="task_summary" caption="Summary" join="task" column="task_summary">
+            <report heading="Summary" url="create-app-url:/task/home.jsp?task_id=${0}"/>
         </field>
 
-        <field id="owner_project_id" caption="Project (Owner)" join="task" column="owner_project_id">
+        <field id="priority_id" caption="Priority ID" join="task" column="priority_id">
+            <report heading="Priority" display="no"/>
+        </field>
+        <field id="priority_caption" caption="Priority" join="task_priority" column="caption">
+            <report heading="Priority" />
+        </field>
+        <field id="task_status" caption="Status ID" join="task" column="task_status">
+            <report heading="Status ID" />
+        </field>
+        <field id="task_status_caption" caption="Status" join="task_status" column="caption">
+            <report heading="Status" />
+        </field>
+        <field id="task_type_caption" caption="Type" join="task_type" column="caption">
+            <report heading="Type" />
+        </field>
+        <field id="project_name" caption="Project" join="project" column="project_name">
             <report heading="Project" />
+        </field>
+        <field id="owner_project_id" caption="Project ID" join="task" column="owner_project_id">
+            <report heading="Project ID" />
         </field>
         <field id="owner_org_id" caption="Organization (Owner)" join="task" column="owner_org_id">
             <report heading="Organization" />
@@ -26,10 +41,15 @@
         </field>
 
         <join id="task" table="task" auto-include="yes"/>
+        <join id="task_priority" table="task_priority" condition="task.priority_id = task_priority.id"/>
+        <join id="task_status" table="task_status" condition="task.task_status = task_status.id"/>
+        <join id="project" table="project" condition="project.project_id = task.owner_project_id"/>
+        <join id="task_type" table="task_type" condition="task_type.id = task.task_type"/>
+
 		<select-dialog name="task_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Task(s)">
 			<field.text query-field="task_id"/>
 			<field.text query-field="task_status"/>
-			<field.text query-field="priority_id"/>
+			<field.select query-field="priority_id"/>
 			<field.select query-field="owner_org_id" choices="query:person.active-org-memberships-name-id"  prepend-blank="yes"/>
 			<field.select name="sort_order"
 					caption="Sort By"
@@ -37,11 +57,12 @@
 					choices="Priority=priority_id;Status=task_status"/>
 			<select heading="Task Search Results">
 				<display field="task_id"/>
+                <display field="task_summary"/>
                 <display field="priority_id"/>
-				<display field="task_status"/>
-                <display field="owner_project_id"/>
-                <display field="owner_org_id"/>
-                <display field="owner_person_id"/>
+                <display field="priority_caption"/>
+				<display field="task_status_caption"/>
+                <display field="task_type_caption"/>
+                <display field="project_name"/>
 				<order-by field="form:sort_order"/>
 
 				<condition field="priority_id" allow-null="no" comparison="equals" value="form:priority_id" connector="and" />

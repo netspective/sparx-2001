@@ -44,12 +44,6 @@
         <enum id="2" abbrev="ENG">Member</enum>
 	</table>
 
-	<table name="ProjectTask_Relation_Type" abbrev="PrjTkRelTy" type="Relationship_Type">
-        <!-- enums for Project/Person relationship -->
-        <enum id="1" >Main</enum>
-        <enum id="2" >Other</enum>
-	</table>
-
 	<table name="Project_Relationship_Status" abbrev="PrjRelSt" type="Relationship_Status"/>
 
 	<table name="ProjectOrg_Relation" abbrev="PrjOrgRel" type="Org_Relationship">
@@ -63,13 +57,6 @@
 		<param name="parent-ref">Project.project_id</param>
 		<param name="record-status-enum">Project_Relationship_Status</param>
 		<param name="relationship-type-enum">ProjectPerson_Relation_Type</param>
-		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
-    </table>
-
-	<table name="ProjectTask_Relation" abbrev="PrjTkRel" type="Task_Relationship">
-		<param name="parent-ref">Project.project_id</param>
-		<param name="record-status-enum">Project_Relationship_Status</param>
-		<param name="relationship-type-enum">ProjectTask_Relation_Type</param>
 		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
     </table>
 

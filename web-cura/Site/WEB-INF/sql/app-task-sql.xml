@@ -26,26 +26,27 @@
         <statement name="information">
             select
                 task_id,
-                task_type,
+                task_type.caption,
                 task_summary,
                 task_status.caption,
                 task_priority.caption
             from
-                task, task_priority, task_status
+                task, task_priority, task_status, task_type
             where
                 task_id = ? and
                 task.priority_id = task_priority.id and
-                task.task_status = task_status.id
+                task.task_status = task_status.id and
+                task.task_type = task_type.id
             <report heading="Overview">
 				<banner>
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
                 </banner>
-                <column heading="ID" align="left"/>
-                <column heading="Type" align="left"/>
-                <column heading="Summary" align="left"/>
-                <column heading="Status" align="left"/>
-                <column heading="Priority" align="left"/>
+                <column heading="Task ID" align="left"/>
+                <column heading="Type" />
+                <column heading="Summary" />
+                <column heading="Status" />
+                <column heading="Priority" />
             </report>
             <params>
                 <param value="request:task_id"/>

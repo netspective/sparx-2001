@@ -6,13 +6,19 @@
             <report heading="Code" />
         </field>
         <field id="project_id" caption="Project ID" join="project" column="project_id">
-            <report heading="ID"  align="right"/>
+            <report heading="ID"  align="left"/>
         </field>
         <field id="project_name" caption="Project Name" join="project" column="project_name">
             <report heading="Name" url="create-app-url:/project/home.jsp?project_id=${0}&amp;project_name=%{.}"/>
         </field>
         <field id="project_descr" caption="Project Description" join="project" column="project_descr">
             <report heading="Description" />
+        </field>
+        <field id="project_status" caption="Project Status ID" join="project" column="project_status">
+            <report heading="Status" />
+        </field>
+        <field id="project_status_caption" caption="Project Status" join="project_status" column="caption">
+            <report heading="Status" />
         </field>
         <field id="person_last_name" caption="Contact Last Name" join="person" column="name_last">
             <report heading="Last Name"/>
@@ -27,6 +33,7 @@
         <join id="org" table="org" condition="org.org_id = projectorg_relation.rel_org_id" imply-join="projectorg_relation"/>
         <join id="projectorg_relation" table="projectorg_relation" />
         <join id="projectperson_relation" table="projectperson_relation" />
+        <join id="project_status" table="project_status" condition="project_status.id = project.project_status"/>
 
 		<select-dialog name="project_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Project(s)">
 			<field.text query-field="project_id"/>
@@ -38,9 +45,10 @@
 					style="combo"
 					choices="Project Name=project_name;Project ID=project_id"/>
 			<select heading="Project Search Results">
-				<display field="project_id"/>
+				<display field="project_id" />
                 <display field="project_name"/>
 				<display field="project_descr"/>
+                <display field="project_status_caption"/>
 				<order-by field="form:sort_order"/>
 
 				<condition field="person_last_name" allow-null="no" comparison="starts-with" value="form:person_last_name" connector="and" />

@@ -95,7 +95,7 @@
 
 	<tabletype name="Task_Relationship" type="Relationship">
 		<description>Basic information required for an entity that may be related to an task.</description>
-		<column name="rel_task_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
+		<column name="rel_task_id" lookupref="Task.task_id" required="yes" descr="The task this entry is related to"/>
 	</tabletype>
 
 	<tabletype name="PersonOrg_Relationship" type="Relationship">

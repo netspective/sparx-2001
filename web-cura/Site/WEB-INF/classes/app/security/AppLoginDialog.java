@@ -17,17 +17,13 @@ import com.xaf.config.Configuration;
 
 public class AppLoginDialog extends LoginDialog
 {
-	protected StandardDialogSkin skin;
+	protected DialogSkin skin;
 
 	public void initialize()
 	{
 		super.initialize();
 
-		skin = new StandardDialogSkin();
-		skin.setOuterTableAttrs("cellspacing='1' cellpadding='0'");
-		skin.setInnerTableAttrs("cellspacing='0' cellpadding='4'");
-		skin.setCaptionFontAttrs("size='2' face='tahoma,arial,helvetica' style='font-size:8pt' color='navy'");
-
+		skin = SkinFactory.getDialogSkin("login-skin");
 		setHeading((SingleValueSource) null);
 	}
 
@@ -45,9 +41,14 @@ public class AppLoginDialog extends LoginDialog
 		writer.write("</head>");
 		writer.write("<body background='white'>");
 		writer.write("	<center><br>");
-		writer.write("		<img src='"+ resourcesUrl +"/images/design/logo-main.gif' border='0'>");
-		writer.write("		<p>");
+        writer.write("  <table width='400' cellpadding='0' cellspacing='0'>");
+        writer.write("  <tr><td align='center' style='background: #0000A0'><img src='"+ resourcesUrl +"/images/design/logo-main.gif' border='0'></td</tr>");
+		writer.write("	<tr><td align='center' style='background: #0000A0'>");
 		writer.write(       getHtml(dc, true));
+        writer.write("  </td></tr>");
+        writer.write("	<tr><td align='center' style='background: #0000A0'>&nbsp;");
+        writer.write("  </td></tr>");
+        writer.write("  </table>");
 		writer.write("	</center>");
 		writer.write("</body>");
 	}

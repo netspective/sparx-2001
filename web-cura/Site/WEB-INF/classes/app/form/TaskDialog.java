@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 
 import dal.table.TaskTable;
 import dal.domain.row.TaskRow;
+import dal.DataAccessLayer;
 import dialog.context.task.RegistrationContext;
 
 public class TaskDialog extends Dialog
@@ -139,15 +140,15 @@ public class TaskDialog extends Dialog
 
         try
         {
-            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
-                dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+            RegistrationContext rc = (RegistrationContext)dc;
+            ConnectionContext cc =  rc.getConnectionContext();
 
             cc.beginTransaction();
             TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
             TaskRow taskRow = taskTable.createTaskRow();
             // this will extract the values from the dialog fields and populate
             // them into the row.
-            taskRow.populateDataByNames(dc);
+            taskRow.populateDataByNames(rc);
 			// insert a row into the Task table
             taskTable.insert(cc, taskRow);
             cc.endTransaction();

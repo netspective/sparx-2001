@@ -44,11 +44,6 @@
             </params>
         </statement>
 
-        <select name="active-tasks-report">
-
-
-        </select>
-
         <statement name="member-persons">
             select
                 person.person_id
@@ -102,21 +97,22 @@
             select
                 task.task_id,
                 task.task_summary,
-                task.task_status
+                task_status.caption
             from
-                task, projecttask_relation
+                task, task_type, task_status
             where
-                task.task_id = projecttask_relation.rel_task_id and
-                projecttask_relation.parent_id = ?
+                task.owner_project_id = ?   and
+                task.task_id = task_type.id and
+                task.task_status = task_status.id
             <params>
                 <param value="request:project_id"/>
             </params>
-            <report heading="Active Tasks">
+            <report heading="Project Tasks">
 				<banner>
                     <item caption="Add" url="config-expr:${create-app-url:/task/create.jsp}?project_id=${request:project_id}&amp;task_type=1"/>
                 </banner>
-                <column display="no"/>
-                <column heading="Summary" align="left" url="create-app-url:/task/home.jsp?task_id=${0}&amp;task_summary=%{1}"/>
+                <column heading="Task ID" align="center" display="yes"/>
+                <column heading="Name" align="left" url="create-app-url:/task/home.jsp?task_id=${0}&amp;task_summary=%{1}"/>
                 <column heading="Status" align="left"/>
             </report>
         </statement>

@@ -176,14 +176,14 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("       <td height='100%' width='158' align='left' valign='top' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
             // This is the static main menu
             out.println("       <table  width='100%' cellpadding='0' cellspacing='0'>");
-            out.println("           <tr bgcolor='#AFD997'><td style='height:50px;width:158px;' align='left'>");
-            out.println("           <label class='Font8pt'><b>Search for:</b></label><br><input name='SearchText' type='text' Class='Font8pt' maxlength='50' size='11' Align='AbsBottom' style='width:120px;' />");
+            out.println("           <tr bgcolor='#0000A0'><td style='height:50px;width:158px;' align='left'>");
+            out.println("           <label class='Font8pt'><b><font color='white'>Search for:</font></b></label><br><input name='SearchText' type='text' Class='Font8pt' maxlength='50' size='11' Align='AbsBottom' style='width:120px;' />");
             out.println("           <input type='image' title='Begin your search' alt='Begin your search' src='"+ resourcesUrl +"/images/design/go.gif' ID='GoButton' Border='0' Align='AbsBottom'/>");
             out.println("           </td></tr>");
             out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>&nbsp;</td></tr>");
 
             out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/index.jsp'>Home</a></font></b>");
+            out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/index.jsp'>Home</a></font></b>");
             out.println("           </td></tr>");
 
             out.println("           <tr><td>");
@@ -191,7 +191,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("           </td></tr>");
 
             out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/account/index.jsp'>Accounts</a></font></b>");
+            out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/account/index.jsp'>Accounts</a></font></b>");
             out.println("           </td></tr>");
 
             out.println("           <tr><td>");
@@ -199,7 +199,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("           </td></tr>");
 
             out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/contact/index.jsp'>Contacts</a></font></b>");
+            out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/contact/index.jsp'>Contacts</a></font></b>");
             out.println("           </td></tr>");
 
             out.println("           <tr><td>");
@@ -207,7 +207,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("           </td></tr>");
 
             out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/project/index.jsp'>Projects</a></font></b>");
+            out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/project/index.jsp'>Projects</a></font></b>");
             out.println("           </td></tr>");
 
             out.println("           <tr><td>");
@@ -215,7 +215,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("           </td></tr>");
 
             out.println("           <tr><td style='height:21px;width:158px;' align='left' background='"+ resourcesUrl +"/images/design/menu-background.jpg'>");
-            out.println("           <b><font size='2' face='tahoma' color='#000088'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/task/index.jsp'>Tasks</a></font></b>");
+            out.println("           <b><font size='2' face='tahoma' color='#FFFFFF'>&nbsp;&nbsp;<a class='Menu' href='" + rootPath + "/task/index.jsp'>Tasks</a></font></b>");
             out.println("           </td></tr>");
 
             out.println("       </table>");

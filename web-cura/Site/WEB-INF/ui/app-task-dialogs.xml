@@ -3,11 +3,10 @@
 <xaf>
     <dialogs package="task">
         <dialog name="registration" heading="create-data-cmd-heading:Task" retain-params="*" class="app.form.TaskDialog">
-            <field.separator heading="Information"/>
-            <!-- field.integer name="task_id" caption="ID">
-                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
-            </field.integer -->
-            <!-- field.text name="task_type" caption="Type"  required="yes"/ -->
+            <field.integer name="cr_person_id" hidden="yes" default="session:person_id"/>
+            <field.integer name="cr_org_id" hidden="yes" default="session:organization"/>
+            <field.integer name="owner_project_id" hidden="yes" default="request:project_id"/>
+            <field.integer name="owner_person_id" hidden="yes" default="request:person_id"/>
             <field.text name="task_summary" caption="Task Name" required="yes"/>
             <field.select name="task_owner" caption="Owner" hidden="yes"/>
             <field.memo name="task_descr" caption="Description" />
