@@ -16,6 +16,7 @@ public class TaskFactory
 	public static void setupDefaults()
 	{
         addTask("exec-statement", com.xaf.task.sql.StatementTask.class);
+        addTask("exec-redirect", com.xaf.task.navigate.RedirectTask.class);
         defaultsAvailable = true;
     }
 

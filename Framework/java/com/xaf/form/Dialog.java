@@ -227,14 +227,25 @@ public class Dialog
         {
 			TaskContext tc = new TaskContext(dc);
 
-            for(int i = 0; i < executeTasks.length; i++)
-            {
-                executeTasks[i].execute(tc);
-            }
-			if(tc.hasError())
-				return tc.getErrorMessage();
-			else if(tc.hasResultMessage())
-				return tc.getResultMessage();
+			try
+			{
+				for(int i = 0; i < executeTasks.length; i++)
+				{
+					executeTasks[i].execute(tc);
+					if(tc.haltProcessing())
+						break;
+				}
+				if(tc.hasError())
+					return tc.getErrorMessage();
+				else if(tc.hasResultMessage())
+					return tc.getResultMessage();
+				else
+					return "";
+			}
+			catch(TaskExecuteException e)
+			{
+				return e.getMessage();
+			}
         }
 
 		return "Need to add Dialog actions or override Dialog.execute(DialogContext)." + dc.getDebugHtml();

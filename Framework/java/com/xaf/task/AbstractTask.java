@@ -17,6 +17,7 @@ abstract public class AbstractTask implements Task
     }
 
 	public long getTaskNum() { return taskNum; }
+
 	public final long getFlags() { return flags; }
 	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }
 	public final void setFlag(long flag)
@@ -46,5 +47,5 @@ abstract public class AbstractTask implements Task
 	}
 
 	abstract public void initialize(Element elem) throws TaskInitializeException;
-	abstract public void execute(TaskContext tc);
+	abstract public void execute(TaskContext tc) throws TaskExecuteException;
 }

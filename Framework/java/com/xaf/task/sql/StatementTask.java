@@ -22,7 +22,6 @@ public class StatementTask extends AbstractTask
     static public final String DEFAULT_REPORTSKINID = "report";
 
     private StatementManager.StatementInfo statementInfo;
-    private boolean debug;
 	private String stmtName;
 	private String stmtSourceId;
 	private String dataSourceId;
@@ -31,15 +30,26 @@ public class StatementTask extends AbstractTask
 	private String storeValueName;
 	private SingleValueSource storeValueSource;
 	private boolean produceReport = true;
-	private int storeValueType;
+	private int storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWMAP;
 
     public StatementTask()
     {
 		super();
     }
 
-   	public boolean getDebug() { return debug; }
-	public void setDebug(boolean value) { debug = value; }
+	public void reset()
+	{
+		statementInfo = null;
+		stmtName = null;
+		stmtSourceId = null;
+		dataSourceId = null;
+		reportId = null;
+		reportSkinId = DEFAULT_REPORTSKINID;
+		storeValueName = null;
+		storeValueSource = null;
+		produceReport = true;
+		storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWMAP;
+	}
 
 	public String getStmtName() { return stmtName; }
 	public void setStmtName(String value) {	stmtName = value; }
@@ -94,14 +104,15 @@ public class StatementTask extends AbstractTask
             if(elem.getAttribute("name").length() == 0)
                 elem.setAttribute("name", "SqlExecuteAction-" + getTaskNum());
             statementInfo = new StatementManager.StatementInfo();
-            statementInfo.importFromXml(elem, "DialogProcessAction", null);
+            statementInfo.importFromXml(elem, "Task", null);
         }
         else
         {
             stmtName = elem.getAttribute("name");
         }
 
-        debug = elem.getAttribute("debug").equals("yes");
+        if(elem.getAttribute("debug").equals("yes"))
+			setFlag(TASKFLAG_DEBUG);
 
         reportId = elem.getAttribute("report");
         if(reportId.length() == 0) reportId = null;
@@ -118,34 +129,37 @@ public class StatementTask extends AbstractTask
 		if(storeValueName != null)
 		{
             setStoreType(elem.getAttribute("store-type"));
+		}
+    }
 
+    public void execute(TaskContext tc) throws TaskExecuteException
+    {
+		if(storeValueName != null && storeValueSource == null)
+		{
 			storeValueSource = ValueSourceFactory.getStoreValueSource(storeValueName);
 			if(storeValueSource == null)
-				throw new TaskInitializeException("SingleValueSource '"+ storeValueName +"' not found");
+				throw new TaskExecuteException("SingleValueSource '"+ storeValueName +"' not found");
 			if(! storeValueSource.supportsSetValue())
-				throw new TaskInitializeException("SingleValueSource '"+ storeValueName +"' does not support value storage.");
+				throw new TaskExecuteException("SingleValueSource '"+ storeValueName +"' does not support value storage.");
 
 			if(storeValueSource instanceof DialogFieldValue)
 				storeValueType = SingleValueSource.RESULTSET_STORETYPE_SINGLEROWFORMFLD;
 
 			if(storeValueType == -1)
-				throw new TaskInitializeException("store-type must be one of "+SingleValueSource.RESULTSET_STORETYPES.toString());
+				throw new TaskExecuteException("store-type must be one of "+SingleValueSource.RESULTSET_STORETYPES.toString());
 		}
-    }
 
-    public void execute(TaskContext tc)
-    {
 		ServletContext context = tc.getServletContext();
 		StatementManager stmtManager = stmtSourceId == null ? StatementManagerFactory.getManager(context) : StatementManagerFactory.getManager(stmtSourceId);
 		DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
 
         if(stmtManager == null)
 		{
-            tc.addErrorMessage("StatementManager file '" + stmtSourceId + "' not found (specified in ServletContext config init parameter 'sql-statements-file'");
+            tc.addErrorMessage("StatementManager file '" + stmtSourceId + "' not found (specified in ServletContext config init parameter 'sql-statements-file'", false);
 			return;
 		}
 
-        if(debug)
+        if(flagIsSet(TASKFLAG_DEBUG))
         {
             StringBuffer debugMessage = new StringBuffer();
             StatementManager.StatementInfo si;
@@ -164,7 +178,7 @@ public class StatementTask extends AbstractTask
 				debugMessage.append(si.getDebugHtml(tc));
 				debugMessage.append("</pre>");
             }
-			tc.addErrorMessage(debugMessage.toString());
+			tc.addErrorMessage(debugMessage.toString(), false);
             return;
         }
 
@@ -177,7 +191,7 @@ public class StatementTask extends AbstractTask
                 ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinId);
                 if(reportSkin == null)
 				{
-					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.");
+					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.", false);
                     return;
 				}
                 else
@@ -200,7 +214,7 @@ public class StatementTask extends AbstractTask
                 ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinId);
                 if(reportSkin == null)
 				{
-					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.");
+					tc.addErrorMessage("ReportSkin '"+reportSkinId+"' not found.", false);
                     return;
 				}
                 else
@@ -214,7 +228,7 @@ public class StatementTask extends AbstractTask
         }
         catch(IOException e)
         {
-            throw new RuntimeException(e.toString());
+            throw new TaskExecuteException(e);
         }
         catch(SQLException e)
         {
@@ -230,16 +244,16 @@ public class StatementTask extends AbstractTask
 			errorMsg.append(stack.toString());
 			errorMsg.append("</pre>");
 
-			tc.addErrorMessage(errorMsg.toString());
+			tc.addErrorMessage(errorMsg.toString(), false);
             return;
         }
         catch(StatementNotFoundException e)
         {
-            throw new RuntimeException(e.toString());
+            throw new TaskExecuteException(e);
         }
         catch(NamingException e)
         {
-            throw new RuntimeException(e.toString());
+            throw new TaskExecuteException(e);
         }
 
 		tc.addResultMessage(out.toString());

@@ -11,7 +11,8 @@ import com.xaf.value.*;
 
 public class TaskContext implements ValueContext
 {
-	static public final long TCFLAG_HASERROR = 1;
+	static public final long TCFLAG_HALTPROCESSING = 1;
+	static public final long TCFLAG_HASERROR = TCFLAG_HALTPROCESSING * 2;
 	static public final long TCFLAG_HASRESULTMSG = TCFLAG_HASERROR * 2;
 
 	private static long taskContextNum = 0;
@@ -67,6 +68,7 @@ public class TaskContext implements ValueContext
 
 	public final boolean hasError() { return (flags & TCFLAG_HASERROR) != 0 ? true : false; }
 	public final boolean hasResultMessage() { return (flags & TCFLAG_HASRESULTMSG) != 0 ? true : false; }
+	public final boolean haltProcessing() { return (flags & TCFLAG_HALTPROCESSING) != 0 ? true : false; }
 
 	public String getResultMessage() { return resultMessage.toString(); }
 	public void addResultMessage(String value)
@@ -76,10 +78,12 @@ public class TaskContext implements ValueContext
 	}
 
 	public String getErrorMessage() { return errorMessage.toString(); }
-	public void addErrorMessage(String value)
+	public void addErrorMessage(String value, boolean haltProcessing)
 	{
 		errorMessage.append(value);
 		setFlag(TCFLAG_HASERROR);
+		if(haltProcessing)
+			setFlag(TCFLAG_HALTPROCESSING);
 	}
 
 	public long getResultCode() { return resultCode; }
