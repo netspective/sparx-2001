@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.3 2002-12-28 20:07:37 shahid.shah Exp $
+ * $Id: NavigationPathContext.java,v 1.4 2002-12-30 14:11:17 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -113,6 +113,8 @@ public class NavigationPathContext extends ServletValueContext
             transactionId = "No MessageDigest Algorithm found!";
             LogManager.recordException(this.getClass(), "constructor", transactionId, e);
         }
+
+        activeTree.makeStateChanges(this);
     }
 
     public String getApplicationName(NavigationPathContext nc)

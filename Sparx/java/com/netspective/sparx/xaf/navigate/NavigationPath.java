@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.3 2002-12-28 20:07:37 shahid.shah Exp $
+ * $Id: NavigationPath.java,v 1.4 2002-12-30 14:11:17 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -541,6 +541,9 @@ public class NavigationPath
                 String defaultChildId = childElem.getAttribute("default");
                 childPath.setDefaultChildId(defaultChildId);
 
+                //TODO: Tried to remove these statement and the variables but it's
+                //      being used in ACE.  Need to alter ACE to follow the new image
+                //      naming convention
                 String imageUrl = childElem.getAttribute("action-image-url");
                 if (imageUrl.length() > 0)
                     childPath.setActionImageUrl(url);
@@ -860,7 +863,7 @@ public class NavigationPath
      */
     public void setVisible(boolean visible)
     {
-        if(visible) setFlagRecursively(NAVGPATHFLAG_INVISIBLE); else clearFlagRecursively(NAVGPATHFLAG_INVISIBLE);
+        if(visible) clearFlagRecursively(NAVGPATHFLAG_INVISIBLE); else setFlagRecursively(NAVGPATHFLAG_INVISIBLE);
     }
 
     /**
@@ -939,6 +942,9 @@ public class NavigationPath
     {
         page.setId(path);
         return addChild(path, page);
+    }
+
+    public void makeStateChanges(NavigationPathContext navigationPathContext) {
     }
 }
 
