@@ -206,6 +206,24 @@ function DialogField_doPreSubmit()
 	}
 }
 
+function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
+{
+	var isChecked = sourceCheckbox.checked;
+	
+	for(var f = 0; f < document.forms.length; f++)
+	{
+		var form = document.forms[f];
+		var elements = form.elements;
+		for(var i = 0; i < elements.length; i++)
+		{
+			control = form.elements[i];
+			if(control.name.indexOf(otherCheckboxesPrefix) == 0)
+				control.checked = isChecked;
+		}
+	}
+	
+}
+
 //****************************************************************************
 // DialogFieldConditionalDisplay class
 //****************************************************************************
