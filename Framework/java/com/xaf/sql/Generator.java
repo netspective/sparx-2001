@@ -28,33 +28,35 @@ public class Generator
 	{
 		public String sql;
 		public String tableName;
-		public Object[] columns;
-		public long bindColFlags;
+		public List columnNames;
+        public List columnValues;
+		public boolean[] bindValues;
 
 		public String toString()
 		{
 			StringBuffer bind = new StringBuffer();
-
-			for(int c = 0; c < columns.length; c++)
-			{
-				long valueIndexFlag = (long) java.lang.Math.pow(2.0, c);
-				if((bindColFlags & valueIndexFlag) != 0)
-				{
-					bind.append((c / 2) + ": " + columns[c] + " ("+ columns[c].getClass() +")\n");
-				}
-			}
-
+            if(bindValues != null)
+            {
+                for(int c = 0; c < bindValues.length; c++)
+                {
+                    if(bindValues[c])
+                    {
+                        bind.append(c + ": " + columnValues.get(c) + " ("+ columnValues.get(c).getClass() +")\n");
+                    }
+                }
+            }
 			return "SQL\n" + sql + "\n\nBIND\n" + bind;
 		}
 	}
 
-	static public DmlStatement createInsertStmt(String tableName, Object[] columns) throws UnknownDBMSException
+	static public DmlStatement createInsertStmt(String tableName, List columnNames, List columnValues)
 	{
 		DmlStatement stmt = new DmlStatement();
 		stmt.tableName = tableName;
-		stmt.columns = columns;
-		stmt.bindColFlags = 0;
-		int columnsCount = columns.length / 2;
+		stmt.columnNames = columnNames;
+        stmt.columnValues = columnValues;
+		stmt.bindValues = new boolean[columnValues.size()];
+		int columnsCount = columnNames.size();
 		StringBuffer names = new StringBuffer();
 		StringBuffer values = new StringBuffer();
 
@@ -65,12 +67,9 @@ public class Generator
 				names.append(", ");
 				values.append(", ");
 			}
-			names.append(columns[i * 2]);
+			names.append((String) columnNames.get(i));
 
-			int valueIndex = (i * 2) + 1;
-			long indexFlag = (long) java.lang.Math.pow(2.0, (double) valueIndex);
-			Object value = columns[valueIndex];
-
+			Object value = columnValues.get(i);
 			if(value instanceof CustomSql)
 			{
 				values.append(((CustomSql) value).customSql);
@@ -82,7 +81,7 @@ public class Generator
 				else
 				{
 					values.append("?");
-				    stmt.bindColFlags |= indexFlag;
+                    stmt.bindValues[i] = true;
 				}
 			}
 		}
@@ -91,13 +90,14 @@ public class Generator
 		return stmt;
 	}
 
-	static public DmlStatement createUpdateStmt(String tableName, Object[] columns, String whereCond, Object[] whereCondParams) throws UnknownDBMSException
+	static public DmlStatement createUpdateStmt(String tableName, List columnNames, List columnValues, String whereCond)
 	{
 		DmlStatement stmt = new DmlStatement();
 		stmt.tableName = tableName;
-		stmt.columns = columns;
-		stmt.bindColFlags = 0;
-		int columnsCount = columns.length / 2;
+        stmt.columnNames = columnNames;
+        stmt.columnValues = columnValues;
+		stmt.bindValues = new boolean[columnValues.size()];
+		int columnsCount = columnNames.size();
 		StringBuffer sets = new StringBuffer();
 
 		for(int i = 0; i < columnsCount; i++)
@@ -105,11 +105,9 @@ public class Generator
 			if(i != 0)
 				sets.append(", ");
 
-			int valueIndex = (i * 2) + 1;
-			long indexFlag = (long) java.lang.Math.pow(2.0, (double) valueIndex);
-			Object value = columns[valueIndex];
+			Object value = columnValues.get(i);
 
-            sets.append(columns[i * 2]);
+            sets.append((String) columnNames.get(i));
             sets.append(" = ");
 
 			if(value instanceof CustomSql)
@@ -125,7 +123,7 @@ public class Generator
 				else
 				{
 					sets.append("?");
-					stmt.bindColFlags |= indexFlag;
+					stmt.bindValues[i] = true;
 				}
 			}
 		}
@@ -142,16 +140,12 @@ public class Generator
      *
      * @param tableName database table name
      * @param whereCond SQL WHERE string
-     * @param whereCondParams WHERE string bind values
      * @returns DmlStatement
      */
-	static public DmlStatement createDeleteStmt(String tableName, String whereCond, Object[] whereCondParams) throws UnknownDBMSException
+	static public DmlStatement createDeleteStmt(String tableName, String whereCond)
 	{
 		DmlStatement stmt = new DmlStatement();
 		stmt.tableName = tableName;
-        stmt.columns = new Object[0];
-		stmt.bindColFlags = 0;
-
 
 		stmt.sql = "delete from "+tableName;
         if(whereCond != null)
