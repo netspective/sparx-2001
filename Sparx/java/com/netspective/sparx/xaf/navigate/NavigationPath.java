@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.14 2003-01-28 21:10:37 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.15 2003-01-29 01:41:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -74,7 +74,7 @@ import com.netspective.sparx.util.ClassPath;
 
 public class NavigationPath
 {
-    static public final long NAVGPATHFLAG_ISROOT    = 1;
+    static public final long NAVGPATHFLAG_ISROOT = 1;
     static public final long NAVGPATHFLAG_INVISIBLE = NAVGPATHFLAG_ISROOT * 2;
     static public final long NAVGPATHFLAG_HIDDEN = NAVGPATHFLAG_INVISIBLE * 2;
     static public final long NAVGPATHFLAG_READONLY = NAVGPATHFLAG_HIDDEN * 2;
@@ -240,8 +240,8 @@ public class NavigationPath
 
     public void setRoot(boolean root)
     {
-        if(root) setFlag(NAVGPATHFLAG_ISROOT); else clearFlag(NAVGPATHFLAG_ISROOT);
-        if(root)
+        if (root) setFlag(NAVGPATHFLAG_ISROOT); else clearFlag(NAVGPATHFLAG_ISROOT);
+        if (root)
         {
             setName(null);
             setParent(null);
@@ -315,11 +315,11 @@ public class NavigationPath
 
     public void setParent(NavigationPath value)
     {
-        if(value != this)
+        if (value != this)
         {
             parent = value;
-            if(parent != null)
-                setLevel(parent.getLevel()+1);
+            if (parent != null)
+                setLevel(parent.getLevel() + 1);
         }
         else
             parent = null;
@@ -334,12 +334,12 @@ public class NavigationPath
     {
         this.level = level;
         setMaxLevel(level);
-        for(NavigationPath activeParent = getParent(); activeParent != null; )
+        for (NavigationPath activeParent = getParent(); activeParent != null;)
         {
             activeParent.setMaxLevel(level);
             activeParent = activeParent.getParent();
         }
-        if(owner != null) owner.setMaxLevel(level);
+        if (owner != null) owner.setMaxLevel(level);
     }
 
     public int getMaxLevel()
@@ -349,7 +349,7 @@ public class NavigationPath
 
     public void setMaxLevel(int maxLevel)
     {
-        if(maxLevel > this.maxLevel)
+        if (maxLevel > this.maxLevel)
             this.maxLevel = maxLevel;
     }
 
@@ -401,10 +401,10 @@ public class NavigationPath
     public void setFlagRecursively(long flag)
     {
         flags |= flag;
-        if(childrenList.size() > 0)
+        if (childrenList.size() > 0)
         {
             Iterator i = childrenList.iterator();
-            while(i.hasNext())
+            while (i.hasNext())
                 ((NavigationPath) i.next()).setFlag(flag);
         }
     }
@@ -412,10 +412,10 @@ public class NavigationPath
     public void clearFlagRecursively(long flag)
     {
         flags &= ~flag;
-        if(childrenList.size() > 0)
+        if (childrenList.size() > 0)
         {
             Iterator i = childrenList.iterator();
-            while(i.hasNext())
+            while (i.hasNext())
                 ((NavigationPath) i.next()).clearFlag(flag);
         }
     }
@@ -486,7 +486,7 @@ public class NavigationPath
 
             Element childElem = (Element) child;
 
-            if(childName.equals("conditional"))
+            if (childName.equals("conditional"))
             {
                 importConditionalFromXml(childElem, parent);
                 continue;
@@ -496,7 +496,7 @@ public class NavigationPath
             {
                 String childClassName = childElem.getAttribute("class");
                 NavigationPath childPath = null;
-                if(childClassName.length() > 0)
+                if (childClassName.length() > 0)
                 {
                     ClassPath.InstanceGenerator instGen = new ClassPath.InstanceGenerator(childClassName, defaultChildClass, true);
                     childPath = (NavigationPath) instGen.getInstance();
@@ -520,12 +520,12 @@ public class NavigationPath
                 parent.register(childPath);
 
                 String name = childElem.getAttribute("name");
-                if(name.length() > 0)
+                if (name.length() > 0)
                     childPath.setName(name);
                 else
                 {
                     String[] pathItems = getPathItems(id);
-                    childPath.setName(pathItems[pathItems.length-1]);
+                    childPath.setName(pathItems[pathItems.length - 1]);
                 }
 
                 String caption = childElem.getAttribute("caption");
@@ -564,13 +564,15 @@ public class NavigationPath
                 }
 
                 //Trying parent's controller
-                if (controller == null) {
+                if (controller == null)
+                {
                     controllerName = childPath.getParent().getControllerName();
-                    controller =  childPath.getParent().getController();
+                    controller = childPath.getParent().getController();
                 }
 
                 //If it's still null then pickup the default
-                if (controller == null){
+                if (controller == null)
+                {
                     controllerName = "default";
                     controller = childPath.getOwner().getControllerByName(controllerName);
                 }
@@ -594,7 +596,7 @@ public class NavigationPath
 
                     List permsList = new ArrayList();
                     StringTokenizer st = new StringTokenizer(permissions, ",");
-                    while(st.hasMoreTokens())
+                    while (st.hasMoreTokens())
                         permsList.add(st.nextToken());
                     permissionConditional.setHasPermissions((String[]) permsList.toArray(new String[permsList.size()]));
 
@@ -607,7 +609,8 @@ public class NavigationPath
 
                 //TODO: Asses if it's worth to inherit retain-params and a way to set them to nothing and make sure to take care of double entries.
                 String retainParams = childElem.getAttribute("retain-params");
-                if (retainParams != null && retainParams.length() > 0) {
+                if (retainParams != null && retainParams.length() > 0)
+                {
                     childPath.setRetainParams(retainParams);
                 }
 
@@ -649,14 +652,14 @@ public class NavigationPath
     {
         String action = elem.getAttribute("action");
 
-        if(action == null || action.length() == 0)
+        if (action == null || action.length() == 0)
         {
             return;
         }
 
         NavigationConditionalAction actionInst = NavigationTreeManager.createConditional(action);
 
-        if(actionInst != null)
+        if (actionInst != null)
         {
             actionInst.setPath(path);
             actionInst.importFromXml(elem);
@@ -768,9 +771,9 @@ public class NavigationPath
     public String getDebugHtml(ValueContext vc)
     {
         StringBuffer html = new StringBuffer();
-        html.append(getAbsolutePath() + ": level " + getLevel() + " (max "+ getMaxLevel() +"), " + getClass().getName() + ", " + getCaption(vc) + ", " + getHeading(vc) + ", " + getTitle(vc));
+        html.append(getAbsolutePath() + ": level " + getLevel() + " (max " + getMaxLevel() + "), " + getClass().getName() + ", " + getCaption(vc) + ", " + getHeading(vc) + ", " + getTitle(vc));
 
-        if(childrenList != null && childrenList.size() > 0)
+        if (childrenList != null && childrenList.size() > 0)
         {
             html.append("<ol>Children");
             Iterator i = childrenList.iterator();
@@ -782,7 +785,7 @@ public class NavigationPath
             html.append("</ol>");
         }
 
-        if(ancestorsList != null && ancestorsList.size() > 0)
+        if (ancestorsList != null && ancestorsList.size() > 0)
         {
             html.append("<ol>Ancestors");
             Iterator i = ancestorsList.iterator();
@@ -933,49 +936,59 @@ public class NavigationPath
         this.ancestorMap = ancestorMap;
     }
 
-    public String getControllerName() {
+    public String getControllerName()
+    {
         return controllerName;
     }
 
-    public void setControllerName(String controllerName) {
+    public void setControllerName(String controllerName)
+    {
         this.controllerName = controllerName;
     }
 
-    public NavigationController getController() {
+    public NavigationController getController()
+    {
         return controller;
     }
 
-    public void setController(NavigationController controller) {
+    public void setController(NavigationController controller)
+    {
         this.controller = controller;
     }
 
-    public ValueSource getRetainParams() {
+    public ValueSource getRetainParams()
+    {
         return retainParams;
     }
 
-    public void setRetainParams(ValueSource retainParams) {
+    public void setRetainParams(ValueSource retainParams)
+    {
         this.retainParams = retainParams;
         hasRetainParams = true;
     }
 
-    public String getRetainParams(ValueContext vc){
+    public String getRetainParams(ValueContext vc)
+    {
         if (hasRetainParams)
             return this.retainParams.getValue(vc);
         else
             return null;
     }
 
-    public void setRetainParams(String retainParams){
+    public void setRetainParams(String retainParams)
+    {
         this.retainParams.initializeSource(retainParams);
         hasRetainParams = true;
     }
 
-    public String getSubHeading(ValueContext vc) {
-        return subHeading.getValue(vc);
+    public String getSubHeading(ValueContext vc)
+    {
+        return subHeading != null ? subHeading.getValue(vc) : null;
     }
 
-    public void setSubHeading(String value) {
-        this.subHeading = ValueSourceFactory.getSingleOrStaticValueSource(value);;
+    public void setSubHeading(String value)
+    {
+        this.subHeading = ValueSourceFactory.getSingleOrStaticValueSource(value);
     }
 
     /**
@@ -1056,25 +1069,29 @@ public class NavigationPath
         return addChild(path, page);
     }
 
-    public void makeStateChanges(NavigationPathContext nc) {
+    public void makeStateChanges(NavigationPathContext nc)
+    {
         //The make state changes should affect the current navPath, its sibilings, its ancestors and the ancestor's sibilings and its children
         if (flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
             applyConditionals(conditionalActions, nc);
 
         List sibilings = this.getSibilingList();
-        for (int i = 0; sibilings!= null && i < sibilings.size(); i++) {
+        for (int i = 0; sibilings != null && i < sibilings.size(); i++)
+        {
             NavigationPath sibiling = (NavigationPath) sibilings.get(i);
             if (sibiling.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
                 applyConditionals(sibiling.getConditionalActions(), nc);
         }
 
         List ancestors = this.getAncestorsList();
-        for (int i = 0; ancestors!= null && i < ancestors.size(); i++) {
+        for (int i = 0; ancestors != null && i < ancestors.size(); i++)
+        {
             NavigationPath ancestor = (NavigationPath) ancestors.get(i);
             if (ancestor.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
                 applyConditionals(ancestor.getConditionalActions(), nc);
             List ancestorSibilings = ancestor.getSibilingList();
-            for (int j = 0; ancestorSibilings != null && j < ancestorSibilings.size(); j++) {
+            for (int j = 0; ancestorSibilings != null && j < ancestorSibilings.size(); j++)
+            {
                 NavigationPath ancestorSibiling = (NavigationPath) ancestorSibilings.get(j);
                 if (ancestorSibiling.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
                     applyConditionals(ancestorSibiling.getConditionalActions(), nc);
@@ -1082,42 +1099,49 @@ public class NavigationPath
         }
 
         List children = this.getChildrenList();
-        for (int i = 0; children!= null && i < children.size(); i++) {
+        for (int i = 0; children != null && i < children.size(); i++)
+        {
             NavigationPath child = (NavigationPath) children.get(i);
             if (child.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
                 applyConditionals(child.getConditionalActions(), nc);
         }
     }
 
-    public void applyConditionals(List conditionals, NavigationPathContext nc){
+    public void applyConditionals(List conditionals, NavigationPathContext nc)
+    {
 
-        if(conditionals != null)
+        if (conditionals != null)
         {
-            for(int i = 0; i < conditionals.size(); i++)
+            for (int i = 0; i < conditionals.size(); i++)
             {
                 NavigationConditionalAction action = (NavigationConditionalAction) conditionals.get(i);
-                if(action instanceof NavigationConditionalApplyFlag)
+                if (action instanceof NavigationConditionalApplyFlag)
                     ((NavigationConditionalApplyFlag) action).applyFlags(nc);
             }
         }
     }
 
-    public void resolveResources(Map resources){
+    public void resolveResources(Map resources)
+    {
 
-		Map pageResources = (Map) resources.get(this.getId());
-		Map parentPageResources = (Map) resources.get(this.getParent().getId());
-        if (parentPageResources == null) {
+        Map pageResources = (Map) resources.get(this.getId());
+        Map parentPageResources = (Map) resources.get(this.getParent().getId());
+        if (parentPageResources == null)
+        {
             //This will only happen for the first level where there is no parent and
             //we need to get the root resources.
             parentPageResources = (Map) resources.get("/");
         }
 
-        if (pageResources == null ) {
+        if (pageResources == null)
+        {
             //We do not need to look at every ancestor and figure out, because the
             //the recursiveness occurs from top to bottom, so all of the parents should
             //have resolved their resources by the time we get to this point.
             resources.put(this.getId(), parentPageResources);
-        } else {
+        }
+        else
+        {
 
             Map currentPageResources = new HashMap();
 
@@ -1126,10 +1150,12 @@ public class NavigationPath
 
             currentPageResources.putAll(pageResources);
             resources.put(this.getId(), currentPageResources);
-		}
+        }
 
-        if (this.childrenList != null) {
-            for (int i = 0; i < childrenList.size(); i++) {
+        if (this.childrenList != null)
+        {
+            for (int i = 0; i < childrenList.size(); i++)
+            {
                 NavigationPath child = (NavigationPath) childrenList.get(i);
                 child.resolveResources(resources);
             }
@@ -1153,7 +1179,8 @@ public class NavigationPath
      */
     public void addConditionalAction(NavigationConditionalAction action)
     {
-        if (conditionalActions == null) {
+        if (conditionalActions == null)
+        {
             conditionalActions = new ArrayList();
             setFlag(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS);
         }
