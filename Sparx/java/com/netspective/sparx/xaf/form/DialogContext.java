@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.9 2002-03-26 17:57:52 eoliphan Exp $
+ * $Id: DialogContext.java,v 1.10 2002-04-12 12:30:05 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -211,7 +211,7 @@ public class DialogContext extends ServletValueContext
                 for(int i = 0; i < values.length; i++)
                 {
                     Element valueElem = doc.createElement("value");
-                    valueElem.appendChild(doc.createTextNode(values[i]));
+                    valueElem.appendChild(doc.createTextNode(DialogField.escapeHTML(values[i])));
                     valuesElem.appendChild(valueElem);
                 }
                 fieldElem.appendChild(valuesElem);
@@ -221,7 +221,7 @@ public class DialogContext extends ServletValueContext
             {
                 fieldElem.setAttribute("value-type", "string");
                 Element valueElem = doc.createElement("value");
-                valueElem.appendChild(doc.createTextNode(value));
+                valueElem.appendChild(doc.createTextNode(DialogField.escapeHTML(value)));
                 fieldElem.appendChild(valueElem);
                 parent.appendChild(fieldElem);
             }
@@ -1495,13 +1495,13 @@ public class DialogContext extends ServletValueContext
             {
                 StringBuffer multiValues = new StringBuffer();
                 for(int v = 0; v < state.values.length; v++)
-                    multiValues.append(state.values[v] + "<br>");
+                    multiValues.append(DialogField.escapeHTML(state.values[v]) + "<br>");
 
                 values.append("<tr valign=top><td>" + state.field.getQualifiedName() + "</td><td>" + multiValues.toString() + "</td></tr>");
             }
             else
             {
-                values.append("<tr valign=top><td>" + state.field.getQualifiedName() + "</td><td>" + state.value + "</td></tr>");
+                values.append("<tr valign=top><td>" + state.field.getQualifiedName() + "</td><td>" + DialogField.escapeHTML(state.value) + "</td></tr>");
             }
         }
 
@@ -1509,8 +1509,8 @@ public class DialogContext extends ServletValueContext
         try
         {
             XML = getAsXml();
-            Perl5Util perl5 = new Perl5Util();
-            XML = perl5.substitute("s/</&lt;/g", XML);
+            if(XML != null)
+                XML = DialogField.escapeHTML(XML);
         }
         catch(Exception e)
         {
