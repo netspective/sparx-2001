@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.4 2002-03-23 21:43:36 snshah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.5 2002-03-25 13:00:53 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -66,6 +66,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Element;
 
@@ -94,8 +95,6 @@ import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.QueryDefnSelectsListValue;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.value.ValueSourceFactory;
-
-import com.caucho.server.http.HttpRequest;
 
 public class QueryBuilderDialog extends Dialog
 {
@@ -409,7 +408,7 @@ public class QueryBuilderDialog extends Dialog
     {
         String transactionId = dc.getTransactionId();
         HttpSession session = dc.getSession();
-        HttpRequest request = (HttpRequest) dc.getRequest();
+        HttpServletRequest request = (HttpServletRequest) dc.getRequest();
         QuerySelectScrollState state = (QuerySelectScrollState) session.getAttribute(transactionId);
 
         boolean keepScrollState = true;
