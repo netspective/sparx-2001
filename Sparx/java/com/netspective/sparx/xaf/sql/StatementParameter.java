@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementParameter.java,v 1.3 2002-11-30 16:44:23 shahid.shah Exp $
+ * $Id: StatementParameter.java,v 1.4 2003-04-18 00:32:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -123,11 +123,17 @@ public class StatementParameter
     private int givenParamNum;
     private DialogField dialogField;
     private String fieldError;
+    private boolean allowNull = false;
 
     public StatementParameter(StatementInfo si, int paramNum)
     {
         this.si = si;
         givenParamNum = paramNum;
+    }
+
+    public boolean allowNull()
+    {
+        return allowNull;
     }
 
     public String getParamName()
@@ -204,6 +210,10 @@ public class StatementParameter
             else
                 throw new RuntimeException("Statement '"+ si.getId() +"' parameter "+ givenParamNum +" has no value specified");
         }
+        // check to see whether or not the parameter allows NULLs
+        String allowNullValue = paramElem.getAttribute("allow-null");
+        if (allowNullValue != null && allowNullValue.equals("yes"))
+            allowNull = true;
 
         NodeList children = paramElem.getChildNodes();
         for(int ch = 0; ch < children.getLength(); ch++)
@@ -315,29 +325,45 @@ public class StatementParameter
         {
             int paramNum = ac.getNextParamNum();
             SingleValueSource vs = (SingleValueSource) valueSource;
-            if(paramType == Types.VARCHAR)
-                stmt.setObject(paramNum, vs.getValue(vc));
+            String value = vs.getValue(vc);
+            // if NULL value and the parameter is allowed to have NULLs
+            if ((value == null || value.length() == 0) && allowNull)
+            {
+                stmt.setNull(paramNum, paramType);
+            }
             else
             {
-                switch(paramType)
+                if(paramType == Types.VARCHAR)
+                    stmt.setObject(paramNum, vs.getValue(vc));
+                else
                 {
-                    case Types.INTEGER:
-                        stmt.setInt(paramNum, vs.getIntValue(vc));
-                        break;
+                    switch(paramType)
+                    {
+                        case Types.INTEGER:
+                            stmt.setInt(paramNum, vs.getIntValue(vc));
+                            break;
 
-                    case Types.DOUBLE:
-                        stmt.setDouble(paramNum, vs.getDoubleValue(vc));
-                        break;
+                        case Types.DOUBLE:
+                            stmt.setDouble(paramNum, vs.getDoubleValue(vc));
+                            break;
+                    }
                 }
             }
         }
         else
         {
             String[] values = ((ListValueSource) valueSource).getValues(vc);
-            for(int q = 0; q < values.length; q++)
+            if (values == null && allowNull)
             {
-                int paramNum = ac.getNextParamNum();
-                stmt.setObject(paramNum, values[q]);
+                stmt.setNull(ac.getNextParamNum(), paramType);
+            }
+            else
+            {
+                for(int q = 0; q < values.length; q++)
+                {
+                    int paramNum = ac.getNextParamNum();
+                    stmt.setObject(paramNum, values[q]);
+                }
             }
         }
     }
