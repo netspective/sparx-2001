@@ -131,6 +131,7 @@ public class QueryBuilderDialog extends Dialog
 		addField(output);
 	}
 
+
 	public void addDisplayOptionsFields()
 	{
 		ListValueSource fieldsList = ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
@@ -303,8 +304,11 @@ public class QueryBuilderDialog extends Dialog
 			if(state == null || (state != null && dc.isInitialExecute()))
 			{
 				QuerySelect select = createSelect(dc);
-
-				String rowsPerPageStr = dc.getValue("output.rows_per_page");
+                // check to see if user has created a field called 'rows_per_page'
+                // which overwrites the default one
+				String rowsPerPageStr = dc.getValue("rows_per_page");
+                if (rowsPerPageStr == null || rowsPerPageStr.length() == 0)
+                    rowsPerPageStr = dc.getValue("output.rows_per_page");
 				state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize);
 				if(state.isValid())
 					session.setAttribute(transactionId, state);
