@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.8 2002-08-17 15:06:34 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.9 2002-08-24 05:37:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -390,20 +390,19 @@ public class StatementManager extends XmlSource
             logEntry.registerBindParamsEnd();
 
             logEntry.registerExecSqlBegin();
-            if(stmt.execute())
-            {
-                logEntry.registerExecSqlEndSuccess();
-                //logEntry.finalize(vc); -- this will be done in the "finally" block??
-                return new ResultInfo(vc, conn, si, stmt, logEntry);
-            }
+            stmt.execute();
+            logEntry.registerExecSqlEndSuccess();
+            return new ResultInfo(vc, conn, si, stmt, logEntry);
+        }
+        catch(SQLException e)
+        {
             logEntry.registerExecSqlEndFailed();
+            throw e;
         }
         finally
         {
             logEntry.finalize(vc);
         }
-
-        return null;
     }
 
     static public ResultInfo execute(ConnectionContext cc, ValueContext vc, StatementInfo si, Object[] params) throws NamingException, SQLException
@@ -429,20 +428,19 @@ public class StatementManager extends XmlSource
             logEntry.registerBindParamsEnd();
 
             logEntry.registerExecSqlBegin();
-            if(stmt.execute())
-            {
-                logEntry.registerExecSqlEndSuccess();
-                //logEntry.finalize(vc); -- this will be done in the "finally" block??
-                return new ResultInfo(vc, conn, si, stmt, logEntry);
-            }
+            stmt.execute();
+            logEntry.registerExecSqlEndSuccess();
+            return new ResultInfo(vc, conn, si, stmt, logEntry);
+        }
+        catch(SQLException e)
+        {
             logEntry.registerExecSqlEndFailed();
+            throw e;
         }
         finally
         {
             logEntry.finalize(vc);
         }
-
-        return null;
     }
 
     public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
