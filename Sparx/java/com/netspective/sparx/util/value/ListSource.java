@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ListSource.java,v 1.2 2002-02-12 12:34:04 snshah Exp $
+ * $Id: ListSource.java,v 1.3 2002-12-26 19:32:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -59,11 +59,29 @@ package com.netspective.sparx.util.value;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.ResultSetMetaData;
+import java.io.Writer;
+import java.io.IOException;
 
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.report.*;
+import com.netspective.sparx.xaf.report.column.GeneralColumn;
+import com.netspective.sparx.xaf.skin.SkinFactory;
 
 public class ListSource implements ListValueSource, SingleValueSource
 {
+    static public Report selectChoicesReport = new StandardReport();
+
+    static
+    {
+        ReportColumn[] columns = new ReportColumn[]
+        {
+            new GeneralColumn(0, "ID", ReportColumn.COLFLAG_HIDDEN),
+            new GeneralColumn(1, "Caption")
+        };
+        selectChoicesReport.initialize(columns, null);
+        selectChoicesReport.setFlag(StandardReport.REPORTFLAG_HIDE_HEADING);
+    }
+
     private SelectChoicesList choices;
     private String[] values;
     protected String valueKey;
@@ -160,5 +178,33 @@ public class ListSource implements ListValueSource, SingleValueSource
 
     public void setValue(ValueContext vc, String value)
     {
+    }
+
+    public Report getReport()
+    {
+        return selectChoicesReport;
+    }
+
+    public ReportContext getReportContext(ValueContext vc, ReportSkin skin)
+    {
+        return new ReportContext(vc, getReport(), skin == null ? SkinFactory.getDefaultReportSkin() : skin);
+    }
+
+    public void renderChoicesHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException
+    {
+        SelectChoicesList scl = getSelectChoices(vc);
+        if(scl != null)
+        {
+            ReportContext rc = getReportContext(vc, skin);
+            if(urlFormats != null)
+            {
+                ReportContext.ColumnState[] state = rc.getStates();
+                for(int i = 0; i < urlFormats.length; i++)
+                    state[i].setUrl(urlFormats[i]);
+            }
+            rc.produceReport(writer, scl.getChoicesForReport());
+        }
+        else
+            writer.write("No choices.");
     }
 }

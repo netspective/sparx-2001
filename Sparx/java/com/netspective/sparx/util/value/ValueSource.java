@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSource.java,v 1.2 2002-02-09 13:02:12 snshah Exp $
+ * $Id: ValueSource.java,v 1.3 2002-12-26 19:32:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -59,13 +59,20 @@ package com.netspective.sparx.util.value;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.io.Writer;
+import java.io.IOException;
 
 import com.netspective.sparx.xaf.sql.StatementManager;
+import com.netspective.sparx.xaf.report.*;
+import com.netspective.sparx.xaf.report.column.GeneralColumn;
+import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 
 abstract public class ValueSource implements SingleValueSource
 {
     static public final String BLANK_STRING = "";
 
+    protected Report report;
     protected String valueKey;
 
     public String getId()
@@ -121,30 +128,30 @@ abstract public class ValueSource implements SingleValueSource
         switch(storeType)
         {
             case RESULTSET_STORETYPE_SINGLECOLUMN:
-                setValue(vc, (Object) StatementManager.getResultSetSingleColumn(rs));
+                setValue(vc, StatementManager.getResultSetSingleColumn(rs));
                 break;
 
             case RESULTSET_STORETYPE_RESULTSET:
-                setValue(vc, (Object) rs);
+                setValue(vc, rs);
                 break;
 
             case RESULTSET_STORETYPE_SINGLEROWMAP:
-                setValue(vc, (Object) StatementManager.getResultSetSingleRowAsMap(rs));
+                setValue(vc, StatementManager.getResultSetSingleRowAsMap(rs));
                 break;
 
             case RESULTSET_STORETYPE_SINGLEROWFORMFLD:
                 throw new RuntimeException("ValueSource.setValue(ValueContext, ResultSet, int) does not support storeType RESULTSET_STORETYPE_SINGLEROWFORMFLD");
 
             case RESULTSET_STORETYPE_MULTIROWMAP:
-                setValue(vc, (Object) StatementManager.getResultSetRowsAsMapArray(rs));
+                setValue(vc, StatementManager.getResultSetRowsAsMapArray(rs));
                 break;
 
             case RESULTSET_STORETYPE_SINGLEROWARRAY:
-                setValue(vc, (Object) StatementManager.getResultSetSingleRowAsArray(rs));
+                setValue(vc, StatementManager.getResultSetSingleRowAsArray(rs));
                 break;
 
             case RESULTSET_STORETYPE_MULTIROWMATRIX:
-                setValue(vc, (Object) StatementManager.getResultSetRowsAsMatrix(rs));
+                setValue(vc, StatementManager.getResultSetRowsAsMatrix(rs));
                 break;
         }
     }
@@ -154,29 +161,29 @@ abstract public class ValueSource implements SingleValueSource
         switch(storeType)
         {
             case RESULTSET_STORETYPE_SINGLECOLUMN:
-                setValue(vc, (Object) StatementManager.getResultSetSingleColumn(data));
+                setValue(vc, StatementManager.getResultSetSingleColumn(data));
                 break;
 
             case RESULTSET_STORETYPE_RESULTSET:
                 throw new RuntimeException("ValueSource.setValue(ValueContext, ResultSetMetaData, Object[][], int) does not support RESULTSET_STORETYPE_RESULTSET (because ResultSet has already been exhausted/run).");
 
             case RESULTSET_STORETYPE_SINGLEROWMAP:
-                setValue(vc, (Object) StatementManager.getResultSetSingleRowAsMap(rsmd, data));
+                setValue(vc, StatementManager.getResultSetSingleRowAsMap(rsmd, data));
                 break;
 
             case RESULTSET_STORETYPE_SINGLEROWFORMFLD:
                 throw new RuntimeException("ValueSource.setValue(ValueContext, ResultSet, int) does not support storeType RESULTSET_STORETYPE_SINGLEROWFORMFLD (use DialogFieldValue.setValue instead)");
 
             case RESULTSET_STORETYPE_MULTIROWMAP:
-                setValue(vc, (Object) StatementManager.getResultSetRowsAsMapArray(rsmd, data));
+                setValue(vc, StatementManager.getResultSetRowsAsMapArray(rsmd, data));
                 break;
 
             case RESULTSET_STORETYPE_SINGLEROWARRAY:
-                setValue(vc, (Object) (data.length > 0 ? data[0] : null));
+                setValue(vc, (data.length > 0 ? data[0] : null));
                 break;
 
             case RESULTSET_STORETYPE_MULTIROWMATRIX:
-                setValue(vc, (Object) data);
+                setValue(vc, data);
                 break;
         }
     }
@@ -184,5 +191,30 @@ abstract public class ValueSource implements SingleValueSource
     public void setValue(ValueContext vc, String value)
     {
         throw new RuntimeException("Class " + this.getClass().getName() + " does not support setValue(ValueContext, String)");
+    }
+
+    public Report getReport()
+    {
+        return ListSource.selectChoicesReport;
+    }
+
+    public ReportContext getReportContext(ValueContext vc, ReportSkin skin)
+    {
+        return new ReportContext(vc, getReport(), skin == null ? SkinFactory.getDefaultReportSkin() : skin);
+    }
+
+    public void renderChoicesHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException
+    {
+        if(this instanceof ListValueSource)
+        {
+            SelectChoicesList scl = ((ListValueSource) this).getSelectChoices(vc);
+            if(scl != null)
+            {
+                ReportContext rc = getReportContext(vc, skin);
+                rc.produceReport(writer, scl.getChoicesForReport());
+            }
+            else
+                writer.write("No choices.");
+        }
     }
 }

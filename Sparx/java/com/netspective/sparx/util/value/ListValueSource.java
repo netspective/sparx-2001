@@ -51,12 +51,16 @@
  */
  
 /**
- * $Id: ListValueSource.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: ListValueSource.java,v 1.2 2002-12-26 19:32:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.report.ReportSkin;
+
+import java.io.Writer;
+import java.io.IOException;
 
 /**
  * A ListValueSource (LVS) is an object that returns a list of values from a particular source
@@ -94,4 +98,14 @@ public interface ListValueSource
      * Returns the contents of this list as a string list.
      */
     public String[] getValues(ValueContext vc);
+
+    /**
+     * Allows choices to be displayed in a web page for selection as popup or inline
+     * @param writer The writer that will accept the output
+     * @param urlFormats any urls that should be overrided (null if none)
+     * @param skin the skin to use to render the report (null if standard)
+     * @param isPopup true if this rendering is being done for a popup windows, false if not
+     * @throws java.io.IOException
+     */
+    public void renderChoicesHtml(ValueContext vc, Writer writer, String[] urlFormats, ReportSkin skin, boolean isPopup) throws IOException;
 }
