@@ -518,7 +518,6 @@ public class NewField extends com.xaf.form.DialogField
         </para>
     </section>
 
-
     <section id="Testing-Dialog">
         <title>Testing the dialog</title>
         <section>
@@ -700,4 +699,115 @@ public class Test1  extends com.xaf.form.Dialog
         </section>
     </section>
 
+    <section id="Dialog-Context">
+        <title> Dialog Context</title>
+        <para>
+        &framework-name;'s Dialog component's functionality with respect to action and listener executions mentioned
+        in the previous section is controlled through a class called <classname>com.xaf.form.DialogConext</classname>.
+        The class can be considered as a controller of the dialog component providing different functions such as
+        execution validations, error message creations, stage tracking, and dialog value populations.
+        The following is a diagram of how the dialog context fits into the flow of a web application:        
+        </para>
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/dialogs/dialogcontext.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>
+        </para>        
+        <para>
+        A dialog context is created using the <methodname>createContext</methodname> method of the 
+        <classname>Dialog</classname> class and it is created for each dialog. The values within the dialog
+        and the properties of the dialog is tracked through its' dialog context. For example,
+        there are three main stages (<literal>input</literal>, <literal>validate</literal>, <literal>execute</literal>) 
+        that a dialog goes through and the flow of these stages are controlled by the dialog context. 
+        Only when the data has been validated, the dialog context changes the state of the dialog
+        to execution mode and allows the configured or programmed actions to be executed. At any time
+        a dialog context is needed to access any of the dialog's fields. A dialog context also contains
+        many ways to access and use SQL statements and database transactions from the dialog.
+        </para>
+        
+        <section>
+            <title>Using the dialog context</title>
+            <para>
+            For simple web applications, there will be no need to use the <classname>DialogContext</classname>
+            object. The extensive functionality of the <classname>DialogContext</classname> will
+            probably be unused beyond the basic method calls made by the <classname>Dialog</classname> object.
+            If there is a need to use other functionalitites provided by the <classname>DialogContext</classname>
+            class or to extend the existing functionalities,        
+            &framework-name; allows the dialog context of any dialog to be overwritten or subclassed. 
+            A simple subclassing of the dialog context is shown below:
+            <programlisting>
+            <![CDATA[            
+public class Test1Context extends com.xaf.form.DialogContext
+{
+    ...
+}
+            ]]>
+            </programlisting>
+            The above class can then be used by referenceing it in the dialog configuration file <filename>dialog.xml</filename>:
+            <programlisting>
+            <![CDATA[
+<dialog  name="Test1" heading="Test Fields" retain-params="*" dc-class="Test1Context">               
+            ]]>
+            </programlisting>
+            
+            
+            It is <quote>possible</quote> to think of the dialog context as a bean representation of a dialog object. Every field
+            and its properties configured in a dialog object can be accessed using various methods (including set and get methods)
+            as shown below:
+            </para>
+
+            <para>        
+            <emphasis role="bold">XML (<filename>dialog.xml</filename>):</emphasis>
+            <programlisting>
+            <![CDATA[
+<dialog  name="Test1" heading="Test Fields" retain-params="*">        
+    ...
+    <field.phone name="phone_field" caption="Phone Field"  strip-brackets="yes" 
+        format-type="dash" hint="Phone field"/>        
+    ...
+</dialog>    
+            ]]>
+            </programlisting>
+
+            <emphasis role="bold">Java (<filename>Test1Context.java</filename>):</emphasis>
+            <programlisting>
+            <![CDATA[    
+public class Test1Context extends DialogContext
+{
+    ...
+    public boolean isPhoneFieldValueSet() { return hasValue("phone_field"); }
+    public boolean isPhoneFieldFlagSet(long flag) { return flagIsSet("phone_field", flag); }
+    public void setPhoneFieldFlag(long flag) { setFlag("phone_field", flag); }
+    public void clearPhoneFieldFlag(long flag) { clearFlag("phone_field", flag); }
+    public String getPhoneFieldRequestParam(long flag) { return request.getParameter("_dc.phone_field"); }
+    public DialogField getPhoneFieldField() { return getField("phone_field"); }
+    public DialogContext.DialogFieldState getPhoneFieldFieldState() { return getFieldState("phone_field"); }
+    public void addPhoneFieldErrorMsg(String msg) { addErrorMessage("phone_field", msg); }
+    public String getPhoneField() { return getValue("phone_field"); }
+    public String getPhoneField(String defaultValue) { return getValue("phone_field", defaultValue); }
+    public String getPhoneFieldOrBlank() { return getValue("phone_field", ""); }
+    public void setPhoneField(String value) { setValue("phone_field", value); }        
+    ...
+}   
+        ]]>
+            </programlisting>
+
+            The above class is a &explorer-name; generated dialog context subclass for the <literal>Test1</literal>
+            dialog. &framework-name; has the ability to generate a dialog context specific to a dialog through
+            &explorer-name;. In the Dialog page (
+            <menuchoice>
+                <guimenu>Application</guimenu>
+                <guimenuitem>Dialogs</guimenuitem>
+            </menuchoice> menu item)
+            there is a URL called <literal>Generate Dialog Beans</literal> which generates a dialog context
+            object for each dialog configured in <filename>dialog.xml</filename>. Once the dialog context
+            classes have been generated, they will be automatically used as the <classname>DialogContext</classname>
+            class of its' respective dialog. A developer can either use this generated dialog context class or
+            a new class can be created by subclassing this generated class. 
+            </para>
+        </section>                
+
+    </section>
 </chapter>
