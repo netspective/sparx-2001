@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.6 2003-03-15 04:30:15 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.7 2003-03-21 05:49:37 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -63,6 +63,8 @@ import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
 import com.netspective.sparx.xaf.navigate.NavigationTree;
 import com.netspective.sparx.xaf.security.AuthenticatedUser;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.config.ConfigurationManager;
 import org.w3c.dom.Element;
 
 import javax.servlet.Servlet;
@@ -115,11 +117,14 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         if (tree.getResources() == null)
         {
             // get all the image resources available with each page
+            ConfigurationManager manager = ConfigurationManagerFactory.getManager(nc.getServletContext());
+            String appRootPath = manager.getDefaultConfiguration().getTextValue(nc, "app.site-root-path");
             tree.discoverResources(appRootPath, getThemeImagePath() + "/pages", null);
             tree.resolveResources();
         }
 
         Map singlePageResources = (Map) tree.getResources().get(pageId);
+
         return (String) singlePageResources.get(imageId);
     }
 
@@ -532,7 +537,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
      * @param nc
      * @throws IOException
      */
-    private void renderPageHeading(Writer writer, NavigationPathContext nc) throws IOException
+    protected void renderPageHeading(Writer writer, NavigationPathContext nc) throws IOException
     {
 
         NavigationPage page = (NavigationPage) nc.getActivePath();
@@ -570,7 +575,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
      * @param nc
      * @throws IOException
      */
-    private void renderPageSubHeading(Writer writer, NavigationPathContext nc) throws IOException
+    protected void renderPageSubHeading(Writer writer, NavigationPathContext nc) throws IOException
     {
         NavigationPage page = (NavigationPage) nc.getActivePath();
         String subHeading = page.getSubHeading(nc);
