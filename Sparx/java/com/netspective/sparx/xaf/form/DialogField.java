@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.19 2003-03-19 20:46:36 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.20 2003-04-04 21:25:37 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -106,7 +106,8 @@ public class DialogField
 		static public final int FLDFLAG_DOUBLEENTRY = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
 		static public final int FLDFLAG_SCANNABLE = FLDFLAG_DOUBLEENTRY * 2;
 		static public final int FLDFLAG_AUTOBLUR = FLDFLAG_SCANNABLE * 2;
-		static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_AUTOBLUR * 2; // all DialogField "children" will use this
+		static public final int FLDFLAG_SUBMIT_ONBLUR = FLDFLAG_AUTOBLUR * 2;
+		static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_SUBMIT_ONBLUR * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -312,6 +313,9 @@ public class DialogField
 
 				if(elem.getAttribute("double-entry").equalsIgnoreCase("yes"))
 					setFlag(DialogField.FLDFLAG_DOUBLEENTRY);
+
+				if(elem.getAttribute("submit-onblur").equalsIgnoreCase("yes"))
+					setFlag(DialogField.FLDFLAG_SUBMIT_ONBLUR);
 
         importChildrenFromXml(elem);
     }
@@ -1055,7 +1059,7 @@ public class DialogField
 			DialogFieldClientJavascript doubleEntryJS = new DialogFieldClientJavascript();
 			doubleEntryJS.setType("extends");
 			doubleEntryJS.setEvent("lose-focus");
-			doubleEntryJS.setScript("validateDoubleEntry(field, control)");
+			doubleEntryJS.setScript("doubleEntry(field, control)");
 			this.addClientJavascript(doubleEntryJS);
 
 			DialogFieldClientJavascript deOnChangeJS = new DialogFieldClientJavascript();
@@ -1599,6 +1603,11 @@ public class DialogField
 				sb.append("field.autoBlurLength = " + autoBlurLength + ";\n");
 				sb.append("field.autoBlurExcRegExp = '" + autoBlurExcludeRegExp + "';\n");
 				sb.append("field.numCharsEntered = 0;\n");
+			}
+
+			if(flagIsSet(DialogField.FLDFLAG_SUBMIT_ONBLUR))
+			{
+				sb.append("field.submitOnBlur = true;\n");
 			}
 
 			return sb.toString();

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.16 2003-03-06 20:57:22 aye.thu Exp $
+ * $Id: StandardDialogSkin.java,v 1.17 2003-04-04 21:25:37 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -60,10 +60,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -128,6 +125,9 @@ public class StandardDialogSkin implements DialogSkin
     protected String prependPostScript;
     protected String appendPreScript;
     protected String appendPostScript;
+		protected Map    includePostScriptsMap;
+		protected Map    includePreScriptsMap;
+
 
     public StandardDialogSkin()
     {
@@ -171,6 +171,8 @@ public class StandardDialogSkin implements DialogSkin
         prependPostScript = null;
         appendPreScript = null;
         appendPostScript = null;
+				includePostScriptsMap = new HashMap();
+				includePreScriptsMap = new HashMap();
     }
 
     public void importFromXml(Element elem)
@@ -255,24 +257,17 @@ public class StandardDialogSkin implements DialogSkin
                 appendPostScript = "<script>\n" + nodeText + "\n</script>";
             else if(nodeName.equals("include-pre-script"))
             {
-                String lang = nodeElem.getAttribute("language");
-                if(lang.length() == 0) lang = "JavaScript";
-                String inc = "<script src='" + nodeElem.getAttribute("src") + "' language='" + lang + "'></script>\n";
-                ;
-                if(includePreScripts == null)
-                    includePreScripts = inc;
-                else
-                    includePreScripts += inc;
+							String lang = nodeElem.getAttribute("language");
+							if(lang.length() == 0) lang = "JavaScript";
+							String src = nodeElem.getAttribute("src");
+							includePreScriptsMap.put(src, lang);
             }
             else if(nodeName.equals("include-post-script"))
             {
                 String lang = nodeElem.getAttribute("language");
                 if(lang.length() == 0) lang = "JavaScript";
-                String inc = "<script src='" + nodeElem.getAttribute("src") + "' language='" + lang + "'></script>\n";
-                if(includePostScripts == null)
-                    includePostScripts = inc;
-                else
-                    includePostScripts += inc;
+								String src = nodeElem.getAttribute("src");
+								includePostScriptsMap.put(src, lang);
             }
             else if(nodeName.equals("include-pre-stylesheet"))
             {
@@ -764,8 +759,10 @@ public class StandardDialogSkin implements DialogSkin
             "<script language='JavaScript1.2'>_version = 1.2;</script>\n" +
             "<script language='JavaScript1.3'>_version = 1.3;</script>\n" +
             "<script language='JavaScript1.4'>_version = 1.4;</script>\n");
-        if(includePreScripts != null)
-            writer.write(includePreScripts);
+
+        // if(includePreScripts != null)
+        //    writer.write(includePreScripts);
+				this.writeIncludeScripts(writer, dc, includePreScriptsMap);
 
         writer.write("<script src='" + sharedScriptsUrl + "/popup.js' language='JavaScript1.1'></script>\n");
         writer.write("<script src='" + sharedScriptsUrl + "/dialog.js' language='JavaScript1.2'></script>\n");
@@ -780,8 +777,11 @@ public class StandardDialogSkin implements DialogSkin
 
         if(dialogIncludeJS != null)
             writer.write("<script language='JavaScript' src='" + dialogIncludeJS + "'></script>\n");
-        if(includePostScripts != null)
-            writer.write(includePostScripts);
+
+        //if(includePostScripts != null)
+        //    writer.write(includePostScripts);
+				this.writeIncludeScripts(writer, dc, includePostScriptsMap);
+
         if(prependPostScript != null)
             writer.write(prependPostScript);
 
@@ -819,6 +819,23 @@ public class StandardDialogSkin implements DialogSkin
 
         LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getLogId(), startTime);
     }
+
+		public void writeIncludeScripts(Writer writer, DialogContext dc, Map scriptsMap) throws IOException
+		{
+			Iterator i = scriptsMap.keySet().iterator();
+			while(i.hasNext())
+			{
+				String src = (String) i.next();
+				String adjustedSrc = src;
+				if(src.startsWith("/"))
+				{
+					String appRoot = ((HttpServletRequest) dc.getRequest()).getContextPath();
+					adjustedSrc = appRoot + src;
+				}
+				String lang = (String) scriptsMap.get(src);
+				writer.write("<script src='" + adjustedSrc + "' language='" + lang + "'></script>\n");
+			}
+		}
 
     public void renderContentsHtml(Writer writer, DialogContext dc, Configuration appConfig, String dialogName, String actionURL, String encType, String heading, int dlgTableColSpan, StringBuffer errorMsgsHtml, StringBuffer fieldsHtml) throws IOException
     {
