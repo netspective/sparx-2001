@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.8 2002-10-20 19:22:35 shahid.shah Exp $
+# $Id: build.sh,v 1.9 2002-10-20 19:23:36 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the SPARX_HOME\java directory.     **
@@ -41,5 +41,5 @@ SAMPLES_DOC_ROOT=`pwd`/../samples
 ln -svf $SAMPLES_ROOT/hello $SAMPLES_DOC_ROOT/hello
 ln -svf $SAMPLES_ROOT/library $SAMPLES_DOC_ROOT/library
 ln -svf $SAMPLES_ROOT/cura $SAMPLES_DOC_ROOT/cura
-ln -svf $HOME/Sparx/kit `pwd`/../download
+ln -svf $HOME/projects/Sparx/kit `pwd`/../download
 
