@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.20 2003-04-18 00:13:00 aye.thu Exp $
+ * $Id: dialog.js,v 1.21 2003-04-18 00:27:13 aye.thu Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -365,7 +365,11 @@ function DialogField_isReadOnly()
 
 function DialogField_getAdjacentArea(dialog)
 {
-	if((this.flags & FLDFLAG_CREATEADJACENTAREA) != 0)
+	if((this.flags & FLDFLAG_CREATEADJACENTAREA) != 0 )
+	{
+		return getControl(dialog, this.qualifiedName + "_adjacent");
+	}
+	else if((this.flags & FLDFLAG_CREATEADJACENTAREA_HIDDEN) != 0 )
 	{
 		return getControl(dialog, this.qualifiedName + "_adjacent");
 	}
