@@ -127,7 +127,7 @@ public class DmlTask extends AbstractTask
 
         ServletRequest request = tc.getRequest();
         if(dialogContextAttr == null)
-            throw new RuntimeException("dml tag requires context attribute (for DialogContext)");
+			dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
 
         DialogContext dc = (DialogContext) request.getAttribute(dialogContextAttr);
         if(dc == null)
@@ -195,6 +195,15 @@ public class DmlTask extends AbstractTask
                     }
 
                 }
+				else if(vs instanceof CustomSqlValue)
+				{
+					/* Generator.CustomSql is a special-purpose class used to signify
+					   to the Sql Generator that the sql should be placed as-is (no changes);
+					   very useful for things like sequences
+					*/
+					columnNames.add(colName);
+					columnValues.add(new Generator.CustomSql(colValue.toString()));
+				}
                 else
                 {
                     columnNames.add(colName);
