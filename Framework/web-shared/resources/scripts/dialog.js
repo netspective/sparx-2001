@@ -90,7 +90,8 @@ function setActiveDialog(dialog)
 // These constants MUST be kept identical to what is in com.xaf.form.DialogField
 
 var FLDFLAG_REQUIRED             = 1;
-var FLDFLAG_INVISIBLE            = FLDFLAG_REQUIRED * 2;
+var FLDFLAG_PRIMARYKEY           = FLDFLAG_REQUIRED * 2;
+var FLDFLAG_INVISIBLE            = FLDFLAG_PRIMARYKEY * 2;
 var FLDFLAG_READONLY             = FLDFLAG_INVISIBLE * 2;
 var FLDFLAG_INITIAL_FOCUS        = FLDFLAG_READONLY * 2;
 var FLDFLAG_PERSIST              = FLDFLAG_INITIAL_FOCUS * 2;
