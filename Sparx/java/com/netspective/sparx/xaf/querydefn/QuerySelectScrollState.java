@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.5 2002-12-03 15:49:56 aye.thu Exp $
+ * $Id: QuerySelectScrollState.java,v 1.6 2002-12-23 23:08:03 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -65,20 +65,19 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
 
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.report.Report;
 import com.netspective.sparx.xaf.report.ReportColumn;
-import com.netspective.sparx.xaf.report.ReportColumnsList;
 import com.netspective.sparx.xaf.report.ReportContext;
-import com.netspective.sparx.xaf.report.ReportFrame;
 import com.netspective.sparx.xaf.report.ReportSkin;
-import com.netspective.sparx.xaf.report.StandardReport;
+import com.netspective.sparx.xaf.report.ReportColumnsList;
+import com.netspective.sparx.xaf.report.ReportFrame;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
 import com.netspective.sparx.util.value.ValueContext;
+import org.w3c.dom.Element;
 
 public class QuerySelectScrollState extends ResultSetScrollState
 {
@@ -93,16 +92,26 @@ public class QuerySelectScrollState extends ResultSetScrollState
     private QueryDefinition.QueryFieldSortInfo sortFieldInfo;
     private int primaryOrderByColIndex = -1;
 
-    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage, int scrollType) throws NamingException, SQLException
+    /**
+     *
+     * @param dc
+     * @param vc
+     * @param select QuerySelect object
+     * @param reportId Name of the report
+     * @param rowsPerPage number of rows per page
+     * @param scrollType  scroll type for the result set
+     * @throws NamingException
+     * @throws SQLException
+     */
+    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, String reportId, int rowsPerPage, int scrollType) throws NamingException, SQLException
     {
         super(select.execute(dc, vc), rowsPerPage, scrollType);
-
         try
         {
-            if(vc instanceof DialogContext)
+            if (vc instanceof DialogContext)
                 this.dialogData = ((DialogContext) vc).getAsXml();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new RuntimeException(e.toString());
         }
@@ -112,41 +121,54 @@ public class QuerySelectScrollState extends ResultSetScrollState
         this.select = select;
 
         ResultSet rs = getResultSet();
-        if(rs != null)
+        if (rs != null)
         {
             this.reportDefn = select.createReport();
-            this.reportDefn.initialize(rs, null);
-
-            String heading = select.getCaption();
-            if(heading != null && heading.length() > 0)
+            Element reportElem = select.getReportElement(reportId);
+            this.reportDefn.initialize(rs, reportElem);
+            ReportFrame frame = reportDefn.getFrame();
+            if (frame == null || frame.getHeading() == null)
             {
-                ReportFrame frame = new ReportFrame();
-                frame.setHeading(heading);
-                this.reportDefn.setFrame(frame);
+                // The frame is null only if there is no report element in the <select> definition
+                String heading = select.getCaption();
+                if (heading != null && heading.length() > 0)
+                {
+                    frame = new ReportFrame();
+                    frame.setHeading(heading);
+                    this.reportDefn.setFrame(frame);
+                }
             }
-
-            reportDefn.setFrame(select.getFrame());
-            reportDefn.setBanner(select.getBanner());
-
+            /*
+            if (reportDefn.getFrame() == null)
+                reportDefn.setFrame(select.getFrame());
+            if (reportDefn.getBanner() == null)
+                reportDefn.setBanner(select.getBanner());
+            */
             ReportColumnsList rcl = this.reportDefn.getColumns();
             List selectFields = select.getReportFields();
 
             List orderByFieldsList = select.getOrderBy();
-            if(orderByFieldsList != null && orderByFieldsList.size() == 1)
+            if (orderByFieldsList != null && orderByFieldsList.size() == 1)
             {
                 QuerySortFieldRef sortRef = (QuerySortFieldRef) orderByFieldsList.get(0);
                 QueryDefinition.QueryFieldSortInfo[] orderByFields = sortRef.getFields(vc);
-                if(orderByFields != null && orderByFields.length == 1)
+                if (orderByFields != null && orderByFields.length == 1)
                     sortFieldInfo = orderByFields[0];
             }
 
-            for(int i = 0; i < rcl.size(); i++)
+            for (int i = 0; i < rcl.size(); i++)
             {
+                ReportColumn col = rcl.getColumn(i);
                 QueryField field = (QueryField) selectFields.get(i);
-                ReportColumn rc = field.getReportColumn();
-                if(rc != null)
-                    rcl.getColumn(i).importFromColumn(rc);
-                if(sortFieldInfo != null && field == sortFieldInfo.getField())
+                if (col.getHeading() == null)
+                {
+                    // The report column heading is null. This means that there is no report element defined within the
+                    // <select> tag. So, go look for the report information in the field definition.
+                    ReportColumn rc = field.getReportColumn();
+                    if (rc != null)
+                        rcl.getColumn(i).importFromColumn(rc);
+                }
+                if (sortFieldInfo != null && field == sortFieldInfo.getField())
                     primaryOrderByColIndex = i;
             }
 
@@ -155,6 +177,21 @@ public class QuerySelectScrollState extends ResultSetScrollState
         }
         else
             throw new SQLException("Unable to execute SQL: " + select.getErrorSql());
+    }
+
+    /**
+     *
+     * @param dc
+     * @param vc
+     * @param select
+     * @param rowsPerPage
+     * @param scrollType
+     * @throws NamingException
+     * @throws SQLException
+     */
+    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage, int scrollType) throws NamingException, SQLException
+    {
+        this(dc, vc, select, null, rowsPerPage, scrollType);
     }
 
     public QueryDefinition.QueryFieldSortInfo getSortFieldInfo()

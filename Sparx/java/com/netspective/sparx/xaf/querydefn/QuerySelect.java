@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.9 2002-12-11 14:05:53 shahid.shah Exp $
+ * $Id: QuerySelect.java,v 1.10 2002-12-23 23:08:03 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -63,6 +63,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.naming.NamingException;
 
@@ -88,6 +90,10 @@ public class QuerySelect
     private String caption;
     private ReportFrame frame = new ReportFrame();
     private ReportBanner banner;
+    private Report defaultReport;
+    private Element defaultReportElem;
+    private Map reportElems;
+    private Map reports;
     private boolean distinctRows;
     private boolean isDirty;
     private boolean alwaysDirty;
@@ -143,6 +149,16 @@ public class QuerySelect
     public QueryDefinition getQueryDefn()
     {
         return queryDefn;
+    }
+
+    public Map getReportElems()
+    {
+        return reportElems;
+    }
+
+    public Element getReportElement(String name)
+    {
+        return name == null ? defaultReportElem : (Element) reportElems.get(name);
     }
 
     public ReportFrame getFrame()
@@ -485,8 +501,14 @@ public class QuerySelect
         this.reportClassName = reportClassName;
     }
 
+    /**
+     * Create a report
+     * @return
+     */
     public Report createReport()
     {
+        return this.createReport(null);
+        /*
         if(reportClassName != null)
         {
             ClassPath.InstanceGenerator instGen = new ClassPath.InstanceGenerator(reportClassName, StandardReport.class, true);
@@ -494,6 +516,39 @@ public class QuerySelect
         }
         else
             return new StandardReport();
+        */
+    }
+
+    /**
+     * Create a report object
+     * @param reportElem
+     * @return Report object
+     */
+    public Report createReport(Element reportElem)
+    {
+        if (reportElem != null && defaultReportElem == reportElem)
+            return defaultReport;
+
+        // if report element is null then return the default report, not a new standard report since
+        // default report already takes into account the 'class' attribute
+        if (reportElem == null)
+        {
+            if (defaultReport != null)
+                return defaultReport;
+            else
+                return new StandardReport();
+        }
+
+        Report result = (Report) reports.get(reportElem);
+        if (result == null)
+        {
+            // an unknown report element was passed in so create a new report element and take into consideration
+            // the class attribute.
+            ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(reportElem.getAttribute("class"), StandardReport.class, true);
+            result = (Report) instanceGen.getInstance();
+            reports.put(reportElem, result);
+        }
+        return result;
     }
 
     public void importFromSelect(QuerySelect select)
@@ -516,6 +571,10 @@ public class QuerySelect
         errors = inherit(errors, select.getErrors());
     }
 
+    /**
+     * Import the &lt;select&gt; XML element
+     * @param elem
+     */
     public void importFromXml(Element elem)
     {
         name = elem.getAttribute("id");
@@ -577,6 +636,28 @@ public class QuerySelect
             {
                 banner = new ReportBanner();
                 banner.importFromXml((Element) node);
+            }
+            else if (childName.equals("report"))
+            {
+                Element reportElem = (Element) node;
+                //if (xs != null) xs.processTemplates(reportElem);
+                String reportName = reportElem.getAttribute("name");
+                if (reportName.length() == 0)
+                {
+                    // a default report since no name was given
+                    defaultReportElem = reportElem;
+                    ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(reportElem.getAttribute("class"), StandardReport.class, true);
+                    defaultReport = (Report) instanceGen.getInstance();
+                }
+                else
+                {
+                    if (reportElems == null)
+                    {
+                        reportElems = new HashMap();
+                        reports = new HashMap();
+                    }
+                    reportElems.put(reportName, reportElem);
+                }
             }
         }
     }
