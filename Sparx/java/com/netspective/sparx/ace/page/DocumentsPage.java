@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DocumentsPage.java,v 1.8 2002-09-17 02:08:52 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.9 2002-09-28 04:56:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -263,6 +263,9 @@ public class DocumentsPage extends AceServletPage
 
     private boolean handleDocument(PageContext pc, File activeEntry, boolean browsing) throws ServletException, IOException
     {
+        if(activeEntry.getAbsolutePath().indexOf("javadoc") != -1)
+            return false;
+
         StringWriter html = new StringWriter();
         if(! SyntaxHighlight.emitHtml(activeEntry, html))
             return false;
