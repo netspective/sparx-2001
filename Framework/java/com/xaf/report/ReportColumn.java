@@ -28,8 +28,8 @@ public interface ReportColumn
 	static public final int ALIGN_CENTER = 1;
 	static public final int ALIGN_RIGHT  = 2;
 
-    static public final String PLACEHOLDER_COLDATA = "{.}";
-    static public final String PLACEHOLDER_OPEN = "{";
+    static public final String PLACEHOLDER_COLDATA = "${.}";
+    static public final String PLACEHOLDER_OPEN = "${";
     static public final String PLACEHOLDER_CLOSE = "}";
 
 	public int getDataType();
@@ -69,7 +69,7 @@ public interface ReportColumn
 
     public String resolvePattern(String srcStr);
 
-	public String getFormattedData(ReportContext rc, Object[] rowData, boolean doCalc);
+	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc);
 	public String getFormattedData(ReportContext rc, ColumnDataCalculator calc);
 
 	public void importFromColumn(ReportColumn rc);

@@ -21,6 +21,9 @@ public interface Report
 	public ReportFrame getFrame();
 	public ReportBanner getBanner();
 
+	public Object getCanvas();
+	public void setCanvas(Object value);
+
 	public ReportColumnsList getColumns();
 	public ReportColumn getColumn(int i);
 
@@ -33,14 +36,8 @@ public interface Report
 	public void initialize(ResultSet rs, Element defnElem) throws SQLException;
     public void initialize(ReportColumn[] cols, Element defnElem);
 	public void importFromXml(Element elem);
-    public String replaceOutputPatterns(ReportContext rc, Object[] rowData, String row);
+    public String replaceOutputPatterns(ReportContext rc, long rowNum, Object[] rowData, String row);
 
 	public void makeStateChanges(ReportContext rc, ResultSet rs);
 	public void makeStateChanges(ReportContext rc, Object[][] data);
-	/*
-	public void produceReport(Writer writer, ResultSet rs, ReportContext rc) throws SQLException, IOException;
-	public void produceReport(Writer writer, Object[][] data, ReportContext rc) throws IOException;
-	public void produceReport(Writer writer, ResultSet rs, ReportSkin skin) throws SQLException, IOException;
-	public void produceReport(Writer writer, Object[][] data, ReportSkin skin) throws IOException;
-	*/
 }

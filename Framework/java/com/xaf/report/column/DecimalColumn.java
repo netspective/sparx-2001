@@ -24,18 +24,19 @@ public class DecimalColumn extends NumericColumn
 
 	public String getFormattedData(ReportContext rc, Object[] rowData, boolean doCalc)
 	{
-        Object oData = rowData[getColIndexInArray()];
+		int colIndex = getColIndexInArray();
+        Object oData = rowData[colIndex];
         String data = "";
         double value = 0;
         if(oData != null)
         {
-            value = ((Number) rowData[getColIndexInArray()]).doubleValue();
+            value = ((Number) oData).doubleValue();
             data = ((NumberFormat) getFormatter()).format(value);
         }
 
         if(doCalc)
         {
-            ColumnDataCalculator calc = rc.getCalc(getColIndexInArray());
+            ColumnDataCalculator calc = rc.getCalc(colIndex);
             if(calc != null)
                 calc.addValue(value);
         }

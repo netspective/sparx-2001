@@ -19,6 +19,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.xaf.form.*;
+import com.xaf.report.column.*;
 import com.xaf.value.*;
 
 public class ReportContext implements ValueContext
@@ -28,7 +29,9 @@ public class ReportContext implements ValueContext
 	public class ColumnState
 	{
 		protected ReportColumn column;
+		protected String heading;
 		protected ColumnDataCalculator calc;
+		protected String dialogFieldIdTemplate;
 		protected long flags;
 		protected String outputFormat;
 		protected String url;
@@ -51,6 +54,14 @@ public class ReportContext implements ValueContext
 				if(flagIsSet(ReportColumn.COLFLAG_WRAPURL))
 					url = column.resolvePattern(column.getUrl());
 			}
+
+			heading = column.getHeading();
+
+			if(column instanceof DialogFieldColumn)
+			{
+				DialogFieldColumn dfc = (DialogFieldColumn) column;
+				dialogFieldIdTemplate = dfc.getFieldIdPrefix() + dfc.getFieldIdRowSuffix();
+			}
 		}
 
 		public final boolean isVisible() { return (flags & ReportColumn.COLFLAG_HIDDEN) == 0 ? true : false; }
@@ -64,8 +75,10 @@ public class ReportContext implements ValueContext
 		public final void clearFlag(long flag) { flags &= ~flag; }
 		public final void updateFlag(long flag, boolean set) { if(set) flags |= flag; else flags &= ~flag; }
 
+		public final String getHeading() { return heading; }
 		public final String getOutputFormat() { return outputFormat; }
 		public final String getUrl() { return url; }
+		public final String getFieldIdTemplate() { return dialogFieldIdTemplate; }
 	}
 
 	private List listeners = new ArrayList();

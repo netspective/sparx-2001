@@ -51,6 +51,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.ssn", SocialSecurityField.class);
         fieldClasses.put("field.phone", PhoneField.class);
         fieldClasses.put("field.bloodpressure", BloodPressureField.class);
+        fieldClasses.put("field.report", ReportField.class);
 		defaultsAvailable = true;
 	}
 

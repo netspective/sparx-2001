@@ -105,6 +105,11 @@ public class SelectField extends DialogField
 	public final ListValueSource getListSource() { return listSource; }
 	public void setListSource(ListValueSource value) { listSource = value; }
 
+	public boolean defaultIsListValueSource()
+	{
+		return true;
+	}
+
 	public void importFromXml(Element elem)
 	{
 		super.importFromXml(elem);
@@ -393,5 +398,4 @@ public class SelectField extends DialogField
 				return "Unknown style " + style;
 		}
 	}
-
 }

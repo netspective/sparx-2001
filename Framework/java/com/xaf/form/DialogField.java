@@ -61,6 +61,11 @@ public class DialogField
 		caption = aCaption != null ? ValueSourceFactory.getSingleOrStaticValueSource(aCaption) : null;
 	}
 
+	public boolean defaultIsListValueSource()
+	{
+		return false;
+	}
+
 	public void importFromXml(Element elem)
 	{
 		simpleName = elem.getAttribute("name");
@@ -71,7 +76,7 @@ public class DialogField
 		if(captionStr.length() > 0)
 			caption = ValueSourceFactory.getSingleOrStaticValueSource(captionStr);
 
-		if(! (this instanceof com.xaf.form.field.SelectField))
+		if(! defaultIsListValueSource())
 		{
 			String defaultv = elem.getAttribute("default");
 			if(defaultv.length() > 0)

@@ -188,7 +188,6 @@ public class DialogManager extends XmlSource
 
 				skin.importFromXml(skinElem);
 				SkinFactory.addDialogSkin(skinElem.getAttribute("name"), skin);
-				errors.add("Added skin " + skin.getClass().getName() + " as " + skinElem.getAttribute("name"));
 			}
 		}
 

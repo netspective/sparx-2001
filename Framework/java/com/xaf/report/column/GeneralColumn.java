@@ -138,7 +138,7 @@ public class GeneralColumn implements ReportColumn
         return replacedIn;
     }
 
-	public String getFormattedData(ReportContext rc, Object[] rowData, boolean doCalc)
+	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc)
 	{
         Object oData = rowData[getColIndexInArray()];
         String data = oData == null ? "" : oData.toString();

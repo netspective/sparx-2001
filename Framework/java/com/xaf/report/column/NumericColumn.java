@@ -35,18 +35,19 @@ public class NumericColumn extends GeneralColumn
 
 	public String getFormattedData(ReportContext rc, Object[] rowData, boolean doCalc)
 	{
-        Object oData = rowData[getColIndexInArray()];
+		int colIndex = getColIndexInArray();
+        Object oData = rowData[colIndex];
         String data = "";
         long value = 0;
         if(oData != null)
         {
-            value = ((Number) rowData[getColIndexInArray()]).longValue();
+            value = ((Number) oData).longValue();
             data = ((NumberFormat) getFormatter()).format(value);
         }
 
         if(doCalc)
         {
-            ColumnDataCalculator calc = rc.getCalc(getColIndexInArray());
+            ColumnDataCalculator calc = rc.getCalc(colIndex);
             if(calc != null)
                 calc.addValue(value);
         }

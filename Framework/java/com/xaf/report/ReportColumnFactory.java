@@ -40,6 +40,7 @@ public class ReportColumnFactory
 		columnClasses.put("default", GeneralColumn.class);
 		columnClasses.put("numeric", NumericColumn.class);
 		columnClasses.put("decimal", DecimalColumn.class);
+		columnClasses.put("checkbox", CheckBoxFieldColumn.class);
 		haveDefaultColClasses = true;
 	}
 
