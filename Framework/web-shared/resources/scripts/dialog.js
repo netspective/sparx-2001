@@ -37,8 +37,9 @@ function getControl(dialog, id)
 
 // Get the dialog field control for DOM browsers such as IE5, IE6 and NS6
 function getControl_Dom(dialog, id)
-{            
-    if (id.charAt(0) == '_')
+{   
+    
+    if (id.substring(0,3) == DIALOGFIELD_PREFIX)
         return document.getElementById(dialog.name).elements[id];
     else
         return document.getElementById(id);
@@ -48,7 +49,10 @@ function getControl_Dom(dialog, id)
 function getControl_NS4(dialog, id)
 {  
     // a dialog field because the ID starts with a PREFIX
-    return document.forms[dialog.name].elements[id];
+    if (id.substring(0,3) == DIALOGFIELD_PREFIX)
+        return document.forms[dialog.name].elements[id];
+    else
+        return document.
 }
 
 //****************************************************************************
@@ -180,7 +184,7 @@ var DATE_DTTYPE_BOTH     = 2;
 function DialogField(type, id, name, qualifiedName, caption, flags)
 {
     this.typeName = type;
-    this.type = FIELD_TYPES[type];
+    this.type = FIELD_TYPES[type];    
     if (typeof this.type == "undefined")
         this.type = null;        
     this.controlId = id;
@@ -425,7 +429,8 @@ function DialogField_focusNext(dialog)
 }
 
 /**
- * Get dialog field control by its name for IE
+ * Gets the control of the table row where the dialog field belongs to for IE 4
+ * This does not get the control of the dialog field(INPUT)!
  */
 function DialogField_getFieldAreaElem(dialog)
 {
@@ -440,22 +445,24 @@ function DialogField_getFieldAreaElem(dialog)
 }
 
 /**
- * Get dialog field control by its name for Dom Browsers
+ * Gets the control of the table row where the dialog field belongs to for Dom Browsers.
+ * This does not get the control of the dialog field(INPUT)!
  */
 function DialogField_getFieldAreaElem_Dom(dialog)
 {    
-    var fieldAreaId = FIELDROW_PREFIX + this.name;
+    var fieldAreaId = FIELDROW_PREFIX + this.name;    
     var fieldAreaElem = getControl_Dom(dialog, fieldAreaId);  
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
         fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
         fieldAreaElem = getControl_Dom(dialog, fieldAreaId);   
-    }    
+    }        
     return fieldAreaElem;
 }
 
 /**
- * Get dialog field control by its name for Netscape 4
+ * Gets the control of the table row which the dialog field belongsd to for Netscape 4
+ * This does not get the control of the dialog field(INPUT)! 
  */
 function DialogField_getFieldAreaElem_NS4(dialog)
 {
@@ -516,7 +523,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     }
 
     var condSource = dialog.fieldsByQualName[this.source];       
-    var fieldAreaElem = condSource.getFieldAreaElem(dialog);
+    var fieldAreaElem = condSource.getFieldAreaElem(dialog);    
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {       
         fieldAreaElem = condSource.getControl(dialog);
@@ -647,8 +654,8 @@ function SimpleSort(objSelect)
 // Event handlers
 //****************************************************************************
 function controlOnClick(control)
-{        
-    field = activeDialog.fieldsById[control.name];
+{            
+    field = activeDialog.fieldsById[control.name];    
     if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.type.click != null)
         return field.type.click(field, control);
@@ -665,7 +672,7 @@ function controlOnKeypress(control)
     else
         return true;
 }
-
+                                            
 function controlOnFocus(control)
 {    
     field = activeDialog.fieldsById[control.name];
@@ -749,10 +756,10 @@ function keypressAcceptRanges(field, control, acceptKeyRanges)
 //****************************************************************************
 // Field-specific validation and keypress filtering functions
 //****************************************************************************
-function SelectField_onClick(field, control)
+function BooleanField_onClick(field, control)
 {
     if (control.type == 'checkbox' || control.type == 'radio')
-    {
+    {        
         if(field.dependentConditions.length > 0)    
         {    
             var conditionalFields = field.dependentConditions;
@@ -1007,7 +1014,8 @@ function SelectField_isValid(field, control)
 }
 
 addFieldType("com.xaf.form.field.TextField", null, null, TextField_valueChanged, TextField_onFocus, null, null, null);
-addFieldType("com.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, SelectField_onClick);
+addFieldType("com.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, null);
+addFieldType("com.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
 addFieldType("com.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, DateField_valueChanged, null, null, DateField_onKeyPress, null);
 addFieldType("com.xaf.form.field.IntegerField", null, IntegerField_isValid, null, null, null, IntegerField_onKeyPress);
