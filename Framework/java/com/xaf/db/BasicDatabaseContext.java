@@ -24,6 +24,18 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
 {
 	static private Context env;
 
+	static public Connection getConnection(String dataSourceId) throws NamingException, SQLException
+	{
+		if(env == null)
+			env = (Context) new InitialContext().lookup("java:comp/env");
+
+        DataSource source = (DataSource) env.lookup(dataSourceId);
+        if(source == null)
+            throw new NamingException("Data source '" + dataSourceId + "' not found");
+
+        return source.getConnection();
+	}
+
 	public final Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException
 	{
 		if(env == null)
