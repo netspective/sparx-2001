@@ -27,7 +27,6 @@ public class DmlTag extends TagSupport
 	public void setTable(String value) { task.setTable(value); }
 	public void setDataSource(String value) { task.setDataSource(value); }
 	public void setFields(String value) { task.setFields(value); }
-	public void setTransaction(String value) { task.setTransaction(value); }
 	public void setWhere(String value) { task.setWhere(value); }
 	public void setColumns(String value) { task.setColumns(value); }
     public void setContext(String value) { task.setDialogContextAttrName(value); }
