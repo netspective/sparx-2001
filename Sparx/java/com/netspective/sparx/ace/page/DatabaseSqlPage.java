@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.6 2002-11-01 23:03:04 aye.thu Exp $
+ * $Id: DatabaseSqlPage.java,v 1.7 2002-11-30 16:32:00 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -62,7 +62,6 @@ import java.io.StringWriter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -78,9 +77,7 @@ import com.netspective.sparx.xaf.sql.StatementDialog;
 import com.netspective.sparx.xaf.task.sql.StatementTask;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
-import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSqlPage extends AceServletPage
@@ -138,7 +135,6 @@ public class DatabaseSqlPage extends AceServletPage
         StatementManager manager = StatementManagerFactory.getManager(context);
 
         PrintWriter out = pc.getResponse().getWriter();
-        DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
 
         StatementInfo si = manager.getStatement(stmtId);
         if(si != null)
@@ -151,12 +147,10 @@ public class DatabaseSqlPage extends AceServletPage
                 dialog.prepareContext(dc);
                 dialog.renderHtml(out, dc, true);
                 out.write("<p>");
-                out.write(si.getDebugHtml(pc));
-
+                out.write(si.getDebugHtml(pc, false, false, null));
             }
             else
                 out.write("Statement '"+ stmtId +"' produced a NULL dialog.");
-
         }
         else
             out.write("Statement '"+ stmtId +"' not found in default context.");
@@ -218,6 +212,6 @@ public class DatabaseSqlPage extends AceServletPage
             out.write(msg.toString());
             out.write("</pre>");
         }
-        out.write(si.getDebugHtml(pc));
+        out.write(si.getDebugHtml(pc, false, false, null));
     }
 }
