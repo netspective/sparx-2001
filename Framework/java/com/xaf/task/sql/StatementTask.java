@@ -233,7 +233,7 @@ public class StatementTask extends AbstractTask
         catch(SQLException e)
         {
 			StringBuffer errorMsg = new StringBuffer();
-            StatementInfo si = stmtManager.getStatement(stmtName);
+            StatementInfo si = statementInfo != null ? statementInfo : stmtManager.getStatement(stmtName);
 
 			StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
