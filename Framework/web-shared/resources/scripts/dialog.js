@@ -771,6 +771,63 @@ function TextField_onFocus(field, control)
     return true;
 }
 
+function TextField_valueChanged(field, control)
+{   
+    if (field.uppercase == 'yes')
+    {
+        control.value = control.value.toUpperCase();
+    }
+    return true;
+}
+
+function PhoneField_valueChanged(field, control)
+{    
+    return formatPhone(field, control);
+}
+
+function PhoneField_isValid(field, control)
+{
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
+    if (control.value.length > 0)
+    {    
+        var test = testPhone(field, control);
+        if (test == false)
+        {
+            field.alertMessage(control, field.text_format_err_msg);
+            return false;
+        }
+    }
+    return true;
+}
+
+function SocialSecurityField_valueChanged(field, control)
+{    
+    return formatSSN(field, control);
+}
+
+function SocialSecurityField_isValid(field, control)
+{
+    if(field.isRequired() && control.value.length == 0)
+    {
+        field.alertRequired(control);
+        return false;
+    }
+    if (control.value.length > 0)
+    {
+        var test = testSSN(field, control);
+        if (test == false)
+        {
+            field.alertMessage(control, "Social Security Number must be in the correct format: 999-99-9999");
+            return false;
+        }
+    }
+    return true;
+}
+
 function IntegerField_onKeyPress(field, control)
 {
 	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE]);
@@ -949,12 +1006,14 @@ function SelectField_isValid(field, control)
     return true;
 }
 
-addFieldType("com.xaf.form.field.TextField", null, null, null, TextField_onFocus, null, null, null);
+addFieldType("com.xaf.form.field.TextField", null, null, TextField_valueChanged, TextField_onFocus, null, null, null);
 addFieldType("com.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, SelectField_onClick);
 addFieldType("com.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
 addFieldType("com.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, DateField_valueChanged, null, null, DateField_onKeyPress, null);
 addFieldType("com.xaf.form.field.IntegerField", null, IntegerField_isValid, null, null, null, IntegerField_onKeyPress);
 addFieldType("com.xaf.form.field.FloatField", null, FloatField_isValid, null, null, null, FloatField_onKeyPress);
+addFieldType("com.xaf.form.field.SocialSecurityField", null, SocialSecurityField_isValid, SocialSecurityField_valueChanged, null, null, null, null);
+addFieldType("com.xaf.form.field.PhoneField", null, PhoneField_isValid, PhoneField_valueChanged, null, null, null, null);
 
 //****************************************************************************
 // Date Formatting
@@ -975,6 +1034,57 @@ function padZeros(number, count)
     if (number.length > count)
         number = number.substring((number.length - count));
     return number;
+}
+
+function testPhone(field, control)
+{
+    var phonePattern = field.text_format_pattern;    
+    return phonePattern.test(control.value) ;
+}
+
+function formatPhone(field, control)
+{
+    var test = testPhone(field, control);    
+    if (test == false)
+    {
+        field.alertMessage(control, field.text_format_err_msg);
+        return false;
+    }
+    else
+    {
+        var phoneStr = control.value;    
+        if (field.phone_format_type == 'dash')
+        {
+            phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3 $4");
+        }
+        else
+        {
+            phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3 $4");
+        }
+        control.value = phoneStr;            
+    }
+    return true;
+}
+
+function testSSN(field, control)
+{    
+    var ssnPattern = field.text_format_pattern ;    
+    return ssnPattern.test(control.value);
+}
+
+function formatSSN(field, control)
+{
+    var test = testSSN(field, control);
+    if (test == false)
+    {
+        field.alertMessage(control, "Social Security Number must be in the correct format: 999-99-9999");
+        return false;    
+    }
+    var ssn = control.value;    
+    ssn = ssn.replace(field.text_format_pattern, "$1-$2-$3");
+    control.value = ssn;
+    
+    return true;    
 }
 
 function formatDate(field, control, delim, strictYear)

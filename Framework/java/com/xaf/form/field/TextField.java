@@ -249,9 +249,23 @@ public class TextField extends DialogField
      */
     public String getCustomJavaScriptDefn(DialogContext dc)
     {
+        StringBuffer buf = new StringBuffer(super.getCustomJavaScriptDefn(dc));
+
         if (this.isBrowserReadOnly(dc))
-            return (super.getCustomJavaScriptDefn(dc) + "field.readonly = 'yes';\n");
+            buf.append("field.readonly = 'yes';\n");
         else
-            return (super.getCustomJavaScriptDefn(dc) + "field.readonly = 'no';\n");
+            buf.append("field.readonly = 'no';\n");
+
+        if (this.flagIsSet(TextField.FLDFLAG_UPPERCASE))
+            buf.append("field.uppercase = 'yes';\n");
+        else
+            buf.append("field.uppercase = 'no';\n");
+
+        if (this.validatePattern != null)
+            buf.append("field.text_format_pattern = " + this.validatePattern + ";\n");
+        if (this.regexMessage != null)
+            buf.append("field.text_format_err_msg = '" + this.regexMessage + "';\n");
+
+        return buf.toString();
     }
 }

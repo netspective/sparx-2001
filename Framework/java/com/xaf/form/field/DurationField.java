@@ -91,7 +91,7 @@ public class DurationField extends DialogField
 
 			if(beginDate.after(endDate))
 			{
-				invalidate(dc, "Begining value should be after ending value.");
+				invalidate(dc, "Begining value should be before ending value.");
 				return false;
 			}
 		}
