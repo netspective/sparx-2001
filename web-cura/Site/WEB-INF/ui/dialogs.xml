@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-
 <xaf>
+	<include file="test_dialogs.xml"/>
+
 	<dialogs package="org">
 		<dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
 			<field.debug visible="no"/>
@@ -17,7 +18,6 @@
 			<field.text name="ticker_symbol" caption="Ticker Symbol"/>
 			<field.integer name="employees" caption="Employees"/>
 			<field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
-
 			<populate-tasks data-cmd="edit,delete">
 				<exec-statement report="none" store-type="row-fields" store="form:*">
 					select * from org where org_id = ?
@@ -26,7 +26,6 @@
 					</params>
 				</exec-statement>
 			</populate-tasks>
-			
 			<execute-tasks data-cmd="add">
 				<exec-transaction command="begin"/>
 				<exec-dml command="insert" table="org" auto-inc="org_id,org_org_id_seq" auto-inc-store="request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/>
@@ -35,12 +34,10 @@
 				<exec-transaction command="end"/>
 				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
 			</execute-tasks>
-
 			<execute-tasks data-cmd="edit">
 				<exec-dml command="update" table="org" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone" where="org_id = ?" where-bind="request:org_id"/>
 				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request:org_id}"/>
 			</execute-tasks>
-
 			<execute-tasks data-cmd="delete">
 				<exec-transaction command="begin"/>
 				<exec-dml command="delete" table="org_industry" where="org_id = ?" where-bind="request:org_id"/>
@@ -51,7 +48,6 @@
 			</execute-tasks>
 		</dialog>
 	</dialogs>
-
 	<dialogs package="train">
 		<dialog name="test" heading="Add Account">
 			<field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/>
