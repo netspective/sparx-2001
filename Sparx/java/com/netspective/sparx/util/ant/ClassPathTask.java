@@ -51,14 +51,28 @@
  */
  
 /**
- * $Id: ClassPathTask.java,v 1.3 2002-09-04 23:21:45 shahid.shah Exp $
+ * $Id: ClassPathTask.java,v 1.4 2002-09-05 14:45:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
 
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Adler32;
+import java.util.zip.CheckedInputStream;
+import java.util.zip.Checksum;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileInputStream;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.Reference;
 
 import com.netspective.sparx.BuildConfiguration;
 import com.netspective.sparx.util.ClassPath;
@@ -89,9 +103,72 @@ public class ClassPathTask extends Task
         showLocOfClass = project.replaceProperties(className);
     }
 
-    public void setAdditional(Path path)
+    /**
+     * Set the additional class path reference by optimizing the items and replacing the reference
+     */
+    public void setAdditionalRef(Reference r)
     {
-        additionalClassPath = path;
+        Path ref = (Path) r.getReferencedObject(project);
+        Path newRef = new Path(project, optimizePath(ref.list()));
+        newRef.concatSystemClasspath();
+        project.getReferences().remove(r.getRefId());
+        project.addReference(r.getRefId(), newRef);
+        createAdditionalClasspath().setRefid(r);
+    }
+
+    /**
+     * Make sure that the items in the path are not duplicated. Duplicates are checked by simple string comparison
+     * for directory paths and checksums for actual files.
+     */
+    public String optimizePath(String[] items)
+    {
+        StringBuffer finalList = new StringBuffer();
+        Set itemSet = new HashSet();
+        Map filesMap = new HashMap();
+
+        for(int i = 0; i < items.length; i++)
+        {
+            String item = items[i];
+            if(itemSet.contains(item))
+                continue;
+
+            File file = new File(item);
+            if(file.isFile() && file.exists())
+            {
+                // Compute Adler-32 checksum of the file
+                try
+                {
+                    CheckedInputStream cis = new CheckedInputStream(new FileInputStream(file), new Adler32());
+                    byte[] tempBuf = new byte[512];
+                    while (cis.read(tempBuf) >= 0) { }
+
+                    String fileName = file.getName();
+                    Checksum existingChecksum = (Checksum) filesMap.get(fileName);
+
+                    if(existingChecksum != null && cis.getChecksum().getValue() == existingChecksum.getValue())
+                        continue;
+                    else
+                        filesMap.put(fileName, cis.getChecksum());
+                }
+                catch(IOException ioe)
+                {
+                    // we're going to eat the error, but keep the item in the finalList
+                }
+            }
+
+            finalList.append(item);
+            finalList.append(File.pathSeparator);
+            itemSet.add(item);
+        }
+
+        return finalList.toString();
+    }
+
+    public Path createAdditionalClasspath()
+    {
+        if (additionalClassPath == null)
+            additionalClassPath = new Path(project);
+        return additionalClassPath.createPath();
     }
 
     public void execute() throws BuildException
@@ -99,7 +176,7 @@ public class ClassPathTask extends Task
         if(listAll)
         {
             ClassPath.ClassPathInfo[] cpi = additionalClassPath != null ?
-                ClassPath.getClassPaths(new String[] { System.getProperty("java.class.path"), additionalClassPath.toString() }) :
+                ClassPath.getClassPaths(additionalClassPath.toString()) :
                 ClassPath.getClassPaths();
 
             for(int i = 0; i < cpi.length; i++)
