@@ -122,6 +122,7 @@ Setup instructions:
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml" todir="Site/WEB-INF"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/resin.web.xml" todir="Site/WEB-INF"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="Site/WEB-INF"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="Site/WEB-INF/web.xml"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="Site/WEB-INF/classes"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="Site/WEB-INF/tld"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="Site/WEB-INF/tld"/>

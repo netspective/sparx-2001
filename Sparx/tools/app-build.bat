@@ -5,7 +5,9 @@ REM ** Setup location of Sparx distribution, application build file, and    **
 REM ** the Sparx JAR file. Just set SPARX_HOME and the others will be set.  **
 REM **************************************************************************
 
-set SPARX_HOME=C:\Projects\Sparx
+if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\java\jdk1.3.1
+if "%SPARX_HOME%" == "" set SPARX_HOME=C:\Projects\Sparx
+
 set SPARX_JAR=%SPARX_HOME%\lib\sparx.jar
 set SPARX_REDIST_HOME=%SPARX_HOME%\lib\redist
 set APP_BUILD_FILE=%SPARX_HOME%\tools\app-build.xml
@@ -38,8 +40,6 @@ REM **   Jakarta Log4J 1.1 or above (http://jakarta.apache.org)             **
 REM **   Java Servlet API 2.2 or above (http://java.sun.com)                **
 REM **   Java JDBC 2.0 Standard Extensions (http://java.sun.com)            **
 REM **************************************************************************
-
-set JAVA_HOME=C:\utils\java\jdk1.3.1
 
 set ANT_JAR=%SPARX_REDIST_HOME%\ant.jar
 set XERCES_JAR=%SPARX_REDIST_HOME%\xerces.jar
