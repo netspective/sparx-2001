@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.10 2002-12-26 19:28:56 shahid.shah Exp $
+ * $Id: StatementTask.java,v 1.11 2003-01-31 06:16:25 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -64,6 +64,8 @@ import java.sql.SQLException;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
 
@@ -83,10 +85,8 @@ import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogSkin;
-import com.netspective.sparx.util.value.DialogFieldValue;
-import com.netspective.sparx.util.value.SingleValueSource;
-import com.netspective.sparx.util.value.StaticValue;
-import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.xaf.security.AccessControlListFactory;
+import com.netspective.sparx.util.value.*;
 
 public class StatementTask extends BasicTask
 {
@@ -99,6 +99,7 @@ public class StatementTask extends BasicTask
     private SingleValueSource dataSourceValueSource;
     private String reportId;
     private String storeValueName = null;
+    private ListValueSource permissions = null;
     private SingleValueSource skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
     private SingleValueSource storeValueSource = null;
     private SingleValueSource reportDestValueSource;
@@ -170,6 +171,17 @@ public class StatementTask extends BasicTask
     public void setDataSource(String value)
     {
         dataSourceValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
+
+    public ListValueSource getPermissions()
+    {
+        return permissions;
+    }
+
+    public void setPermissions(String value)
+    {
+        this.permissions = new StringsListValue();
+        permissions.initializeSource(value);
     }
 
     public String getReport()
@@ -323,7 +335,20 @@ public class StatementTask extends BasicTask
     public void execute(TaskContext tc) throws TaskExecuteException
     {
         tc.registerTaskExecutionBegin(this);
-
+        if (permissions != null)
+        {
+            HttpSession session = tc.getSession();
+            com.netspective.sparx.xaf.security.AuthenticatedUser user =
+                    (com.netspective.sparx.xaf.security.AuthenticatedUser) session.getAttribute("authenticated-user");
+            boolean permitted = user.hasAnyPermission(AccessControlListFactory.getACL(tc.getServletContext()),
+                    permissions.getValues(tc));
+            if (!permitted)
+            {
+                // user does not have permission to execute the SQL statement, meaning the
+                // report should not be shown
+                return;
+            }
+        }
         if(storeValueName != null)
         {
             storeValueSource = ValueSourceFactory.getStoreValueSource(storeValueName);
