@@ -10,8 +10,9 @@ package com.xaf.value;
  */
 
 import com.xaf.form.*;
+import com.xaf.form.field.*;
 
-public class DialogFieldOrRequestParameterValue extends ValueSource
+public class DialogFieldOrRequestParameterValue extends ValueSource implements ListValueSource
 {
     public DialogFieldOrRequestParameterValue()
     {
@@ -25,4 +26,21 @@ public class DialogFieldOrRequestParameterValue extends ValueSource
             value = vc.getRequest().getParameter(valueKey);
         return value;
     }
+
+    public SelectChoicesList getSelectChoices(ValueContext vc)
+    {
+		SelectChoicesList choices = new SelectChoicesList();
+		String[] values = getValues(vc);
+		for(int i = 0; i < values.length; i++)
+			choices.add(new SelectChoice(values[i]));
+        return choices;
+	}
+
+    public String[] getValues(ValueContext vc)
+    {
+		String[] values = vc.getRequest().getParameterValues(Dialog.PARAMNAME_CONTROLPREFIX + valueKey);
+        if(values == null)
+            values = vc.getRequest().getParameterValues(valueKey);
+        return values;
+	}
 }
