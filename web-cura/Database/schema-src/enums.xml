@@ -19,6 +19,9 @@
     </table>
 
     <table name="Task_Type" abbrev="TskTy" type="Enumeration">
+        <enum>Organization</enum>
+        <enum>Project</enum>
+        <enum>Personal</enum>
     </table>
 
 </schema>

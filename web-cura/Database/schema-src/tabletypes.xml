@@ -93,15 +93,17 @@
 		<column name="rel_org_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
 	</tabletype>
 
+	<tabletype name="Task_Relationship" type="Relationship">
+		<description>Basic information required for an entity that may be related to an task.</description>
+		<column name="rel_task_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
+	</tabletype>
+
 	<tabletype name="PersonOrg_Relationship" type="Relationship">
 		<description>Basic information required for an entity that may be related to a person/org combination.</description>
 		<column name="rel_person_id" lookupref="Person.person_id" required="yes" descr="The person this entry is related to"/>
 		<column name="rel_org_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
 	</tabletype>
 
-	<tabletype name="ProjectOrg_Relationship" type="Org_Relationship">
-		<description>Basic information required for an entity that may be related to a project/org combination.</description>
-	</tabletype>
 	<!--
 	*********************************************************************
 	** Contact Methods Tables and Enumerations
