@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.6 2002-08-25 19:07:58 shahid.shah Exp $
+ * $Id: HtmlReportSkin.java,v 1.7 2002-08-25 20:38:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -87,13 +87,16 @@ public class HtmlReportSkin implements ReportSkin
 
     static public final String[] ALIGN_ATTRS = {"LEFT", "CENTER", "RIGHT"};
 
+    /* NOTE: The PanelTag custom tag produces a panel similar to this one so be sure to make appropriate changes there */
+
     protected int flags;
     protected String frameHdTableAttrs = "cellspacing=0 cellpadding=0 width='100%' border=0";
     protected String frameHdRowAttrs = "bgcolor='#666666' height=15";
     protected String frameHdRowSpacerAttrs = "bgcolor='#666666' height=2";
     protected String frameHdCellAttrs = "bgcolor='#666666' width='40%'";
-    protected String frameHdInfoCellAttrs = "bgcolor='white'";
+    protected String frameHdInfoCellAttrs = "bgcolor='white' align='right'";
     protected String frameHdFontAttrs = "face='tahoma,arial,helvetica' size=1 color=white";
+    protected String frameHdInfoFontAttrs = "face='tahoma,arial,helvetica' size=1";
     protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#666666' width='100%' ";
     protected String innerTableAttrs = "cellpadding='2' cellspacing='0' border='0' width='100%'";
     protected SingleValueSource frameHdTabImgSrcValueSource = ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/tabs/transparent-triangle.gif");
@@ -181,7 +184,7 @@ public class HtmlReportSkin implements ReportSkin
                 String frameHdSpacerImgSrc = frameHdSpacerImgSrcValueSource.getValue(rc);
 
                 writer.write("<table "+ frameHdTableAttrs +">");
-                writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
+                writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdInfoFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
                 writer.write("<tr " + frameHdRowSpacerAttrs +"><td colspan=3><img src='"+ frameHdSpacerImgSrc +"' height=2></td></tr>");
                 writer.write("</table>");
             }
