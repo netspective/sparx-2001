@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogManagerFactory.java,v 1.6 2002-12-23 04:41:14 shahid.shah Exp $
+ * $Id: DialogManagerFactory.java,v 1.7 2002-12-26 19:34:04 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -59,7 +59,6 @@ package com.netspective.sparx.xaf.form;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -70,15 +69,11 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 
-import org.w3c.dom.Element;
-
 import com.netspective.sparx.util.factory.FactoryEvent;
 import com.netspective.sparx.util.factory.FactoryListener;
 import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
-import com.netspective.sparx.xaf.security.AccessControlList;
-import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xif.dal.TableDialog;
@@ -117,22 +112,6 @@ public class DialogManagerFactory implements Factory
         }
     }
 
-    /*
-    public static void generatePermissions(AccessControlList acl, Element parentElem)
-    {
-        for(Iterator m = managers.values().iterator(); m.hasNext();)
-        {
-            DialogManager manager = (DialogManager) m.next();
-            Map dialogs = manager.getDialogs();
-            for(Iterator d = dialogs.values().iterator(); d.hasNext();)
-            {
-                DialogManager.DialogInfo info = (DialogManager.DialogInfo) d.next();
-                acl.addPermissionElem(parentElem, info.getLookupName());
-            }
-        }
-    }
-    */
-
     public static DialogManager getManager(String file)
     {
         DialogManager activeManager = (DialogManager) managers.get(file);
@@ -166,188 +145,5 @@ public class DialogManagerFactory implements Factory
             return getManager(context);
         else
             return getManager(dlgSource);
-    }
-
-    /**
-     * cmdParams should look like:
-     *   0 dialog name (required)
-     *   1 data command like add,edit,delete,confirm (optional, may be empty or set to "-" to mean "none")
-     *   2 skin name (optional, may be empty or set to "-" to mean "none")
-     */
-
-    public static DialogCommands getCommands(String cmdParams)
-    {
-        return new DialogCommands(cmdParams);
-    }
-
-    public static class DialogCommands
-    {
-        static public final String PAGE_COMMAND_REQUEST_PARAM_NAME = "cmd";
-        static public final String[] DIALOG_COMMAND_RETAIN_PARAMS =
-                {
-                    PAGE_COMMAND_REQUEST_PARAM_NAME
-                };
-
-        private String dialogName;
-        private String dataCmd;
-        private String skinName;
-        private String debugFlagsSpec;
-
-        public DialogCommands(String cmdParams)
-        {
-            this(new StringTokenizer(cmdParams, ","));
-        }
-
-        public DialogCommands(StringTokenizer st)
-        {
-            dialogName = st.nextToken();
-
-            if(st.hasMoreTokens())
-            {
-                dataCmd = st.nextToken();
-                if(dataCmd.length() == 0 || dataCmd.equals("-"))
-                    dataCmd = null;
-            }
-            else
-                dataCmd = null;
-
-            if(st.hasMoreTokens())
-            {
-                skinName = st.nextToken();
-                if(skinName.length() == 0 || skinName.equals("-"))
-                    skinName = null;
-            }
-            else
-                skinName = null;
-
-            if(st.hasMoreTokens())
-            {
-                debugFlagsSpec = st.nextToken();
-                if(debugFlagsSpec.equals("-"))
-                    debugFlagsSpec = null;
-            }
-            else
-                debugFlagsSpec = null;
-        }
-
-        public String getDataCmd()
-        {
-            return dataCmd;
-        }
-
-        public String getDialogName()
-        {
-            return dialogName;
-        }
-
-        public String getSkinName()
-        {
-            return skinName;
-        }
-
-        public String getDebugFlagsSpec()
-        {
-            return debugFlagsSpec;
-        }
-
-        public void setDataCmd(String dataCmd)
-        {
-            this.dataCmd = dataCmd;
-        }
-
-        public void setDialogName(String dialogName)
-        {
-            this.dialogName = dialogName;
-        }
-
-        public void setSkinName(String skinName)
-        {
-            this.skinName = skinName;
-        }
-
-        public void setDebugFlagsSpec(String debugFlagsSpec)
-        {
-            this.debugFlagsSpec = debugFlagsSpec;
-        }
-
-        public String generateCommand()
-        {
-            StringBuffer sb = new StringBuffer(dialogName);
-            sb.append(",");
-            sb.append(dataCmd != null ? dataCmd : "-");
-            if(skinName != null)
-            {
-                sb.append(",");
-                sb.append(skinName);
-            }
-            if(debugFlagsSpec != null)
-            {
-                sb.append(",");
-                sb.append(debugFlagsSpec);
-            }
-            return sb.toString();
-        }
-
-        public void handleDialog(ValueContext vc, boolean unitTest) throws IOException
-        {
-            if(dataCmd != null)
-                vc.getRequest().setAttribute(com.netspective.sparx.xaf.form.Dialog.PARAMNAME_DATA_CMD_INITIAL, dataCmd);
-
-            PrintWriter out = vc.getResponse().getWriter();
-            javax.servlet.ServletContext context = vc.getServletContext();
-            com.netspective.sparx.xaf.form.DialogManager manager = com.netspective.sparx.xaf.form.DialogManagerFactory.getManager(context);
-            if(manager == null)
-            {
-                out.write("DialogManager not found in ServletContext");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(vc.getServletContext(), null, dialogName);
-            if(dialog == null)
-            {
-                out.write("Dialog '" + dialogName + "' not found in manager '" + manager + "'.");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
-            if(skin == null)
-            {
-                out.write("DialogSkin '" + skinName + "' not found in skin factory.");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(context, vc.getServlet(), (javax.servlet.http.HttpServletRequest) vc.getRequest(), (javax.servlet.http.HttpServletResponse) vc.getResponse(), skin);
-            if(debugFlagsSpec != null)
-                dc.setDebugFlags(debugFlagsSpec);
-            dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
-            dialog.prepareContext(dc);
-            if(unitTest)
-                dc.setRedirectDisabled(true);
-
-            if(dc.inExecuteMode())
-            {
-                if(dc.debugFlagIsSet(Dialog.DLGDEBUGFLAG_SHOW_FIELD_DATA))
-                {
-                    out.write(dc.getDebugHtml());
-                    out.write(dialog.getLoopSeparator());
-                    dc.getSkin().renderHtml(out, dc);
-                }
-                else
-                {
-                    dialog.execute(out, dc);
-
-                    if(unitTest && dialog instanceof TableDialog)
-                        out.write("<pre>Last row processed: "+ dc.getLastRowManipulated() +"</pre>");
-
-                    if(! dc.executeStageHandled())
-                    {
-                        out.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
-                        out.write(dc.getDebugHtml());
-                    }
-                }
-            }
-            else
-                dialog.renderHtml(out, dc, true);
-        }
     }
 }
