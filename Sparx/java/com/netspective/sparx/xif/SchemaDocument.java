@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.28 2003-02-04 18:01:40 shahbaz.javeed Exp $
+ * $Id: SchemaDocument.java,v 1.29 2003-02-13 04:50:46 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -130,7 +130,7 @@ public class SchemaDocument extends XmlSource
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
 
-    public static final String[] MACROSIN_FIELDNODES = {"name", "caption", "size"};
+    public static final String[] MACROSIN_FIELDNODES = {"name", "caption", "size", "choices"};
     public static final String[] MACROSIN_CONDITIONALSNODES = {"action", "flag", "data-cmd", "partner", "js-expr"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
 
@@ -905,7 +905,14 @@ public class SchemaDocument extends XmlSource
             else if (generateId == null && nodeName.equals(ELEMNAME_GENERATE_ID))
                 generateId = childNode.getFirstChild().getNodeValue();
             else if (nodeName.startsWith(DialogField.FIELDTAGPREFIX))
+            {
+/*
+                Map fieldExpressionVariables = new HashMap();
+                fieldExpressionVariables.put("params", (Map) tableParams.get(table.getAttribute("name")));
+                replaceNodeMacros(childNode, replaceMacrosInFieldNodes, fieldExpressionVariables);
+*/
                 dialogFieldDefn = (Element) childNode;
+            }
         }
 
         if (size != null && sqlDefnElems.size() > 0)
@@ -1207,10 +1214,23 @@ public class SchemaDocument extends XmlSource
             Element childElem = (Element) node;
             String nodeName = node.getNodeName();
 
-            if (nodeName.equals("column"))
-                fixupColumnElement(table, childElem, false);
-            else if (nodeName.equals("param"))
+            if (nodeName.equals("param"))
                 params.put(childElem.getAttribute("name"), childElem.getFirstChild().getNodeValue());
+        }
+
+        for (int c = 0; c < columns.getLength(); c++)
+        {
+            Node node = columns.item(c);
+            if (node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            Element childElem = (Element) node;
+            String nodeName = node.getNodeName();
+
+            if (nodeName.equals("column"))
+            {
+                fixupColumnElement(table, childElem, false);
+            }
         }
 
         Node[][] replaceCols = new Node[columns.getLength()][];
@@ -2719,6 +2739,7 @@ public class SchemaDocument extends XmlSource
                         Element triggerElem = (Element) child;
                         Map variables = new HashMap();
                         variables.put("table", tableElem);
+                        variables.put("params", (Map) tableParams.get(tableElem.getAttribute("name")));
                         prepareJavaCodeText(triggerElem, variables, "        ");
                     }
                 }

@@ -113,10 +113,13 @@
 
 	<datatype name="stamp">
 		<java-class package="java.util">Date</java-class>
+		<java-timestamp-class>java.sql.Timestamp</java-timestamp-class>
 		<java-date-format-instance>java.text.DateFormat.getDateTimeInstance()</java-date-format-instance>
 		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
+		<sqldefn dbms="postgres">timestamp</sqldefn>
+		<sqldefn dbms="oracle">timestamp</sqldefn>
 
 		<field.datetime size="16" format="MM-dd-yyyy H:mm" min="01-01-1900 00:00"/>
 	</datatype>

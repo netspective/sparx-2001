@@ -24,7 +24,7 @@ import com.netspective.sparx.xif.dal.validation.UnknownValidationResultException
 import com.netspective.sparx.xif.dal.validation.result.*;
 import com.netspective.sparx.xaf.form.DialogContext;
 
-<xsl:if test="java-class and java-class/@package != 'java.lang' and java-class/@package != 'java.util'">import <xsl:value-of select="java-class/@package"/>;</xsl:if>
+<xsl:if test="java-class and java-class/@package != 'java.lang' and java-class/@package != 'java.util'">import <xsl:value-of select="java-class/@package"/>.*;</xsl:if>
 
 public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 {
@@ -171,8 +171,9 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 	public <xsl:value-of select="$java-class-spec"/> parse(String text) throws ParseException { return dateFormat.parse(text); }
 	public String format(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? dateFormat.format(value) : null; }
 	public String format(DialogContext dc, <xsl:value-of select="$java-class-spec"/> value) { return value != null ? dateFormat.format(value) : null; }
-    public Object getValueForSqlBindParam(Object value) { return getValueForSqlBindParam((<xsl:value-of select="$java-class-spec"/>) value); }
-    public Object getValueForSqlBindParam(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? new java.sql.Date(value.getTime()) : null; }
+	public Object getValueForSqlBindParam(Object value) { return getValueForSqlBindParam((<xsl:value-of select="$java-class-spec"/>) value); }
+<xsl:choose><xsl:when test="java-timestamp-class"><xsl:text>	</xsl:text>public Object getValueForSqlBindParam(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? new <xsl:value-of select="java-timestamp-class"/>(value.getTime()) : null; }</xsl:when>
+<xsl:otherwise><xsl:text>	</xsl:text>public Object getValueForSqlBindParam(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? new <xsl:value-of select="$java-class-spec"/>(value.getTime()) : null; }</xsl:otherwise></xsl:choose>
 </xsl:when>
 <xsl:when test="java-type">
 	public <xsl:value-of select="$java-class-spec"/> parse(String text) { return new <xsl:value-of select="$java-class-spec"/>(text); }
