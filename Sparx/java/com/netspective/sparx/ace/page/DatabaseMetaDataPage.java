@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseMetaDataPage.java,v 1.2 2002-08-09 11:53:45 shahid.shah Exp $
+ * $Id: DatabaseMetaDataPage.java,v 1.3 2002-08-14 02:31:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -60,6 +60,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -120,12 +122,30 @@ public class DatabaseMetaDataPage extends AceServletPage
             Class.forName(dc.getValue("ds_driver_name"));
             conn = DriverManager.getConnection(dc.getValue("ds_url"), dc.getValue("ds_username"), dc.getValue("ds_password"));
 
-            SchemaDocument schema = new SchemaDocument(conn, dc.getValue("ds_catalog"), dc.getValue("ds_schema"));
+            String catalog = dc.getValue("ds_catalog");
+            SchemaDocument schema = new SchemaDocument(conn, catalog != null ? (catalog.length() > 0 ? catalog : null) : null, dc.getValue("ds_schema"));
 
             String fileName = dc.getValue("out_file_name");
             schema.saveXML(fileName);
 
-            out.write("Wrote file '" + fileName + "'");
+            out.write("<p>&nbsp;&nbsp;Wrote file <a href='" + fileName + "'>"+ fileName +"</a><p>");
+
+            DatabaseMetaData dbmd = conn.getMetaData();
+            ResultSet rs = dbmd.getCatalogs();
+            out.write("Available catalogs:<ul>");
+            while(rs.next())
+            {
+                out.write("<li>"+rs.getObject(1).toString());
+            }
+            rs.close();
+            out.write("</ul>Available schemas:<ul>");
+            rs = dbmd.getSchemas();
+            while(rs.next())
+            {
+                out.write("<li>"+rs.getObject(1).toString());
+            }
+            out.write("</ul>");
+            rs.close();
         }
         catch(Exception e)
         {
