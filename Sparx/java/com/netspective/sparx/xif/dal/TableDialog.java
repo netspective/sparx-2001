@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TableDialog.java,v 1.3 2003-02-03 00:51:29 shahid.shah Exp $
+ * $Id: TableDialog.java,v 1.4 2003-02-04 05:07:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -63,6 +63,8 @@ import java.io.IOException;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
 
@@ -74,7 +76,9 @@ import com.netspective.sparx.util.log.LogManager;
 
 public class TableDialog extends Dialog
 {
+    public static final int DLGFLAG_ALLOW_INSERT_IF_EDITPK_NOT_FOUND = DLGFLAG_CUSTOM_START * 2;
     public static final String PARAMNAME_PRIMARYKEY = "pk";
+    public static final String SESSATTRNAMEPREFIX_ACTIVE_PRIMARYKEY = "table-dialog-active-pk-";
 
     private String schemaName;
     private Schema schema;
@@ -156,6 +160,9 @@ public class TableDialog extends Dialog
 
         if(elem.getAttribute("table").length() > 0)
             setTableName(elem.getAttribute("table"));
+
+        if(elem.getAttribute("allow-insert-if-edit-pk-not-found").equals("yes"))
+            setFlag(DLGFLAG_ALLOW_INSERT_IF_EDITPK_NOT_FOUND);
     }
 
     public void populateValues(DialogContext dc, int formatType)
@@ -168,12 +175,12 @@ public class TableDialog extends Dialog
             }
             else if((dc.editingData() || dc.deletingData()))
             {
-                ServletRequest request = dc.getRequest();
+                HttpServletRequest request = (HttpServletRequest) dc.getRequest();
                 Object pkValue = request.getAttribute(PARAMNAME_PRIMARYKEY);
                 if(pkValue == null)
                 {
                     request.getParameter(PARAMNAME_PRIMARYKEY);
-                    if(pkValue == null)
+                    if(pkValue == null && primaryKeyColName != null)
                     {
                         pkValue = request.getAttribute(primaryKeyColName);
                         if(pkValue == null)
@@ -181,33 +188,39 @@ public class TableDialog extends Dialog
                     }
                 }
 
-                ConnectionContext cc = null;
-                try
+                if(pkValue != null)
                 {
-                    cc = dc.getConnectionContextAuto();
-                    Row row = table.getRecordByPrimaryKey(cc, pkValue, null);
-                    if(row != null)
-                        row.setData(dc);
-                    else
-                        dc.addErrorMessage("Unable to locate primary key '"+ pkValue +"'");
-                }
-                catch (NamingException e)
-                {
-                    LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
-                }
-                catch (SQLException e)
-                {
-                    LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
-                }
-                finally
-                {
+                    ConnectionContext cc = null;
                     try
                     {
-                        if(cc != null) cc.returnConnection();
+                        cc = dc.getConnectionContextAuto();
+                        Row row = table.getRecordByPrimaryKey(cc, pkValue, null);
+                        if(row != null)
+                        {
+                            row.setData(dc);
+                            request.getSession(true).setAttribute(SESSATTRNAMEPREFIX_ACTIVE_PRIMARYKEY + dc.getTransactionId(), pkValue);
+                        }
+                        else if(! flagIsSet(DLGFLAG_ALLOW_INSERT_IF_EDITPK_NOT_FOUND))
+                            dc.addErrorMessage("Unable to locate primary key '"+ pkValue +"'");
+                    }
+                    catch (NamingException e)
+                    {
+                        LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
                     }
                     catch (SQLException e)
                     {
                         LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            if(cc != null) cc.returnConnection();
+                        }
+                        catch (SQLException e)
+                        {
+                            LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
+                        }
                     }
                 }
             }
@@ -232,6 +245,10 @@ public class TableDialog extends Dialog
         Row row = table.createRow();
         row.populateDataByNames(dc);
 
+        HttpServletRequest request = (HttpServletRequest) dc.getRequest();
+        HttpSession session = request.getSession(true);
+        String activePrimaryKeyValueSessAttrName = SESSATTRNAMEPREFIX_ACTIVE_PRIMARYKEY + dc.getTransactionId();
+
         try
         {
             cc.beginTransaction();
@@ -244,7 +261,16 @@ public class TableDialog extends Dialog
                     break;
 
                 case DialogContext.DATA_CMD_EDIT:
-                    table.update(cc, row);
+                    if(flagIsSet(DLGFLAG_ALLOW_INSERT_IF_EDITPK_NOT_FOUND))
+                    {
+                        Object pkValue = session.getAttribute(activePrimaryKeyValueSessAttrName);
+                        if(pkValue == null)
+                            table.insert(cc, row);
+                        else
+                            table.update(cc, row);
+                    }
+                    else
+                        table.update(cc, row);
                     dc.setLastRowManipulated(row);
                     break;
 
@@ -260,6 +286,10 @@ public class TableDialog extends Dialog
         catch (Exception e)
         {
             handlePostExecuteException(writer, dc, dc.getDataCommandText(true) + ": " + row, e);
+        }
+        finally
+        {
+            session.removeAttribute(activePrimaryKeyValueSessAttrName);
         }
     }
 }
