@@ -89,6 +89,12 @@ public class MemoField extends DialogField
 			invalidate(dc, getCaption(dc) + " is required.");
 			return false;
 		}
+
+        if (value != null && value.length() > maxLength)
+        {
+            invalidate(dc, getCaption(dc) + " is limited to " + maxLength + " characters.");
+            return false;
+        }
 		return true;
 	}
 
@@ -106,8 +112,11 @@ public class MemoField extends DialogField
 		else
 		{
 			return
-				"<textarea maxlength=\"" + maxLength + "\" name=\""+ id +"\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
-					WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? "class='required'" : "") + dc.getSkin().getDefaultControlAttrs() + ">" + (value != null ? value : "") + "</textarea>";
+				"<textarea name=\""+ id +"\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
+					WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? " class='required'" : "") +
+                    dc.getSkin().getDefaultControlAttrs() +
+                    "onKeyUp='return MemoField_isValid(this, " + maxLength + ")' >" +
+                    (value != null ? value : "") + "</textarea>";
 		}
 	}
 
