@@ -41,6 +41,7 @@
 		<java-class package="java.lang">Boolean</java-class>
 		<sqldefn dbms="ansi">boolean</sqldefn>
 		<sqldefn dbms="oracle">number(1)</sqldefn>
+                <sqldefn dbms="hsqldb">BIT</sqldefn>
 	</datatype>
 
 	<datatype name="currency">
