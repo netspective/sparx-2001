@@ -20,10 +20,23 @@
 								<xsd:complexType>
 									<xsd:choice>
 										<xsd:group ref="dialog-fields"/>
-										<xsd:element name="process-actions" minOccurs="0">
+										<xsd:element name="execute-tasks" minOccurs="0">
 											<xsd:complexType>
 												<xsd:choice>
-													<xsd:element name="exec-query" minOccurs="0" maxOccurs="unbounded"/>
+													<xsd:element name="exec-statement" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType>
+															<xsd:complexContent>
+																<xsd:extension base="statementType">
+																	<xsd:attribute name="name" type="xsd:string" use="optional"/>
+																</xsd:extension>
+															</xsd:complexContent>
+														</xsd:complexType>
+													</xsd:element>
+													<xsd:element name="exec-redirect" minOccurs="0">
+														<xsd:complexType>
+															<xsd:attribute name="url" type="xsd:uriReference" use="required"/>
+														</xsd:complexType>
+													</xsd:element>
 												</xsd:choice>
 											</xsd:complexType>
 										</xsd:element>
@@ -53,22 +66,10 @@
 				<xsd:element name="sql-statements" minOccurs="0" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:choice>
-							<xsd:element name="statement" minOccurs="0" maxOccurs="unbounded">
+							<xsd:element name="statement" type="statementType" minOccurs="0" maxOccurs="unbounded">
 								<xsd:annotation>
 									<xsd:documentation>An SQL Statement along with its parameters and report definitions</xsd:documentation>
 								</xsd:annotation>
-								<xsd:complexType mixed="true">
-									<xsd:choice>
-										<xsd:element name="params" minOccurs="0">
-											<xsd:complexType>
-												<xsd:choice>
-													<xsd:element name="param" maxOccurs="unbounded"/>
-												</xsd:choice>
-											</xsd:complexType>
-										</xsd:element>
-										<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded"/>
-									</xsd:choice>
-								</xsd:complexType>
 							</xsd:element>
 						</xsd:choice>
 					</xsd:complexType>
@@ -550,5 +551,17 @@
 		</xsd:annotation>
 		<xsd:attribute name="value" type="xsd:string" use="required"/>
 		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional" value="and"/>
+	</xsd:complexType>
+	<xsd:complexType name="statementType" mixed="true">
+		<xsd:choice>
+			<xsd:element name="params" minOccurs="0">
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="param" maxOccurs="unbounded"/>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:choice>
 	</xsd:complexType>
 </xsd:schema>
