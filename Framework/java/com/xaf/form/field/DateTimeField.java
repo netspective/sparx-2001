@@ -145,7 +145,9 @@ public class DateTimeField extends TextField
 			setFlag(DialogField.FLDFLAG_READONLY);
 
         String strictFlag = elem.getAttribute("strict-year");
-        if (strictFlag != null && strictFlag.equals("yes"))
+        if (strictFlag != null && strictFlag.equals("no"))
+            clearFlag(FLDFLAG_STRICT_YEAR);
+        else
             setFlag(FLDFLAG_STRICT_YEAR);
 	}
 
