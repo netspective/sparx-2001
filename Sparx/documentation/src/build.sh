@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.6 2002-09-16 02:07:20 shahid.shah Exp $
+# $Id: build.sh,v 1.7 2002-10-02 20:51:44 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the SPARX_HOME\java directory.     **
@@ -14,7 +14,7 @@ if [ -z $JAVA_HOME ]; then
 fi
 
 if [ -z $SPARX_HOME ]; then
-	SPARX_HOME=../
+	SPARX_HOME=../../
 	export SPARX_HOME
 fi
 
@@ -29,7 +29,7 @@ if [ -f $JAVA_HOME/lib/classes.zip ]; then
 	JAVACP=$JAVA_HOME/lib/classes.zip
 fi
 
-java -cp $SPARX_REDIST_HOME/ant.jar:$SPARX_REDIST_HOME/ant-optional.jar:$SPARX_REDIST_HOME/xerces.jar:$JAVACP org.apache.tools.ant.Main $1 $2 $3 $4 $5
+java -cp .:$SPARX_HOME/lib/sparx.jar:$SPARX_REDIST_HOME/oro.jar:$SPARX_REDIST_HOME/syntax.jar:$SPARX_REDIST_HOME/ant.jar:$SPARX_REDIST_HOME/ant-optional.jar:$SPARX_REDIST_HOME/xerces.jar:$JAVACP org.apache.tools.ant.Main $1 $2 $3 $4 $5
 
 # the following is for developer.netspective.com
 
