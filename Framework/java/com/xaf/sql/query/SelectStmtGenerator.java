@@ -97,12 +97,12 @@ public class SelectStmtGenerator
 			addJoin(field);
 		}
 
-		List conds = select.getConditions();
-		int condsAvailCount = conds.size();
-        int condsUsedCount = 0;
-		for(int c = 0; c < condsAvailCount; c++)
+		List allConditions = select.getConditions();
+        List usedConditions = new ArrayList();
+		int allCondsCount = allConditions.size();
+		for(int c = 0; c < allCondsCount; c++)
 		{
-			QueryCondition cond = (QueryCondition) conds.get(c);
+			QueryCondition cond = (QueryCondition) allConditions.get(c);
             if(cond.removeIfValueIsNull())
             {
                 String value = cond.getValue().getValue(vc);
@@ -110,7 +110,7 @@ public class SelectStmtGenerator
                     continue;
             }
 
-            condsUsedCount++;
+            usedConditions.add(cond);
 			QueryField field = cond.getField();
 			if(field != null)
 				addJoin(field);
@@ -164,29 +164,21 @@ public class SelectStmtGenerator
 		}
 
 		boolean haveCondWheres = false;
-		if(condsUsedCount > 0)
+        int usedCondsCount = usedConditions.size();
+		if(usedCondsCount > 0)
 		{
 			if(haveJoinWheres)
 				sql.append(" and (\n");
 			else
 				sql.append("where\n  (\n");
 
-    		int condsUsedLast = condsUsedCount-1;
-            int condsUsedIndex = 0;
-			for(int condsAvailIndex = 0; condsAvailIndex < condsAvailCount; condsAvailIndex++)
+    		int condsUsedLast = usedCondsCount-1;
+			for(int c = 0; c < usedCondsCount; c++)
 			{
-				QueryCondition cond = (QueryCondition) conds.get(condsAvailIndex);
-                if(cond.removeIfValueIsNull())
-                {
-                    String value = cond.getValue().getValue(vc);
-                    if(value == null || value.length() == 0)
-                        continue;
-                }
-
-                condsUsedIndex++;
+				QueryCondition cond = (QueryCondition) usedConditions.get(c);
 				addJoin(cond.getField());
 				sql.append("  (" + cond.getWhereCondExpr(this) + ")");
-				if(condsUsedIndex != condsUsedLast)
+				if(c != condsUsedLast)
 					sql.append(cond.getConnectorSql());
 				sql.append("\n");
 			}
