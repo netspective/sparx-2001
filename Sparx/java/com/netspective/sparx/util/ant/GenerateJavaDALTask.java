@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GenerateJavaDALTask.java,v 1.2 2002-08-09 21:28:18 shahid.shah Exp $
+ * $Id: GenerateJavaDALTask.java,v 1.3 2002-08-18 20:58:48 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -71,13 +71,13 @@ public class GenerateJavaDALTask extends Task
     private String destRoot;
     private String styleSheetRoot;
 
-    private String dataTypesPkg = "dal.column";
-    private String tableTypesPkg = "dal.table.type";
-    private String tablesPkg = "dal.table";
-    private String domainsPkg = "dal.domain";
-    private String rowsPkg = "dal.domain.row";
-    private String rowsListPkg = "dal.domain.rows";
-    private String schemaPkg = "dal";
+    private String dataTypesPkg = "app.dal.column";
+    private String tableTypesPkg = "app.dal.table.type";
+    private String tablesPkg = "app.dal.table";
+    private String domainsPkg = "app.dal.domain";
+    private String rowsPkg = "app.dal.domain.row";
+    private String rowsListPkg = "app.dal.domain.rows";
+    private String schemaPkg = "app.dal";
     private String schemaClassName = "DataAccessLayer";
 
     private String dataTypesGeneratorStyleSheet = "data-type-generator.xsl";

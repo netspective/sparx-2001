@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateJavaDialog.java,v 1.4 2002-08-09 21:28:17 shahid.shah Exp $
+ * $Id: DatabaseGenerateJavaDialog.java,v 1.5 2002-08-18 20:58:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -123,37 +123,37 @@ public class DatabaseGenerateJavaDialog extends Dialog
         dataTypesPkgField = new TextField("data_types_pkg", "Datatypes Package");
         dataTypesPkgField.setSize(40);
         dataTypesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        dataTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.column"));
+        dataTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.column"));
 
         tableTypesPkgField = new TextField("table_types_pkg", "Tabletypes Package");
         tableTypesPkgField.setSize(40);
         tableTypesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tableTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.table.type"));
+        tableTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.table.type"));
 
         tablesPkgField = new TextField("tables_pkg", "Tables Package");
         tablesPkgField.setSize(40);
         tablesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tablesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.table"));
+        tablesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.table"));
 
         domainsPkgField = new TextField("domains_pkg", "Domains Package");
         domainsPkgField.setSize(40);
         domainsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        domainsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.domain"));
+        domainsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain"));
 
         rowsPkgField = new TextField("rows_pkg", "Rows Package");
         rowsPkgField.setSize(40);
         rowsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        rowsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.domain.row"));
+        rowsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain.row"));
 
         rowsListPkgField = new TextField("rows_list_pkg", "Rows List Package");
         rowsListPkgField.setSize(40);
         rowsListPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        rowsListPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.domain.rows"));
+        rowsListPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain.rows"));
 
         schemaPkgField = new TextField("schema_pkg", "Schema Package");
         schemaPkgField.setSize(40);
         schemaPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        schemaPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal"));
+        schemaPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal"));
 
         schemaClassNameField = new TextField("schema_class_name", "Schema Class Name");
         schemaClassNameField.setSize(40);
