@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.21 2002-12-23 05:02:23 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.22 2002-12-26 19:29:53 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -121,6 +121,8 @@ public class SchemaDocument extends XmlSource
     public static final String ATTRNAME_DAL_STYLESHEET = "style-sheet";
     public static final String ATTRPREFIX_INHERITFIELD = "field.";
 
+    public static final String STMTNAME_DEFAULT = "default";
+
     public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
@@ -161,6 +163,28 @@ public class SchemaDocument extends XmlSource
     private static Set refColumnExcludeElementsFromInherit = new HashSet();
     private static Set dialogFieldExcludeColElemsFromInherit = new HashSet();
 
+    static
+    {
+        replaceMacrosInColumnNodes = new HashSet();
+        replaceMacrosInTableNodes = new HashSet();
+        replaceMacrosInIndexNodes = new HashSet();
+
+        for (int i = 0; i < MACROSIN_COLUMNNODES.length; i++)
+            replaceMacrosInColumnNodes.add(MACROSIN_COLUMNNODES[i]);
+        for (int i = 0; i < MACROSIN_TABLENODES.length; i++)
+            replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
+        for (int i = 0; i < MACROSIN_INDEXNODES.length; i++)
+            replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
+
+        for (int i = 0; i < JAVA_RESERVED_WORDS.length; i++)
+            javaReservedWords.add(JAVA_RESERVED_WORDS[i]);
+        for (int i = 0; i < JAVA_RESERVED_TERMS.length; i++)
+            javaReservedTerms.add(JAVA_RESERVED_TERMS[i]);
+
+        refColumnExcludeElementsFromInherit.add(ELEMNAME_GENERATE_ID);
+        dialogFieldExcludeColElemsFromInherit.add("size");
+    }
+
     private Map dataTypeNodes = new HashMap();
     private Map tableTypeNodes = new HashMap();
     private Map indexTypeNodes = new HashMap();
@@ -169,6 +193,7 @@ public class SchemaDocument extends XmlSource
     private Map tableParams = new HashMap(); // key is table name, value is hash-table of key/value pairs
     private Map enumTableDataChoices = new HashMap(); // key is an enum data table name, value is SelectChoicesList
     private Map tableDialogDefns = new HashMap(); // key is uppercase TABLE_NAME, value is DialogDefinition instance
+    private Map tableStatementDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a map of TableStatementDefinition elements
     private Map dialogFieldDefns = new HashMap(); // key is uppercase TABLE_NAME.COLUMN_NAME, value is a DialogFieldDefinition instance
     private Map columnsWithFieldDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a string list with names of columns with field defns
     private DataAccessLayerProperties dalProperties = new DataAccessLayerProperties();
@@ -320,28 +345,6 @@ public class SchemaDocument extends XmlSource
         }
     }
 
-    static
-    {
-        replaceMacrosInColumnNodes = new HashSet();
-        replaceMacrosInTableNodes = new HashSet();
-        replaceMacrosInIndexNodes = new HashSet();
-
-        for (int i = 0; i < MACROSIN_COLUMNNODES.length; i++)
-            replaceMacrosInColumnNodes.add(MACROSIN_COLUMNNODES[i]);
-        for (int i = 0; i < MACROSIN_TABLENODES.length; i++)
-            replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
-        for (int i = 0; i < MACROSIN_INDEXNODES.length; i++)
-            replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
-
-        for (int i = 0; i < JAVA_RESERVED_WORDS.length; i++)
-            javaReservedWords.add(JAVA_RESERVED_WORDS[i]);
-        for (int i = 0; i < JAVA_RESERVED_TERMS.length; i++)
-            javaReservedTerms.add(JAVA_RESERVED_TERMS[i]);
-
-        refColumnExcludeElementsFromInherit.add(ELEMNAME_GENERATE_ID);
-        dialogFieldExcludeColElemsFromInherit.add("size");
-    }
-
     public SchemaDocument()
     {
     }
@@ -422,6 +425,45 @@ public class SchemaDocument extends XmlSource
         }
     }
 
+    public class TableStatementDefinition
+    {
+        protected Element table;
+        protected Element statementDefn;
+
+        public TableStatementDefinition(Element table, Element statementDefn)
+        {
+            this.table = table;
+
+            setAttrValueDefault(statementDefn, "name", STMTNAME_DEFAULT);
+            this.statementDefn = (Element) statementDefn.cloneNode(true);
+        }
+
+        public Element getStatementDefn()
+        {
+            return statementDefn;
+        }
+
+        public Element getTable()
+        {
+            return table;
+        }
+
+        public String getMapKey()
+        {
+            return statementDefn.getAttribute("name").toUpperCase();
+        }
+
+        public Element createStatementElement(Element parent, Element statementRefPlaceholder)
+        {
+            // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
+            overrideAttributes(statementRefPlaceholder, statementDefn);
+            Element clonedStatementDefn = (Element) parent.getOwnerDocument().importNode(statementDefn, true);
+            clonedStatementDefn.setAttribute("_original-tag", statementRefPlaceholder.getNodeName());
+            parent.insertBefore(clonedStatementDefn, statementRefPlaceholder);
+            return clonedStatementDefn;
+        }
+    }
+
     public class TableDialogDefinition
     {
         protected Element table;
@@ -461,7 +503,7 @@ public class SchemaDocument extends XmlSource
             overrideAttributes(tableDialogRefPlaceholder, dialogDefn);
             Element clonedDialogDefn = (Element) parent.getOwnerDocument().importNode(dialogDefn, true);
             clonedDialogDefn.setAttribute("_original-tag", tableDialogRefPlaceholder.getNodeName());
-            clonedDialogDefn.setAttribute("class", "com.netspective.sparx.xif.dal.TableDialog");
+            setAttrValueDefault(clonedDialogDefn, "class", "com.netspective.sparx.xif.dal.TableDialog");
             //Element clonedTableDefn = (Element) parent.getOwnerDocument().importNode(table, true);
             //clonedDialogDefn.appendChild(clonedTableDefn);
             parent.insertBefore(clonedDialogDefn, tableDialogRefPlaceholder);
@@ -576,6 +618,12 @@ public class SchemaDocument extends XmlSource
         return (TableDialogDefinition) tableDialogDefns.get(tableName.toUpperCase());
     }
 
+    public Map getTableStatementDefns(String tableName)
+    {
+        reload();
+        return (Map) tableStatementDefns.get(tableName.toUpperCase());
+    }
+
     /**
      * Given a <field.table-column> element inside a <dialog> element in a DialogManager, return a suitable
      * field.xxx element that will take the place of the <field.table-column> tag. The suitable element is
@@ -617,6 +665,14 @@ public class SchemaDocument extends XmlSource
         reload();
         List result = new ArrayList();
         result.addAll(tableDialogDefns.keySet());
+        return result;
+    }
+
+    public List getNamesOfTablesWithStatementDefns()
+    {
+        reload();
+        List result = new ArrayList();
+        result.addAll(tableStatementDefns.keySet());
         return result;
     }
 
@@ -1117,6 +1173,18 @@ public class SchemaDocument extends XmlSource
                 TableDialogDefinition tableDialogDefinition = new TableDialogDefinition(table, (Element) node);
                 tableDialogDefns.put(tableDialogDefinition.getMapKey(), tableDialogDefinition);
             }
+            else if (nodeName.equals("statement"))
+            {
+                Map statements = (Map) tableStatementDefns.get(tableName.toUpperCase());
+                if(statements == null)
+                {
+                    statements = new HashMap();
+                    tableStatementDefns.put(tableName.toUpperCase(), statements);
+                }
+
+                TableStatementDefinition tableStatementDefinition = new TableStatementDefinition(table, (Element) node);
+                statements.put(tableStatementDefinition.getMapKey(), tableStatementDefinition);
+            }
         }
 
         if (lastColumnSeen != null) lastColumnSeen.setAttribute("is-last", "yes");
@@ -1463,6 +1531,7 @@ public class SchemaDocument extends XmlSource
         columnTableNodes.clear();
         tableParams.clear();
         tableDialogDefns.clear();
+        tableStatementDefns.clear();
         dialogFieldDefns.clear();
         columnsWithFieldDefns.clear();
         dalProperties = new DataAccessLayerProperties();
@@ -1754,6 +1823,61 @@ public class SchemaDocument extends XmlSource
         }
     }
 
+    /**
+     * Looks for a columns="a, b, c" attribute in groupDefn and expands entries into <column name="a">,
+     * <column name="b">, and <column name="c"> under the groupDefn element. Then, it goes through the <column>
+     * tags within the groupDefn and looks up the appropriate column elements and returns them.
+     * @param groupName The name of the group used for error reporting if column "x" is not found
+     * @param table The table for which group is being defined
+     * @param groupDefn The group definition column
+     * @return An array of the actual <column> elements that define the <column> in the table
+     */
+    public Element[] expandAndGetColumnsGroup(String groupName, Element table, Element groupDefn)
+    {
+        List columnsGroup = new ArrayList();
+
+        NodeList columnElems = table.getElementsByTagName("column");
+        int columnsCount = columnElems.getLength();
+
+        String columnsList = groupDefn.getAttribute("columns");
+        if (columnsList.length() > 0)
+        {
+            StringTokenizer st = new StringTokenizer(groupDefn.getAttribute("columns"), ",");
+            while (st.hasMoreTokens())
+            {
+                String accessorColName = st.nextToken().trim();
+                Element colNameElem = table.getOwnerDocument().createElement("column");
+                colNameElem.setAttribute("name", accessorColName);
+                groupDefn.appendChild(colNameElem);
+            }
+        }
+
+        // the @columns is now expanded, check that each of the accessor <column> tags actually exists in the table
+        NodeList accessorColumnElems = groupDefn.getElementsByTagName("column");
+        int accessorColumnsCount = accessorColumnElems.getLength();
+        for (int ac = 0; ac < accessorColumnsCount; ac++)
+        {
+            Element groupColumnElem = (Element) accessorColumnElems.item(ac);
+            String groupColName = groupColumnElem.getAttribute("name");
+            boolean found = false;
+            for (int ic = 0; ic < columnsCount; ic++)
+            {
+                Element columnElem = (Element) columnElems.item(ic);
+                if (columnElem.getAttribute("name").equals(groupColName))
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                errors.add(groupName + " column '" + groupColName + "' not found in table '" + table.getAttribute("name") + "'");
+            }
+        }
+
+        return columnsGroup.size() > 0 ? (Element[]) columnsGroup.toArray(new Element[columnsGroup.size()]) : null;
+    }
+
     public class DataAccessLayerProperties
     {
         private Element generatorElement;
@@ -1957,10 +2081,8 @@ public class SchemaDocument extends XmlSource
         public void prepareTableElements(Element table)
         {
             String tableName = table.getAttribute("name");
-            Document tableDoc = table.getOwnerDocument();
 
             NodeList columns = table.getChildNodes();
-            Element colNameElem = null;
             for (int c = 0; c < columns.getLength(); c++)
             {
                 Node node = columns.item(c);
@@ -1990,49 +2112,14 @@ public class SchemaDocument extends XmlSource
                     Element accessor = (Element) node;
 
                     String methodName = accessor.getAttribute("name");
-                    NodeList columnElems = table.getElementsByTagName("column");
-                    int columnsCount = columnElems.getLength();
-
-                    // if the convenient method <java-dal-accessor name="abc" columns="a,b,c"/> is used, expand to <column name="a">, etc
-                    String columnsList = accessor.getAttribute("columns");
-                    if (columnsList.length() > 0)
+                    Element[] columnsInAccessor = expandAndGetColumnsGroup("Accessor '"+ methodName +"' ", table, accessor);
+                    if(columnsInAccessor != null)
                     {
-                        StringTokenizer st = new StringTokenizer(accessor.getAttribute("columns"), ",");
-                        while (st.hasMoreTokens())
+                        for(int i = 0; i < columnsInAccessor.length; i++)
                         {
-                            String accessorColName = st.nextToken().trim();
-                            colNameElem = tableDoc.createElement("column");
-                            colNameElem.setAttribute("name", accessorColName);
-                            accessor.appendChild(colNameElem);
-                        }
-                    }
-
-                    // the @columns is now expanded, check that each of the accessor <column> tags actually exists in the table
-                    NodeList accessorColumnElems = accessor.getElementsByTagName("column");
-                    int accessorColumnsCount = accessorColumnElems.getLength();
-                    for (int ac = 0; ac < accessorColumnsCount; ac++)
-                    {
-                        Element accessorColumnElem = (Element) accessorColumnElems.item(ac);
-                        String accessorColName = accessorColumnElem.getAttribute("name");
-                        boolean found = false;
-                        for (int ic = 0; ic < columnsCount; ic++)
-                        {
-                            Element columnElem = (Element) columnElems.item(ic);
-                            if (columnElem.getAttribute("name").equals(accessorColName))
-                            {
-                                found = true;
-                                String dataType = columnElem.getAttribute("type");
-                                Element dataTypeElem = (Element) dataTypeNodes.get(dataType);
-                                if (dataTypeElem.getElementsByTagName("java-type").getLength() > 0)
-                                {
-                                    accessor.setAttribute("_gen-has-primitive-params", "yes");
-                                }
-                                break;
-                            }
-                        }
-                        if (!found)
-                        {
-                            errors.add("Accessor '" + methodName + "' column '" + accessorColName + "' not found in table '" + tableName + "'");
+                            Element columnElem = columnsInAccessor[i];
+                            if (columnElem.getElementsByTagName("java-type").getLength() > 0)
+                                accessor.setAttribute("_gen-has-primitive-params", "yes");
                         }
                     }
                 }
