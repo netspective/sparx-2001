@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ClassPathTask.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: ClassPathTask.java,v 1.2 2002-09-04 16:33:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -60,6 +60,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import com.netspective.sparx.BuildConfiguration;
+import com.netspective.sparx.util.ClassPath;
 
 public class ClassPathTask extends Task
 {
@@ -90,17 +91,17 @@ public class ClassPathTask extends Task
     {
         if(listAll)
         {
-            BuildConfiguration.ClassPathInfo[] cpi = BuildConfiguration.getClassPaths();
+            ClassPath.ClassPathInfo[] cpi = ClassPath.getClassPaths();
             for(int i = 0; i < cpi.length; i++)
             {
-                BuildConfiguration.ClassPathInfo info = cpi[i];
+                ClassPath.ClassPathInfo info = cpi[i];
                 log(info.getClassPath().getAbsolutePath() + (info.isValid() ? "" : " (INVALID)"));
             }
         }
 
         if(showLocOfClass != null)
         {
-            log(showLocOfClass + " is " + BuildConfiguration.getClassFileName(showLocOfClass));
+            log(showLocOfClass + " is " + ClassPath.getClassFileName(showLocOfClass));
         }
     }
 }

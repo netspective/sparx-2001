@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: BuildConfigurationTask.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: BuildConfigurationTask.java,v 1.2 2002-09-04 16:33:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -76,7 +76,6 @@ public class BuildConfigurationTask extends Task
         project.setProperty("build.release", Integer.toString(BuildConfiguration.releaseNumber));
         project.setProperty("build.version.major", Integer.toString(BuildConfiguration.versionMajor));
         project.setProperty("build.version.minor", Integer.toString(BuildConfiguration.versionMinor));
-        project.setProperty("build.number", Integer.toString(BuildConfiguration.buildNumber));
 
         project.setProperty("build.libitem.path.prefix", BuildConfiguration.getBuildPathPrefix());
         project.setProperty("build.libitem.file.prefix", BuildConfiguration.getBuildFilePrefix());

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportData.java,v 1.1 2002-08-30 00:31:47 shahid.shah Exp $
+ * $Id: DatabaseImportData.java,v 1.2 2002-09-04 16:33:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -90,6 +90,7 @@ import com.netspective.sparx.xif.dal.xml.ParseContext;
 import com.netspective.sparx.xif.dal.xml.ImportException;
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.BuildConfiguration;
+import com.netspective.sparx.util.ClassPath;
 
 public class DatabaseImportData extends AceServletPage
 {
@@ -146,7 +147,7 @@ public class DatabaseImportData extends AceServletPage
 
         out.write("<table class='data_table'>");
         out.write("<tr class='data_table'><td class='data_table' align=right>Source File:</td><td class='data_table'><font color='green'>"+ sourceFile +"</font></td></tr>");
-        out.write("<tr class='data_table'><td class='data_table' align=right>Schema Class:</td><td class='data_table'><font color='green'>"+ schemaClass.getName() +" ("+ BuildConfiguration.getClassFileName(schemaClass.getName()) +")");
+        out.write("<tr class='data_table'><td class='data_table' align=right>Schema Class:</td><td class='data_table'><font color='green'>"+ schemaClass.getName() +" ("+ ClassPath.getClassFileName(schemaClass.getName()) +")");
 
         Schema schema = null;
         try

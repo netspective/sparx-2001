@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppInitParamsPage.java,v 1.2 2002-08-25 17:33:31 shahid.shah Exp $
+ * $Id: AppInitParamsPage.java,v 1.3 2002-09-04 16:33:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -70,6 +70,7 @@ import org.w3c.dom.Element;
 import com.netspective.sparx.BuildConfiguration;
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.xaf.page.PageContext;
 
 public class AppInitParamsPage extends AceServletPage
@@ -140,12 +141,12 @@ public class AppInitParamsPage extends AceServletPage
         propertiesElem.setAttribute("name", "Classpath (" + Thread.currentThread().getContextClassLoader().getClass().getName() + ")");
         rootElem.appendChild(propertiesElem);
 
-        BuildConfiguration.ClassPathInfo[] classPaths = BuildConfiguration.getClassPaths();
+        ClassPath.ClassPathInfo[] classPaths = ClassPath.getClassPaths();
         if(classPaths != null)
         {
             for(int i = 0; i < classPaths.length; i++)
             {
-                BuildConfiguration.ClassPathInfo cpi = classPaths[i];
+                ClassPath.ClassPathInfo cpi = classPaths[i];
                 propertyElem = doc.createElement("property");
                 addText(propertyElem, "name", cpi.getClassPath().getAbsolutePath());
                 addText(propertyElem, "value", !cpi.isValid() ? "invalid" : (cpi.isDirectory() ? "directory" : (cpi.isJar() ? "JAR" : "ZIP")));
@@ -174,14 +175,14 @@ public class AppInitParamsPage extends AceServletPage
         String className = javax.xml.parsers.DocumentBuilderFactory.newInstance().getClass().getName();
         addText(propertyElem, "name", "XML Document Builder Factory");
         addText(propertyElem, "value", className);
-        addText(propertyElem, "value-detail", BuildConfiguration.getClassFileName(className));
+        addText(propertyElem, "value-detail", ClassPath.getClassFileName(className));
         propertiesElem.appendChild(propertyElem);
 
         propertyElem = doc.createElement("property");
         className = javax.xml.transform.TransformerFactory.newInstance().getClass().getName();
         addText(propertyElem, "name", "XSLT Transformer Factory");
         addText(propertyElem, "value", className);
-        addText(propertyElem, "value-detail", BuildConfiguration.getClassFileName(className));
+        addText(propertyElem, "value-detail", ClassPath.getClassFileName(className));
         propertiesElem.appendChild(propertyElem);
 
         transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);

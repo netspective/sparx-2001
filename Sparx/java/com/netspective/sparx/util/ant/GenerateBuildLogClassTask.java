@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GenerateBuildLogClassTask.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: GenerateBuildLogClassTask.java,v 1.2 2002-09-04 16:33:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -63,8 +63,7 @@ import java.util.Date;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-
-import com.netspective.sparx.BuildConfiguration;
+import com.netspective.sparx.util.ClassPath;
 
 public class GenerateBuildLogClassTask extends Task
 {
@@ -108,6 +107,7 @@ public class GenerateBuildLogClassTask extends Task
             writer.write("package " + logPackageName + ";\n\n");
             writer.write("public class " + logClassName + "\n");
             writer.write("{\n");
+            writer.write("  public final static int    BUILD_NUMBER = " + project.getProperty("build.number") + ";\n");
             writer.write("  public final static String BUILD_HOST_NAME = \"" + localhost.getHostName() + "\";\n");
             writer.write("  public final static String BUILD_HOST_IP = \"" + localhost.getHostAddress() + "\";\n");
             writer.write("  public final static String BUILD_DATE = \"" + buildDate.toString() + "\";\n\n");
@@ -120,10 +120,10 @@ public class GenerateBuildLogClassTask extends Task
             writer.write("  public final static String BUILD_VM_VENDOR = \"" + System.getProperty("java.vm.vendor") + "\";\n\n");
 
             writer.write("  public final static String[] BUILD_CLASS_PATH = new String[] {\n");
-            BuildConfiguration.ClassPathInfo[] cpi = BuildConfiguration.getClassPaths();
+            ClassPath.ClassPathInfo[] cpi = ClassPath.getClassPaths();
             for(int i = 0; i < cpi.length; i++)
             {
-                BuildConfiguration.ClassPathInfo info = cpi[i];
+                ClassPath.ClassPathInfo info = cpi[i];
                 if(i > 0)
                     writer.write(", \n");
                 String path = info.getClassPath().getAbsolutePath();

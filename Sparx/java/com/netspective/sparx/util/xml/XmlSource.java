@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.4 2002-08-25 17:34:09 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.5 2002-09-04 16:33:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -92,6 +92,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import com.netspective.sparx.util.metric.Metric;
+import com.netspective.sparx.util.ClassPath;
 
 public class XmlSource
 {
@@ -164,7 +165,7 @@ public class XmlSource
             return;
 
         String className = cls.getName();
-        String classFileName = com.netspective.sparx.BuildConfiguration.getClassFileName(className);
+        String classFileName = ClassPath.getClassFileName(className);
 
         defnElement.setAttribute(attrPrefix + "class-name", className);
         defnElement.setAttribute(attrPrefix + "class-file-name", classFileName);

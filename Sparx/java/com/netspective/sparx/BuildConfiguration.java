@@ -51,15 +51,10 @@
  */
 
 /**
- * $Id: BuildConfiguration.java,v 1.58 2002-09-03 22:29:19 aye.thu Exp $
+ * $Id: BuildConfiguration.java,v 1.59 2002-09-04 16:33:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 public class BuildConfiguration
 {
@@ -68,8 +63,7 @@ public class BuildConfiguration
 
     public static final int releaseNumber = 2;
     public static final int versionMajor = 0;
-    public static final int versionMinor = 14;
-    public static final int buildNumber = 167;
+    public static final int versionMinor = 15;
 
     static public final int getReleaseNumber()
     {
@@ -88,12 +82,12 @@ public class BuildConfiguration
 
     static public final int getBuildNumber()
     {
-        return buildNumber;
+        return BuildLog.BUILD_NUMBER;
     }
 
     static public final String getBuildPathPrefix()
     {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor + "_" + buildNumber;
+        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor + "_" + BuildLog.BUILD_NUMBER;
     }
 
     static public final String getBuildFilePrefix()
@@ -108,121 +102,16 @@ public class BuildConfiguration
 
     static public final String getVersionAndBuild()
     {
-        return "Version " + getVersion() + " Build " + buildNumber;
+        return "Version " + getVersion() + " Build " + BuildLog.BUILD_NUMBER;
     }
 
     static public final String getProductBuild()
     {
-        return productName + " Version " + getVersion() + " Build " + buildNumber;
+        return productName + " Version " + getVersion() + " Build " + BuildLog.BUILD_NUMBER;
     }
 
     static public final String getVersionAndBuildShort()
     {
-        return "v" + getVersion() + " b" + buildNumber;
-    }
-
-    /**
-     * Prints the absolute pathname of the class file containing the specified class name, as prescribed by
-     * the class path.
-     *
-     * @param className Name of the class.
-     */
-    public static String getClassFileName(String className)
-    {
-
-        String resource = new String(className);
-
-        if(!resource.startsWith("/"))
-            resource = "/" + resource;
-
-        resource = resource.replace('.', '/');
-        resource = resource + ".class";
-
-        java.net.URL classUrl = BuildConfiguration.class.getResource(resource);
-
-        if(classUrl == null)
-            return null;
-        else
-            return classUrl.getFile();
-    }
-
-    static public class ClassPathInfo
-    {
-        private File classPath;
-        private boolean isValid;
-        private boolean isDirectory;
-        private boolean isJar;
-        private boolean isZip;
-
-        public ClassPathInfo(String path)
-        {
-            classPath = new File(path);
-
-            if(classPath.exists())
-            {
-                if(classPath.isDirectory())
-                {
-                    isValid = true;
-                    isDirectory = true;
-                }
-                else
-                {
-                    isValid = true;
-                    String pathLower = path.toLowerCase();
-                    if(pathLower.endsWith(".jar"))
-                        isJar = true;
-                    else if(pathLower.endsWith(".zip"))
-                        isZip = true;
-                    else
-                        isValid = false;
-                }
-            }
-            else
-                isValid = false;
-        }
-
-        public File getClassPath()
-        {
-            return classPath;
-        }
-
-        public boolean isValid()
-        {
-            return isValid;
-        }
-
-        public boolean isDirectory()
-        {
-            return isDirectory;
-        }
-
-        public boolean isJar()
-        {
-            return isJar;
-        }
-
-        public boolean isZip()
-        {
-            return isZip;
-        }
-    }
-
-    public static ClassPathInfo[] getClassPaths()
-    {
-        List classPathList = new ArrayList();
-
-        StringTokenizer tokenizer =
-                new StringTokenizer(System.getProperty("java.class.path"), File.pathSeparator);
-
-        while(tokenizer.hasMoreTokens())
-        {
-            String pathName = tokenizer.nextToken();
-            classPathList.add(new ClassPathInfo(pathName));
-        }
-
-        if(classPathList.size() == 0)
-            return null;
-
-        return (ClassPathInfo[]) classPathList.toArray(new ClassPathInfo[classPathList.size()]);
+        return "v" + getVersion() + " b" + BuildLog.BUILD_NUMBER;
     }
 }
