@@ -51,55 +51,23 @@
  */
 
 /**
- * $Id: PostgreSQLDatabasePolicy.java,v 1.2 2002-11-14 02:57:15 shahbaz.javeed Exp $
+ * $Id: PostgreSQLDatabasePolicy.java,v 1.3 2002-12-05 18:26:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import com.netspective.sparx.util.value.ValueContext;
 
 public class PostgreSQLDatabasePolicy extends BasicDatabasePolicy
 {
-    public Object executeAndGetSingleValue(Connection conn, String sql) throws SQLException
-    {
-        Object value = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try
-        {
-            stmt = conn.createStatement();
-            try
-            {
-                rs = stmt.executeQuery(sql);
-                if(rs.next())
-                    value = rs.getObject(1);
-            }
-            finally
-            {
-                if(rs != null) rs.close();
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new SQLException(e.toString() + " [" + sql + "]");
-        }
-        finally
-        {
-            if(stmt != null) stmt.close();
-        }
-        return value;
-    }
-
     public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
         Object autoIncValue = executeAndGetSingleValue(conn, "select nextval('" + seqOrTableName + "')");
-        if(autoIncValue == null)
+        if (autoIncValue == null)
             throw new SQLException("Unable to obtain next PostgreSQL sequence value from sequence '" + seqOrTableName + "'");
         return autoIncValue;
     }
@@ -107,7 +75,7 @@ public class PostgreSQLDatabasePolicy extends BasicDatabasePolicy
     public Object handleAutoIncPreDmlExecute(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName, List columnNames, List columnValues) throws SQLException
     {
         Object autoIncValue = executeAndGetSingleValue(conn, "select nextval('" + seqOrTableName + "')");
-        if(autoIncValue != null)
+        if (autoIncValue != null)
         {
             columnNames.add(autoIncColumnName);
             columnValues.add(autoIncValue);
@@ -121,11 +89,10 @@ public class PostgreSQLDatabasePolicy extends BasicDatabasePolicy
     {
         return executeAndGetSingleValue(conn, "select currval('" + seqOrTableName + "')");
     }
-	/**
-	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
-	 */
-	public String getDBMSName() {
-		return "postgres";
-	}
+
+    public String getDBMSName()
+    {
+        return "postgres";
+    }
 
 }

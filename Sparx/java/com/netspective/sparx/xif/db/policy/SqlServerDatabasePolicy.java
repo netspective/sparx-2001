@@ -51,100 +51,46 @@
  */
 
 /**
- * $Id: SqlServerDatabasePolicy.java,v 1.4 2002-11-14 02:57:15 shahbaz.javeed Exp $
+ * $Id: SqlServerDatabasePolicy.java,v 1.5 2002-12-05 18:26:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import com.netspective.sparx.util.value.ValueContext;
 
 public class SqlServerDatabasePolicy extends BasicDatabasePolicy
 {
-    public Object executeAndGetSingleValue(Connection conn, String sql) throws SQLException
-    {
-        Object value = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try
-        {
-            stmt = conn.createStatement();
-            try
-            {
-                rs = stmt.executeQuery(sql);
-                if(rs.next())
-                    value = rs.getObject(1);
-            }
-            finally
-            {
-                if(rs != null) rs.close();
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new SQLException(e.toString() + " [" + sql + "]");
-        }
-        finally
-        {
-            if(stmt != null) stmt.close();
-        }
-        return value;
-    }
-
     public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
         return null;
-        //Object autoIncValue = executeAndGetSingleValue(conn, "select "+ seqOrTableName +".nextval from dual");
-        //if(autoIncValue == null)
-        //    throw new SQLException("Unable to obtain next ORACLE sequence value from sequence '"+ seqOrTableName +"'");
-        //return autoIncValue;
     }
 
     public Object handleAutoIncPreDmlExecute(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName, List columnNames, List columnValues) throws SQLException
     {
         return null;
-        //Object autoIncValue = executeAndGetSingleValue(conn, "select "+ seqOrTableName +".nextval from dual");
-        //if(autoIncValue != null)
-        //{
-        //    columnNames.add(autoIncColumnName);
-        //    columnValues.add(autoIncValue);
-        //    return autoIncValue;
-        //}
-        //else
-        //    throw new SQLException("Unable to obtain next ORACLE sequence value from sequence '"+ seqOrTableName +"'");
     }
 
     public Object getAutoIncCurrentValue(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
-        //return executeAndGetSingleValue(conn, "select "+ seqOrTableName +".currval from dual");
         return null;
     }
 
     public boolean retainAutoIncColInDml()
     {
-				return false;
-		}
-
-    public String appendInsertSqlForAutoInc()
-    {
-      return "select @@IDENTITY";
+        return false;
     }
 
     public Object handleAutoIncPostDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName, Object autoIncColumnValue) throws SQLException
     {
-        String sql = "select @@IDENTITY";
-        return executeAndGetSingleValue(conn, sql);
+        return executeAndGetSingleValue(conn, "select @@IDENTITY");
     }
-	/**
-	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
-	 */
-	public String getDBMSName() {
-		return "mssql";
-	}
 
+    public String getDBMSName()
+    {
+        return "mssql";
+    }
 }
