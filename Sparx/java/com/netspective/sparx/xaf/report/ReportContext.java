@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportContext.java,v 1.5 2003-05-08 17:57:51 aye.thu Exp $
+ * $Id: ReportContext.java,v 1.6 2003-05-09 15:06:47 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -306,11 +306,14 @@ public class ReportContext extends ServletValueContext
     public ReportContext(ValueContext vc, Report reportDefn, ReportSkin skin)
     {
         this(vc.getServletContext(), vc.getServlet(), vc.getRequest(), vc.getResponse(), reportDefn, skin);
+        if (vc instanceof DialogContext)
+            setDialogContext((DialogContext)vc);
     }
 
     public ReportContext(QuerySelect select, DialogContext dc, Report reportDefn, ReportSkin skin)
     {
         this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse(), reportDefn, skin);
+        setDialogContext(dc);
     }
 
     public long getFrameFlags()
