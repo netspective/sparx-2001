@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.17 2002-09-06 19:58:55 shahid.shah Exp $
+$Id: app-build.xml,v 1.18 2002-09-07 22:17:45 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -121,7 +121,7 @@ $Id: app-build.xml,v 1.17 2002-09-06 19:58:55 shahid.shah Exp $
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
 
         <available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
-        <property name="app.java.dal.jar.name" value="${app.name}-dcb.jar"/>
+        <property name="app.java.dcb.jar.name" value="${app.name}-dcb.jar"/>
         <property name="app.java.dcb.package" value="app.form.context"/>
         <property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
         <property name="app.java.dcb.jar" value="${app.java.dcb.dir}/${app.java.dcb.jar.name}"/>
