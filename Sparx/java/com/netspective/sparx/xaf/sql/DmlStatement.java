@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DmlStatement.java,v 1.3 2002-11-14 02:57:14 shahbaz.javeed Exp $
+ * $Id: DmlStatement.java,v 1.4 2002-11-22 07:39:03 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -70,15 +70,21 @@ public class DmlStatement
 		public static String DEFAULT_DBMS = "ansi";
 
         Map customSql = new HashMap();
+	    Map haveCustomSqlMap = new HashMap();
 
         public CustomSql(String sql)
         {
             customSql.put(DEFAULT_DBMS, sql);
+	        haveCustomSqlMap.put(DEFAULT_DBMS, new Boolean(true));
         }
         
         public CustomSql(String dbms, String sql)
         {
             customSql.put(dbms, sql);
+	        haveCustomSqlMap.put(dbms, new Boolean(true));
+
+			Boolean haveCustomSql = (Boolean) haveCustomSqlMap.get(DEFAULT_DBMS);
+	        if (!haveCustomSql.booleanValue()) haveCustomSqlMap.put(DEFAULT_DBMS, new Boolean(true));
         }
         
 		public String getCustomSql()
@@ -88,7 +94,16 @@ public class DmlStatement
 		
         public String getCustomSql(String dbms)
         {
-        	return (String) customSql.get(dbms);
+			String returnValue;
+	        Boolean haveCustomSql = (Boolean) haveCustomSqlMap.get(dbms);
+	        Boolean haveCustomSqlDefault = (Boolean) haveCustomSqlMap.get(DEFAULT_DBMS);
+
+			if (null == haveCustomSql || haveCustomSql.booleanValue())
+				returnValue = (String) customSql.get(DEFAULT_DBMS);
+	        else
+				returnValue = (String) customSql.get(dbms);
+
+	        return returnValue;
         }
     }
 
@@ -272,7 +287,7 @@ public class DmlStatement
             Object value = columnValues.get(i);
             if(value instanceof CustomSql)
             {
-                values.append(((CustomSql) value).customSql.get(dbms));
+                values.append(((CustomSql) value).getCustomSql(dbms));
             }
             else
             {
@@ -312,7 +327,7 @@ public class DmlStatement
 
             if(value instanceof CustomSql)
             {
-                sets.append(((CustomSql) value).customSql.get(dbms));
+                sets.append(((CustomSql) value).getCustomSql(dbms));
             }
             else
             {

@@ -3,55 +3,55 @@
  *
  * Netspective Corporation permits redistribution, modification and use
  * of this file in source and binary form ("The Software") under the
- * Netspective Source License ("NSL" or "The License"). The following 
- * conditions are provided as a summary of the NSL but the NSL remains the 
+ * Netspective Source License ("NSL" or "The License"). The following
+ * conditions are provided as a summary of the NSL but the NSL remains the
  * canonical license and must be accepted before using The Software. Any use of
- * The Software indicates agreement with the NSL. 
+ * The Software indicates agreement with the NSL.
  *
  * 1. Each copy or derived work of The Software must preserve the copyright
  *    notice and this notice unmodified.
  *
- * 2. Redistribution of The Software is allowed in object code form only 
- *    (as Java .class files or a .jar file containing the .class files) and only 
- *    as part of an application that uses The Software as part of its primary 
- *    functionality. No distribution of the package is allowed as part of a software 
- *    development kit, other library, or development tool without written consent of 
- *    Netspective Corporation. Any modified form of The Software is bound by 
+ * 2. Redistribution of The Software is allowed in object code form only
+ *    (as Java .class files or a .jar file containing the .class files) and only
+ *    as part of an application that uses The Software as part of its primary
+ *    functionality. No distribution of the package is allowed as part of a software
+ *    development kit, other library, or development tool without written consent of
+ *    Netspective Corporation. Any modified form of The Software is bound by
  *    these same restrictions.
- * 
- * 3. Redistributions of The Software in any form must include an unmodified copy of 
+ *
+ * 3. Redistributions of The Software in any form must include an unmodified copy of
  *    The License, normally in a plain ASCII text file unless otherwise agreed to,
  *    in writing, by Netspective Corporation.
  *
- * 4. The names "Sparx" and "Netspective" are trademarks of Netspective 
- *    Corporation and may not be used to endorse products derived from The 
- *    Software without without written consent of Netspective Corporation. "Sparx" 
- *    and "Netspective" may not appear in the names of products derived from The 
+ * 4. The names "Sparx" and "Netspective" are trademarks of Netspective
+ *    Corporation and may not be used to endorse products derived from The
+ *    Software without without written consent of Netspective Corporation. "Sparx"
+ *    and "Netspective" may not appear in the names of products derived from The
  *    Software without written consent of Netspective Corporation.
  *
- * 5. Please attribute functionality to Sparx where possible. We suggest using the 
+ * 5. Please attribute functionality to Sparx where possible. We suggest using the
  *    "powered by Sparx" button or creating a "powered by Sparx(tm)" link to
  *    http://www.netspective.com for each application using Sparx.
  *
- * The Software is provided "AS IS," without a warranty of any kind. 
+ * The Software is provided "AS IS," without a warranty of any kind.
  * ALL EXPRESS OR IMPLIED REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
  * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
  * OR NON-INFRINGEMENT, ARE HEREBY DISCLAIMED.
  *
  * NETSPECTIVE CORPORATION AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING 
+ * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING
  * THE SOFTWARE. IN NO EVENT WILL NETSPECTIVE OR ITS LICENSORS BE LIABLE
  * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
  * CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
  * REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
  * INABILITY TO USE THE SOFTWARE, EVEN IF HE HAS BEEN ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGES.      
+ * OF SUCH DAMAGES.
  *
  * @author Shahid N. Shah
  */
- 
+
 /**
- * $Id: AbstractRow.java,v 1.4 2002-11-14 02:57:14 shahbaz.javeed Exp $
+ * $Id: AbstractRow.java,v 1.5 2002-11-22 07:39:03 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -80,12 +80,12 @@ public abstract class AbstractRow implements Row
 {
     protected Table rowTable;
     protected Column[] rowColumns;
-	protected Map haveSqlExprDataMap = new HashMap();
-	protected Map sqlExprDataMap = new HashMap();
+		protected Map haveSqlExprDataMap = new HashMap();
+		protected Map sqlExprDataMap = new HashMap();
     protected boolean[] haveSqlExprData;
-//    protected String[] sqlExprData;
 
-	public static String DEFAULT_DBMS = "ansi";
+		public static String DEFAULT_DBMS = "ansi";
+    public static String NO_SQL_EXPRESSION = "No SQL Expression";
 
     public AbstractRow(com.netspective.sparx.xif.dal.Column[] columns)
     {
@@ -102,31 +102,31 @@ public abstract class AbstractRow implements Row
         return null;
     }
 
-	public boolean haveSqlExprData (String dbms, int column) {
-		if (null == haveSqlExprData) {
-			haveSqlExprData = new boolean [getColumns().length];
-			return false;
-		}
+    public boolean haveSqlExprData(String dbms, int column)
+    {
+				boolean returnValue = false;
 
-		if (! haveSqlExprData[column]) return false;
-		
-		boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
+        if (null == this.haveSqlExprData)
+        {
+					// The Master haveSqlExprData doesnt exist - Create it...
+            this.haveSqlExprData = new boolean[getColumns().length];
+        }
 
-		if (null == haveSqlExprData) {
-			haveSqlExprData = new boolean [getColumns().length];
-			haveSqlExprDataMap.put(dbms, haveSqlExprData);
-		}
+        boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
 
-		return haveSqlExprData[column];
-	}
-	
+        if (null == haveSqlExprData)
+        {
+            haveSqlExprData = new boolean[getColumns().length];
+            haveSqlExprDataMap.put(dbms, haveSqlExprData);
+        }
+
+        return haveSqlExprData[column];
+    }
+
 	public boolean haveSqlExprData (int column) {
-		if (null == haveSqlExprData)
-			haveSqlExprData = new boolean [getColumns().length];
-
-		return haveSqlExprData[column];
+		return haveSqlExprData (DEFAULT_DBMS, column);
 	}
-	
+
 	public void setHaveSqlExprData (String dbms, int column, boolean value) {
 		// First set the value of specified in the dbms specified for the column specified
 		boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
@@ -136,53 +136,53 @@ public abstract class AbstractRow implements Row
 
 		haveSqlExprData[column] = value;
 		haveSqlExprDataMap.put(dbms, haveSqlExprData);
-		
+
 		// Now check to see whether the value of the current column is the same
 		// across all dbms values or not.  If so, change the global haveSqlExprData
 		// value to the value passed into this method
 		Set dbmsSet = sqlExprDataMap.keySet();
 		Iterator dbmsIter = dbmsSet.iterator();
 		boolean changeGlobal = true;
-		
+
 		while (changeGlobal && dbmsIter.hasNext()) {
 			haveSqlExprData = (boolean[]) haveSqlExprDataMap.get((String) dbmsIter.next());
-			
+
 			if (null == haveSqlExprData) {
 				haveSqlExprData = new boolean [getColumns().length];
 				haveSqlExprDataMap.put(dbms, haveSqlExprData);
 			}
-			
+
 			if (haveSqlExprData[column] != value) changeGlobal = false;
 		}
-		
+
 		if (changeGlobal) this.haveSqlExprData[column] = value;
 	}
-	
+
 	public String sqlExprDataToString (int column) {
 		StringBuffer str = new StringBuffer();
-		
+
 		if (! haveSqlExprData[column]) return str.toString();
-		
+
 		Set dbmsSet = sqlExprDataMap.keySet();
 		Iterator dbmsIter = dbmsSet.iterator();
-		
+
 		while (dbmsIter.hasNext()) {
 			String dbms = (String) dbmsIter.next();
-			
+
 			haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
-						
+
 			if (null != haveSqlExprData && haveSqlExprData[column]) {
 				String sqlExprData = getCustomSqlExpr (column, dbms);
 				str.append("[DBMS: " + dbms + ", SQL Expr: " + sqlExprData + "]");
 			}
 		}
-		
+
 		return str.toString();
 	}
-	
+
 	public void setSqlExprData (String dbms, int column, String sqlExpr) {
 		String[] sqlExprData = (String[]) sqlExprDataMap.get(dbms);
-		
+
         if(null == sqlExprData)
             sqlExprData = new String[getColumns().length];
 
@@ -190,17 +190,27 @@ public abstract class AbstractRow implements Row
 
         sqlExprDataMap.put(dbms, sqlExprData);
 	}
-	public String getSqlExprData (String dbms, int column) {
-		String[] sqlExprData = (String[]) sqlExprDataMap.get(dbms);
-		String returnValue = null;
-		
-        if(null == sqlExprData) {
+
+    public String getSqlExprData(String dbms, int column)
+    {
+        String[] sqlExprData = (String[]) sqlExprDataMap.get(dbms);
+        String[] sqlExprDataDefault = (String[]) sqlExprDataMap.get(DEFAULT_DBMS);
+
+        if (null == sqlExprData)
+        {
             sqlExprData = new String[getColumns().length];
             sqlExprDataMap.put(dbms, sqlExprData);
         }
 
-        return sqlExprData[column];
-	}
+        String returnValue;
+
+        if (haveSqlExprData(dbms, column))
+            returnValue = sqlExprData[column];
+        else
+            returnValue = sqlExprDataDefault[column];
+
+        return returnValue;
+    }
 
     /**
      * Sets the SQL expression that should be passed into the database in place of a bind parameter. This
@@ -363,7 +373,7 @@ public abstract class AbstractRow implements Row
 	 */
 	public DmlStatement createDeleteDml(Table table, String whereCond) {
 		BasicDatabasePolicy dbPolicy = new BasicDatabasePolicy();
-		
+
 		return createDeleteDml(table, dbPolicy, whereCond);
 	}
 
@@ -372,7 +382,7 @@ public abstract class AbstractRow implements Row
 	 */
 	public DmlStatement createInsertDml(Table table) {
 		BasicDatabasePolicy dbPolicy = new BasicDatabasePolicy();
-		
+
 		return createInsertDml(table, dbPolicy);
 	}
 
@@ -381,7 +391,7 @@ public abstract class AbstractRow implements Row
 	 */
 	public DmlStatement createUpdateDml(Table table, String whereCond) {
 		BasicDatabasePolicy dbPolicy = new BasicDatabasePolicy();
-		
+
 		return createUpdateDml(table, dbPolicy, whereCond);
 	}
 
