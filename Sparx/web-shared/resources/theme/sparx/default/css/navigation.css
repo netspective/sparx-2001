@@ -29,6 +29,7 @@
 .menu-level-1-table-start { background: url(../images/level1/level1tab-open.gif) no-repeat left bottom }
 .menu-level-1-end  { background: url(../images/level1/level1tab-end.gif) no-repeat left bottom }
 .menu-level-1-start { border-bottom: 1px solid black }
+.menu-level-1-fill { border-bottom: 1px solid black }
 .menu-level-1-active-end    { background: url(../images/level1/level1tab-active-cap.gif) no-repeat right bottom;color: white; font-weight: bold; font-size: 10px; font-family: Verdana; text-decoration: none;  padding-top: 3px; padding-bottom: 4px; height: 19px }
 .menu-level-1-active-start { color: white; font-weight: bold; font-size: 10px; font-family: Verdana; text-decoration: none; background: url(../images/level1/level1tab-active-open.gif) no-repeat right bottom; padding-top: 3px; padding-bottom: 4px; height: 19px }
 .menu-level-1-active   { color: white; font-weight: bold; font-size: 10px; font-family: Verdana; text-decoration: none }
