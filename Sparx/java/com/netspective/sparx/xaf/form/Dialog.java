@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.17 2003-01-01 19:26:44 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.18 2003-02-03 00:37:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -960,7 +960,13 @@ public class Dialog
     public void handlePostExecute(Writer writer, DialogContext dc) throws IOException
     {
         dc.setExecuteStageHandled(true);
-        dc.performDefaultRedirect(writer);
+        dc.performDefaultRedirect(writer, null);
+    }
+
+    public void handlePostExecute(Writer writer, DialogContext dc, String redirect) throws IOException
+    {
+        dc.setExecuteStageHandled(true);
+        dc.performDefaultRedirect(writer, redirect);
     }
 
     public void handlePostExecuteException(Writer writer, DialogContext dc, String message, Exception e) throws IOException
@@ -968,7 +974,7 @@ public class Dialog
         dc.setExecuteStageHandled(true);
         LogManager.recordException(this.getClass(), "handlePostExecuteException", message, e);
         dc.setRedirectDisabled(true);
-        dc.performDefaultRedirect(writer);
+        dc.performDefaultRedirect(writer, null);
         writer.write(message + e.toString());
     }
 
@@ -1115,7 +1121,7 @@ public class Dialog
         if(importsCode.length() > 0)
             code.append(importsCode.toString());
         code.append("import com.netspective.sparx.xaf.form.*;\n\n");
-        code.append("public class " + com.netspective.sparx.util.xml.XmlSource.xmlTextToJavaIdentifier(getNameFromXml(), true) + "Context extends DialogContext\n");
+        code.append("public class " + com.netspective.sparx.util.xml.XmlSource.xmlTextToJavaIdentifier(getNameFromXml(), true) + "Context extends com.netspective.sparx.xaf.form.DialogContext\n");
         code.append("{\n");
         code.append(membersCode.toString());
         code.append("}\n");
