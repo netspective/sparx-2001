@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.32 2003-01-30 16:07:44 shahbaz.javeed Exp $
+ * $Id: DialogContext.java,v 1.33 2003-02-03 00:38:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -545,9 +545,9 @@ public class DialogContext extends ServletValueContext
         return dialog.getNextActionUrl(this, defaultUrl);
     }
 
-    public void performDefaultRedirect(Writer writer) throws IOException
+    public void performDefaultRedirect(Writer writer, String redirect) throws IOException
     {
-        String redirectToUrl = request.getParameter(DEFAULT_REDIRECT_PARAM_NAME);
+        String redirectToUrl = redirect != null ? redirect : request.getParameter(DEFAULT_REDIRECT_PARAM_NAME);
         if(redirectToUrl == null)
         {
             redirectToUrl = request.getParameter(dialog.getPostExecuteRedirectUrlParamName());
@@ -558,6 +558,7 @@ public class DialogContext extends ServletValueContext
         if(redirectDisabled || redirectToUrl == null)
         {
             writer.write("<p><b>Redirect is disabled</b>.");
+            writer.write("<br><code>redirect</code> method parameter is <code>"+ redirect +"</code>");
             writer.write("<br><code>redirect</code> URL parameter is <code>"+ request.getParameter(DEFAULT_REDIRECT_PARAM_NAME) +"</code>");
             writer.write("<br><code>redirect</code> form field is <code>"+ request.getParameter(dialog.getPostExecuteRedirectUrlParamName()) +"</code>");
             writer.write("<br><code>getNextActionUrl</code> method result is <code>"+ getNextActionUrl(null) +"</code>");
@@ -2144,6 +2145,28 @@ public class DialogContext extends ServletValueContext
     {
         return ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
                 dataSource, ConnectionContext.CONNCTXTYPE_TRANSACTION);
+    }
+
+    /**
+     * Retrieves a connection context for the default data source
+     *
+     * @return ConnectionContext
+     */
+    public ConnectionContext getConnectionContextAuto() throws NamingException, SQLException
+    {
+        return this.getConnectionContextAuto(this.getServletContext().getInitParameter("default-data-source"));
+    }
+
+    /**
+     * Retrieves a connection context
+     *
+     * @param dataSource data source name
+     * @return ConnectionContext
+     */
+    public ConnectionContext getConnectionContextAuto(String dataSource) throws NamingException, SQLException
+    {
+        return ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
+                dataSource, ConnectionContext.CONNCTXTYPE_AUTO);
     }
 
     /**
