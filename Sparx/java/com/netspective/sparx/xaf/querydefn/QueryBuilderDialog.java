@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.2 2002-02-07 01:09:10 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -87,6 +87,7 @@ import com.netspective.sparx.xaf.report.ReportDestination;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.QueryDefnSelectsListValue;
 import com.netspective.sparx.util.value.StaticValue;
@@ -470,7 +471,8 @@ public class QueryBuilderDialog extends Dialog
         DatabaseContext dbc = DatabaseContextFactory.getContext(dc);
         try
         {
-            ResultSet rs = select.execute(dbc, dc);
+            ResultInfo ri = select.execute(dbc, dc);
+            ResultSet rs = ri.getResultSet();
 
             if(rs != null)
             {

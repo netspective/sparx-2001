@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QuerySelect.java,v 1.2 2002-02-07 01:09:10 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -74,6 +74,7 @@ import org.w3c.dom.NodeList;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xaf.report.ReportBanner;
 import com.netspective.sparx.xaf.report.ReportFrame;
+import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
@@ -385,7 +386,7 @@ public class QuerySelect
         addWhereExpr(new SqlWhereExpression(expr, connector));
     }
 
-    public ResultSet execute(DatabaseContext dc, ValueContext vc, Object[] overrideParams) throws NamingException, SQLException
+    public ResultInfo execute(DatabaseContext dc, ValueContext vc, Object[] overrideParams) throws NamingException, SQLException
     {
         if(getSql(vc) == null)
             return null;
@@ -437,12 +438,12 @@ public class QuerySelect
         }
 
         if(stmt.execute())
-            return stmt.getResultSet();
+            return new ResultInfo(conn, stmt);
         else
             return null;
     }
 
-    public ResultSet execute(DatabaseContext dc, ValueContext vc) throws NamingException, SQLException
+    public ResultInfo execute(DatabaseContext dc, ValueContext vc) throws NamingException, SQLException
     {
         return execute(dc, vc, null);
     }

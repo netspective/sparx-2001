@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetScrollState.java,v 1.2 2002-02-01 04:02:12 thua Exp $
+ * $Id: ResultSetScrollState.java,v 1.3 2002-02-07 01:09:10 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -63,7 +63,7 @@ import java.sql.Statement;
 
 public class ResultSetScrollState
 {
-    private ResultSet resultSet;
+    private ResultInfo resultInfo;
     private boolean resultSetScrollable;
     private int rowsPerPage;         // used for both scrollable and non-scrollable result sets
     private int activePage;          // used for both scrollable and non-scrollable
@@ -74,9 +74,11 @@ public class ResultSetScrollState
     private int rowsProcessed;       // used only for non-scrollable
     private boolean reachedEndOnce;  // used only for non-scrollable
 
-    public ResultSetScrollState(ResultSet rs, int rowsPerPage) throws SQLException
+    public ResultSetScrollState(ResultInfo ri, int rowsPerPage) throws SQLException
     {
-        this.resultSet = rs;
+        ResultSet rs = ri.getResultSet();
+
+        this.resultInfo = ri;
         this.rowsPerPage = rowsPerPage;
         this.resultSetScrollable = rs != null ? (rs.getType() != ResultSet.TYPE_FORWARD_ONLY) : false;
         this.totalRows = -1;
@@ -87,7 +89,7 @@ public class ResultSetScrollState
         this.haveMoreRows = true;
         this.reachedEndOnce = false;
 
-        if(resultSetScrollable && resultSet != null)
+        if(resultSetScrollable && resultInfo != null)
         {
             rs.last();
 
@@ -102,7 +104,7 @@ public class ResultSetScrollState
 
     public final ResultSet getResultSet()
     {
-        return resultSet;
+        return resultInfo.getResultSet();
     }
 
     public final int getActivePage()
@@ -157,25 +159,27 @@ public class ResultSetScrollState
 
     public final boolean hasMoreRows() throws SQLException
     {
-        return resultSetScrollable ? (!resultSet.isAfterLast()) : haveMoreRows;
+        return resultSetScrollable ? (!resultInfo.getResultSet().isAfterLast()) : haveMoreRows;
     }
 
     public void scrollToActivePage() throws SQLException
     {
         activePageRowStart = ((activePage - 1) * rowsPerPage) + 1;
+        ResultSet resultSet = resultInfo.getResultSet();
         resultSet.absolute(activePageRowStart);
         resultSet.previous();
     }
 
-    public void scrollToActivePage(ResultSet rs) throws SQLException
+    public void scrollToActivePage(ResultInfo ri) throws SQLException
     {
         if(resultSetScrollable)
             throw new RuntimeException("No need to call scrollToActivePage(ResultSet rs) for scrollable cursors. Call scrollToActivePage() instead.");
 
-        resultSet = rs;
+        resultInfo = ri;
         activePageRowStart = ((activePage - 1) * rowsPerPage);
         haveMoreRows = true;
 
+        ResultSet resultSet = ri.getResultSet();
         if(activePageRowStart > 1)
         {
             int atRow = 1;
@@ -208,17 +212,9 @@ public class ResultSetScrollState
 
     public void close() throws SQLException
     {
-        Statement stmt = resultSet.getStatement();
-        Connection conn = stmt.getConnection();
-        resultSet.close();
-        resultSet = null;
-        stmt.close();
-        stmt = null;
-        if(conn.getAutoCommit() == true)
-        {
-            conn.close();
-            conn = null;
-        }
+        if(resultInfo != null)
+            resultInfo.close();
+        resultInfo = null;
     }
 
     protected void finalize() throws Throwable
