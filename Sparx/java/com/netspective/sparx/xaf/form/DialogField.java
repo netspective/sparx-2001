@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.25 2003-04-21 22:03:00 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.26 2003-05-23 13:41:39 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -156,6 +156,7 @@ public class DialogField
 	private String submitOnBlurPartnerField;
 	private String submitOnBlurCustomScript;
 	private String scanCodeIgnoreCase;
+    private String accessKey;
 
 	/**
 	 * Creates a dialog field
@@ -318,7 +319,9 @@ public class DialogField
 
 		if (elem.getAttribute("double-entry").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_DOUBLEENTRY);
-
+        String aKey = elem.getAttribute("access-key");
+        if (aKey != null && aKey.length() > 0)
+            setAccessKey(aKey);
 		importChildrenFromXml(elem);
 	}
 
@@ -572,6 +575,24 @@ public class DialogField
 	{
 		dc.addErrorMessage(parent != null ? parent : this, message);
 	}
+
+    /**
+     * Gets the dialog field's access key
+     * @return String
+     */
+    public String getAccessKey()
+    {
+        return accessKey;
+    }
+
+    /**
+     * Sets the dialog field's access key
+     * @param accessKey
+     */
+    public void setAccessKey(String accessKey)
+    {
+        this.accessKey = accessKey;
+    }
 
 	/**
 	 * Gets the parent dialog field
