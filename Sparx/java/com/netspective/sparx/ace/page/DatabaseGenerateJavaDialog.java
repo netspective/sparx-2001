@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseGenerateJavaDialog.java,v 1.7 2002-10-20 15:51:15 shahid.shah Exp $
+ * $Id: DatabaseGenerateJavaDialog.java,v 1.8 2002-12-23 04:24:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -70,205 +70,53 @@ import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogDirector;
 import com.netspective.sparx.xaf.form.DialogField;
-import com.netspective.sparx.xaf.form.field.SelectField;
 import com.netspective.sparx.xaf.form.field.TextField;
-import com.netspective.sparx.util.value.FilesystemEntriesListValue;
-import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xif.SchemaDocument;
 
 public class DatabaseGenerateJavaDialog extends Dialog
 {
-    public final static String DAL_SCHEMA_CONFIG_PARAM_NAME  = "app.dal.schema.class-name";
-    public final static String DAL_SCHEMA_DEFAULT_CLASS_NAME = "app.dal.DataAccessLayer";
-
-    protected FilesystemEntriesListValue generatorsList;
-
     protected TextField sourceFileField;
-    protected TextField destRootField;
-
-    protected TextField dataTypesPkgField;
-    protected TextField tableTypesPkgField;
-    protected TextField tablesPkgField;
-    protected TextField domainsPkgField;
-    protected TextField listenersPkgField;
-    protected TextField rowsPkgField;
-    protected TextField rowsListPkgField;
-    protected TextField schemaPkgField;
-    protected TextField schemaClassNameField;
-
-    protected SelectField dataTypesGeneratorField;
-    protected SelectField tableTypesGeneratorField;
-    protected SelectField tablesGeneratorField;
-    protected SelectField domainsGeneratorField;
-    protected SelectField listenersGeneratorField;
-    protected SelectField rowsGeneratorField;
-    protected SelectField rowsListGeneratorField;
-    protected SelectField schemaGeneratorField;
-    protected SelectField xsdGeneratorField;
+    protected TextField stylesheetsRootField;
 
     public DatabaseGenerateJavaDialog()
     {
         super("schemagen", "Generate Data Access Layer (DAL)");
 
-        generatorsList = new FilesystemEntriesListValue();
-        generatorsList.setRootPath("config-expr:${"+ com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX +"xslt-path}/schema-gen/java-gen");
-        generatorsList.setFilter("\\.xsl$");
-
         sourceFileField = new TextField("source_file", "Source file");
-        sourceFileField.setSize(60);
+        sourceFileField.setSize(80);
         sourceFileField.setFlag(DialogField.FLDFLAG_REQUIRED);
         sourceFileField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config:app.schema.source-file"));
 
-        destRootField = new TextField("dest_root", "Destination Root");
-        destRootField.setSize(50);
-        destRootField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        destRootField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${config:app.schema.root-path}/java"));
-
-        dataTypesPkgField = new TextField("data_types_pkg", "Datatypes Package");
-        dataTypesPkgField.setSize(40);
-        dataTypesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        dataTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.column"));
-
-        tableTypesPkgField = new TextField("table_types_pkg", "Tabletypes Package");
-        tableTypesPkgField.setSize(40);
-        tableTypesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tableTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.table.type"));
-
-        tablesPkgField = new TextField("tables_pkg", "Tables Package");
-        tablesPkgField.setSize(40);
-        tablesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tablesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.table"));
-
-        domainsPkgField = new TextField("domains_pkg", "Domains Package");
-        domainsPkgField.setSize(40);
-        domainsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        domainsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain"));
-
-        listenersPkgField = new TextField("listeners_pkg", "Listeners Package");
-        listenersPkgField.setSize(40);
-        listenersPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        listenersPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.listener"));
-
-        rowsPkgField = new TextField("rows_pkg", "Rows Package");
-        rowsPkgField.setSize(40);
-        rowsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        rowsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain.row"));
-
-        rowsListPkgField = new TextField("rows_list_pkg", "Rows List Package");
-        rowsListPkgField.setSize(40);
-        rowsListPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        rowsListPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal.domain.rows"));
-
-        schemaPkgField = new TextField("schema_pkg", "Schema Package");
-        schemaPkgField.setSize(40);
-        schemaPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        schemaPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.dal"));
-
-        schemaClassNameField = new TextField("schema_class_name", "Schema Class Name");
-        schemaClassNameField.setSize(40);
-        schemaClassNameField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        schemaClassNameField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("DataAccessLayer"));
-        schemaClassNameField.setFlag(DialogField.FLDFLAG_COLUMN_BREAK_AFTER);
-
-        dataTypesGeneratorField = new SelectField("data_types_gen", "Datatypes Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        dataTypesGeneratorField.setDefaultValue(new StaticValue("data-type-generator.xsl"));
-
-        tableTypesGeneratorField = new SelectField("table_types_gen", "Tabletypes Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        tableTypesGeneratorField.setDefaultValue(new StaticValue("table-type-generator.xsl"));
-
-        tablesGeneratorField = new SelectField("tables_gen", "Tables Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        tablesGeneratorField.setDefaultValue(new StaticValue("table-generator.xsl"));
-
-        domainsGeneratorField = new SelectField("domains_gen", "Domains Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        domainsGeneratorField.setDefaultValue(new StaticValue("domain-generator.xsl"));
-
-        listenersGeneratorField = new SelectField("listeners_gen", "Listeners Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        listenersGeneratorField.setDefaultValue(new StaticValue("listener-generator.xsl"));
-
-        rowsGeneratorField = new SelectField("rows_gen", "Rows Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        rowsGeneratorField.setDefaultValue(new StaticValue("row-generator.xsl"));
-
-        rowsListGeneratorField = new SelectField("rows_list_gen", "Rows List Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        rowsListGeneratorField.setDefaultValue(new StaticValue("rows-generator.xsl"));
-
-        schemaGeneratorField = new SelectField("schema_gen", "Schema Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        schemaGeneratorField.setDefaultValue(new StaticValue("schema-generator.xsl"));
-
-        xsdGeneratorField = new SelectField("xsd_gen", "XSD Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
-        xsdGeneratorField.setDefaultValue(new StaticValue("xsd-generator.xsl"));
-
-        //ListValueSource allTables = ValueSourceFactory.getListValueSource("schema-tables:.*");
-        //tablesField = new SelectField("tables", "Tables", SelectField.SELECTSTYLE_MULTIDUAL, allTables);
-        //tablesField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        //tablesField.setDefaultListValue(allTables);
-        //tablesField.setSize(8);
+        stylesheetsRootField = new TextField("style_sheets_root", "Stylesheet root");
+        stylesheetsRootField.setSize(80);
+        stylesheetsRootField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        stylesheetsRootField.setDefaultValue(ValueSourceFactory.getSingleValueSource("config-expr:${"+ com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX +"xslt-path}/schema-gen/java-gen"));
 
         addField(sourceFileField);
-        addField(destRootField);
-
-        addField(dataTypesPkgField);
-        addField(tableTypesPkgField);
-        addField(tablesPkgField);
-        addField(domainsPkgField);
-        addField(listenersPkgField);
-        addField(rowsPkgField);
-        addField(rowsListPkgField);
-        addField(schemaPkgField);
-        addField(schemaClassNameField);
-
-        addField(dataTypesGeneratorField);
-        addField(tableTypesGeneratorField);
-        addField(tablesGeneratorField);
-        addField(domainsGeneratorField);
-        addField(listenersGeneratorField);
-        addField(rowsGeneratorField);
-        addField(rowsListGeneratorField);
-        addField(schemaGeneratorField);
-        addField(xsdGeneratorField);
+        addField(stylesheetsRootField);
 
         setDirector(new DialogDirector());
     }
 
     public void execute(Writer writer, DialogContext dc) throws IOException
     {
-        SchemaDocument schemaDoc = SchemaDocFactory.getDoc(dc.getValue("source_file"));
+        String srcFile = dc.getValue(sourceFileField);
+        SchemaDocument schemaDoc = SchemaDocFactory.getDoc(srcFile);
         if(schemaDoc == null)
             //return "Schema file '" + dc.getValue("source_file") + "' not found.";
-            writer.write("Schema file '" + dc.getValue("source_file") + "' not found.");
+            writer.write("Schema file '" + srcFile + "' not found.");
 
-        String generatorsListRootPath = generatorsList.getRootPath().getValue(dc);
-        SchemaDocument.ObjectRelationalGenerator orGenerator = new SchemaDocument.ObjectRelationalGenerator();
-        orGenerator.setDestRoot(dc.getValue("dest_root"));
-
-        orGenerator.setDataTypesPkg(dc.getValue("data_types_pkg"));
-        orGenerator.setTableTypesPkg(dc.getValue("table_types_pkg"));
-        orGenerator.setTablesPkg(dc.getValue("tables_pkg"));
-        orGenerator.setDomainsPkg(dc.getValue("domains_pkg"));
-        orGenerator.setListenersPkg(dc.getValue("listeners_pkg"));
-        orGenerator.setRowsPkg(dc.getValue("rows_pkg"));
-        orGenerator.setRowsListPkg(dc.getValue("rows_list_pkg"));
-        orGenerator.setSchemaPkg(dc.getValue("schema_pkg"));
-        orGenerator.setSchemaClassName(dc.getValue("schema_class_name"));
-
-        orGenerator.setDataTypesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("data_types_gen"));
-        orGenerator.setTableTypesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("table_types_gen"));
-        orGenerator.setTablesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("tables_gen"));
-        orGenerator.setDomainsGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("domains_gen"));
-        orGenerator.setListenersGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("listeners_gen"));
-        orGenerator.setRowsGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_gen"));
-        orGenerator.setRowsListGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_list_gen"));
-        orGenerator.setSchemaGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("schema_gen"));
-        orGenerator.setXsdGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("xsd_gen"));
-
+        String stylesheetsRootPath = dc.getValue(stylesheetsRootField);
         StringBuffer output = new StringBuffer("<p align='center'>");
+        SchemaDocument.DataAccessLayerGenerator dalGen = schemaDoc.getDataAccessLayerGenerator(stylesheetsRootPath);
         try
         {
-            orGenerator.generate(schemaDoc);
-            output.append("Generated " + orGenerator.getDataTypesGeneratedCount() + " data types, ");
-            output.append(orGenerator.getTableTypesGeneratedCount() + " table types, and ");
-            output.append(orGenerator.getTablesGeneratedCount() + " tables.");
+            dalGen.generate();
+            output.append("Generated " + dalGen.getDataTypesGeneratedCount() + " data types, ");
+            output.append(dalGen.getTableTypesGeneratedCount() + " table types, and ");
+            output.append(dalGen.getTablesGeneratedCount() + " tables.");
         }
         catch(TransformerConfigurationException e)
         {
@@ -278,7 +126,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
         }
         catch(TransformerException e)
         {
-            List messages = orGenerator.getMessages();
+            List messages = dalGen.getMessages();
             if(messages.size() > 0)
             {
                 output.append("<ol>");
@@ -291,7 +139,6 @@ public class DatabaseGenerateJavaDialog extends Dialog
             e.printStackTrace(new PrintWriter(stack));
             output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
         }
-        //return output.toString();
         writer.write(output.toString());
     }
 
