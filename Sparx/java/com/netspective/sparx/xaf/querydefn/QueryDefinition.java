@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryDefinition.java,v 1.3 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: QueryDefinition.java,v 1.4 2002-11-30 16:38:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -70,6 +70,7 @@ import org.w3c.dom.NodeList;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
 
 public class QueryDefinition
 {
@@ -285,32 +286,34 @@ public class QueryDefinition
             if(childName.equals("field"))
             {
                 Element fieldElem = (Element) node;
-                QueryField field = new QueryField();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(fieldElem.getAttribute("class"), QueryField.class, true);
+                QueryField field = (QueryField) instanceGen.getInstance();
                 field.importFromXml(fieldElem);
                 defineField(field);
             }
             else if(childName.equals("join"))
             {
                 Element joinElem = (Element) node;
-                QueryJoin join = new QueryJoin();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(joinElem.getAttribute("class"), QueryJoin.class, true);
+                QueryJoin join = (QueryJoin) instanceGen.getInstance();
                 join.importFromXml(joinElem);
                 defineJoin(join);
             }
             else if(childName.equals("select"))
             {
-                selectElems.add((Element) node);
+                selectElems.add(node);
             }
             else if(childName.equals("select-dialog"))
             {
-                selectDialogElems.add((Element) node);
+                selectDialogElems.add(node);
             }
             else if(childName.equals("default-condition"))
             {
-                condElems.add((Element) node);
+                condElems.add(node);
             }
             else if(childName.equals("default-where-expr"))
             {
-                whereExprElems.add((Element) node);
+                whereExprElems.add(node);
             }
         }
 
@@ -324,8 +327,10 @@ public class QueryDefinition
             defaultConditions = new ArrayList();
             for(Iterator i = condElems.iterator(); i.hasNext();)
             {
-                QueryCondition cond = new QueryCondition();
-                cond.importFromXml(this, (Element) i.next());
+                Element condElem = (Element) i.next();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(condElem.getAttribute("class"), QueryCondition.class, true);
+                QueryCondition cond = (QueryCondition) instanceGen.getInstance();
+                cond.importFromXml(this, condElem);
                 defineDefaultCondition(cond);
             }
         }
@@ -335,8 +340,10 @@ public class QueryDefinition
             defaultWhereExprs = new ArrayList();
             for(Iterator i = whereExprElems.iterator(); i.hasNext();)
             {
-                SqlWhereExpression expr = new SqlWhereExpression();
-                expr.importFromXml((Element) i.next());
+                Element whereExprElem = (Element) i.next();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(whereExprElem.getAttribute("class"), SqlWhereExpression.class, true);
+                SqlWhereExpression expr = (SqlWhereExpression) instanceGen.getInstance();
+                expr.importFromXml(whereExprElem);
                 defineWhereExpression(expr);
             }
         }
@@ -346,8 +353,11 @@ public class QueryDefinition
 
         for(Iterator i = selectElems.iterator(); i.hasNext();)
         {
-            QuerySelect select = new QuerySelect(this);
-            select.importFromXml((Element) i.next());
+            Element selectElem = (Element) i.next();
+            ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(selectElem.getAttribute("class"), QuerySelect.class, true);
+            QuerySelect select = (QuerySelect) instanceGen.getInstance();
+            select.setQueryDefn(this);
+            select.importFromXml(selectElem);
             defineSelect(select);
         }
 

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.5 2002-08-17 15:12:11 shahid.shah Exp $
+ * $Id: QuerySelect.java,v 1.6 2002-11-30 16:38:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -63,7 +63,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.naming.NamingException;
 
@@ -78,6 +77,7 @@ import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.ClassPath;
 
 public class QuerySelect
 {
@@ -104,6 +104,11 @@ public class QuerySelect
         this.queryDefn = queryDefn;
         this.isDirty = true;
         this.distinctRows = true;
+    }
+
+    public void setQueryDefn(QueryDefinition queryDefn)
+    {
+        this.queryDefn = queryDefn;
     }
 
     public void setAlwaysDirty(boolean flag)
@@ -483,8 +488,6 @@ public class QuerySelect
 
     public void importFromXml(Element elem)
     {
-        Map queryFields = queryDefn.getFieldsMap();
-
         name = elem.getAttribute("id");
         caption = elem.getAttribute("heading");
         String value = elem.getAttribute("distinct");
@@ -524,13 +527,15 @@ public class QuerySelect
             }
             else if(childName.equals("condition"))
             {
-                QueryCondition cond = new QueryCondition();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(((Element) node).getAttribute("class"), QueryCondition.class, true);
+                QueryCondition cond = (QueryCondition) instanceGen.getInstance();
                 cond.importFromXml(queryDefn, (Element) node);
                 addCondition(cond);
             }
             else if(childName.equals("where-expr"))
             {
-                SqlWhereExpression expr = new SqlWhereExpression();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(((Element) node).getAttribute("class"), SqlWhereExpression.class, true);
+                SqlWhereExpression expr = (SqlWhereExpression) instanceGen.getInstance();
                 expr.importFromXml((Element) node);
                 addWhereExpr(expr);
             }
