@@ -60,18 +60,18 @@ Setup instructions:
     <target name="generate-xsdn" depends="init">
     	<delete file="${normalized-xif-xsd-file}"/>
     	<delete file="${normalized-xaf-xsd-file}"/>
-		<style basedir="." destdir="." extension=".xsdn" style="xsd-normalize.xsl">
+		<xslt basedir="." destdir="." extension=".xsdn" style="xsd-normalize.xsl" processor="trax">
 			<include name="xif.xsd"/>
 			<include name="xaf.xsd"/>
-		</style>
+		</xslt>
     </target>
 
     <target name="generate-html" depends="init,clean">
-		<style basedir="." destdir="${html-path}" extension=".html" style="${default-style-sheet}" force="yes">
+		<xslt basedir="." destdir="${html-path}" extension=".html" style="${default-style-sheet}" force="yes" processor="trax">
 			<include name="**/*.xml"/>
 			<exclude name="build.xml"/>
 			<exclude name="structure.xml"/>
-		</style>
+		</xslt>
     </target>
 
     <target name="generate-all" depends="init,clean,generate-value-sources-html,generate-xsdn,generate-html"/>

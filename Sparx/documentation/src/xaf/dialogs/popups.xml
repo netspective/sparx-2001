@@ -13,7 +13,7 @@
 	<p/>
 	<channel xsdn-element="/xaf/dialogs/dialog/field.text/popup"/>
 	<p/>
-	<channel heading="Sample Dialog" type="xml-source" include="../../../cura/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_07']"/>
+	<channel heading="Sample Dialog" type="xml-source" sample-app-file="/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_07']"/>
 	<p/>
-	<channel heading="Sample Popup HTML" type="xml-source" include="../../../cura/tests/test-popup.html"/>
+	<channel heading="Sample Popup HTML" type="xml-source" sample-app-file="/tests/test-popup.html"/>
 </page>

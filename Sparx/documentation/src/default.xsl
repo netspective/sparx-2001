@@ -9,6 +9,7 @@
 <xsl:param name="active-menu-tab-color">#EEEEEE</xsl:param>
 <xsl:param name="channel-color">#660000</xsl:param>
 <xsl:param name="channel-frame-color">#E7B89F</xsl:param>
+<xsl:param name="sample-app-home">../../../cura/</xsl:param>
 
 <xsl:variable name="structure" select="document('structure.xml')/structure"/>
 <xsl:variable name="home-page" select="$structure/page[@name = 'index']"/>
@@ -590,25 +591,30 @@
 				<td>
 					<font face="courier,arial,helvetica" size="2" style="font-size:8pt">
 					<xsl:choose>
+						<xsl:when test="@sample-app-file and not(@element)">
+							<xsl:call-template name="xml-element">
+								<xsl:with-param name="element" select="document(concat($sample-app-home, @sample-app-file))"/>
+							</xsl:call-template>
+						</xsl:when>
 						<xsl:when test="@include and not(@element)">
 							<xsl:call-template name="xml-element">
 								<xsl:with-param name="element" select="document(@include)"/>
 							</xsl:call-template>
 						</xsl:when>
-						<xsl:when test="@include and @element">
-							<xsl:variable name="xml-element" select="xalan:evaluate(concat('document(@include)', @element))"/>
-							<DIV STYLE="margin-left:2em;text-indent:-2em">
-								&lt;<font color="navy"><xsl:value-of select="name($xml-element)"/></font>
-								<xsl:if test="$xml-element/@*"><xsl:text> </xsl:text></xsl:if>
-								<xsl:for-each select="$xml-element/@*">
-									<font color="red"><xsl:value-of select="name()"/></font>=&quot;<font color="green"><xsl:value-of select="."/></font>&quot;
-									<xsl:if test="position() != last()"><xsl:text> </xsl:text></xsl:if>
-								</xsl:for-each><xsl:if test="count(*) = 0">/</xsl:if>&gt;
-								<xsl:call-template name="xml-element">
-									<xsl:with-param name="element" select="$xml-element"/>
-								</xsl:call-template>
-								<xsl:if test="count($xml-element/*) > 0">&lt;/<font color="navy"><xsl:value-of select="name($xml-element)"/></font>&gt;</xsl:if>
-							</DIV>
+						<xsl:when test="(@include and @element) or (@sample-app-file and @element)">
+							<xsl:variable name="xml-element">
+								<xsl:choose>
+									<xsl:when test="@include">
+										<xsl:copy-of select="xalan:evaluate(concat('document(@include)', @element))"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:copy-of select="xalan:evaluate(concat('document(concat($sample-app-home, @sample-app-file))', @element))"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:call-template name="xml-element">
+								<xsl:with-param name="element" select="xalan:nodeset($xml-element)"/>
+							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:call-template name="xml-element">
@@ -784,7 +790,8 @@
 	<xsl:param name="root-dir"/>
 	<xsl:param name="resources-dir"/>
 	<xsl:param name="images-dir"/>
-	<xsl:apply-templates select="document(@file)">
+	<xsl:variable name="file-contents" select="document(@file)"/>
+	<xsl:apply-templates select="xalan:nodeset($file-contents)">
 		<xsl:with-param name="active-page" select="$active-page"/>
 		<xsl:with-param name="root-dir" select="$root-dir"/>
 		<xsl:with-param name="resources-dir" select="$resources-dir"/>
@@ -1101,7 +1108,9 @@
 			</ol>
 			</xsl:if>
 			<xsl:if test="@name = 'Last Update'">
+			<!--
 			<xsl:value-of select="$file-date"/>
+			-->
 			</xsl:if>
 			<xsl:apply-templates/>
 		</td>

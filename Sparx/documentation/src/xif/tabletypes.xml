@@ -18,9 +18,9 @@
 
 	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/tabletype" describe-children="/*"/>
 	<p/>
-	<channel heading="Sample Default Tabletype" type="xml-source" include="../../../cura/WEB-INF/schema/tabletypes.xml" element="/schema/tabletype[@name = 'Default']"/>
+	<channel heading="Sample Default Tabletype" type="xml-source" sample-app-file="/WEB-INF/schema/tabletypes.xml" element="/schema/tabletype[@name = 'Default']"/>
 	<p/>
-	<channel heading="Sample Enumeration Tabletype" type="xml-source" include="../../../cura/WEB-INF/schema/tabletypes.xml" element="/schema/tabletype[@name = 'Enumeration']"/>
+	<channel heading="Sample Enumeration Tabletype" type="xml-source" sample-app-file="/WEB-INF/schema/tabletypes.xml" element="/schema/tabletype[@name = 'Enumeration']"/>
 	<p/>
-	<channel heading="Sample Status Tabletype" type="xml-source" include="../../../cura/WEB-INF/schema/tabletypes.xml" element="/schema/tabletype[@name = 'Status']"/>
+	<channel heading="Sample Status Tabletype" type="xml-source" sample-app-file="/WEB-INF/schema/tabletypes.xml" element="/schema/tabletype[@name = 'Status']"/>
 </page>

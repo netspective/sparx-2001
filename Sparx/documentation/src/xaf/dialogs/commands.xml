@@ -57,7 +57,7 @@
 			<code>request.setAttribute("data_cmd", "<b>edit</b>");</code><br/>
 		</channel>
 		<p/>
-		<channel heading="Sample Dialog with Data Command Conditionals" type="xml-source" include="../../../cura/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_10']"/>
+		<channel heading="Sample Dialog with Data Command Conditionals" type="xml-source" sample-app-file="/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_10']"/>
 
 	</section>
 </page>

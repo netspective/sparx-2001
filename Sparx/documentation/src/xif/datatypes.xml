@@ -26,11 +26,11 @@
 
 	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/datatype" describe-children="/*"/>
 	<p/>
-	<channel heading="Basic Text Datatype Definition" type="xml-source" include="../../../cura/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'text']"/>
+	<channel heading="Basic Text Datatype Definition" type="xml-source" sample-app-file="/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'text']"/>
 	<p/>
-	<channel heading="Numeric Datatype Definition" type="xml-source" include="../../../cura/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'integer']"/>
+	<channel heading="Numeric Datatype Definition" type="xml-source" sample-app-file="/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'integer']"/>
 	<p/>
-	<channel heading="Date Datatype Definition" type="xml-source" include="../../../cura/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'date']"/>
+	<channel heading="Date Datatype Definition" type="xml-source" sample-app-file="/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'date']"/>
 	<p/>
-	<channel heading="Composite Datatype Definition" type="xml-source" include="../../../cura/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'duration']"/>
+	<channel heading="Composite Datatype Definition" type="xml-source" sample-app-file="/WEB-INF/schema/datatypes.xml" element="/schema/datatype[@name = 'duration']"/>
 </page>

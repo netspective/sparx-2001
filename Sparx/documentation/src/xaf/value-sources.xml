@@ -55,6 +55,6 @@
 	</section>
 
 	<channel heading="Pre-defined Value Sources">
-		<include file="xaf/value-sources.inc"/>
+		<include file="value-sources.inc"/>
 	</channel>
 </page>

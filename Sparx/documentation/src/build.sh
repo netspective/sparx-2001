@@ -1,11 +1,19 @@
 #!/bin/sh
 
+# $Id: build.sh,v 1.3 2002-08-19 16:53:01 shahid.shah Exp $
+
+# **************************************************************************
+# ** This script should be be run from the SPARX_HOME/documentation/src   **
+# ** directory. It is basically a "launcher" for Ant and the actual work  **
+# ** is done in the build.xml file.                                       **
+# **************************************************************************
+
 BUILD_FILE=build.xml
 SPARX_HOME=`pwd`/../../
 SPARX_REDIST_HOME=$SPARX_HOME/lib/redist
 
 SPARX_JAR=$SPARX_HOME/lib/sparx.jar
-ANT_JAR=$SPARX_REDIST_HOME/ant.jar
+ANT_JAR=$SPARX_REDIST_HOME/ant.jar:$SPARX_REDIST_HOME/ant-optional.jar
 XERCES_JAR=$SPARX_REDIST_HOME/xerces.jar
 XALAN_JAR=$SPARX_REDIST_HOME/xalan.jar
 OROMATCHER_JAR=$SPARX_REDIST_HOME/oro.jar

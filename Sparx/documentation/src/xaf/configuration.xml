@@ -58,5 +58,5 @@
 	<channel
 		heading="Extended examples (standard configuration.xml file)"
 		type="xml-source"
-		include="../../../cura/WEB-INF/configuration.xml"/>
+		sample-app-file="/WEB-INF/configuration.xml"/>
 </page>

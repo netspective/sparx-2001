@@ -1,13 +1,34 @@
 @echo off
 
-set SPARX_HOME=C:\Projects\Sparx
+REM $Id: build.bat,v 1.3 2002-08-19 16:53:01 shahid.shah Exp $
+
+REM **************************************************************************
+REM ** This script should be be run from the SPARX_HOME\documentation\src   **
+REM ** directory. It is basically a "launcher" for Ant and the actual work  **
+REM ** is done in the build.xml file.                                       **
+REM **************************************************************************
+
+REM **************************************************************************
+REM ** NOTE: The command "for %%D in (.) do set BASEDIR" will only work in  **
+REM ** Windows NT/2k/XP. If you are not running under Windows NT/2k/XP then **
+REM ** you need to replace the line with with                               **
+REM **    set BASEDIR=[your path name]                                      **
+REM ** The SPARX_HOME, if not set, is assumed to be two levels above this   **
+REM ** directory                                                            **
+REM **************************************************************************
+
+for %%D in (.) do set BASEDIR=%%~fD
+
+if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\java\jdk1.3.1
+if "%SPARX_HOME%" == "" set SPARX_HOME=%BASEDIR%\..\..
+
+echo JAVA_HOME is %JAVA_HOME%
+echo SPARX_HOME is %SPARX_HOME%
+
 set BUILD_FILE=build.xml
-set BASE_DIR=%SPARX_HOME%\documentation\src
-set SPARX_REDIST_HOME=D:\shared\utils\java\lib\sparx-redist
+set SPARX_REDIST_HOME=%SPARX_HOME%\lib\redist
 
-set JAVA_HOME=C:\utils\java\jdk1.3.1
-set ANT_HOME=D:\shared\utils\java\lib\jakarta-ant-1.4.1
-
+set ANT_JAR=%SPARX_REDIST_HOME%\ant.jar;%SPARX_REDIST_HOME%\ant-optional.jar
 set XERCES_JAR=%SPARX_REDIST_HOME%\xerces.jar
 set XALAN_JAR=%SPARX_REDIST_HOME%\xalan.jar
 set OROMATCHER_JAR=%SPARX_REDIST_HOME%\oro.jar
@@ -22,4 +43,4 @@ if exist "%JAVA_HOME%\lib\classes.zip" set JAVACP=%CLASSPATH%;%JAVA_HOME%\lib\cl
 
 set USE_CLASS_PATH=%APP_CLASSES%;%XERCES_JAR%;%SPARX_JAR%;%OROMATCHER_JAR%;%LOG4J_JAR%;%SERVLETAPI_JAR%;%JDBC2X_JAR%;%XALAN_JAR%;%JAVACP%
 
-java -Dant.home=%ANT_HOME% -classpath %USE_CLASS_PATH%;%ANT_HOME%\lib\ant.jar;%ANT_HOME%\lib\ant-optional.jar org.apache.tools.ant.Main -Dbasedir=%BASE_DIR% -buildfile %BUILD_FILE% %1 %2 %3 %4 %5
+java -classpath %USE_CLASS_PATH%;%ANT_JAR% org.apache.tools.ant.Main -Dbasedir=%BASEDIR% -buildfile %BUILD_FILE% %1 %2 %3 %4 %5

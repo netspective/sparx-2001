@@ -12,14 +12,14 @@
 		can use the <code>default</code> attribute to specify a single or list value source that
 		will bind dynamic data to the control.
 		<p/>
-		<channel type="xml-source" include="../../../cura/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_14']"/>
+		<channel type="xml-source" sample-app-file="/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_14']"/>
 		<p/>
 		<image name="xaf-binding-dialog"/>
 	</section>
 
-	<channel heading="Sample SQL (query:org.name-only)" type="xml-source" include="../../../cura/WEB-INF/sql/app-org-sql.xml" element="/xaf/sql-statements/statement[@name='name-only']"/>
+	<channel heading="Sample SQL (query:org.name-only)" type="xml-source" sample-app-file="/WEB-INF/sql/app-org-sql.xml" element="/xaf/sql-statements/statement[@name='name-only']"/>
 
-	<channel heading="Sample SQL (query:org.registration)" type="xml-source" include="../../../cura/WEB-INF/sql/app-org-sql.xml" element="/xaf/sql-statements/statement[@name='registration']"/>
+	<channel heading="Sample SQL (query:org.registration)" type="xml-source" sample-app-file="/WEB-INF/sql/app-org-sql.xml" element="/xaf/sql-statements/statement[@name='registration']"/>
 
-	<channel heading="Sample SQL (query:org.classification)" type="xml-source" include="../../../cura/WEB-INF/sql/app-org-sql.xml" element="/xaf/sql-statements/statement[@name='classification']"/>
+	<channel heading="Sample SQL (query:org.classification)" type="xml-source" sample-app-file="/WEB-INF/sql/app-org-sql.xml" element="/xaf/sql-statements/statement[@name='classification']"/>
 </page>

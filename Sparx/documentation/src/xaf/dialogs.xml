@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<page name="xaf/dialogs">
+<page name="xaf/dialogs" xmlns:jsp='http://just/a/sample' xmlns:app='http://just/a/sample' xmlns:xaf='http://just/a/sample'>
 	<summary>
 		The XAF refers to HTML forms as "Dialogs" because it handles the two-way
 		interaction between browsers and users completely; this includes data persistence,
