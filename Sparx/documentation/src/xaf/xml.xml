@@ -52,7 +52,7 @@
 		<configuration>
 			<property name="system.projects-root" value="C:/Projects"/>
 			<property name="framework.root-path" value="${system.projects-root}/Framework"/>
-			<property name="app.project-root" value="${system.projects-root}/web-cura"/>
+			<property name="app.project-root" value="${system.projects-root}/cura"/>
 			<properties name="framework.ace.transform">
 				<property name="dml" value="${framework.ace.xslt-path}/article-transform.xsl"/>
 				<property name="tpml" value="${framework.ace.xslt-path}/test-plan-transform.xsl"/>

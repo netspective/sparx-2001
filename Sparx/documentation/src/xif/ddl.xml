@@ -15,7 +15,7 @@
 	<center><image name="ace-schema-doc-ddl"/></center>
 	</section>
 
-	<channel heading="Sample XIF Table" type="xml-source" include="../../../web-cura/Database/schema-src/person.xml" element="/schema/table[@name = 'Person']"/>
+	<channel heading="Sample XIF Table" type="xml-source" include="../../../cura/WEB-INF/schema/person.xml" element="/schema/table[@name = 'Person']"/>
 
 	<channel heading="Sample Generated DDL"><pre>
 create table Person (
