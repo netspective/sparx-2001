@@ -30,15 +30,15 @@ public class PoolmanDatabaseContext implements DatabaseContext
 
 	public final Connection getConnection(String dataSourceId) throws NamingException, SQLException
 	{
-	    // load the PoolMan JDBC Driver
         try
 	    {
-            Class.forName("com.codestudio.sql.PoolMan").newInstance();
+		    // load the PoolMan JDBC Driver
+            Class.forName("com.codestudio.sql.PoolMan");
 	    }
-        catch (Exception e)
-        {
-            throw new SQLException("Poolman ClassNotFoundException");
-        }
+		catch(ClassNotFoundException e)
+		{
+            throw new SQLException(e.toString());
+		}
 	    connection = DriverManager.getConnection("jdbc:poolman://" + dataSourceId);
 
 		return connection;
