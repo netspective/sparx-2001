@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.33 2003-02-03 00:38:15 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.34 2003-02-04 20:34:48 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -978,6 +978,12 @@ public class DialogContext extends ServletValueContext
             setValidationStage(VALSTAGE_IGNORE);
 
         String autoExec = request.getParameter(Dialog.PARAMNAME_AUTOEXECUTE);
+        if (autoExec == null || autoExec.length() == 0)
+        {
+            // if no autoexec is defined in the request parameter, look for it also in the request attribute
+            autoExec = (String) request.getAttribute(Dialog.PARAMNAME_AUTOEXECUTE);
+        }
+
         if(autoExec != null && !autoExec.equals("no"))
         {
             activeMode = dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
@@ -1097,6 +1103,15 @@ public class DialogContext extends ServletValueContext
     }
 
     /**
+     *  Sets the active mode of the dialog
+     * @param mode
+     */
+    public void setActiveMode(char mode)
+    {
+        activeMode = mode;
+    }
+
+    /**
      * Returns what the next mode of the dialog is
      *
      * @return char Mode
@@ -1106,6 +1121,13 @@ public class DialogContext extends ServletValueContext
         return nextMode;
     }
 
+    /**
+     * Set the next mode of the dialog
+     */
+    public void setNextMode(char mode)
+    {
+        nextMode = mode;
+    }
     /**
      * Indicates whether or not the dialog is in input mode
      *
