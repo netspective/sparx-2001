@@ -8,7 +8,6 @@
 				from item, category
 				where category_id = category.id
 		</statement -->
-
 		<statement name="getGiftPicture">
 				select name, caption
 				from gift, category
@@ -140,14 +139,14 @@
          </params>
       </statement>
       <statement name="user_list">
-				select id, 'Edit' as Edit, 'Delete' as Delete, first_name, middle_name, last_name, caption, email_addr, phone
+				select user.id, 'Edit' as Edit, 'Delete' as Delete, first_name, middle_name, last_name, caption, email_addr, phone
 				from relationship, user
 				where user.relationship_id = relationship.id AND
 				user.id >= 0
 				<report heading="User List">
 				<column index="0" display="no"/>
-				<column index="1" url="create-app-url:/EditUser.jsp?id=${0}&amp;data_cmd=edit"/>
-				<column index="2" url="create-app-url:/EditUser.jsp?id=${0}&amp;data_cmd=delete"/>
+				<column index="1" url="create-app-url:/AdminEditUser.jsp?id=${0}&amp;data_cmd=edit"/>
+				<column index="2" url="create-app-url:/AdminEditUser.jsp?id=${0}&amp;data_cmd=delete"/>
 				<column index="3" heading="First Name"/>
 				<column index="4" heading="Middle Name"/>
 				<column index="5" heading="Last Name"/>
@@ -195,7 +194,10 @@
 		<field id="user_lname" caption="It" join="user" column="last_name"/>
         <field id="picture_path" caption="Picture" join="gift" column="picture_path"/>
 		<field id="update" caption="Update" column="'Update'">
-			<report heading="Update" url="create-app-url:/detailForm.jsp?data_cmd=edit&amp;id=${1}&amp;s_category=${form:s_category}&amp;s_status=${form:s_status}"/>
+			<report heading="Update" url="create-app-url:/detailForm.jsp?data_cmd=edit&amp;id=${2}&amp;s_category=${form:s_category}&amp;s_status=${form:s_status}"/>
+		</field>
+        <field id="delete" caption="Delete" column="'Delete'">
+			<report heading="Delete" url="create-app-url:/detailForm.jsp?data_cmd=delete&amp;id=${2}&amp;s_category=${form:s_category}&amp;s_status=${form:s_status}"/>
 		</field>
 		<field id="add_to_list" caption="Add to Gift List" column="'Add'">
 			<report heading="Add To List" url="create-app-url:/MyGiftList.jsp?id=${1}&amp;user_id=${session:person-id}"/>
@@ -210,6 +212,7 @@
 			<field.select caption="Gift Status" name="s_status" choices="schema-enum:Status" prepend-blank="yes"/>
 			<select heading="GIFTS">
 				<display field="update"/>
+                <display field="delete"/>
 				<display field="gift_id"/>
 				<display field="name"/>
 				<display field="s_category"/>
