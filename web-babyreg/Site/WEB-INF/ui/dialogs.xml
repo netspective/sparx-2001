@@ -3,7 +3,7 @@
 	<register-field tag-name="field.image" class="app.field.ImageField"/>
 	<dialogs package="Gift">
 		<dialog name="DetailGift" heading="Gift Detail Screen" retain-params="*" loop="append">
-			<field.text name="name" caption="Gift Name">
+			<field.text name="name" caption="Gift Name" required="yes">
 				<client-js event="lose-focus" type="extends" js-expr="var name = getControl(activeDialog,'_dc.name');
                                                                       var picture = getControl(activeDialog,'_dc.picture_path');
                                                                       var category = getControl(activeDialog,'_dc.category_id');
@@ -28,7 +28,7 @@
 			<field.select name="status_id" caption="Status" choices="schema-enum:Status"/>
 			<field.select name="user_id" caption="Who Picked it" choices="query:User.combo_user_list"/>
 			<field.separator/>
-            <field.composite name="age_range" caption="Age Range" show-child-caption="yes">
+            <field.composite name="age_range" caption="Age Range" show-child-caption="yes" required="yes">
                <field.text name="begin" caption="From" size="2" max-length="2"/>
                <field.text name="end" caption="To" size="2" max-length="2"/>
                <field.select name="unit" choices="schema-enum:Age_Range_Unit"/>
