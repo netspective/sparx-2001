@@ -241,9 +241,9 @@ public class SelectField extends DialogField
 		{
 			SelectChoice choice = (SelectChoice) i.next();
 			if(choice.selected)
-				selectOptionsSelected.append("<option value='"+ choice.value +"'>"+ choice.caption +"</option>\n");
+				selectOptionsSelected.append("<option value=\""+ choice.value +"\">"+ choice.caption +"</option>\n");
 			else
-				selectOptions.append("<option value='"+ choice.value +"'>"+ choice.caption +"</option>\n");
+				selectOptions.append("<option value=\""+ choice.value +"\">"+ choice.caption +"</option>\n");
 		}
 
 		return
@@ -295,7 +295,7 @@ public class SelectField extends DialogField
 				{
 					if(html.length() > 0)
 						html.append("<br>");
-					html.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'><span id='"+ getQualifiedName() +"'>" + choice.caption + "</span>");
+					html.append("<input type='hidden' name='"+ id +"' value=\""+ choice.value +"\"><span id='"+ getQualifiedName() +"'>" + choice.caption + "</span>");
 				}
 			}
 		}
@@ -305,7 +305,7 @@ public class SelectField extends DialogField
 			{
 				SelectChoice choice = (SelectChoice) i.next();
 				if(choice.selected)
-					html.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'>");
+					html.append("<input type='hidden' name='"+ id +"' value=\""+ choice.value +"\">");
 			}
 		}
 
@@ -346,7 +346,7 @@ public class SelectField extends DialogField
 						SelectChoice choice = (SelectChoice) i.next();
 						if(options.length() > 0)
 							options.append("<br>");
-						options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+						options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
 						itemIndex++;
 					}
 				}
@@ -355,7 +355,7 @@ public class SelectField extends DialogField
 					while(i.hasNext())
 					{
 						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
+						options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
 						itemIndex++;
 					}
 				}
@@ -369,7 +369,7 @@ public class SelectField extends DialogField
 						SelectChoice choice = (SelectChoice) i.next();
 						if(options.length() > 0)
 							options.append("<br>");
-						options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+						options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
 						itemIndex++;
 					}
 				}
@@ -378,7 +378,7 @@ public class SelectField extends DialogField
 					while(i.hasNext())
 					{
 						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
+						options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
 						itemIndex++;
 					}
 				}
@@ -396,7 +396,7 @@ public class SelectField extends DialogField
 						{
 							if(options.length() > 0)
 								options.append(", ");
-							options.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'>");
+							options.append("<input type='hidden' name='"+ id +"' value=\""+ choice.value +"\">");
 							options.append(choice.caption);
 						}
 					}
@@ -419,7 +419,7 @@ public class SelectField extends DialogField
 					while(i.hasNext())
 					{
 						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<option value='"+ choice.value +"' "+ (choice.selected ? "selected" : "") + ">"+ choice.caption +"</option>");
+						options.append("<option value=\""+ choice.value +"\" "+ (choice.selected ? "selected" : "") + ">"+ choice.caption +"</option>");
 					}
 
 					if(appendBlank)

@@ -174,7 +174,7 @@ public class TextField extends DialogField
 
 		if(isReadOnly(dc))
 		{
-			return "<input type='hidden' name='"+ getId() +"' value='" + value + "'><span id='"+ getQualifiedName() +"'>" + value + "</span>";
+			return "<input type='hidden' name='"+ getId() +"' value=\"" + value + "\"><span id='"+ getQualifiedName() +"'>" + value + "</span>";
 		}
         else if (isBrowserReadOnly(dc))
         {

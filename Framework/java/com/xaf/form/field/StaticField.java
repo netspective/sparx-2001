@@ -25,6 +25,6 @@ public class StaticField extends TextField
 	public String getControlHtml(DialogContext dc)
 	{
 		String value = dc.getValue(this);
-		return "<input type='hidden' name='"+ getId() +"' value='" + (value != null ? value : "") + "'><span id='"+ getQualifiedName() +"'>" + value + "</span>";
+		return "<input type='hidden' name='"+ getId() +"' value=\"" + (value != null ? value : "") + "\"><span id='"+ getQualifiedName() +"'>" + value + "</span>";
 	}
 }
