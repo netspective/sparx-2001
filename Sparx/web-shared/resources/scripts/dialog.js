@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.17 2003-04-12 00:27:14 aye.thu Exp $
+ * $Id: dialog.js,v 1.18 2003-04-14 15:23:18 aye.thu Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -1021,7 +1021,7 @@ function controlOnBlur(control, event)
 			retval = field.type.loseFocus(field, control);
 	}
 
-	if(retval && control.value != "" && field.submitOnBlur)
+	if(control.value != "" && field.submitOnBlur)
 	{
 		submitOnblur(field, control);
 	}
@@ -1157,17 +1157,17 @@ function TextField_valueChanged(field, control)
 
 	if (control.value.length > 0)
 	{
-        if (field.choices != '')
+        if (field.validValues)
         {
             var valid = false;
-            for (k in field.choices)
+            for (k in field.validValues)
             {
-                if (field.choices[k] == control.value)
+                if (field.validValues[k] == control.value)
                     valid = true;
             }
             if (valid == false)
             {
-                field.alertMessage(control, control.name + ": Entered field value '" + control.value + "' is not valid. ");
+                field.alertMessage(control, "value '" + control.value + "' is not valid. ");
                 return false;
             }
         }
@@ -1192,7 +1192,7 @@ function TextField_onKeyPress(field, control, event)
 	}
 	return true;
 }
-/*
+
 function TextField_isValid(field, control)
 {
 	if(field.isRequired() && control.value.length == 0)
@@ -1202,7 +1202,7 @@ function TextField_isValid(field, control)
 	}
 	if (control.value.length > 0)
 	{
-        if (field.validValues != '')
+        if (field.validValues)
         {
             var valid = false;
             for (k in field.validValues)
@@ -1229,7 +1229,7 @@ function TextField_isValid(field, control)
 	}
 	return true;
 }
-*/
+
 function PhoneField_valueChanged(field, control)
 {
 	return formatPhone(field, control);
@@ -1502,7 +1502,7 @@ function SelectField_isValid(field, control)
 	return true;
 }
 
-addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, null, TextField_valueChanged, TextField_onFocus, null, null, null);
+addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, null, null, TextField_onFocus, TextField_valueChanged, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.netspective.sparx.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
@@ -1869,7 +1869,10 @@ function getDoubleEntries(field, control)
 
 function doubleEntry(field, control)
 {
-	return getDoubleEntries(field, control);
+	var result = getDoubleEntries(field, control);
+	window.event.cancelBubble = true;
+	window.event.returnValue = false;
+	return result;
 }
 
 // --------------------------------------------
