@@ -67,12 +67,12 @@ public class AppLoginDialog extends LoginDialog
 		String resourcesUrl = ((HttpServletRequest) dc.getRequest()).getContextPath() + "/resources";
         String fname = dc.getRequest().getParameter("user_fname");
         String lname = dc.getRequest().getParameter("user_lname");
-        System.out.println(fname + " " + lname);
+        
         if (fname != null && fname.length() > 0) {
             dc.setValue(dc.getField("user_fname"),fname);
             dc.setValue(dc.getField("user_lname"),lname);
         }
-        System.out.println(dc.getRequest().getParameter("user_fname"));
+        
 		writer.write("<head>");
 		writer.write("<title>Welcome to the Hernandez new Baby Registry</title>");
 		writer.write("</head>");

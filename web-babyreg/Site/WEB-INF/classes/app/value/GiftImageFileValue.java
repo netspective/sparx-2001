@@ -22,17 +22,6 @@ public class GiftImageFileValue extends ListSource
     {
     }
 
-    public void initializeSource(String srcParams)
-    {
-        System.out.println("srcParams: " + srcParams);
-    }
-
-    public String getValue(ValueContext vc)
-    {
-        return "Hola";
-
-	}
-
     public SelectChoicesList getSelectChoices(ValueContext vc)
 	{
         String dataCmd = vc.getRequest().getParameter("data_cmd");
@@ -50,7 +39,6 @@ public class GiftImageFileValue extends ListSource
             DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), vc.getServletContext());
             Object[][] result = null;
             Object[] parameters = {id};
-            //System.out.println("id: " + id);
             try {
                 result = sm.executeStmtGetValuesMatrix(dbContext, vc, null , "Gift.getGiftPicture", parameters);
             } catch (StatementNotFoundException e) { return choices;
@@ -62,13 +50,9 @@ public class GiftImageFileValue extends ListSource
                 if (result[0] != null && result[0].length >=2){
                     name = (String) result[0][0];
                     category = (String) result[0][1];
-                    //System.out.println("result[0][0]: " + result[0][0]);
-                    //System.out.println("result[0][1]: " + result[0][1]);
                 }
             }
             if ( category != null && category.length() > 0 && name != null && name.length() > 0){
-                //System.out.println("category: " + category);
-                //System.out.println("name: " + name);
                 choices.add(new SelectChoice("Picture", category + "/" + name));
             }
         }
