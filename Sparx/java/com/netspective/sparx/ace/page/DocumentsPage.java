@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DocumentsPage.java,v 1.2 2002-07-04 03:15:36 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.3 2002-07-04 19:07:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -78,7 +78,6 @@ import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.ace.AppComponentsExplorerServlet;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
-import com.netspective.sparx.util.java2html.Java2Html;
 import com.netspective.sparx.xaf.navigate.FileSystemContext;
 import com.netspective.sparx.xaf.navigate.FileSystemEntry;
 import com.netspective.sparx.xaf.page.PageContext;
@@ -93,13 +92,19 @@ public class DocumentsPage extends AceServletPage
     private FileSystemContext fsContext;
     private boolean transformersMapInitialized;
     private Map transformersMap;
-    static private Java2Html j2h;
+    static private Map documentHandlerMap;
 
     static
     {
-        j2h = new Java2Html();
-        j2h.setLineNumberFlag(true);
-        j2h.setTabString("    ");
+        JavaContentHandler javaHandler = new JavaContentHandler();
+        XmlContentHandler xmlHandler = new XmlContentHandler();
+
+        documentHandlerMap = new HashMap();
+        documentHandlerMap.put("java", javaHandler);
+        documentHandlerMap.put("js", javaHandler);
+        documentHandlerMap.put("xml", xmlHandler);
+        documentHandlerMap.put("xsl", xmlHandler);
+        documentHandlerMap.put("jsp", xmlHandler);
     }
 
     public DocumentsPage()
@@ -137,8 +142,7 @@ public class DocumentsPage extends AceServletPage
 
     public final String getCaption(PageContext pc)
     {
-        FileSystemEntry activeEntry = (FileSystemEntry) pc.getRequest().getAttribute("active-entry");
-        return activeEntry != null ? (activeEntry.getEntryCaption() + "." + activeEntry.getEntryType()) : (caption == null ? "Documents" : caption);
+        return caption == null ? "Documents" : caption;
     }
 
     public final String getHeading(PageContext pc)
@@ -223,7 +227,8 @@ public class DocumentsPage extends AceServletPage
             }
             else
             {
-                if(activeEntry.getEntryType().equalsIgnoreCase("java") || activeEntry.getEntryType().equalsIgnoreCase("js") || activeEntry.getEntryType().equalsIgnoreCase("jsp"))
+                DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(activeEntry.getEntryType());
+                if(docContentHandler != null)
                 {
                     Document navgDoc = null;
                     try
@@ -241,11 +246,11 @@ public class DocumentsPage extends AceServletPage
                     navgDoc.appendChild(navgRootElem);
 
                     fsContext.addXML(navgRootElem, fsContext);
-                    pc.getRequest().setAttribute("active-entry", activeEntry);
                     handlePageMetaData(pc);
                     handlePageHeader(pc);
                     transform(pc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
-                    j2h.generateHtml(new FileInputStream(activeEntry), pc.getResponse().getOutputStream());
+                    pc.getResponse().getOutputStream().print("&nbsp;&nbsp;<b><code>"+ activeEntry.getAbsolutePath() +"</code></b>");
+                    docContentHandler.generateHtml(pc, new FileInputStream(activeEntry));
                     handlePageFooter(pc);
                 }
                 else

@@ -153,11 +153,10 @@ setting these accordingly:
 
 public class Java2Html extends Object implements Serializable
 {
-
     private String[] color =
             {
                 "#000000", // plain
-                "#800000", // keyword
+                "#000099", // keyword
                 "#000080", // api class
                 "#008200", // constant
                 "#636163" // comment
@@ -189,7 +188,7 @@ public class Java2Html extends Object implements Serializable
      on the properties that control the appearance
      of the Java source on the generated web page */
 
-    public int generateHtml(InputStream javaSource, OutputStream htmlOutput) throws IOException
+    public void generateHtml(InputStream javaSource, OutputStream htmlOutput) throws IOException
     {
         initialize();
 
@@ -398,8 +397,6 @@ public class Java2Html extends Object implements Serializable
 
         out.writeBytes("</pre>\n");
         out.writeBytes(htmlSuffix());
-
-        return (0);
     }
 
     /** getter method for the <code>lineNumberFlag</code> property,
@@ -648,8 +645,8 @@ public class Java2Html extends Object implements Serializable
         String result =
                 "<style type=\"text/css\">\n"
                 + "<!--\n"
-                + "body\n"
-                + "{ background-color: #ffffff; font-size: -1 }\n"
+                + "pre\n"
+                + "{ font-size: -1; font-family: lucida console,courier new,courier,fixed; }\n"
                 + "-->\n"
                 + "</style>\n"
                 + "<body>\n\n";
@@ -2814,7 +2811,7 @@ class ColorManager
         if (currentColor != TokenClass.lowerb)
         {
             if (currentColor == TokenClass.keyword)
-                htmlString = "</strong></font>";
+                htmlString = "</b></font>";
             else
                 htmlString = "</font>";
 
