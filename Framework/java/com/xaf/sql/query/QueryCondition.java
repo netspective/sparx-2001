@@ -25,8 +25,9 @@ public class QueryCondition
 	private SingleValueSource value;
 	private int connector = CONNECT_AND;
     private boolean removeIfValueNull;
+    private boolean removeIfValueNullChildren;
     private String bindExpression;
-    private List nestedConditions;
+    private QueryConditions nestedConditions;
 
     public QueryCondition()
     {
@@ -51,9 +52,13 @@ public class QueryCondition
 	public SqlComparison getComparison() { return comparison; }
 	public SingleValueSource getValue() { return value; }
 	public String getConnectorSql() { return QueryCondition.CONNECTOR_SQL[connector]; }
-    public boolean removeIfValueIsNull() { return removeIfValueNull; }
     public boolean isNested() { return nestedConditions != null; }
     public boolean isNotNested() { return nestedConditions == null; }
+
+    public boolean removeIfValueIsNull()
+    {
+        return removeIfValueNull || removeIfValueNullChildren;
+    }
 
 	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator stmt)
 	{
@@ -76,8 +81,50 @@ public class QueryCondition
     public void addCondition(QueryCondition cond)
     {
         if(nestedConditions == null)
-            nestedConditions = new ArrayList();
+            nestedConditions = new QueryConditions(this);
         nestedConditions.add(cond);
+        if(cond.removeIfValueIsNull())
+            removeIfValueNullChildren = true;
+    }
+
+    /**
+     * Return true if this condition should be kept when dynamically generating the where clause. One of the
+     * reasons to not keep the condition would be because the value is null and we don't want the where clause
+     * element to have any items with nulls. If this condition is a nested condition, we will check to see if
+     * any of our nested conditions are used; if none of the nested conditions are used, then we will not keep
+     * the condition.
+     */
+    public boolean useCondition(SelectStmtGenerator stmtGen, ValueContext vc, QueryConditions usedConditions)
+    {
+        if(nestedConditions != null)
+        {
+            QueryConditions nestedUsedConditions = nestedConditions.getUsedConditions(stmtGen, vc);
+            if(nestedUsedConditions.size() == 0)
+                return false;
+
+             usedConditions.add(nestedUsedConditions);
+             return true;
+        }
+        else
+        {
+            SingleValueSource vs = getValue();
+            if (vs instanceof ListValueSource)
+            {
+                String[] values = ((ListValueSource) vs).getValues(vc);
+                if (values == null || values.length == 0 || (values.length == 1 && (values[0] == null || values[0].length() == 0)))
+                    return false;
+            }
+            else
+            {
+                String value = vs.getValue(vc);
+                if(value == null || value.length() == 0)
+                    return false;
+            }
+
+            usedConditions.add(this);
+            stmtGen.addJoin(field);
+            return true;
+        }
     }
 
 	public void importFromXml(QueryDefinition queryDefn, QueryCondition parentCond, Element elem)

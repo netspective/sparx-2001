@@ -32,7 +32,7 @@ public class QuerySelect
     private boolean alwaysDirty;
 	private List reportFields = new ArrayList();
 	private List orderBy = new ArrayList();
-	private List conditions = new ArrayList();
+	private QueryConditions conditions = new QueryConditions(null);
     private List groupByFields = new ArrayList();
 	private List whereExprs;
 	private List errors;
@@ -55,7 +55,7 @@ public class QuerySelect
     public ReportFrame getFrame() { return frame; }
     public ReportBanner getBanner() { return banner; }
 	public List getReportFields() { return reportFields; }
-	public List getConditions() { return conditions; }
+	public QueryConditions getConditions() { return conditions; }
 	public List getWhereExpressions() { return whereExprs; }
 	public List getOrderBy() { return orderBy; }
     public List getGroupBy() { return groupByFields; }
@@ -355,6 +355,7 @@ public class QuerySelect
 		inherit(orderBy, select.getOrderBy());
         inherit(groupByFields, select.getGroupBy());
 
+        conditions.registerDynamicConditions();
         frame = select.getFrame();
         banner = select.getBanner();
 

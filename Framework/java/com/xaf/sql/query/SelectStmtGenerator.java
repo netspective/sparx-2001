@@ -120,36 +120,8 @@ public class SelectStmtGenerator
 			addJoin(field);
 		}
 
-		List allConditions = select.getConditions();
-        List usedConditions = new ArrayList();
-		int allCondsCount = allConditions.size();
-		for(int c = 0; c < allCondsCount; c++)
-		{
-			QueryCondition cond = (QueryCondition) allConditions.get(c);
-            if(cond.removeIfValueIsNull() && cond.isNotNested())
-            {
-                SingleValueSource vs = cond.getValue();
-                if (vs instanceof ListValueSource)
-                {
-                    String[] values = ((ListValueSource)vs).getValues(vc);
-                    if (values == null || values.length == 0 || (values.length == 1 && (values[0] == null || values[0].length() == 0)))
-                        continue;
-                }
-                else
-                {
-                    String value = vs.getValue(vc);
-                    if(value == null || value.length() == 0)
-                        continue;
-                }
-            }
-
-            usedConditions.add(cond);
-			QueryField field = cond.getField();
-			if(field != null)
-				addJoin(field);
-			else if(cond.isNotNested())
-				return "Condition '"+c+"' has no field.";
-		}
+		QueryConditions allSelectConditions = select.getConditions();
+        QueryConditions usedSelectConditions = allSelectConditions.getUsedConditions(this, vc);
 
         // add join tables which have the auto-include flag set and their respective conditions to the
         // from and where clause lists. If the join is already in the 'joins' list, no need to add it in.
@@ -206,25 +178,14 @@ public class SelectStmtGenerator
 		}
 
 		boolean haveCondWheres = false;
-        int usedCondsCount = usedConditions.size();
+        int usedCondsCount = usedSelectConditions.size();
 		if(usedCondsCount > 0)
 		{
 			if(haveJoinWheres)
 				sql.append(" and (\n");
 			else
 				sql.append("where\n  (\n");
-
-    		int condsUsedLast = usedCondsCount-1;
-			for(int c = 0; c < usedCondsCount; c++)
-			{
-				QueryCondition cond = (QueryCondition) usedConditions.get(c);
-				if(cond.isNotNested()) addJoin(cond.getField());
-				sql.append("  (" + cond.getWhereCondExpr(vc, select, this) + ")");
-				if(c != condsUsedLast)
-					sql.append(cond.getConnectorSql());
-				sql.append("\n");
-			}
-
+            usedSelectConditions.createSql(this, vc, usedSelectConditions, sql);
 			sql.append("  )\n");
 			haveCondWheres = true;
 		}
