@@ -470,23 +470,38 @@
     <tr valign="top">
         <xsl:for-each select="$table/column">
        		<td>
-       		<xsl:if test="$data-elem[name() = 'enum'] and @name = 'caption'">
-				<xsl:value-of select="$data-elem/text()"/>
-       		</xsl:if>
-        	<xsl:variable name="column-name" select="@name"/>
-        	<!-- the for-each should be using select="$data-elem/@*" but Xalan doesn't work with that, so we're using @* since . is already the $data-elm -->
-        	<xsl:for-each select="@*">
-        		<xsl:choose>
-					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
-					<xsl:otherwise>&#160;</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:for-each>
-        	<xsl:for-each select="$data-elem/*">
-        		<xsl:choose>
-					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
-					<xsl:otherwise>&#160;</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:for-each>
+            <xsl:choose>
+                <xsl:when test="$data-elem[name() = 'enum']">
+                    <xsl:choose>
+                        <xsl:when test="@name = 'id'"><xsl:attribute name="align">right</xsl:attribute><xsl:value-of select="$data-elem/@id"/></xsl:when>
+                        <xsl:when test="@name = 'caption'"><xsl:value-of select="$data-elem/text()"/></xsl:when>
+                        <xsl:when test="@name = 'abbrev'">
+                            <xsl:choose>
+                                <xsl:when test="$data-elem/@abbrev">
+                                    <xsl:value-of select="$data-elem/@abbrev"/>
+                                </xsl:when>
+                                <xsl:otherwise>&#160;</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="column-name" select="@name"/>
+                    <!-- the for-each should be using select="$data-elem/@*" but Xalan doesn't work with that, so we're using @* since . is already the $data-elm -->
+                    <xsl:for-each select="@*">
+                        <xsl:choose>
+                            <xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
+                            <xsl:otherwise>&#160;</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                    <xsl:for-each select="$data-elem/*">
+                        <xsl:choose>
+                            <xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
+                            <xsl:otherwise>&#160;</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
        		</td>
 		</xsl:for-each>
     </tr>
