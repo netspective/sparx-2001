@@ -198,14 +198,16 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
                 return;
     </xsl:when>
     <xsl:when test="@_gen-ref-table-is-enum = 'yes'">
-                <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem enum = <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem.parseItem(text);
-                if(enum != null)
                 {
-                    set<xsl:value-of select="@_gen-method-name"/>(enum.getId());
-                    return;
+                    <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem enum = <xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem.parseItem(text);
+                    if(enum != null)
+                    {
+                        set<xsl:value-of select="@_gen-method-name"/>(enum.getId());
+                        return;
+                    }
+                    else
+                        throw new ParseException("<xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem was unable to parse '"+ text +"'", 0);
                 }
-                else
-                    throw new ParseException("<xsl:value-of select="@_gen-ref-table-class-name"/>.EnumeratedItem was unable to parse '"+ text +"'", 0);
     </xsl:when>
     <xsl:otherwise>
                 set<xsl:value-of select="@_gen-method-name"/>(((<xsl:value-of select="@_gen-data-type-class"/>) column).parse(text));
@@ -239,7 +241,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	{
 		List data = new ArrayList();
 		String dbms = dbPolicy.getDBMSName();
-		
+
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 <xsl:for-each select="column">
 <xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
@@ -262,7 +264,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	{
 		boolean status = true;
 		BasicRowValidationResult brvResult = new BasicRowValidationResult();
-		
+
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 <xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
 		{
@@ -281,7 +283,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		BasicRowValidationResult brvResult = new BasicRowValidationResult();
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		boolean status = true;
-		
+
 <xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
 		{
 			BasicDataValidationResult bdvResult = table.get<xsl:value-of select="@_gen-method-name"/>Column().getValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);

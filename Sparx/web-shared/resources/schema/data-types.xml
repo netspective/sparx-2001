@@ -2,6 +2,8 @@
 
 <schema name="generic-datatypes">
 
+	<!-- include file="deprecated-data-types.xml"/ -->
+
 	<!--
 	*********************************************************************
 	** Generic Datatypes used by all tables
@@ -70,7 +72,7 @@
 		<field.integer size="16" min="0" max="99999999"/>
 	</datatype>
 
-	<datatype name="smallint">
+	<datatype name="small-int">
 		<java-type default="0">int</java-type>
 		<java-class package="java.lang">Integer</java-class>
 		<sqldefn dbms="ansi">smallint</sqldefn>
@@ -85,7 +87,7 @@
 		<field.integer size="16" min="0" max="9999"/>
 	</datatype>
 
-	<datatype name="longint">
+	<datatype name="long-int">
 		<java-type default="0">long</java-type>
 		<java-class package="java.lang">Long</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
@@ -170,7 +172,7 @@
 		<field.time size="16" format="H:mm" min="00:00"/>
 	</datatype>
 
-	<datatype name="autoinc" type="longint">
+	<datatype name="auto-inc" type="long-int">
 		<copytype>longint</copytype>
 		<sqldefn dbms="mssql">integer IDENTITY</sqldefn>
 		<sqldefn dbms="hsqldb">integer IDENTITY</sqldefn>
@@ -178,7 +180,7 @@
 		<field.integer size="16" min="0"/>
 	</datatype>
 
-	<datatype name="datablock">
+	<datatype name="data-block">
 		<java-class package="java.lang">Object</java-class>
 		<sqldefn dbms="oracle">clob</sqldefn>
 		<sqldefn dbms="mssql">text</sqldefn>
@@ -196,7 +198,7 @@
 		<field.email size="20"/>
 	</datatype>
 
-	<datatype name="guidtext">
+	<datatype name="guid-text">
 		<java-class package="java.lang">String</java-class>
 		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
@@ -210,8 +212,8 @@
 		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
 	</datatype>
 
-	<datatype name="guid32" type="guidtext">
-		<copytype>guidtext</copytype>
+	<datatype name="guid32" type="guid-text">
+		<copytype>guid-text</copytype>
 
 		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
 	</datatype>
@@ -223,7 +225,7 @@
 		</composite>
 	</datatype>
 
-	<datatype name="stamp_range">
+	<datatype name="stamp-range">
 		<composite>
 			<column name="$name$_begin_stamp" type="stamp"/>
 			<column name="$name$_end_stamp" type="stamp"/>
