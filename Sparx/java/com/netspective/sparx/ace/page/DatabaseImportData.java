@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportData.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: DatabaseImportData.java,v 1.4 2002-10-10 22:36:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -154,9 +154,9 @@ public class DatabaseImportData extends AceServletPage
             catch (InvocationTargetException e)
             {
             }
-            out.write("<br>"+ caption +": " + colClass.getName() + "(");
+            out.write("<br>"+ caption +": " + colClass.getName() + " (");
             out.write("DateFormat class is " + (format != null ? format.getClass().getName() : "null"));
-            out.write(", pattern is "+ (format != null ? (format instanceof SimpleDateFormat ? ("'" + ((SimpleDateFormat) format).toLocalizedPattern() + "'") : "unkown") : "unknown"));
+            out.write(", pattern is "+ (format != null ? (format instanceof SimpleDateFormat ? ("'<code>" + ((SimpleDateFormat) format).toLocalizedPattern() + "</code>'") : "unkown") : "unknown"));
             out.write(")");
         }
         else
@@ -186,7 +186,7 @@ public class DatabaseImportData extends AceServletPage
 
         out.write("<table class='data_table'>");
         out.write("<tr class='data_table'><td class='data_table' align=right>Source File:</td><td class='data_table'><font color='green'>"+ sourceFile +"</font></td></tr>");
-        out.write("<tr class='data_table'><td class='data_table' align=right valign='top'>Schema Class:</td><td class='data_table'><font color='green'>"+ schemaClass.getName() +" ("+ ClassPath.getClassFileName(schemaClass.getName()) +")");
+        out.write("<tr class='data_table'><td class='data_table' align=right valign='top'>Schema Class:</td><td class='data_table'><font color='green'><b>"+ schemaClass.getName() +"</b> ("+ ClassPath.getClassFileName(schemaClass.getName()) +")");
 
         Schema schema = null;
         try
