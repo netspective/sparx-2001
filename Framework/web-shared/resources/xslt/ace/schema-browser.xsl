@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:xalan="http://xml.apache.org/xalan"
+                   exclude-result-prefixes="xalan">
 <xsl:output method="html"/>
 
 <xsl:param name="root-url"/>
@@ -223,6 +224,7 @@
 </xsl:template>
 
 <xsl:template match="table" mode="detail">
+    <xsl:param name="table" select="."/>
 	<xsl:param name="table-name" select="@name"/>
 	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
 	<tr class="heading">
@@ -395,21 +397,39 @@
 	<p/><h1>Table Data</h1>
 	<table border="0" cellspacing="0">
 	<tr bgcolor="beige">
-		<th>Id</th>
-		<th>&#160;</th>
-		<th>Caption</th>
-		<th>&#160;</th>
-		<th>Abbrev</th>
-	</tr>
-	<xsl:for-each select="enum">
-	<tr>
+        <xsl:for-each select="$table/*">
+            <xsl:variable name="elem-name" select="name()"/>
+            <xsl:if test="$elem-name = 'column'"><th align='center'><xsl:value-of select="@name"/></th></xsl:if>
+		</xsl:for-each>
+        <!-- xsl:for-each select="$table/column">
+            <th align='center'><xsl:value-of select="@name"/></th>
+		</xsl:for-each -->
+
+    </tr>
+
+    <xsl:for-each select="enum">
+    <tr>
+        <xsl:variable name="column-data-elems">
+            <xsl:call-template name="get-data-elems">
+                <xsl:with-param name="data-elem" select="."/>
+                <xsl:with-param name="table" select="$table"/>
+            </xsl:call-template>
+        </xsl:variable>
+		<xsl:for-each select="xalan:nodeset($column-data-elems)/*">
+                <td align='left'><xsl:value-of select="."/></td>
+		</xsl:for-each>
+    </tr>
+    </xsl:for-each>
+
+
+	<!-- tr>
 		<td align="right"><xsl:value-of select="@id"/></td>
 		<td></td>
 		<td><xsl:value-of select="."/></td>
 		<td></td>
 		<td><xsl:value-of select="@abbrev"/></td>
-	</tr>
-	</xsl:for-each>
+	</tr -->
+
 	</table>
 	</xsl:if>
 
@@ -445,7 +465,7 @@
         <th>&#160;</th>
         <th>Columns</th>
         <th>&#160;</th>
-        <th>Connector</th>        
+        <th>Connector</th>
     </tr>
     <xsl:for-each select="java-dal-accessor">
     <tr>
@@ -455,13 +475,33 @@
         <td></td>
         <td><xsl:value-of select="@columns"/></td>
         <td></td>
-        <td><xsl:value-of select="@connector"/></td>        
+        <td><xsl:value-of select="@connector"/></td>
     </tr>
     </xsl:for-each>
     </table>
     </xsl:if>
 
 	</td></tr></table>
+</xsl:template>
+
+<xsl:template name="get-data-elems">
+    <xsl:param name="data-elem"/>
+    <xsl:param name="table"/>
+       <xsl:for-each select="$data-elem/@*">
+            <xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
+            <!-- if the attribute matches one of our column names, we want it -->
+            <xsl:if test="$table/column[@name = $attr-name]">
+                <xsl:element name="{$attr-name}"><xsl:value-of select="."/></xsl:element>
+
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:for-each select="$data-elem/*">
+            <xsl:variable name="child-name"><xsl:value-of select="name()"/></xsl:variable>
+            <!-- if the attribute matches one of our column names, we want it -->
+            <xsl:if test="$table/column[@name = $child-name]">
+                <xsl:copy-of select="."/>
+            </xsl:if>
+        </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="column">

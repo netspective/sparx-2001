@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<xsl:preserve-space elements="text"/>
-<xsl:output method="text" />
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:xalan="http://xml.apache.org/xalan"
+                   exclude-result-prefixes="xalan">
+<xsl:output method="text"/>
+
 <xsl:param name="generate-drop-table"/>
 <xsl:param name="generate-drop-seq"/>
 
@@ -22,7 +23,7 @@
 				<xsl:with-param name="table" select="."/>
 			</xsl:call-template>
 		</xsl:if>
-		
+
 		<xsl:if test="$generate-constraints = 'yes'">
 			<!-- This only supports primary keys with single columns -->
 			<xsl:for-each select="column[not(@default) and (@required='yes' or @primarykey='yes')]">
@@ -52,8 +53,15 @@
 		</xsl:for-each>
 	</xsl:if>
 	<xsl:for-each select="table[enum]">
-		<xsl:call-template name="enum-data">
+		<xsl:call-template name="static-data">
 			<xsl:with-param name="table" select="."/>
+            <xsl:with-param name="static-data" select="enum"/>
+		</xsl:call-template>
+	</xsl:for-each>
+	<xsl:for-each select="table[data]">
+		<xsl:call-template name="static-data">
+			<xsl:with-param name="table" select="."/>
+            <xsl:with-param name="static-data" select="data"/>
 		</xsl:call-template>
 	</xsl:for-each>
 </xsl:template>
@@ -123,14 +131,12 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
-	<xsl:text>&#32;</xsl:text>
+	<xsl:text>	</xsl:text>
 	<xsl:value-of select="$column/@name"/>
-	<xsl:text>&#32;</xsl:text>
 	<xsl:call-template name="column-sql-defn">
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="$column"/>
 	</xsl:call-template>
-	<xsl:text>&#32;</xsl:text>
 	<xsl:call-template name="column-sql-modifiers">
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="$column"/>
@@ -151,6 +157,7 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
+	<xsl:text> </xsl:text>
 	<xsl:choose>
 		<xsl:when test="$column/sqldefn[@dbms = $dbms-id]">
 			<xsl:value-of select="$column/sqldefn[@dbms = $dbms-id]"/>
@@ -162,13 +169,11 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 			<xsl:value-of select="$column/sqldefn"/>
 		</xsl:otherwise>
 	</xsl:choose>
-	<xsl:text> </xsl:text>
 </xsl:template>
 
 <xsl:template name="column-sql-modifiers">
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
-	<xsl:text> </xsl:text>
 
 	<xsl:if test="$generate-constraints != 'yes'">
 		<xsl:if test="@primarykey='yes'">
@@ -261,36 +266,71 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 
-<xsl:template name="enum-data">
-	<xsl:param name="table"/>
+<xsl:template name="get-data-elems">
+    <xsl:param name="data-elem"/>
+    <xsl:param name="table"/>
+    <xsl:for-each select="$data-elem/@*">
+        <xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
+        <!-- if the attribute matches one of our column names, we want it -->
+        <xsl:if test="$table/column[@name = $attr-name]">
+            <xsl:element name="{$attr-name}"><xsl:value-of select="."/></xsl:element>
+        </xsl:if>
+    </xsl:for-each>
 
-	<xsl:for-each select="$table/enum">
+    <xsl:choose>
+        <!-- when child elements exist, there should be no text node of the  enum element.
+             This means the caption  should be explicitly defined either as an attribute
+             or a child element.
+         -->
+        <xsl:when test="$data-elem/*">
+            <xsl:for-each select="$data-elem/*">
+                <xsl:variable name="child-name"><xsl:value-of select="name()"/></xsl:variable>
+                <!-- if the attribute matches one of our column names, we want it -->
+                <xsl:if test="$table/column[@name = $child-name]">
+                    <xsl:copy-of select="."/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- Expecting a HARD CODED column called 'caption' to exist -->
+            <xsl:variable name="value" select="$data-elem/text()"/>
+            <xsl:if test="$value != ''">
+                <xsl:element name="caption"><xsl:value-of select="$value"/></xsl:element>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="static-data">
+	<xsl:param name="table"/>
+    <xsl:param name="static-data"/>
+	<xsl:for-each select="$static-data">
+        <xsl:variable name="column-data-elems">
+            <xsl:call-template name="get-data-elems">
+                <xsl:with-param name="data-elem" select="."/>
+                <xsl:with-param name="table" select="$table"/>
+            </xsl:call-template>
+        </xsl:variable>
+
 		<xsl:text>insert into </xsl:text>
 		<xsl:value-of select="$table/@name"/>
 		<xsl:text>(</xsl:text>
-		<xsl:for-each select="@*">
-			<xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
-			<!-- if the attribute matches one of our column names, we want it -->
-			<xsl:if test="$table/column[@name = $attr-name]">
-				<xsl:value-of select="name()"/><xsl:text>, </xsl:text>
-			</xsl:if>
+		<xsl:for-each select="xalan:nodeset($column-data-elems)/*">
+				<xsl:value-of select="name()"/><xsl:if test="position() != last()">, </xsl:if>
 		</xsl:for-each>
-		<xsl:text>caption) values (</xsl:text>
-		<xsl:for-each select="@*">
-			<xsl:variable name="attr-name"><xsl:value-of select="name()"/></xsl:variable>
-			<!-- if the attribute matches one of our column names, we want it -->
-			<xsl:if test="$table/column[@name = $attr-name]">
-				<xsl:choose>
-					<xsl:when test="$table/column[@name = $attr-name]/@type = 'text'">
-						<xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>', </xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="."/><xsl:text>, </xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:if>
+		<xsl:text>) values (</xsl:text>
+		<xsl:for-each select="xalan:nodeset($column-data-elems)/*">
+            <xsl:variable name="elem-name"><xsl:value-of select="name()"/></xsl:variable>
+
+            <xsl:choose>
+            <xsl:when test="$table/column[@name = $elem-name]/@type = 'text'">
+                <xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>'</xsl:text><xsl:if test="position() != last()">, </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                    <xsl:value-of select="."/><xsl:if test="position() != last()">, </xsl:if>
+            </xsl:otherwise>
+            </xsl:choose>
 		</xsl:for-each>
-		<xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>'</xsl:text>
 		<xsl:text>)</xsl:text>
 	<!-- line break -->
 	<xsl:value-of select="$statement-terminator"/>
