@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
+$Id: app-build.xml,v 1.23 2002-10-01 16:02:31 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -59,6 +59,7 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
             <pathelement path="classes"/>
             <fileset dir="lib">
                 <include name="**/*.jar"/>
+                <exclude name="*-ids.jar"/> <!-- don't include the app-generated Identifiers JAR (config) -->
                 <exclude name="*-dal.jar"/> <!-- don't include the app-generated DAL JAR (database) -->
                 <exclude name="*-dcb.jar"/> <!-- don't include the app-generated DCB JAR (UI) -->
             </fileset>
@@ -97,7 +98,7 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
         <echo message="Sparx source is in ${sparx.java.dir}"/>
         <echo message="Application Site root is ${app.root.dir}"/>
 
-        <!-- define all the tasks that will be used in this file -->
+        <!-- define the tasks that will be used in this file -->
         <taskdef name="config" classname="com.netspective.sparx.util.ant.ImportConfigurationTask" classpathref="project.class.path"/>
         <taskdef name="dal" classname="com.netspective.sparx.util.ant.GenerateJavaDALTask" classpathref="project.class.path"/>
         <taskdef name="dcb" classname="com.netspective.sparx.util.ant.GenerateDialogBeansTask" classpathref="project.class.path"/>
@@ -109,22 +110,23 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
 
         <property name="app.classes.dir" value="${config.app.web-inf-root-path}/classes"/>
         <property name="app.lib.dir" value="${config.app.web-inf-root-path}/lib"/>
-        <property name="resin.work.dir" value="${config.app.web-inf-root-path}/work"/>
         <property name="java.dal.stylesheet.root.dir" value="${config.sparx.shared.xslt-path}/schema-gen/java-gen"/>
 
         <property name="app.javadoc.root.dir" value="${config.app.documents-root-path}/javadoc"/>
-        <property name="app.java.identifiers-pkg" value="id"/>
-        <property name="app.java.identifiers-pkg.root-path" value="${app.classes.dir}"/>
+        <property name="app.java.identifiers.jar.name" value="${app.name}-ids.jar"/>
+        <property name="app.java.identifiers.pkg-name" value="id"/>
+        <property name="app.java.identifiers.dir" value="${app.WEB-INF.dir}/conf/classes"/>
+        <property name="app.java.identifiers.build.dir" value="${app.java.identifiers.dir}/build"/>
+        <property name="app.java.identifiers.jar" value="${app.WEB-INF.dir}/conf/${app.java.identifiers.jar.name}"/>
         <property name="app.java.identifiers.doc.dir" value="${app.javadoc.root.dir}/identifiers"/>
         
-        <property name="app.java.identifiers.config-props.class-name" value="${app.java.identifiers-pkg}.Config"/>
+        <property name="app.java.identifiers.config-props.class-name" value="${app.java.identifiers.pkg-name}.Config"/>
 
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
         <property name="app.java.dal.jar.name" value="${app.name}-dal.jar"/>
         <property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
         <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.java.dal.jar.name}"/>
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
-        <property name="app.java.identifiers.dialogs.class-name" value="${app.java.identifiers-pkg}.Dialog"/>
 
         <available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
         <property name="app.java.dcb.jar.name" value="${app.name}-dcb.jar"/>
@@ -132,18 +134,21 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
         <property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
         <property name="app.java.dcb.jar" value="${app.java.dcb.dir}/${app.java.dcb.jar.name}"/>
         <property name="app.java.dcb.doc.dir" value="${app.javadoc.root.dir}/dcb"/>
+        <property name="app.java.identifiers.dialogs.class-name" value="${app.java.identifiers.pkg-name}.Dialog"/>
 
         <available file="${config.app.sql.source-file}" property="app.sql.source-file-exists"/>
-        <property name="app.java.identifiers.statements.class-name" value="${app.java.identifiers-pkg}.Statement"/>
+        <property name="app.java.identifiers.statements.class-name" value="${app.java.identifiers.pkg-name}.Statement"/>
 
         <available file="${config.app.security.acl-file}" property="app.security.acl-file-exists"/>
-        <property name="app.java.identifiers.acl.class-name" value="${app.java.identifiers-pkg}.ACL"/>
+        <property name="app.java.identifiers.acl.class-name" value="${app.java.identifiers.pkg-name}.ACL"/>
 
         <available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
 
         <echo message="app.classes.dir-exists = ${app.classes.dir-exists}"/>
         <echo message="app.schema.source-file-exists = ${app.schema.source-file-exists}"/>
         <echo message="app.ui.source-file-exists = ${app.ui.source-file-exists}"/>
+        <echo message="app.sql.source-file-exists = ${app.sql.source-file-exists}"/>
+        <echo message="app.security.acl-file-exists = ${app.security.acl-file-exists}"/>
     </target>
 
     <!--
@@ -302,6 +307,7 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
         <javac srcdir="${app.classes.dir}" classpathref="project.class.path" deprecation="on">
             <classpath>
                 <fileset dir="lib">
+                    <include name="*-ids.jar"/>
                     <include name="*-dal.jar"/>
                     <include name="*-dcb.jar"/>
                 </fileset>
@@ -395,7 +401,7 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
     ============================= Generate Identifiers Classes ================================
     -->
 
-    <target name="identifiers-setup" depends="init">
+    <target name="dialogs-ids" depends="init" if="app.ui.source-file-exists">
         <taskdef name="dids" classname="com.netspective.sparx.util.ant.GenerateDialogsIdentifiersClassTask" classpathref="project.class.path">
             <classpath>
                 <fileset dir="lib">
@@ -404,31 +410,41 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
                 </fileset>
             </classpath>
         </taskdef>
-        <taskdef name="sids" classname="com.netspective.sparx.util.ant.GenerateStatementsIdentifiersClassTask" classpathref="project.class.path"/>
-        <taskdef name="cids" classname="com.netspective.sparx.util.ant.GenerateConfigIdentifiersClassTask" classpathref="project.class.path"/>
-        <taskdef name="aids" classname="com.netspective.sparx.util.ant.GenerateAccessControlIdentifiersClassTask" classpathref="project.class.path"/>
-    </target>
-
-    <target name="dialogs-ids" depends="init" if="app.ui.source-file-exists">
-        <dids source="${config.app.ui.source-file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.dialogs.class-name}" debug="no"/>
+        <dids source="${config.app.ui.source-file}" dest="${app.java.identifiers.dir}" class="${app.java.identifiers.dialogs.class-name}" debug="no"/>
     </target>
 
     <target name="statements-ids" depends="init" if="app.sql.source-file-exists">
-        <sids source="${config.app.sql.source-file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.statements.class-name}" debug="no"/>
+        <taskdef name="sids" classname="com.netspective.sparx.util.ant.GenerateStatementsIdentifiersClassTask" classpathref="project.class.path"/>
+        <sids source="${config.app.sql.source-file}" dest="${app.java.identifiers.dir}" class="${app.java.identifiers.statements.class-name}" debug="no"/>
     </target>
 
     <target name="acl-ids" depends="init" if="app.security.acl-file-exists">
-        <aids source="${config.app.security.acl-file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.acl.class-name}" debug="no"/>
+        <taskdef name="aids" classname="com.netspective.sparx.util.ant.GenerateAccessControlIdentifiersClassTask" classpathref="project.class.path"/>
+        <aids source="${config.app.security.acl-file}" dest="${app.java.identifiers.dir}" class="${app.java.identifiers.acl.class-name}" debug="no"/>
     </target>
 
-    <target name="identifiers" depends="identifiers-setup,dialogs-ids,statements-ids,acl-ids">
-        <cids source="${app.config.file}" dest="${app.java.identifiers-pkg.root-path}" class="${app.java.identifiers.config-props.class-name}" debug="no"/>
+    <target name="identifiers" depends="dialogs-ids,statements-ids,acl-ids">
+        <taskdef name="cids" classname="com.netspective.sparx.util.ant.GenerateConfigIdentifiersClassTask" classpathref="project.class.path"/>
+        <cids source="${app.config.file}" dest="${app.java.identifiers.dir}" class="${app.java.identifiers.config-props.class-name}" debug="no"/>
+
+        <mkdir dir="${app.java.identifiers.build.dir}"/>
+        <javac srcdir="${app.java.identifiers.dir}" destdir="${app.java.identifiers.build.dir}" classpathref="project.class.path"/>
+        <jar jarfile="${app.java.identifiers.jar}" basedir="${app.java.identifiers.build.dir}">
+            <include name="**"/>
+        </jar>
+
+        <!-- now move the file to the application's lib directory -->
+        <delete dir="${app.java.identifiers.build.dir}"/>
+        <mkdir dir="${app.lib.dir}"/>
+        <delete file="${app.lib.dir}/${app.java.identifiers.jar.name}" verbose="true"/>
+        <move file="${app.java.identifiers.jar}" todir="${app.lib.dir}"/>
+        <echo message="The Identifiers JAR file is in ${app.lib.dir}"/>
     </target>
 
     <target name="identifiers-doc" depends="identifiers">
         <mkdir dir="${app.java.identifiers.doc.dir}"/>
         <javadoc 
-             packagenames="${app.java.identifiers-pkg}.*"
+             packagenames="${app.java.identifiers.pkg-name}.*"
              destdir="${app.java.identifiers.doc.dir}"
              classpathref="project.class.path"
              author="true"
@@ -438,7 +454,7 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
              doctitle="Application Identifiers API Documentation"
              bottom="Copyright &#169; 2002 Netspective. All Rights Reserved.">
             <sourcepath>
-                <pathelement path="${app.java.identifiers-pkg.root-path}"/>
+                <pathelement path="${app.java.identifiers.dir}"/>
             </sourcepath>
         </javadoc>
     </target>
@@ -458,9 +474,9 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
         <delete dir="${app.java.dal.doc.dir}"/>
         <delete dir="${app.java.dcb.dir}"/>
         <delete dir="${app.java.dcb.doc.dir}"/>
+        <delete dir="${app.java.identifiers.dir}"/>
         <delete dir="${app.java.identifiers.doc.dir}"/>
         
-        <delete dir="${resin.work.dir}"/>
         <delete dir="${config.app.site-temp-path}"/>
         <mkdir dir="${config.app.site-temp-path}"/>
     </target>
@@ -471,7 +487,12 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
     </target>
 
     <!-- =============================== Help =============================== -->
-    <target name="all" depends="init,clean,dal,dcb,compile,dal-doc,dcb-doc,identifiers,identifiers-doc">
+    
+    <target name="all" depends="init,clean,dal,dcb,identifiers,compile,dal-doc,dcb-doc,identifiers-doc">
+        <echo message="Complete"/>
+    </target>
+
+    <target name="all-but-docs" depends="init,clean,dal,dcb,identifiers,compile">
         <echo message="Complete"/>
     </target>
 
@@ -480,8 +501,9 @@ $Id: app-build.xml,v 1.22 2002-09-30 03:56:39 shahid.shah Exp $
         <echo message="ANT build targets for for Sparx Applications"/>
         <echo message=""/>
         <echo message="The following targets are available:"/>
-        <echo message="  all          Run all of the targets in this order: clean, dal, dcb, compile,"/>
-        <echo message="               dal-doc, dcb-doc"/>
+        <echo message="  all          Run all of the targets in this order: clean, dal, dcb, identifiers,"/>
+        <echo message="               compile, dal-doc, dcb-doc, identifiers-doc"/>
+        <echo message="  all-but-docs Same as 'all' except without JavaDocs"/>
         <echo message="  clean        Clean directories"/>
         <echo message="  clean-log    Clean only the log directory (remove all entries and re-create)"/>
         <echo message="  "/>
