@@ -25,6 +25,7 @@ Build targets:
     - compile   compiles XAF in ../build/classes.
     - jar       jars XAF classes from ../build/classes into ../lib/sparx.jar.
     - sparx     creates ../lib/sparx.jar [the default target]
+    - kit-eval  creates ../sparx-x.y.z.zip
 
 -->
 <project name="Sparx" default="sparx" basedir=".">
@@ -97,7 +98,7 @@ Build targets:
             deprecation="on" >
         </javac>
 
-		<echoproperties destfile="${web-shared.dir}/resources/sparx.build.properties"/>
+        <echoproperties destfile="${web-shared.dir}/resources/sparx.build.properties"/>
 
     </target>
 
@@ -154,9 +155,10 @@ Build targets:
     </target>
 
     <!-- ==================== Deployment/kitting targets  =================== -->
-    <target name="kit-eval">
-        <delete file="../sparx-eval.zip"/>
-        <zip destfile="../sparx-eval.zip">
+    <target name="kit-eval" depends="init">
+        <property name="eval.kit.name" value="../${build.libitem.file.prefix}-eval.zip"/>
+        <delete file="${eval.kit.name}"/>
+        <zip destfile="${eval.kit.name}">
             <!--
             <zipfileset dir="../documentation" prefix="Sparx/documentation">
                 <exclude name="*.doc"/>
