@@ -67,10 +67,9 @@ public class StatementParameter
 
 	public void apply(ApplyContext ac, DatabaseContext dc, ValueContext vc, PreparedStatement stmt) throws SQLException
 	{
-		int paramNum = ac.getNextParamNum();
-
 		if(paramType != Types.ARRAY)
 		{
+			int paramNum = ac.getNextParamNum();
 			SingleValueSource vs = (SingleValueSource) valueSource;
 			if(paramType == Types.VARCHAR)
 				stmt.setObject(paramNum, vs.getValue(vc));
@@ -93,8 +92,8 @@ public class StatementParameter
 			String[] values = ((ListValueSource) valueSource).getValues(vc);
 			for(int q = 0; q < values.length; q++)
 			{
+				int paramNum = ac.getNextParamNum();
 				stmt.setObject(paramNum, values[q]);
-				paramNum = ac.getNextParamNum();
 			}
 		}
 	}
