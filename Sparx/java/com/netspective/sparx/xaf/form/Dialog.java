@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.5 2002-08-17 15:13:56 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.6 2002-08-18 21:05:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -73,7 +73,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import com.netspective.sparx.xaf.form.field.FileField;
 import com.netspective.sparx.xaf.form.field.SelectField;
@@ -85,7 +85,7 @@ import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 
 /**
@@ -488,7 +488,7 @@ public class Dialog
 
         // see if this dialog is using a special context (bean?) class
         // if a specific dc-class is provided, use it or try and find one
-        // with the same name as the dialog in "dialog.context." package
+        // with the same name as the dialog in "app.form.context." package
         String dcClassName = elem.getAttribute("dc-class");
 
         if(dcClassName != null && dcClassName.length() > 0)
@@ -497,7 +497,7 @@ public class Dialog
         {
             String elemName = com.netspective.sparx.util.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true);
             String dlgName = packageName != null ? (packageName + "." + elemName) : elemName;
-            dcClassName = "dialog.context." + dlgName + "Context";
+            dcClassName = "app.form.context." + dlgName + "Context";
             try
             {
                 dcClass = Class.forName(dcClassName);
@@ -790,11 +790,11 @@ public class Dialog
             TaskContext tc = new TaskContext(dc);
 
             int numTasksExecuted = 0;
-            Category cat = AppServerCategory.getInstance(LogManager.DEBUG_PAGE);
-            if(cat.isDebugEnabled())
+            Logger logger = AppServerLogger.getLogger(LogManager.DEBUG_PAGE);
+            if(logger.isDebugEnabled())
             {
-                cat.debug("Current data-cmd is " + dc.getDataCommandText(false));
-                cat.debug(executeTasks.getDebugHtml(tc));
+                logger.debug("Current data-cmd is " + dc.getDataCommandText(false));
+                logger.debug(executeTasks.getDebugHtml(tc));
             }
 
             if(executeTasks.allowExecute(tc))
