@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DocumentsPage.java,v 1.4 2002-07-04 19:39:00 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.5 2002-08-25 20:37:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -185,16 +185,23 @@ public class DocumentsPage extends AceServletPage
             if(browseDoc != null)
             {
                 File browseFile = new File(browseDoc);
-                String fileName = browseFile.getName();
-                String fileType = fileName.substring(fileName.lastIndexOf('.')+1);
-                DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(fileType);
-                if(docContentHandler != null)
+                String browseFilePath = browseFile.getAbsolutePath();
+                String servletPath = pc.getServletContext().getRealPath("");
+                if(browseFilePath.startsWith(servletPath))
                 {
-                    handleDocument(pc, docContentHandler, browseFile, true);
-                    return;
+                    String fileName = browseFile.getName();
+                    String fileType = fileName.substring(fileName.lastIndexOf('.')+1);
+                    DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(fileType);
+                    if(docContentHandler != null)
+                    {
+                        handleDocument(pc, docContentHandler, browseFile, true);
+                        return;
+                    }
+                    else
+                        throw new ServletException("File type '"+fileType+"' not known.");
                 }
                 else
-                    throw new ServletException("File type '"+fileType+"' not known.");
+                    throw new ServletException("File '"+ browseFilePath +"' is not within the context path '"+ servletPath +"'.");
             }
 
             if(!isFileRef)
