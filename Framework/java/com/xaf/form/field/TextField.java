@@ -5,9 +5,7 @@ import java.util.*;
 import org.w3c.dom.*;
 import com.xaf.form.*;
 import com.xaf.value.*;
-import org.apache.oro.text.regex.*;
 import org.apache.oro.text.perl.*;
-
 
 public class TextField extends DialogField
 {
@@ -17,14 +15,13 @@ public class TextField extends DialogField
 	static public final long FLDFLAG_TRIM        = FLDFLAG_LOWERCASE * 2;
     static public final long FLDFLAG_STARTCUSTOM = FLDFLAG_TRIM * 2;
 
-
+    static public Perl5Util perlUtil = new Perl5Util();
 
 	private int size;
 	private int maxLength;
-    private String validatePattern = null;
-    private String regexMessage = null;
-    private String subgroupPattern = null;
-    private Perl5Util pUtil  = null;
+    private String validatePattern;
+    private String regexMessage;
+	private String substPattern;
 
 	public TextField()
 	{
@@ -79,6 +76,9 @@ public class TextField extends DialogField
         if (value != null && value.length() != 0)
             setValidatePatternErrorMessage(value);
 
+        value = elem.getAttribute("format-pattern");
+        if (value != null && value.length() != 0)
+            setSubstitutePattern(value);
 	}
 
 	public String formatValue(String value)
@@ -89,6 +89,20 @@ public class TextField extends DialogField
 		if((flags & FLDFLAG_UPPERCASE) != 0) value = value.toUpperCase();
 		if((flags & FLDFLAG_LOWERCASE) != 0) value = value.toLowerCase();
 		if((flags & FLDFLAG_TRIM) != 0) value = value.trim();
+
+		if(substPattern != null)
+		{
+			try
+			{
+				value = perlUtil.substitute(substPattern, value);
+			}
+			catch(MalformedPerl5PatternException e)
+			{
+                e.printStackTrace();
+				value = e.toString();
+			}
+		}
+
 		return value;
 	}
 
@@ -109,6 +123,11 @@ public class TextField extends DialogField
 		dc.setValue(this, formatValue(value));
 	}
 
+    public boolean needsValidation(DialogContext dc)
+	{
+        return true;
+	}
+
 	public boolean isValid(DialogContext dc)
 	{
 		String value = dc.getValue(this);
@@ -122,26 +141,26 @@ public class TextField extends DialogField
         boolean result = super.isValid(dc);
         if(! result)
             return false;
-        // if the field is a regular expression, validate!
-        if ((value != null && value.length() > 0) && getValidatePattern() != null)
-        {
-            String[] subgroups = null;
+
+		// if we're doing a regular expression pattern match, try it now
+		if(validatePattern != null && value != null && value.length() > 0)
+		{
             try
             {
-                subgroups = this.patternMatches(value);
+				if(! perlUtil.match(this.validatePattern, value))
+				{
+					invalidate(dc, regexMessage);
+					result = false;
+				}
             }
             catch (MalformedPerl5PatternException e)
             {
                 e.printStackTrace();
-                invalidate(dc, "Invalid regular expression pattern.");
-                return false;
+                invalidate(dc, e.toString());
+				result = false;
             }
-            if (subgroups == null || subgroups.length == 0)
-            {
-                invalidate(dc, this.getValidatePatternErrorMessage());
-                result = false;
-            }
-        }
+		}
+
 		return result;
 	}
 
@@ -176,6 +195,7 @@ public class TextField extends DialogField
     {
         return validatePattern;
     }
+
     /**
      * Sets the regular expression used for validating the field
      * @param str Pattern string
@@ -183,6 +203,25 @@ public class TextField extends DialogField
     public void setValidatePattern(String str)
     {
         validatePattern = str;
+    }
+
+    /**
+     * Returns the regular expression used for formatting/substituting the field
+     *
+     * @returns String regular expression pattern
+     */
+    public String getSubstitutePattern()
+    {
+        return substPattern;
+    }
+
+    /**
+     * Sets the regular expression used for formatting/substituting the field
+     * @param str Pattern string
+     */
+    public void setSubstitutePattern(String str)
+    {
+        substPattern = str;
     }
 
     /**
@@ -200,40 +239,4 @@ public class TextField extends DialogField
     {
         regexMessage = str;
     }
-    /**
-     * Checks to see if the string matches the pattern
-     *
-     * @param checkStr String to be validated against the pattern
-     * @returns String[] An array of the subgroups that matched
-     */
-    public String[] patternMatches(String value) throws MalformedPerl5PatternException
-    {
-        boolean result = false;
-        if (pUtil == null)
-            pUtil = new Perl5Util();
-        result = pUtil.match(this.validatePattern, value);
-
-        String[] subgroups = null;
-        if (result)
-        {
-            // get subgroup count
-            int count = pUtil.groups();
-            if (count > 1)
-            {
-                subgroups = new String[count-1];
-                for (int i=0; i < subgroups.length; i++)
-                {
-                    // ignore index '0' because that returns the entire string itself
-                    // as a subgroup
-                    if (pUtil.group(i+1) != null)
-                        subgroups[i] = pUtil.group(i+1);
-                }
-            }
-        }
-        return subgroups;
-    }
-
-
-
-
 }

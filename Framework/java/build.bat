@@ -7,11 +7,11 @@ set SAVEANTHOME=%ANT_HOME%
 set SAVEJAVAHOME=%JAVA_HOME%
 set SAVERESINHOME=%RESIN_HOME%
 
-if "%POOLMAN_HOME%" == "" set POOLMAN_HOME=D:\Utils\Poolman-2.0.3
-if "%JAVA_HOME%" == "" set JAVA_HOME=D:\jdk1.3.1
-if "%ANT_HOME%" == "" set ANT_HOME=D:\jakarta-ant-1.3
-if "%RESIN_HOME%" == "" set RESIN_HOME=D:\resin-1.2.5
-if "%OROMATCHER_HOME%" == "" set OROMATCHER_HOME=D:\Utils\jakarta-oro-2.0.3
+if "%POOLMAN_HOME%" == "" set POOLMAN_HOME=C:\utils\java\Poolman-2.0.3
+if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\java\jdk1.3
+if "%ANT_HOME%" == "" set ANT_HOME=C:\utils\java\jakarta-ant-1.3
+if "%RESIN_HOME%" == "" set RESIN_HOME=c:\utils\resin-1.2.5
+if "%OROMATCHER_HOME%" == "" set OROMATCHER_HOME=C:\utils\java\jakarta-oro-2.0.3
 
 REM === This automatically adds system classes to CLASSPATH ===
 if exist "%JAVA_HOME%\lib\tools.jar" set CLASSPATH=%JAVA_HOME%\lib\tools.jar

@@ -16,14 +16,14 @@ import com.xaf.form.*;
 public class PhoneField extends TextField
 {
     static public final long FLDFLAG_STRIPBRACKETS = TextField.FLDFLAG_STARTCUSTOM;
-
+	static public final String PATTERN_MATCHPHONE  = "^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})[ ]?([x][\\d]{1,5})?$";
 
     public PhoneField()
     {
         super();
         setFlag(FLDFLAG_STRIPBRACKETS);
         // set the dafault regex pattern for the phone field
-        setValidatePattern("/^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})[ ]?([x][\\d]{1,5})?$/");
+        setValidatePattern("/" + PATTERN_MATCHPHONE + "/");
         setValidatePatternErrorMessage("Input must be in the 999-999-9999 x99999 format.");
     }
 
@@ -33,53 +33,10 @@ public class PhoneField extends TextField
 		String attr = elem.getAttribute("strip-brackets");
 		if(attr.equals("no"))
             clearFlag(FLDFLAG_STRIPBRACKETS);
+
+        if(flagIsSet(FLDFLAG_STRIPBRACKETS))
+		{
+			setSubstitutePattern("s/" + PATTERN_MATCHPHONE + "/$1$2$3$4/g");
+		}
 	}
-
-    public boolean needsValidation(DialogContext dc)
-	{
-        return true;
-	}
-
-	public String formatValue(String value)
-	{
-        if(! flagIsSet(FLDFLAG_STRIPBRACKETS))
-            return value;
-
-        if(value == null)
-            return value;
-
-        String retValue = value;
-
-        try
-        {
-            String[] subgroups = this.patternMatches(value);
-            if (subgroups != null && subgroups.length > 0)
-            {
-                retValue = "";
-                for (int i=0; i < subgroups.length; i++)
-                {
-                    if (subgroups[i] != null)
-                        retValue += subgroups[i];
-                }
-            }
-
-        }
-        catch (Exception mpe)
-        {
-            mpe.printStackTrace();
-
-        }
-        return retValue;
-
-	}
-	public boolean isValid(DialogContext dc)
-	{
-        boolean result = super.isValid(dc);
-        if(! result)
-            return false;
-
-
-        return true;
-	}
-
 }
