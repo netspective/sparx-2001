@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseContext.java,v 1.4 2002-09-02 22:57:53 shahid.shah Exp $
+ * $Id: DatabaseContext.java,v 1.5 2002-10-14 00:15:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -95,8 +95,8 @@ public interface DatabaseContext
     public String translateDataSourceId(ValueContext vc, String dataSourceId);
 
     /**
-     * Given a data source, perform any special runtime translation of the data source parameters (like URL, user name,
-     * etc). vc can be null when not running within a servlet environment. dataSource can also be null if no
+     * Given a data source, perform any special runtime translation of the data source parameters such URL and user name.
+     * ValueContext can be null when not running within a servlet environment. DataSource can also be null if no
      * dataSource was found by a given dataSourceId.
      */
     public DataSource translateDataSource(ValueContext vc, String dataSourceId, DataSource dataSource);

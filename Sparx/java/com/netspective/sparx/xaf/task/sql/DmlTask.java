@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DmlTask.java,v 1.6 2002-09-02 22:56:25 shahid.shah Exp $
+ * $Id: DmlTask.java,v 1.7 2002-10-14 00:15:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -326,13 +326,7 @@ public class DmlTask extends BasicTask
             }
         }
     }
-    /**
-     * Attributes allowed:
-     *  1. action = "execute"
-     *  2. has-value
-     *  3. has-permission
-     *  4. is-true
-     */
+
     public void importConditionalFromXml(Element elem) throws TaskInitializeException
     {
         String action = elem.getAttribute("action");

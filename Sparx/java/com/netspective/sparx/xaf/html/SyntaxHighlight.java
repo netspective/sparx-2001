@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SyntaxHighlight.java,v 1.2 2002-09-17 02:08:52 shahid.shah Exp $
+ * $Id: SyntaxHighlight.java,v 1.3 2002-10-14 00:15:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
@@ -223,7 +223,7 @@ public class SyntaxHighlight
      *
      * @param fileName the fileName to get the source from
      * @param out place to write output.
-     * @returns true if this file type can be handled
+     * @return true if this file type can be handled
      * @throws IOException if an I/O error occurs.
      */
     public static boolean emitHtml(String type, Reader in, Writer out) throws IOException
@@ -252,7 +252,7 @@ public class SyntaxHighlight
      *
      * @param fileName the fileName to get the source from
      * @param out place to write output.
-     * @returns true if this file type can be handled
+     * @return true if this file type can be handled
      * @throws IOException if an I/O error occurs.
      */
     public static boolean emitHtml(File file, Writer out) throws IOException
@@ -272,7 +272,7 @@ public class SyntaxHighlight
      *
      * @param fileName the fileName to get the source from
      * @param out place to write output.
-     * @returns true if this file type can be handled
+     * @return true if this file type can be handled
      * @throws IOException if an I/O error occurs.
      */
     public static boolean emitHtml(String fileName, Writer out) throws IOException

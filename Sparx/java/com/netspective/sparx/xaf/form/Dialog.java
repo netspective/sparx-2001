@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.11 2002-10-13 19:54:55 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.12 2002-10-14 00:15:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -295,7 +295,7 @@ public class Dialog
     /**
      * Clears the flag
      *
-     * @para, flag bit-mapped value
+     * @param flag bit-mapped value
      */
     public final void clearFlag(long flag)
     {
