@@ -34,5 +34,6 @@ Apache Xerces                      2.0.2  xerces.jar   http://xml.apache.org/xer
 Jakarta Ant                        1.5.0  ant.jar      http://jakarta.apache.org/ant
 Jakarta Log4J                      1.2.6  log4j.jar    http://jakarta.apache.org/log4j/docs
 Jakarta ORO                        2.0.4  oro.jar      http://jakarta.apache.org/oro
+JUnit Testing Framework            3.8    junit.jar    http://www.junit.org
 IBM Bean Scripting Framework (BSF) 2.2    bsf.jar      http://www.ibm.com/developerworks/projects/bsf
-Netscape Rhino JavaScript for BSF  1.5R3  js.jar       http://www.mozilla.org/rhino/
+Netscape Rhino JavaScript for BSF  1.5R3  js.jar       http://www.mozilla.org/rhino

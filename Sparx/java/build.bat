@@ -1,6 +1,6 @@
 @echo off
 
-REM $Id: build.bat,v 1.5 2002-08-23 16:51:20 shahid.shah Exp $
+REM $Id: build.bat,v 1.6 2002-09-02 22:51:50 shahid.shah Exp $
 
 REM **************************************************************************
 REM ** This script should be be run from the SPARX_HOME\java directory.     **
@@ -45,6 +45,7 @@ set OROMATCHER_JAR=%SPARX_REDIST_LIB%\oro.jar
 set LOG4J_JAR=%SPARX_REDIST_LIB%\log4j.jar
 set BSF_JAR=%SPARX_REDIST_LIB%\bsf.jar
 set BSF_JS_JAR=%SPARX_REDIST_LIB%\js.jar
+set JUNIT_JAR=%SPARX_REDIST_LIB%\junit.jar
 
 set SERVLETAPI_JAR=%SPARX_REDIST_LIB%\servlet.jar
 set JDBC2X_JAR=%SPARX_REDIST_LIB%\jdbc.jar
@@ -52,7 +53,7 @@ set JDBC2X_JAR=%SPARX_REDIST_LIB%\jdbc.jar
 if exist "%JAVA_HOME%/lib/tools.jar" set JAVACP=%JAVA_HOME%/lib/tools.jar
 if exist "%JAVA_HOME%/lib/classes.zip" set JAVACP=%CLASSPATH%;%JAVA_HOME%/lib/classes.zip
 
-set USE_CLASS_PATH=%XMLAPIS_JAR%;%XERCES_JAR%;%OROMATCHER_JAR%;%LOG4J_JAR%;%SERVLETAPI_JAR%;%JDBC2X_JAR%;%XALAN_JAR%;%JAVACP%;%ANT_JAR%;%BSF_JAR%;%BSF_JS_JAR%
+set USE_CLASS_PATH=%XMLAPIS_JAR%;%XERCES_JAR%;%OROMATCHER_JAR%;%LOG4J_JAR%;%SERVLETAPI_JAR%;%JDBC2X_JAR%;%XALAN_JAR%;%JAVACP%;%ANT_JAR%;%BSF_JAR%;%BSF_JS_JAR%;%JUNIT_JAR%
 
 REM **************************************************************************
 REM ** Now that all the variables are set, execute Ant                      **
