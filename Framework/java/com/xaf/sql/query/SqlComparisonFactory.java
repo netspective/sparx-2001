@@ -35,6 +35,7 @@ public class SqlComparisonFactory
 	static public void setupDefaults()
 	{
 		addComparison(new BinaryOpComparison("equals", "equals", "general", "="), new String[] { "is", "=" });
+		addComparison(new BinaryOpComparison("not-equals", "does not equal", "general", "!="), new String[] { "is-not", "!=" });
 		addComparison(new StartsWithComparison(), null);
 		addComparison(new ContainsComparison(), null);
 		addComparison(new EndsWithComparison(), null);
