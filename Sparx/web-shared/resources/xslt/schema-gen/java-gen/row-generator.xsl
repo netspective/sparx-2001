@@ -532,7 +532,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, dbms, value);
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 		} else {
-			dml.removeColumn("<xsl:value-of select="@name"/>");
+			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 			dml.createSql(dbms);
 		}
 </xsl:for-each>
@@ -546,7 +546,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, dbms, value);
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 		} else {
-			dml.removeColumn("<xsl:value-of select="@name"/>");
+			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 			dml.createSql(dbms);
 		}
 </xsl:for-each>
@@ -564,14 +564,14 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:for-each select="column[@_gen-create-id = 'autoinc']">
 		if (!databasePolicy.retainAutoIncColInDml())
 		{
-			dml.removeColumn("<xsl:value-of select="@name"/>");
+			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 			dml.createSql(dbms);
 		}
 </xsl:for-each>
 <xsl:for-each select="column[@_gen-create-id = 'guid32']">
 		if (!databasePolicy.retainGUIDColInDml())
 		{
-			dml.removeColumn("<xsl:value-of select="@name"/>");
+			dml.removeColumn(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
 			dml.createSql(dbms);
 		}
 </xsl:for-each>
@@ -661,7 +661,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 </xsl:if>
 -->
 	/** <xsl:value-of select="@descr"/> **/
-    public void set<xsl:value-of select="@_gen-method-name"/>SqlExpr(String value) { setCustomSqlExpr(<xsl:value-of select="$array-index"/>, "ansi", value); }
+    public void set<xsl:value-of select="@_gen-method-name"/>SqlExpr(String value) { setCustomSqlExpr(<xsl:value-of select="$array-index"/>, DEFAULT_DBMS, value); }
 	public void set<xsl:value-of select="@_gen-method-name"/>SqlExpr(String dbms, String value) { setCustomSqlExpr(<xsl:value-of select="$array-index"/>, dbms, value); }
 <xsl:if	test="@_gen-ref-table-is-enum = 'yes'">
 	/** <xsl:value-of select="@descr"/> **/
