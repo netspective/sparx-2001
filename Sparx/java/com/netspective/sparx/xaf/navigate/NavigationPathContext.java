@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.5 2002-12-31 19:48:29 shahid.shah Exp $
+ * $Id: NavigationPathContext.java,v 1.6 2003-01-01 19:29:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -146,6 +146,11 @@ public class NavigationPathContext extends ServletValueContext
     public final String getRootUrl()
     {
         return rootUrl;
+    }
+
+    public final String getServletRootUrl()
+    {
+        return rootUrl + "/" + ((HttpServletRequest) getRequest()).getServletPath();
     }
 
     public int getMaxLevel()
