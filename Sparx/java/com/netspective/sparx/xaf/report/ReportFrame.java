@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportFrame.java,v 1.5 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: ReportFrame.java,v 1.6 2003-03-05 23:06:53 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -74,10 +74,12 @@ public class ReportFrame
     public final static long RPTFRAMEFLAG_HAS_ADD = RPTFRAMEFLAG_HAS_FOOTING * 2;
     public final static long RPTFRAMEFLAG_HAS_EDIT = RPTFRAMEFLAG_HAS_ADD * 2;
     public final static long RPTFRAMEFLAG_HAS_DELETE = RPTFRAMEFLAG_HAS_EDIT * 2;
+    public static final long RPTFRAMEFLAG_IS_SELECTABLE = RPTFRAMEFLAG_HAS_DELETE * 2;
 
     private SingleValueSource heading;
     private SingleValueSource headingExtra;
     private SingleValueSource footing;
+    private SingleValueSource selectableValue;
     private SingleValueSource recordAddCaption;
     private SingleValueSource recordAddUrlFormat;
     private SingleValueSource recordEditUrlFormat;
@@ -91,6 +93,22 @@ public class ReportFrame
     {
         heading = null;
         footing = null;
+    }
+
+    public SingleValueSource getSelectableValue()
+    {
+        return selectableValue;
+    }
+
+    public void setSelectableValue(SingleValueSource vs)
+    {
+        selectableValue = vs;
+        applyFlag(RPTFRAMEFLAG_IS_SELECTABLE, selectableValue != null);
+    }
+
+    public void setSelectableValue(String value)
+    {
+        setSelectableValue(value != null && value.length() > 0 ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
     }
 
     /**
@@ -110,6 +128,11 @@ public class ReportFrame
     public boolean isCollapsed()
     {
         return collapsed;
+    }
+
+    public final boolean flagIsSet(long flag)
+    {
+        return (flags & flag) == 0 ? false : true;
     }
 
     public long getFlags()
@@ -273,6 +296,8 @@ public class ReportFrame
         setHeading(XmlSource.getAttrValueOrTagText(elem, "heading", null));
         setHeadingExtra(XmlSource.getAttrValueOrTagText(elem, "heading-extra", null));
         setFooting(XmlSource.getAttrValueOrTagText(elem, "footing", null));
+
+        setSelectableValue(XmlSource.getAttrValueOrTagText(elem, "allow-select", null));
 
         setRecordAddCaption(XmlSource.getAttrValueOrTagText(elem, "record-add-caption", null));
         setRecordAddUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-add-url", null));
