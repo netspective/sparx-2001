@@ -1,11 +1,14 @@
 package com.xaf.security;
 
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 import com.xaf.form.*;
 import com.xaf.form.field.*;
+import com.xaf.log.*;
+import com.xaf.skin.*;
 import com.xaf.value.*;
 
 public class LoginDialog extends Dialog
@@ -25,7 +28,14 @@ public class LoginDialog extends Dialog
 
 		userNameCookieName = DEFAULT_COOKIENAME_USERID;
 		userInfoSessionAttrName = DEFAULT_ATTRNAME_USERINFO;
+
+		setRetainAllRequestParams(true);
     }
+
+	public DialogSkin getSkin()
+	{
+		return SkinFactory.getDialogSkin();
+	}
 
 	public TextField createUserIdField()
 	{
@@ -100,6 +110,50 @@ public class LoginDialog extends Dialog
 		Cookie cookie = new Cookie(userNameCookieName, dc.getValue(userIdField));
 		cookie.setPath("/");
 		((HttpServletResponse) dc.getResponse()).addCookie(cookie);
+
+		AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_SECURITY);
+		if(cat.isInfoEnabled())
+		{
+			String userId = user.getUserId();
+			StringBuffer info = new StringBuffer();
+			info.append(userId);
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			BitSet perms = user.getUserPermissions();
+			info.append(perms != null ? user.getUserPermissions().toString() : "{}");
+			info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+			String[] roles = user.getUserRoles();
+			if(roles != null)
+			{
+				for(int r = 0; r < roles.length; r++)
+				{
+					if(r > 0)
+						info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+					info.append(roles[r]);
+				}
+			}
+		}
+
+		cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SECURITY);
+		if(cat.isDebugEnabled())
+		{
+			String userId = user.getUserId();
+			cat.debug("User '"+ userId +"' ("+ user.getUserName() +") is now authenticated for Session ID '"+ ((HttpServletRequest) dc.getRequest()).getSession(true).getId() +"'");
+
+			BitSet perms = user.getUserPermissions();
+			if(perms != null)
+				cat.debug("User '"+ userId +"' has permissions " + user.getUserPermissions().toString());
+			else
+				cat.debug("User '"+ userId +" has no permissions.");
+
+			String[] roles = user.getUserRoles();
+			if(roles != null)
+			{
+				for(int r = 0; r < roles.length; r++)
+					cat.debug("User '"+ userId +"' has role " + roles[r]);
+			}
+			else
+				cat.debug("User '"+ userId +" has no roles.");
+		}
 	}
 
 	public void clearUserData(ValueContext vc)
