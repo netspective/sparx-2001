@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LoginDialog.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: LoginDialog.java,v 1.2 2002-02-01 04:02:12 thua Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -59,11 +59,13 @@ package com.netspective.sparx.xaf.security;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.netspective.sparx.util.log.AppServerCategory;
 import com.netspective.sparx.util.log.LogManager;
@@ -74,6 +76,8 @@ import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.field.TextField;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.querydefn.QuerySelectScrollState;
+import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class LoginDialog extends Dialog
@@ -301,6 +305,7 @@ public class LoginDialog extends Dialog
     public void clearUserData(ValueContext vc)
     {
         HttpServletRequest req = (HttpServletRequest) vc.getRequest();
+        HttpSession session = req.getSession();
         AuthenticatedUser user = (AuthenticatedUser) req.getSession(true).getAttribute(userInfoSessionAttrName);
 
         AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_SECURITY);
@@ -334,6 +339,20 @@ public class LoginDialog extends Dialog
                 }
             }
             cat.info(info);
+        }
+        try
+        {
+            // clean up any connections still held open by query select dialogs
+            QuerySelectScrollState activeState = (QuerySelectScrollState) session.getAttribute(QueryBuilderDialog.QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+            if(activeState != null && !flagIsSet(QueryBuilderDialog.QBDLGFLAG_ALLOW_MULTIPLE_QSSS))
+            {
+                activeState.close();
+                session.removeAttribute(QueryBuilderDialog.QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
         }
 
         req.getSession(true).removeAttribute(userInfoSessionAttrName);

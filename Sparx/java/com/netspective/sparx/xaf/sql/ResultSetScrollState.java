@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetScrollState.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: ResultSetScrollState.java,v 1.2 2002-02-01 04:02:12 thua Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -211,9 +211,14 @@ public class ResultSetScrollState
         Statement stmt = resultSet.getStatement();
         Connection conn = stmt.getConnection();
         resultSet.close();
+        resultSet = null;
         stmt.close();
+        stmt = null;
         if(conn.getAutoCommit() == true)
+        {
             conn.close();
+            conn = null;
+        }
     }
 
     protected void finalize() throws Throwable

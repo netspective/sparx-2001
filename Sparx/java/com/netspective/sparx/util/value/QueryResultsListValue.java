@@ -51,15 +51,12 @@
  */
  
 /**
- * $Id: QueryResultsListValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: QueryResultsListValue.java,v 1.2 2002-02-01 04:02:12 thua Exp $
  */
 
 package com.netspective.sparx.util.value;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -192,9 +189,7 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
             {
                 if(rs != null)
                 {
-                    Connection con = rs.getStatement().getConnection();
-                    rs.close();
-                    con.close();
+                    closeStatement(rs);
                 }
 
             }
@@ -205,6 +200,19 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
         }
 
         return choices;
+    }
+
+    private void closeStatement(ResultSet rs) throws SQLException
+    {
+        Statement stmt = rs.getStatement();
+        Connection con = stmt.getConnection();
+        rs.close();
+        stmt.close();
+        con.close();
+
+        rs = null;
+        stmt = null;
+        con = null;
     }
 
     public String[] getValues(ValueContext vc)
@@ -228,9 +236,7 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
             {
                 if(rs != null)
                 {
-                    Connection con = rs.getStatement().getConnection();
-                    rs.close();
-                    con.close();
+                    closeStatement(rs);
                 }
 
             }
@@ -264,9 +270,7 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
             {
                 if(rs != null)
                 {
-                    Connection con = rs.getStatement().getConnection();
-                    rs.close();
-                    con.close();
+                    closeStatement(rs);
                 }
 
             }

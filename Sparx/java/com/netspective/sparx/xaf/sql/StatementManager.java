@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementManager.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: StatementManager.java,v 1.2 2002-02-01 04:02:12 thua Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -153,9 +153,14 @@ public class StatementManager extends XmlSource
             Statement stmt = rs.getStatement();
             Connection conn = stmt.getConnection();
             rs.close();
+            rs = null;
             stmt.close();
+            stmt = null;
             if(conn.getAutoCommit() == true)
+            {
                 conn.close();
+                conn = null;
+            }
         }
 
         protected void finalize() throws Throwable

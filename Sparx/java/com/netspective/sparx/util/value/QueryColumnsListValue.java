@@ -51,15 +51,12 @@
  */
  
 /**
- * $Id: QueryColumnsListValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: QueryColumnsListValue.java,v 1.2 2002-02-01 04:02:12 thua Exp $
  */
 
 package com.netspective.sparx.util.value;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 
 import javax.naming.NamingException;
 
@@ -151,9 +148,7 @@ public class QueryColumnsListValue extends ListSource
             {
                 if(rs != null)
                 {
-                    Connection con = rs.getStatement().getConnection();
-                    rs.close();
-                    con.close();
+                    closeStatement(rs);
                 }
             }
             catch(Exception e)
@@ -163,6 +158,19 @@ public class QueryColumnsListValue extends ListSource
         }
 
         return choices;
+    }
+
+    private void closeStatement(ResultSet rs) throws SQLException
+    {
+        Statement stmt = rs.getStatement();
+        Connection con = stmt.getConnection();
+        rs.close();
+        stmt.close();
+        con.close();
+
+        rs = null;
+        stmt = null;
+        con = null;
     }
 
     public String[] getValues(ValueContext vc)
@@ -186,9 +194,7 @@ public class QueryColumnsListValue extends ListSource
             {
                 if(rs != null)
                 {
-                    Connection con = rs.getStatement().getConnection();
-                    rs.close();
-                    con.close();
+                    closeStatement(rs);
                 }
 
             }
