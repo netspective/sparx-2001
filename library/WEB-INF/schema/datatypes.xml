@@ -101,6 +101,9 @@
 		<sqldefn dbms="hsqldb">integer IDENTITY</sqldefn>
 	</datatype>
 
+	<datatype name="guid32" type="text">
+	</datatype>
+
 	<datatype name="datablock">
 		<java-class package="java.lang">Object</java-class>
 		<sqldefn dbms="oracle">clob</sqldefn>

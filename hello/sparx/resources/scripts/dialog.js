@@ -3,55 +3,55 @@
  *
  * Netspective Corporation permits redistribution, modification and use
  * of this file in source and binary form ("The Software") under the
- * Netspective Source License ("NSL" or "The License"). The following 
- * conditions are provided as a summary of the NSL but the NSL remains the 
+ * Netspective Source License ("NSL" or "The License"). The following
+ * conditions are provided as a summary of the NSL but the NSL remains the
  * canonical license and must be accepted before using The Software. Any use of
- * The Software indicates agreement with the NSL. 
+ * The Software indicates agreement with the NSL.
  *
  * 1. Each copy or derived work of The Software must preserve the copyright
  *    notice and this notice unmodified.
  *
- * 2. Redistribution of The Software is allowed in object code form only 
- *    (as Java .class files or a .jar file containing the .class files) and only 
- *    as part of an application that uses The Software as part of its primary 
- *    functionality. No distribution of the package is allowed as part of a software 
- *    development kit, other library, or development tool without written consent of 
- *    Netspective Corporation. Any modified form of The Software is bound by 
+ * 2. Redistribution of The Software is allowed in object code form only
+ *    (as Java .class files or a .jar file containing the .class files) and only
+ *    as part of an application that uses The Software as part of its primary
+ *    functionality. No distribution of the package is allowed as part of a software
+ *    development kit, other library, or development tool without written consent of
+ *    Netspective Corporation. Any modified form of The Software is bound by
  *    these same restrictions.
- * 
- * 3. Redistributions of The Software in any form must include an unmodified copy of 
+ *
+ * 3. Redistributions of The Software in any form must include an unmodified copy of
  *    The License, normally in a plain ASCII text file unless otherwise agreed to,
  *    in writing, by Netspective Corporation.
  *
- * 4. The names "Sparx" and "Netspective" are trademarks of Netspective 
- *    Corporation and may not be used to endorse products derived from The 
- *    Software without without written consent of Netspective Corporation. "Sparx" 
- *    and "Netspective" may not appear in the names of products derived from The 
+ * 4. The names "Sparx" and "Netspective" are trademarks of Netspective
+ *    Corporation and may not be used to endorse products derived from The
+ *    Software without without written consent of Netspective Corporation. "Sparx"
+ *    and "Netspective" may not appear in the names of products derived from The
  *    Software without written consent of Netspective Corporation.
  *
- * 5. Please attribute functionality to Sparx where possible. We suggest using the 
+ * 5. Please attribute functionality to Sparx where possible. We suggest using the
  *    "powered by Sparx" button or creating a "powered by Sparx(tm)" link to
  *    http://www.netspective.com for each application using Sparx.
  *
- * The Software is provided "AS IS," without a warranty of any kind. 
+ * The Software is provided "AS IS," without a warranty of any kind.
  * ALL EXPRESS OR IMPLIED REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
  * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
  * OR NON-INFRINGEMENT, ARE HEREBY DISCLAIMED.
  *
  * NETSPECTIVE CORPORATION AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING 
+ * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING
  * THE SOFTWARE. IN NO EVENT WILL NETSPECTIVE OR ITS LICENSORS BE LIABLE
  * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
  * CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
  * REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
  * INABILITY TO USE THE SOFTWARE, EVEN IF HE HAS BEEN ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGES.      
+ * OF SUCH DAMAGES.
  *
  * @author Shahid N. Shah
  */
- 
+
 /**
- * $Id: dialog.js,v 1.3 2002-08-25 21:03:14 shahid.shah Exp $
+ * $Id: dialog.js,v 1.4 2002-10-20 16:41:11 shahid.shah Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -73,9 +73,9 @@ function setAllowValidation(value)
 // BrowserCheck class
 // **************************************************************************
 function BrowserCheck()
-{ 
+{
     //Browsercheck (needed)
-    this.ver = navigator.appVersion; 
+    this.ver = navigator.appVersion;
     this.agent = navigator.userAgent;
     this.dom = document.getElementById? true : false;
     this.ie5 = (this.ver.indexOf("MSIE 5")>-1 && this.dom)? true : false;
@@ -84,7 +84,7 @@ function BrowserCheck()
     this.ie = this.ie4 || this.ie5 || this.ie6;
     this.mac = this.agent.indexOf("Mac") > -1;
     this.opera5 = this.agent.indexOf("Opera 5") > -1;
-    this.ns6 = (this.dom && parseInt(this.ver) >= 5) ? true : false; 
+    this.ns6 = (this.dom && parseInt(this.ver) >= 5) ? true : false;
     this.ns4 = (document.layers && !this.dom)? true : false;
     this.browser = (this.ie6 || this.ie5 || this.ie4 || this.ns4 || this.ns6 || this.opera5 || this.dom);
     return this
@@ -93,7 +93,7 @@ var browser = new BrowserCheck() //Making browsercheck object
 
 // Get the dialog field control for IE4
 function getControl_IE4(dialog, id)
-{    
+{
     return document.all.item(id);
 }
 
@@ -108,7 +108,7 @@ function getControl_Dom(dialog, id)
 
 // Get the dialog field control for Netscape 4
 function getControl_NS4(dialog, id)
-{  
+{
     // a dialog field because the ID starts with a PREFIX
     if (id.substring(0,3) == DIALOGFIELD_PREFIX)
         return document.forms[dialog.name].elements[id];
@@ -141,7 +141,7 @@ function radioButtonSelected(fieldName, value)
 		alert("Field '" + fieldId + "' not found in active dialog -- can't check for radio button value");
 		return false;
 	}
-	
+
 	return control.checked;
 }
 
@@ -156,7 +156,7 @@ function FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, 
     this.isValid = onValidate;
     this.getFocus = onFocus;
     this.valueChanged = onChange;
-    this.keyPress = onKeyPress;    
+    this.keyPress = onKeyPress;
     this.loseFocus = onBlur;
     this.click = onClick;
 }
@@ -178,7 +178,7 @@ function Dialog(name)
     this.fields = new Array();              // straight list (simple array)
     this.fieldsById = new Array();          // hash -- value is field
     this.fieldsByQualName = new Array();    // hash -- value is field
-    
+
     // the remaining are object-based methods
     this.registerField = Dialog_registerField;
     this.finalizeContents = Dialog_finalizeContents;
@@ -192,10 +192,10 @@ function Dialog_registerField(field)
     field.fieldIndex = this.fields.length;
     this.fields[field.fieldIndex] = field;
     this.fieldsById[field.controlId] = field;
-    this.fieldsByQualName[field.qualifiedName] = field; 
+    this.fieldsByQualName[field.qualifiedName] = field;
 
     if(field.fieldIndex > 0)
-        field.prevFieldIndex = field.fieldIndex-1;      
+        field.prevFieldIndex = field.fieldIndex-1;
     field.nextFieldIndex = field.fieldIndex+1;
 }
 
@@ -220,10 +220,10 @@ function Dialog_isValid()
         if(field.requiresPreSubmit)
             field.doPreSubmit();
     }
-    
+
     if(! this.allowValidation())
         return true;
-    
+
     var isValid = true;
     for(var i = 0; i < dialogFields.length; i++)
     {
@@ -260,21 +260,23 @@ function setActiveDialog(dialog)
 
 // These constants MUST be kept identical to what is in com.netspective.sparx.form.DialogField
 
-var FLDFLAG_REQUIRED             = 1;
-var FLDFLAG_PRIMARYKEY           = FLDFLAG_REQUIRED * 2;
-var FLDFLAG_INVISIBLE            = FLDFLAG_PRIMARYKEY * 2;
-var FLDFLAG_READONLY             = FLDFLAG_INVISIBLE * 2;
-var FLDFLAG_INITIAL_FOCUS        = FLDFLAG_READONLY * 2;
-var FLDFLAG_PERSIST              = FLDFLAG_INITIAL_FOCUS * 2;
-var FLDFLAG_CREATEADJACENTAREA   = FLDFLAG_PERSIST * 2;
-var FLDFLAG_SHOWCAPTIONASCHILD   = FLDFLAG_CREATEADJACENTAREA * 2;
-var FLDFLAG_INPUT_HIDDEN         = FLDFLAG_SHOWCAPTIONASCHILD * 2;
-var FLDFLAG_HAS_CONDITIONAL_DATA = FLDFLAG_INPUT_HIDDEN * 2;
-var FLDFLAG_COLUMN_BREAK_BEFORE  = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
-var FLDFLAG_COLUMN_BREAK_AFTER   = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
-var FLDFLAG_BROWSER_READONLY     = FLDFLAG_COLUMN_BREAK_AFTER * 2;
-var FLDFLAG_IDENTIFIER           = FLDFLAG_BROWSER_READONLY * 2;
-var FLDFLAG_STARTCUSTOM          = FLDFLAG_IDENTIFIER * 2;// all DialogField "children" will use this
+var FLDFLAG_REQUIRED                           = 1;
+var FLDFLAG_PRIMARYKEY                         = FLDFLAG_REQUIRED * 2;
+var FLDFLAG_INVISIBLE                          = FLDFLAG_PRIMARYKEY * 2;
+var FLDFLAG_READONLY                           = FLDFLAG_INVISIBLE * 2;
+var FLDFLAG_INITIAL_FOCUS                      = FLDFLAG_READONLY * 2;
+var FLDFLAG_PERSIST                            = FLDFLAG_INITIAL_FOCUS * 2;
+var FLDFLAG_CREATEADJACENTAREA                 = FLDFLAG_PERSIST * 2;
+var FLDFLAG_SHOWCAPTIONASCHILD                 = FLDFLAG_CREATEADJACENTAREA * 2;
+var FLDFLAG_INPUT_HIDDEN                       = FLDFLAG_SHOWCAPTIONASCHILD * 2;
+var FLDFLAG_HAS_CONDITIONAL_DATA               = FLDFLAG_INPUT_HIDDEN * 2;
+var FLDFLAG_COLUMN_BREAK_BEFORE                = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
+var FLDFLAG_COLUMN_BREAK_AFTER                 = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
+var FLDFLAG_BROWSER_READONLY                   = FLDFLAG_COLUMN_BREAK_AFTER * 2;
+var FLDFLAG_IDENTIFIER                         = FLDFLAG_BROWSER_READONLY * 2;
+var FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA    = FLDFLAG_IDENTIFIER * 2;
+var FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
+var FLDFLAG_STARTCUSTOM                        = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;// all DialogField "children" will use this
 // These constants MUST be kept identical to what is in com.netspective.sparx.form.field.SelectField
 
 var SELECTSTYLE_RADIO      = 0;
@@ -291,9 +293,9 @@ var DATE_DTTYPE_BOTH     = 2;
 function DialogField(type, id, name, qualifiedName, caption, flags)
 {
     this.typeName = type;
-    this.type = FIELD_TYPES[type];    
+    this.type = FIELD_TYPES[type];
     if (typeof this.type == "undefined")
-        this.type = null;        
+        this.type = null;
     this.controlId = id;
     this.name = name;
     this.qualifiedName = qualifiedName;
@@ -303,15 +305,15 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
     this.dependentConditions = new Array();
     this.style = null;
     this.requiresPreSubmit = false;
-    
+
     this.fieldIndex = -1;
-    this.prevFieldIndex = -1;       
+    this.prevFieldIndex = -1;
     this.nextFieldIndex = -1;
-    
+
     // the remaining are object-based methods
     if (browser.ie5 || browser.ie6 || browser.ns6)
     {
-        this.getControl = DialogField_getControl_Dom; 
+        this.getControl = DialogField_getControl_Dom;
         this.getControlByQualifiedName = DialogField_getControlByQualifiedName_Dom;
         this.getFieldAreaElem = DialogField_getFieldAreaElem_Dom;
     }
@@ -322,25 +324,31 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
         this.getFieldAreaElem = DialogField_getFieldAreaElem_NS4;
     }
     else if (browser.ie4)
-    {        
+    {
         this.getControl = DialogField_getControl_IE4;
         this.getControlByQualifiedName = DialogField_getControlByQualifiedName_IE4;
         this.getFieldAreaElem = DialogField_getFieldAreaElem_IE4;
     }
-    
+
     this.evaluateConditionals = DialogField_evaluateConditionals;
     this.finalizeContents = DialogField_finalizeContents;
     this.isValid = DialogField_isValid;
     this.doPreSubmit = DialogField_doPreSubmit;
-    this.focusNext = DialogField_focusNext;    
+    this.focusNext = DialogField_focusNext;
     this.alertRequired = DialogField_alertRequired;
     this.isRequired = DialogField_isRequired;
+    this.isReadOnly = DialogField_isReadOnly;
     this.alertMessage = DialogField_alertMessage;
 }
 
 function DialogField_isRequired()
 {
     return (this.flags & FLDFLAG_REQUIRED) != 0;
+}
+
+function DialogField_isReadOnly()
+{
+    return ((this.flags & FLDFLAG_READONLY) != 0) || ((this.flags & FLDFLAG_BROWSER_READONLY) != 0);
 }
 
 /**
@@ -355,7 +363,7 @@ function DialogField_getControl_IE4(dialog)
  * Get the dialog field control  using its ID for DOM browsers such as IE5, IE6 and NS6
  */
 function DialogField_getControl_Dom(dialog)
-{    
+{
     return getControl_Dom(dialog, this.controlId);
 }
 
@@ -363,15 +371,15 @@ function DialogField_getControl_Dom(dialog)
  * Get the dialog field control  using its ID for Netscape 4
  */
 function DialogField_getControl_NS4(dialog)
-{      
-    return getControl_NS4(dialog, this.controlId);                
+{
+    return getControl_NS4(dialog, this.controlId);
 }
 
 /**
  * Get the dialog field control  using its qualified name for IE4
  */
 function DialogField_getControlByQualifiedName_IE4(dialog)
-{    
+{
     return getControl_IE4(dialog, this.qualifiedName);
 }
 
@@ -379,7 +387,7 @@ function DialogField_getControlByQualifiedName_IE4(dialog)
  * Get the dialog field control  using its qualified name for DOM browsers such as IE5, IE6 and NS6
  */
 function DialogField_getControlByQualifiedName_Dom(dialog)
-{        
+{
     return getControl_Dom(dialog, this.qualifiedName);
 }
 
@@ -387,8 +395,8 @@ function DialogField_getControlByQualifiedName_Dom(dialog)
  * Get the dialog field control using its qualified name for Netscape 4
  */
 function DialogField_getControlByQualifiedName_NS4(dialog)
-{      
-    return getControl_NS4(dialog, this.qualifiedName);                
+{
+    return getControl_NS4(dialog, this.qualifiedName);
 }
 
 function DialogField_finalizeContents(dialog)
@@ -401,7 +409,7 @@ function DialogField_finalizeContents(dialog)
 
     if(this.style != null && this.style == SELECTSTYLE_MULTIDUAL)
         this.requiresPreSubmit = true;
-        
+
     if(this.dependentConditions.length > 0)
         this.evaluateConditionals(dialog);
 
@@ -416,8 +424,8 @@ function DialogField_finalizeContents(dialog)
 }
 
 function DialogField_evaluateConditionals(dialog)
-{   
-    if(((this.flags & FLDFLAG_READONLY) != 0))
+{
+    if(this.isReadOnly())
         return;
 
     var control = this.getControl(dialog);
@@ -426,7 +434,7 @@ function DialogField_evaluateConditionals(dialog)
         alert("Unable to find control '"+this.controlId+"' in DialogField.evaluateConditionals()");
         return;
     }
-    
+
     var conditionalFields = this.dependentConditions;
     for(var i = 0; i < conditionalFields.length; i++)
         conditionalFields[i].evaluate(dialog, control);
@@ -460,22 +468,25 @@ function DialogField_alertRequired(control)
 
 function DialogField_isValid()
 {
+    if(this.isReadOnly())
+        return true;
+
     // perform default validation first
     var control = this.getControl(dialog);
     if (control == null)
         return true;
-        
+
     // now see if there are any type-specific validations to perform
     var fieldType = this.type;
     if(fieldType != null && fieldType.isValid != null)
-    {  
+    {
         if (this.customHandlers.isValid != null)
-        {            
+        {
             var valid = true;
             if (this.customHandlers.isValidType == 'extends')
-                valid = fieldType.isValid(this, control);        
+                valid = fieldType.isValid(this, control);
             if (valid)
-            {             
+            {
                 valid = this.customHandlers.isValid(this, control);
             }
             return valid;
@@ -498,7 +509,7 @@ function DialogField_isValid()
             }
         }
     }
-    
+
     return true;
 }
 
@@ -506,13 +517,13 @@ function DialogField_doPreSubmit()
 {
     if(this.style != null && this.style == SELECTSTYLE_MULTIDUAL)
     {
-        // Select all items in multidual elements. If items aren't selected, 
-        // they won't be posted.        
-        var control = this.getControl(dialog);        
+        // Select all items in multidual elements. If items aren't selected,
+        // they won't be posted.
+        var control = this.getControl(dialog);
         for (var i = 0; i < control.options.length; i++)
         {
             control.options[i].selected = true;
-        }       
+        }
     }
 }
 
@@ -521,17 +532,17 @@ function DialogField_focusNext(dialog)
     var dialogFieldsCount = dialog.fields.length;
     var nextField = null;
     var nextFieldControl = null;
-    var fieldIndex = this.nextFieldIndex;       
+    var fieldIndex = this.nextFieldIndex;
     var foundEditable = false;
     while((! foundEditable) && fieldIndex < dialogFieldsCount)
     {
-        nextField = dialog.fields[fieldIndex];        
+        nextField = dialog.fields[fieldIndex];
         nextFieldAreaElem = nextField.getFieldAreaElem(dialog);
         nextFieldControl = nextField.getControl(dialog);
         //nextFieldControl = document.all.item(nextField.controlId);
         if(nextFieldControl != null && nextFieldControl.length > 0)
             nextFieldControl = nextFieldControl[0];
-            
+
         if(nextField.typeName == "com.netspective.sparx.form.DialogDirector")
             return false;
 
@@ -562,7 +573,7 @@ function DialogField_focusNext(dialog)
         }
         return true;
     }
-    
+
     return false;
 }
 
@@ -578,7 +589,7 @@ function DialogField_getFieldAreaElem_IE4(dialog)
     {
         fieldAreaId = GRIDFIELDROW_PREFIX + this.qualifiedName;
         fieldAreaElem = getControl_IE4(dialog, fieldAreaId);
-    }    
+    }
     return fieldAreaElem;
 }
 
@@ -587,37 +598,37 @@ function DialogField_getFieldAreaElem_IE4(dialog)
  * This does not get the control of the dialog field(INPUT)!
  */
 function DialogField_getFieldAreaElem_Dom(dialog)
-{    
-    var fieldAreaId = FIELDROW_PREFIX + this.name;    
-    var fieldAreaElem = getControl_Dom(dialog, fieldAreaId);  
+{
+    var fieldAreaId = FIELDROW_PREFIX + this.name;
+    var fieldAreaElem = getControl_Dom(dialog, fieldAreaId);
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
         fieldAreaId = GRIDFIELDROW_PREFIX + this.qualifiedName;
-        fieldAreaElem = getControl_Dom(dialog, fieldAreaId);   
-    }        
+        fieldAreaElem = getControl_Dom(dialog, fieldAreaId);
+    }
     return fieldAreaElem;
 }
 
 /**
  * Gets the control of the table row which the dialog field belongsd to for Netscape 4
- * This does not get the control of the dialog field(INPUT)! 
+ * This does not get the control of the dialog field(INPUT)!
  */
 function DialogField_getFieldAreaElem_NS4(dialog)
 {
     var fieldAreaId = FIELDROW_PREFIX + this.name;
-    var fieldAreaElem = getControl_NS4(dialog, fieldAreaId);  
+    var fieldAreaElem = getControl_NS4(dialog, fieldAreaId);
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
         fieldAreaId = GRIDFIELDROW_PREFIX + this.qualifiedName;
         fieldAreaElem = getControl_NS4(dialog, fieldAreaId);
-    }    
+    }
     return fieldAreaElem;
 }
 
 function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
 {
     var isChecked = sourceCheckbox.checked;
-    
+
     for(var f = 0; f < document.forms.length; f++)
     {
         var form = document.forms[f];
@@ -640,9 +651,9 @@ function DialogFieldConditionalDisplay(source, partner, expression)
     this.source = source;
     this.partner = partner;
     this.expression = expression;
-    
+
     // the remaining are object-based methods
-    this.evaluate = DialogFieldConditionalDisplay_evaluate;    
+    this.evaluate = DialogFieldConditionalDisplay_evaluate;
 }
 
 function DialogFieldConditionalDisplay_evaluate(dialog, control)
@@ -652,17 +663,17 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     //    then go ahead and use that
     // -- if no primary field row is found, find the actual control and
     //    use that to hide/show
-    
+
     if(control == null)
     {
         alert("control is null in DialogFieldConditionalDisplay.evaluate(control)");
-        return;    
+        return;
     }
 
-    var condSource = dialog.fieldsByQualName[this.source];       
-    var fieldAreaElem = condSource.getFieldAreaElem(dialog);    
+    var condSource = dialog.fieldsByQualName[this.source];
+    var fieldAreaElem = condSource.getFieldAreaElem(dialog);
     if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
-    {       
+    {
         fieldAreaElem = condSource.getControl(dialog);
         if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
         {
@@ -670,16 +681,16 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
             return;
         }
     }
-    
+
     // now that we have the fieldArea that we want to show/hide go ahead
     // and evaluate the js expression to see if the field should be shown
     // or hidden. remember, the expression is evaluted in the current context
     // which means the word "control" refers to the control that is the
-    // the conditional "partner" (not the source)   
+    // the conditional "partner" (not the source)
     if(eval(this.expression) == true)
     {
         //fieldAreaElem.className = 'section_field_area_conditional_expanded';
-        if (fieldAreaElem.style) 
+        if (fieldAreaElem.style)
             fieldAreaElem.style.display = '';
         else
             fieldAreaElem.visibility = 'show';
@@ -687,8 +698,8 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     else
     {
         //fieldAreaElem.className = 'section_field_area_conditional';
-        if (fieldAreaElem.style) 
-            fieldAreaElem.style.display = 'none'; 
+        if (fieldAreaElem.style)
+            fieldAreaElem.style.display = 'none';
         else
             fieldAreaElem.visibility = 'hide';
     }
@@ -710,16 +721,16 @@ Input:
 Return:
     none
 */
-function MoveSelectItems(strFormName, strFromSelect, strToSelect, blnSort) 
+function MoveSelectItems(strFormName, strFromSelect, strToSelect, blnSort)
 {
     var dialog = eval("document.forms." + strFormName);
     var objSelectFrom = dialog.elements[strFromSelect];
     var objSelectTo = dialog.elements[strToSelect];
     var intLength = objSelectFrom.options.length;
 
-    for (var i=0; i < intLength; i++) 
+    for (var i=0; i < intLength; i++)
     {
-        if(objSelectFrom.options[i].selected && objSelectFrom.options[i].value != "") 
+        if(objSelectFrom.options[i].selected && objSelectFrom.options[i].value != "")
         {
             var objNewOpt = new Option();
             objNewOpt.value = objSelectFrom.options[i].value;
@@ -743,11 +754,11 @@ Input:
 Return:
     none
 */
-function RemoveEmpties(objSelect, intStart)  
+function RemoveEmpties(objSelect, intStart)
 {
-    for(var i=intStart; i<objSelect.options.length; i++) 
+    for(var i=intStart; i<objSelect.options.length; i++)
     {
-        if (objSelect.options[i].value == "")  
+        if (objSelect.options[i].value == "")
         {
             objSelect.options[i] = null;    // This removes item and reduces count
             RemoveEmpties(objSelect, i);
@@ -764,20 +775,20 @@ Input:
 Return:
     none
 */
-function SimpleSort(objSelect)  
+function SimpleSort(objSelect)
 {
     var arrTemp = new Array();
     var objTemp = new Object();
-    for(var i=0; i<objSelect.options.length; i++)  
+    for(var i=0; i<objSelect.options.length; i++)
     {
         arrTemp[i] = objSelect.options[i];
     }
-    
-    for(var x=0; x<arrTemp.length-1; x++)  
+
+    for(var x=0; x<arrTemp.length-1; x++)
     {
-        for(var y=(x+1); y<arrTemp.length; y++)  
+        for(var y=(x+1); y<arrTemp.length; y++)
         {
-            if(arrTemp[x].text > arrTemp[y].text)  
+            if(arrTemp[x].text > arrTemp[y].text)
             {
                 objTemp = arrTemp[x].text;
                 arrTemp[x].text = arrTemp[y].text;
@@ -798,11 +809,11 @@ function controlOnClick(control, event)
 
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
-    
+
     if (field.customHandlers.click != null)
-    {    
+    {
         var retval = true;
-        if (field.customHandlers.clickType == 'extends')   
+        if (field.customHandlers.clickType == 'extends')
         {
             if (field.type.click != null)
                 retval = field.type.click(field, control);
@@ -821,7 +832,7 @@ function controlOnClick(control, event)
 }
 
 function controlOnKeypress(control, event)
-{    
+{
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.customHandlers.keyPress != null)
@@ -830,11 +841,11 @@ function controlOnKeypress(control, event)
         if (field.customHandlers.keyPressType == 'extends')
         {
             if (field.type.keyPress != null)
-                retval =  field.type.keyPress(field, control);      
+                retval =  field.type.keyPress(field, control);
         }
         if (retval)
             retval =  field.customHandlers.keyPress(field, control);
-        return retval;             
+        return retval;
     }
     else
     {
@@ -842,11 +853,11 @@ function controlOnKeypress(control, event)
             return field.type.keyPress(field, control, event);
         else
             return true;
-    }            
+    }
 }
-                                            
+
 function controlOnFocus(control, event)
-{    
+{
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.customHandlers.getFocus != null)
@@ -855,18 +866,18 @@ function controlOnFocus(control, event)
         if (field.customHandlers.getFocusType == 'extends')
         {
             if (field.type.getFocus != null)
-                retval =  field.type.getFocus(field, control);      
+                retval =  field.type.getFocus(field, control);
         }
         if (retval)
             retval =  field.customHandlers.getFocus(field, control);
-        return retval;             
+        return retval;
     }
     else
     {
         if (field.type.getFocus != null)
             return field.type.getFocus(field, control);
         else
-            return true;        
+            return true;
     }
 }
 
@@ -874,7 +885,7 @@ function controlOnChange(control, event)
 {
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null) return;
-    if(field.dependentConditions.length > 0)    
+    if(field.dependentConditions.length > 0)
     {
         var conditionalFields = field.dependentConditions;
         for(var i = 0; i < conditionalFields.length; i++)
@@ -891,14 +902,14 @@ function controlOnChange(control, event)
         }
         if (retval)
             retval =  field.customHandlers.valueChanged(field, control);
-        return retval;            
+        return retval;
     }
     else
     {
         if (field.type.valueChanged != null)
             return field.type.valueChanged(field, control);
         else
-            return true;        
+            return true;
     }
 }
 
@@ -907,7 +918,7 @@ function controlOnBlur(control, event)
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.customHandlers.loseFocus != null)
-    {    
+    {
         var retval = true;
         if (field.customHandlers.loseFocusType == 'extends')
         {
@@ -916,15 +927,15 @@ function controlOnBlur(control, event)
         }
         if (retval)
             retval =  field.customHandlers.loseFocus(field, control);
-        return retval;          
+        return retval;
     }
     else
     {
         if (field.type.loseFocus != null)
             return field.type.loseFocus(field, control);
         else
-            return true;     
-    }            
+            return true;
+    }
 }
 
 //****************************************************************************
@@ -946,7 +957,7 @@ function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 	if(! ENABLE_KEYPRESS_FILTERS)
 		return true;
 
-	// if the default document keypress handler handled the event, 
+	// if the default document keypress handler handled the event,
 	// it returns "FALSE" so we don't want to bother with the event
 	if(! documentOnKeyDown())
 		return true;
@@ -955,8 +966,8 @@ function keypressAcceptRanges(field, control, acceptKeyRanges, event)
     if (event == null || typeof event == "undefined")
         event = window.event;
 	for (i in acceptKeyRanges)
-	{        
-		var keyCodeValue = null;        
+	{
+		var keyCodeValue = null;
         if (event.keyCode)
 			keyCodeValue = event.keyCode;
 		else
@@ -964,7 +975,7 @@ function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 
 		var keyInfo = acceptKeyRanges[i];
 		if(keyCodeValue >= keyInfo[0] && keyCodeValue <= keyInfo[1])
-			return true;        
+			return true;
 	}
 
 	// if we get to here, it means we didn't accept any of the ranges
@@ -990,7 +1001,7 @@ function CurrencyField_isValid(field, control)
         return false;
     }
     if (control.value.length > 0)
-    {    
+    {
         var test = testCurrency(field, control);
         if (test == false)
         {
@@ -1009,27 +1020,27 @@ function CurrencyField_valueChanged(field, control)
 function BooleanField_onClick(field, control)
 {
     if (control.type == 'checkbox' || control.type == 'radio')
-    {        
-        if(field.dependentConditions.length > 0)    
-        {    
+    {
+        if(field.dependentConditions.length > 0)
+        {
             var conditionalFields = field.dependentConditions;
             for(var i = 0; i < conditionalFields.length; i++)
                 conditionalFields[i].evaluate(activeDialog, control);
-        }    
-    }   
+        }
+    }
     return true;
 }
 
 function TextField_onFocus(field, control)
-{        
+{
     if (field.readonly == 'yes')
         control.blur();
-    
+
     return true;
 }
 
 function TextField_valueChanged(field, control)
-{   
+{
     if (field.uppercase == 'yes')
     {
         control.value = control.value.toUpperCase();
@@ -1047,7 +1058,7 @@ function TextField_onKeyPress(field, control, event)
 }
 
 function PhoneField_valueChanged(field, control)
-{    
+{
     return formatPhone(field, control);
 }
 
@@ -1059,7 +1070,7 @@ function PhoneField_isValid(field, control)
         return false;
     }
     if (control.value.length > 0)
-    {    
+    {
         var test = testPhone(field, control);
         if (test == false)
         {
@@ -1071,7 +1082,7 @@ function PhoneField_isValid(field, control)
 }
 
 function SocialSecurityField_valueChanged(field, control)
-{    
+{
     return formatSSN(field, control);
 }
 
@@ -1138,7 +1149,7 @@ function FloatField_isValid(field, control)
 	return true;
 }
 
-function MemoField_isValid(field, control) 
+function MemoField_isValid(field, control)
 {
 	if(field.isRequired() && control.value.length == 0)
 	{
@@ -1146,23 +1157,23 @@ function MemoField_isValid(field, control)
 		return false;
 	}
 
-    maxlimit = field.maxLength;    
+    maxlimit = field.maxLength;
     if (control.value.length > maxlimit)
     {
         field.alertMessage(control, "Maximum number of characters allowed is " + maxlimit);
         return false;
-    }    
+    }
     return true;
 }
 
 function MemoField_onKeyPress(field, control, event)
 {
-    maxlimit = field.maxLength;    
+    maxlimit = field.maxLength;
     if (control.value.length >= maxlimit)
-    {        
+    {
         field.alertMessage(control, "Maximum number of characters allowed is " + maxlimit);
         return false;
-    }    
+    }
     return true;
 }
 
@@ -1208,14 +1219,14 @@ function DateField_isValid(field, control)
 function DateField_valueChanged(field, control)
 {
     if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
-    {        
+    {
         var result = formatDate(field, control, field.dateItemDelim, field.dateStrictYear);
         control.value = result[1];
         return result[0];
     }
     else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
-    {        
-        var result = formatTime(field, control);  
+    {
+        var result = formatTime(field, control);
         return result;
     }
     return true;
@@ -1228,7 +1239,7 @@ function DateField_onKeyPress(field, control, event)
 		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange], event);
     }
     else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
-    {  
+    {
         return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, COLON_KEY_RANGE], event);
     }
     return true;
@@ -1237,7 +1248,7 @@ function DateField_onKeyPress(field, control, event)
 function SelectField_isValid(field, control)
 {
     var style = field.style;
-    
+
     if(field.isRequired())
     {
         if(style == SELECTSTYLE_RADIO)
@@ -1264,7 +1275,7 @@ function SelectField_isValid(field, control)
         }
         else if(style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
         {
-        
+
             var selectedCount = 0;
             var options = control.options;
             for(var o = 0; o < options.length; o++)
@@ -1294,7 +1305,7 @@ function SelectField_isValid(field, control)
         }
         else if(style == SELECTSTYLE_MULTIDUAL)
         {
-        
+
             var selectedCount = 0;
             var options = control.options;
             for(var o = 0; o < options.length; o++)
@@ -1307,9 +1318,9 @@ function SelectField_isValid(field, control)
                 field.alertRequired(control);
                 return false;
             }
-        }        
+        }
     }
-    
+
     return true;
 }
 
@@ -1349,31 +1360,31 @@ function testCurrency(field, control)
 {
     if (control.value == '')
         return true;
-    var pattern = field.text_format_pattern;      
-    return pattern.test(control.value) ;        
+    var pattern = field.text_format_pattern;
+    return pattern.test(control.value) ;
 }
 
 function formatCurrency(field, control)
 {
-    var test = testCurrency(field, control);    
+    var test = testCurrency(field, control);
     if (test == false)
-    {        
-        field.alertMessage(control, this.field.text_format_err_msg);    
+    {
+        field.alertMessage(control, this.field.text_format_err_msg);
         return false;
     }
     else
-    {    
+    {
         if (control.value != '')
         {
             value = control.value;
-            var pattern = field.text_format_pattern; 
+            var pattern = field.text_format_pattern;
             if (pattern.exec(value))
             {
                 match = pattern.exec(value)
                 if (field.negative_pos == "after")
                 {
                     if (match[1] == "")
-                        match[1] = field.currency_symbol;                    
+                        match[1] = field.currency_symbol;
                     if (typeof match[3] == "undefined")
                         match[3] = ".00";
                     control.value = match[1] + match[2] + match[3];
@@ -1383,8 +1394,8 @@ function formatCurrency(field, control)
                     if (match[2] == "")
                         match[2] = field.currency_symbol;
                     if (typeof match[4] == "undefined")
-                        match[4] = ".00";                        
-                    control.value = match[1] + match[2] + match[3] + match[4]; 
+                        match[4] = ".00";
+                    control.value = match[1] + match[2] + match[3] + match[4];
                 }
             }
         }
@@ -1396,13 +1407,13 @@ function testPhone(field, control)
 {
     if (control.value == '')
         return true;
-    var phonePattern = field.text_format_pattern;    
+    var phonePattern = field.text_format_pattern;
     return phonePattern.test(control.value) ;
 }
 
 function formatPhone(field, control)
 {
-    var test = testPhone(field, control);    
+    var test = testPhone(field, control);
     if (test == false)
     {
         field.alertMessage(control, field.text_format_err_msg);
@@ -1412,7 +1423,7 @@ function formatPhone(field, control)
     {
         if (control.value != '')
         {
-            var phoneStr = control.value;            
+            var phoneStr = control.value;
             if (field.phone_format_type == 'dash')
             {
                 phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3$4");
@@ -1421,17 +1432,17 @@ function formatPhone(field, control)
             {
                 phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3$4");
             }
-            control.value = phoneStr;            
+            control.value = phoneStr;
         }
     }
     return true;
 }
 
 function testSSN(field, control)
-{    
+{
     if (control.value == '')
         return true;
-    var ssnPattern = field.text_format_pattern ;    
+    var ssnPattern = field.text_format_pattern ;
     return ssnPattern.test(control.value);
 }
 
@@ -1441,20 +1452,20 @@ function formatSSN(field, control)
     if (test == false)
     {
         field.alertMessage(control, "Social Security Number must be in the correct format: 999-99-9999");
-        return false;    
+        return false;
     }
     if (control.value != '')
     {
-        var ssn = control.value;    
+        var ssn = control.value;
         ssn = ssn.replace(field.text_format_pattern, "$1-$2-$3");
         control.value = ssn;
-    }    
-    return true;    
+    }
+    return true;
 }
 
 
 function testTime(field, control)
-{    
+{
     var inTime = control.value;
     if (inTime == '')
         return true;
@@ -1474,12 +1485,12 @@ function testTime(field, control)
     else if (inTime.length == 4 && inTime.indexOf(":") == 1)
     {
         hr = inTime.substring(0, 1);
-        min = inTime.substring(2);        
+        min = inTime.substring(2);
         if (hr > 23 || min > 59)
         {
             field.alertMessage(control, "Time field must have a valid value");
             return false;
-        }        
+        }
         return true;
     }
     field.alertMessage(control, "Time field must have the correct format: " + field.dateFormat);
@@ -1488,11 +1499,11 @@ function testTime(field, control)
 
 function formatTime(field, control)
 {
-    var inTime = control.value;        
+    var inTime = control.value;
     newTime = inTime;
     if (field.timeStrict == false && inTime.indexOf(":") == -1)
     {
-        if (inTime.length == 4) 
+        if (inTime.length == 4)
         {
             newTime = inTime.substring(0, 2) + ":"  + inTime.substring(2);
         }
@@ -1500,16 +1511,16 @@ function formatTime(field, control)
         {
             newTime = inTime.substring(0, 1) + ":" + inTime.substring(1);
         }
-        control.value = newTime;        
-    }             
-    return testTime(field, control);    
+        control.value = newTime;
+    }
+    return testTime(field, control);
 }
 
 function formatDate(field, control, delim, strictYear)
 {
     if (delim == null)
         delim = "/";
-    
+
     var inDate = control.value;
     var today = new Date();
     var currentDate = today.getDate();
@@ -1533,7 +1544,7 @@ function formatDate(field, control, delim, strictYear)
     {
         if ((a[0].length == 6) || (a[0].length == 8))
         {
-            a[2] = a[0].substring(4);            
+            a[2] = a[0].substring(4);
             a[1] = a[0].substring(2,4);
             a[0] = a[0].substring(0,2);
         }
@@ -1558,13 +1569,13 @@ function formatDate(field, control, delim, strictYear)
         else
             a[2] = currentYear;
     }
-    
+
     if (strictYear != true)
-    {        
+    {
         if (a[2] < 100 && a[2] > 10)
             a[2] = "19" + a[2];
         if (a[2] < 1000)
-            a[2] = "20" + a[2];              
+            a[2] = "20" + a[2];
     }
     if ( (a[0] < 1) || (a[0] > 12) )
     {
@@ -1642,7 +1653,7 @@ function documentOnKeyDown()
 {
     if(TRANSLATE_ENTER_KEY_TO_TAB_KEY && window.event.keyCode == KEYCODE_ENTER)
     {
-        var control = window.event.srcElement;        
+        var control = window.event.srcElement;
         var field = activeDialog.fieldsById[control.name];
         if(field == null)
         {

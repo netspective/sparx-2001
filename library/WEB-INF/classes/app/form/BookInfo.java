@@ -75,8 +75,7 @@ public class BookInfo extends Dialog
 
 
     /**
-     *  This is where you perform all your actions. Whatever you return as the function result will be shown
-     * in the HTML
+     *  This is where you perform all your actions.
      */
     public void execute(Writer writer, DialogContext dc) throws IOException
     {
@@ -84,12 +83,13 @@ public class BookInfo extends Dialog
         // to override
         // super.execute(writer, dc);
 
+        BookInfoContext bic = (BookInfoContext) dc;
         if (dc.addingData())
-            processAddAction(writer, dc);
+            processAddAction(writer, bic);
         else if (dc.editingData())
-            processEditAction(writer, dc);
+            processEditAction(writer, bic);
         else if (dc.deletingData())
-            processDeleteAction(writer, dc);
+            processDeleteAction(writer, bic);
 
 		// this is necessary to let the framework know we handled the execute
 		dc.setExecuteStageHandled(true);
@@ -101,24 +101,23 @@ public class BookInfo extends Dialog
     /**
      * Process the new data
      */
-    protected boolean processAddAction(Writer writer, DialogContext dc)
+    protected boolean processAddAction(Writer writer, BookInfoContext bic)
     {
-        BookInfoContext dcb = (BookInfoContext) dc;
         BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
         boolean status = false;
 
         try
         {
-            ConnectionContext cc = dcb.getConnectionContext();
+            ConnectionContext cc = bic.getConnectionContext();
 
             // Create a new BookInfo record and insert it...
             BookInfoRow bkInfoRow = bkInfoTbl.createBookInfoRow();
             bkInfoRow.setCrStamp(null);
-            bkInfoRow.setId(dcb.getBookId());
-            bkInfoRow.setAuthor(dcb.getBookAuthor());
-            bkInfoRow.setName(dcb.getBookName());
-            bkInfoRow.setType(dcb.getBookTypeInt());
-            bkInfoRow.setIsbn(dcb.getBookISBN());
+            bkInfoRow.setId(bic.getBookId());
+            bkInfoRow.setAuthor(bic.getBookAuthor());
+            bkInfoRow.setName(bic.getBookName());
+            bkInfoRow.setType(bic.getBookTypeInt());
+            bkInfoRow.setIsbn(bic.getBookISBN());
 
             status = bkInfoTbl.insert(cc, bkInfoRow);
             cc.commitTransaction();
@@ -138,23 +137,22 @@ public class BookInfo extends Dialog
     /**
      * Process the update action
      */
-    protected boolean processEditAction(Writer writer, DialogContext dc)
+    protected boolean processEditAction(Writer writer, BookInfoContext bic)
     {
-        BookInfoContext dcb = (BookInfoContext) dc;
         BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
         boolean status = false;
-        String bookId = dc.getRequest().getParameter("bookid");
+        String bookId = bic.getRequest().getParameter("bookid");
 
         try
         {
-            ConnectionContext cc = dcb.getConnectionContext();
+            ConnectionContext cc = bic.getConnectionContext();
 
             BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
-            bkInfoRow.setId(dcb.getBookId());
-            bkInfoRow.setAuthor(dcb.getBookAuthor());
-            bkInfoRow.setName(dcb.getBookName());
-            bkInfoRow.setType(dcb.getBookTypeInt());
-            bkInfoRow.setIsbn(dcb.getBookISBN());
+            bkInfoRow.setId(bic.getBookId());
+            bkInfoRow.setAuthor(bic.getBookAuthor());
+            bkInfoRow.setName(bic.getBookName());
+            bkInfoRow.setType(bic.getBookTypeInt());
+            bkInfoRow.setIsbn(bic.getBookISBN());
 
             status = bkInfoTbl.update(cc, bkInfoRow);
             cc.commitTransaction();
@@ -174,16 +172,15 @@ public class BookInfo extends Dialog
     /**
      * Process the delete action
      */
-    protected boolean processDeleteAction(Writer writer, DialogContext dc)
+    protected boolean processDeleteAction(Writer writer, BookInfoContext bic)
     {
-        BookInfoContext dcb = (BookInfoContext) dc;
         BookInfoTable bkInfoTbl = DataAccessLayer.instance.getBookInfoTable();
         boolean status = false;
-        String bookId = dc.getRequest().getParameter("bookid");
+        String bookId = bic.getRequest().getParameter("bookid");
 
         try
         {
-            ConnectionContext cc = dcb.getConnectionContext();
+            ConnectionContext cc = bic.getConnectionContext();
 
             BookInfoRow bkInfoRow = bkInfoTbl.getBookInfoById(cc, bookId);
 

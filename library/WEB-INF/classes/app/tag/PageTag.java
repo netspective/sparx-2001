@@ -162,7 +162,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
             out.println("</table>");
             out.println(" <p>&nbsp;");
             out.println(" <p>");
-            //out.println("<table width=100%><tr><td align=right><a target='netspective' href='http://www.netspective.com'><img border='0' alt='Powered by Netspective Sparx' src='"+ rootPath +"/sparx/resources/images/powered-by-sparx.gif'></a></td><td><font size=1>"+ com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() +"</font></td></table></body>");
+            //out.println("<table width=100%><tr><td align=right><a target='netspective' href='http://www.netspective.com'><img border='0' alt='Powered by Netspective Sparx' src='"+ rootPath +"/sparx/resources/images/powered-by-sparx.gif'></a></td><td><font size=1>"+ com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() +"</font></td></table>");
             //out.println("</body>");
             //out.println("</html>");
             doSamplePageEnd(); // remove if this is not a Netspective "Sample" application

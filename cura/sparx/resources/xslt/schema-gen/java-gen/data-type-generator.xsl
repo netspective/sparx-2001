@@ -21,7 +21,8 @@ import com.netspective.sparx.xaf.form.DialogContext;
 
 public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 {
-<xsl:if test="java-date-format-instance">	private DateFormat dateFormat = <xsl:value-of select="java-date-format-instance"/>;
+<xsl:if test="java-date-format-instance">	private static DateFormat defaultDateFormat = <xsl:value-of select="java-date-format-instance"/>;
+    private DateFormat dateFormat = defaultDateFormat;
 </xsl:if>	private <xsl:value-of select="$java-class-spec"/> defaultValue;
 
 	public <xsl:value-of select="$data-type-name"/>(Table table, String name)
@@ -41,6 +42,7 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 	public void setDefaultValue(<xsl:value-of select="$java-class-spec"/> value) { defaultValue = value; }
 <xsl:choose>
 <xsl:when test="java-date-format-instance">
+	public static DateFormat getDefaultDateFormat() { return defaultDateFormat; }
 	public DateFormat getDateFormat() { return dateFormat; }
 	public void setDateFormat(DateFormat value) { value = dateFormat; }
 	public <xsl:value-of select="$java-class-spec"/> parse(String text) throws ParseException { return dateFormat.parse(text); }

@@ -22,7 +22,7 @@
                 <record-edit-url>bookInfo.jsp?data_cmd=edit&amp;bookid=${0}</record-edit-url>
                 <record-delete-url>bookInfo.jsp?data_cmd=delete&amp;bookid=${0}</record-delete-url>
 
-				<column visible="no"/>   <!-- we get the id so we can use it in our urls but we don't want to show it -->
+				<column display="no"/>   <!-- we get the id so we can use it in our urls but we don't want to show it -->
 				<column index="1" url="report-record-url:edit"/>
 				<column heading="Genre" index="2"/>
 			</report>
