@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.5 2002-04-12 12:30:05 snshah Exp $
+ * $Id: DialogField.java,v 1.6 2002-07-03 15:08:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -829,10 +829,8 @@ public class DialogField
                 case '®': sb.append("&reg;");break;
                 case '©': sb.append("&copy;");break;
                 case '€': sb.append("&euro;"); break;
-                // be carefull with this one (non-breaking whitee space)
-                case ' ': sb.append("&nbsp;");break;
 
-                default:  sb.append(c); break;
+                default: sb.append(c); break;
             }
         }
         return sb.toString();
