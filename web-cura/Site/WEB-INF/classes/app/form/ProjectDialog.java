@@ -160,6 +160,7 @@ public class ProjectDialog extends Dialog
             projectRow.setProjectDescr(rc.getProjectDescr());
             projectTable.update(cc, projectRow);
 
+			/*
             ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
             ProjectRelationRows projRelRows =  projectRow.getProjectRelationRows(cc);
 
@@ -170,13 +171,13 @@ public class ProjectDialog extends Dialog
                 // NOTE: relationships have not been defined yet. Using 1 as a dummy
                 if (projRelRow.getRelType().intValue() == 1)
                 {
-                    projRelRow.setNotifyEmail(rc.getNotifyEmail());
+                    //projRelRow.setNotifyEmail(rc.getNotifyEmail());
                     projRelTable.update(cc, projRelRow);
                 }
             }
+			*/
 
-
-            cc.endTransaction();
+		    cc.endTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
             dc.getRequest().setAttribute("project_name", projectRow.getProjectName());
         }

@@ -40,14 +40,29 @@
                 <param value="request:project_id"/>
             </params>
             <report heading="Project Members">
-				<banner>
-                    <item caption="Add" url="config-expr:member.jsp?cmd=dialog,project.relation,add&amp;project_id=${request:project_id}"/>
-                </banner>
-                <column heading="Last Name" align="left" url="config-expr:member.jsp?cmd=dialog,project.relation,edit&amp;project_id=${request:project_id}"/>
+				<!-- banner>
+                    <item caption="Add" url="config-expr:member.jsp?cmd=dialog,project.org_relation,add&amp;project_id=${request:project_id}"/>
+                </banner -->
+                <column heading="Last Name" align="left" url="config-expr:member.jsp?cmd=dialog,project.org_relation,edit&amp;project_id=${request:project_id}"/>
                 <column heading="First Name" align="left"/>
                 <column heading="Organization" align="left"/>
                 <column heading="Relationship" align="left"/>
             </report>
         </statement>
+		<statement name="available-orgs">
+			select
+                org.org_name,
+                org.org_id
+			from
+                org, personorg_relationship por
+			where
+                por.parent_id = ?
+                and por.record_status_id = 1  /* active status only */
+                and por.rel_type = 0       /* member of organization */
+                and por.rel_org_id = org.org_id /* join to get org_name */
+            <params>
+                <param value="request-attr:person_id"/>
+            </params>
+		</statement>
     </sql-statements>
 </xaf>

@@ -10,23 +10,45 @@
             <field.text name="project_name" caption="Project Name"     max-length="255" required="yes"/>
             <field.text name="project_code" caption="Code"       max-length="64"/>
             <field.memo name="project_descr" caption="Description" required="yes"/>
-            <field.select name="parent_project" caption="Parent Project" choices="Self" />
-
-            <!--execute-tasks data-cmd="add">
-				<exec-redirect url="config-expr:${create-app-url:/project/home.jsp}?project_id=${request-attr:project_id}"/>
-			</execute-tasks -->
         </dialog>
 
-        <dialog name="relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*">
-            <field.separator heading="Relations"/>
-            <field.select name="organization" caption="Organization" choices="query:person.active-org-memberships-name-id" required="yes">
-                <conditional action="apply-flag" flag="browser-read-only" data-cmd="delete"/>
-            </field.select>
+        <dialog name="org_relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*" >
+            <!-- field.report name="organization" required="yes" style="multicheck">
+                <statement>
+                    select
+                        org.org_id as "checkbox",
+                        org.org_id ,
+                        org.org_name
+                    from
+                        org, personorg_relationship por
+                    where
+                        por.parent_id = ?
+                        and por.record_status_id = 1
+                        and por.rel_type = 0
+                        and por.rel_org_id = org.org_id
+                    <params>
+                        <param value="request-attr:person_id" />
+                    </params>
+                    <report>
+                        <banner>
+                            <item caption="Please select the organization"/>
+                        </banner>
+                        <column type="checkbox" value="1"/>
+                        <column heading="ID"/>
+                        <column heading="Organization Name"/>
+                    </report>
+                </statement>
+            </field.report -->
+            <field.select name="org_id" caption="Organization(s)" choices="query:person.active-org-memberships" style="multidual"/>
+            <execute-tasks data-cmd="add">
+                <exec-redirect url="config-expr:${create-app-url:/project/member.jsp}?cmd=dialog,project.person_relation,add&amp;org_id=${form:checkbox}&amp;project_id=${request:project_id}"/>
+            </execute-tasks>
+        </dialog>
+
+        <dialog name="person_relation" heading="create-data-cmd-heading:Project Member(s)" retain-params="*">
             <field.select name="person" style="multilist" caption="Member(s)" required="yes">
-                <popup action="config-app-url:/org/index.jsp?panel,org&org_id=" fill="owner_person_id"/>
+
             </field.select>
-
-
             <field.email name="notify_email" caption="Notify Email" />
         </dialog>
     </dialogs>

@@ -125,6 +125,9 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             BigDecimal personId = (BigDecimal) personRegistration.get("person_id");
             req.setAttribute("person_id", personId);
 
+            Map memberOrgs = (Map) user.getAttribute("member-orgs");
+            int orgCount = memberOrgs.size();
+
 
 			out.println("<html>");
 			out.println("<head>");
@@ -144,7 +147,16 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 
             out.println("</tr>");
             out.println("<tr bgcolor='#4a74e7'>");
-            out.println("   <td style='height:21px' colspan='2' align='left'><b><font face='verdana' color='#FFFFFF' size=2>" + personRegistration.get("complete_name") + "</b></font></td>");
+            out.println("   <td style='font-family: Trebuchet MS, Arial; font-size: 8pt;height:21px' align='left'><b><font color='#FFFFFF'>" + personRegistration.get("complete_name") + "</b></font></td>");
+            out.println("   <td align='right' style='font-family: Trebuchet MS, Arial; font-size: 8pt'><font color='white'>Organization: &nbsp; ") ;
+            out.println("   <select name='active_org' size='" + orgCount + "' style='font-size: 7pt'>");
+            Iterator orgKeys = memberOrgs.keySet().iterator();
+            while (orgKeys.hasNext())
+            {
+                Object orgId = orgKeys.next();
+                out.println("       <option  value='"+  orgId + "'>" + memberOrgs.get(orgId)+ " </option>");
+            }
+            out.println("   </select></font></td");
             out.println("</tr>");
             out.println("</table>");
 

@@ -82,6 +82,10 @@
                 <param value="request:org_id"/>
             </params>
             <report heading="Organization Members">
+                <banner>
+                    <item caption="Add" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Remove" url=""/>
+                </banner>
                 <column heading="ID" align="center"/>
                 <column heading="Last Name" align="center"/>
                 <column heading="First Name" align="center"/>
