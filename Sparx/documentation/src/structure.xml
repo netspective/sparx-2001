@@ -22,8 +22,8 @@
 		<page level="1" name="overview" caption="Overview" heading="Netspective Sparx Overview">
             <page level="2" name="overview/why-use-sparx" caption="Why Use Sparx?"/>
             <page level="2" name="overview/requirements" caption="Requirements" heading="Netspective Sparx Requirements"/>
-            <page level="2" name="overview/eval-kit" caption="Evaluation Kit" heading="Netspective Sparx Evaluation Kit"/>
         </page>
+        <page level="1" name="downloads" caption="Downloads" heading="Netspective Sparx Downloads"/>
         <page level="1" name="samples" caption="Samples" heading="Netspective Sparx Sample Applications">
             <page level="2" name="samples/hello" caption="Hello World"/>
             <page level="2" name="samples/library" caption="Library"/>

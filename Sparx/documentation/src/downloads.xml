@@ -1,17 +1,48 @@
 <?xml version="1.0"?>
 
-<page name="samples">
+<page name="downloads">
     <summary>
-        The utility of any application framework can be discovered three ways. The first is introductory material that
-        explains what the framework does. The second is detailed API documentation and usage patterns. The third, and
-        perhaps the most important, is by looking at sample applications and actual code. This page describes the
-        many sample applications provided with the <link page="downloads">Sparx Evaluation Kit</link>,
-        all of which are also available online.
+        The full Sparx Application Platform Release <sparx-build-version/> can be downloaded for a free 30-day evaluation period.
+        <p/>
+        Please <link page="overview/requirements">review the requirements</link> first, make sure you have a <a href="http://java.sun.com">JDK</a> installed,
+        then click one of the links below to download and install the evaluation kit.
+        <p/>
+        <table class="data" cellspacing="0" cellpadding="3">
+            <tr class="data_head">
+                <th class="data">Kit</th>
+                <th class="data">Size</th>
+                <th class="data">Instructions</th>
+            </tr>
+            <tr class="data">
+                <td class="data"><b><sparx-bin-kit-link-zip/></b></td>
+                <td class="data" align="center"><nobr>5 mb</nobr></td>
+                <td class="data">
+                    Binaries only (no app server, samples, or documentation).
+                </td>
+            </tr>
+            <tr class="data">
+                <td class="data"><b><sparx-eval-kit-link-zip/></b></td>
+                <td class="data" align="center"><nobr>30 mb</nobr></td>
+                <td class="data">
+                	Complete Sparx evaluation kit for Windows. Includes <a href="http://www.caucho.com">Resin</a> application server, Sparx binaries,
+                	introductory whitepaper, developer guides, and sample applications.
+                </td>
+            </tr>
+            <tr class="data">
+                <td class="data"><b><sparx-eval-kit-link-tgz/></b></td>
+                <td class="data" align="center"><nobr>30 mb</nobr></td>
+                <td class="data">
+                	Complete Sparx evaluation kit for Linux, UNIX, and MacOS. Includes <a href="http://www.caucho.com">Resin</a> application server, Sparx binaries,
+                	introductory whitepaper, developer guides, and sample applications.
+                </td>
+            </tr>
+        </table>
     </summary>
 
     <section heading="Tutorials and Documentation">
         Sparx includes hundreds of pages of both online (HTML) and offline (PDF) documentation. To get the most out of the
-        sample applications described below, please review the documents described below and follow along.
+        sample applications described below, please review the documents described below and follow along with the
+        samples either <link page="samples">online</link> or on your own servers.
         <p/>
         <table class="data" cellspacing="0" cellpadding="3">
             <tr class="data_head">
@@ -53,7 +84,5 @@
             </tr>
         </table>
     </section>
-
-    <summarize-children heading="Sparx Samples Available for Online or Offline evaluation"/>
 
 </page>

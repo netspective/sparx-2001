@@ -2,7 +2,7 @@
 
 <page name="dal">
 	<summary>
-		Using XSLT stylesheets, the XIF can generate a complete Java object-relational (O-R) map to
+		Using XSLT style sheets, the XIF can generate a complete Java object-relational (O-R) map to
 		every table in the schema (sometimes called a as <i>persistence layer</i>). This Java O-R map is called the
         Sparx <i>Data Access Layer</i>, or DAL. The DAL requires a valid <link page="xif">XML-based SchemaDoc</link> be
         defined using the <link page="xif">XIF</link> tool. Once you have a valid XML SchemaDoc, you can generate

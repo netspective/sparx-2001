@@ -30,7 +30,7 @@ Setup instructions:
                 <include name="**/*.jar"/>
             </fileset>
         </path>
-        
+
 		<echo message="Basedir is '${basedir}'"/>
 
         <!-- show the current class path and optimize it -->
@@ -86,10 +86,23 @@ Setup instructions:
     </target>
 
     <target name="generate-html" depends="init,clean">
+		<property name="build.version" value="${build.release}.${build.version.major}.${build.version.minor}"/>
 		<xslt basedir="." destdir="${html-path}" extension=".html" style="${default-style-sheet}" force="yes" processor="trax" classpathref="project.class.path">
 			<include name="**/*.xml"/>
 			<exclude name="build.xml"/>
 			<exclude name="structure.xml"/>
+
+			<param name="sparx-build-version" expression="${build.version}"/>
+
+			<param name="sparx-bin-kit-title-zip" expression="Sparx-${build.version}.zip"/>
+			<param name="sparx-bin-kit-title-tgz" expression="Sparx-${build.version}.tar.gz"/>
+			<param name="sparx-eval-kit-title-zip" expression="Sparx-${build.version}-Eval.zip"/>
+			<param name="sparx-eval-kit-title-tgz" expression="Sparx-${build.version}-Eval.tar.gz"/>
+
+			<param name="sparx-bin-kit-filename-zip" expression="download/${build.libitem.file.prefix}.zip"/>
+			<param name="sparx-bin-kit-filename-tgz" expression="download/${build.libitem.file.prefix}.tar.gz"/>
+			<param name="sparx-eval-kit-filename-zip" expression="download/${build.libitem.file.prefix}-eval.zip"/>
+			<param name="sparx-eval-kit-filename-tgz" expression="download/${build.libitem.file.prefix}-eval.tar.gz"/>
 		</xslt>
     </target>
 

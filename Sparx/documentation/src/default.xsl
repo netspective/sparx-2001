@@ -13,6 +13,17 @@
 <xsl:param name="channel-frame-color">#E7B89F</xsl:param>
 <xsl:param name="sample-app-home">../../../cura/</xsl:param>
 
+<!-- must be passed in from build.xml -->
+<xsl:param name="sparx-build-version"/>
+<xsl:param name="sparx-bin-kit-title-zip"/>
+<xsl:param name="sparx-bin-kit-title-tgz"/>
+<xsl:param name="sparx-eval-kit-title-zip"/>
+<xsl:param name="sparx-eval-kit-title-tgz"/>
+<xsl:param name="sparx-bin-kit-filename-zip"/>
+<xsl:param name="sparx-bin-kit-filename-tgz"/>
+<xsl:param name="sparx-eval-kit-filename-zip"/>
+<xsl:param name="sparx-eval-kit-filename-tgz"/>
+
 <xsl:variable name="structure" select="document('structure.xml')/structure"/>
 <xsl:variable name="home-page" select="$structure/page[@name = 'index']"/>
 <xsl:variable name="xaf-xsd" select="document('xaf.xsd')/xsd:schema"/>
@@ -40,6 +51,22 @@
 </xsl:template>
 
 <xsl:template match="space"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></xsl:template>
+
+<xsl:template match="sparx-build-version">
+	<xsl:value-of select="$sparx-build-version"/>
+</xsl:template>
+
+<xsl:template match="sparx-bin-kit-link-zip">
+	<a href="{$sparx-bin-kit-filename-zip}"><nobr><xsl:value-of select="$sparx-bin-kit-title-zip"/></nobr></a>
+</xsl:template>
+
+<xsl:template match="sparx-eval-kit-link-zip">
+	<a href="{$sparx-eval-kit-filename-zip}"><nobr><xsl:value-of select="$sparx-eval-kit-title-zip"/></nobr></a>
+</xsl:template>
+
+<xsl:template match="sparx-eval-kit-link-tgz">
+	<a href="{$sparx-eval-kit-filename-tgz}"><nobr><xsl:value-of select="$sparx-eval-kit-title-tgz"/></nobr></a>
+</xsl:template>
 
 <xsl:template name="structure">
 	<xsl:param name="active-page"/>
@@ -185,7 +212,7 @@
 			<table border="0" cellspacing="0" cellpadding="0" width="100%">
 				<!-- the third masthead row and cookie crumbs area -->
 				<tr height="20">
-					<td bgcolor="black"><font face="tahoma,arial" size="2" color="black" style="font-size:8pt"><img width="150" height="20" src="{concat($images-dir, 'spacer.gif')}"/></font></td>
+					<td bgcolor="black" width="150" align="center"><font face="tahoma,arial" size="2" color="#CDCDCD" style="font-size:8pt">Release <xsl:value-of select="$sparx-build-version"/></font></td>
 					<td bgcolor="{$active-menu-tab-color}"><font size="2" face="tahoma,arial,helvetica">
 						<xsl:if test="$active-level > 1">
 							<font face="tahoma,arial" size="2" color="#660000" style="font-size:8pt">
