@@ -23,10 +23,7 @@ public class HomePage extends AceServletPage
 			PrintWriter out = pc.getResponse().getWriter();
 			out.print("<br>&nbsp;<p>&nbsp;<p><center><img src='");
 			out.print(sharedImagesRootURL);
-			out.print("/design/sparx-logo-lg.gif'><br>");
-			out.print("<p>&nbsp;<img src='");
-			out.print(sharedImagesRootURL);
-			out.print("/ace/ace-text.gif'><p>");
+			out.print("/ace/sparx-ace-logo-lg.gif'><br>");
 			out.print("<table cellspacing=10><tr valign=top><td align=center>");
 			out.print(BuildConfiguration.getProductBuild());
 			out.print("<br>by Netspective Corp.");
