@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: XmlSource.java,v 1.12 2002-12-30 18:04:43 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.13 2003-01-12 22:36:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -1232,7 +1232,7 @@ public class XmlSource
                 catch (Exception e)
                 {
                     sb.append("${" + javaExprStr + "}");
-                    addError("Unable to evaluate expression '"+ javaExprStr +"': " + e.getMessage());
+                    addError("Unable to evaluate expression '"+ javaExprStr +"': " + e + ", variables: " + variables.keySet());
                 }
 
                 prev = endName + 1;
