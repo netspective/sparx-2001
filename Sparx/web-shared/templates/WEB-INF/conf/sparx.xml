@@ -17,7 +17,7 @@
         * Required configuration parameters - these parameters setup the     *
         * evaluation of the remainder of the properties in this file.        *
         ********************************************************************** -->
-        
+
         <property name="app.site-root-path" value="${servlet-context-path:/}"/>
         <property name="app.web-inf-root-path" value="${app.site-root-path}/WEB-INF"/>
 
@@ -28,11 +28,11 @@
         **********************************************************************
         * Sparx factory system properties                                    *
         ********************************************************************** -->
-        <system-property name="javax.xml.parsers.DocumentBuilderFactory" 
+        <system-property name="javax.xml.parsers.DocumentBuilderFactory"
                          value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
-        <system-property name="javax.xml.transform.TransformerFactory" 
+        <system-property name="javax.xml.transform.TransformerFactory"
                          value="org.apache.xalan.processor.TransformerFactoryImpl"/>
-        <system-property name="com.netspective.sparx.xif.db.DatabaseContext.class" 
+        <system-property name="com.netspective.sparx.xif.db.DatabaseContext.class"
                          value="com.netspective.sparx.xif.db.context.BasicDatabaseContext"/>
 
         <!--
@@ -51,17 +51,17 @@
         <property name="sparx.shared.scripts-url" value="${sparx.shared.resources-url}/scripts"/>
         <property name="sparx.shared.xslt-path" value="${sparx.shared.resources-path}/xslt"/>
         <property name="sparx.shared.xslt-url" value="${sparx.shared.resources-url}/xslt"/>
-        <property name="sparx.shared.dialog.field.popup-image-src" 
+        <property name="sparx.shared.dialog.field.popup-image-src"
                   value="${sparx.shared.images-url}/dialog/magnifying-glass-sm.gif"/>
-        <property name="sparx.shared.dialog.field.calendar.js-src" 
+        <property name="sparx.shared.dialog.field.calendar.js-src"
                   value="${sparx.shared.resources-url}/scripts/calendar.js"/>
-        <property name="sparx.shared.dialog.field.calendar.image-url" 
+        <property name="sparx.shared.dialog.field.calendar.image-url"
                   value="${sparx.shared.images-url}/navigate/calendar.gif"/>
-        <property name="sparx.shared.report.row-sep-img-src" 
+        <property name="sparx.shared.report.row-sep-img-src"
                   value="${sparx.shared.images-url}/design/bar.gif"/>
-        <property name="sparx.shared.report.sort-ascending-img-src" 
+        <property name="sparx.shared.report.sort-ascending-img-src"
                   value="${sparx.shared.images-url}/navigate/triangle-up-blue.gif"/>
-        <property name="sparx.shared.report.sort-descending-img-src" 
+        <property name="sparx.shared.report.sort-descending-img-src"
                   value="${sparx.shared.images-url}/navigate/triangle-down-blue.gif"/>
         <property name="sparx.shared.popup.page-url" value="${sparx.shared.pages-url}/popup.jsp"/>
 
@@ -82,6 +82,7 @@
         <property name="sparx.ace.schema-browser-xsl" value="${sparx.ace.xslt-path}/schema-browser.xsl"/>
         <property name="sparx.ace.sql-browser-xsl" value="${sparx.ace.xslt-path}/sql-browser.xsl"/>
         <property name="sparx.ace.navigation-browser-xsl" value="${sparx.ace.xslt-path}/navigation-browser.xsl"/>
+        <property name="sparx.ace.requirements-browser-xsl" value="${sparx.ace.xslt-path}/requirements-browser.xsl"/>
         <property name="sparx.ace.ui-browser-xsl" value="${sparx.ace.xslt-path}/dialogs-browser.xsl"/>
         <properties name="sparx.ace.transform">
             <property name="dml" value="${sparx.ace.xslt-path}/article-transform.xsl"/>
@@ -102,16 +103,16 @@
             <property name="sparx.debug.page" value="style-text"/>
             <property name="sparx.debug.security" value="style-text"/>
             <property name="sparx.debug.sql" value="style-text"/>
-            <property name="sparx.monitor.page" 
+            <property name="sparx.monitor.page"
                       value="style-tab,Date,Host,NDC,Object,Object-id,Render-time,Source"/>
-            <property name="sparx.monitor.security" 
+            <property name="sparx.monitor.security"
                       value="style-tab,Date,Host,NDC,Activity,App User,User Org,Remote User,Remote Host,Remote Addr,Permissions,Roles"/>
-            <property name="sparx.monitor.sql" 
+            <property name="sparx.monitor.sql"
                       value="style-tab,Date,Host,NDC,SQL Statement,Ok,Conn,Bind,SQL,Total,Source"/>
         </properties>
 
     </configuration>
-    
+
     <include file="app-config.xml"/>
-        
+
 </xaf>
