@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.26 2003-04-23 14:45:47 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.27 2003-04-24 16:37:59 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -492,7 +492,7 @@ function DialogField_alertMessage(control, message)
 	}
 	else
 	{
-		alert(this.caption + ": " + message);
+		alert(this.caption + ":   " + message);
 	}
 	control.focus();
 	handleCancelBubble(control);
@@ -1049,10 +1049,11 @@ function submitOnblur(field, control)
 		var partnerControl = partnerField.getControl(dialog);
 
 		okToSubmit = (partnerControl.value == "") ? true : false;
-		if(okToSubmit && field.submitOnBlurCustomScript != "")
-		{
-			okToSubmit = field.submitOnBlurCustomScript(field, control);
-		}
+	}
+
+	if(okToSubmit && field.submitOnBlurCustomScript != "")
+	{
+		okToSubmit = field.submitOnBlurCustomScript(field, control);
 	}
 
 	if(okToSubmit)
