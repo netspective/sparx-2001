@@ -17,7 +17,6 @@ import com.netspective.sparx.util.value.*;
 import com.netspective.sparx.util.config.ConfigurationManager;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.config.Configuration;
-import com.caucho.server.http.HttpResponse;
 
 public class SharedPasswordDialog extends Dialog
 {
