@@ -124,9 +124,9 @@ public class DialogManager extends XmlSource
 				{
 					dialog = new Dialog();
 				}
-				dialog.importFromXml(pkgName, defnElement);
-				dialog.setDialogContextClass(dialogContextClass);
                 dialog.setDialogDirectorClass(directorClass);
+                dialog.setDialogContextClass(dialogContextClass);
+				dialog.importFromXml(pkgName, defnElement);
 			}
 			return dialog;
 		}

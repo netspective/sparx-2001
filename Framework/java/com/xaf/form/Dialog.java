@@ -207,6 +207,7 @@ public class Dialog
             }
             catch(Exception e)
             {
+                addField(new StaticField("error", "Dialog director problem: " + e.toString()));
                 director = new DialogDirector();
             }
         }
