@@ -44,6 +44,7 @@ public class XmlSource
 	protected SourceInfo docSource;
 	protected Hashtable sourceFiles = new Hashtable();
 	protected Document xmlDoc;
+	protected Set inheritanceHistorySet = new HashSet();
 
     /**
      * returns the boolean equivalent of a string, which is considered true
@@ -159,6 +160,12 @@ public class XmlSource
 					errors.add("can not extend '"+ element.getAttribute("name") +"' from '"+ inheritType +"': source not found");
 					continue;
 				}
+
+				/* don't inherit the same objects more than once */
+				String inheritanceId = Integer.toString(element.hashCode()) + '.' + Integer.toString(inheritFromElem.hashCode());
+				if(inheritanceHistorySet.contains(inheritanceId))
+					continue;
+				inheritanceHistorySet.add(inheritanceId);
 
                 Element extendsElem = xmlDoc.createElement("extends");
                 extendsElem.appendChild(xmlDoc.createTextNode(inheritType));

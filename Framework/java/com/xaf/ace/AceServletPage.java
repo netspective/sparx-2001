@@ -46,7 +46,7 @@ public class AceServletPage extends AbstractServletPage
 		parent.appendChild(elemNode);
 	}
 
-	public void transform(PageContext pc, Document doc, String styleSheetConfigName) throws IOException
+	public void transform(PageContext pc, Document doc, String styleSheetConfigName, String outputFileName) throws IOException
 	{
 		AppComponentsExplorerServlet servlet = ((AppComponentsExplorerServlet) pc.getServlet());
 		Hashtable styleSheetParams = servlet.getStyleSheetParams();
@@ -106,9 +106,18 @@ public class AceServletPage extends AbstractServletPage
 				transformer.setParameter((String) entry.getKey(), entry.getValue());
 			}
 
-			transformer.transform
-				(new javax.xml.transform.dom.DOMSource(doc),
-				 new javax.xml.transform.stream.StreamResult(out));
+			if(outputFileName == null)
+			{
+				transformer.transform
+					(new javax.xml.transform.dom.DOMSource(doc),
+					 new javax.xml.transform.stream.StreamResult(out));
+			}
+			else
+			{
+				transformer.transform
+					(new javax.xml.transform.dom.DOMSource(doc),
+					 new javax.xml.transform.stream.StreamResult(outputFileName));
+			}
 		}
 		catch(TransformerConfigurationException e)
 		{
@@ -122,6 +131,11 @@ public class AceServletPage extends AbstractServletPage
             e.printStackTrace(new PrintWriter(stack));
 			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
 		}
+	}
+
+	public void transform(PageContext pc, Document doc, String styleSheetConfigName) throws IOException
+	{
+		transform(pc, doc, styleSheetConfigName, null);
 	}
 
 	public void transform(PageContext pc, String xmlSourceFile, String xsltSourceFile) throws IOException

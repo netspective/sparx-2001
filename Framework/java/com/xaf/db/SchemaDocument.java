@@ -14,7 +14,7 @@ import com.xaf.xml.*;
  * Provides the ability to fully describe an entire database
  * schema in a single or multiple XML files; complete support for data
  * dictionaries, column domains, and table inheritance is built-in.
- * These XML files can then be read in a run-time to provide complete
+ * These XML files can then be read in at run-time to provide complete
  * database schema information in a RDBMS-independent manner.
  * After a schema is read in, complete information about all tables,
  * columns, enumerations, foreign keys, indexes, etc are available for processing
@@ -32,6 +32,7 @@ public class SchemaDocument extends XmlSource
 
 	public static final String[] MACROSIN_COLUMNNODES = { "parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size" };
     public static final String[] MACROSIN_TABLENODES = { "name", "abbrev", "parent" };
+    public static final String[] MACROSIN_INDEXNODES = { "name" };
     public static final String[] REFTYPE_NAMES = { "none", "parent", "lookup", "self", "usetype" };
 
 	public static final int REFTYPE_NONE    = 0;
@@ -42,6 +43,7 @@ public class SchemaDocument extends XmlSource
 
     static HashSet replaceMacrosInColumnNodes = null;
     static HashSet replaceMacrosInTableNodes = null;
+    static HashSet replaceMacrosInIndexNodes = null;
 
 	private Hashtable dataTypeNodes = new Hashtable();
 	private Hashtable tableTypeNodes = new Hashtable();
@@ -56,11 +58,14 @@ public class SchemaDocument extends XmlSource
         {
             replaceMacrosInColumnNodes = new HashSet();
             replaceMacrosInTableNodes = new HashSet();
+            replaceMacrosInIndexNodes = new HashSet();
 
             for(int i = 0; i < MACROSIN_COLUMNNODES.length; i++)
                 replaceMacrosInColumnNodes.add(MACROSIN_COLUMNNODES[i]);
             for(int i = 0; i < MACROSIN_TABLENODES.length; i++)
                 replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
+            for(int i = 0; i < MACROSIN_INDEXNODES.length; i++)
+                replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
         }
     }
 
@@ -345,6 +350,10 @@ public class SchemaDocument extends XmlSource
 			table.removeChild(replaceCols[j][0]);
 		}
 
+        params.put("tbl_name", table.getAttribute("name"));
+        params.put("tbl_Name", ucfirst(table.getAttribute("name")));
+        params.put("tbl_abbrev", table.getAttribute("abbrev"));
+
         Element tableParentElem = (Element) table.getParentNode();
         if(tableParentElem != null && tableParentElem.getNodeName().equals("column"))
         {
@@ -368,6 +377,8 @@ public class SchemaDocument extends XmlSource
 
         replaceNodeMacros((Node) table, replaceMacrosInTableNodes, params);
 
+		Element lastColumnSeen = null;
+		int lastEnumId = 0;
         columns = table.getChildNodes();
         for(int c = 0; c < columns.getLength(); c++)
         {
@@ -377,7 +388,12 @@ public class SchemaDocument extends XmlSource
 
 			String nodeName = node.getNodeName();
             if(nodeName.equals("column"))
+			{
                 replaceNodeMacros(node, replaceMacrosInColumnNodes, params);
+				lastColumnSeen = (Element) node;
+			}
+            else if(nodeName.equals("index"))
+                replaceNodeMacros(node, replaceMacrosInTableNodes, params);
 			else if(nodeName.equals("parent"))
 			{
 				if(table.getAttribute("parent").length() == 0)
@@ -388,7 +404,29 @@ public class SchemaDocument extends XmlSource
                 if(node.getFirstChild().getNodeValue().equals("Audit"))
                     table.setAttribute("audit", "yes");
             }
+			else if (nodeName.equals("enum"))
+			{
+				Element enumElem = (Element) node;
+				String enumId = enumElem.getAttribute("id");
+				if(enumId.length() == 0)
+				{
+					enumElem.setAttribute("id", Integer.toString(lastEnumId));
+					lastEnumId++;
+				}
+				else
+				{
+					try	{ lastEnumId = Integer.parseInt(enumId) + 1; }
+					catch(NumberFormatException e)
+					{
+						addError("Enum id '"+ enumId +"' in table '"+ tableName +"' is invalid.");
+					}
+				}
+			}
         }
+
+		if(lastColumnSeen != null) lastColumnSeen.setAttribute("is-last", "yes");
+		if(table.getAttribute("abbrev").length() == 0)
+			table.setAttribute("abbrev", tableName);
 
 		resolveIndexes(table);
     }
@@ -473,8 +511,6 @@ public class SchemaDocument extends XmlSource
                     if(refColumnName.equalsIgnoreCase(refInfo.columnName))
                     {
                         column.setAttribute("refcol", refColumnName);
-						if(column.getAttribute("type").length() > 0)
-		                    errors.add("In a reference column, 'type' and other related modifiers like 'size' should not be specified (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
 
                         String copyType = findElementOrAttrValue(refColumnElem, "copytype");
                         if(copyType != null && copyType.length() > 0)
