@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: SelectField.java,v 1.2 2002-08-12 20:51:07 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -297,6 +297,10 @@ public class SelectField extends DialogField
         blank = elem.getAttribute("append-blank");
         if(blank.length() > 0 && blank.equals("yes"))
             setFlag(FLDFLAG_APPENDBLANK);
+
+        String sizeStr = elem.getAttribute("size");
+        if(sizeStr.length() != 0)
+            size = Integer.parseInt(sizeStr);
 
         String controlSep = elem.getAttribute("control-separator");
         if(controlSep.length() > 0)
