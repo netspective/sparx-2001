@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.7 2003-01-19 00:11:43 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.8 2003-01-22 06:30:22 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -69,9 +69,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.netspective.sparx.util.value.ValueContext;
-import com.netspective.sparx.util.value.SingleValueSource;
-import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.*;
 import com.netspective.sparx.util.ClassPath;
 
 public class NavigationPath
@@ -212,6 +210,8 @@ public class NavigationPath
     private SingleValueSource url = null;
     private Map ancestorMap = new HashMap();
     private List ancestorsList = new ArrayList();
+    private ValueSource retainParams = new ConfigurationExprValue();
+    private boolean hasRetainParams = false;
     private int level = 0;
     private int maxLevel = 0;
 
@@ -556,10 +556,18 @@ public class NavigationPath
                 String url = childElem.getAttribute("url");
                 if (url == null || url.length() == 0)
                 {
-                    url = controller.getUrl() + id; //TODO: I think that it would be useful for every page should be able to defin retain-params.
+                    url = "config-expr:${create-app-url:" + controller.getUrl() + id + "}" + (controller.getRetainParamsSource() != null || controller.getRetainParamsSource().length() > 0 ? "?" + controller.getRetainParamsSource() : "");
                     childElem.setAttribute("url", id);
                 }
                 childPath.setUrl(url);
+
+                //TODO: It would simplfy the XML definition if we add a url-params if you want to have the defual URL but only define some params, which is in most cases what you want to do.
+
+                //TODO: Make sure this is modified to inherit retain-params and a way to set them to nothing
+                String retainParams = childElem.getAttribute("retain-params");
+                if (retainParams != null && retainParams.length() > 0) {
+                    childPath.setRetainParams(retainParams);
+                }
 
                 String visible = childElem.getAttribute("visible");
                 if (visible != null && "no".equals(visible))
@@ -786,11 +794,13 @@ public class NavigationPath
     public String getUrl(ValueContext vc)
     {
         String startOfUrl = url != null ? url.getValue(vc) : ((HttpServletRequest) vc.getRequest()).getContextPath() + ((HttpServletRequest) vc.getRequest()).getServletPath() + getAbsolutePath();
-
+        return startOfUrl;
+        /*
         String params = controller.getRetainParamsValue(vc);
         //TODO: This code will need to be smarter in order to NOT double parameters that have already been included as part of the URL
         //      For example, the url defines param a and the controller does as well, then currently this param will show up twice in the request.
         return startOfUrl + (params != null && params.length() > 0 ? "?" + params : "");
+        */
     }
 
     /**
@@ -882,6 +892,27 @@ public class NavigationPath
 
     public void setController(NavigationController controller) {
         this.controller = controller;
+    }
+
+    public ValueSource getRetainParams() {
+        return retainParams;
+    }
+
+    public void setRetainParams(ValueSource retainParams) {
+        this.retainParams = retainParams;
+        hasRetainParams = true;
+    }
+
+    public String getRetainParams(ValueContext vc){
+        if (hasRetainParams)
+            return this.retainParams.getValue(vc);
+        else
+            return null;
+    }
+
+    public void setRetainParams(String retainParams){
+        this.retainParams.initializeSource(retainParams);
+        hasRetainParams = true;
     }
 
 
