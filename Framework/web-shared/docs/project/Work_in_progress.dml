@@ -14,7 +14,7 @@
 			<name>ACE</name>
 			<task><name>Allow logs files to be browsed through ACE.</name></task>
 			<task><name>Add new Monitor menu to allow monitoring of internal Sparx tasks.</name></task>
-			<task><name>XSLT browser file for configuration does not properly handle &lt;properties&gt; tag.</name></task>
+			<task><name>Need to modify colors and icons for SQL Components to new standard color scheme.</name></task>
 			<task><name>Allow dialog testing/execution to specify/select a skin.</name></task>
 			<task><name>Move Query Definitions to their own ACE page (instead of being combined with SQL Statements).</name></task>
 			<task><name>Need to go through all the code to make sure all tags are documented (missing initial-focus, XML skins, field.report, DialogDirector additions, primary-key field attribute, &lt;access-control&gt; tag, reg exp validation, QueryBuilderDialog, and field.separator rule attributes).</name></task>
@@ -68,6 +68,11 @@
 			<name>Security</name>
 			<task><name>Add basic User Management functionality to the Access Control framework.</name></task>
 			<task><name>When sessions time-out, set a flag so that login dialogs can indicate a timeout to the end user.</name></task>
+		</task>
+
+		<task>
+			<name>Platform-specific</name>
+			<task><name>On Linux, the Work In Progress (Framework Documents) page is not working (XALAN problem?).</name></task>
 		</task>
 
 	</project>
