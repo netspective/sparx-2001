@@ -15,7 +15,7 @@
 		<title>Sparx&#153; Sample Application</title>
 	</head>
 
-	<body bgcolor="#ffffff" leftmargin="5" marginheight="5" marginwidth="5" topmargin="5">
+	<body bgcolor="#cccccc" leftmargin="5" marginheight="5" marginwidth="5" topmargin="5">
 		<basefont face="Trebuchet MS" size=2>
 		<center>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -61,5 +61,5 @@
 					<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
 						<tr height="100%">
 							<td align="left" valign="top" width="15" height="100%" background="<%= sparxSampleImagesUrl %>/sample-apps-08.gif"><img src="<%= sparxSampleImagesUrl %>/sample-apps-spacer.gif" alt="" width="15" height="100%" border="0"></td>
-							<td align="left" valign="top" width="100%" height="100%">
+							<td align="left" valign="top" width="100%" height="100%" bgcolor="white">
 							<!-- *** START OF BODY CONTENT ** -->
