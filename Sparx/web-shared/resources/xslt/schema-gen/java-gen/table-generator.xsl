@@ -143,7 +143,7 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 <xsl:if test="@type = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
 		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="$table-abbrev"/>_<xsl:value-of select="@name"/>_SEQ&quot;);
 </xsl:if>
-<xsl:if test="@type != 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
+<xsl:if test="(@type != 'autoinc' or @type != 'guid32') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
 </xsl:if>
 <xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsRequired(true);
 </xsl:if>
