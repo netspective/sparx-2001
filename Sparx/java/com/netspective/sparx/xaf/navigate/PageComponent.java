@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageComponent.java,v 1.1 2003-02-03 04:24:28 roque.hernandez Exp $
+ * $Id: PageComponent.java,v 1.2 2003-04-07 15:34:17 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -333,6 +333,10 @@ public class PageComponent {
 
     public void handleDefaultBody(ValueContext vc) throws IOException, ComponentCommandException{
         renderComponents(vc, vc.getResponse().getWriter());
+    }
+
+    public void handleDefaultBody(ValueContext vc, Writer writer) throws IOException, ComponentCommandException{
+        renderComponents(vc, writer);
     }
 }
 
