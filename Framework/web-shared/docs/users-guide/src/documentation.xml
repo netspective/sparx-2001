@@ -13,6 +13,7 @@
 <!ENTITY dml.xml SYSTEM "dml.xml">
 <!ENTITY db-schema.xml SYSTEM "db-schema.xml">
 <!ENTITY security.xml SYSTEM "security.xml">
+<!ENTITY logging.xml SYSTEM "logging.xml">
 <!ENTITY faq.xml SYSTEM "faq.xml">
 
 
@@ -48,19 +49,14 @@
 <book>
 	<bookinfo>
 		<title>Sparx Documentation</title>
-        <authorgroup>  
+        <authorgroup>
             <author>
                 <firstname>Shahid</firstname>
                 <othername role="mi">N</othername>
                 <surname>Shah</surname>
             </author>
-            <author>
-                <firstname>Aye</firstname>
-                <othername role="mi">K</othername>
-                <surname>Thu</surname>
-            </author>
         </authorgroup>
-  
+
 		<copyright>
 			<year>2000</year>
 			<year>2001</year>
@@ -79,6 +75,7 @@
     &dml.xml;
     &db-schema.xml;
     &security.xml;
+    &logging.xml;
     &faq.xml;
 
 </book>
