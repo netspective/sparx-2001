@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogComponentCommand.java,v 1.5 2003-02-26 07:54:14 aye.thu Exp $
+ * $Id: DialogComponentCommand.java,v 1.6 2003-04-07 15:31:38 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -60,6 +60,7 @@ import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.html.ComponentCommandException;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.sql.StatementDialog;
 import com.netspective.sparx.xif.dal.TableDialog;
 
 import java.util.StringTokenizer;
@@ -220,33 +221,43 @@ public class DialogComponentCommand extends AbstractComponentCommand
             dc.setDebugFlags(debugFlagsSpec);
         dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
         dialog.prepareContext(dc);
-        if(unitTest)
-            dc.setRedirectDisabled(true);
 
-        if(dc.inExecuteMode())
+        if (dialog instanceof StatementDialog)
         {
-            if(dc.debugFlagIsSet(Dialog.DLGDEBUGFLAG_SHOW_FIELD_DATA))
-            {
-                writer.write(dc.getDebugHtml());
-                writer.write(dialog.getLoopSeparator());
-                dc.getSkin().renderHtml(writer, dc);
-            }
-            else
-            {
-                dialog.execute(writer, dc);
-
-                if(unitTest && dialog instanceof TableDialog)
-                    writer.write("<pre>Last row processed: "+ dc.getLastRowManipulated() +"</pre>");
-
-                if(! dc.executeStageHandled())
-                {
-                    writer.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
-                    writer.write(dc.getDebugHtml());
-                }
-            }
+            dialog.retainAllRequestParams();
+            dialog.renderHtml(writer, dc, true);
         }
         else
-            dialog.renderHtml(writer, dc, true);
+        {
+            if(unitTest)
+                dc.setRedirectDisabled(true);
+
+            if(dc.inExecuteMode())
+            {
+                if(dc.debugFlagIsSet(Dialog.DLGDEBUGFLAG_SHOW_FIELD_DATA))
+                {
+                    writer.write(dc.getDebugHtml());
+                    writer.write(dialog.getLoopSeparator());
+                    dc.getSkin().renderHtml(writer, dc);
+                }
+                else
+                {
+                    dialog.execute(writer, dc);
+
+                    if(unitTest && dialog instanceof TableDialog)
+                        writer.write("<pre>Last row processed: "+ dc.getLastRowManipulated() +"</pre>");
+
+                    if(! dc.executeStageHandled())
+                    {
+                        writer.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
+                        writer.write(dc.getDebugHtml());
+                    }
+
+                }
+            }
+            else
+                dc.getSkin().renderHtml(writer, dc);
+        }
     }
 
     public static class SkinParameter extends Documentation.Parameter
