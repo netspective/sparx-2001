@@ -59,4 +59,10 @@
 		heading="Extended examples (standard WEB-INF/conf/sparx.xml file)"
 		type="xml-source"
 		sample-app-file="/WEB-INF/conf/sparx.xml"/>
+
+	<channel
+		heading="Extended examples (standard WEB-INF/conf/app-config.xml file)"
+		type="xml-source"
+		sample-app-file="/WEB-INF/conf/app-config.xml"/>
+		
 </page>

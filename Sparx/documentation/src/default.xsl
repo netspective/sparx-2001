@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0"
-				xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan">
+				xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan"
+				xmlns:highlight="xalan://xalan.SyntaxHighlight"
+				extension-element-prefixes="highlight">
 
 <xsl:output method="html"/>
 
@@ -17,6 +19,7 @@
 <xsl:variable name="xaf-xsdn" select="document('xaf.xsdn')"/>
 <xsl:variable name="xif-xsd" select="document('xif.xsd')/xsd:schema"/>
 <xsl:variable name="xif-xsdn" select="document('xif.xsdn')"/>
+<xsl:variable name="syntax-highlighter" select="highlight:new()"/>
 
 <xsl:template match="*">
 	<xsl:param name="active-page"/>
@@ -146,7 +149,8 @@
 			</style>
 		</head>
 		<body topmargin="0" leftmargin="0" rightmargin="0" border="0">
-
+			<link rel="stylesheet" href="{concat($root-dir, '/resources/css/syntax.css')}"/>
+			
 			<!-- start of page master table -->
 			<table border="0" cellspacing="0" cellpadding="0" width="100%">
 				<!-- the main masthead row and search box -->
@@ -585,6 +589,16 @@
 			</tr>
 			</xsl:for-each>
 		</xsl:when>
+		<xsl:when test="@type = 'java-source'">
+			<tr>
+				<xsl:attribute name="bgcolor"><xsl:choose><xsl:when test="@content-color"><xsl:value-of select="@content-color"/></xsl:when><xsl:otherwise>#FFFFFF</xsl:otherwise></xsl:choose></xsl:attribute>
+				<td>
+					<font face="courier,arial,helvetica" size="2" style="font-size:8pt">
+						<xsl:value-of select="highlight:document($syntax-highlighter, @source-file)" disable-output-escaping="yes"/>
+					</font>
+				</td>
+			</tr>
+		</xsl:when>
 		<xsl:when test="@type = 'xml-source'">
 			<tr>
 				<xsl:attribute name="bgcolor"><xsl:choose><xsl:when test="@content-color"><xsl:value-of select="@content-color"/></xsl:when><xsl:otherwise>#FFFFFF</xsl:otherwise></xsl:choose></xsl:attribute>
@@ -592,9 +606,12 @@
 					<font face="courier,arial,helvetica" size="2" style="font-size:8pt">
 					<xsl:choose>
 						<xsl:when test="@sample-app-file and not(@element)">
+							<!--
 							<xsl:call-template name="xml-element">
 								<xsl:with-param name="element" select="document(concat($sample-app-home, @sample-app-file))"/>
 							</xsl:call-template>
+							-->
+							<xsl:value-of select="highlight:document($syntax-highlighter, concat($sample-app-home, @sample-app-file))" disable-output-escaping="yes"/>
 						</xsl:when>
 						<xsl:when test="@include and not(@element)">
 							<xsl:call-template name="xml-element">

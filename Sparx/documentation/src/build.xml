@@ -6,26 +6,45 @@ Build file for Application - for use with the Jakarta Ant java build tool
 Setup instructions:
     Before running an Ant build, you must
      - set the JAVA_HOME environment variable to the JDK root directory
-     - set the ANT_HOME environment variable to the Ant root directory
      - set the SPARX_HOME environment variable to the Sparx root directory
-     - set CLASSPATH with all required libraries:
-       * Sparx
-       * Apache Xerces 1.4 or above (http://xml.apache.org)
-       * Apache Xalan 2.1 or above (http://xml.apache.org)
-       * Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)
-       * Jakarta Log4J 1.1 or above (http://jakarta.apache.org)
-       * Java Servlet API 2.2 or above (http://java.sun.com)
-       * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
 -->
 
 <project name="app" default="generate-all">
 
+    <property environment="env"/>
+
     <target name="init">
     	<tstamp/>
 
+        <path id="sparx.home.path">
+            <pathelement location="${env.SPARX_HOME}"/>
+        </path>
+        <pathconvert targetos="unix" property="sparx.home" refid="sparx.home.path"/>
+
+        <path id="project.class.path">
+            <pathelement location="${basedir}"/>
+            <fileset dir="${sparx.home}/lib">
+                <include name="sparx.jar"/>
+            </fileset>
+            <fileset dir="${sparx.home}/lib/redist">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+        
 		<echo message="Basedir is '${basedir}'"/>
-		<property environment="env"/>
-		<property name="sparx-web-shared-path" value="${env.SPARX_HOME}/web-shared"/>
+
+        <!-- show the current class path and optimize it -->
+        <taskdef name="cp" classname="com.netspective.sparx.util.ant.ClassPathTask" classpath="${build.classes.dir}" classpathref="project.class.path"/>
+        <cp listall="yes" additionalref="project.class.path"/>
+
+        <!-- Compile the Xalan utility classes -->
+        <javac srcdir="${basedir}/xalan" includes="*.java" deprecation="off" classpathref="project.class.path"/>
+
+        <!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
+        <taskdef name="config" classname="com.netspective.sparx.util.ant.BuildConfigurationTask" classpath="${build.classes.dir}" classpathref="project.class.path"/>
+        <config/>
+
+		<property name="sparx-web-shared-path" value="${sparx.home.path}/web-shared"/>
 
 		<property name="html-path" value="${basedir}/../"/>
 		<property name="resources-path" value="${basedir}/../resources"/>
@@ -53,21 +72,21 @@ Setup instructions:
 
     <target name="generate-value-sources-html" depends="init">
     	<delete file="${value-sources-inc-file}"/>
-		<taskdef name="gen-vs" classname="com.netspective.sparx.util.ant.GenerateValueSourcesDocumentation"/>
+		<taskdef name="gen-vs" classname="com.netspective.sparx.util.ant.GenerateValueSourcesDocumentation" classpathref="project.class.path"/>
 		<gen-vs output="${value-sources-inc-file}"/>
     </target>
 
     <target name="generate-xsdn" depends="init">
     	<delete file="${normalized-xif-xsd-file}"/>
     	<delete file="${normalized-xaf-xsd-file}"/>
-		<xslt basedir="." destdir="." extension=".xsdn" style="xsd-normalize.xsl" processor="trax">
+		<xslt basedir="." destdir="." extension=".xsdn" style="xsd-normalize.xsl" processor="trax" classpathref="project.class.path">
 			<include name="xif.xsd"/>
 			<include name="xaf.xsd"/>
 		</xslt>
     </target>
 
     <target name="generate-html" depends="init,clean">
-		<xslt basedir="." destdir="${html-path}" extension=".html" style="${default-style-sheet}" force="yes" processor="trax">
+		<xslt basedir="." destdir="${html-path}" extension=".html" style="${default-style-sheet}" force="yes" processor="trax" classpathref="project.class.path">
 			<include name="**/*.xml"/>
 			<exclude name="build.xml"/>
 			<exclude name="structure.xml"/>
