@@ -179,7 +179,7 @@ public class SchemaDocument extends XmlSource
 			{
 				Node nameAttr = ((Element) compNode).getAttributeNode("name");
 				replaceNodeValue(nameAttr, "$name$", compositeName);
-		        fixupColumnElement((Element) compNode);
+		        fixupColumnElement((Element) compNode, false);
 				((Element) compNode).setAttribute("descr", column.getAttribute("descr"));
 				compColumns.appendChild(compNode);
 			}
@@ -187,8 +187,19 @@ public class SchemaDocument extends XmlSource
 		return compColumns;
 	}
 
-    public void fixupColumnElement(Element column)
+    public boolean isReferenceColumn(Element column)
     {
+        return  column.getAttribute("lookupref").length() > 0 || column.getAttribute("parentref").length() > 0 ||
+                column.getAttribute("selfref").length() > 0 || column.getAttribute("usetype").length() > 0;
+    }
+
+    public void fixupColumnElement(Element column, boolean inRefColumn)
+    {
+        // if we're not fixing up a reference column and this column happens to be a reference, we're not going
+        // to deal with it right now
+        if(inRefColumn == false && isReferenceColumn(column))
+            return;
+
         inheritNodes(column, dataTypeNodes);
 
         NodeList colInfo = column.getChildNodes();
@@ -406,7 +417,7 @@ public class SchemaDocument extends XmlSource
             String nodeName = node.getNodeName();
 
             if(nodeName.equals("column"))
-                fixupColumnElement(childElem);
+                fixupColumnElement(childElem, false);
             else if (nodeName.equals("param"))
                 params.put(childElem.getAttribute("name"), childElem.getFirstChild().getNodeValue());
         }
@@ -626,10 +637,14 @@ public class SchemaDocument extends XmlSource
                     else
                         column.setAttribute("type", refColumnElem.getAttribute("type"));
 
+                    String sizeAttr = findElementOrAttrValue(refColumnElem, "size");
+                    if(sizeAttr != null && sizeAttr.length() > 0)
+                           column.setAttribute("size", sizeAttr);
+
                     if(column.getAttribute("type").length() == 0)
                         errors.add("Column '" + refInfo.columnName + "' has no type in Table '"+ refInfo.tableName +"' for "+ REFTYPE_NAMES[refInfo.type] +" reference '"+ refInfo.reference +"' (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
 
-                    fixupColumnElement(column);
+                    fixupColumnElement(column, true);
 
                     Element refByElem = xmlDoc.createElement("referenced-by");
                     refColumnElem.appendChild(refByElem);
