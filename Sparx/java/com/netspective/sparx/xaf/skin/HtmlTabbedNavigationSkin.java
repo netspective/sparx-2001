@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.17 2003-01-29 15:48:22 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.18 2003-02-05 04:51:39 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -229,7 +229,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("<!-- Master Header Begins -->");
         writer.write("   <TABLE class=\"mast_header\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
         writer.write("      <TR>");
-        writer.write("	        <TD>&nbsp;<A class=\"app_name\" href=\"" + nc.getRootUrl() + "/index.jsp\">" + nc.getApplicationName(nc) + "</A></TD>");
+        writer.write("	        <TD>&nbsp;<A class=\"app_name\" href=\"" + nc.getRootUrl() + "/index.jsp\">" + ( nc.getApplicationName(nc) == null ? "Application Name" : nc.getApplicationName(nc) ) + "</A></TD>");
         writer.write("	        <TD width=\"100%\"><IMG height=25 src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\" width=10 border=0></TD>");
         writer.write("			<TD rowspan=\"2\"><!-- space for image on right --></TD>");
         writer.write("       </TR>");
