@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.8 2003-02-26 07:54:14 aye.thu Exp $
+ * $Id: NavigationTreeManager.java,v 1.9 2003-06-03 22:41:45 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -200,6 +200,8 @@ public class NavigationTreeManager extends XmlSource
                 tree.setControllerName(NAME_DEFAULT);
                 tree.setController(defaultController);
                 tree.setRoot(true);
+                tree.setDefaultChildId(childElem.getAttribute("default"));
+                tree.setName(childElem.getAttribute("name"));
                 tree.importFromXml(childElem, tree);
                 structures.put(childElem.getAttribute("name"), tree);
             }
