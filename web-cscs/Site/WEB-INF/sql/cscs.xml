@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <sql-statements package="person">
+
+            <statement name="registration">
+                select * from person where person_id = ?
+            </statement>
+    </sql-statements>
+
+	<query-defn id="Drugs">
+
+		<!-- Fields -->
+		<field id="person_id" caption="Person ID" join="prescription" column="person_id">
+			<report heading="ID"  />
+		</field>
+		<field id="refills" caption="Refills" join="prescription" column="refills">
+			<report heading="Refills"  />
+		</field>
+		<field id="genallowed" caption="Gen. Allowed" join="prescription" column="genallowed">
+			<report heading="Gen. Allowed"  />
+		</field>
+
+		<field id="name_first" caption="First Name" join="person" column="name_first">
+			<report heading="First Name"  />
+		</field>
+		<field id="name_last" caption="Last Name" join="person" column="name_last">
+			<report heading="Last Name"  />
+		</field>
+		<field id="physician" caption="Physician" join="physician" column="name_last">
+			<report heading="Physician"  />
+		</field>
+
+
+		<field id="cr_stamp" caption="Prescription Date" join="prescription" column="cr_stamp"  column-expr="to_char(prescription.cr_stamp, 'MM/DD/YYYY')">
+			<report heading="Date"  />
+		</field>
+		<field id="drug" caption="Drug" join="drug_type" column="caption">
+			<report heading="Drug"  />
+		</field>
+        <field id="drug_id" caption="Drug ID" join="drug_type" column="id">
+
+		</field>
+		<field id="quantity" caption="Quantity" join="quantity_type" column="caption">
+			<report heading="Quantity"  />
+		</field>
+		<field id="dosage" caption="Dosage" join="dosage_type" column="caption">
+			<report heading="Dosage"  />
+		</field>
+
+
+
+
+		<!-- Joins -->
+		<join id="prescription" table="prescription" auto-include="yes"/>
+		<join id="drug_type" table="drug_type"  condition="drug_type.id = prescription.drug" />
+		<join id="dosage_type" table="dosage_type"  condition="dosage_type.id = prescription.dosage" />
+		<join id="quantity_type" table="quantity_type"  condition="quantity_type.id = prescription.quantity" />
+
+
+        <join id="person" table="person" condition="person.person_id = prescription.person_id" />
+        <join id="physician" table="person" condition="physician.person_id = prescription.cr_person_id" />
+
+
+		<select-dialog name="drug_search" allow-debug="no" show-output-dests="no" hide-readonly-hints="yes" heading="Prescription Reporting">
+			<!-- <field.text query-field="perso"/>
+			<field.text query-field="name_last"/>
+			<field.text query-field="name_first"/>
+			<field.select query-field="gender" choices="query:person.gender-list" prepend-blank="yes"/>
+			<field.select query-field="org_id" choices="query:person.active-org-memberships-name-id"  default="session:organization" prepend-blank="yes"/>
+            <field.select name="sort_order"
+					caption="Sort By"
+					style="combo"
+					choices="Last Name=name_last;Gender=gender;SSN=ssn"
+                    default="name_last"/>                              -->
+            <field.select query-field="drug" choices="schema-enum:Drug_Type" />
+            <field.select name="sort_order"
+					caption="Sort By"
+					style="combo"
+					choices="Last Name=name_last;Physician=physician;Date=cr_stamp" />
+			<select heading="Prescription Search Results">
+
+                <display field="cr_stamp"/>
+                <display field="name_last" />
+                <display field="name_first" />
+                <display field="drug"/>
+                <display field="quantity" />
+                <display field="dosage" />
+                <display field="refills" />
+                <display field="physician" />
+
+				<order-by field="form:sort_order"/>
+
+                <!--
+				<condition field="person_id" allow-null="no" comparison="starts-with" value="form:person_id" connector="and" />
+				<condition field="name_last" allow-null="no" comparison="starts-with" value="form:name_last" connector="and" bind-expr="upper(?)"/>
+				<condition field="name_first" allow-null="no" comparison="starts-with" value="form:name_first" connector="and" bind-expr="upper(?)"/>
+				<condition field="gender" allow-null="no" comparison="equals" value="form:gender" connector="and"/>
+                <condition field="ssn" allow-null="no" comparison="equals" value="form:ssn" connector="and"/>
+                <condition field="org_id" allow-null="no" comparison="equals" value="form:org_id" connector="and" />
+                -->
+                <condition field="drug_id" allow-null="no"  comparison="equals" value="form:drug" />
+
+			</select>
+			<director cancel-url="index.jsp" submit-caption="Search"/>
+		</select-dialog>
+    </query-defn>
+
+	<sql-statements package="cscs">
+        <statement name="physician-list">
+            select
+                name_first ,
+                name_last ,
+                ssn,
+                dea_number ,
+                city ,
+                state ,
+                zip ,
+                person_id
+            from
+                person
+            where
+                person_type = 1
+			<report heading="Physician List">
+                <column heading="First Name" />
+                <column heading="Last Name"/>
+                <column heading="SSN" />
+                <column heading="DEA Number" />
+                <column heading="City"/>
+                <column heading="State"/>
+                <column heading="Zip"/>
+                <column heading="person_id" display="no" />
+             </report>
+
+        </statement>
+
+        <statement name="docs-patient-list">
+            select
+                'View History',
+                'Add Prescription',
+                name_first ,
+                name_last ,
+                ssn,
+                city ,
+                state ,
+                zip ,
+                person_id
+            from
+                person
+            where
+                cr_person_id  = ?
+            <params>
+                <param value="request-attr:person_id"/>
+            </params>
+			<report heading="Patient List">
+                <column heading=" " url="config-expr:${create-app-url:/prescriptionhistory.jsp}?pat_person_id=${8}" />
+				<column heading=" " url="config-expr:${create-app-url:/prescription.jsp}?pat_person_id=${8}"/>
+                <column heading="First Name" />
+                <column heading="Last Name"/>
+                <column heading="SSN" />
+                <column heading="City"/>
+                <column heading="State"/>
+                <column heading="Zip"/>
+                <column heading="person_id" display="no" />
+             </report>
+
+        </statement>
+       <statement name="patient-prescription-list">
+            select
+                drug_type.caption,
+                dosage_type.caption,
+                to_char(prescription.cr_stamp,'MM/DD/YYYY'),
+                physician.name_last
+            from
+                dosage_type,drug_type,prescription,person,person physician
+            where
+                prescription.person_id = person.person_id and
+                physician.person_id = prescription.cr_person_id and
+                drug_type.id  = prescription.drug and
+                dosage_type.id = prescription.dosage and
+                person.person_id  = ?
+            <params>
+                <param value="request:pat_person_id"/>
+            </params>
+			<report heading="Prescriptions">
+				<column heading="Drug" />
+                <column heading="Dosage"/>
+                <column heading="Date" />
+                <column heading="Physician"/>
+             </report>
+
+        </statement>
+
+	</sql-statements>
+</xaf>

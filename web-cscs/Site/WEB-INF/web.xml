@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<web-app>
+	<!-- setup external classes -->
+<classpath id='/root/projects/newproj/Sparx/lib/sparx-2-0-3.jar'/>
+	<classpath id='C:\Projects\web-ipms\lib\cos.jar'/>
+	<classpath id='C:\Projects\web-ipms\lib\mail.jar'/>
+	<classpath id='/root/projects/newproj/Framework/lib/sparx-2-0-3_doc.jar'/>
+	<classpath id='/root/projects/newproj/Framework/lib/sparx-2-0-3_src.jar'/>
+	<classpath id='/root/projects/newproj/java/jakarta-oro-2.0.4/jakarta-oro-2.0.4.jar'/>
+	<classpath id='/root/projects/newproj/java/jakarta-log4j-1.1.3/dist/lib/log4j.jar'/>
+	<classpath id='/root/projects/newproj/java/xerces-1_4_3/xerces.jar'/>
+	<classpath id='/root/projects/newproj/java/xalan-j_2_2_D13/bin/xalan.jar'/>
+	<classpath id='/root/projects/newproj/java/xsql/lib/classes12.zip'/>
+
+
+	<!-- setup utility servlet aliases -->
+	<servlet>
+		<servlet-name>AppComponentsExplorer</servlet-name>
+		<servlet-class>com.netspective.sparx.ace.AppComponentsExplorerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AppComponentsExplorer</servlet-name>
+		<url-pattern>/ace/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- setup database connections -->
+	<context-param>
+	  <param-name>default-data-source</param-name>
+	  <param-value>jdbc/cura</param-value>
+	</context-param>
+
+	<resource-ref>
+	  <res-ref-name>jdbc/cura</res-ref-name>
+	  <res-type>javax.sql.DataSource</res-type>
+	  <init-param driver-name="oracle.jdbc.driver.OracleDriver"/>
+	  <init-param url="jdbc:oracle:thin:@localhost:1521:db"/>
+	  <init-param user="cscs"/>
+	  <init-param password="cscs"/>
+	  <init-param max-connections="15"/>
+	  <init-param enable-transaction="false"/>
+	</resource-ref>
+
+</web-app>

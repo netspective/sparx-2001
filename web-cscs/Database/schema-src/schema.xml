@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+
+<schema name="db">
+
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+	<include file="enums.xml"/>
+
+
+    <table name="Person_Type" abbrev="PerType" type="Enumeration">
+		<enum>Admin</enum>
+		<enum>Physician</enum>
+		<enum>Patient</enum>
+
+	</table>
+    <table name="Drug_Type" abbrev="Drug" type="Enumeration">
+        <enum>Codeine</enum>
+        <enum>Percoset</enum>
+        <enum>Xanax</enum>
+        <enum>Lithium</enum>
+        <enum>Cipro</enum>
+        <enum>Keflex</enum>
+    </table>
+
+    <table name="Dosage_Type" abbrev="Dose" type="Enumeration">
+        <enum id="50">tab 50 mg</enum>
+        <enum id="100">tab 100 mg</enum>
+        <enum id="200">tab 200 mg</enum>
+
+    </table>
+
+    <table name="Quantity_Type" abbrev="Quantity" type="Enumeration">
+        <enum id="10">tablets 10</enum>
+        <enum id="20">tablets 20</enum>
+        <enum id="30">tablets 30</enum>
+    </table>
+
+    <table name="Drug_Quota" type="Default">
+         <column name="drug" lookupref="Drug_Type" default="0" descr="Drug Type"/>
+         <column name="max_prescription" type="integer" descr="max prescriptions" />
+   </table>
+
+	<table name="Person" abbrev="Per" type="Default">
+		<description>Any person (client, staff member, etc.)</description>
+		<column name="person_id" primarykey="yes" type="autoinc" descr="Auto-generated Unique ID for a person within the entire system"/>
+
+		<column name="name_first" type="text" required="yes" size="32"/>
+		<column name="name_last" type="text" required="yes" size="32"/>
+		<column name="simple_name" type="text" required="dbms" size="96" descr="[name_first] [name_last]"/>
+		<column name="ssn" indexed="yes" type="text" size="11" descr="Social Security number"/>
+		<column name="date_of_birth" type="date" descr="Date of Birth"/>
+        <column name="person_type" lookupref="Person_Type" default="0" descr="Person Type"/>
+        <column name="address" type="text" size="256" descr="The first address line"/>
+		<column name="city" type="text" size="128" descr="The city of the state"/>
+		<column name="state" type="text" size="128" descr="The state of the union"/>
+		<column name="zip" type="text" size="128" descr="The postal code (+4 format)"/>
+        <column name="dea_number" type="integer" descr="DEA ID for Physician" />
+
+	</table>
+
+	<table name="Person_Login" abbrev="PerLg" type="Default">
+		<description>
+			Stores the login records for each person. This table has a one to one relationship with the
+			Person table and is separated to allow easily changing login information (username/password)
+			without affecting a person's registation record.
+		</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="person_id" parentref="Person.person_id" indexed="yes" descr="The person for whom login information is specified"/>
+		<column name="user_id" type="text" size="32" unique="yes" descr="The login ID for the person in this system"/>
+		<column name="password" type="text" size="16" descr="The login password"/>
+
+		<column name="quantity" type="integer" default="1" descr="The number of times login is allowed from different sessions"/>
+	</table>
+
+
+    <table name="Prescription" abbrev="Prescr" type="Default">
+       	<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="person_id" parentref="Person.person_id" required="yes" indexed="yes" descr="The person for whom the prescription is assigned"/>
+        <column name="drug" lookupref="Drug_Type" default="0" descr="Drug Type"/>
+        <column name="dosage" lookupref="Dosage_Type" required="yes" default="10" descr="Dosage" />
+        <column name="quantity" lookupref="Quantity_Type" required="yes" default="10" descr="Quantity" />
+        <column name="instructions" type="text" size="255" descr="Special Instructions" />
+        <column name="refills" type="integer" descr="Number of Refills Allowed" />
+        <column name="genallowed" type="boolean" descr="Generic Allowed" />
+
+    </table>
+
+   <!--
+	<include file="person.xml"/>
+	<include file="org.xml"/>
+    <include file="task.xml"/>
+	<include file="artifact.xml"/>
+
+	<table name="Project" abbrev="Prj" type="Default">
+		<column name="project_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="parent_id" selfref="Project.project_id" descr="Parent project (NULL if this is not a sub-project)"/>
+		<column name="project_code" type="text" size="64" unique="yes" descr="General project code"/>
+		<column name="project_name" type="text" size="256" descr="The name of the project"/>
+		<column name="project_descr" type="text" size="4000" descr="Project details"/>
+        <column name="project_status" lookupref="Project_Status" descr="The active status of this project"/>
+        <column name="start_date" type="date" descr="project start date"/>
+        <column name="target_end_date" type="date" descr="Project target end date"/>
+        <column name="actual_end_date" type="date" descr="Project actual end date"/>
+	</table>
+
+    <table name="Project_Status" abbrev="PrjSt" type="Status">
+        <enum>Not Defined</enum>
+        <enum>Proposed</enum>
+        <enum>In Planning</enum>
+        <enum>In Progress</enum>
+        <enum>On Hold</enum>
+        <enum>Complete</enum>
+    </table>
+
+	<table name="ProjectOrg_Relation_Type" abbrev="PrjOrgRelTy" type="Relationship_Type">
+
+        <enum id="1" abbrev="Owner">Owner</enum>
+        <enum id="2" abbrev="mainc">Main contractor</enum>
+        <enum id="3" abbrev="subc">Sub contractor</enum>
+	</table>
+
+	<table name="ProjectPerson_Relation_Type" abbrev="PrjPerRelTy" type="Relationship_Type">
+
+        <enum id="1" abbrev="LD">Lead</enum>
+        <enum id="2" abbrev="ENG">Member</enum>
+	</table>
+
+	<table name="Project_Relationship_Status" abbrev="PrjRelSt" type="Relationship_Status"/>
+
+	<table name="ProjectOrg_Relation" abbrev="PrjOrgRel" type="Org_Relationship">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Relationship_Status</param>
+		<param name="relationship-type-enum">ProjectOrg_Relation_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+	</table>
+
+	<table name="ProjectPerson_Relation" abbrev="PrjPerRel" type="Person_Relationship">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Relationship_Status</param>
+		<param name="relationship-type-enum">ProjectPerson_Relation_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+    </table>
+
+	<table name="Project_Event" abbrev="PrjEvt" type="Event">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Event_Status</param>
+		<param name="event-type-enum">Project_Event_Type</param>
+	</table>
+
+	<table name="Project_Flag_Type" abbrev="PrjFlTy" type="Flag_Type">
+	</table>
+
+	<table name="Project_Flag_Status" abbrev="PrjFlSt" type="Flag_Status"/>
+
+	<table name="Project_Flag" abbrev="PrjFlg" type="Flag">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Flag_Status</param>
+		<param name="flag-type-enum">Project_Flag_Type</param>
+	</table>
+    -->
+
+
+
+
+</schema>

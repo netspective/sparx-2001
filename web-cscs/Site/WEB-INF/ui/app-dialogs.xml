@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <!--
+    <include file="app-person-dialogs.xml"/>
+    <include file="app-org-dialogs.xml"/>
+    <include file="app-project-dialogs.xml"/>
+    <include file="app-task-dialogs.xml"/>
+    -->
+    <dialogs package="main">
+        <dialog name="prescription_entry" heading="Record Prescription"  >
+            <field.text name="physician_name"  caption="physician" read-only="yes" />
+            <field.text name="dea_number" caption="DEA Number" read-only="yes" />
+            <field.separator />
+            <field.static name="pi" caption="Patient Information" default=" "/>
+            <field.static name="name_first" caption="First Name" />
+            <field.static name="name_last" caption="Last Name" />
+            <field.text name="person_id" hidden="yes" />  <!-- workaround for issue w/ "losing" reqest var -->
+            <field.ssn name="ssn" caption="Patient ID" read-only="yes" />
+            <field.separator />
+            <field.static name="pi2" caption="Prescription Information" default=" "/>
+            <field.select name="drug" caption="Drug Name" choices="schema-enum:Drug_Type" />
+            <field.select name="dosage" caption="Dosage" choices="schema-enum:Dosage_Type" />
+            <field.select name="quantity" caption="Quantity" choices="schema-enum:Quantity_Type" />
+            <field.integer name="refills" caption="Refills" />
+            <field.boolean name="genallowed" caption="Generic Allowed" />
+            <field.memo name="instructions" caption="Instructions" />
+
+
+            <populate-tasks data-cmd="add" debug="yes" >
+                <exec-statement report="none" store-type="row-fields" store="form:*"  >
+                    select name_first,name_last,ssn,person_id from person
+                        where person_id = ?
+                    <params>
+                        <param value="request:pat_person_id" />
+                    </params>
+                </exec-statement>
+                <exec-statement report="none" store-type="row-fields" store="form:*"   >
+                    select name_last "physician_name", dea_number from person
+                        where person_id = ?
+                    <params>
+                        <param value="request-attr:phy_person_id" />
+                    </params>
+                </exec-statement>
+
+            </populate-tasks>
+
+            <execute-tasks data-cmd="add"  >
+
+                <exec-transaction command="begin"/>
+
+                    <exec-dml command="insert" table="prescription" auto-inc="system_id,prescr_system_id_seq"
+                        columns="cr_person_id=request-attr:phy_person_id,person_id=form:person_id"
+                        fields="drug,dosage,quantity,instructions" />
+
+
+                <exec-transaction command="end"/>
+
+                <exec-redirect url="config-expr:${create-app-url:/index.jsp}" />
+
+            </execute-tasks>
+        </dialog>
+
+
+        <dialog name="physician_entry" heading="Add Physician" >
+
+            <field.text name="name_first" required="yes" caption="First Name" />
+            <field.text name="name_last" required="yes" caption="Last Name" />
+            <field.ssn name="ssn" required="yes" caption="SSN" />
+            <field.integer name="dea_number" required="yes" caption="DEA Number" />
+            <field.text name="city" caption="City" />
+            <field.text name="state" caption="State" />
+            <field.zip name="zip" caption="Zip" />
+            <field.text name="user_id" required="yes" caption="CSCS Username" />
+            <field.text name="password" required="yes" caption="CSCS Password" />
+
+            <execute-tasks data-cmd="add" >
+
+                <exec-transaction command="begin"/>
+
+                    <exec-dml command="insert" table="person" auto-inc="person_id,per_person_id_seq"
+                        auto-inc-store="request-attr:person_id"
+                        columns="person_type=custom-sql:1"
+                        fields="name_first,name_last,ssn,dea_number,city,state,zip" />
+
+                    <exec-dml command="insert" table="person_login" auto-inc="system_id,perlg_system_id_seq"
+                            columns="person_id=request-attr:person_id"
+                            fields="user_id,password" />
+
+                <exec-transaction command="end"/>
+
+                <exec-redirect url="config-expr:${create-app-url:/index.jsp}" />
+
+            </execute-tasks>
+
+        </dialog>
+         <dialog name="patient_entry" heading="Add Patient" >
+
+            <field.text name="name_first" required="yes" caption="First Name" />
+            <field.text name="name_last" required="yes" caption="Last Name" />
+            <field.ssn name="ssn" required="yes" caption="Patient ID" />
+
+            <field.text name="city" required="yes" caption="City" />
+            <field.text name="state" required="yes" caption="State" />
+            <field.zip name="zip" required="yes" caption="Zip" />
+            <execute-tasks data-cmd="add" >
+
+                <exec-transaction command="begin"/>
+
+                    <exec-dml command="insert" table="person" auto-inc="person_id,per_person_id_seq"
+                        auto-inc-store="request-attr:person_id"
+                        columns="person_type=custom-sql:2,cr_person_id=request-attr:person_id"
+                        fields="name_first,name_last,ssn,city,state,zip" />
+
+
+                <exec-transaction command="end"/>
+
+                <exec-redirect url="config-expr:${create-app-url:/index.jsp}" />
+
+            </execute-tasks>
+
+        </dialog>
+    </dialogs>
+</xaf>

@@ -1,0 +1,132 @@
+2002-02-25 00:07:24,446	mayra	aaa9HZw-GuEKah	login	ace	null	null	localhost.localdomain	127.0.0.1	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 01:09:49,242	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 01:13:22,748	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 01:19:47,909	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 03:01:09,447	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 03:06:14,577	mayra	aaahZ1ReZLKpO-	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 03:39:12,294	mayra	aaahZ1ReZLKpO-	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 03:45:41,427	mayra	aaahZ1ReZLKpO-	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 03:50:27,495	mayra	aaahZ1ReZLKpO-	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 03:52:30,487	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:03:53,265	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:13:59,286	mayra	aaahZ1ReZLKpO-	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:15:46,804	mayra	aaahZ1ReZLKpO-	logout	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:15:57,858	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:22:49,097	mayra	aaahZ1ReZLKpO-	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:25:53,254	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:26:04,216	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:29:18,041	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:29:59,076	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:36:58,584	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 04:57:52,002	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:01:23,415	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:04:29,434	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:04:37,390	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:13:45,637	mayra	aaahZ1ReZLKpO-	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:32:42,604	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:32:49,521	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:46:37,877	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 05:46:46,229	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:02:22,020	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:02:30,395	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:05:18,085	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:05:23,807	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:06:40,257	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:10:00,648	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:10:57,693	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:11:08,903	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:14:18,364	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:14:29,466	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:16:54,049	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:17:00,521	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:21:06,796	mayra	aaahZ1ReZLKpO-	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:21:16,274	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-25 06:28:03,715	mayra	aaahZ1ReZLKpO-	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 01:49:34,918		aaa4clZiQL--B1	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 01:51:54,465		aaa4clZiQL--B1	logout	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:05:29,500	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:11:55,690	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:12:04,553	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:13:19,422	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:13:26,474	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:21:41,217	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:21:47,108	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:26:33,473	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:26:43,423	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:28:45,374	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:30:42,297	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 02:57:04,253	mayra	aaa4clZiQL--B1	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 03:25:37,092	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 03:51:24,426	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 03:56:49,496	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 03:57:09,141	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 04:02:28,498	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 04:16:19,786	mayra	aaa4clZiQL--B1	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 04:16:48,518	mayra	aaa4clZiQL--B1	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 04:21:57,760	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 04:31:50,762	mayra	aaa4clZiQL--B1	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 04:49:15,543	mayra	aaaaJS1Qqy-HZZ	login	null	null	null	192.168.1.1	192.168.1.1	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 05:00:18,678	mayra	aaa4cfW940AFTI	login	null	null	null	user-119ap03.biz.mindspring.com	66.149.100.3	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 16:32:08,291	mayra	aaacqF2Nbgxo4G	login	ace	null	null	resva-igate01.trw.com	192.35.84.5	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 17:16:51,749	mayra	aaac1qbXQs-7KZ	login	wily coyote	null	null	24-240-231-215.hsacorp.net	24.240.231.215	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 17:47:25,843	mayra	aaacqF2Nbgxo4G	login	null	null	null	resva-igate01.trw.com	192.35.84.5	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 17:53:19,716	mayra	aaabtdlbG2ixID	login	wily coyote	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 18:46:17,013	mayra	aaacqF2Nbgxo4G	login	ace	null	null	resva-igate01.trw.com	192.35.84.5	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 21:37:22,709	mayra	aaa_-e0pIj_EW1	login	null	null	null	resva-igate01.trw.com	192.35.84.5	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 21:39:06,355	mayra	aaa_-e0pIj_EW1	logout	null	null	null	resva-igate01.trw.com	192.35.84.5	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 22:13:06,523	mayra	aaagQioISU_FDv	login	wily coyote	null	null	24-240-231-215.hsacorp.net	24.240.231.215	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 22:43:09,602	mayra	aaagQioISU_FDv	logout	wily coyote	null	null	24-240-231-215.hsacorp.net	24.240.231.215	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 22:52:13,428	mayra	aaabtdlbG2ixID	login	null	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 23:19:08,573	mayra	aaa_-e0pIj_EW1	login	null	null	null	resva-igate01.trw.com	192.35.84.5	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-26 23:22:05,964	mayra	aaabtdlbG2ixID	login	null	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:07:38,400	mayra	aaafo-DdhVYo8U	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:22:25,724	mayra	aaafo-DdhVYo8U	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:24:45,589	mayra	aaafo-DdhVYo8U	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:25:53,336	mayra	aaafo-DdhVYo8U	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:29:32,019	mayra	aaagSqLz0NyODc	login	wily coyote	null	null	24.216.142.150	24.216.142.150	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:34:38,112	mayra	aaafo-DdhVYo8U	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:37:26,343	mayra	aaafo-DdhVYo8U	logout	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:37:32,438	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:42:30,915	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:49:11,621	mayra	aaafo-DdhVYo8U	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 04:49:20,093	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:01:37,599	mayra	aaafo-DdhVYo8U	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:07:45,472	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:11:09,308	mayra	aaafo-DdhVYo8U	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:13:38,025	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:14:46,254	mayra	aaafo-DdhVYo8U	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:16:23,755	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 05:24:55,451	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 06:20:32,740	mayra	aaa4RJ7yzP3sjm	login	ace	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 07:17:05,370	mayra	aaafo-DdhVYo8U	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 07:17:35,063	mayra	aaafo-DdhVYo8U	logout	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 07:17:44,564	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 07:33:08,131	mayra	aaafo-DdhVYo8U	login	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 07:35:29,121	mayra	aaafo-DdhVYo8U	logout	null	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 07:35:35,123	mayra	aaafo-DdhVYo8U	login	wily coyote	null	null	192.168.1.102	192.168.1.102	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 11:58:09,725	mayra	aaa9pquJ-n-XzN	login	null	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 11:59:35,874	mayra	aaa9pquJ-n-XzN	logout	null	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 11:59:53,868	mayra	aaa9pquJ-n-XzN	login	wily coyote	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 11:59:59,191	mayra	aaa9pquJ-n-XzN	logout	wily coyote	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 12:02:27,266	mayra	aaa9pquJ-n-XzN	login	null	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 12:02:46,084	mayra	aaa9pquJ-n-XzN	logout	null	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 12:03:03,400	mayra	aaa9pquJ-n-XzN	login	wily coyote	null	null	cs242769-110.houston.rr.com	24.27.69.110	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 14:32:37,777	mayra	aaad-WLr8KTuyQ	login	null	null	null	user-119ap03.biz.mindspring.com	66.149.100.3	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 15:40:17,007	mayra	aaadvqUJOuqRb8	login	wily coyote	null	null	24-240-231-215.hsacorp.net	24.240.231.215	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:19:11,188	mayra	aaa45YrEzsU7YX	login	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:20:38,650	mayra	aaa45YrEzsU7YX	logout	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:21:11,356	mayra	aaa45YrEzsU7YX	login	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:23:17,341	mayra	aaa45YrEzsU7YX	logout	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:23:24,145	mayra	aaa45YrEzsU7YX	login	null	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:25:59,250	mayra	aaa45YrEzsU7YX	logout	null	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:26:23,035	mayra	aaa45YrEzsU7YX	login	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:27:03,587	mayra	aaa45YrEzsU7YX	logout	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:27:36,451	mayra	aaa45YrEzsU7YX	login	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:28:21,513	mayra	aaa45YrEzsU7YX	logout	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:28:28,333	mayra	aaa45YrEzsU7YX	login	null	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:29:25,799	mayra	aaa45YrEzsU7YX	logout	null	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-27 17:29:39,324	mayra	aaa45YrEzsU7YX	login	wily coyote	null	null	w020.z067105182.was-dc.dsl.cnc.net	67.105.182.20	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-28 03:19:53,725	mayra	aaadvqUJOuqRb8	login	wily coyote	null	null	24-240-231-215.hsacorp.net	24.240.231.215	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-02-28 23:58:59,360	mayra	aaahwjWZr6DQCz	login	null	null	null	192.168.1.1	192.168.1.1	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-03-01 00:04:42,380	mayra	aaahwjWZr6DQCz	logout	null	null	null	192.168.1.1	192.168.1.1	{2, 3, 4, 5, 6, 7, 9}	/role/super-user
+2002-03-01 00:06:31,080	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	login	wily coyote	null	null	192.168.1.1	192.168.1.1	{2, 3, 4, 5, 6, 7, 9}	/role/super-user

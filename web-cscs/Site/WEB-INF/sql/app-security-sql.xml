@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="security">
+
+		<!-- these security statements are used in AppLoginDialog -->
+		<statement name="login-info">
+			select person_id, password, quantity
+			from person_login
+			where user_id = ?
+			<!--and login_status = 1     /* active status only */-->
+		</statement>
+
+	</sql-statements>
+</xaf>

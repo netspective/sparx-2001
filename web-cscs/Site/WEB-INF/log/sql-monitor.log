@@ -1,0 +1,623 @@
+2002-02-25 01:02:17,530	mayra	aaahZ1ReZLKpO-	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:02:17,591	mayra	aaahZ1ReZLKpO-	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:05:02,408	mayra	aaahZ1ReZLKpO-	security.login-info	1	4037	7	22	4134	/cscs/index.jsp
+2002-02-25 01:05:02,425	mayra	aaahZ1ReZLKpO-	security.login-info	1	0	0	6	8	/cscs/index.jsp
+2002-02-25 01:05:56,771	mayra	aaahZ1ReZLKpO-	security.login-info	1	68	1	6	75	/cscs/index.jsp
+2002-02-25 01:05:56,999	mayra	aaahZ1ReZLKpO-	person.active-org-memberships	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:07:59,182	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	security.login-info	1	45	0	13	59	/cscs/index.jsp
+2002-02-25 01:07:59,196	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-org-memberships	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:09:49,002	mayra	aaahZ1ReZLKpO-	security.login-info	1	2759	12	7	2864	/cscs/index.jsp
+2002-02-25 01:09:49,092	mayra	aaahZ1ReZLKpO-	person.registration	1	0	1	12	15	/cscs/index.jsp
+2002-02-25 01:13:22,472	mayra	aaahZ1ReZLKpO-	security.login-info	1	3497	8	12	3638	/cscs/index.jsp
+2002-02-25 01:13:22,575	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-25 01:13:22,999	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:13:23,075	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:19:47,645	mayra	aaahZ1ReZLKpO-	security.login-info	1	2770	7	8	2881	/cscs/index.jsp
+2002-02-25 01:19:47,758	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-25 01:19:48,142	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 01:19:48,196	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 03:01:09,198	mayra	aaahZ1ReZLKpO-	security.login-info	1	2791	7	8	2929	/cscs/index.jsp
+2002-02-25 03:01:09,295	mayra	aaahZ1ReZLKpO-	person.registration	1	0	1	10	13	/cscs/index.jsp
+2002-02-25 03:01:09,668	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 03:01:09,746	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 03:52:30,311	mayra	aaahZ1ReZLKpO-	security.login-info	1	1948	7	15	2046	/cscs/index.jsp
+2002-02-25 03:52:30,407	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	15	17	/cscs/index.jsp
+2002-02-25 03:52:30,662	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 03:52:30,714	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:02:47,519	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:02:47,573	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:02:53,428	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:02:53,510	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:03:53,078	mayra	aaahZ1ReZLKpO-	security.login-info	1	1890	6	7	1967	/cscs/index.jsp
+2002-02-25 04:03:53,159	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 04:03:53,442	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:03:53,494	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:05:37,701	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:05:37,773	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:06:11,442	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:06:11,497	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:13:59,037	mayra	aaahZ1ReZLKpO-	security.login-info	1	1917	6	7	1994	/cscs/index.jsp
+2002-02-25 04:13:59,135	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	13	/cscs/index.jsp
+2002-02-25 04:13:59,457	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:13:59,511	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:14:46,629	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:14:46,686	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:15:38,539	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:15:38,590	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:15:57,804	mayra	aaahZ1ReZLKpO-	security.login-info	1	42	0	6	49	/cscs/index.jsp
+2002-02-25 04:15:57,823	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	15	/cscs/index.jsp
+2002-02-25 04:15:57,871	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:15:57,922	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:25:43,908	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:25:43,961	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:26:04,166	mayra	aaahZ1ReZLKpO-	security.login-info	1	58	0	7	67	/cscs/index.jsp
+2002-02-25 04:26:04,183	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 04:26:04,228	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:26:04,284	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:29:17,829	mayra	aaahZ1ReZLKpO-	security.login-info	1	1871	7	6	1947	/cscs/contact/index.jsp
+2002-02-25 04:29:17,916	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	17	19	/cscs/contact/index.jsp
+2002-02-25 04:29:58,886	mayra	aaahZ1ReZLKpO-	security.login-info	1	1873	7	7	1950	/cscs/index.jsp
+2002-02-25 04:29:58,967	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-25 04:29:59,249	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:29:59,307	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:31:47,713	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:31:47,766	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:32:16,518	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:32:16,574	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:36:58,284	mayra	aaahZ1ReZLKpO-	security.login-info	1	1944	7	7	2024	/cscs/index.jsp
+2002-02-25 04:36:58,382	mayra	aaahZ1ReZLKpO-	person.registration	1	1	0	10	13	/cscs/index.jsp
+2002-02-25 04:36:58,751	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:36:58,803	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:37:56,944	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:37:56,995	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:39:20,596	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:39:20,648	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:57:51,781	mayra	aaahZ1ReZLKpO-	security.login-info	1	1866	6	7	1948	/cscs/index.jsp
+2002-02-25 04:57:51,869	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 04:57:52,168	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:57:52,220	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:59:50,365	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 04:59:50,423	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:01:23,201	mayra	aaahZ1ReZLKpO-	security.login-info	1	1875	7	7	1951	/cscs/index.jsp
+2002-02-25 05:01:23,282	mayra	aaahZ1ReZLKpO-	person.registration	1	1	0	10	12	/cscs/index.jsp
+2002-02-25 05:01:23,568	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:01:24,170	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:01:27,446	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	39	1	9	52	/cscs/patientlist.jsp
+2002-02-25 05:04:25,447	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	40	0	13	55	/cscs/patientlist.jsp
+2002-02-25 05:04:37,370	mayra	aaahZ1ReZLKpO-	security.login-info	1	0	0	5	8	/cscs/index.jsp
+2002-02-25 05:04:37,387	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 05:04:37,402	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:04:37,453	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:04:39,949	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	39	0	9	51	/cscs/patientlist.jsp
+2002-02-25 05:05:42,368	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	39	0	9	51	/cscs/patientlist.jsp
+2002-02-25 05:32:38,085	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:32:38,153	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:32:49,472	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	security.login-info	1	42	0	6	49	/cscs/index.jsp
+2002-02-25 05:32:49,489	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 05:32:49,533	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:32:49,584	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:33:00,608	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	cscs.docs-patient-list	1	40	0	7	50	/cscs/patientlist.jsp
+2002-02-25 05:33:43,605	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	0	0	8	11	/cscs/patientlist.jsp
+2002-02-25 05:33:50,099	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-19	1	0	0	7	11	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:33:50,113	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-20	1	0	1	6	10	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:35:41,122	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	Task.SqlExecuteAction-27	1	40	0	6	48	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:35:41,155	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	Task.SqlExecuteAction-28	0	-1	-1	-1	-1	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:40:31,105	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	Task.SqlExecuteAction-31	1	44	0	11	58	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:40:31,117	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	Task.SqlExecuteAction-32	1	0	0	6	9	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:46:46,178	mayra	aaahZ1ReZLKpO-	security.login-info	1	40	0	5	47	/cscs/index.jsp
+2002-02-25 05:46:46,195	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 05:46:46,241	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:46:46,293	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 05:46:53,400	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	cscs.docs-patient-list	1	41	0	9	53	/cscs/patientlist.jsp
+2002-02-25 05:46:56,257	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-50	1	1	1	5	9	/cscs/prescription.jsp?person_id=11
+2002-02-25 05:46:56,269	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-51	1	0	0	6	9	/cscs/prescription.jsp?person_id=11
+2002-02-25 06:02:30,348	mayra	aaahZ1ReZLKpO-	security.login-info	1	41	0	6	49	/cscs/index.jsp
+2002-02-25 06:02:30,365	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 06:02:30,409	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:02:30,479	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:02:32,391	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	cscs.docs-patient-list	1	49	0	8	61	/cscs/patientlist.jsp
+2002-02-25 06:02:33,738	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	Task.SqlExecuteAction-70	1	1	0	6	9	/cscs/prescription.jsp?person_id=11
+2002-02-25 06:02:33,751	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	Task.SqlExecuteAction-71	1	0	0	5	8	/cscs/prescription.jsp?person_id=11
+2002-02-25 06:05:23,760	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	security.login-info	1	81	0	6	88	/cscs/index.jsp
+2002-02-25 06:05:23,778	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.registration	1	1	0	11	13	/cscs/index.jsp
+2002-02-25 06:05:23,823	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:05:23,876	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:05:27,214	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-25 06:05:57,042	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-25 06:06:02,356	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-25 06:06:13,670	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-25 06:06:51,777	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:06:51,797	mayra	aaahZ1ReZLKpO- aaahZ1ReZLKpO-	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:10:00,414	mayra	aaahZ1ReZLKpO-	security.login-info	1	2259	20	17	2428	/cscs/index.jsp
+2002-02-25 06:10:00,515	mayra	aaahZ1ReZLKpO-	person.registration	1	0	1	10	13	/cscs/index.jsp
+2002-02-25 06:10:00,817	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:10:01,012	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:10:03,344	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	39	0	8	51	/cscs/patientlist.jsp
+2002-02-25 06:10:06,523	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-5	1	0	0	6	9	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:10:06,538	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-6	1	1	0	9	12	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:11:08,827	mayra	aaahZ1ReZLKpO-	security.login-info	1	39	0	6	47	/cscs/index.jsp
+2002-02-25 06:11:08,846	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-25 06:11:08,917	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:11:08,971	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:11:10,515	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	42	0	8	52	/cscs/patientlist.jsp
+2002-02-25 06:11:12,565	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-17	1	0	0	6	8	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:11:12,577	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-18	1	0	0	6	9	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:14:29,418	mayra	aaahZ1ReZLKpO-	security.login-info	1	51	0	6	58	/cscs/index.jsp
+2002-02-25 06:14:29,435	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-25 06:14:29,478	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:14:29,529	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:14:31,440	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	51	0	11	65	/cscs/patientlist.jsp
+2002-02-25 06:15:35,767	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:15:35,819	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:16:12,999	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	46	0	7	56	/cscs/patientlist.jsp
+2002-02-25 06:17:00,409	mayra	aaahZ1ReZLKpO-	security.login-info	1	0	0	6	8	/cscs/index.jsp
+2002-02-25 06:17:00,457	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	31	33	/cscs/index.jsp
+2002-02-25 06:17:00,533	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:17:00,639	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:17:03,045	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	41	0	8	51	/cscs/patientlist.jsp
+2002-02-25 06:17:07,732	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-43	1	0	0	6	9	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:17:07,744	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-44	1	0	0	6	9	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:17:15,092	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:17:15,145	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:21:16,214	mayra	aaahZ1ReZLKpO-	security.login-info	1	42	0	6	50	/cscs/index.jsp
+2002-02-25 06:21:16,237	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	17	19	/cscs/index.jsp
+2002-02-25 06:21:16,286	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:21:16,339	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:21:17,560	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	42	0	8	52	/cscs/patientlist.jsp
+2002-02-25 06:21:19,987	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-56	1	0	0	6	10	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:21:19,999	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-57	1	0	0	6	9	/cscs/prescription.jsp?person_id=12
+2002-02-25 06:28:03,472	mayra	aaahZ1ReZLKpO-	security.login-info	1	2044	7	13	2132	/cscs/index.jsp
+2002-02-25 06:28:03,566	mayra	aaahZ1ReZLKpO-	person.registration	1	0	0	10	13	/cscs/index.jsp
+2002-02-25 06:28:03,884	mayra	aaahZ1ReZLKpO-	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:28:03,950	mayra	aaahZ1ReZLKpO-	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-25 06:28:08,413	mayra	aaahZ1ReZLKpO-	cscs.docs-patient-list	1	43	1	7	63	/cscs/patientlist.jsp
+2002-02-25 06:28:13,795	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-5	1	0	0	6	9	/cscs/prescription.jsp?person_id=11
+2002-02-25 06:28:13,807	mayra	aaahZ1ReZLKpO-	Task.SqlExecuteAction-6	1	1	0	5	8	/cscs/prescription.jsp?person_id=11
+2002-02-26 01:46:31,364		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:46:31,384		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:48:59,590		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:48:59,595		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:49:00,671		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:49:00,675		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:49:01,393		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:49:01,398		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:49:34,645		aaa4clZiQL--B1	security.login-info	1	2090	8	61	2222	/cscs/index.jsp
+2002-02-26 01:49:34,783		aaa4clZiQL--B1	person.registration	1	0	0	18	20	/cscs/index.jsp
+2002-02-26 01:49:34,995		aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:49:35,065		aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:52:01,911		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:52:01,920		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:52:08,155		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:52:08,164		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:52:09,116		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 01:52:09,124		aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:05:29,229	mayra	aaa4clZiQL--B1	security.login-info	1	2176	7	92	2343	/cscs/index.jsp
+2002-02-26 02:05:29,356	mayra	aaa4clZiQL--B1	person.registration	1	0	0	42	44	/cscs/index.jsp
+2002-02-26 02:05:29,666	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:05:29,733	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:05:32,895	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	39	1	9	52	/cscs/patientlist.jsp
+2002-02-26 02:06:37,975	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-5	0	-1	-1	-1	-1	/cscs/prescription.jsp?person_id=11
+2002-02-26 02:06:38,035	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-6	1	49	0	7	58	/cscs/prescription.jsp?person_id=11
+2002-02-26 02:06:45,974	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:06:46,033	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:07:01,221	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	40	0	8	50	/cscs/patientlist.jsp
+2002-02-26 02:07:02,602	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-5	0	-1	-1	-1	-1	/cscs/prescription.jsp?person_id=11
+2002-02-26 02:07:02,658	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-6	1	46	0	6	54	/cscs/prescription.jsp?person_id=11
+2002-02-26 02:12:04,506	mayra	aaa4clZiQL--B1	security.login-info	1	39	0	6	47	/cscs/index.jsp
+2002-02-26 02:12:04,523	mayra	aaa4clZiQL--B1	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-26 02:12:04,564	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:12:04,617	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:12:06,808	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	40	0	8	51	/cscs/patientlist.jsp
+2002-02-26 02:12:09,743	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-19	1	0	0	7	10	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:12:09,756	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-20	1	0	0	7	9	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:13:26,421	mayra	aaa4clZiQL--B1	security.login-info	1	40	0	6	47	/cscs/index.jsp
+2002-02-26 02:13:26,443	mayra	aaa4clZiQL--B1	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-26 02:13:26,486	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:13:26,537	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:13:29,388	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	40	0	8	51	/cscs/patientlist.jsp
+2002-02-26 02:13:31,224	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-31	0	-1	-1	-1	-1	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:13:31,275	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-32	1	40	0	6	49	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:21:47,061	mayra	aaa4clZiQL--B1	security.login-info	1	40	0	12	53	/cscs/index.jsp
+2002-02-26 02:21:47,078	mayra	aaa4clZiQL--B1	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-26 02:21:47,119	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:21:47,171	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:21:49,372	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	41	0	8	51	/cscs/patientlist.jsp
+2002-02-26 02:21:51,346	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-43	1	1	0	8	11	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:21:51,358	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-44	1	1	0	6	9	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:22:00,461	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:22:00,513	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:26:43,329	mayra	aaa4clZiQL--B1	security.login-info	1	44	0	6	52	/cscs/index.jsp
+2002-02-26 02:26:43,346	mayra	aaa4clZiQL--B1	person.registration	1	1	0	10	12	/cscs/index.jsp
+2002-02-26 02:26:43,436	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:26:43,480	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:26:45,531	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 02:28:51,042	mayra	aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:28:51,062	mayra	aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:30:42,069	mayra	aaa4clZiQL--B1	security.login-info	1	1921	7	7	2009	/cscs/index.jsp
+2002-02-26 02:30:42,162	mayra	aaa4clZiQL--B1	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-26 02:30:42,469	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:30:42,529	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:30:46,458	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	42	0	7	52	/cscs/patientlist.jsp
+2002-02-26 02:30:49,502	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-5	1	5	0	6	14	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:30:49,514	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-6	1	1	0	6	9	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 02:31:27,429	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:31:27,480	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 02:57:50,324	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	0	-1	-1	-1	-1	/cscs/ace/database/sql/test/cscs.patient-prescription-list
+2002-02-26 03:25:36,207	mayra	aaa4clZiQL--B1	security.login-info	1	50	13	7	71	/cscs/index.jsp
+2002-02-26 03:25:36,291	mayra	aaa4clZiQL--B1	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-26 03:25:37,136	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 03:25:37,196	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 03:25:40,173	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 03:26:41,097	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	39	0	21	64	/cscs/patientlist.jsp
+2002-02-26 03:26:48,393	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	0	-1	-1	-1	-1	/cscs/prescriptionhistory.jsp?pat_person_id=20001
+2002-02-26 03:37:06,991	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	0	-1	-1	-1	-1	/cscs/prescriptionhistory.jsp?pat_person_id=20001
+2002-02-26 03:38:08,980	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 03:48:38,692	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 03:51:24,196	mayra	aaa4clZiQL--B1	security.login-info	1	2193	7	7	2290	/cscs/index.jsp
+2002-02-26 03:51:24,290	mayra	aaa4clZiQL--B1	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-26 03:51:24,601	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 03:51:24,659	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 03:51:34,286	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	39	0	8	50	/cscs/patientlist.jsp
+2002-02-26 03:51:50,724	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	0	-1	-1	-1	-1	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 03:52:53,362	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	43	0	8	54	/cscs/patientlist.jsp
+2002-02-26 03:52:57,436	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	0	-1	-1	-1	-1	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 03:54:55,138	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	40	0	9	53	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 03:57:09,087	mayra	aaa4clZiQL--B1	security.login-info	1	39	1	5	46	/cscs/index.jsp
+2002-02-26 03:57:09,104	mayra	aaa4clZiQL--B1	person.registration	1	0	0	10	12	/cscs/index.jsp
+2002-02-26 03:57:09,153	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:02:28,298	mayra	aaa4clZiQL--B1	security.login-info	1	1929	6	12	2018	/cscs/index.jsp
+2002-02-26 04:02:28,392	mayra	aaa4clZiQL--B1	person.registration	1	0	0	11	13	/cscs/index.jsp
+2002-02-26 04:02:28,669	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:02:28,728	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:03:33,886	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:03:33,937	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:14:01,620	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 04:20:47,590	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 04:20:47,597	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 04:20:47,760	mayra	aaa4clZiQL--B1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:20:48,020	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 04:20:48,200	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/ace/database/sql/test/cscs.docs-patient-list
+2002-02-26 04:21:57,527	mayra	aaa4clZiQL--B1	security.login-info	1	1328	5	6	1391	/cscs/index.jsp
+2002-02-26 04:21:57,607	mayra	aaa4clZiQL--B1	person.registration	1	0	0	16	18	/cscs/index.jsp
+2002-02-26 04:21:57,862	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:21:57,922	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:22:04,176	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	42	0	6	50	/cscs/patientlist.jsp
+2002-02-26 04:22:32,856	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	0	22	24	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 04:22:40,868	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	0	5	9	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 04:22:54,544	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	1	11	13	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 04:23:05,227	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	0	4	7	/cscs/prescriptionhistory.jsp?pat_person_id=12
+2002-02-26 04:23:14,805	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-9	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 04:23:14,815	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-10	1	0	0	4	6	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 04:23:32,972	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:23:33,008	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:31:32,070	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 04:31:50,586	mayra	aaa4clZiQL--B1	security.login-info	1	1588	3	7	1649	/cscs/index.jsp
+2002-02-26 04:31:50,670	mayra	aaa4clZiQL--B1	person.registration	1	0	0	15	17	/cscs/index.jsp
+2002-02-26 04:31:50,858	mayra	aaa4clZiQL--B1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:31:50,914	mayra	aaa4clZiQL--B1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:31:56,506	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	40	0	7	49	/cscs/patientlist.jsp
+2002-02-26 04:32:07,049	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	0	5	8	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 04:32:14,939	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-6	1	0	0	7	9	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 04:32:14,949	mayra	aaa4clZiQL--B1	Task.SqlExecuteAction-7	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 04:32:17,398	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	0	0	13	15	/cscs/patientlist.jsp
+2002-02-26 04:32:18,675	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	1	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 04:32:21,308	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	0	1	7	16	/cscs/patientlist.jsp
+2002-02-26 04:32:22,449	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	0	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=12
+2002-02-26 04:32:23,999	mayra	aaa4clZiQL--B1	cscs.docs-patient-list	1	0	0	10	12	/cscs/patientlist.jsp
+2002-02-26 04:32:25,078	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	0	0	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 04:49:15,503	mayra	aaaaJS1Qqy-HZZ	security.login-info	1	41	0	5	48	/cscs/index.jsp
+2002-02-26 04:49:15,514	mayra	aaaaJS1Qqy-HZZ	person.registration	1	0	0	7	9	/cscs/index.jsp
+2002-02-26 04:49:15,548	mayra	aaaaJS1Qqy-HZZ	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:49:15,583	mayra	aaaaJS1Qqy-HZZ	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 04:49:24,995	mayra	aaaaJS1Qqy-HZZ	cscs.docs-patient-list	1	30	0	6	38	/cscs/patientlist.jsp
+2002-02-26 04:49:39,019	mayra	aaaaJS1Qqy-HZZ	cscs.patient-prescription-list	1	0	0	6	8	/cscs/prescriptionhistory.jsp?pat_person_id=12
+2002-02-26 04:51:44,136	mayra	aaa4clZiQL--B1	cscs.patient-prescription-list	1	34	0	10	45	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 05:00:18,556	mayra	aaa4cfW940AFTI	security.login-info	1	32	0	4	38	/cscs/index.jsp
+2002-02-26 05:00:18,569	mayra	aaa4cfW940AFTI	person.registration	1	0	0	7	9	/cscs/index.jsp
+2002-02-26 05:00:18,683	mayra	aaa4cfW940AFTI	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 05:00:18,726	mayra	aaa4cfW940AFTI	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 05:00:29,513	mayra	aaa4cfW940AFTI	cscs.docs-patient-list	1	33	1	6	41	/cscs/patientlist.jsp
+2002-02-26 05:01:25,982	mayra	aaa4cfW940AFTI	cscs.patient-prescription-list	1	30	0	6	37	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 05:01:35,004	mayra	aaa4cfW940AFTI	Task.SqlExecuteAction-6	1	0	0	12	17	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 05:01:35,013	mayra	aaa4cfW940AFTI	Task.SqlExecuteAction-7	1	0	0	4	6	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 17:16:51,664	mayra	aaac1qbXQs-7KZ	security.login-info	1	69	0	4	100	/cscs/index.jsp
+2002-02-26 17:16:51,678	mayra	aaac1qbXQs-7KZ	person.registration	1	1	0	6	9	/cscs/index.jsp
+2002-02-26 17:16:51,756	mayra	aaac1qbXQs-7KZ	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:16:51,810	mayra	aaac1qbXQs-7KZ	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:47:25,797	mayra	aaacqF2Nbgxo4G	security.login-info	1	30	0	4	35	/cscs/index.jsp
+2002-02-26 17:47:25,809	mayra	aaacqF2Nbgxo4G	person.registration	1	0	0	6	8	/cscs/index.jsp
+2002-02-26 17:47:25,847	mayra	aaacqF2Nbgxo4G	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:47:25,889	mayra	aaacqF2Nbgxo4G	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:47:34,252	mayra	aaacqF2Nbgxo4G	cscs.docs-patient-list	1	35	1	5	42	/cscs/patientlist.jsp
+2002-02-26 17:47:37,849	mayra	aaacqF2Nbgxo4G	cscs.patient-prescription-list	1	0	0	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 17:47:43,962	mayra	aaacqF2Nbgxo4G	Task.SqlExecuteAction-6	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 17:47:43,971	mayra	aaacqF2Nbgxo4G	Task.SqlExecuteAction-7	1	0	0	4	6	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 17:53:19,430	mayra	aaabtdlbG2ixID	security.login-info	1	34	1	4	39	/cscs/index.jsp
+2002-02-26 17:53:19,453	mayra	aaabtdlbG2ixID	person.registration	1	0	0	19	20	/cscs/index.jsp
+2002-02-26 17:53:19,721	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:53:19,756	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:55:02,684	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 17:55:02,722	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:06:11,080	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:08:24,531	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:08:29,920	mayra	aaabtdlbG2ixID	cscs.docs-patient-list	0	-1	-1	-1	-1	/cscs/patientlist.jsp
+2002-02-26 18:08:34,261	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:08:40,360	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:08:45,010	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:08:53,532	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:16:17,080	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:18:30,560	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:18:40,271	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:18:46,361	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:18:51,030	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:18:59,602	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:27:12,640	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:37:18,720	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:37:26,183	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 18:47:32,190	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 19:27:42,960	mayra	aaabtdlbG2ixID	security.login-info	0	-1	-1	-1	-1	/cscs/task/index.jsp
+2002-02-26 19:31:00,333	mayra	aaabtdlbG2ixID	security.login-info	0	-1	-1	-1	-1	/cscs/task/index.jsp
+2002-02-26 19:37:48,960	mayra	aaabtdlbG2ixID	security.login-info	0	-1	-1	-1	-1	/cscs/task/index.jsp
+2002-02-26 19:41:06,330	mayra	aaabtdlbG2ixID	security.login-info	0	-1	-1	-1	-1	/cscs/task/index.jsp
+2002-02-26 19:41:31,000	mayra	aaabtdlbG2ixID	security.login-info	0	-1	-1	-1	-1	/cscs/task/index.jsp
+2002-02-26 19:51:37,011	mayra	aaabtdlbG2ixID	security.login-info	0	-1	-1	-1	-1	/cscs/task/index.jsp
+2002-02-26 21:35:47,230	mayra	aaa_-e0pIj_EW1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 21:37:22,389	mayra	aaa_-e0pIj_EW1	security.login-info	1	1765	4	6	1832	/cscs/index.jsp
+2002-02-26 21:37:22,496	mayra	aaa_-e0pIj_EW1	person.registration	1	0	0	17	19	/cscs/index.jsp
+2002-02-26 21:37:22,899	mayra	aaa_-e0pIj_EW1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 21:37:22,953	mayra	aaa_-e0pIj_EW1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 21:38:24,917	mayra	aaa_-e0pIj_EW1	cscs.docs-patient-list	1	42	0	6	61	/cscs/patientlist.jsp
+2002-02-26 21:38:34,733	mayra	aaa_-e0pIj_EW1	Task.SqlExecuteAction-5	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 21:38:34,742	mayra	aaa_-e0pIj_EW1	Task.SqlExecuteAction-6	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 21:38:46,205	mayra	aaa_-e0pIj_EW1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 21:38:46,240	mayra	aaa_-e0pIj_EW1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 21:38:50,871	mayra	aaa_-e0pIj_EW1	cscs.docs-patient-list	1	39	0	6	46	/cscs/patientlist.jsp
+2002-02-26 21:38:57,719	mayra	aaa_-e0pIj_EW1	cscs.patient-prescription-list	1	0	0	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=11
+2002-02-26 22:13:06,440	mayra	aaagQioISU_FDv	security.login-info	1	30	0	4	36	/cscs/index.jsp
+2002-02-26 22:13:06,451	mayra	aaagQioISU_FDv	person.registration	1	0	0	7	8	/cscs/index.jsp
+2002-02-26 22:13:06,528	mayra	aaagQioISU_FDv	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 22:13:06,566	mayra	aaagQioISU_FDv	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 22:52:13,216	mayra	aaabtdlbG2ixID	security.login-info	1	36	0	5	47	/cscs/task/index.jsp
+2002-02-26 22:52:13,236	mayra	aaabtdlbG2ixID	person.registration	1	0	0	10	16	/cscs/task/index.jsp
+2002-02-26 23:18:06,700	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:18:06,910	mayra	aaa_-e0pIj_EW1	security.login-info	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:18:07,380	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:19:08,342	mayra	aaa_-e0pIj_EW1	security.login-info	1	1536	7	7	1605	/cscs/index.jsp
+2002-02-26 23:19:08,439	mayra	aaa_-e0pIj_EW1	person.registration	1	0	0	15	17	/cscs/index.jsp
+2002-02-26 23:19:08,698	mayra	aaa_-e0pIj_EW1	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:19:08,746	mayra	aaa_-e0pIj_EW1	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:22:05,743	mayra	aaabtdlbG2ixID	security.login-info	1	1541	4	7	1615	/cscs/index.jsp
+2002-02-26 23:22:05,829	mayra	aaabtdlbG2ixID	person.registration	1	0	0	15	17	/cscs/index.jsp
+2002-02-26 23:22:06,079	mayra	aaabtdlbG2ixID	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:22:06,145	mayra	aaabtdlbG2ixID	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-26 23:22:26,945	mayra	aaabtdlbG2ixID	cscs.docs-patient-list	1	30	0	8	40	/cscs/patientlist.jsp
+2002-02-26 23:22:43,428	mayra	aaabtdlbG2ixID	Task.SqlExecuteAction-5	1	0	0	15	18	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 23:22:43,445	mayra	aaabtdlbG2ixID	Task.SqlExecuteAction-6	1	0	0	10	12	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 23:23:01,193	mayra	aaabtdlbG2ixID	cscs.docs-patient-list	1	0	0	5	7	/cscs/patientlist.jsp
+2002-02-26 23:23:41,877	mayra	aaabtdlbG2ixID	Task.SqlExecuteAction-5	1	32	0	5	39	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 23:23:41,892	mayra	aaabtdlbG2ixID	Task.SqlExecuteAction-6	1	0	0	5	13	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 23:29:03,256	mayra	aaabtdlbG2ixID	Task.SqlExecuteAction-5	1	30	0	5	37	/cscs/prescription.jsp?pat_person_id=11
+2002-02-26 23:29:03,265	mayra	aaabtdlbG2ixID	Task.SqlExecuteAction-6	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=11
+2002-02-27 04:22:25,524	mayra	aaafo-DdhVYo8U	security.login-info	1	1710	3	9	1796	/cscs/index.jsp
+2002-02-27 04:22:25,620	mayra	aaafo-DdhVYo8U	person.registration	1	3	0	17	21	/cscs/index.jsp
+2002-02-27 04:22:25,825	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:22:25,873	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:24:45,397	mayra	aaafo-DdhVYo8U	security.login-info	1	1551	4	6	1608	/cscs/index.jsp
+2002-02-27 04:24:45,465	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	16	17	/cscs/index.jsp
+2002-02-27 04:24:45,678	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:24:45,733	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:25:53,154	mayra	aaafo-DdhVYo8U	security.login-info	1	2011	3	7	2068	/cscs/index.jsp
+2002-02-27 04:25:53,220	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	15	17	/cscs/index.jsp
+2002-02-27 04:25:53,427	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:25:53,472	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:29:31,835	mayra	aaagSqLz0NyODc	security.login-info	1	1208	3	7	1276	/cscs/index.jsp
+2002-02-27 04:29:31,903	mayra	aaagSqLz0NyODc	person.registration	1	0	0	16	17	/cscs/index.jsp
+2002-02-27 04:29:32,115	mayra	aaagSqLz0NyODc	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:29:32,159	mayra	aaagSqLz0NyODc	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:34:32,919	mayra	aaafo-DdhVYo8U	security.login-info	1	1223	4	6	1282	/cscs/index.jsp
+2002-02-27 04:34:32,995	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	25	26	/cscs/index.jsp
+2002-02-27 04:34:38,201	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:34:38,245	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:37:22,625	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:37:22,666	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:37:32,411	mayra	aaafo-DdhVYo8U	security.login-info	1	31	0	5	37	/cscs/index.jsp
+2002-02-27 04:37:32,435	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	20	21	/cscs/index.jsp
+2002-02-27 04:37:32,443	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:37:32,479	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:37:36,157	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	36	1	6	44	/cscs/patientlist.jsp
+2002-02-27 04:38:04,717	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:38:04,759	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:38:06,362	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	31	0	7	39	/cscs/patientlist.jsp
+2002-02-27 04:38:08,538	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	0	-1	-1	-1	-1	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 04:39:48,106	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	1	38	0	12	52	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 04:40:05,341	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	6	8	/cscs/patientlist.jsp
+2002-02-27 04:42:30,728	mayra	aaafo-DdhVYo8U	security.login-info	1	2659	4	7	2716	/cscs/index.jsp
+2002-02-27 04:42:30,804	mayra	aaafo-DdhVYo8U	person.registration	1	1	0	16	18	/cscs/index.jsp
+2002-02-27 04:42:31,006	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:42:31,056	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:42:33,840	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	42	0	8	52	/cscs/patientlist.jsp
+2002-02-27 04:42:36,312	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	1	0	0	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=22222
+2002-02-27 04:42:40,722	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	6	8	/cscs/patientlist.jsp
+2002-02-27 04:42:44,229	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-7	1	0	0	11	13	/cscs/prescription.jsp?pat_person_id=22222
+2002-02-27 04:43:04,760	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	1	30	0	5	37	/cscs/prescriptionhistory.jsp?pat_person_id=22222
+2002-02-27 04:43:06,613	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	8	10	/cscs/patientlist.jsp
+2002-02-27 04:43:07,531	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U	Task.SqlExecuteAction-7	1	0	0	4	6	/cscs/prescription.jsp?pat_person_id=22222
+2002-02-27 04:49:20,047	mayra	aaafo-DdhVYo8U	security.login-info	1	30	0	6	38	/cscs/index.jsp
+2002-02-27 04:49:20,061	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	10	11	/cscs/index.jsp
+2002-02-27 04:49:20,099	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:49:20,154	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:49:22,075	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	cscs.docs-patient-list	1	31	1	11	43	/cscs/patientlist.jsp
+2002-02-27 04:49:24,621	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-7	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 04:49:24,634	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-8	1	1	0	7	9	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 04:50:21,391	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:50:21,429	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 04:50:22,878	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	cscs.docs-patient-list	1	33	1	5	39	/cscs/patientlist.jsp
+2002-02-27 04:50:24,276	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	Task.SqlExecuteAction-23	1	0	0	6	8	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 04:50:24,285	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	Task.SqlExecuteAction-24	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 05:00:10,477	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:00:10,515	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:00:13,006	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	31	1	7	39	/cscs/patientlist.jsp
+2002-02-27 05:00:41,728	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	10	12	/cscs/patientlist.jsp
+2002-02-27 05:00:44,417	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:00:44,453	mayra	aaafo-DdhVYo8U aaafo-DdhVYo8U aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:07:45,288	mayra	aaafo-DdhVYo8U	security.login-info	1	1442	4	6	1520	/cscs/index.jsp
+2002-02-27 05:07:45,354	mayra	aaafo-DdhVYo8U	person.registration	1	1	0	15	17	/cscs/index.jsp
+2002-02-27 05:07:45,751	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:07:45,811	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:37,966	mayra	aaafo-DdhVYo8U	security.login-info	1	42	0	5	49	/cscs/index.jsp
+2002-02-27 05:13:37,997	mayra	aaafo-DdhVYo8U	person.registration	1	1	0	26	28	/cscs/index.jsp
+2002-02-27 05:13:38,031	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:38,073	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:43,593	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	35	0	6	43	/cscs/patientlist.jsp
+2002-02-27 05:13:49,303	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:49,340	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:53,871	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	49	0	6	57	/cscs/patientlist.jsp
+2002-02-27 05:13:56,295	mayra	aaafo-DdhVYo8U	person.active-tasks	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:56,336	mayra	aaafo-DdhVYo8U	person.active-projects	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-02-27 05:13:58,149	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	51	0	10	62	/cscs/patientlist.jsp
+2002-02-27 05:16:23,710	mayra	aaafo-DdhVYo8U	security.login-info	1	33	0	5	39	/cscs/index.jsp
+2002-02-27 05:16:23,723	mayra	aaafo-DdhVYo8U	person.registration	1	0	1	8	10	/cscs/index.jsp
+2002-02-27 05:16:23,772	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	11	14	/cscs/index.jsp
+2002-02-27 05:24:55,141	mayra	aaafo-DdhVYo8U	security.login-info	1	1228	3	37	1415	/cscs/index.jsp
+2002-02-27 05:24:55,305	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	38	40	/cscs/index.jsp
+2002-02-27 05:24:55,488	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	4	9	16	/cscs/index.jsp
+2002-02-27 06:25:27,596	mayra	aaa4RJ7yzP3sjm	person.gender-list	0	-1	-1	-1	-1	/cscs/ace/database/query-defn/test/query-defn-dlg/Person/person_search
+2002-02-27 06:25:27,689	mayra	aaa4RJ7yzP3sjm	person.active-org-memberships-name-id	0	-1	-1	-1	-1	/cscs/ace/database/query-defn/test/query-defn-dlg/Person/person_search
+2002-02-27 07:07:03,354	mayra	aaa4RJ7yzP3sjm	cscs.physician-list	1	32	0	7	40	/cscs/ace/database/sql/test/cscs.physician-list
+2002-02-27 07:17:05,270	mayra	aaafo-DdhVYo8U	security.login-info	1	39	3	5	48	/cscs/index.jsp
+2002-02-27 07:17:05,313	mayra	aaafo-DdhVYo8U	person.registration	1	0	1	37	39	/cscs/index.jsp
+2002-02-27 07:17:05,398	mayra	aaafo-DdhVYo8U	cscs.physician-list	1	0	0	6	8	/cscs/index.jsp
+2002-02-27 07:17:44,547	mayra	aaafo-DdhVYo8U	security.login-info	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 07:17:44,561	mayra	aaafo-DdhVYo8U	person.registration	1	0	1	8	10	/cscs/index.jsp
+2002-02-27 07:17:44,574	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	6	8	/cscs/index.jsp
+2002-02-27 07:17:49,285	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	1	0	1	11	16	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 07:17:59,700	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-6	1	0	0	7	9	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 07:17:59,709	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-7	1	0	0	4	6	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 07:18:13,425	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	30	0	8	40	/cscs/index.jsp
+2002-02-27 07:18:15,477	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	1	0	1	7	9	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 07:33:07,936	mayra	aaafo-DdhVYo8U	security.login-info	1	1688	4	6	1751	/cscs/index.jsp
+2002-02-27 07:33:08,014	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	15	17	/cscs/index.jsp
+2002-02-27 07:33:08,176	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	5	9	17	/cscs/index.jsp
+2002-02-27 07:35:00,754	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	48	0	6	55	/cscs/index.jsp
+2002-02-27 07:35:19,334	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-5	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 07:35:19,346	mayra	aaafo-DdhVYo8U	Task.SqlExecuteAction-6	1	0	2	5	9	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 07:35:25,577	mayra	aaafo-DdhVYo8U	cscs.docs-patient-list	1	0	0	11	13	/cscs/index.jsp
+2002-02-27 07:35:27,117	mayra	aaafo-DdhVYo8U	cscs.patient-prescription-list	1	0	0	6	10	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 07:35:35,100	mayra	aaafo-DdhVYo8U	security.login-info	1	0	0	5	12	/cscs/index.jsp
+2002-02-27 07:35:35,121	mayra	aaafo-DdhVYo8U	person.registration	1	0	0	17	18	/cscs/index.jsp
+2002-02-27 07:35:35,135	mayra	aaafo-DdhVYo8U	cscs.physician-list	1	0	0	8	9	/cscs/index.jsp
+2002-02-27 11:57:48,917	mayra	aaa9pquJ-n-XzN	security.login-info	1	1671	1	5	1695	/cscs/index.jsp
+2002-02-27 11:57:48,955	mayra	aaa9pquJ-n-XzN	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 11:57:59,260	mayra	aaa9pquJ-n-XzN	security.login-info	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 11:57:59,269	mayra	aaa9pquJ-n-XzN	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 11:58:09,438	mayra	aaa9pquJ-n-XzN	security.login-info	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 11:58:09,449	mayra	aaa9pquJ-n-XzN	person.registration	1	0	1	6	8	/cscs/index.jsp
+2002-02-27 11:58:09,809	mayra	aaa9pquJ-n-XzN	cscs.docs-patient-list	1	1	0	11	13	/cscs/index.jsp
+2002-02-27 11:58:51,389	mayra	aaa9pquJ-n-XzN	cscs.docs-patient-list	1	71	0	6	86	/cscs/index.jsp
+2002-02-27 11:59:01,666	mayra	aaa9pquJ-n-XzN	cscs.docs-patient-list	1	0	0	6	33	/cscs/index.jsp
+2002-02-27 11:59:06,601	mayra	aaa9pquJ-n-XzN	Task.SqlExecuteAction-5	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 11:59:06,610	mayra	aaa9pquJ-n-XzN	Task.SqlExecuteAction-6	1	0	0	4	6	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 11:59:31,137	mayra	aaa9pquJ-n-XzN	cscs.docs-patient-list	1	48	1	8	57	/cscs/index.jsp
+2002-02-27 11:59:53,801	mayra	aaa9pquJ-n-XzN	security.login-info	1	1	0	6	8	/cscs/index.jsp
+2002-02-27 11:59:53,825	mayra	aaa9pquJ-n-XzN	person.registration	1	0	0	20	21	/cscs/index.jsp
+2002-02-27 11:59:53,883	mayra	aaa9pquJ-n-XzN	cscs.physician-list	1	0	0	8	9	/cscs/index.jsp
+2002-02-27 12:02:27,212	mayra	aaa9pquJ-n-XzN	security.login-info	1	33	0	5	39	/cscs/index.jsp
+2002-02-27 12:02:27,228	mayra	aaa9pquJ-n-XzN	person.registration	1	0	0	12	13	/cscs/index.jsp
+2002-02-27 12:02:27,279	mayra	aaa9pquJ-n-XzN	cscs.docs-patient-list	1	0	0	8	10	/cscs/index.jsp
+2002-02-27 12:02:31,422	mayra	aaa9pquJ-n-XzN	cscs.patient-prescription-list	1	0	0	21	23	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 12:02:40,560	mayra	aaa9pquJ-n-XzN	cscs.docs-patient-list	1	0	0	9	11	/cscs/index.jsp
+2002-02-27 12:03:03,348	mayra	aaa9pquJ-n-XzN	security.login-info	1	0	0	9	10	/cscs/index.jsp
+2002-02-27 12:03:03,362	mayra	aaa9pquJ-n-XzN	person.registration	1	0	0	9	11	/cscs/index.jsp
+2002-02-27 12:03:03,411	mayra	aaa9pquJ-n-XzN	cscs.physician-list	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 12:03:28,162	mayra	aaa9pquJ-n-XzN	cscs.physician-list	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 14:32:33,083	mayra	aaad-WLr8KTuyQ	security.login-info	1	86	1	4	129	/cscs/index.jsp
+2002-02-27 14:32:33,125	mayra	aaad-WLr8KTuyQ	person.registration	1	0	0	12	13	/cscs/index.jsp
+2002-02-27 14:32:37,808	mayra	aaad-WLr8KTuyQ	cscs.docs-patient-list	1	0	0	5	9	/cscs/index.jsp
+2002-02-27 14:32:48,388	mayra	aaad-WLr8KTuyQ	cscs.patient-prescription-list	1	0	0	5	7	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-02-27 14:32:53,765	mayra	aaad-WLr8KTuyQ	Task.SqlExecuteAction-5	1	0	0	5	6	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 14:32:53,776	mayra	aaad-WLr8KTuyQ	Task.SqlExecuteAction-6	1	0	0	6	8	/cscs/prescription.jsp?pat_person_id=3
+2002-02-27 15:40:16,924	mayra	aaadvqUJOuqRb8	security.login-info	1	32	0	4	37	/cscs/index.jsp
+2002-02-27 15:40:16,935	mayra	aaadvqUJOuqRb8	person.registration	1	0	0	7	9	/cscs/index.jsp
+2002-02-27 15:40:17,016	mayra	aaadvqUJOuqRb8	cscs.physician-list	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 17:19:10,927	mayra	aaa45YrEzsU7YX	security.login-info	1	30	0	4	35	/cscs/index.jsp
+2002-02-27 17:19:10,943	mayra	aaa45YrEzsU7YX	person.registration	1	1	0	11	13	/cscs/index.jsp
+2002-02-27 17:19:11,197	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 17:20:03,099	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	35	0	11	47	/cscs/index.jsp
+2002-02-27 17:20:34,381	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	61	0	5	68	/cscs/index.jsp
+2002-02-27 17:20:48,167	mayra	aaa45YrEzsU7YX	security.login-info	1	1	0	4	6	/cscs/index.jsp
+2002-02-27 17:20:48,175	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:20:53,157	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:20:53,166	mayra	aaa45YrEzsU7YX	security.login-info	1	1	0	4	6	/cscs/index.jsp
+2002-02-27 17:21:02,056	mayra	aaa45YrEzsU7YX	security.login-info	1	0	1	7	9	/cscs/index.jsp
+2002-02-27 17:21:02,065	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:21:05,179	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:21:05,188	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:21:11,341	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	5	/cscs/index.jsp
+2002-02-27 17:21:11,354	mayra	aaa45YrEzsU7YX	person.registration	1	0	0	9	11	/cscs/index.jsp
+2002-02-27 17:21:11,365	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:21:20,850	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	0	0	5	7	/cscs/index.jsp
+2002-02-27 17:23:11,413	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	63	0	5	69	/cscs/index.jsp
+2002-02-27 17:23:24,129	mayra	aaa45YrEzsU7YX	security.login-info	1	1	0	4	6	/cscs/index.jsp
+2002-02-27 17:23:24,139	mayra	aaa45YrEzsU7YX	person.registration	1	0	0	6	7	/cscs/index.jsp
+2002-02-27 17:23:24,154	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	0	0	5	7	/cscs/index.jsp
+2002-02-27 17:23:53,235	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	33	0	6	41	/cscs/index.jsp
+2002-02-27 17:24:29,487	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	67	0	10	78	/cscs/index.jsp
+2002-02-27 17:24:34,468	mayra	aaa45YrEzsU7YX	Task.SqlExecuteAction-5	1	1	0	4	6	/cscs/prescription.jsp?pat_person_id=8
+2002-02-27 17:24:34,477	mayra	aaa45YrEzsU7YX	Task.SqlExecuteAction-6	1	0	1	4	6	/cscs/prescription.jsp?pat_person_id=8
+2002-02-27 17:25:11,152	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	31	0	6	43	/cscs/index.jsp
+2002-02-27 17:25:15,975	mayra	aaa45YrEzsU7YX	Task.SqlExecuteAction-5	1	0	0	5	7	/cscs/prescription.jsp?pat_person_id=9
+2002-02-27 17:25:15,986	mayra	aaa45YrEzsU7YX	Task.SqlExecuteAction-6	1	0	0	7	9	/cscs/prescription.jsp?pat_person_id=9
+2002-02-27 17:25:54,695	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	76	0	5	82	/cscs/index.jsp
+2002-02-27 17:26:05,454	mayra	aaa45YrEzsU7YX	security.login-info	1	0	1	11	13	/cscs/index.jsp
+2002-02-27 17:26:05,463	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 17:26:16,829	mayra	aaa45YrEzsU7YX	security.login-info	1	0	1	4	6	/cscs/index.jsp
+2002-02-27 17:26:16,837	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	5	/cscs/index.jsp
+2002-02-27 17:26:23,016	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	5	/cscs/index.jsp
+2002-02-27 17:26:23,032	mayra	aaa45YrEzsU7YX	person.registration	1	0	0	12	13	/cscs/index.jsp
+2002-02-27 17:26:23,049	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	0	0	11	12	/cscs/index.jsp
+2002-02-27 17:27:13,966	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:27:13,975	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:27:18,696	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	5	26	/cscs/index.jsp
+2002-02-27 17:27:18,706	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	6	7	/cscs/index.jsp
+2002-02-27 17:27:22,217	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:27:22,225	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:27:36,438	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	5	6	/cscs/index.jsp
+2002-02-27 17:27:36,448	mayra	aaa45YrEzsU7YX	person.registration	1	0	0	6	7	/cscs/index.jsp
+2002-02-27 17:27:36,468	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	1	0	5	7	/cscs/index.jsp
+2002-02-27 17:28:15,728	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	32	0	5	38	/cscs/index.jsp
+2002-02-27 17:28:28,320	mayra	aaa45YrEzsU7YX	security.login-info	1	0	1	4	6	/cscs/index.jsp
+2002-02-27 17:28:28,331	mayra	aaa45YrEzsU7YX	person.registration	1	0	1	5	7	/cscs/index.jsp
+2002-02-27 17:28:28,348	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	0	1	10	12	/cscs/index.jsp
+2002-02-27 17:28:57,356	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	63	1	5	70	/cscs/index.jsp
+2002-02-27 17:29:01,440	mayra	aaa45YrEzsU7YX	Task.SqlExecuteAction-5	1	0	1	4	6	/cscs/prescription.jsp?pat_person_id=11
+2002-02-27 17:29:01,449	mayra	aaa45YrEzsU7YX	Task.SqlExecuteAction-6	1	0	1	4	6	/cscs/prescription.jsp?pat_person_id=11
+2002-02-27 17:29:23,567	mayra	aaa45YrEzsU7YX	cscs.docs-patient-list	1	58	0	5	65	/cscs/index.jsp
+2002-02-27 17:29:31,473	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:29:31,482	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:29:39,310	mayra	aaa45YrEzsU7YX	security.login-info	1	0	0	4	6	/cscs/index.jsp
+2002-02-27 17:29:39,322	mayra	aaa45YrEzsU7YX	person.registration	1	0	0	8	9	/cscs/index.jsp
+2002-02-27 17:29:39,337	mayra	aaa45YrEzsU7YX	cscs.physician-list	1	0	0	8	9	/cscs/index.jsp
+2002-02-28 03:19:53,662	mayra	aaadvqUJOuqRb8	security.login-info	1	213	1	4	227	/cscs/index.jsp
+2002-02-28 03:19:53,691	mayra	aaadvqUJOuqRb8	person.registration	1	0	0	5	7	/cscs/index.jsp
+2002-02-28 03:19:53,735	mayra	aaadvqUJOuqRb8	cscs.physician-list	1	0	0	4	6	/cscs/index.jsp
+2002-02-28 03:24:13,683	mayra	aaadvqUJOuqRb8	cscs.physician-list	1	40	0	9	51	/cscs/index.jsp
+2002-02-28 23:56:16,149	mayra	aaahwjWZr6DQCz	security.login-info	1	3057	5	6	3133	/cscs/index.jsp
+2002-02-28 23:58:39,052	mayra	aaahwjWZr6DQCz	security.login-info	1	73	0	6	80	/cscs/index.jsp
+2002-02-28 23:58:39,085	mayra	aaahwjWZr6DQCz	person.registration	1	1	0	29	30	/cscs/index.jsp
+2002-02-28 23:58:59,444	mayra	aaahwjWZr6DQCz	cscs.docs-patient-list	1	0	4	25	31	/cscs/index.jsp
+2002-03-01 00:03:47,889	mayra	aaahwjWZr6DQCz	cscs.docs-patient-list	1	573	1	6	590	/cscs/index.jsp
+2002-03-01 00:03:51,713	mayra	aaahwjWZr6DQCz	cscs.patient-prescription-list	1	1	0	13	53	/cscs/prescriptionhistory.jsp?pat_person_id=3
+2002-03-01 00:03:59,563	mayra	aaahwjWZr6DQCz	Task.SqlExecuteAction-6	1	0	0	5	13	/cscs/prescription.jsp?pat_person_id=3
+2002-03-01 00:03:59,571	mayra	aaahwjWZr6DQCz	Task.SqlExecuteAction-7	1	0	0	5	6	/cscs/prescription.jsp?pat_person_id=3
+2002-03-01 00:04:16,261	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	cscs.docs-patient-list	1	0	0	5	6	/cscs/index.jsp
+2002-03-01 00:04:18,457	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	cscs.patient-prescription-list	1	0	0	5	6	/cscs/prescriptionhistory.jsp?pat_person_id=4
+2002-03-01 00:04:20,664	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	Task.SqlExecuteAction-6	1	0	0	8	9	/cscs/prescription.jsp?pat_person_id=4
+2002-03-01 00:04:20,669	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	Task.SqlExecuteAction-7	1	0	0	3	4	/cscs/prescription.jsp?pat_person_id=4
+2002-03-01 00:05:23,474	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	security.login-info	1	98	0	10	109	/cscs/index.jsp
+2002-03-01 00:05:23,892	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	person.registration	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-03-01 00:05:40,913	mayra	aaahwjWZr6DQCz	security.login-info	1	37	0	5	42	/cscs/index.jsp
+2002-03-01 00:05:40,921	mayra	aaahwjWZr6DQCz	person.registration	0	-1	-1	-1	-1	/cscs/index.jsp
+2002-03-01 00:06:10,998	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	security.login-info	1	68	0	4	73	/cscs/index.jsp
+2002-03-01 00:06:11,029	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	person.registration	1	0	0	22	24	/cscs/index.jsp
+2002-03-01 00:06:31,092	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	cscs.physician-list	1	0	0	7	10	/cscs/index.jsp
+2002-03-01 00:07:08,349	mayra	aaahwjWZr6DQCz aaahwjWZr6DQCz	cscs.physician-list	1	32	0	9	43	/cscs/index.jsp
