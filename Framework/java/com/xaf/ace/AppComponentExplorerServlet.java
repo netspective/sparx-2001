@@ -238,9 +238,12 @@ public class AppComponentExplorerServlet extends HttpServlet
 		{
 			Map.Entry configEntry = (Map.Entry) i.next();
 
-			Property property = (Property) configEntry.getValue();
-			String propName = property.getName();
-			styleSheetParams.put(propName, appConfig.getValue(vc, propName));
+			if(configEntry.getValue() instanceof Property)
+			{
+				Property property = (Property) configEntry.getValue();
+				String propName = property.getName();
+				styleSheetParams.put(propName, appConfig.getValue(vc, propName));
+			}
 		}
 
         response.setContentType(CONTENT_TYPE);
@@ -284,18 +287,28 @@ public class AppComponentExplorerServlet extends HttpServlet
 			Element itemElem = configDoc.createElement("config-item");
 			Map.Entry configEntry = (Map.Entry) i.next();
 			itemElem.setAttribute("name", (String) configEntry.getKey());
-			Property property = (Property) configEntry.getValue();
-			String expression = property.getExpression();
-			String value = defaultConfig.getValue(vc, property.getName());
-			itemElem.setAttribute("value", value);
-			if(! expression.equals(value))
+
+			if(configEntry.getValue() instanceof Property)
 			{
-				itemElem.setAttribute("expression", expression);
-				if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
-					itemElem.setAttribute("final", "no");
+				Property property = (Property) configEntry.getValue();
+				String expression = property.getExpression();
+				String value = defaultConfig.getValue(vc, property.getName());
+				itemElem.setAttribute("value", value);
+				if(! expression.equals(value))
+				{
+					itemElem.setAttribute("expression", expression);
+					if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
+						itemElem.setAttribute("final", "no");
+				}
+				if(property.getDescription() != null)
+					itemElem.setAttribute("description", property.getDescription());
 			}
-			if(property.getDescription() != null)
-				itemElem.setAttribute("description", property.getDescription());
+			else if(configEntry.getValue() instanceof PropertiesCollection)
+			{
+				PropertiesCollection propColl = (PropertiesCollection) configEntry.getValue();
+				Collection coll = propColl.getCollection();
+				itemElem.setAttribute("expression", "list of " + coll.size() + " item(s)");
+			}
 			configItemsElem.appendChild(itemElem);
 		}
 
