@@ -172,11 +172,6 @@ public class StandardDialogSkin implements DialogSkin
 		}
 	}
 
-	public final String getControlAreaFontAttrs()
-	{
-		return controlAreaFontAttrs;
-	}
-
 	public final String getDefaultControlAttrs()
 	{
 		return controlAttrs;
@@ -530,6 +525,8 @@ public class StandardDialogSkin implements DialogSkin
 
 	public String getHtml(DialogContext dc)
 	{
+		long startTime = new Date().getTime();
+
 		Dialog dialog = dc.getDialog();
 		String dialogName = dialog.getName();
 
@@ -618,7 +615,7 @@ public class StandardDialogSkin implements DialogSkin
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
 		String sharedScriptsUrl = appConfig.getValue(dc, "framework.shared.scripts-url");
 
-		return
+		String html =
 			(includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
 			"<link rel='stylesheet' href='"+ appConfig.getValue(dc, "framework.shared.css-url") +"/dialog.css'>\n"+
 			(includePostStyleSheets != null ? includePostStyleSheets : EMPTY) +
@@ -657,6 +654,9 @@ public class StandardDialogSkin implements DialogSkin
 			"       dialog.finalizeContents();\n" +
 			"</script>\n"+
 			(appendPostScript != null ? appendPostScript : EMPTY);
+
+		com.xaf.log.LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getDialog().getName(), startTime);
+		return html;
 	}
 
 	public String getSeparatorHtml(DialogContext dc, SeparatorField field)
@@ -681,4 +681,83 @@ public class StandardDialogSkin implements DialogSkin
 				return field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE) ? "<br>" : "<hr size=1 color=silver>";
 		}
 	}
+
+	public String getOuterTableAttrs() { return outerTableAttrs; }
+	public void setOuterTableAttrs(String value) { outerTableAttrs = value; }
+
+	public String getInnerTableAttrs() { return innerTableAttrs; }
+	public void setInnerTableAttrs(String value) { innerTableAttrs = value; }
+
+	public String getFrameHdRowAlign() { return frameHdRowAlign; }
+	public void setFrameHdRowAlign(String value) { frameHdRowAlign = value; }
+
+	public String getFrameHdRowAttrs() { return frameHdRowAttrs; }
+	public void setFrameHdRowAttrs(String value) { frameHdRowAttrs = value; }
+
+	public String getFrameHdFontAttrs() { return frameHdFontAttrs; }
+	public void setFrameHdFontAttrs(String value) { frameHdFontAttrs = value; }
+
+	public String getFieldRowAttrs() { return fieldRowAttrs; }
+	public void setFieldRowAttrs(String value) { fieldRowAttrs = value; }
+
+	public String getFieldRowErrorAttrs() { return fieldRowErrorAttrs; }
+	public void setFieldRowErrorAttrs(String value) { fieldRowErrorAttrs = value; }
+
+	public String getGridCaptionFontAttrs() { return gridCaptionFontAttrs; }
+	public void setGridCaptionFontAttrs(String value) { gridCaptionFontAttrs = value; }
+
+	public String getGridRowCaptionFontAttrs() { return gridRowCaptionFontAttrs; }
+	public void setGridRowCaptionFontAttrs(String value) { gridRowCaptionFontAttrs = value; }
+
+	public String getCaptionCellAttrs() { return captionCellAttrs; }
+	public void setCaptionCellAttrs(String value) { captionCellAttrs = value; }
+
+	public String getCaptionFontAttrs() { return captionFontAttrs; }
+	public void setCaptionFontAttrs(String value) { captionFontAttrs = value; }
+
+	public String getControlAreaFontAttrs() { return controlAreaFontAttrs; }
+	public void setControlAreaFontAttrs(String value) { controlAreaFontAttrs = value; }
+
+	public String getControlAttrs() { return controlAttrs; }
+	public void setControlAttrs(String value) { controlAttrs = value; }
+
+	public String getSeparatorFontAttrs() { return separatorFontAttrs; }
+	public void setSeparatorFontAttrs(String value) { separatorFontAttrs = value; }
+
+	public String getSeparatorHtml() { return separatorHtml; }
+	public void setSeparatorHtml(String value) { separatorHtml = value; }
+
+	public String getHintFontAttrs() { return hintFontAttrs; }
+	public void setHintFontAttrs(String value) { hintFontAttrs = value; }
+
+	public String getErrorMsgFontAttrs() { return errorMsgFontAttrs; }
+	public void setErrorMsgFontAttrs(String value) { errorMsgFontAttrs = value; }
+
+	public String getCaptionSuffix() { return captionSuffix; }
+	public void setCaptionSuffix(String value) { captionSuffix = value; }
+
+	public String getIncludePreScripts() { return includePreScripts; }
+	public void setIncludePreScripts(String value) { includePreScripts = value; }
+
+	public String getIncludePostScripts() { return includePostScripts; }
+	public void setIncludePostScripts(String value) { includePostScripts = value; }
+
+	public String getIncludePreStyleSheets() { return includePreStyleSheets; }
+	public void setIncludePreStyleSheets(String value) { includePreStyleSheets = value; }
+
+	public String getIncludePostStyleSheets() { return includePostStyleSheets; }
+	public void setIncludePostStyleSheets(String value) { includePostStyleSheets = value; }
+
+	public String getPrependPreScript() { return prependPreScript; }
+	public void setPrependPreScript(String value) { prependPreScript = value; }
+
+	public String getPrependPostScript() { return prependPostScript; }
+	public void setPrependPostScript(String value) { prependPostScript = value; }
+
+	public String getAppendPreScript() { return appendPreScript; }
+	public void setAppendPreScript(String value) { appendPreScript = value; }
+
+	public String getAppendPostScript() { return appendPostScript; }
+	public void setAppendPostScript(String value) { appendPostScript = value; }
+
 }

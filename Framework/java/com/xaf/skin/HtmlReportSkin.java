@@ -58,6 +58,8 @@ public class HtmlReportSkin implements ReportSkin
 
     public void produceReport(Writer writer, ReportContext rc, ResultSet rs, Object[][] data) throws SQLException, IOException
     {
+		long startTime = new java.util.Date().getTime();
+
         ReportFrame frame = rc.getReport().getFrame();
         ReportBanner banner = rc.getReport().getBanner();
 
@@ -125,6 +127,8 @@ public class HtmlReportSkin implements ReportSkin
         {
             writer.write("</td></tr></table>");
         }
+
+		com.xaf.log.LogManager.recordAccess((javax.servlet.http.HttpServletRequest) rc.getRequest(), null, this.getClass().getName(), rc.getReport().getName(), startTime);
     }
 
 	public void produceReport(Writer writer, ReportContext rc, ResultSet rs) throws SQLException, IOException
