@@ -45,7 +45,7 @@ public class DataSourcesPage extends AceServletPage
 
 		try
 		{
-			DatabaseContextFactory.createCatalog(context, pc.getRequest(), rootElem);
+			DatabaseContextFactory.createCatalog(pc, rootElem);
 	    	transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
 		}
 		catch(NamingException e)

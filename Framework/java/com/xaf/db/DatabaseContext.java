@@ -52,5 +52,5 @@ public interface DatabaseContext
 	 * Creates catalog of dataSource identifiers and drivers for ACE Data Source
 	 * tab.
 	 */
-    public void createCatalog(Element parent) throws NamingException;
+    public void createCatalog(ValueContext vc, Element parent) throws NamingException;
 }

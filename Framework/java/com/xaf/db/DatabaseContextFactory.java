@@ -9,6 +9,7 @@ import javax.naming.*;
 import org.w3c.dom.*;
 
 import com.xaf.form.*;
+import com.xaf.value.*;
 
 /**
  * Provides a factory pattern for constructing DatabaseContext instances.
@@ -50,8 +51,10 @@ public class DatabaseContextFactory
      * @param parent
      * @returns
      */
-    public static void createCatalog(ServletContext servletContext, ServletRequest servletRequest, Element parent) throws NamingException
+    public static void createCatalog(ValueContext vc, Element parent) throws NamingException
     {
+        ServletContext servletContext = vc.getServletContext();
+        ServletRequest servletRequest = vc.getRequest();
 		DatabaseContext dc = getContext(servletRequest, servletContext);
 
         Document doc = parent.getOwnerDocument();
@@ -60,7 +63,7 @@ public class DatabaseContextFactory
 		dataSourcesElem.setAttribute("class", dc != null ? dc.getClass().getName() : "No DatabaseContext found.");
 
 		if(dc != null)
-			dc.createCatalog(dataSourcesElem);
+			dc.createCatalog(vc, dataSourcesElem);
 		else
 			addErrorProperty(doc, dataSourcesElem, "DatabaseContext could not be located. Check system property '"+CONTEXTNAME_PROPNAME+"'");
     }

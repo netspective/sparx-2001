@@ -64,7 +64,7 @@ public class AbstractDatabaseContext implements DatabaseContext
 		return RESULTSET_NOT_SCROLLABLE;
 	}
 
-    public void createCatalog(Element parent) throws NamingException
+    public void createCatalog(ValueContext vc, Element parent) throws NamingException
 	{
 	}
 }
