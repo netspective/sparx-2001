@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: XmlSource.java,v 1.10 2002-12-23 04:46:40 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.11 2002-12-30 15:59:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -87,6 +87,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.xpath.XPathAPI;
 import org.apache.oro.text.regex.*;
+import org.apache.oro.text.perl.Perl5Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
@@ -179,6 +180,54 @@ public class XmlSource
         String classSrcName = classFileName.substring(0, classFileName.lastIndexOf('.')) + ".java";
         if(new File(classSrcName).exists())
             defnElement.setAttribute(attrPrefix + "class-src-name", classSrcName);
+    }
+
+    /**
+     * Return the given text unindented by whatever the first line is indented by
+     * @param text The original text
+     * @return Unindented text or original text if not indented
+     */
+    public static String getUnindentedText(String text)
+    {
+        /*
+         * if the entire SQL string is indented, find out how far the first line is indented
+         */
+        StringBuffer replStr = new StringBuffer();
+        for(int i = 0; i < text.length(); i++)
+        {
+            char ch = text.charAt(i);
+            if(Character.isWhitespace(ch))
+                replStr.append(ch);
+            else
+                break;
+        }
+
+        /*
+         * If the first line is indented, unindent all the lines the distance of just the first line
+         */
+        Perl5Util perlUtil = new Perl5Util();
+
+        if(replStr.length() > 0)
+            return perlUtil.substitute("s/" + replStr + "/\n/g", text).trim();
+        else
+            return text;
+    }
+
+    /**
+     * Return the given text indented by the given string
+     * @param text The original text
+     * @return Unindented text or original text if not indented
+     */
+    public static String getIndentedText(String text, String indent, boolean appendNewLine)
+    {
+        text = getUnindentedText(text);
+
+        /*
+         * If the first line is indented, unindent all the lines the distance of just the first line
+         */
+        Perl5Util perlUtil = new Perl5Util();
+        text = perlUtil.substitute("s/^/"+ indent +"/gm", text);
+        return appendNewLine ? text + "\n" : text;
     }
 
     public boolean getAllowReload()
@@ -626,7 +675,7 @@ public class XmlSource
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public void inheritElement(Element srcElement, Element destElem, Set excludeElems, String inheritedFromNote)
+    public void inheritElement(Element srcElement, Element destElem, Set excludeElems, String inheritedFromNode)
     {
         NamedNodeMap inhAttrs = srcElement.getAttributes();
         for(int i = 0; i < inhAttrs.getLength(); i++)
@@ -648,8 +697,8 @@ public class XmlSource
             if(destElem.getAttribute(nodeName).length() == 0 && (! excludeElems.contains(nodeName)))
             {
                 Node cloned = childNode.cloneNode(true);
-                if(inheritedFromNote != null && cloned.getNodeType() == Node.ELEMENT_NODE)
-                    ((Element) cloned).setAttribute("_inherited-from", inheritedFromNote);
+                if(inheritedFromNode != null && cloned.getNodeType() == Node.ELEMENT_NODE)
+                    ((Element) cloned).setAttribute("_inherited-from", inheritedFromNode);
                 inheritFragment.insertBefore(cloned, inheritFragment.getFirstChild());
             }
         }
