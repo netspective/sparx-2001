@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.13 2003-01-28 20:48:50 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.14 2003-01-28 21:10:37 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -563,10 +563,14 @@ public class NavigationPath
 
                 }
 
-                if (childPath.getParent().getController() != null) {
+                //Trying parent's controller
+                if (controller == null) {
                     controllerName = childPath.getParent().getControllerName();
                     controller =  childPath.getParent().getController();
-                } else {
+                }
+
+                //If it's still null then pickup the default
+                if (controller == null){
                     controllerName = "default";
                     controller = childPath.getOwner().getControllerByName(controllerName);
                 }
