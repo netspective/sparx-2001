@@ -337,6 +337,46 @@ public class SchemaDocument extends XmlSource
 					}
 				}
 			}
+            else if(nodeName.equals("java-dal-accessor"))
+			{
+				Element accessor = (Element) node;
+		        //inheritNodes(accessor, indexTypeNodes);
+
+				String methodName = accessor.getAttribute("name");
+                String type = accessor.getAttribute("type");
+                String connector = accessor.getAttribute("connector");
+				NodeList columnElems = table.getElementsByTagName("column");
+				int columnsCount = columnElems.getLength();
+
+				String columnsList = accessor.getAttribute("columns");
+				if(columnsList.length() > 0)
+				{
+					StringTokenizer st = new StringTokenizer(accessor.getAttribute("columns"), ",");
+					while(st.hasMoreTokens())
+					{
+						String accessorColName = st.nextToken().trim();
+						boolean found = false;
+						for(int ic = 0; ic < columnsCount; ic++)
+						{
+							Element columnElem = (Element) columnElems.item(ic);
+							if(columnElem.getAttribute("name").equals(accessorColName))
+							{
+								found = true;
+								colNameElem = tableDoc.createElement("column");
+								colNameElem.setAttribute("name", accessorColName);
+								accessor.appendChild(colNameElem);
+                                System.out.println("Adding column: " + accessorColName + " " + columnElem.getAttribute("name"));
+                                break;
+							}
+						}
+						if(! found)
+						{
+							errors.add("Column '"+accessorColName+"' not found in table '"+ tableName +"'");
+						}
+					}
+				}
+			}
+
         }
 
 		if(columnIndexes.size() > 0)

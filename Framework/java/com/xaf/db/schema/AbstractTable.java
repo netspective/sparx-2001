@@ -229,6 +229,134 @@ public abstract class AbstractTable implements Table
         }
     }
 
+    protected Rows getRecordsByEquality(ConnectionContext cc, String[] colNames, Object[] colValues, Rows rows) throws NamingException, SQLException
+    {
+        Rows result = rows;
+        String selectSql = this.createPreparedStatementString(colNames);
+        Connection conn = cc.getConnection();
+        try
+        {
+            PreparedStatement stmt = null;
+            try
+            {
+                stmt = conn.prepareStatement(selectSql);
+                ResultSet rs = this.getResultSetByStatement(stmt, colValues);
+                if(rs != null)
+                {
+                    if(result == null) result = createRows();
+                    result.populateDataByIndexes(rs);
+                }
+                return result;
+            }
+            catch(SQLException e)
+            {
+                // rethrow the exception with the select SQL and bind parameter information added
+                throw this.generateSQLException(selectSql, colValues, e);
+            }
+            finally
+            {
+                if(stmt != null) stmt.close();
+            }
+        }
+        finally
+        {
+            cc.returnConnection();
+        }
+    }
+
+    /**
+     * Retrieve Row object based on unique column name and value pairs
+     */
+    protected Row getRecordByEquality(ConnectionContext cc, String[] colNames, Object[] colValues, Row row) throws NamingException, SQLException
+    {
+        Row result = row;
+        String selectSql = this.createPreparedStatementString(colNames);
+        Connection conn = cc.getConnection();
+        try
+        {
+            PreparedStatement stmt = null;
+            try
+            {
+                stmt = conn.prepareStatement(selectSql);
+                ResultSet rs = this.getResultSetByStatement(stmt, colValues);
+                if(rs != null)
+                {
+                    if(result == null) result = createRow();
+                    result.populateDataByIndexes(rs);
+                }
+                return result;
+            }
+            catch(SQLException e)
+            {
+                // rethrow the exception with the select SQL and bind parameter information added
+                throw this.generateSQLException(selectSql, colValues, e);
+            }
+            finally
+            {
+                if(stmt != null) stmt.close();
+            }
+        }
+        finally
+        {
+            cc.returnConnection();
+        }
+    }
+
+    /**
+     * Rethrows an exception as a SQLException with additional data with regard to SQL statement
+     * and bind parameters.
+     */
+    private SQLException generateSQLException(String selectSql, Object[] colValues, Exception e)
+    {
+        StringBuffer sb = new StringBuffer();
+        for (int k = 0; k < colValues.length; k++)
+        {
+            sb.append(colValues[k] != null ? "'" + colValues[k] + "' {"+ colValues[k].getClass().getName() + "}" : "none");
+        }
+        return new SQLException(e.toString() + " ["+ selectSql +" (bind = "+ sb.toString() +")]");
+    }
+
+    /**
+     * Retrieves ResultSet based on passed in SQL and bind values.
+     *
+     * @param conn DB Connection object
+     * @param selectSql SQL statement
+     * @param colValues bind parameters
+     */
+    private ResultSet getResultSetByStatement(PreparedStatement stmt, Object[] colValues) throws SQLException
+    {
+        for (int k = 0; k < colValues.length; k++)
+        {
+            stmt.setObject(k+1, colValues[k]);
+        }
+        if(stmt.execute())
+        {
+            ResultSet rs = stmt.getResultSet();
+            return rs;
+        }
+        return null;
+    }
+
+    /**
+     * Creates a SQL string used for a PreparedStatement
+     *
+     * @param colNames name of columns for the WHERE clause
+     */
+    private String createPreparedStatementString(String[] colNames)
+    {
+        if (colNames == null || colNames.length == 0)
+            return null;
+        StringBuffer selectSqlBuffer = new StringBuffer("select " + getColumnNamesForSelect() + " from " + getName() + " where ");
+        for (int i=0; i < colNames.length; i++)
+        {
+            selectSqlBuffer.append(colNames[i] + " = ? ");
+            if (i != colNames.length - 1)
+                selectSqlBuffer.append("and ");
+        }
+        return selectSqlBuffer.toString();
+    }
+
+
     protected void deleteRecordsByEquality(ConnectionContext cc, String colName, Object colValue) throws NamingException, SQLException
     {
         String deleteSql = "delete from " + getName() + " where " + colName + " = ?";

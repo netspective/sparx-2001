@@ -435,6 +435,32 @@
 	</table>
 	</xsl:if>
 
+    <xsl:if test="java-dal-accessor">
+    <p/><h1>Java DAL Accessor</h1>
+    <table border="0" cellspacing="0">
+    <tr bgcolor="beige">
+        <th>Name</th>
+        <th>&#160;</th>
+        <th>Type</th>
+        <th>&#160;</th>
+        <th>Columns</th>
+        <th>&#160;</th>
+        <th>Connector</th>        
+    </tr>
+    <xsl:for-each select="java-dal-accessor">
+    <tr>
+        <td><xsl:value-of select="@name"/></td>
+        <td></td>
+        <td><xsl:value-of select="@type"/></td>
+        <td></td>
+        <td><xsl:value-of select="@columns"/></td>
+        <td></td>
+        <td><xsl:value-of select="@connector"/></td>        
+    </tr>
+    </xsl:for-each>
+    </table>
+    </xsl:if>
+
 	</td></tr></table>
 </xsl:template>
 

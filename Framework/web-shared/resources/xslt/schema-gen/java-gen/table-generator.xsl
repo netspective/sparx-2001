@@ -285,7 +285,44 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value); 
 	}
 </xsl:if>
+<xsl:if test="java-type and (@unique = 'yes' and @primarykey != 'yes')">
+    /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type **/
+    public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException 
+    { 
+        return get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value)); 
+    }
+</xsl:if><xsl:if test="@unique = 'yes' and @primarykey != 'yes'">
+    /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by a unique key <xsl:value-of select="@name"/> **/
+    public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
+    { 
+        return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
+    }
+</xsl:if>
 </xsl:for-each>
+<xsl:for-each select="index[@type='unique' and @java-method-name]">
+    /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by unique keys <xsl:value-of select="@columns"/> **/
+    public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@java-method-name"/>(ConnectionContext cc, <xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/java-type"/><xsl:text> </xsl:text> <xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>) throws NamingException, SQLException
+    { 
+        return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByEquality(cc, new String[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="../../column[@name=$index-column]/@_gen-constant-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, new Object[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable>new <xsl:value-of select="../../column[@name=$index-column]/java-class"/>(<xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/>)<xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, null);        
+    }    
+</xsl:for-each>
+
+<xsl:for-each select="java-dal-accessor[@type='equality' and @name]">
+    /** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by keys <xsl:value-of select="@columns"/> **/
+    public <xsl:value-of select="../@_gen-rows-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>(ConnectionContext cc, <xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/java-type"/><xsl:text> </xsl:text> <xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>) throws NamingException, SQLException
+    { 
+        return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, new String[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="../../column[@name=$index-column]/@_gen-constant-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, new Object[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable>new <xsl:value-of select="../../column[@name=$index-column]/java-class"/>(<xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/>)<xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, null);        
+    }    
+</xsl:for-each>
+
+<xsl:for-each select="java-dal-accessor[@type='equality' and @name]">
+    /** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by keys <xsl:value-of select="@columns"/> **/
+    public <xsl:value-of select="../@_gen-rows-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>(ConnectionContext cc, <xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/java-class"/><xsl:text> </xsl:text> <xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>) throws NamingException, SQLException
+    { 
+        return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, new String[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="../../column[@name=$index-column]/@_gen-constant-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, new Object[]{<xsl:for-each select="column"><xsl:variable name="index-column"><xsl:value-of select="@name"/></xsl:variable><xsl:value-of select="../../column[@name=$index-column]/@_gen-member-name"/><xsl:if test="position() != last()">, </xsl:if></xsl:for-each>}, null);        
+    }    
+</xsl:for-each>
+
 }
 </xsl:template>
 
