@@ -1,6 +1,6 @@
 @echo off
 
-set SPARX_HOME=c:\projects\Framework
+set SPARX_HOME=c:\projects\Sparx
 set APP_ROOT=c:\projects\web-cura
 set APP_CLASSES=%APP_ROOT%\Site\WEB-INF\classes
 
@@ -14,7 +14,7 @@ set OROMATCHER_JAR=C:\utils\java\jakarta-oro-2.0.3\jakarta-oro-2.0.3.jar
 set LOG4J_JAR=C:\utils\java\jakarta-log4j-1.1.2\dist\lib\log4j.jar
 set SERVLETAPI_JAR=C:\utils\app-servers\resin-2.0.4\lib\jsdk23.jar
 set JDBC2X_JAR=C:\utils\app-servers\resin-2.0.4\lib\jdbc2_0-stdext.jar
-set SPARX_JAR=%SPARX_HOME%\lib\xaf-1_2_8.jar
+set SPARX_JAR=%SPARX_HOME%\lib\sparx.jar
 
 if exist "%JAVA_HOME%\lib\tools.jar" set JAVACP=%JAVA_HOME%\lib\tools.jar
 if exist "%JAVA_HOME%\lib\classes.zip" set JAVACP=%CLASSPATH%;%JAVA_HOME%\lib\classes.zip
