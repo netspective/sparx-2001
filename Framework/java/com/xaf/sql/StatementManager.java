@@ -65,6 +65,14 @@ public class StatementManager extends XmlSource
 		public String getSQL(ValueContext vc) { return si.getSql(vc); }
 		public Element getStmtElement() { return si.getStatementElement(); }
 		public StatementExecutionLogEntry getLogEntry() { return logEntry; }
+
+		public void close() throws SQLException
+		{
+			Connection conn = rs.getStatement().getConnection();
+			rs.close();
+			if (conn.getAutoCommit() == true)
+				conn.close();
+		}
 	}
 
 	private String defaultStyleSheet = null;
@@ -297,7 +305,7 @@ public class StatementManager extends XmlSource
 			if(params != null)
 			{
 				for(int i = 0; i < params.length; i++)
-					stmt.setObject(i, params[i]);
+					stmt.setObject(i+1, params[i]);
 			}
 			else
 				si.applyParams(dc, vc, stmt);
@@ -342,12 +350,7 @@ public class StatementManager extends XmlSource
 		ResultSet rs = ri.getResultSet();
 		vs.setValue(vc, rs, storeType);
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
-        {
-            Connection conn = rs.getStatement().getConnection();
-            rs.close();
-            if (conn.getAutoCommit() == true)
-			    conn.close();
-        }
+			ri.close();
 		return ri;
 	}
 
@@ -357,12 +360,7 @@ public class StatementManager extends XmlSource
 		ResultSet rs = ri.getResultSet();
 		vs.setValue(vc, rs, storeType);
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
-        {
-            Connection conn = rs.getStatement().getConnection();
-            rs.close();
-            if (conn.getAutoCommit() == true)
-                conn.close();
-        }
+			ri.close();
 		return ri;
 	}
 
@@ -530,7 +528,7 @@ public class StatementManager extends XmlSource
 		ArrayList result = new ArrayList();
 		while(rs.next())
 		{
-			result.add(rs.getString(0));
+			result.add(rs.getString(1));
 		}
 
 		if(result.size() > 0)
@@ -571,11 +569,7 @@ public class StatementManager extends XmlSource
 		ReportContext rc = new ReportContext(vc, rd, skin);
         rc.produceReport(writer, rs);
 
-        Connection conn = rs.getStatement().getConnection();
-        rs.close();
-        if (conn.getAutoCommit() == true)
-            conn.close();
-
+		ri.close();
 	}
 
 	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
@@ -616,10 +610,6 @@ public class StatementManager extends XmlSource
 		ReportContext rc = new ReportContext(vc, rd, skin);
         rc.produceReport(writer, data);
 
-        Connection conn = rs.getStatement().getConnection();
-        rs.close();
-        if (conn.getAutoCommit() == true)
-            conn.close();
-
+		ri.close();
 	}
 }
