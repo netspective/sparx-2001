@@ -1058,14 +1058,14 @@ function formatPhone(field, control)
     }
     else
     {
-        var phoneStr = control.value;    
+        var phoneStr = control.value;            
         if (field.phone_format_type == 'dash')
         {
-            phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3 $4");
+            phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3$4");
         }
         else
         {
-            phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3 $4");
+            phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3$4");
         }
         control.value = phoneStr;            
     }
