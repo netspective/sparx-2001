@@ -73,9 +73,24 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
 			try
 			{
 				DataSource source = (DataSource) env.lookup(entry.getName());
-				DatabaseMetaData dbmd = source.getConnection().getMetaData();
+                Connection conn = source.getConnection();
+				DatabaseMetaData dbmd = conn.getMetaData();
+                String databasePolicyClass = null;
+
+                try
+                {
+                    databasePolicyClass = DatabaseContextFactory.getDatabasePolicy(conn).getClass().getName();
+                }
+                catch(Exception dpe)
+                {
+                    databasePolicyClass = dpe.toString();
+                }
+
 				DatabaseContextFactory.addText(doc, propertyElem, "value", dbmd.getDriverName());
-				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Version " + dbmd.getDriverVersion());
+                DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Product: " + dbmd.getDatabaseProductName());
+                DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Product Version: " + dbmd.getDatabaseProductVersion());
+				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Driver Version: " + dbmd.getDriverVersion());
+                DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Database Policy: " + databasePolicyClass);
 				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "URL: " + dbmd.getURL());
 				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "User: " + dbmd.getUserName());
 

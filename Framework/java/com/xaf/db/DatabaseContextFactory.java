@@ -22,6 +22,41 @@ public class DatabaseContextFactory
 {
 	public static final String CONTEXTNAME_PROPNAME = "com.netspective.sparx.DatabaseContext.class";
 	private static DatabaseContext useContext = null;
+    private static Map databasePolicies = new HashMap();
+    private static boolean defaultPoliciesSetup = false;
+
+    static public void addDatabasePolicy(String databaseProductName, DatabasePolicy policy)
+    {
+        databasePolicies.put(databaseProductName, policy);
+    }
+
+    static public void addDatabasePolicy(String databaseProductName, String policyClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException
+    {
+        DatabasePolicy policy = (DatabasePolicy) Class.forName(policyClassName).newInstance();
+        databasePolicies.put(databaseProductName, policy);
+    }
+
+    static public void setupDefaultPolicies()
+    {
+        addDatabasePolicy("Oracle", new OracleDatabasePolicy());
+        defaultPoliciesSetup = true;
+    }
+
+    static public DatabasePolicy getDatabasePolicy(String databaseProductName)
+    {
+        if(!defaultPoliciesSetup) setupDefaultPolicies();
+        return (DatabasePolicy) databasePolicies.get(databaseProductName);
+    }
+
+    static public DatabasePolicy getDatabasePolicy(Connection conn) throws SQLException
+    {
+        String databaseProductName = conn.getMetaData().getDatabaseProductName();
+        DatabasePolicy policy = getDatabasePolicy(databaseProductName);
+        if(policy == null)
+            throw new SQLException("Database policy not found for database '"+ databaseProductName +"'");
+        else
+            return policy;
+    }
 
 	/**
 	 * If the DatabaseContext is stored in a ServletContext atttibute, then this is the
