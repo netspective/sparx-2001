@@ -187,7 +187,8 @@ public class StandardReport implements Report
 	 * Replace contents from rowData using the String row as a template. Each
 	 * occurrence of ${#} will be replaced with rowNum and occurrences of ${x}
 	 * where x is a number between 0 and rowData.length will be replaced with
-	 * the contents of rowData[x].
+	 * the contents of rowData[x]. NOTE: this function needs to be
+	 * improved from both an elegance and performance perspective.
 	 */
 
     public String replaceOutputPatterns(ReportContext rc, long rowNum, Object[] rowData, String row)
@@ -272,89 +273,32 @@ public class StandardReport implements Report
 				}
 
                 prev=endName+1;
-                pos1 = row.indexOf("$", prev);
-                pos2 = row.indexOf("%", prev);
-                if (pos2 != -1)
+            }
+
+            pos1 = row.indexOf("$", prev);
+            pos2 = row.indexOf("%", prev);
+            if (pos2 != -1)
+            {
+                if (pos1 != -1 && pos2 > pos1)
                 {
-                    if (pos1 != -1 && pos2 > pos1)
-                    {
-                        pos = pos1;
-                    }
-                    else
-                    {
-                        encode = true;
-                        pos = pos2;
-                    }
+                    pos = pos1;
                 }
                 else
                 {
-                    encode = false;
-                    pos = pos1;
+                    encode = true;
+                    pos = pos2;
                 }
+            }
+            else
+            {
+                encode = false;
+                pos = pos1;
             }
         }
 
         if(prev < row.length()) sb.append(row.substring(prev));
         return sb.toString();
     }
-
-	/*
-    public String replaceOutputPatterns(ReportContext rc, long rowNum, Object[] rowData, String row)
-    {
-        int plhOpenPos = row.indexOf(ReportColumn.PLACEHOLDER_OPEN);
-        if(plhOpenPos == -1)
-            return row;
-
-        int plhOpenLen = ReportColumn.PLACEHOLDER_OPEN.length();
-        int plhCloseLen = ReportColumn.PLACEHOLDER_CLOSE.length();
-
-        StringBuffer replacedIn = new StringBuffer(row);
-        boolean done = false;
-
-        while(! done)
-        {
-            int plhStartPos = plhOpenPos + plhOpenLen;
-            int plhEndPos = plhStartPos;
-
-            int strLen = replacedIn.length();
-            while(plhEndPos < strLen && Character.isDigit(replacedIn.charAt(plhEndPos)))
-                plhEndPos++;
-
-            if(plhEndPos >= strLen)
-            {
-                done = true;
-                continue;
-            }
-
-			String item = replacedIn.substring(plhStartPos, plhEndPos);
-			try
-			{
-				if(item.equals("#"))
-				{
-					replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, Long.toString(rowNum));
-				}
-				else
-				{
-					int colIndex = Integer.parseInt(item);
-	    			String colValue = columns.getColumn(colIndex).getFormattedData(rc, rowNum, rowData, false);
-		    		replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, colValue);
-				}
-			}
-			catch(NumberFormatException e)
-			{
-				replacedIn.replace(plhOpenPos, plhEndPos + plhCloseLen, "Invalid: " + item);
-				done = true;
-			}
-
-            String newStr = replacedIn.toString();
-            plhOpenPos = newStr.indexOf(ReportColumn.PLACEHOLDER_OPEN);
-            if(plhOpenPos == -1)
-                done = true;
-        }
-
-        return replacedIn.toString();
-    }
-	*/
 
 	public void makeStateChanges(ReportContext rc, ResultSet rs)
 	{
