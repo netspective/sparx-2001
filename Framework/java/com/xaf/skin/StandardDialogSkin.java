@@ -23,6 +23,8 @@ public class StandardDialogSkin implements DialogSkin
 	protected String frameHdRowAlign;
 	protected String frameHdRowAttrs;
 	protected String frameHdFontAttrs;
+    protected String errorMsgHdFontAttrs;
+    protected String errorMsgHdText;
 	protected String fieldRowAttrs;
 	protected String fieldRowErrorAttrs;
 	protected String gridCaptionFontAttrs;      // grid column font attributes
@@ -52,6 +54,8 @@ public class StandardDialogSkin implements DialogSkin
 		frameHdRowAlign = "LEFT";
 		frameHdRowAttrs = "bgcolor='#6699CC' ";
 		frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='yellow' ";
+        errorMsgHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='darkred'";
+        errorMsgHdText = "Please review the following:";
 		fieldRowAttrs = "";
 		fieldRowErrorAttrs = "bgcolor='beige' ";
 		captionCellAttrs = "align='right' ";
@@ -100,6 +104,10 @@ public class StandardDialogSkin implements DialogSkin
 				frameHdRowAttrs = nodeText;
 			else if(nodeName.equals("frame-head-font-attrs") && nodeText != null)
 				frameHdFontAttrs = nodeText;
+            else if(nodeName.equals("error-msg-hd-font-attrs") && nodeText != null)
+                errorMsgHdFontAttrs = nodeText;
+            else if(nodeName.equals("error-msg-hd-text") && nodeText != null)
+                errorMsgHdText = nodeText;
 			else if(nodeName.equals("field-row-attrs") && nodeText != null)
 				fieldRowAttrs = nodeText;
 			else if(nodeName.equals("field-row-error-attrs") && nodeText != null)
@@ -389,9 +397,7 @@ public class StandardDialogSkin implements DialogSkin
 
 	}
 
-
-
-	public void appendFieldHtml(DialogContext dc, DialogField field, StringBuffer fieldsHtml, StringBuffer fieldsJSDefn)
+	public void appendFieldHtml(DialogContext dc, DialogField field, StringBuffer fieldsHtml, StringBuffer fieldsJSDefn, List fieldErrorMsgs)
 	{
 		if(field.flagIsSet(DialogField.FLDFLAG_INPUT_HIDDEN))
 		{
@@ -453,7 +459,10 @@ public class StandardDialogSkin implements DialogSkin
 				Iterator emi = errorMessages.iterator();
 				while(emi.hasNext())
 				{
-					messagesHtml.append("<br>" + (String) emi.next());
+                    int msgNum = fieldErrorMsgs.size();
+                    String msgStr = (String) emi.next();
+                    fieldErrorMsgs.add(msgStr);
+					messagesHtml.append("<br><a name='dc_error_msg_"+ msgNum +"'>" + msgStr + "</a>");
 				}
 				messagesHtml.append("</font>");
                 haveErrors = true;
@@ -487,6 +496,7 @@ public class StandardDialogSkin implements DialogSkin
 	{
 		long startTime = new Date().getTime();
 
+        List fieldErrorMsgs = dc.getErrorsCount() > 0 ? new ArrayList() : null;
 		Dialog dialog = dc.getDialog();
 		String dialogName = dialog.getName();
 
@@ -506,11 +516,11 @@ public class StandardDialogSkin implements DialogSkin
 				if(! field.isVisible(dc))
 					continue;
 
-				appendFieldHtml(dc, field, fieldsHtml, fieldsJSDefn);
+				appendFieldHtml(dc, field, fieldsHtml, fieldsJSDefn, fieldErrorMsgs);
 			}
 
 			if(director != null && director.isVisible(dc))
-				appendFieldHtml(dc, director, fieldsHtml, fieldsJSDefn);
+				appendFieldHtml(dc, director, fieldsHtml, fieldsJSDefn, fieldErrorMsgs);
 		}
 		else
 		{
@@ -529,7 +539,7 @@ public class StandardDialogSkin implements DialogSkin
 
 				if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
 					activeColumn++;
-				appendFieldHtml(dc, field, layoutColsFieldsHtml[activeColumn], fieldsJSDefn);
+				appendFieldHtml(dc, field, layoutColsFieldsHtml[activeColumn], fieldsJSDefn, fieldErrorMsgs);
 				if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_AFTER))
 					activeColumn++;
 			}
@@ -578,6 +588,18 @@ public class StandardDialogSkin implements DialogSkin
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(dc.getServletContext());
 		String sharedScriptsUrl = appConfig.getValue(dc, "framework.shared.scripts-url");
 
+        StringBuffer errorMsgsHtml = new StringBuffer();
+        if(fieldErrorMsgs != null)
+        {
+            errorMsgsHtml.append("<tr><td colspan='"+dlgTableColSpan+"'><ul type=square><font "+ controlAreaFontAttrs +"><font "+ errorMsgHdFontAttrs +"><b>"+ errorMsgHdText +"</b></font>\n");
+            for(int i = 0; i < fieldErrorMsgs.size(); i++)
+            {
+                String errorMsg = (String) fieldErrorMsgs.get(i);
+                errorMsgsHtml.append("<li><a href='#dc_error_msg_"+ i +"' style='text-decoration:none'><font "+ errorMsgFontAttrs +">"+ errorMsg +"</font></a></li>\n");
+            }
+            errorMsgsHtml.append("</ul></td></tr>\n");
+        }
+
 		String html =
 			(includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
 			"<link rel='stylesheet' href='"+ appConfig.getValue(dc, "framework.shared.css-url") +"/dialog.css'>\n"+
@@ -603,6 +625,7 @@ public class StandardDialogSkin implements DialogSkin
 			"<tr><td><table "+innerTableAttrs+">" +
 			(heading == null ? "" :
 			"<tr "+frameHdRowAttrs+"><td colspan='"+dlgTableColSpan+"' align='"+ frameHdRowAlign +"'><font "+frameHdFontAttrs+"><b>"+ heading +"</b></font></td></tr>\n") +
+            errorMsgsHtml +
 			"<form id='" + dialogName + "' name='"+ dialogName +"' action='"+ actionURL +"' method='post' onsubmit='return(activeDialog.isValid())'>\n" +
 			dc.getStateHiddens() + "\n" +
 			fieldsHtml +

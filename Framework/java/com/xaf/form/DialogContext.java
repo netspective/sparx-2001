@@ -101,6 +101,7 @@ public class DialogContext extends ServletValueContext
 	private String dataCmdStr;
 	private int dataCmd;
 	private String[] retainReqParams;
+    private int errorsCount;
 
 	public DialogContext()
 	{
@@ -305,6 +306,7 @@ public class DialogContext extends ServletValueContext
 	public final String getOriginalReferer() { return originalReferer; }
 	public final Dialog getDialog() { return dialog; }
 	public final DialogSkin getSkin() { return skin; }
+    public final int getErrorsCount() { return errorsCount; }
 
 	public final int getDataCommand() { return dataCmd; }
     public final boolean addingData() { return dataCmd == DATA_CMD_ADD; }
@@ -654,6 +656,7 @@ public class DialogContext extends ServletValueContext
 		}
 
 		state.errorMessages.add(message);
+        errorsCount++;
 	}
 
 	public void addErrorMessage(DialogField field, String message)
