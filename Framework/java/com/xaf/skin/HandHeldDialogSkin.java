@@ -145,7 +145,7 @@ public class HandHeldDialogSkin implements DialogSkin
         boolean haveErrors = false;
 		if(name != null)
 		{
-			ArrayList errorMessages = dc.getErrorMessages(field);
+			List errorMessages = dc.getErrorMessages(field);
 			if(errorMessages != null)
 			{
 				messagesHtml.append("<font "+errorMsgFontAttrs+">");
