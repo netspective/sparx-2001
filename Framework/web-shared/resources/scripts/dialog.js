@@ -1044,6 +1044,8 @@ function padZeros(number, count)
 
 function testPhone(field, control)
 {
+    if (control.value == '')
+        return true;
     var phonePattern = field.text_format_pattern;    
     return phonePattern.test(control.value) ;
 }
@@ -1058,22 +1060,27 @@ function formatPhone(field, control)
     }
     else
     {
-        var phoneStr = control.value;            
-        if (field.phone_format_type == 'dash')
+        if (control.value != '')
         {
-            phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3$4");
+            var phoneStr = control.value;            
+            if (field.phone_format_type == 'dash')
+            {
+                phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3$4");
+            }
+            else
+            {
+                phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3$4");
+            }
+            control.value = phoneStr;            
         }
-        else
-        {
-            phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3$4");
-        }
-        control.value = phoneStr;            
     }
     return true;
 }
 
 function testSSN(field, control)
 {    
+    if (control.value == '')
+        return true;
     var ssnPattern = field.text_format_pattern ;    
     return ssnPattern.test(control.value);
 }
@@ -1086,10 +1093,12 @@ function formatSSN(field, control)
         field.alertMessage(control, "Social Security Number must be in the correct format: 999-99-9999");
         return false;    
     }
-    var ssn = control.value;    
-    ssn = ssn.replace(field.text_format_pattern, "$1-$2-$3");
-    control.value = ssn;
-    
+    if (control.value != '')
+    {
+        var ssn = control.value;    
+        ssn = ssn.replace(field.text_format_pattern, "$1-$2-$3");
+        control.value = ssn;
+    }    
     return true;    
 }
 
