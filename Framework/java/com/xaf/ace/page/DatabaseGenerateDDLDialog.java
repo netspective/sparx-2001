@@ -34,7 +34,7 @@ public class DatabaseGenerateDDLDialog extends Dialog
     protected TextField sourceFileField;
 	protected TextField outputFileField;
     protected SelectField generatorFileField;
-    protected SelectField tablesField;
+    //protected SelectField tablesField;
     protected FilesystemEntriesListValue generatorsList;
 
     public DatabaseGenerateDDLDialog()
@@ -58,36 +58,33 @@ public class DatabaseGenerateDDLDialog extends Dialog
         generatorFileField = new SelectField("generator", "Generator", SelectField.SELECTSTYLE_RADIO, generatorsList);
         generatorFileField.setDefaultValue(new com.xaf.value.StaticValue("ansi.xsl"));
 
+        /*
         ListValueSource allTables = ValueSourceFactory.getListValueSource("schema-tables:.*");
         tablesField = new SelectField("tables", "Tables", SelectField.SELECTSTYLE_MULTIDUAL, allTables);
         tablesField.setFlag(DialogField.FLDFLAG_REQUIRED);
         tablesField.setDefaultListValue(allTables);
         tablesField.setSize(8);
+        */
 
         addField(sourceFileField);
 		addField(outputFileField);
         addField(generatorFileField);
-        addField(tablesField);
+        //addField(tablesField);
 
 		setDirector(new DialogDirector());
     }
 
     public String execute(DialogContext dc)
 	{
-        SchemaDocument schemaDoc = SchemaDocFactory.getDoc(dc.getValue("source_file"));
 		String styleSheet = generatorsList.getRootPath().getValue(dc) + "/" + dc.getValue("generator");
-        String outputFile = dc.getValue("output_file");
 
 		try
 		{
-			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Transformer transformer = tFactory.newTransformer(new StreamSource(styleSheet));
+            SchemaDocument.SqlDdlGenerator generator = new SchemaDocument.SqlDdlGenerator(styleSheet, dc.getValue("output_file"));
+            SchemaDocument schemaDoc = SchemaDocFactory.getDoc(dc.getValue("source_file"));
+            generator.generate(schemaDoc);
 
-			transformer.transform
-				(new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()),
-				 new javax.xml.transform.stream.StreamResult(outputFile));
-
-            return "<p>Saved generated schema in <a href='" + outputFile + "'>"+ outputFile +"</a>";
+            return "<p>Saved generated schema in <a href='" + generator.getDestFile() + "'>"+ generator.getDestFile() +"</a>";
 		}
 		catch(TransformerConfigurationException e)
 		{

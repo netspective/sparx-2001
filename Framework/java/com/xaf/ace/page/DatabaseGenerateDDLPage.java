@@ -18,7 +18,7 @@ public class DatabaseGenerateDDLPage extends AceServletPage
 {
 	public final String getName() { return "generate-ddl"; }
 	public final String getPageIcon() { return "ddl.gif"; }
-	public final String getCaption(PageContext pc) { return "Generate DDL"; }
+	public final String getCaption(PageContext pc) { return "Generate SQL DDL"; }
 	public final String getHeading(PageContext pc) { return "Generate SQL Data Definition"; }
 
 	private DatabaseGenerateDDLDialog dialog;

@@ -18,8 +18,8 @@ public class DatabaseGenerateJavaPage extends AceServletPage
 {
 	public final String getName() { return "generate-java"; }
 	public final String getPageIcon() { return "ddl.gif"; }
-	public final String getCaption(PageContext pc) { return "Generate Java"; }
-	public final String getHeading(PageContext pc) { return "Generate Java Relational Objects"; }
+	public final String getCaption(PageContext pc) { return "Generate Java DAL"; }
+	public final String getHeading(PageContext pc) { return "Generate Java Data Access Layer (DAL)"; }
 
 	private DatabaseGenerateJavaDialog dialog;
 

@@ -14,6 +14,7 @@ public class BuildConfigurationTask extends Task
 		project.setProperty("build.product.name", BuildConfiguration.productName);
 		project.setProperty("build.product.id", BuildConfiguration.productId);
 
+        project.setProperty("build.version.complete", BuildConfiguration.getVersionAndBuild());
 		project.setProperty("build.release", Integer.toString(BuildConfiguration.releaseNumber));
 		project.setProperty("build.version.major", Integer.toString(BuildConfiguration.versionMajor));
 		project.setProperty("build.version.minor", Integer.toString(BuildConfiguration.versionMinor));
@@ -23,6 +24,6 @@ public class BuildConfigurationTask extends Task
 		project.setProperty("build.libitem.file.prefix", BuildConfiguration.getBuildFilePrefix());
 		project.setProperty("build.date", java.text.DateFormat.getDateTimeInstance().format(new java.util.Date()));
 
-		log("Setup build.* properties.");
+		log("Setup build.* properties for "+ BuildConfiguration.productName +" "+ BuildConfiguration.getVersionAndBuild() +".");
 	}
 }

@@ -76,6 +76,15 @@ public class XmlSource
                 s.equalsIgnoreCase("yes"));
     }
 
+    /**
+     * Given a text string, return a string that would be suitable for that string to be used
+     * as a Java identifier (as a variable or method name). Depending upon whether ucaseInitial
+     * is set, the string starts out with a lowercase or uppercase letter. Then, the rule is
+     * to convert all periods into underscores and title case any words separated by
+     * underscores. This has the effect of removing all underscores and creating mixed case
+     * words. For example, Person_Address becomes personAddress or PersonAddress depending upon
+     * whether ucaseInitial is set to true or false. Person.Address would become Person_Address.
+     */
 	public static String xmlTextToJavaIdentifier(String xml, boolean ucaseInitial)
 	{
 		if(xml == null || xml.length() == 0)
@@ -104,6 +113,11 @@ public class XmlSource
 		return identifier.toString();
 	}
 
+    /**
+     * Given a text string, return a string that would be suitable for that string to be used
+     * as a Java constant (public static final XXX). The rule is to basically take every letter
+     * or digit and return it in uppercase and every non-letter or non-digit as an underscore.
+     */
     public static String xmlTextToJavaConstant(String xml)
 	{
 		if(xml == null || xml.length() == 0)
@@ -114,6 +128,25 @@ public class XmlSource
 		{
 			char ch = xml.charAt(i);
             constant.append(Character.isJavaIdentifierPart(ch) ? Character.toUpperCase(ch) : '_');
+		}
+		return constant.toString();
+	}
+
+    /**
+     * Given a text string, return a string that would be suitable for an XML element name. For example,
+     * when given Person_Address it would return person-address. The rule is to basically take every letter
+     * or digit and return it in lowercase and every non-letter or non-digit as a dash.
+     */
+    public static String xmlTextToNodeName(String xml)
+	{
+		if(xml == null || xml.length() == 0)
+			return xml;
+
+		StringBuffer constant = new StringBuffer();
+		for(int i = 0; i < xml.length(); i++)
+		{
+			char ch = xml.charAt(i);
+            constant.append(Character.isLetterOrDigit(ch) ? Character.toLowerCase(ch) : '-');
 		}
 		return constant.toString();
 	}
@@ -389,7 +422,7 @@ public class XmlSource
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder parser = factory.newDocumentBuilder();
 			doc = parser.parse(file);
-			doc.normalize();
+            doc.normalize();
 		}
 		catch(Exception e)
 		{

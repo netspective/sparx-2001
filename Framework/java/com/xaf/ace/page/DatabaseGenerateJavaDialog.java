@@ -61,7 +61,7 @@ public class DatabaseGenerateJavaDialog extends Dialog
 
     public DatabaseGenerateJavaDialog()
     {
-		super("schemagen", "Generate Object-Relational Objects");
+		super("schemagen", "Generate Data Access Layer (DAL)");
 
         generatorsList = new FilesystemEntriesListValue();
         generatorsList.setRootPath("config-expr:${framework.shared.xslt-path}/schema-gen/java-gen");
@@ -80,42 +80,42 @@ public class DatabaseGenerateJavaDialog extends Dialog
 		dataTypesPkgField = new TextField("data_types_pkg", "Datatypes Package");
         dataTypesPkgField.setSize(40);
 		dataTypesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        dataTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.column"));
+        dataTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.column"));
 
         tableTypesPkgField = new TextField("table_types_pkg", "Tabletypes Package");
         tableTypesPkgField.setSize(40);
 		tableTypesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tableTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.table.type"));
+        tableTypesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.table.type"));
 
         tablesPkgField = new TextField("tables_pkg", "Tables Package");
         tablesPkgField.setSize(40);
 		tablesPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tablesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.table"));
+        tablesPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.table"));
 
         domainsPkgField = new TextField("domains_pkg", "Domains Package");
         domainsPkgField.setSize(40);
 		domainsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        domainsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.domain"));
+        domainsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.domain"));
 
         rowsPkgField = new TextField("rows_pkg", "Rows Package");
         rowsPkgField.setSize(40);
 		rowsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        rowsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.domain.row"));
+        rowsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.domain.row"));
 
         rowsListPkgField = new TextField("rows_list_pkg", "Rows List Package");
         rowsListPkgField.setSize(40);
 		rowsListPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        rowsListPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.domain.rows"));
+        rowsListPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal.domain.rows"));
 
         schemaPkgField = new TextField("schema_pkg", "Schema Package");
         schemaPkgField.setSize(40);
 		schemaPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        schemaPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema"));
+        schemaPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dal"));
 
         schemaClassNameField = new TextField("schema_class_name", "Schema Class Name");
         schemaClassNameField.setSize(40);
 		schemaClassNameField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        schemaClassNameField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("AppSchema"));
+        schemaClassNameField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("DataAccessLayer"));
         schemaClassNameField.setFlag(DialogField.FLDFLAG_COLUMN_BREAK_AFTER);
 
         dataTypesGeneratorField = new SelectField("data_types_gen", "Datatypes Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
