@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.8 2002-10-03 14:55:23 shahid.shah Exp $
+ * $Id: dialog.js,v 1.9 2002-10-20 16:00:36 shahid.shah Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -337,12 +337,18 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
     this.focusNext = DialogField_focusNext;
     this.alertRequired = DialogField_alertRequired;
     this.isRequired = DialogField_isRequired;
+    this.isReadOnly = DialogField_isReadOnly;
     this.alertMessage = DialogField_alertMessage;
 }
 
 function DialogField_isRequired()
 {
     return (this.flags & FLDFLAG_REQUIRED) != 0;
+}
+
+function DialogField_isReadOnly()
+{
+    return ((this.flags & FLDFLAG_READONLY) != 0) || ((this.flags & FLDFLAG_BROWSER_READONLY) != 0);
 }
 
 /**
@@ -419,7 +425,7 @@ function DialogField_finalizeContents(dialog)
 
 function DialogField_evaluateConditionals(dialog)
 {
-    if(((this.flags & FLDFLAG_READONLY) != 0))
+    if(this.isReadOnly())
         return;
 
     var control = this.getControl(dialog);
@@ -462,6 +468,9 @@ function DialogField_alertRequired(control)
 
 function DialogField_isValid()
 {
+    if(this.isReadOnly())
+        return true;
+
     // perform default validation first
     var control = this.getControl(dialog);
     if (control == null)
