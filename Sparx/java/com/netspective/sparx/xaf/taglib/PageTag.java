@@ -51,17 +51,14 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.4 2002-10-16 03:14:57 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.5 2002-12-26 19:39:49 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.sql.SQLException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -69,41 +66,43 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
-import javax.naming.NamingException;
 
-import com.netspective.sparx.xaf.form.Dialog;
-import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.DialogManager;
-import com.netspective.sparx.xaf.form.DialogManagerFactory;
-import com.netspective.sparx.xaf.form.DialogSkin;
+import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.html.ComponentCommandFactory;
+import com.netspective.sparx.xaf.security.LoginDialog;
+import com.netspective.sparx.xaf.security.AuthenticatedUser;
 import com.netspective.sparx.xaf.security.AccessControlList;
 import com.netspective.sparx.xaf.security.AccessControlListFactory;
-import com.netspective.sparx.xaf.security.AuthenticatedUser;
-import com.netspective.sparx.xaf.security.LoginDialog;
+import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.sql.StatementManager;
-import com.netspective.sparx.xaf.sql.StatementManagerFactory;
-import com.netspective.sparx.xaf.sql.StatementNotFoundException;
-import com.netspective.sparx.xaf.querydefn.QueryDefinition;
-import com.netspective.sparx.xaf.querydefn.QuerySelectDialog;
-import com.netspective.sparx.xaf.page.PageControllerServlet;
+import com.netspective.sparx.xaf.page.*;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.Globals;
+import com.netspective.sparx.BuildConfiguration;
 
 public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 {
+    public static final String ATTRNAME_SKIPPEDBODY = "skipped-body";
+    public static final String ATTRVALUE_YES = "yes";
     static public final String PAGE_SECURITY_MESSAGE_ATTRNAME = "security-message";
     static public final String PAGE_DEFAULT_LOGIN_DIALOG_CLASS = "com.netspective.sparx.xaf.security.LoginDialog";
 
-    static private com.netspective.sparx.xaf.security.LoginDialog loginDialog;
+    static private LoginDialog loginDialog;
+    static private NavigationSkin navSkin;
 
     private String title;
     private String heading;
     private String[] permissions;
+    private boolean popup;
+    private boolean ignoreLogin;
     private long startTime;
+    private String navSkinName;
+    private NavigationContext nc;
+    private NavigationPage page;
 
     public void release()
     {
@@ -111,6 +110,10 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         title = null;
         heading = null;
         permissions = null;
+        popup = false;
+        ignoreLogin= false;
+        nc = null;
+        page = null;
     }
 
     public final String getTitle()
@@ -123,6 +126,16 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         return heading;
     }
 
+    public final boolean isPopup()
+    {
+        return popup;
+    }
+
+    public final boolean ignoreLogin()
+    {
+        return ignoreLogin;
+    }
+
     public void setTitle(String value)
     {
         title = value;
@@ -131,6 +144,31 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public void setHeading(String value)
     {
         heading = value;
+    }
+
+    public void setPopup(boolean value)
+    {
+        popup = value;
+    }
+
+    public void setPopup(String value)
+    {
+        popup = value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false);
+    }
+
+    public void setIgnoreLogin(boolean value)
+    {
+        ignoreLogin = value;
+    }
+
+    public void setIgnoreLogin(String value)
+    {
+        popup = value == null ? false : (value.equals(ATTRVALUE_YES) ? true : false);
+    }
+
+    public void setNavSkin(String value)
+    {
+        navSkinName = value;
     }
 
     public final String[] getPermissions()
@@ -170,7 +208,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
             try
             {
                 Class loginDialogClass = Class.forName(className);
-                loginDialog = (com.netspective.sparx.xaf.security.LoginDialog) loginDialogClass.newInstance();
+                loginDialog = (LoginDialog) loginDialogClass.newInstance();
             }
             catch(ClassNotFoundException e)
             {
@@ -190,13 +228,13 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         String logout = req.getParameter("_logout");
         if(logout != null)
         {
-            com.netspective.sparx.util.value.ValueContext vc = new com.netspective.sparx.util.value.ServletValueContext(servletContext, page, req, resp);
+            ValueContext vc = new ServletValueContext(servletContext, page, req, resp);
             loginDialog.logout(vc);
 
             /** If the logout parameter included a non-zero length value, then
              *  we'll redirect to the value provided.
              */
-            if(logout.length() == 0 || logout.equals("1") || logout.equals("yes"))
+            if(logout.length() == 0 || logout.equals("1") || logout.equals(ATTRVALUE_YES))
                 resp.sendRedirect(req.getContextPath());
             else
                 resp.sendRedirect(logout);
@@ -206,7 +244,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         if(!loginDialog.accessAllowed(servletContext, req, resp))
         {
             String skinName = getLoginDialogSkinName();
-            com.netspective.sparx.xaf.form.DialogContext dc = loginDialog.createContext(servletContext, page, req, resp, skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName));
+            DialogContext dc = loginDialog.createContext(servletContext, page, req, resp, skinName == null ? SkinFactory.getDialogSkin() : SkinFactory.getDialogSkin(skinName));
             loginDialog.prepareContext(dc);
             if(dc.inExecuteMode())
             {
@@ -227,16 +265,16 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         if(permissions == null)
             return true;
 
-        javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
+        HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
 
-        com.netspective.sparx.xaf.security.AuthenticatedUser user = (com.netspective.sparx.xaf.security.AuthenticatedUser) request.getSession(true).getAttribute("authenticated-user");
+        AuthenticatedUser user = (AuthenticatedUser) request.getSession(true).getAttribute("authenticated-user");
         if(user == null)
         {
             request.setAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME, "No user identified.");
             return false;
         }
 
-        com.netspective.sparx.xaf.security.AccessControlList acl = com.netspective.sparx.xaf.security.AccessControlListFactory.getACL(pageContext.getServletContext());
+        AccessControlList acl = AccessControlListFactory.getACL(pageContext.getServletContext());
         if(acl == null)
         {
             request.setAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME, "No ACL defined.");
@@ -256,7 +294,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     {
         try
         {
-            return PageControllerServlet.handleDefaultBodyItem(
+            return ComponentCommandFactory.handleDefaultBodyItem(
                     pageContext.getServletContext(),
                     (Servlet) pageContext.getPage(),
                     pageContext.getRequest(), pageContext.getResponse()
@@ -266,27 +304,98 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         {
             throw new JspException(e);
         }
-        catch(SQLException e)
+        catch(ComponentCommandException e)
         {
             throw new JspException(e);
         }
-        catch(StatementNotFoundException e)
-        {
-            throw new JspException(e);
-        }
-        catch(NamingException e)
-        {
-            throw new JspException(e);
-        }
+    }
+
+    public NavigationPage createDefaultPage()
+    {
+        return null;
     }
 
     public int doStartTag() throws javax.servlet.jsp.JspException
     {
-        return EVAL_BODY_INCLUDE;
+        doPageBegin();
+
+        JspWriter out = pageContext.getOut();
+
+        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
+        HttpServletResponse resp = (HttpServletResponse) pageContext.getResponse();
+        ServletContext servletContext = pageContext.getServletContext();
+
+        try {
+            if (!ignoreLogin && doLogin(servletContext, (Servlet) pageContext.getPage(), req, resp))
+            {
+                req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
+                return SKIP_BODY;
+            }
+
+            if (!ignoreLogin && !hasPermission())
+            {
+                req.setAttribute(ATTRNAME_SKIPPEDBODY, ATTRVALUE_YES);
+                out.print(req.getAttribute(PAGE_SECURITY_MESSAGE_ATTRNAME));
+                return SKIP_BODY;
+            }
+
+            NavigationTree navTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
+            if(navTree != null)
+            {
+                if(navSkin == null)
+                {
+                    navSkin = navSkinName != null ? SkinFactory.getNavigationSkin(navSkinName) : SkinFactory.getNavigationSkin();
+                    if(navSkin == null)
+                        throw new JspException("Navigation skin not found.");
+                }
+
+                nc = navTree.createContext(pageContext, navSkin, popup);
+                page = (NavigationPage) nc.getPage();
+
+                if (page == null)
+                    page = createDefaultPage();
+
+                if(page != null)
+                {
+                    page.setHeading(this.getHeading());
+                    page.setTitle(this.getTitle());
+                    page.handlePageBeforeBody(nc);
+                }
+                else
+                    out.print("No navigation page (or default) found.");
+            }
+            else
+                out.print("NavigationTree navTree is null.");
+        }
+        catch (Exception e)
+        {
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+            throw new JspException(e.toString() + stack.toString());
+        }
+
+        if (handleDefaultBodyItem())
+            return SKIP_BODY;
+        else
+            return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws javax.servlet.jsp.JspException
     {
+        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
+        if(req.getAttribute(ATTRNAME_SKIPPEDBODY) == null && page != null)
+        {
+            try
+            {
+                page.handlePageAfterBody(nc);
+            }
+            catch (Exception e)
+            {
+                throw new JspException(e.toString());
+            }
+        }
+
+        doPageEnd();
         return EVAL_PAGE;
     }
 
@@ -296,7 +405,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public void doPageBegin()
     {
         startTime = new java.util.Date().getTime();
-        javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
+        HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
         org.apache.log4j.NDC.push(request.getSession(true).getId());
     }
 
@@ -305,8 +414,8 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
      */
     public void doPageEnd()
     {
-        javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
-        com.netspective.sparx.util.log.LogManager.recordAccess(request, null, pageContext.getPage().getClass().getName(), request.getRequestURI(), startTime);
+        javax.servlet.http.HttpServletRequest request = ((HttpServletRequest) pageContext.getRequest());
+        LogManager.recordAccess(request, null, pageContext.getPage().getClass().getName(), request.getRequestURI(), startTime);
         org.apache.log4j.NDC.pop();
     }
 
@@ -319,7 +428,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         ServletValueContext svc = new ServletValueContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
 
         String sparxACEUrl = config.getTextValue(svc, "sparx.ace.root-url");
-        String sparxSampleImagesUrl = config.getTextValue(svc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url") + "/samples";
+        String sparxSampleImagesUrl = config.getTextValue(svc, Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url") + "/samples";
 
         javax.servlet.jsp.JspWriter out = pageContext.getOut();
         out.println("<html>");
@@ -386,10 +495,10 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     {
         Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(pageContext.getServletContext());
         ServletValueContext svc = new ServletValueContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), pageContext.getRequest(), pageContext.getResponse());
-        String sparxSampleImagesUrl = config.getTextValue(svc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url") + "/samples";
+        String sparxSampleImagesUrl = config.getTextValue(svc, Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url") + "/samples";
 
         javax.servlet.jsp.JspWriter out = pageContext.getOut();
-        out.println("                         <p><center><font size=2 color=silver>"+ com.netspective.sparx.BuildConfiguration.getProductBuild() + "</font></center>");
+        out.println("                         <p><center><font size=2 color=silver>"+ BuildConfiguration.getProductBuild() + "</font></center>");
         out.println("							</td>");
         out.println("							<td align='left' valign='top' width='19' height='100%' background='"+ sparxSampleImagesUrl +"/sample-apps-10.gif'><img src='"+ sparxSampleImagesUrl +"/sample-apps-spacer.gif' alt='' width='19' height='100%' border='0'></td>");
         out.println("						</tr>");
