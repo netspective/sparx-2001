@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.14 2002-08-18 21:05:22 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.15 2002-09-18 03:59:08 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -826,12 +826,12 @@ public class DialogContext extends ServletValueContext
         dialog.makeStateChanges(this, STATECALCSTAGE_FINAL);
     }
 
-    public final Map getFieldStates()
+    public Map getFieldStates()
     {
         return this.fieldStates;
     }
 
-    public final String getTransactionId()
+    public String getTransactionId()
     {
         return transactionId;
     }
@@ -841,7 +841,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return boolean True if context was reset
      */
-    public final boolean contextWasReset()
+    public boolean contextWasReset()
     {
         return resetContext;
     }
@@ -851,7 +851,7 @@ public class DialogContext extends ServletValueContext
      *
      * @param int sequence number
      */
-    public final int getRunSequence()
+    public int getRunSequence()
     {
         return runSequence;
     }
@@ -861,12 +861,12 @@ public class DialogContext extends ServletValueContext
      *
      * @param int execution count
      */
-    public final int getExecuteSequence()
+    public int getExecuteSequence()
     {
         return execSequence;
     }
 
-    public final boolean isInitialEntry()
+    public boolean isInitialEntry()
     {
         return runSequence == 1;
     }
@@ -876,7 +876,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return boolean True if the execution is for the first time
      */
-    public final boolean isInitialExecute()
+    public boolean isInitialExecute()
     {
         return execSequence == 1;
     }
@@ -886,7 +886,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return boolean True if current exectuion is a duplicate one
      */
-    public final boolean isDuplicateExecute()
+    public boolean isDuplicateExecute()
     {
         return execSequence > 1;
     }
@@ -896,7 +896,7 @@ public class DialogContext extends ServletValueContext
      *
      * @param char Mode
      */
-    public final char getActiveMode()
+    public char getActiveMode()
     {
         return activeMode;
     }
@@ -906,7 +906,7 @@ public class DialogContext extends ServletValueContext
      *
      * @param char Mode
      */
-    public final char getNextMode()
+    public char getNextMode()
     {
         return nextMode;
     }
@@ -916,7 +916,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return boolean True if the dialog is in input mode
      */
-    public final boolean inInputMode()
+    public boolean inInputMode()
     {
         return activeMode == DIALOGMODE_INPUT;
     }
@@ -926,7 +926,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return boolean True if the dialog is in execution mode
      */
-    public final boolean inExecuteMode()
+    public boolean inExecuteMode()
     {
         return activeMode == DIALOGMODE_EXECUTE;
     }
@@ -936,7 +936,7 @@ public class DialogContext extends ServletValueContext
      *
      * @param boolean
      */
-    public final boolean isPending()
+    public boolean isPending()
     {
         return validationStage == VALSTAGE_IGNORE;
     }
@@ -944,7 +944,7 @@ public class DialogContext extends ServletValueContext
     /**
      *
      */
-    public final String getOriginalReferer()
+    public String getOriginalReferer()
     {
         return originalReferer;
     }
@@ -954,7 +954,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return Dialog dialog object
      */
-    public final Dialog getDialog()
+    public Dialog getDialog()
     {
         return dialog;
     }
@@ -964,7 +964,7 @@ public class DialogContext extends ServletValueContext
      *
      * @param DialogSkin dialog skin
      */
-    public final DialogSkin getSkin()
+    public DialogSkin getSkin()
     {
         return skin;
     }
@@ -974,7 +974,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return int total error count
      */
-    public final int getErrorsCount()
+    public int getErrorsCount()
     {
         return errorsCount;
     }
@@ -984,7 +984,7 @@ public class DialogContext extends ServletValueContext
      *
      * @return int data command
      */
-    public final int getDataCommand()
+    public int getDataCommand()
     {
         return dataCmd;
     }
@@ -992,7 +992,7 @@ public class DialogContext extends ServletValueContext
     /**
      *
      */
-    public final String getDataCommandText(boolean titleCase)
+    public String getDataCommandText(boolean titleCase)
     {
         String dataCmdText = getDataCmdTextForCmdId(getDataCommand());
         if(!titleCase)
@@ -1003,27 +1003,27 @@ public class DialogContext extends ServletValueContext
         return dataCmdSb.toString();
     }
 
-    public final boolean addingData()
+    public boolean addingData()
     {
         return (dataCmd & DATA_CMD_ADD) == 0 ? false : true;
     }
 
-    public final boolean editingData()
+    public boolean editingData()
     {
         return (dataCmd & DATA_CMD_EDIT) == 0 ? false : true;
     }
 
-    public final boolean deletingData()
+    public boolean deletingData()
     {
         return (dataCmd & DATA_CMD_DELETE) == 0 ? false : true;
     }
 
-    public final boolean confirmingData()
+    public boolean confirmingData()
     {
         return (dataCmd & DATA_CMD_CONFIRM) == 0 ? false : true;
     }
 
-    public final boolean printingData()
+    public boolean printingData()
     {
         return (dataCmd & DATA_CMD_PRINT) == 0 ? false : true;
     }
@@ -1033,9 +1033,9 @@ public class DialogContext extends ServletValueContext
      *
      * @return DatabaseContext
      */
-    public final DatabaseContext getDatabaseContext()
+    public DatabaseContext getDatabaseContext()
     {
-        return dbContext;
+        return dbContext == null ? DatabaseContextFactory.getContext(this) : dbContext;
     }
 
     /**
@@ -1043,7 +1043,7 @@ public class DialogContext extends ServletValueContext
      *
      * @param value DatabaseContext object
      */
-    public final void setDatabaseContext(DatabaseContext value)
+    public void setDatabaseContext(DatabaseContext value)
     {
         dbContext = value;
     }
