@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConfigurationManagerFactory.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: ConfigurationManagerFactory.java,v 1.2 2002-08-25 16:06:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.config;
@@ -59,6 +59,7 @@ package com.netspective.sparx.util.config;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 
@@ -122,7 +123,7 @@ public class ConfigurationManagerFactory implements Factory
 
         String configFile = context.getInitParameter(com.netspective.sparx.Globals.DEFAULT_CONFIGITEM_PREFIX + "config-file");
         if(configFile == null)
-            configFile = "WEB-INF/configuration.xml";
+            configFile = "WEB-INF/conf/sparx.xml";
         manager = getManager(context.getRealPath(configFile));
         manager.initializeForServlet(context);
 

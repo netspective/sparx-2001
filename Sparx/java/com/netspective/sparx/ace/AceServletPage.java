@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AceServletPage.java,v 1.2 2002-08-25 16:06:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -116,7 +116,7 @@ public class AceServletPage extends AbstractServletPage
         Hashtable styleSheetParams = servlet.getStyleSheetParams();
 
         /**
-         * Add all of the entries from configuration.xml into the StyleSheet
+         * Add all of the entries from WEB-INF/conf/sparx.xml into the StyleSheet
          * parameters. This will allow stylesheets to use the configuration
          * properties as well.
          */

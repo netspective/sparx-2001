@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementManagerFactory.java,v 1.2 2002-07-05 17:37:08 aye.thu Exp $
+ * $Id: StatementManagerFactory.java,v 1.3 2002-08-25 16:06:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -96,7 +96,7 @@ public class StatementManagerFactory implements Factory
     /**
      * Method used for retrieving a <code>StatementManager</code> object within a web application context.
      * The factory retrieves the static SQL XML file name from <code>app.sql.source-file</code> configuraton entry
-     * defined in <code>configuration.xml</code> of the web application.
+     * defined in <code>WEB-INF/conf/sparx.xml</code> of the web application.
      *
      * @param context the servlet context
      * @return StatementManager

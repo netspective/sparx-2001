@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConfigurationValue.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: ConfigurationValue.java,v 1.2 2002-08-25 16:06:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -72,7 +72,7 @@ public class ConfigurationValue extends ValueSource
     public SingleValueSource.Documentation getDocumentation()
     {
         return new SingleValueSource.Documentation(
-                "Provides access to configuration variables in the default configuration file (configuration.xml). If " +
+                "Provides access to configuration variables in the default Sparx configuration file (WEB-INF/conf/sparx.xml). If " +
                 "no source-name is provided the property-name requested is read from the default configuration element " +
                 "of the default configuration file. If a source-name is provided, then the property-name is read from the " +
                 "configuration named source-name in the default configuration file.",

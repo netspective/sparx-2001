@@ -104,6 +104,8 @@ Build targets:
             deprecation="on" >
         </javac>
 
+		<echoproperties destfile="${web-shared.dir}/resources/sparx.build.properties"/>
+
     </target>
 
     <!-- ============================= Jar XAF ========================= -->

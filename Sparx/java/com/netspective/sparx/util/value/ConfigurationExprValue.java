@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConfigurationExprValue.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: ConfigurationExprValue.java,v 1.2 2002-08-25 16:06:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -74,7 +74,7 @@ public class ConfigurationExprValue extends ValueSource
     {
         return new SingleValueSource.Documentation(
                 "Evaluates the given expression as a property value that would be created had the given expression been " +
-                "specified in the default configuration file (configuration.xml). If " +
+                "specified in the default Sparx configuration file (WEB-INF/conf/sparx.xml). If " +
                 "no source-name is provided the expr requested is evaluted based on the the default configuration element " +
                 "of the default configuration file. If a source-name is provided, then the expr is evaluated based on the " +
                 "configuration named source-name in the default configuration file.",
