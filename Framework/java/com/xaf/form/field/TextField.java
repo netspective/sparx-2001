@@ -86,7 +86,6 @@ public class TextField extends DialogField
 		if(value == null) return null;
 
 		long flags = getFlags();
-        System.out.println(value);
 		if((flags & FLDFLAG_UPPERCASE) != 0) value = value.toUpperCase();
 		if((flags & FLDFLAG_LOWERCASE) != 0) value = value.toLowerCase();
 		if((flags & FLDFLAG_TRIM) != 0) value = value.trim();
