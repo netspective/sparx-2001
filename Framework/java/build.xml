@@ -49,20 +49,24 @@ Authors:
 
     <property name="build.dir" value="../build"/>
     <property name="lib.dir" value="../lib"/>
-    <property name="doc.dir" value="../web-shared/docs"/>
+    <property name="lib-ext.dir" value="${lib.dir}/${build.product.id}-${build.version.major}_${build.version.minor}_${build.number}"/>
+    <property name="web-shared.dir" value="../web-shared"/>
+    <property name="doc.dir" value="${web-shared.dir}/docs"/>
     <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
 
-    <property name="jar.prefix" value="${build.product.id}-${build.version.major}_${build.version.minor}_${build.number}"/>
+    <property name="jar.prefix" value="${build.product.id}-${build.version.major}_${build.version.minor}"/>
     <property name="lib.jar" value="${jar.prefix}.jar"/>
     <property name="src.jar" value="${jar.prefix}_src.jar"/>
     <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
-
+    <property name="web-shared.zip" value="${jar.prefix}_web-shared.zip"/>
+    
     <!-- ============================= Prepare XAF ========================= -->
     <target name="prepare">
         <!-- Create destination directories -->
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dir}/classes"/>
         <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${lib-ext.dir}"/>
     </target>
     
     <!-- ============================= Build XAF ========================= -->
@@ -84,15 +88,19 @@ Authors:
         <!-- Create XAF BINARIES JAR file -->
         <copy file="build.properties" todir="${build.dir}/classes"/>
         
-        <jar jarfile="${lib.dir}/${lib.jar}" basedir="${build.dir}/classes">
+        <jar jarfile="${lib-ext.dir}/${lib.jar}" basedir="${build.dir}/classes">
             <include name="build.properties"/>
             <include name="com/xaf/**"/>
         </jar>
+        
+        <copy file="${lib-ext.dir}/${lib.jar}" tofile="${lib.dir}/${lib.jar}"/>
 
         <!-- Create XAF SOURCE JAR file -->
-        <jar jarfile="${lib.dir}/${src.jar}" basedir=".">
+        <jar jarfile="${lib-ext.dir}/${src.jar}" basedir=".">
             <include name="**" />
         </jar>
+        
+        <copy file="${lib-ext.dir}/${src.jar}" tofile="${lib.dir}/${src.jar}"/>
         
         <delete dir="${build.dir}"/>
     </target>
@@ -112,17 +120,27 @@ Authors:
              doctitle="XAF API Documentation"
              bottom="Copyright &#169; 2001 Netspective. All Rights Reserved."
         />
-        <jar jarfile="${lib.dir}/${doc.jar}" basedir="${javadoc.dir}" >
+        <jar jarfile="${lib-ext.dir}/${doc.jar}" basedir="${javadoc.dir}" >
             <include name="**" />
         </jar>
+
+        <copy file="${lib-ext.dir}/${doc.jar}" tofile="${lib.dir}/${doc.jar}"/>
+        
     </target>
 
+    <!-- ============================= JavaDoc XAF ========================= -->
+    
+    <target name="web-shared">
+    	<zip zipfile="${lib-ext.dir}/${web-shared.zip}" basedir="${web-shared.dir}"/>
+        <copy file="${lib-ext.dir}/${web-shared.zip}" tofile="${lib.dir}/${web-shared.zip}"/>
+    </target>
+    
     <!-- ==================== Administrative targets  ======================= -->
     <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="xaf" depends="clean,compile,jar,javadoc"/>
+    <target name="xaf" depends="clean,compile,jar,javadoc,web-shared"/>
 
     <!-- =============================== Help =============================== -->
     <target name="targets">
