@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.11 2002-10-03 14:54:54 shahid.shah Exp $
+ * $Id: DialogField.java,v 1.12 2002-10-10 22:38:03 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -970,7 +970,7 @@ public class DialogField
             if(state.flagIsSet(FLDFLAG_INVISIBLE))
                 return false;
 
-            if(state.flagIsSet(FLDFLAG_READONLY) &&
+            if(children == null && state.flagIsSet(FLDFLAG_READONLY) &&
                (state.flagIsSet(FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA) ||
                     dc.getDialog().flagIsSet(Dialog.DLGFLAG_READONLY_FIELDS_INVISIBLE_UNLESS_HAVE_DATA)))
             {
@@ -1025,7 +1025,7 @@ public class DialogField
             if(state.flagIsSet(FLDFLAG_INPUT_HIDDEN))
                 return true;
 
-            if(state.flagIsSet(FLDFLAG_READONLY) &&
+            if(children == null && state.flagIsSet(FLDFLAG_READONLY) &&
                (state.flagIsSet(FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA) ||
                     dc.getDialog().flagIsSet(Dialog.DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA)))
             {
