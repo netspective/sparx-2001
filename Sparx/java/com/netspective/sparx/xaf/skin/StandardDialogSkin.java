@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.3 2002-08-24 05:36:29 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.4 2002-08-30 00:28:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -322,7 +322,7 @@ public class StandardDialogSkin implements DialogSkin
             controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'></span>");
 
         StringBuffer messagesHtml = new StringBuffer();
-        String hint = field.getHint();
+        String hint = field.getHint(dc);
         if(hint != null)
         {
             messagesHtml.append("<br><font " + hintFontAttrs + ">");
@@ -543,7 +543,7 @@ public class StandardDialogSkin implements DialogSkin
             controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'></span>");
 
         StringBuffer messagesHtml = new StringBuffer();
-        String hint = field.getHint();
+        String hint = field.getHint(dc);
         if(hint != null && !(field.isReadOnly(dc) && dc.getDialog().flagIsSet(Dialog.DLGFLAG_HIDE_READONLY_HINTS)))
         {
             messagesHtml.append("<br><font " + hintFontAttrs + ">");

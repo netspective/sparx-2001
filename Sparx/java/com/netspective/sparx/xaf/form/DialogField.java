@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.9 2002-07-12 21:19:59 aye.thu Exp $
+ * $Id: DialogField.java,v 1.10 2002-08-30 00:28:14 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -129,7 +129,7 @@ public class DialogField
     private List clientJavascripts;
     private long flags;
     private DialogFieldPopup popup;
-    private String hint;
+    private SingleValueSource hint;
 
     /**
      * Creates a dialog field
@@ -215,8 +215,9 @@ public class DialogField
                 defaultValue = null;
         }
 
-        hint = elem.getAttribute("hint");
-        if(hint.length() == 0) hint = null;
+        String hintStr = elem.getAttribute("hint");
+        if(hintStr.length() > 0)
+            hint = ValueSourceFactory.getSingleOrStaticValueSource(hintStr);
 
         if(elem.getAttribute("required").equalsIgnoreCase("yes"))
             setFlag(DialogField.FLDFLAG_REQUIRED);
@@ -577,9 +578,19 @@ public class DialogField
      *
      * @return String
      */
-    public final String getHint()
+    public final String getHint(DialogContext dc)
     {
-        return hint;
+        return hint != null ? hint.getValue(dc) : null;
+    }
+
+    /**
+     * Sets the hint string associated with the dialog field
+     *
+     * @param value hint string
+     */
+    public void setHint(SingleValueSource value)
+    {
+        hint = value;
     }
 
     /**
@@ -589,7 +600,7 @@ public class DialogField
      */
     public void setHint(String value)
     {
-        hint = value;
+        setHint(value != null ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null);
     }
 
     /**

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HandHeldDialogSkin.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: HandHeldDialogSkin.java,v 1.2 2002-08-30 00:28:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -209,7 +209,7 @@ public class HandHeldDialogSkin implements DialogSkin
         field.renderControlHtml(controlHtml, dc);
 
         StringBuffer messagesHtml = new StringBuffer();
-        String hint = field.getHint();
+        String hint = field.getHint(dc);
         if(hint != null)
         {
             messagesHtml.append("<br><font " + hintFontAttrs + ">");
