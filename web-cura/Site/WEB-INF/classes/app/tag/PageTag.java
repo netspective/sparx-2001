@@ -97,7 +97,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 				if(appConfig == null)
 					throw new Exception("Unable to get default configuration manager");
 
-				String structFile = appConfig.getValue(null, "app.navigate.structure-file");
+				String structFile = appConfig.getValue(null, "app.ui.structure-file");
 				if(structFile == null)
 					throw new Exception("Unable to retrieve structure file from configuration variable 'app.navigate.structure-file'");
 
@@ -131,9 +131,9 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
             out.println("   </td>");
 
             out.println("</tr>");
-            out.println("</table><p>");
+            out.println("</table><p><center>");
 
-			out.print("<table><tr><td><font face='verdana' size=2>");
+			out.print("<table width='100%' cellpadding='5' cellspacing='0'><tr><td align='center'><font face='verdana' size=2>");
 
 			String heading = getHeading();
 			if(heading != null)
@@ -161,7 +161,7 @@ public class PageTag extends com.xaf.navigate.taglib.PageTag
 		try
 		{
 			out.print("</font></td></tr></table>");
-			out.print("</body>");
+			out.print("</center></body>");
 			out.print("</html>");
 		}
 		catch(IOException e)
