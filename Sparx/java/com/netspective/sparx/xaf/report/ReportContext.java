@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportContext.java,v 1.4 2003-01-24 14:13:27 shahid.shah Exp $
+ * $Id: ReportContext.java,v 1.5 2003-05-08 17:57:51 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -265,6 +265,7 @@ public class ReportContext extends ServletValueContext
     private int rowCurrent, rowStart, rowEnd;
     private long frameFlags;
 
+    private DialogContext dc;
     public NumberFormat generalNumberFmt;
 
     public ReportContext(ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response, Report reportDefn, ReportSkin skin)
@@ -315,6 +316,16 @@ public class ReportContext extends ServletValueContext
     public long getFrameFlags()
     {
         return frameFlags;
+    }
+
+    public DialogContext getDialogContext()
+    {
+        return dc;
+    }
+
+    public void setDialogContext(DialogContext dc)
+    {
+        this.dc = dc;
     }
 
     /**
