@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DurationField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DurationField.java,v 1.2 2002-10-13 21:19:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -144,6 +144,12 @@ public class DurationField extends DialogField
             beginField.setFlag(DateTimeField.FLDFLAG_POPUP_CALENDAR);
             endField.setFlag(DateTimeField.FLDFLAG_POPUP_CALENDAR);
         }
+
+        if(flagIsSet(FLDFLAG_COLUMN_BREAK_AFTER))
+            beginField.setFlag(FLDFLAG_COLUMN_BREAK_AFTER);
+
+        if(flagIsSet(FLDFLAG_COLUMN_BREAK_BEFORE))
+            beginField.setFlag(FLDFLAG_COLUMN_BREAK_BEFORE);
 
         addChildField(beginField);
         addChildField(endField);
