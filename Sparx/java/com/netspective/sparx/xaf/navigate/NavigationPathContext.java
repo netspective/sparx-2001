@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.6 2003-01-01 19:29:24 shahid.shah Exp $
+ * $Id: NavigationPathContext.java,v 1.7 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -77,7 +77,7 @@ public class NavigationPathContext extends ServletValueContext
     static public final long PCFLAG_HASERROR = 0;
 
     private static int pageContextNum = 0;
-    private NavigationPath ownerTree;
+    private NavigationTree ownerTree;
     private NavigationPath activeTree;
     private NavigationPathSkin skin;
     private NavigationPath.FindResults activePathFindResults;
@@ -90,7 +90,7 @@ public class NavigationPathContext extends ServletValueContext
     private int maxLevel = 0;
     private String rootUrl;
 
-    public NavigationPathContext(NavigationPath ownerTree, ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse, NavigationPathSkin skin, String activePathId)
+    public NavigationPathContext(NavigationTree ownerTree, ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse, NavigationPathSkin skin, String activePathId)
     {
         super(aContext, aServlet, aRequest, aResponse);
 
@@ -133,7 +133,7 @@ public class NavigationPathContext extends ServletValueContext
         return activeTree;
     }
 
-    public final NavigationPath getOwnerTree()
+    public final NavigationTree getOwnerTree()
     {
         return ownerTree;
     }

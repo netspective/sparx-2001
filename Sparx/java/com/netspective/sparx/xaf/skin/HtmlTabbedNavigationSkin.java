@@ -51,15 +51,15 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.10 2003-01-06 17:19:40 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.11 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
 
 import com.netspective.sparx.BuildConfiguration;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
+import com.netspective.sparx.util.config.ConfigurationManager;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.xaf.navigate.*;
 import com.netspective.sparx.xaf.security.AuthenticatedUser;
 import org.w3c.dom.Element;
 
@@ -67,8 +67,18 @@ import javax.servlet.Servlet;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
+
+    static public final String HEADING_ACTION_IMAGE = "action-icon";
+    static public final String HEADING_ENTITY_IMAGE = "entity-icon";
+    static public final String HEADING_BACKGROUND_IMAGE = "heading-background";
+    static public final String HEADING_MIDDLE_IMAGE = "heading-middle";
+    static public final String TAB_SEPARATOR_IMAGE = "tab-separator";
+    static public final String TAB_ON_IMAGE = "tab-on";
+    static public final String TAB_OFF_IMAGE = "tab-off";
+
     protected NavigationStyle levelOneStyle;
     protected NavigationStyle levelTwoStyle;
     protected NavigationStyle levelThreeStyle;
@@ -84,8 +94,6 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
 
     protected String appRootPath;
 
-    protected NavigationSkinPageResources resources;
-
     public HtmlTabbedNavigationSkin() {
         levelOneStyle = new Level1Style();
         levelTwoStyle = new Level2Style();
@@ -100,14 +108,24 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
         level1DividerImageFileName = skinResourcesBasePath + "/header/level1-divider.gif";
 
         pageResourcesBasePath = skinResourcesBasePath + "/pages";
-
-        resources = NavigationSkinPageResources.getInstance();
     }
 
+    public String getImagePath(String pageId, String imageId, NavigationPathContext nc) {
 
+        NavigationTree tree = nc.getOwnerTree();
 
-    //  TODO: See if it's worth discovering where a particular common image is comming from and set it as the alt or
-    //        if they want they can just override.
+        if (tree.getResources() == null) {
+            ConfigurationManager manager = ConfigurationManagerFactory.getManager(nc.getServletContext());
+            String appRootPath = manager.getDefaultConfiguration().getTextValue(nc, "app.site-root-path");
+            tree.discoverResources(appRootPath, skinResourcesBasePath + "/pages", null);
+            tree.discoverResources(appRootPath, altSkinResourcesBasePath + "/pages", tree.getResources());
+            tree.resolveResources();
+        }
+
+        Map singlePageResources = (Map) tree.getResources().get(pageId);
+
+        return (String) singlePageResources.get(imageId);
+    }
 
     public String getHeaderMarkerImageFileName() {
         return headerMarkerImageFileName;
@@ -133,7 +151,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
         this.level1DividerImageFileName = level1DividerImageFileName;
     }
 
-    public NavigationPathContext createContext(javax.servlet.jsp.PageContext jspPageContext, NavigationPath tree, String navTreeId, boolean popup) {
+    public NavigationPathContext createContext(javax.servlet.jsp.PageContext jspPageContext, NavigationTree tree, String navTreeId, boolean popup) {
         NavigationPathContext result = new NavigationPathContext(tree,
                 jspPageContext.getServletContext(),
                 (Servlet) jspPageContext.getPage(),
@@ -269,27 +287,59 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
         writer.write("<TABLE class=\"page_header\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
         writer.write("<TR>");
 
-        String actionIcon = nc.getRootUrl() + resources.getImagePath(activePath.getId(), "action-icon", nc);
+        String actionIcon = getImagePath(activePath.getId(), HEADING_ACTION_IMAGE, nc);
         if (actionIcon != null && actionIcon.length() > 0)
-            writer.write("<td>&nbsp;<img src=\"" + actionIcon + "\"></td>");
+            writer.write("<td>&nbsp;<img src=\"" + nc.getRootUrl() + actionIcon + "\"></td>");
 
         //Page Heading
         writer.write("<TD nowrap class=page_header height=\"30\">" + activePath.getHeading(nc) + "</TD>");
-        writer.write("<td><img src=\"" + nc.getRootUrl() + resources.getImagePath(activePath.getId(), "page-heading-middle", nc) + "\"></td>");
-        writer.write("<TD width=\"100%\" background=\"" + nc.getRootUrl() + resources.getImagePath(activePath.getId(), "page-heading-background", nc) + "\"><IMG height=3 alt=\"\" src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\" width=10 border=0></TD>");
+
+        String middleImage = getImagePath(activePath.getId(), HEADING_MIDDLE_IMAGE, nc);
+        if (middleImage != null) {
+            writer.write("<td><img src=\"" + nc.getRootUrl() + middleImage + "\"></td>");
+        }
+
+        writer.write("<TD width=\"100%\"");
+        String backgroundImage = getImagePath(activePath.getId(), HEADING_BACKGROUND_IMAGE, nc);
+
+        if (backgroundImage != null) {
+            writer.write(" background=\"" + nc.getRootUrl() + backgroundImage + "\"");
+        }
+
+        writer.write("><IMG height=3 alt=\"\" src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\" width=10 border=0></TD>");
 
         // Select the entity icon that goes on the right of the Page Heading.
-        String entityIcon = nc.getRootUrl() + resources.getImagePath(activePath.getId(), "entity-icon", nc);
+        String entityIcon = getImagePath(activePath.getId(), HEADING_ENTITY_IMAGE, nc);
         if (entityIcon != null && entityIcon.length() > 0)
-            writer.write("<td><img src=\"" + entityIcon + "\"></td>");
+            writer.write("<td><img src=\"" + nc.getRootUrl() + entityIcon + "\"></td>");
 
         writer.write("</TR></TABLE>");
+
+        renderPageSubHeading(writer, nc);
+
         writer.write("<!-- Page Heading Ends -->");
 
         writer.write("<TABLE class=\"main\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0 height=\"100%\">");
         writer.write("  <TR>");
 
         renderPageMenusLevelThree(writer, nc);
+    }
+
+    private void renderPageSubHeading(Writer writer, NavigationPathContext nc) throws IOException{
+
+        NavigationPage page = (NavigationPage) nc.getActivePath();
+
+        String subHeading = page.getSubHeading(nc);
+
+        if (subHeading != null && subHeading.length() > 0) {
+            writer.write("<TABLE cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
+            writer.write("<TR class=\"sub_heading\">");
+            writer.write("<TD><IMG height=20 alt=\"\" src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\" width=10 border=0></TD>");
+            writer.write("<TD class=\"sub_heading\"><nobr>" + subHeading + "</nobr></TD>");
+            writer.write("<TD width=\"100%\"><IMG height=20 alt=\"\" src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\" width=10 border=0></TD>");
+            writer.write("</TR>");
+            writer.write("</TABLE>");
+        }
     }
 
     public void renderPageFooter(Writer writer, NavigationPathContext nc) throws IOException {
@@ -603,12 +653,22 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin {
 
                 NavigationPath tabElement = (NavigationPath) tabElements.get(i);
                 if (tabElement.isVisible(nc)) {
-                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " ");
-                    writer.write("src=\"" + nc.getRootUrl() + resources.getImagePath(tabElement.getId(), "tab_separator", nc) + "\"></TD>");
+                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + ">");
+                    String tabSeparatorImage = getImagePath(tabElement.getId(), TAB_SEPARATOR_IMAGE, nc);
+                    if (tabSeparatorImage != null) {
+                        writer.write("<IMG " + innerSeparatorImgAttrs + " ");
+                        writer.write("src=\"" + nc.getRootUrl() + tabSeparatorImage + "\">");
+                    }
+                    writer.write("</TD>");
                     writer.write("<TD " + navAttrs + ">");
                     writer.write("<A " + navLinkAttrs + " href=\"" + tabElement.getUrl(nc) + "\">");
-                    writer.write("<IMG " + navImgAttrs + " ");
-                    writer.write("src=\"" + nc.getRootUrl() + resources.getImagePath(tabElement.getId(), ("tab_" + (tabElement.isInActivePath(nc) ? "on" : "off")), nc) + "\"></A></TD>");
+                    String tabImage = getImagePath(tabElement.getId(), (tabElement.isInActivePath(nc) ? TAB_ON_IMAGE : TAB_OFF_IMAGE), nc);
+                    if (tabImage != null) {
+                        writer.write("<IMG " + navImgAttrs + " ");
+                        writer.write("src=\"" + nc.getRootUrl() + tabImage + "\"></A></TD>");
+                    } else {
+                        writer.write(tabElement.getName() + "</A></TD>");
+                    }
                 }
             }
 

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppComponentsExplorerServlet.java,v 1.6 2002-12-28 15:48:32 shahid.shah Exp $
+ * $Id: AppComponentsExplorerServlet.java,v 1.7 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -76,6 +76,7 @@ import com.netspective.sparx.xaf.page.PageControllerServlet;
 import com.netspective.sparx.xaf.page.RedirectPage;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.xaf.navigate.NavigationPage;
+import com.netspective.sparx.xaf.navigate.NavigationTree;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -91,7 +92,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 
         List menuBar = new ArrayList();
 
-        List mainMenu = getPagesPath().getChildrenList();
+        List mainMenu = getPagesTree().getChildrenList();
         int menuNum = 1;
         for(Iterator i = mainMenu.iterator(); i.hasNext();)
         {
@@ -126,45 +127,45 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 
     public void registerPages(ServletConfig config) throws ServletException
     {
-        NavigationPage pagesPath = new NavigationPage();
-        pagesPath.setRoot(true);
-        setPagesPath(pagesPath);
+        NavigationTree pagesTree = new NavigationTree();
+        pagesTree.setRoot(true);
+        setPagesTree(pagesTree);
 
         homePage = new HomePage();
-        pagesPath.registerPage("/", homePage);
-        pagesPath.registerPage("/home", homePage);
-        pagesPath.registerPage("/application", new RedirectPage("application", "Application", null));
-        pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
-        pagesPath.registerPage("/application/navigation", new AppNavigationPage());
-        pagesPath.registerPage("/application/config", new AppConfigurationPage());
-        pagesPath.registerPage("/application/servlet-context", new AppInitParamsPage());
-        pagesPath.registerPage("/application/acl", new AppAccessControlListPage());
-        pagesPath.registerPage("/application/system-properties", new SystemPropertiesPage());
-        pagesPath.registerPage("/application/metrics", new AppMetricsPage());
+        pagesTree.registerPage("/", homePage);
+        pagesTree.registerPage("/home", homePage);
+        pagesTree.registerPage("/application", new RedirectPage("application", "Application", null));
+        pagesTree.registerPage("/application/dialogs", new AppDialogsPage());
+        pagesTree.registerPage("/application/navigation", new AppNavigationPage());
+        pagesTree.registerPage("/application/config", new AppConfigurationPage());
+        pagesTree.registerPage("/application/servlet-context", new AppInitParamsPage());
+        pagesTree.registerPage("/application/acl", new AppAccessControlListPage());
+        pagesTree.registerPage("/application/system-properties", new SystemPropertiesPage());
+        pagesTree.registerPage("/application/metrics", new AppMetricsPage());
 
-        pagesPath.registerPage("/application/factory", new AppFactoryPage());
-        pagesPath.registerPage("/application/factory/value-sources", new AppFactoryPage("value-sources", "Value Sources", AppFactoryPage.FACTORY_VALUESOURCE));
-        pagesPath.registerPage("/application/factory/dialog-fields", new AppFactoryPage("dialog-fields", "Dialog Fields", AppFactoryPage.FACTORY_DIALOG_FIELD));
-        pagesPath.registerPage("/application/factory/report-comps", new AppFactoryPage("report-comps", "Report Components", AppFactoryPage.FACTORY_REPORT_COMPS));
-        pagesPath.registerPage("/application/factory/tasks", new AppFactoryPage("tasks", "Tasks", AppFactoryPage.FACTORY_TASK));
-        pagesPath.registerPage("/application/factory/skins", new AppFactoryPage("skins", "Skins", AppFactoryPage.FACTORY_SKIN));
-        pagesPath.registerPage("/application/factory/sql-comparisons", new AppFactoryPage("sql-comparisons", "SQL Comparisons", AppFactoryPage.FACTORY_SQL_COMPARE));
-        pagesPath.registerPage("/application/factory/component-commands", new AppFactoryPage("component-commands", "Component Commands", AppFactoryPage.FACTORY_COMPONENT_COMMANDS));
+        pagesTree.registerPage("/application/factory", new AppFactoryPage());
+        pagesTree.registerPage("/application/factory/value-sources", new AppFactoryPage("value-sources", "Value Sources", AppFactoryPage.FACTORY_VALUESOURCE));
+        pagesTree.registerPage("/application/factory/dialog-fields", new AppFactoryPage("dialog-fields", "Dialog Fields", AppFactoryPage.FACTORY_DIALOG_FIELD));
+        pagesTree.registerPage("/application/factory/report-comps", new AppFactoryPage("report-comps", "Report Components", AppFactoryPage.FACTORY_REPORT_COMPS));
+        pagesTree.registerPage("/application/factory/tasks", new AppFactoryPage("tasks", "Tasks", AppFactoryPage.FACTORY_TASK));
+        pagesTree.registerPage("/application/factory/skins", new AppFactoryPage("skins", "Skins", AppFactoryPage.FACTORY_SKIN));
+        pagesTree.registerPage("/application/factory/sql-comparisons", new AppFactoryPage("sql-comparisons", "SQL Comparisons", AppFactoryPage.FACTORY_SQL_COMPARE));
+        pagesTree.registerPage("/application/factory/component-commands", new AppFactoryPage("component-commands", "Component Commands", AppFactoryPage.FACTORY_COMPONENT_COMMANDS));
 
-        pagesPath.registerPage("/database", new DatabasePage());
-        pagesPath.registerPage("/database/sql", new DatabaseSqlPage());
-        pagesPath.registerPage("/database/query-defn", new DatabaseQueryDefnPage());
-        pagesPath.registerPage("/database/schema", new DatabaseSchemaDocPage());
-        pagesPath.registerPage("/database/generate-ddl", new DatabaseGenerateDDLPage());
-        pagesPath.registerPage("/database/generate-java", new DatabaseGenerateJavaPage());
-        pagesPath.registerPage("/database/data-sources", new DataSourcesPage());
-        pagesPath.registerPage("/database/import-data", new DatabaseImportData());
-        pagesPath.registerPage("/database/meta-data", new DatabaseMetaDataPage());
+        pagesTree.registerPage("/database", new DatabasePage());
+        pagesTree.registerPage("/database/sql", new DatabaseSqlPage());
+        pagesTree.registerPage("/database/query-defn", new DatabaseQueryDefnPage());
+        pagesTree.registerPage("/database/schema", new DatabaseSchemaDocPage());
+        pagesTree.registerPage("/database/generate-ddl", new DatabaseGenerateDDLPage());
+        pagesTree.registerPage("/database/generate-java", new DatabaseGenerateJavaPage());
+        pagesTree.registerPage("/database/data-sources", new DataSourcesPage());
+        pagesTree.registerPage("/database/import-data", new DatabaseImportData());
+        pagesTree.registerPage("/database/meta-data", new DatabaseMetaDataPage());
 
         Configuration appConfig = getAppConfig();
         ValueContext vc = new ServletValueContext(config.getServletContext(), this, null, null);
 
-        pagesPath.registerPage("/application/monitor", new MonitorLogPage());
+        pagesTree.registerPage("/application/monitor", new MonitorLogPage());
         Collection logs = appConfig.getValues(vc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "monitor.logs");
         if(logs != null)
         {
@@ -177,12 +178,12 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
                     String logName = logProperty.getName();
                     String logStyle = appConfig.getValue(vc, logProperty, null);
                     MonitorLogPage page = new MonitorLogPage(logName, logStyle);
-                    pagesPath.registerPage("/application/monitor/" + page.getName(), page);
+                    pagesTree.registerPage("/application/monitor/" + page.getName(), page);
                 }
             }
         }
 
-        pagesPath.registerPage("/documents", new DocumentsPage());
+        pagesTree.registerPage("/documents", new DocumentsPage());
         Collection bookmarks = appConfig.getValues(vc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "bookmarks");
         if(bookmarks != null)
         {
@@ -195,7 +196,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
                     String info = bookmark.getName();
                     String dest = appConfig.getValue(vc, bookmark, null);
                     DocumentsPage page = new DocumentsPage(info, dest);
-                    pagesPath.registerPage("/documents/" + page.getName(), page);
+                    pagesTree.registerPage("/documents/" + page.getName(), page);
                 }
             }
         }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.12 2002-12-30 21:23:59 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.13 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -80,11 +80,7 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationPageException;
-import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
-import com.netspective.sparx.xaf.navigate.NavigationPage;
+import com.netspective.sparx.xaf.navigate.*;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -125,7 +121,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private String loginDialogSkinName;
     private String logoutParamName;
 
-    private NavigationPath pagesPath;
+    private NavigationTree pagesTree;
 
     protected AppServerLogger debugLog;
     protected AppServerLogger monitorLog;
@@ -163,14 +159,14 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         return DEFAULT_CONTENT_TYPE;
     }
 
-    public void setPagesPath(NavigationPath pagesPath)
+    public void setPagesTree(NavigationTree pagesTree)
     {
-        this.pagesPath = pagesPath;
+        this.pagesTree = pagesTree;
     }
 
-    public final NavigationPath getPagesPath()
+    public final NavigationTree getPagesTree()
     {
-        return pagesPath;
+        return pagesTree;
     }
 
     public final Configuration getAppConfig()
@@ -386,7 +382,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         org.apache.log4j.NDC.push(req.getSession(true).getId());
         resp.setContentType(getDefaultContentType());
 
-        NavigationPathContext nc = new NavigationPathContext(pagesPath, getServletContext(), this, req, resp, getNavigationSkin(), getActivePathToFind(req));
+        NavigationPathContext nc = new NavigationPathContext(pagesTree, getServletContext(), this, req, resp, getNavigationSkin(), getActivePathToFind(req));
         NavigationPath.FindResults activePathResults = nc.getActivePathFindResults();
         NavigationPath activePath = activePathResults.getMatchedPath();
         Writer writer = resp.getWriter();
@@ -418,14 +414,14 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
             {
                 resp.getWriter().print("Path '"+ activePathResults.getSearchedForPath() +"' is a " + activePath.getClass().getName() +" -- should be a com.netspective.sparx.xaf.navigate.NavigationPage");
                 if(ConfigurationManagerFactory.isDevelopmentEnvironment(getServletContext()))
-                    resp.getWriter().print(pagesPath.getDebugHtml(nc));
+                    resp.getWriter().print(pagesTree.getDebugHtml(nc));
             }
         }
         else
         {
             resp.getWriter().print("Unable to find a ServletPage to match this URL path. ("+ activePathResults.getSearchedForPath() +")");
             if(ConfigurationManagerFactory.isDevelopmentEnvironment(getServletContext()))
-                resp.getWriter().print(pagesPath.getDebugHtml(nc));
+                resp.getWriter().print(pagesTree.getDebugHtml(nc));
         }
 
         LogManager.recordAccess(req, monitorLog, activePath != null ? activePath.getClass().getName() : this.getClass().getName(), req.getRequestURI(), startTime);

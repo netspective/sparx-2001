@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathSkin.java,v 1.2 2002-12-28 20:07:37 shahid.shah Exp $
+ * $Id: NavigationPathSkin.java,v 1.3 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -69,7 +69,7 @@ public interface NavigationPathSkin
      * @param popup True if this is a popup window
      * @return NavigationContext
      */
-    public NavigationPathContext createContext(PageContext jspPageContext, NavigationPath tree, String navTreeId, boolean popup);
+    public NavigationPathContext createContext(PageContext jspPageContext, NavigationTree tree, String navTreeId, boolean popup);
 
     /**
      * Render the meta data like <html>, <head>, <script> etc.

@@ -50,79 +50,57 @@
  * @author Shahid N. Shah
  */
 
-/**
- * $Id: NavigationTreeManager.java,v 1.4 2003-01-07 10:46:05 roque.hernandez Exp $
- */
-
 package com.netspective.sparx.xaf.navigate;
-
-import com.netspective.sparx.util.xml.XmlSource;
-import com.netspective.sparx.util.ClassPath;
-import com.netspective.sparx.xaf.skin.SkinFactory;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.io.File;
+import java.io.FilenameFilter;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
+public class NavigationTree extends NavigationPage {
 
-public class NavigationTreeManager extends XmlSource
-{
-    public static final String NAME_DEFAULT = "default";
-    private Map structures = new HashMap();
+    protected Map resources;
 
-    public NavigationTreeManager(File file)
-    {
-        loadDocument(file);
+    public void discoverResources(String appRoot, String rootUrl, Map inheritResources) {
+        if (resources == null)
+            resources = new HashMap();
+
+        File dir = new File(appRoot + rootUrl);
+        discoverResources(inheritResources, rootUrl, "/", dir);
     }
 
-    public NavigationTree getTree(String name)
-    {
-        reload();
-        return (NavigationTree) structures.get(name == null ? NAME_DEFAULT : name);
-    }
+    protected void discoverResources(Map inheritResources, String rootUrl, String currentPathId, File dir) {
 
-    public void catalogNodes()
-    {
-        structures.clear();
+        File[] files = dir.listFiles();
 
-        if(xmlDoc == null)
-            return;
+        Map singlePathResources = (inheritResources == null ? new HashMap() : (inheritResources.get(currentPathId) == null ? new HashMap() : (Map)inheritResources.get(currentPathId) ) );
 
-        NodeList children = xmlDoc.getDocumentElement().getChildNodes();
-        for(int c = 0; c < children.getLength(); c++)
-        {
-            Node child = children.item(c);
-            if(child.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-
-            Element childElem = (Element) child;
-            if(childElem.getNodeName().equals("structure"))
-            {
-                setAttrValueDefault(childElem, "name", NAME_DEFAULT);
-                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationTree.class, true);
-                NavigationTree tree = (NavigationTree) instanceGen.getInstance();
-                tree.setRoot(true);
-                tree.importFromXml(childElem, tree);
-                structures.put(childElem.getAttribute("name"), tree);
+        for (int i = 0; files!= null && i < files.length; i++) {
+            File file = files[i];
+            if (file.isDirectory()) {
+                discoverResources(inheritResources, rootUrl, currentPathId + (currentPathId.endsWith("/") ? "" : "/") + file.getName(), file);
             }
-            else if(childElem.getNodeName().equals("register-navigation-skin"))
-            {
-                String name = childElem.getAttribute("name");
-                String className = childElem.getAttribute("class");
-                try
-                {
-                    SkinFactory.addNavigationSkin(name, className);
-                }
-                catch (Exception e)
-                {
-                    addError("Error registering skin '"+ name +"': "+ e.toString());
-                }
+            else {
+                String fileName = file.getName();
+                int extnIndex = fileName.lastIndexOf(".");
+                String justNameNoExtn = extnIndex == -1 ? fileName : fileName.substring(0, extnIndex);
+                singlePathResources.put(justNameNoExtn, rootUrl + currentPathId + (currentPathId.endsWith("/") ? "" : "/") + fileName);
             }
         }
-
-        addMetaInformation();
+        resources.put(currentPathId, singlePathResources);
     }
+
+    public Map getResources() {
+        return resources;
+    }
+
+    public void resolveResources() {
+        List children = this.getChildrenList();
+        for (int i = 0; i < children.size(); i++) {
+            NavigationPath navPath = (NavigationPath) children.get(i);
+            navPath.resolveResources(getResources());
+        }
+    }
+
 }

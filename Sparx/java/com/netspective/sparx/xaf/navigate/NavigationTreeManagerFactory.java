@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManagerFactory.java,v 1.2 2002-12-28 20:07:37 shahid.shah Exp $
+ * $Id: NavigationTreeManagerFactory.java,v 1.3 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -120,7 +120,7 @@ public class NavigationTreeManagerFactory implements Factory
      * @param context ServletContext for web application requesting the navigation tree
      * @return NavigationTree
      */
-    public static NavigationPage getNavigationTree(ServletContext context)
+    public static NavigationTree getNavigationTree(ServletContext context)
     {
         NavigationTreeManager manager = getManager(context);
         return manager != null ? manager.getTree(null) : null;

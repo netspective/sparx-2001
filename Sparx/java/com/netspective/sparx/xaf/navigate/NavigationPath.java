@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.4 2002-12-30 14:11:17 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.5 2003-01-07 10:46:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -945,6 +945,36 @@ public class NavigationPath
     }
 
     public void makeStateChanges(NavigationPathContext navigationPathContext) {
+    }
+
+    public void resolveResources(Map resources){
+
+        boolean resourcesFound = true;
+        if (resources.get(this.getId()) == null ) {
+            resourcesFound = false;
+            for (int i = ancestorsList.size() - 1; i >= 0 ; i--) {
+                NavigationPath ancestor = (NavigationPath) ancestorsList.get(i);
+                Map parentResources = (Map) resources.get(ancestor.getId());
+                if (parentResources != null) {
+                    resources.put(this.getId(), parentResources);
+                    resourcesFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (!resourcesFound) {
+            Map ownerResources = (Map) resources.get("/");
+            resources.put(this.getId(), ownerResources);
+        }
+
+        if (this.childrenList != null) {
+            for (int i = 0; i < childrenList.size(); i++) {
+                NavigationPath child = (NavigationPath) childrenList.get(i);
+                child.resolveResources(resources);
+            }
+        }
+
     }
 }
 

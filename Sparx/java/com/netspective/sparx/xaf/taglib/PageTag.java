@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageTag.java,v 1.10 2002-12-31 19:55:09 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.11 2003-01-07 10:46:06 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -75,10 +75,8 @@ import com.netspective.sparx.xaf.security.AccessControlList;
 import com.netspective.sparx.xaf.security.AccessControlListFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
-import com.netspective.sparx.xaf.navigate.NavigationPage;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
+import com.netspective.sparx.xaf.skin.HtmlTabbedNavigationSkin;
+import com.netspective.sparx.xaf.navigate.*;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.config.Configuration;
@@ -327,7 +325,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 return SKIP_BODY;
             }
 
-            NavigationPage appNavigationTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
+            NavigationTree appNavigationTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
             if(appNavigationTree != null)
             {
                 if(navSkin == null)
@@ -345,6 +343,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
                 String navId = req.getPathInfo();
                 nc = navSkin.createContext(pageContext, appNavigationTree, navId == null ? this.navId : navId, popup);
+
                 activePage = (NavigationPage) nc.getActivePath();
                 if(activePage != null)
                 {
