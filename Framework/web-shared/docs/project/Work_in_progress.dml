@@ -23,13 +23,14 @@
 
 		<task>
 			<name>User Interface Management</name>
+			<task><name>Add ability to auto-generate "form bean" java classes from Dialog XML (at runtime).</name></task>
+			<task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
 			<task><name>Field persistence through cookies still needs to be implemented.</name></task>
 			<task><name>Implement e-mail feature in output types for Query Builder and Query Select Dialogs.</name></task>
 			<task><name>Implement file compression in output types for Query Builder and Query Select Dialogs.</name></task>
 			<task><name>When the Done button is pressed in Query Builder and Query Select Dialogs, close statements and result sets.</name></task>
 			<task><name>Implement new field type &lt;field.schema&gt; to create fields directly from SchemaDoc.</name></task>
 			<task><name>Create non-cacheable dialogs so that certain dialogs will always be created when called (allows for dynamic dialogs).</name></task>
-			<task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
 			<task><name>Allow skins to be modified through XML (dialog skins are mostly ok, report skins need implementation).</name></task>
 			<task><name>In reports, when a value is formatted (like, e.g. with commas or dollar signs) then the formatted value is also used in URLs. There should be an option to use an alternate value formatting and URLs.</name></task>
 			<task><name>Allow &lt;field.select&gt; and &lt;field.report&gt; to specify max number of selections a user can make.</name></task>
