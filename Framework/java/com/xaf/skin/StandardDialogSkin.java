@@ -336,7 +336,7 @@ public class StandardDialogSkin implements DialogSkin
 				StringBuffer messagesHtml = new StringBuffer();
 				boolean haveErrors = false;
 				boolean firstMsg = true;
-				ArrayList errorMessages = dc.getErrorMessages(rowField);
+				List errorMessages = dc.getErrorMessages(rowField);
 				if(errorMessages != null)
 				{
 					messagesHtml.append("<font "+errorMsgFontAttrs+">");
@@ -452,7 +452,7 @@ public class StandardDialogSkin implements DialogSkin
         boolean haveErrors = false;
 		if(name != null)
 		{
-			ArrayList errorMessages = dc.getErrorMessages(field);
+			List errorMessages = dc.getErrorMessages(field);
 			if(errorMessages != null)
 			{
 				messagesHtml.append("<font "+errorMsgFontAttrs+">");
@@ -497,6 +497,10 @@ public class StandardDialogSkin implements DialogSkin
 		long startTime = new Date().getTime();
 
         List fieldErrorMsgs = dc.getErrorsCount() > 0 ? new ArrayList() : null;
+        List dlgErrorMsgs = dc.getErrorMessages();
+        if(dlgErrorMsgs != null)
+            fieldErrorMsgs.addAll(dlgErrorMsgs);
+
 		Dialog dialog = dc.getDialog();
 		String dialogName = dialog.getName();
 

@@ -86,6 +86,7 @@ public class DialogContext extends ServletValueContext
 
     private Map fieldStates = new HashMap();
 	private List listeners = new ArrayList();
+    private ArrayList dlgErrorMessages;
 	private boolean resetContext;
 	private String transactionId;
 	private Dialog dialog;
@@ -631,7 +632,7 @@ public class DialogContext extends ServletValueContext
 		state.values = values;
 	}
 
-	public ArrayList getErrorMessages(DialogField field)
+	public List getErrorMessages(DialogField field)
 	{
 		DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
 		if(state == null)
@@ -667,6 +668,35 @@ public class DialogContext extends ServletValueContext
 	public void addErrorMessage(DialogField field, String message)
 	{
 		addErrorMessage(field.getQualifiedName(), message);
+	}
+
+
+    /**
+     *  Return error messages that are not specific to a particular field (at the Dialog level)
+     */
+
+    public List getErrorMessages()
+	{
+        return dlgErrorMessages;
+	}
+
+    /**
+     *  Add error message that is not specific to a particular field (at the Dialog level)
+     */
+
+    public void addErrorMessage(String message)
+	{
+		if(dlgErrorMessages == null)
+			dlgErrorMessages = new ArrayList();
+
+		for(Iterator i = dlgErrorMessages.iterator(); i.hasNext(); )
+		{
+			if(((String) i.next()).equals(message))
+				return;
+		}
+
+		dlgErrorMessages.add(message);
+        errorsCount++;
 	}
 
 	public void populateValuesFromStatement(String statementId)

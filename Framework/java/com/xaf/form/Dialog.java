@@ -540,6 +540,9 @@ public class Dialog
 				invalidFieldsCount++;
 		}
 
+        if(dc.getErrorMessages() != null)
+            invalidFieldsCount++;
+
 		boolean isValid = invalidFieldsCount == 0 ? true : false;
 		dc.setValidationStage(isValid ? DialogContext.VALSTAGE_PERFORMED_SUCCEEDED : DialogContext.VALSTAGE_PERFORMED_FAILED);
 		return isValid;
