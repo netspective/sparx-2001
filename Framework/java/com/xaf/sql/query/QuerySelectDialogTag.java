@@ -45,6 +45,15 @@ public class QuerySelectDialogTag extends TagSupport
                 return SKIP_BODY;
             }
 
+            // this is here so that the default skin for the dialogs will be loaded
+            // if it is over written through XML
+			DialogManager dialogmanager = DialogManagerFactory.getManager(context);
+            if(dialogmanager == null)
+            {
+                out.write("DialogManager not found in ServletContext");
+                return SKIP_BODY;
+            }
+
     		QueryDefinition queryDefn = manager.getQueryDefn(source);
             if(queryDefn == null)
             {

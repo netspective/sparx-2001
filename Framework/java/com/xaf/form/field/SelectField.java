@@ -220,7 +220,7 @@ public class SelectField extends DialogField
 			case SELECTSTYLE_LIST:
 			case SELECTSTYLE_RADIO:
 				String value = dc.getValue(this);
-				if(isRequired(dc) && (value == null || value.length() == 0))
+				if(this.isVisible(dc) && this.isRequired(dc) && (value == null || value.length() == 0))
 				{
 					invalidate(dc, getCaption(dc) + " is required.");
 					return false;
@@ -231,7 +231,7 @@ public class SelectField extends DialogField
 			case SELECTSTYLE_MULTICHECK:
 			case SELECTSTYLE_MULTIDUAL:
 				String[] values = dc.getValues(this);
-				if(isRequired(dc) && (values == null || values.length == 0))
+				if(this.isVisible(dc) && this.isRequired(dc) && (values == null || values.length == 0))
 				{
 					invalidate(dc, getCaption(dc) + " is required.");
 					return false;
@@ -239,6 +239,7 @@ public class SelectField extends DialogField
 				break;
 
 		}
+
 		return super.isValid(dc);
 	}
 

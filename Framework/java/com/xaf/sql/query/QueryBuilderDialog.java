@@ -209,6 +209,13 @@ public class QueryBuilderDialog extends Dialog
 
 	public void makeStateChanges(DialogContext dc, int stage)
 	{
+        Iterator k = this.getFields().iterator();
+		while(k.hasNext())
+		{
+			DialogField field = (DialogField) k.next();
+            field.makeStateChanges(dc, stage);
+		}
+
 		dc.setValue(QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME, queryDefn.getName());
 		if(dc.inExecuteMode() && stage == DialogContext.STATECALCSTAGE_FINAL)
 		{

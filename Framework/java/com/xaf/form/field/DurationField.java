@@ -63,6 +63,18 @@ public class DurationField extends DialogField
         else
             endField.setDefaultValue(this.getDefaultValue());
 
+        value = elem.getAttribute("begin-min-value");
+        if (value != null && value.length() != 0)
+        {
+            this.beginField.setMinDateStr(this.beginField.translateDateString(value));
+        }
+
+        value = elem.getAttribute("end-max-value");
+        if (value != null && value.length() != 0)
+        {
+            this.endField.setMaxDateStr(this.endField.translateDateString(value));
+        }
+
 		addChildField(beginField);
 		addChildField(endField);
 	}
@@ -84,16 +96,18 @@ public class DurationField extends DialogField
 		if(! required && (strEndValue == null || strEndValue.length() == 0))
 			return true;
 
+        Date beginDate, endDate;
 		try
 		{
-			Date beginDate = beginField.getFormat().parse(dc.getValue(beginField));
-			Date endDate = endField.getFormat().parse(dc.getValue(endField));
+			beginDate = beginField.getFormat().parse(dc.getValue(beginField));
+			endDate = endField.getFormat().parse(dc.getValue(endField));
 
 			if(beginDate.after(endDate))
 			{
-				invalidate(dc, "Begining value should be before ending value.");
+				invalidate(dc, "Beginning value should be before ending value.");
 				return false;
 			}
+
 		}
 		catch(Exception e)
 		{
@@ -101,6 +115,67 @@ public class DurationField extends DialogField
 			return false;
 		}
 
+        try
+        {
+            String maxDateStr = this.endField.getMaxDateStr();
+            if (maxDateStr != null)
+            {
+                Date maxDate = endField.getFormat().parse(maxDateStr);
+                if (endDate.after(maxDate))
+                {
+                    invalidate(dc, endField.getCaption(dc) + " must not be greater than " + maxDateStr + ".");
+                    return false;
+                }
+            }
+            String minDateStr = this.beginField.getMinDateStr();
+            if (minDateStr != null)
+            {
+                Date minDate = beginField.getFormat().parse(minDateStr);
+                if (beginDate.before(minDate))
+                {
+                    invalidate(dc, beginField.getCaption(dc) + " must not be less than " + minDateStr + ".");
+                    return false;
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+			invalidate(dc, "One of the min and max values is invalid. This error should never happen.");
+            e.printStackTrace();
+			return false;
+        }
+
+
 		return super.isValid(dc);
 	}
+
+    /**
+     * Populates a default value into the dialog field. Overwites TextField.populateValue().
+     *
+     * @param dc Dialog context
+     */
+	public void populateValue(DialogContext dc, int formatType)
+	{
+        super.populateValue(dc, formatType);
+        String xlatedDate = null;
+
+        String beginValue = dc.getValue(this.beginField);
+        if (beginValue != null)
+        {
+            xlatedDate = this.beginField.translateDateString(beginValue);
+            dc.setValue(this.beginField, xlatedDate);
+        }
+
+        String endValue = dc.getValue(this.endField);
+        if (endValue != null)
+        {
+            xlatedDate = this.endField.translateDateString(endValue);
+            dc.setValue(this.endField, xlatedDate);
+        }
+
+
+
+	}
+
 }

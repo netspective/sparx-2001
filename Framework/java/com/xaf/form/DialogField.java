@@ -641,7 +641,6 @@ public class DialogField
 				}
 			}
 		}
-
 		if(children == null)
 			return true;
 
@@ -653,7 +652,6 @@ public class DialogField
 			if(field.isVisible(dc) && (! field.isValid(dc)))
 				invalidFieldsCount++;
 		}
-
 		return invalidFieldsCount == 0 ? true : false;
 	}
 
@@ -692,7 +690,7 @@ public class DialogField
 
     public void makeStateChanges(DialogContext dc, int stage)
     {
-        if(stage == DialogContext.STATECALCSTAGE_FINAL && conditionalActions != null)
+        if(stage == DialogContext.STATECALCSTAGE_INITIAL && conditionalActions != null)
         {
             for(int i = 0; i < conditionalActions.size(); i++)
             {

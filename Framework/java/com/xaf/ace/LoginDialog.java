@@ -11,6 +11,8 @@ import com.xaf.config.ConfigurationManager;
 import com.xaf.config.ConfigurationManagerFactory;
 import com.xaf.config.Configuration;
 
+import javax.servlet.http.*;
+
 public class LoginDialog extends com.xaf.security.LoginDialog
 {
     private String LOGIN_ID_PROPERTY = "framework.ace.login.user-name";
@@ -102,8 +104,14 @@ public class LoginDialog extends com.xaf.security.LoginDialog
         }
         // all checks were successful
         return true;
-
-
-
     }
+
+	public String execute(DialogContext dc)
+	{
+        dc.getSession().setAttribute(Dialog.ENV_PARAMNAME, "ace");
+		AuthenticatedUser user = createUserData(dc);
+		applyAccessControls(dc, user);
+		storeUserData(dc, user);
+		return null;
+	}
 }

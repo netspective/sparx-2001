@@ -13,6 +13,7 @@ public class ValueSourceFactory
     {
         srcClasses.put("form", DialogFieldValue.class);
 		srcClasses.put("formOrRequest", DialogFieldOrRequestParameterValue.class);
+        srcClasses.put("formOrRequestAttr", DialogFieldOrRequestAttributeValue.class);
         srcClasses.put("query", QueryResultsListValue.class);
         srcClasses.put("query-cols", QueryColumnsListValue.class);
 		srcClasses.put("dialog-field-types", DialogFieldFactoryListValue.class);

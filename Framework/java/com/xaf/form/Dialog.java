@@ -52,6 +52,10 @@ public class Dialog
 	static public final String PARAMVALUE_DATA_CMD_DELETE  = "delete";
 	static public final String PARAMVALUE_DATA_CMD_CONFIRM = "confirm";
 
+    // This flag is used to search for a session parameter indicating whether or not
+    // the dialog is being used in an application or ACE.
+    public static final String ENV_PARAMNAME = "dialog_environment";
+
 	private ArrayList fields = new ArrayList();
 	private int flags;
     private Task populateTasks;
@@ -444,6 +448,15 @@ public class Dialog
 			((DialogContextListener) listeners.get(l)).populateDialogData(dc);
 	}
 
+    /**
+     * Checks each field to make sure the state of it needs to be changed or not
+     * usually based on Conditionals.
+     *
+     * <b>IMPORTANT</b>: If any changes are made in this class, make sure
+     * that they are also reflected in QuerySelectDialog and QueryBuilderDialog classes
+     * which extend this class but they overwrite this method and doesn't make a call
+     * to this method.
+     */
 	public void makeStateChanges(DialogContext dc, int stage)
 	{
         Iterator i = fields.iterator();

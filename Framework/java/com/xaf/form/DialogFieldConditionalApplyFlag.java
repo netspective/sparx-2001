@@ -182,6 +182,17 @@ public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalActio
         boolean lackPermissionFlg = false;
         if(status && (this.hasPermissions != null || this.lackPermissions != null))
         {
+            String dialogEnv = (String)dc.getSession().getAttribute(Dialog.ENV_PARAMNAME);
+            if (dialogEnv != null && dialogEnv.equals("ace"))
+            {
+                // if the dialog is being run in ACE, don't allow conditionals to be executed since
+                // conditionals can contain permission checking which is dependent upon the application
+                dc.addErrorMessage(getSourceField().getQualifiedName(),
+                    "Conditionals using permission checking are not allowed to run in ACE since " +
+                    "they are dependent on the application's security settings.");
+                return;
+            }
+
             HttpServletRequest request = (HttpServletRequest) dc.getRequest();
             AuthenticatedUser user = (AuthenticatedUser) request.getSession().getAttribute(LoginDialog.DEFAULT_ATTRNAME_USERINFO);
             AccessControlList acl = AccessControlListFactory.getACL(dc.getServletContext());

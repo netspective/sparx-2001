@@ -216,6 +216,7 @@ public class LoginDialog extends Dialog
 
 	public String execute(DialogContext dc)
 	{
+        dc.getSession().setAttribute(Dialog.ENV_PARAMNAME, "app");
 		AuthenticatedUser user = createUserData(dc);
 		applyAccessControls(dc, user);
 		storeUserData(dc, user);

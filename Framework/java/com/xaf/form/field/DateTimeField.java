@@ -68,6 +68,26 @@ public class DateTimeField extends TextField
 		postDate = high;
 	}
 
+    public String getMaxDateStr()
+    {
+        return maxDateStr;
+    }
+
+    public void setMaxDateStr(String maxDateStr)
+    {
+        this.maxDateStr = maxDateStr;
+    }
+
+    public String getMinDateStr()
+    {
+        return minDateStr;
+    }
+
+    public void setMinDateStr(String minDateStr)
+    {
+        this.minDateStr = minDateStr;
+    }
+
     public Object getValueAsObject(String value)
     {
         try
@@ -283,58 +303,88 @@ public class DateTimeField extends TextField
         String value = dc.getValue(this);
 
         String xlatedDate = null;
-        if (value != null && (value.startsWith("today") ||  value.startsWith("now")))
+        switch (this.dataType)
+        {
+            case DateTimeField.DTTYPE_DATEONLY:
+            case DateTimeField.DTTYPE_BOTH:
+                xlatedDate = this.translateDateString(value);
+                break;
+            case DateTimeField.DTTYPE_TIMEONLY:
+                xlatedDate = this.translateTimeString(value);
+                break;
+            default:
+                break;
+        }
+
+        if (xlatedDate != null)
+            dc.setValue(this, xlatedDate);
+
+	}
+
+    /**
+     * Translates a reserved date word such as "today" or "now" into the actual time
+     *
+     * @param str reserved string
+     * @returns String actual time string
+     */
+    public String translateTimeString(String str)
+    {
+        String xlatedDate = str;
+
+        if (str != null && (str.startsWith("today") ||  str.startsWith("now")))
+        {
+            Date dt = new Date();
+            xlatedDate = this.format.format(dt);
+        }
+        return xlatedDate;
+    }
+
+    /**
+     * Translates a reserved date word such as "today" or "now" into the actual date
+     *
+     * @param str reserved string
+     * @returns String actual date string
+     */
+    public String translateDateString(String str)
+    {
+        String xlatedDate = str;
+
+        if (str != null && (str.startsWith("today") ||  str.startsWith("now")))
         {
             int strLength = 0;
-            if (value.startsWith("today"))
+            if (str.startsWith("today"))
                 strLength =  "today".length();
             else
                 strLength = "now".length();
-
             Date dt = null;
-            switch (this.dataType)
+            if (str.length() > strLength)
             {
-                case DateTimeField.DTTYPE_DATEONLY:
-                case DateTimeField.DTTYPE_BOTH:
-                    if (value.length() > strLength)
-                    {
-                        try
-                        {
-                            String opValueStr = null;
-                            if (value.charAt(strLength) == '+')
-                                opValueStr = value.substring(strLength+1);
-                            else
-                                opValueStr = value.substring(strLength);
-                            int opValue = Integer.parseInt(opValueStr);
-                            Calendar  calendar = new GregorianCalendar();
-                            calendar.add(Calendar.DAY_OF_MONTH, opValue);
-                            dt = calendar.getTime();
-                            xlatedDate = this.format.format(dt);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
+                try
+                {
+                    String opValueStr = null;
+                    if (str.charAt(strLength) == '+')
+                        opValueStr = str.substring(strLength+1);
                     else
-                    {
-                        dt = new Date();
-                        xlatedDate = this.format.format(dt);
-                    }
-                    break;
-                case DateTimeField.DTTYPE_TIMEONLY:
-                    dt = new Date();
+                        opValueStr = str.substring(strLength);
+                    int opValue = Integer.parseInt(opValueStr);
+                    Calendar  calendar = new GregorianCalendar();
+                    calendar.add(Calendar.DAY_OF_MONTH, opValue);
+                    dt = calendar.getTime();
                     xlatedDate = this.format.format(dt);
-                    break;
-                default:
-                    break;
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
-
-            if (xlatedDate != null)
-                dc.setValue(this, xlatedDate);
+            else
+            {
+                dt = new Date();
+                xlatedDate = this.format.format(dt);
+            }
         }
-
-	}
+        return xlatedDate;
+    }
 
     /**
 	 * Produces Java code when a custom DialogContext is created
