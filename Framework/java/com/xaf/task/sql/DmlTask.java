@@ -27,7 +27,7 @@ public class DmlTask extends AbstractTask
 
     private int command;
 	private String tableName;
-	private String dataSourceId;
+	private SingleValueSource dataSourceValueSource;
     private String fields;
     private String transaction;
 	private SingleValueSource insertCheckValueSource;
@@ -46,7 +46,7 @@ public class DmlTask extends AbstractTask
 		super.reset();
         command = DMLCMD_UNKNOWN;
 		tableName = null;
-		dataSourceId = null;
+		dataSourceValueSource = null;
 		fields = null;
         transaction = null;
         whereCond = null;
@@ -75,8 +75,11 @@ public class DmlTask extends AbstractTask
 	public String getTable() { return tableName; }
 	public void setTable(String value) { tableName = (value != null && value.length() > 0) ? value : null; }
 
-	public String getDataSource() { return dataSourceId; }
-	public void setDataSource(String value) { dataSourceId = (value != null && value.length() > 0) ? value : null; }
+	public SingleValueSource getDataSource() { return dataSourceValueSource; }
+	public void setDataSource(String value)
+    {
+        dataSourceValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
 	public String getFields() { return fields; }
 	public void setFields(String value) { fields = (value != null && value.length() > 0) ? value : null; }
@@ -320,6 +323,7 @@ public class DmlTask extends AbstractTask
         {
             ServletContext context = tc.getServletContext();
             DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
+            String dataSourceId = this.getDataSource() != null ?this.getDataSource().getValue(tc) : null;
             Connection conn = dbContext.getConnection(tc, dataSourceId);
             PreparedStatement stmt = conn.prepareStatement(dml.sql);
 

@@ -24,7 +24,7 @@ public class StatementTask extends AbstractTask
     private StatementInfo statementInfo;
 	private String stmtName;
 	private String stmtSourceId;
-	private String dataSourceId;
+    private SingleValueSource dataSourceValueSource;
 	private String reportId;
 	private String storeValueName;
 	private SingleValueSource skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
@@ -44,7 +44,7 @@ public class StatementTask extends AbstractTask
 		statementInfo = null;
 		stmtName = null;
 		stmtSourceId = null;
-		dataSourceId = null;
+		dataSourceIdValueSource = null;
 		reportId = null;
 		skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
 		storeValueName = null;
@@ -69,8 +69,11 @@ public class StatementTask extends AbstractTask
 	public String getStmtSource() { return stmtSourceId; }
 	public void setStmtSource(String value) { stmtSourceId = value; }
 
-	public String getDataSource() { return dataSourceId; }
-	public void setDataSource(String value) { dataSourceId = value; }
+	public SingleValueSource getDataSource() { return dataSourceValueSource; }
+	public void setDataSource(String value)
+    {
+        dataSourceValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
 	public String getReport() { return reportId; }
 	public void setReport(String value) { reportId = value; if("none".equals(value)) produceReport = false; }
@@ -110,8 +113,7 @@ public class StatementTask extends AbstractTask
         stmtSourceId = elem.getAttribute("stmt-src");
         if(stmtSourceId.length() == 0) stmtSourceId = null;
 
-        dataSourceId = elem.getAttribute("data-src");
-        if(dataSourceId.length() == 0) dataSourceId = null;
+        setDataSource(elem.getAttribute("data-src"));
 
         if(elem.getChildNodes().getLength() > 0)
         {
@@ -223,7 +225,7 @@ public class StatementTask extends AbstractTask
 			}
 			else
 				out = new StringWriter();
-
+            String dataSourceId = this.getDataSource() != null ?this.getDataSource().getValue(tc) : null;
             if(produceReport && storeValueSource == null)
             {
                 if(statementInfo != null)

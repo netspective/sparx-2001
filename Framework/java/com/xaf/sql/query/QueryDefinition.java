@@ -12,11 +12,12 @@ package com.xaf.sql.query;
 import java.util.*;
 import org.w3c.dom.*;
 import com.xaf.db.*;
+import com.xaf.value.*;
 
 public class QueryDefinition
 {
 	private String name;
-    private String dataSourceId;
+    private SingleValueSource dataSourceValueSource;
 	private int dbms;
 	private List fieldsList = new ArrayList();
 	private Map fieldsMap = new Hashtable();
@@ -33,11 +34,16 @@ public class QueryDefinition
 
     public QueryDefinition()
     {
+        dataSourceValueSource = null;
     }
 
 	public String getName() { return name; }
 	public int getDbms() { return dbms; }
-    public String getDataSource() { return dataSourceId; }
+	public SingleValueSource getDataSource() { return dataSourceValueSource; }
+	public void setDataSource(String value)
+    {
+        dataSourceValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
 	public List getFieldsList() { return fieldsList; }
 	public Map getFieldsMap() { return fieldsMap; }
@@ -87,9 +93,8 @@ public class QueryDefinition
 	public void importFromXml(Element elem)
 	{
 		name = elem.getAttribute("id");
-        dataSourceId = elem.getAttribute("data-src");
-        if(dataSourceId.length() == 0)
-            dataSourceId = null;
+
+        setDataSource(elem.getAttribute("data-src"));
 
 		String dbmsId = elem.getAttribute("dbms");
 		if(dbmsId != null && dbmsId.length() > 0)

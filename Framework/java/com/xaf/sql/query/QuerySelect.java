@@ -221,7 +221,7 @@ public class QuerySelect
 		if(getSql(vc) == null)
 			return null;
 
-        String dataSourceId = queryDefn.getDataSource();
+        String dataSourceId = queryDefn.getDataSource() != null ?queryDefn.getDataSource().getValue(vc) : null;
 		Connection conn = dc.getConnection(vc, dataSourceId);
 		int rsType = dc.getScrollableResultSetType(conn);
 
