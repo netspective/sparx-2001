@@ -12,8 +12,14 @@ package com.xaf.xml;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-import org.w3c.dom.*;
 import javax.xml.parsers.*;
+import javax.xml.transform.*;
+
+import org.w3c.dom.*;
+import org.apache.xpath.objects.*;
+import org.apache.xpath.*;
+
+import com.xaf.Metric;
 
 public class XmlSource
 {
@@ -398,4 +404,19 @@ public class XmlSource
 		}
 	}
 
+	public NodeList selectNodeList(String expr) throws TransformerException
+	{
+		return XPathAPI.selectNodeList(xmlDoc, expr);
+	}
+
+	public long getSelectNodeListCount(String expr) throws TransformerException
+	{
+		NodeList nodes = selectNodeList(expr);
+		return nodes.getLength();
+	}
+
+	public Metric getMetrics(Metric root)
+	{
+		return null;
+	}
 }

@@ -18,6 +18,7 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
+import com.xaf.Metric;
 import com.xaf.db.*;
 import com.xaf.xml.*;
 import com.xaf.skin.*;
@@ -611,5 +612,45 @@ public class StatementManager extends XmlSource
         rc.produceReport(writer, data);
 
 		ri.close();
+	}
+
+	public Metric getMetrics(Metric root)
+	{
+		reload();
+
+		Metric uiMetrics = root.createChildMetricGroup("User Interface");
+		Metric reportsMetric = uiMetrics.createChildMetricSimple("SQL Reports");
+		reportsMetric.setFlag(Metric.METRICFLAG_SUM_CHILDREN);
+
+		Metric stdReportsMetric = reportsMetric.createChildMetricSimple("Standard");
+		Metric customReportsMetric = reportsMetric.createChildMetricSimple("Custom");
+		Metric qddMetric = uiMetrics.createChildMetricSimple("Query Definition Select Dialogs");
+		Metric skinsMetric = uiMetrics.createChildMetricSimple("Custom Report Skins");
+
+		Metric metrics = root.createChildMetricGroup("Database");
+		Metric packagesMetric = metrics.createChildMetricSimple("Total Packages");
+		Metric stmtsMetric = metrics.createChildMetricSimple("Total SQL Statements");
+		Metric qdMetric = metrics.createChildMetricSimple("Total Query Definitions");
+		Metric qdfMetric = qdMetric.createChildMetricSimple("Query Definition Fields");
+		Metric qdjMetric = qdMetric.createChildMetricSimple("Query Definition Joins");
+
+		try
+		{
+			packagesMetric.setSum(getSelectNodeListCount("//sql-statements"));
+			stmtsMetric.setSum(getSelectNodeListCount("//statement"));
+			stdReportsMetric.setSum(getSelectNodeListCount("//statement/report[not(@name)]"));
+			customReportsMetric.setSum(getSelectNodeListCount("//statement/report[@name]"));
+			qdMetric.setSum(getSelectNodeListCount("//query-defn"));
+			qdfMetric.setSum(getSelectNodeListCount("//query-defn/field"));
+			qdjMetric.setSum(getSelectNodeListCount("//query-defn/join"));
+			qddMetric.setSum(getSelectNodeListCount("//query-defn/select-dialog"));
+			skinsMetric.setSum(getSelectNodeListCount("//register-report-skin"));
+		}
+		catch(Exception e)
+		{
+			metrics.createChildMetricSimple(e.toString());
+		}
+
+		return metrics;
 	}
 }

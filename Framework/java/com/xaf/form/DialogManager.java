@@ -20,6 +20,7 @@ import org.w3c.dom.*;
 import com.xaf.form.field.*;
 import com.xaf.xml.*;
 import com.xaf.skin.*;
+import com.xaf.Metric;
 
 public class DialogManager extends XmlSource
 {
@@ -192,5 +193,68 @@ public class DialogManager extends XmlSource
 		}
 
 		addMetaInformation();
+	}
+
+	public Metric getMetrics(Metric root)
+	{
+		reload();
+
+		Metric metrics = root.createChildMetricGroup("User Interface");
+		Metric packagesMetric = metrics.createChildMetricSimple("Total Packages");
+		Metric dialogsMetric = metrics.createChildMetricSimple("Total Dialogs");
+		Metric fieldsPerDlgMetric = metrics.createChildMetricAverage("Avg Fields per Dialog");
+		Metric fieldsMetric = metrics.createChildMetricSimple("Total Fields");
+		fieldsMetric.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
+		Metric dialogSkinsMetric = metrics.createChildMetricSimple("Custom Dialog Skins");
+		Metric customFieldTypesMetric = metrics.createChildMetricSimple("Custom Field Types");
+
+		try
+		{
+			packagesMetric.setSum(getSelectNodeListCount("//dialogs"));
+			dialogSkinsMetric.setSum(getSelectNodeListCount("//dialog-skin"));
+			customFieldTypesMetric.setSum(getSelectNodeListCount("//register-field"));
+
+			NodeList dialogsList = selectNodeList("//dialog");
+			dialogsMetric.setSum(dialogsList.getLength());
+			for(int n = 0; n < dialogsList.getLength(); n++)
+			{
+				Element dialogElem = (Element) dialogsList.item(n);
+				NodeList dialogChildren = dialogElem.getChildNodes();
+
+				int fieldCount = 0;
+				for(int c = 0; c < dialogChildren.getLength(); c++)
+				{
+					Node dialogChild = dialogChildren.item(c);
+					if(dialogChild.getNodeName().startsWith(DialogField.FIELDTAGPREFIX))
+						fieldCount++;
+				}
+				fieldsPerDlgMetric.incrementAverage(fieldCount);
+			}
+
+			NodeList fieldsList = selectNodeList("//dialog/*");
+			for(int n = 0; n < fieldsList.getLength(); n++)
+			{
+				Node fieldNode = fieldsList.item(n);
+				String nodeName = fieldNode.getNodeName();
+				if(! nodeName.startsWith(DialogField.FIELDTAGPREFIX))
+					continue;
+
+				Metric fieldTypeMetric = fieldsMetric.getChild(nodeName);
+				if(fieldTypeMetric == null)
+				{
+					fieldTypeMetric = fieldsMetric.createChildMetricSimple(nodeName);
+					fieldTypeMetric.setFlag(Metric.METRICFLAG_SHOW_PCT_OF_PARENT);
+				}
+
+				fieldsMetric.incrementCount();
+				fieldTypeMetric.incrementCount();
+			}
+		}
+		catch(Exception e)
+		{
+			metrics.createChildMetricSimple(e.toString());
+		}
+
+		return metrics;
 	}
 }
