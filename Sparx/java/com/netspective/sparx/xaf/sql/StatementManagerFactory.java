@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementManagerFactory.java,v 1.4 2002-09-08 02:08:11 shahid.shah Exp $
+ * $Id: StatementManagerFactory.java,v 1.5 2002-10-16 03:14:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -62,8 +62,10 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
+import javax.naming.NamingException;
 
 import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.util.config.Configuration;
@@ -71,6 +73,12 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.form.DialogManagerFactory;
+import com.netspective.sparx.xaf.form.DialogSkin;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.report.ReportSkin;
+import com.netspective.sparx.xif.db.DatabaseContext;
+import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 public class StatementManagerFactory implements Factory
 {
@@ -120,25 +128,168 @@ public class StatementManagerFactory implements Factory
     }
 
     /**
-     * cmdParams should look like:
+     * cmdParams for StatementCommands should look like:
+     *   0 statement name (required)
+     *   1 reportId name (optional, may be empty or set to "-" to mean default)
+     *   2 rows per page (optional, may be empty or set to "-" to mean unlimited)
+     *   3 skin name (optional, may be empty or set to "-" to mean "none")
+     *   4.. + are same as DialogCommands to show dialog next to a statement
+     */
+
+
+    public static StatementCommands getStatementCommands(String cmdParams)
+    {
+        return new StatementCommands(cmdParams);
+    }
+
+    public static class StatementCommands
+    {
+        static public final int UNLIMITED_ROWS = Integer.MAX_VALUE;
+
+        private String statementName;
+        private int rowsPerPage;
+        private String skinName;
+        private String reportId;
+        private DialogManagerFactory.DialogCommands dialogCommands;
+
+        public StatementCommands(String cmdParams)
+        {
+            StringTokenizer st = new StringTokenizer(cmdParams, ",");
+            statementName = st.nextToken();
+
+            if(st.hasMoreTokens())
+            {
+                reportId = st.nextToken();
+                if(reportId.length() == 0 || reportId.equals("-"))
+                    reportId = null;
+            }
+            else
+                reportId = null;
+
+            if(st.hasMoreTokens())
+            {
+                String rowsPerPageStr = st.nextToken();
+                if(rowsPerPageStr.length() == 0 || rowsPerPageStr.equals("-"))
+                    rowsPerPage = UNLIMITED_ROWS;
+                else
+                    rowsPerPage = Integer.parseInt(rowsPerPageStr);
+            }
+            else
+                rowsPerPage = UNLIMITED_ROWS;
+
+            if(st.hasMoreTokens())
+            {
+                skinName = st.nextToken();
+                if(skinName.length() == 0 || skinName.equals("-"))
+                    skinName = null;
+            }
+            else
+                skinName = null;
+
+            if(st.hasMoreTokens())
+                dialogCommands = new DialogManagerFactory.DialogCommands(st);
+        }
+
+        public String getStatementName()
+        {
+            return statementName;
+        }
+
+        public String getSkinName()
+        {
+            return skinName;
+        }
+
+        public void setStatementName(String statementName)
+        {
+            this.statementName = statementName;
+        }
+
+        public void setSkinName(String skinName)
+        {
+            this.skinName = skinName;
+        }
+
+        public String generateCommand()
+        {
+            StringBuffer sb = new StringBuffer(statementName);
+            sb.append(",");
+            sb.append(reportId != null ? reportId : "-");
+            sb.append(",");
+            sb.append(rowsPerPage != UNLIMITED_ROWS ? Integer.toString(rowsPerPage) : "-");
+            sb.append(",");
+            sb.append(skinName != null ? skinName : "-");
+            if(dialogCommands != null)
+            {
+                sb.append(",");
+                sb.append(dialogCommands.generateCommand());
+            }
+            return sb.toString();
+        }
+
+        public void handleStatement(ValueContext vc) throws IOException, StatementNotFoundException, NamingException, SQLException
+        {
+            PrintWriter out = vc.getResponse().getWriter();
+            javax.servlet.ServletContext context = vc.getServletContext();
+
+            com.netspective.sparx.xaf.sql.StatementManager manager = com.netspective.sparx.xaf.sql.StatementManagerFactory.getManager(context);
+            if(manager == null)
+            {
+                out.write("StatementManager not found in ServletContext");
+                return;
+            }
+
+            if(dialogCommands != null)
+                out.write("<table><tr valign='top'><td>");
+
+            if(rowsPerPage > 0 && rowsPerPage < UNLIMITED_ROWS)
+            {
+                // Special Case: This static query must produce a report that is pageable
+                StatementDialog stmtDialog = new StatementDialog(manager.getStatement(statementName), reportId, skinName);
+                stmtDialog.setRowsPerPage(rowsPerPage);
+                DialogSkin dialogSkin = com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin();
+                DialogContext dc = stmtDialog.createContext(context, vc.getServlet(),
+                        (javax.servlet.http.HttpServletRequest) vc.getRequest(),
+                        (javax.servlet.http.HttpServletResponse) vc.getResponse(), dialogSkin);
+                stmtDialog.prepareContext(dc);
+                stmtDialog.renderHtml(out, dc, false);
+            }
+            else
+            {
+                ReportSkin skin = skinName != null ? SkinFactory.getReportSkin(skinName) : SkinFactory.getDefaultReportSkin();
+                DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), context);
+                manager.produceReport(out, dbContext, vc, null, skin, statementName, null, null);
+            }
+
+            if(dialogCommands != null)
+            {
+                out.write("</td><td>");
+                dialogCommands.handleDialog(vc);
+                out.write("</td></tr></td></table>");
+            }
+        }
+    }
+
+    /**
+     * cmdParams for QuerySelectDialogCommands should look like:
      *   0 query definition name (required)
      *   1 dialog name (required)
      *   2 skin name (optional, may be empty or set to "-" to mean "none")
      */
 
 
-    public static DialogCommands getCommands(String cmdParams)
+    public static QuerySelectDialogCommands getQuerySelectDialogCommands(String cmdParams)
     {
-        return new DialogCommands(cmdParams);
+        return new QuerySelectDialogCommands(cmdParams);
     }
 
-    public static class DialogCommands
+    public static class QuerySelectDialogCommands
     {
         private String dialogName;
         private String source;
         private String skinName;
 
-        public DialogCommands(String cmdParams)
+        public QuerySelectDialogCommands(String cmdParams)
         {
             StringTokenizer st = new StringTokenizer(cmdParams, ",");
             source = st.nextToken();

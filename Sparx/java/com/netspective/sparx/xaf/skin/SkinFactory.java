@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.4 2002-10-13 18:42:01 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.5 2002-10-16 03:14:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -114,6 +114,11 @@ public class SkinFactory implements Factory
     public static ReportSkin getReportSkin(String id)
     {
         return (ReportSkin) reportSkins.get(id);
+    }
+
+    public static ReportSkin getDefaultReportSkin()
+    {
+        return getReportSkin("report");
     }
 
     public static void addDialogSkin(String id, DialogSkin skin)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.5 2002-09-23 03:47:27 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.6 2002-10-16 03:14:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -66,6 +66,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.sql.SQLException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -78,6 +79,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.naming.NamingException;
 
 import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
@@ -89,6 +91,7 @@ import com.netspective.sparx.xaf.form.DialogManagerFactory;
 import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
+import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -416,7 +419,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         return false;
     }
 
-    public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp) throws IOException
+    public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp) throws IOException, StatementNotFoundException, NamingException, SQLException
     {
         String pageCmdReqParam = req.getParameter(DialogManagerFactory.DialogCommands.PAGE_COMMAND_REQUEST_PARAM_NAME);
         if(pageCmdReqParam == null)
@@ -439,8 +442,13 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         }
         else if(pageCmd.equals("qd-dialog"))
         {
-            StatementManagerFactory.DialogCommands dcmd = StatementManagerFactory.getCommands(pageCmdParam);
+            StatementManagerFactory.QuerySelectDialogCommands dcmd = StatementManagerFactory.getQuerySelectDialogCommands(pageCmdParam);
             dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp));
+        }
+        else if(pageCmd.equals("statement"))
+        {
+            StatementManagerFactory.StatementCommands scmd = StatementManagerFactory.getStatementCommands(pageCmdParam);
+            scmd.handleStatement(new ServletValueContext(context, servlet, req, resp));
         }
         else
         {

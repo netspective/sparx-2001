@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogManagerFactory.java,v 1.3 2002-09-18 17:49:38 shahid.shah Exp $
+ * $Id: DialogManagerFactory.java,v 1.4 2002-10-16 03:14:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -192,7 +192,11 @@ public class DialogManagerFactory implements Factory
 
         public DialogCommands(String cmdParams)
         {
-            StringTokenizer st = new StringTokenizer(cmdParams, ",");
+            this(new StringTokenizer(cmdParams, ","));
+        }
+
+        public DialogCommands(StringTokenizer st)
+        {
             dialogName = st.nextToken();
 
             if(st.hasMoreTokens())

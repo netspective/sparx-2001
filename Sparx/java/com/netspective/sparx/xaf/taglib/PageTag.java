@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.3 2002-09-08 02:08:12 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.4 2002-10-16 03:14:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.sql.SQLException;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -69,6 +70,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.naming.NamingException;
 
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
@@ -82,6 +84,7 @@ import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
+import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QuerySelectDialog;
 import com.netspective.sparx.xaf.page.PageControllerServlet;
@@ -260,6 +263,18 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                     );
         }
         catch(IOException e)
+        {
+            throw new JspException(e);
+        }
+        catch(SQLException e)
+        {
+            throw new JspException(e);
+        }
+        catch(StatementNotFoundException e)
+        {
+            throw new JspException(e);
+        }
+        catch(NamingException e)
         {
             throw new JspException(e);
         }
