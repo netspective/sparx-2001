@@ -81,8 +81,7 @@ public class GeneralColumn implements ReportColumn
 	public final SingleValueSource getUrl() { return urlValueSource; }
 	public final void setUrl(String value)
     {
-        // convert all '$' to '%' so that all request parameters are URL encoded.
-        urlValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value.replace('$', '%')) : null;
+        urlValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
         if(urlValueSource != null)
             setFlag(COLFLAG_WRAPURL);
         else
