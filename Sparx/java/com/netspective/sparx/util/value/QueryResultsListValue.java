@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryResultsListValue.java,v 1.5 2002-11-30 16:44:23 shahid.shah Exp $
+ * $Id: QueryResultsListValue.java,v 1.6 2003-04-22 21:20:16 aye.thu Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -299,5 +299,25 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 
     public void setValue(ValueContext vc, String value)
     {
+    }
+
+    public String getStatementName()
+    {
+        return stmtName;
+    }
+
+    public String getDataSourceId()
+    {
+        return dataSourceId;
+    }
+
+    public SingleValueSource[] getQueryParams()
+    {
+        return queryParams;
+    }
+
+    public String getStatementManagerName()
+    {
+        return stmtMgrName;
     }
 }
