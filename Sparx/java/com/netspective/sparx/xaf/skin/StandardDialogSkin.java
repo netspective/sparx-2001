@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: StandardDialogSkin.java,v 1.2 2002-02-17 14:07:31 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -354,7 +354,7 @@ public class StandardDialogSkin implements DialogSkin
             int fieldNum = 0;
             String[] fieldCaptions = gridField.getCaptions(dc);
             // save space in the header for the row captions
-            headerHtml.append("<td" + gridCaptionCellAttrs + ">&nbsp;</td> ");
+            headerHtml.append("<td " + gridCaptionCellAttrs + ">&nbsp;</td> ");
             // append the row caption to the first row
             rowHtml.append("<td><font " + gridRowCaptionFontAttrs + ">");
             rowHtml.append(rowCaption);
