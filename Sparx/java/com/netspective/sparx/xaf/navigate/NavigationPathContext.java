@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.4 2002-12-30 14:11:17 roque.hernandez Exp $
+ * $Id: NavigationPathContext.java,v 1.5 2002-12-31 19:48:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -114,7 +114,8 @@ public class NavigationPathContext extends ServletValueContext
             LogManager.recordException(this.getClass(), "constructor", transactionId, e);
         }
 
-        activeTree.makeStateChanges(this);
+        if(activeTree != null)
+            activeTree.makeStateChanges(this);
     }
 
     public String getApplicationName(NavigationPathContext nc)
