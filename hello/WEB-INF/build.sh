@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.5 2002-08-09 16:27:19 shahid.shah Exp $
+# $Id: build.sh,v 1.6 2002-08-09 16:37:57 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
@@ -23,6 +23,7 @@ BASEDIR=`pwd`
 
 if [ -z $SPARX_HOME ]; then
 	SPARX_HOME=$BASEDIR/../../Sparx
+	export SPARX_HOME
 fi	
 
 SPARX_REDIST_HOME=$SPARX_HOME/lib/redist
