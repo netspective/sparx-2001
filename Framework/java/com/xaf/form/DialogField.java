@@ -11,7 +11,8 @@ public class DialogField
 	static public final int FLDFLAG_REQUIRED             = 1;
 	static public final int FLDFLAG_INVISIBLE            = FLDFLAG_REQUIRED * 2;
 	static public final int FLDFLAG_READONLY             = FLDFLAG_INVISIBLE * 2;
-	static public final int FLDFLAG_PERSIST              = FLDFLAG_READONLY * 2;
+	static public final int FLDFLAG_INITIAL_FOCUS        = FLDFLAG_READONLY * 2;
+	static public final int FLDFLAG_PERSIST              = FLDFLAG_INITIAL_FOCUS * 2;
 	static public final int FLDFLAG_CREATEADJACENTAREA   = FLDFLAG_PERSIST * 2;
 	static public final int FLDFLAG_SHOWCAPTIONASCHILD   = FLDFLAG_CREATEADJACENTAREA * 2;
 	static public final int FLDFLAG_INPUT_HIDDEN         = FLDFLAG_SHOWCAPTIONASCHILD * 2;
@@ -86,6 +87,9 @@ public class DialogField
 
 		if(elem.getAttribute("required").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_REQUIRED);
+
+		if(elem.getAttribute("initial-focus").equalsIgnoreCase("yes"))
+			setFlag(DialogField.FLDFLAG_INITIAL_FOCUS);
 
 		if(elem.getAttribute("read-only").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_READONLY);

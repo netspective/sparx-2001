@@ -206,6 +206,7 @@
 			</xsd:element>
 		</xsd:choice>
 		<xsd:attributeGroup ref="dialog-field"/>
+		<xsd:attribute name="initial-focus" type="yes-no-enum" use="optional" value="no"/>
 	</xsd:complexType>
 	<xsd:simpleType name="dialog-field-name">
 		<xsd:annotation>

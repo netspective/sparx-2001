@@ -2,7 +2,7 @@
 var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
-var ALLOW_CLIENT_VALIDATION = false;
+var ALLOW_CLIENT_VALIDATION = true;
 
 //****************************************************************************
 // FieldType class
@@ -89,12 +89,18 @@ function setActiveDialog(dialog)
 
 // These constants MUST be kept identical to what is in com.xaf.form.DialogField
 
-var FLDFLAG_REQUIRED           = 1;
-var FLDFLAG_INVISIBLE          = FLDFLAG_REQUIRED * 2;
-var FLDFLAG_READONLY           = FLDFLAG_INVISIBLE * 2;
-var FLDFLAG_PERSIST            = FLDFLAG_READONLY * 2;
-var FLDFLAG_CREATEADJACENTAREA = FLDFLAG_PERSIST * 2;
-var FLDFLAG_SHOWCAPTIONASCHILD = FLDFLAG_CREATEADJACENTAREA * 2;
+var FLDFLAG_REQUIRED             = 1;
+var FLDFLAG_INVISIBLE            = FLDFLAG_REQUIRED * 2;
+var FLDFLAG_READONLY             = FLDFLAG_INVISIBLE * 2;
+var FLDFLAG_INITIAL_FOCUS        = FLDFLAG_READONLY * 2;
+var FLDFLAG_PERSIST              = FLDFLAG_INITIAL_FOCUS * 2;
+var FLDFLAG_CREATEADJACENTAREA   = FLDFLAG_PERSIST * 2;
+var FLDFLAG_SHOWCAPTIONASCHILD   = FLDFLAG_CREATEADJACENTAREA * 2;
+var FLDFLAG_INPUT_HIDDEN         = FLDFLAG_SHOWCAPTIONASCHILD * 2;
+var FLDFLAG_HAS_CONDITIONAL_DATA = FLDFLAG_INPUT_HIDDEN * 2;
+var FLDFLAG_COLUMN_BREAK_BEFORE  = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
+var FLDFLAG_COLUMN_BREAK_AFTER   = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
+var FLDFLAG_STARTCUSTOM          = FLDFLAG_COLUMN_BREAK_AFTER * 2; // all DialogField "children" will use this
 
 // These constants MUST be kept identical to what is in com.xaf.form.field.SelectField
 
@@ -140,7 +146,14 @@ function DialogField_finalizeContents()
 	if(this.dependentConditions.length > 0)
 		this.evaluateConditionals();
 
-	//alert(this.qualifiedName + " " + this.style + " " + this.requiresPreSubmit + " " + this.dependentConditions.length);
+	if((this.flags & FLDFLAG_INITIAL_FOCUS) != 0)
+	{
+		var control = document.all.item(this.controlId);
+		if(control == null)
+			alert("Unable to find control '"+this.controlId+"' in DialogField.finalizeContents() -- trying to set initial focus");
+		else
+			control.focus();
+	}
 }
 
 function DialogField_evaluateConditionals()
