@@ -17,7 +17,7 @@ import com.xaf.value.*;
 
 public class QueryBuilderDialog extends Dialog
 {
-	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS    = 1;
+	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS    = DLGFLAG_CUSTOM_START;
 	static public final int QBDLGFLAG_ALLOW_DEBUG          = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
 
 	static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
