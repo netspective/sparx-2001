@@ -389,7 +389,7 @@ public class SelectField extends DialogField
                     SelectChoice choice = (SelectChoice) i.next();
                     if(options.length() > 0)
                         options.append(radioCheckSeparator);
-                    options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                    options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>");
                     itemIndex++;
                 }
 				return options.toString();
@@ -400,7 +400,7 @@ public class SelectField extends DialogField
                     SelectChoice choice = (SelectChoice) i.next();
                     if(options.length() > 0)
                         options.append(radioCheckSeparator);
-                    options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                    options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>");
                     itemIndex++;
                 }
 				return options.toString();
