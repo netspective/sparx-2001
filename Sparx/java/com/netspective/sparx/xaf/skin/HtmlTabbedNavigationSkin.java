@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.14 2003-01-09 03:44:58 shahid.shah Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.15 2003-01-14 23:25:54 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -272,6 +272,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 break;
 
             case 3:
+            case 4:
                 levelTwoStyle.renderHtml(writer, (NavigationPath) activePath.getAncestorsList().get(2), nc);
                 break;
         }
@@ -298,6 +299,13 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 levelThreeStyle.renderHtml(writer, activePath, nc);
                 writer.write("    </TD>");
                 break;
+
+            case 4:
+                writer.write("    <TD vAlign=top height=\"100%\" rowspan=2>");
+                levelThreeStyle.renderHtml(writer, (NavigationPath) activePath.getAncestorsList().get(3), nc);
+                writer.write("    </TD>");
+                break;
+
         }
 
         writer.write("   <TD class=\"page_content\" vAlign=top align=\"center\" width=\"100%\">");
@@ -677,14 +685,17 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             for (int i = 0; i < sideBarElements.size(); i++)
             {
                 NavigationPath sideBarElement = (NavigationPath) sideBarElements.get(i);
-                writer.write("        <TR " + navAttrs + " " + navClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\">");
-                writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
-                writer.write("              <TD><A " + navLinkClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\" ");
-                writer.write("            href=\"" + sideBarElement.getUrl(nc) + "\"><nobr>" + sideBarElement.getCaption(nc) + "</nobr></A></TD>");
-                writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
-                writer.write("            </TR>");
-                writer.write("        <TR>");
-                writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD></TR>");
+                if (sideBarElement.isVisible(nc))
+                {
+                    writer.write("        <TR " + navAttrs + " " + navClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\">");
+                    writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
+                    writer.write("              <TD><A " + navLinkClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\" ");
+                    writer.write("            href=\"" + sideBarElement.getUrl(nc) + "\"><nobr>" + sideBarElement.getCaption(nc) + "</nobr></A></TD>");
+                    writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD>");
+                    writer.write("            </TR>");
+                    writer.write("        <TR>");
+                    writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + getHeaderSpacerImageFileName() + "\"></TD></TR>");
+                }
             }
 
             writer.write("        <TR>");
@@ -752,6 +763,4 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             writer.write("</TABLE>");
         }
     }
-
-
 }
