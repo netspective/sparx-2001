@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.19 2002-12-15 20:27:34 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.20 2002-12-19 20:27:11 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -89,6 +89,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import com.netspective.sparx.util.StringUtilities;
 import com.netspective.sparx.util.xml.XmlSource;
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
@@ -1396,6 +1397,101 @@ public class SchemaDocument extends XmlSource
         }
     }
 
+    //TODO: Refactor this to make it more generic
+    public void keepOnlyUniqueValidationRules(Element dataType)
+    {
+        NodeList validationRules = dataType.getElementsByTagName("validation");
+        Map elemHash = new HashMap();
+
+        if (0 < validationRules.getLength())
+        {
+            Node validation = validationRules.item(0).cloneNode(false);
+
+            for (int i = 0; i < validationRules.getLength(); i ++) {
+                Element parent = (Element) validationRules.item(i);
+                NodeList rules = parent.getElementsByTagName("rule");
+
+                for (int j = 0; j < rules.getLength(); j++)
+                {
+                    Element elem = (Element) rules.item(j);
+                    String ruleContents = getRuleContents(elem);
+                    elem.setAttribute("rule-contents", ruleContents);
+
+                    if (elemHash.containsKey(ruleContents))
+                    {
+                        // This means that this node is a duplicate of one already checked, so replace the earlier
+                        // node in the hash with this one and delete that older one from the DOM.
+                        Node oldNode = (Node) elemHash.put(ruleContents, rules.item(j));
+                        Node nodeParent = oldNode.getParentNode();
+                        nodeParent.removeChild(oldNode);
+                    }
+                    else
+                    {
+                        // This means that this node is not present in the element Hash.  It needs to be there for
+                        // dupe checking with other (later) nodes
+                        elemHash.put(ruleContents, rules.item(j));
+                    }
+                }
+            }
+
+            // Now add all the rules that are left into one unified validation node...
+            // ... and then delete the original validation nodes ...
+            // ... and replace them with the new unified validation node
+/*
+            for (int i = 0; i < validationRules.getLength(); i ++) {
+                Element parent = (Element) validationRules.item(i);
+                NodeList rules = parent.getElementsByTagName("rule");
+
+                for (int j = 0; j < rules.getLength(); j ++) {
+                    validation.appendChild(rules.item(j).cloneNode(true));
+                }
+
+                dataType.removeChild(parent);
+            }
+
+            dataType.appendChild(validation);
+*/
+        }
+    }
+
+    private String getCompleteNodeContents(Node element)
+    {
+        StringBuffer sb = new StringBuffer(element.getNodeName());
+        StringBuffer at = new StringBuffer();
+        NamedNodeMap attributes = element.getAttributes();
+
+        sb.append("[");
+
+        for (int i = 0; i < attributes.getLength(); i ++)
+        {
+            Node attribute = attributes.item(i);
+
+            at.append(':');
+            at.append(attribute.getNodeName());
+            at.append('=');
+            at.append(attribute.getNodeValue());
+        }
+
+        at.deleteCharAt(0);
+        sb.append(at);
+        sb.append("]=");
+        sb.append(element.getNodeValue());
+        return sb.toString();
+    }
+
+    private String getRuleContents(Node ruleNode)
+    {
+        Element elem = (Element) ruleNode;
+        String ruleContents = elem.getNodeName() + "[";
+
+        ruleContents += "name=" + elem.getAttribute("name");
+        ruleContents += ":type=" + elem.getAttribute("type");
+
+        ruleContents += "]";
+
+        return ruleContents;
+    }
+
     public void doDataTypeInheritance()
     {
         for (Iterator i = dataTypeNodes.values().iterator(); i.hasNext();)
@@ -1411,6 +1507,8 @@ public class SchemaDocument extends XmlSource
             keepOnlyLastElement(dataType, "default");
             keepOnlyLastElement(dataType, "java-class");
             keepOnlyLastElement(dataType, "java-type");
+
+            keepOnlyUniqueValidationRules(dataType);
         }
     }
 

@@ -14,6 +14,10 @@
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
 		<size>32</size>
 
+		<validation>
+			<rule name="max-length" type="max-length">getSize()</rule>
+		</validation>
+
 		<field.text size="20"/>
 	</datatype>
 
@@ -22,6 +26,10 @@
 		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
 		<size>255</size>
+
+		<validation>
+			<rule name="max-length" type="max-length">getSize()</rule>
+		</validation>
 
 		<field.text size="20"/>
 	</datatype>
@@ -39,6 +47,11 @@
 		<sqldefn dbms="ansi">float</sqldefn>
 		<sqldefn dbms="oracle">number(20,6)</sqldefn>
 
+		<validation>
+			<rule name="digits-and-decimals-only" type="regex" success-message="Success" failure-message="Failure">^\\d*(\\.\\d*)?$</rule>
+			<rule name="minimum-value" type="min">0.0</rule>
+		</validation>
+
 		<field.float size="16" min="0.0"/>
 	</datatype>
 
@@ -47,6 +60,12 @@
 		<java-class package="java.lang">Integer</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(8)</sqldefn>
+
+		<validation>
+			<rule name="digits-only" type="regex" success-message="Success" failure-message="Failure">^\\d*$</rule>
+			<rule name="minimum-value" type="min">0</rule>
+			<rule name="maximum-value" type="max">99999999</rule>
+		</validation>
 
 		<field.integer size="16" min="0" max="99999999"/>
 	</datatype>
@@ -57,6 +76,12 @@
 		<sqldefn dbms="ansi">smallint</sqldefn>
 		<sqldefn dbms="oracle">number(4)</sqldefn>
 
+		<validation>
+			<rule name="digits-only" type="regex" success-message="Success" failure-message="Failure">^\\d*$</rule>
+			<rule name="minimum-value" type="min">0</rule>
+			<rule name="maximum-value" type="max">9999</rule>
+		</validation>
+
 		<field.integer size="16" min="0" max="9999"/>
 	</datatype>
 
@@ -65,6 +90,11 @@
 		<java-class package="java.lang">Long</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(16)</sqldefn>
+
+		<validation>
+			<rule name="digits-only" type="regex" success-message="Success" failure-message="Failure">^\\d*$</rule>
+			<rule name="minimum-value" type="min">0</rule>
+		</validation>
 
 		<field.integer size="16" min="0"/>
 	</datatype>
@@ -96,6 +126,10 @@
 		<java-class package="java.lang">Float</java-class>
 		<sqldefn dbms="ansi">float</sqldefn>
 		<sqldefn dbms="oracle">number(5,2)</sqldefn>
+
+		<validation>
+			<rule name="maximum-value" type="min">100.0</rule>
+		</validation>
 
 		<field.float size="16" min="0.0" max="100.0"/>
 	</datatype>
@@ -155,6 +189,10 @@
 	<datatype name="email" type="text">
 		<size>64</size>
 
+		<validation>
+			<rule name="email-format" type="regex" success-message="Success" failure-message="Please ensure that this field contains a valid email address.&lt;br&gt;Acceptable email address formats can have any digits or letters of the alphabet and must have an @ in the middle.">^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$</rule>
+		</validation>
+
 		<field.email size="20"/>
 	</datatype>
 
@@ -163,6 +201,11 @@
 		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
 		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
 		<size>36</size>
+
+		<validation>
+			<rule name="guid32-format" type="regex" success-message="Success" failure-message="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit.">^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$</rule>
+			<rule name="max-length" type="max-length">getSize()</rule>
+		</validation>
 
 		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
 	</datatype>

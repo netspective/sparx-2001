@@ -33,13 +33,15 @@ import com.netspective.sparx.xaf.form.DialogContext;
 
 public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 {
+<!--
 	// Constants for each Validation Rule
 <xsl:for-each select="validation"><xsl:for-each select="rule">
-	public static final int RULE_<xsl:value-of select="@_gen-java-constant-name"/><xsl:if test="@_gen-java-constant-name = 'NUMBER_'"><xsl:value-of select="position() - 1"/></xsl:if> = <xsl:value-of select="position() - 1"/>;</xsl:for-each></xsl:for-each>
-
+	public static final int RULE_<xsl:value-of select="@_gen-java-constant-name"/><xsl:if test="@_gen-java-constant-name = 'NUMBER_'"><xsl:value-of select="position() - 1"/></xsl:if> = <xsl:value-of select="position() - 1"/>;
+</xsl:for-each></xsl:for-each>
+-->
 <xsl:for-each select="validation"><xsl:for-each select="rule">
-	public static final String ruleName<xsl:value-of select="@_gen-java-identifier-name"/><xsl:if test="@_gen-java-constant-name = 'NUMBER_'"><xsl:value-of select="position() - 1"/></xsl:if> = &quot;<xsl:value-of select="@_gen-rule-name"/><xsl:if test="@_gen-java-constant-name = 'NUMBER_'"><xsl:value-of select="position() - 1"/></xsl:if>&quot;;</xsl:for-each></xsl:for-each>
-	
+	public static final String ruleName<xsl:value-of select="@_gen-java-identifier-name"/><xsl:if test="@_gen-java-constant-name = 'NUMBER_'"><xsl:value-of select="position() - 1"/></xsl:if> = &quot;<xsl:value-of select="@_gen-rule-name"/><xsl:if test="@_gen-java-constant-name = 'NUMBER_'"><xsl:value-of select="position() - 1"/></xsl:if>&quot;;
+</xsl:for-each></xsl:for-each>
 <xsl:if test="java-date-format-instance">	private static DateFormat defaultDateFormat = <xsl:value-of select="java-date-format-instance"/>;
 	private DateFormat dateFormat = defaultDateFormat;
 </xsl:if>
@@ -262,16 +264,16 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 </xsl:for-each>
 </xsl:for-each>
 
-		return bdvResult;		
+		return bdvResult;
 	}
-	
+
 	public boolean isValid(<xsl:value-of select="$java-class-spec"/> value)
 	{
 		boolean status = true;
 		BasicDataValidationResult bdvResult = getValidationResult(value);
-		
+
 		if (null == bdvResult) throw new UnknownValidationResultException();
-		
+
 		return bdvResult.isValid();
 	}
 
