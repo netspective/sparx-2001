@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.2 2002-01-28 09:29:43 thua Exp $
+ * $Id: DialogContext.java,v 1.3 2002-01-30 03:40:35 thua Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1065,12 +1065,53 @@ public class DialogContext extends ServletValueContext
         task = null;
     }
 
-    public void endSqlTransaction() throws TaskExecuteException
+    /**
+     * Rollback the SQL transaction for the default data source
+     *
+     * @since Version 2.0.2 Build 0
+     * @exception TaskExecuteException
+     *
+     */
+    public void rollbackSqlTransaction() throws TaskExecuteException
     {
-        endSqlTransaction(null);
+        this.rollbackSqlTransaction(null);
     }
 
-    public void endSqlTransaction(String dataSourceId) throws TaskExecuteException
+    /**
+     * Rollback the SQL transaction for the passed in data source
+     *
+     * @param dataSourceId Data source ID
+     * @exception TaskExecuteException
+     * @since Version 2.0.2 Build 0
+     *
+     */
+    public void rollbackSqlTransaction(String dataSourceId) throws TaskExecuteException
+    {
+        TransactionTask task = new TransactionTask();
+        task.setDataSource(dataSourceId);
+        task.setCommand(TransactionTask.COMMAND_ROLLBACK);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
+    /**
+     * Commit the SQL transaction for the default data source
+     *
+     * @exception TaskExecuteException
+     */
+    public void commitSqlTransaction() throws TaskExecuteException
+    {
+        commitSqlTransaction(null);
+    }
+
+    /**
+     * Commit the SQL transaction for the passed in data source
+     *
+     * @param dataSourceId Data source ID
+     * @exception TaskExecuteException
+     */
+    public void commitSqlTransaction(String dataSourceId) throws TaskExecuteException
     {
         TransactionTask task = new TransactionTask();
         task.setDataSource(dataSourceId);

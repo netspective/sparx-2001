@@ -51,12 +51,13 @@
  */
  
 /**
- * $Id: TransactionTask.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: TransactionTask.java,v 1.2 2002-01-30 03:40:35 thua Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -77,6 +78,7 @@ public class TransactionTask extends BasicTask
     static public final int COMMAND_UNKNOWN = 0;
     static public final int COMMAND_BEGIN = 1;
     static public final int COMMAND_END = 2;
+    public static final int COMMAND_ROLLBACK = 3;
 
     private SingleValueSource dataSourceValueSource;
     private int command;
@@ -166,6 +168,15 @@ public class TransactionTask extends BasicTask
                 Connection conn = (Connection) request.getAttribute(dataSourceId);
                 // commit and close the connection
                 conn.commit();
+                conn.setAutoCommit(true);
+                request.removeAttribute(dataSourceId);
+            }
+            else if (command == COMMAND_ROLLBACK)
+            {
+                // get the connection and rollback the transaction
+                Connection conn = (Connection) request.getAttribute(dataSourceId);
+                System.out.println("ROLLBACK ROLLBACK");
+                conn.rollback();
                 conn.setAutoCommit(true);
                 request.removeAttribute(dataSourceId);
             }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConnectionContext.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: ConnectionContext.java,v 1.2 2002-01-30 03:40:35 thua Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -63,7 +63,40 @@ import javax.naming.NamingException;
 
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabasePolicy;
-
+/**
+ * Database Object used by other DAL objects for accessing the database. To execute DAL operations within a
+ * transaction, use the <code>beginTransaction()</code> and <code>commitTransaction()</code> methods to
+ * mark the beginning and ending of the transaction.
+ * <p>
+ * It is important when using a transaction, the rollback
+ * method, <code>rollbackTransaction()</code>, is used when exceptions occur. For example:
+ * </p>
+ * <pre>
+ * try
+ * {
+ *      ..
+ *      ConnectionContext cc =  ConnectionContext.getConnectionContext(databaseContext, dataSourceId,
+ *          ConnectionContext.CONNCTXTYPE_TRANSACTION);
+ *      cc.beginTransaction();
+ *      // do DAL operations here
+ *      ...
+ *      cc.commitTransaction();
+ * }
+ * catch (Exception e)
+ * {
+ *      try
+ *      {
+ *          cc.rollbackTransaction();
+ *      }
+ *      catch (SQLException sqle)
+ *      {
+ *          // Failed to rollback. Do application specific handling
+ *          ...
+ *      }
+ * }
+ * </pre>
+ *
+ */
 public class ConnectionContext
 {
     static public final short CONNCTXTYPE_TRANSACTION = 0;
@@ -125,19 +158,62 @@ public class ConnectionContext
     public Connection open() throws NamingException, SQLException
     {
         conn = dbc.getConnection(dataSourceId);
+        if (type == CONNCTXTYPE_TRANSACTION)
+            conn.setAutoCommit(false);
         dbp = dbc.getDatabasePolicy(conn);
         return conn;
     }
 
+    /**
+     * Start a database transaction. If the <code>ConnectionContext</code> object was created
+     * without specifying the type to be <code>CONNCTXTYPE_TRANSACTION</code>, this method will
+     * modify the object into a transaction type and any database operation after this will become
+     * a part of a new transaction.
+     *
+     */
     public void beginTransaction() throws SQLException
     {
-        type = CONNCTXTYPE_TRANSACTION;
+        // if the connection context object was created without specifying it as a transaction type
+        // then it needs to be changed to a transaction type. Also disable the
+        // autocommit feature of the database connection so that any database operation after this
+        // will be a part of the transaction
+        if (type != CONNCTXTYPE_TRANSACTION)
+        {
+            type = CONNCTXTYPE_TRANSACTION;
+            if (conn != null)
+                conn.setAutoCommit(false);
+        }
     }
 
-    public void endTransaction() throws SQLException
+    /**
+     * Rolls back database operations executed within the transaction and closes the connection.
+     * No action is taken if the connection is not a transaction type.
+     *
+     * @exception SQLException
+     * @since Version 2.0.2 Build 0
+     */
+    public void rollbackTransaction() throws SQLException
     {
-        if(conn != null)
+        if (conn != null && type == CONNCTXTYPE_TRANSACTION)
         {
+            conn.rollback();
+            conn.close();
+            conn = null;
+        }
+    }
+
+    /**
+     * Commits database operations executed within the transaction and closes the connection.
+     * No action is taken if the connection is not a transaction type.
+     *
+     * @exception SQLException
+     */
+    public void commitTransaction() throws SQLException
+    {
+        if(conn != null && type == CONNCTXTYPE_TRANSACTION)
+        {
+            conn.commit();
+            conn.setAutoCommit(true);
             conn.close();
             conn = null;
         }
