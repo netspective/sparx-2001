@@ -41,6 +41,7 @@ public class SchemaDocument extends XmlSource
 
 	private Hashtable dataTypeNodes = new Hashtable();
 	private Hashtable tableTypeNodes = new Hashtable();
+	private Hashtable indexTypeNodes = new Hashtable();
 	private Hashtable tableNodes = new Hashtable();
 	private ArrayList columnTableNodes = new ArrayList();
     private Hashtable tableParams = new Hashtable(); // key is table name, value is hash-table of key/value pairs
@@ -72,6 +73,8 @@ public class SchemaDocument extends XmlSource
 
 	public Map getDataTypes() { return dataTypeNodes;	}
 	public Map getTableTypes() { return tableTypeNodes; }
+	public Map getIndexTypes() { return indexTypeNodes; }
+
 	public Map getTables() { return tableNodes; }
 
 	public String[] getTableNames(boolean includeAudit)
@@ -191,6 +194,100 @@ public class SchemaDocument extends XmlSource
 		return null;
 	}
 
+	public void resolveIndexes(Element table)
+	{
+        String tableName = table.getAttribute("name");
+		List columnIndexes = new ArrayList();
+		Document tableDoc = table.getOwnerDocument();
+
+        NodeList columns = table.getChildNodes();
+		Element colIndexElem = null;
+		Element colNameElem = null;
+        for(int c = 0; c < columns.getLength(); c++)
+        {
+            Node node = columns.item(c);
+			if(node.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+
+			String nodeName = node.getNodeName();
+            if(nodeName.equals("column"))
+			{
+				Element column = (Element) node;
+				String indexColName = column.getAttribute("name");
+				if(column.getAttribute("unique").equals("yes"))
+				{
+					colIndexElem = tableDoc.createElement("index");
+					colIndexElem.setAttribute("name", indexColName + "_unq");
+					colIndexElem.setAttribute("type", "unique");
+					colIndexElem.setAttribute("columns", indexColName);
+					colNameElem = tableDoc.createElement("column");
+					colNameElem.setAttribute("name", indexColName);
+					colIndexElem.appendChild(colNameElem);
+					columnIndexes.add(colIndexElem);
+				}
+				else if(column.getAttribute("indexed").equals("yes"))
+				{
+					colIndexElem = tableDoc.createElement("index");
+					colIndexElem.setAttribute("name", indexColName);
+					colIndexElem.setAttribute("columns", indexColName);
+					colNameElem = tableDoc.createElement("column");
+					colNameElem.setAttribute("name", indexColName);
+					colIndexElem.appendChild(colNameElem);
+					columnIndexes.add(colIndexElem);
+				}
+
+				/* the old Physia schema attributes 'indexgrp' and 'uniquegrp' are no longer supported */
+				if(column.getAttribute("indexgrp").length() > 0)
+					errors.add("The 'indexgrp' attribute is no longer supported in table '"+ tableName +"' column '"+ indexColName +"' (use 'index' tag instead)");
+				if(column.getAttribute("uniquegrp").length() > 0)
+					errors.add("The 'uniquegrp' attribute is no longer supported in table '"+ tableName +"' column '"+ indexColName +"' (use 'index' tag instead)");
+			}
+		    else if(nodeName.equals("index"))
+			{
+				Element index = (Element) node;
+		        inheritNodes(index, indexTypeNodes);
+
+				String indexName = index.getAttribute("name");
+				NodeList columnElems = table.getElementsByTagName("column");
+				int columnsCount = columnElems.getLength();
+
+				String columnsList = index.getAttribute("columns");
+				if(columnsList.length() > 0)
+				{
+					StringTokenizer st = new StringTokenizer(index.getAttribute("columns"), ",");
+					while(st.hasMoreTokens())
+					{
+						String indexColName = st.nextToken().trim();
+						boolean found = false;
+						for(int ic = 0; ic < columnsCount; ic++)
+						{
+							Element columnElem = (Element) columnElems.item(ic);
+							if(columnElem.getAttribute("name").equals(indexColName))
+							{
+								found = true;
+								colNameElem = tableDoc.createElement("column");
+								colNameElem.setAttribute("name", indexColName);
+								index.appendChild(colNameElem);
+							}
+						}
+						if(! found)
+						{
+							errors.add("Column '"+indexColName+"' not found in index '"+ indexName +"' of table '"+ tableName +"'");
+						}
+					}
+				}
+			}
+        }
+
+		if(columnIndexes.size() > 0)
+		{
+			for(Iterator i = columnIndexes.iterator(); i.hasNext(); )
+			{
+				table.appendChild((Element) i.next());
+			}
+		}
+	}
+
     public void fixupTableElement(Element table)
     {
         Hashtable params = new Hashtable();
@@ -282,6 +379,8 @@ public class SchemaDocument extends XmlSource
                     table.setAttribute("audit", "yes");
             }
         }
+
+		resolveIndexes(table);
     }
 
 	class Reference
@@ -364,6 +463,9 @@ public class SchemaDocument extends XmlSource
                     if(refColumnName.equalsIgnoreCase(refInfo.columnName))
                     {
                         column.setAttribute("refcol", refColumnName);
+						if(column.getAttribute("type").length() > 0)
+		                    errors.add("In a reference column, 'type' and other related modifiers like 'size' should not be specified (in table '"+ tableElem.getAttribute("name") +"' column '"+ column.getAttribute("name") +"')");
+
                         String copyType = findElementOrAttrValue(refColumnElem, "copytype");
                         if(copyType != null && copyType.length() > 0)
                             column.setAttribute("type", copyType);
@@ -493,6 +595,7 @@ public class SchemaDocument extends XmlSource
 	public void catalogNodes()
 	{
 		dataTypeNodes.clear();
+		indexTypeNodes.clear();
 		tableTypeNodes.clear();
 		tableNodes.clear();
 		columnTableNodes.clear();
@@ -523,6 +626,8 @@ public class SchemaDocument extends XmlSource
             }
 			else if(nodeName.equals("tabletype"))
 				tableTypeNodes.put(element.getAttribute("name"), node);
+			else if(nodeName.equals("indextype"))
+				indexTypeNodes.put(element.getAttribute("name"), node);
 			else if(nodeName.equals("table"))
 				tableNodes.put(element.getAttribute("name").toUpperCase(), node);
 		}

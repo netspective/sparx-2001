@@ -375,6 +375,29 @@
 	<tr><td colspan="14"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	</xsl:for-each>
 	</table>
+	
+	<xsl:if test="index">
+	<p/><h1>Indexes</h1>
+	<table border="0" cellspacing="0">
+	<tr bgcolor="beige">
+		<th>Name</th>
+		<th>&#160;</th>
+		<th>Type</th>
+		<th>&#160;</th>
+		<th>Columns</th>
+	</tr>
+	<xsl:for-each select="index">
+	<tr>
+		<td><xsl:value-of select="@name"/></td>
+		<td></td>
+		<td><xsl:value-of select="@type"/></td>
+		<td></td>
+		<td><xsl:value-of select="@columns"/></td>
+	</tr>
+	</xsl:for-each>
+	</table>
+	</xsl:if>
+	
 	</td></tr></table>
 </xsl:template>
 

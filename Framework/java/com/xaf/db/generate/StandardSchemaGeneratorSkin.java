@@ -10,12 +10,49 @@ import com.xaf.sql.*;
 
 public class StandardSchemaGeneratorSkin implements SchemaGeneratorSkin
 {
+	public class Index
+	{
+		private String name;    // name of index
+		private String type;    // type of index (unique, etc)
+		private String columnsStr; // comma-separated list
+		private String[] columns;
+
+		public Index(Element elem)
+		{
+			name = elem.getAttribute("name");
+		    if(elem.getAttribute("unique").equals("yes"))
+				type = "unique";
+
+			StringBuffer columnsStr = new StringBuffer();
+			NodeList columnElems = elem.getElementsByTagName("column");
+			int columnsCount = columnElems.getLength();
+			columns = new String[columnsCount];
+
+			for(int c = 0; c < columnsCount; c++)
+			{
+				String colName = ((Element) columnElems.item(c)).getAttribute("name");
+				columns[c] = colName;
+				if(c > 0)
+					columnsStr.append(", ");
+				columnsStr.append(colName);
+			}
+
+			this.columnsStr = columnsStr.toString();
+		}
+
+		public String getName() { return name; }
+		public String getType() { return type; }
+		public String getColumnsStr() { return columnsStr; }
+		public String[] getColumns() { return columns; }
+	}
+
 	public class Table
 	{
 		public Element table;
 		public String name;
 		public String abbrev;
 		public Column[] columns;
+		public Index[] indexes;
 		public int longestColumnNameLen;
 
 		public Table(Element elem)
@@ -37,6 +74,16 @@ public class StandardSchemaGeneratorSkin implements SchemaGeneratorSkin
 
 				if(column.name.length() > longestColumnNameLen)
 					longestColumnNameLen = column.name.length();
+			}
+
+			NodeList indexElems = table.getElementsByTagName("index");
+			int indexesCount = indexElems.getLength();
+			indexes = new Index[indexesCount];
+
+			for(int i = 0; i < indexesCount; i++)
+			{
+				Element indexElem = (Element) indexElems.item(i);
+				indexes[i] = new Index(indexElem);
 			}
 		}
 	}
@@ -221,32 +268,27 @@ public class StandardSchemaGeneratorSkin implements SchemaGeneratorSkin
 	public void generateTableIndexes(Writer writer, Element tableElem) throws IOException
 	{
 		Table table = getTable(tableElem);
-		for(int c = 0; c < table.columns.length; c++)
+		if(table.indexes.length > 0)
 		{
-			Column column = table.columns[c];
-			Element columnElem = column.column;
-			if(columnElem.getAttribute("indexed").equals("yes"))
+			for(int i = 0; i < table.indexes.length; i++)
 			{
-				writer.write("create index ");
+				Index index = table.indexes[i];
+				String type = index.getType();
+
+				writer.write("create ");
+				if(type != null)
+				{
+					writer.write(type);
+					writer.write(" ");
+				}
+				writer.write("index ");
 				writer.write(table.abbrev.toUpperCase());
 				writer.write("_");
-				writer.write(column.name.toUpperCase());
+				writer.write(index.getName().toUpperCase());
 				writer.write(" on ");
 				writer.write(table.name);
 				writer.write(" (");
-				writer.write(column.name);
-				writer.write(")"+statementTerminator+"\n");
-			}
-			if(columnElem.getAttribute("unique").equals("yes"))
-			{
-				writer.write("create unique index ");
-				writer.write(table.abbrev.toUpperCase());
-				writer.write("_");
-				writer.write(column.name.toUpperCase());
-				writer.write("_UNQ on ");
-				writer.write(table.name);
-				writer.write(" (");
-				writer.write(column.name);
+				writer.write(index.getColumnsStr());
 				writer.write(")"+statementTerminator+"\n");
 			}
 		}
