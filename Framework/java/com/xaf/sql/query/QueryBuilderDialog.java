@@ -45,6 +45,7 @@ public class QueryBuilderDialog extends Dialog
     {
 		setName("queryDialog");
 		setQueryDefn(queryDefn);
+        setFlag(QBDLGFLAG_ALLOW_DEBUG);
 		setMaxConditions(5);
 		setLoopEntries(true);
     }
@@ -176,7 +177,7 @@ public class QueryBuilderDialog extends Dialog
 			options.addChildField(predefinedSels);
 
 		if(flagIsSet(QBDLGFLAG_ALLOW_DEBUG))
-			options.addChildField(new BooleanField("debug", "Debug", BooleanField.BOOLSTYLE_CHECK, 0));
+			options.addChildField(new BooleanField("debug", "View Generated SQL", BooleanField.BOOLSTYLE_CHECK, 0));
 
 		addField(options);
 		addField(displayFields);
