@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlSingleRowReportSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
+ * $Id: HtmlSingleRowReportSkin.java,v 1.3 2003-06-03 14:26:02 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -149,7 +149,10 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
     {
         // position the single row -- if we can't do "next" then no row exists
         if(!rs.next())
+        {
+            writer.write("<tr><td class=\"report-detail\">No data found.</td></tr>");
             return;
+        }
 
         ResultSetMetaData rsmd = rs.getMetaData();
         int resultSetColsCount = rsmd.getColumnCount();
