@@ -25,6 +25,9 @@ public class ReportColumnFactory
 
     static void setupDefaultFormats()
     {
+        NumberFormat plainFmt = (NumberFormat) NumberFormat.getNumberInstance().clone();
+        plainFmt.setGroupingUsed(false);
+        formats.put("plain", plainFmt);
         formats.put("general", NumberFormat.getNumberInstance());
         formats.put("decimal", DecimalFormat.getNumberInstance());
         formats.put("currency", NumberFormat.getCurrencyInstance());
