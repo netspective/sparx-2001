@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StandardReport.java,v 1.2 2002-10-13 18:39:45 shahid.shah Exp $
+ * $Id: StandardReport.java,v 1.3 2002-10-16 18:32:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -82,7 +82,7 @@ public class StandardReport implements Report
     private String name;
     private ReportColumnsList columns = new ReportColumnsList();
     private boolean contentsFinalized;
-    private ReportFrame frame = null;
+    private ReportFrame frame = new ReportFrame();
     private ReportBanner banner = null;
     private int visibleColsCount = -1;
     private int flags;
@@ -225,7 +225,6 @@ public class StandardReport implements Report
         if(name.length() == 0)
             name = "default";
 
-        if(frame == null) frame = new ReportFrame();
         frame.importFromXml(elem);
 
         if(elem.getAttribute("first-row").equals("column-headings"))
