@@ -109,14 +109,6 @@ public class SelectField extends DialogField
 	{
 		super.importFromXml(elem);
 
-		String defaultv = elem.getAttribute("default");
-		if(defaultv.length() > 0)
-		{
-			defaultValue = ValueSourceFactory.getListValueSource(defaultv);
-		}
-		else
-			defaultValue = null;
-
 		String styleValue = elem.getAttribute("style");
 		if(styleValue.length() > 0)
 		{
@@ -148,6 +140,17 @@ public class SelectField extends DialogField
 			if(value.length() > 0)
 				multiDualWidth = Integer.parseInt(value);
 		}
+
+		String defaultv = elem.getAttribute("default");
+		if(defaultv.length() > 0)
+		{
+            if(isMulti())
+    			defaultValue = ValueSourceFactory.getListValueSource(defaultv);
+            else
+				super.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource(defaultv));
+		}
+		else
+			defaultValue = null;
 
 		String choicesValue = elem.getAttribute("choices");
 		if(choicesValue.length() > 0)
