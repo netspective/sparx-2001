@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: IntegerField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: IntegerField.java,v 1.2 2002-12-04 17:47:35 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -180,6 +180,7 @@ public class IntegerField extends TextField
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? 0 : o.intValue(); }\n");
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.intValue(); }\n");
         mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", Integer.toString(value)); }\n");
+	    mi.addJavaCode("\tpublic void set" + memberName + "(Integer value) { setValue(\"" + fieldName + "\", value.toString()); }\n");
 
         return mi;
     }
