@@ -529,6 +529,23 @@ public class StatementManager extends XmlSource
 			return null;
 	}
 
+	static public String[] getResultSetSingleRowAsStrings(ResultSet rs) throws SQLException
+	{
+		if(rs.next())
+		{
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colsCount = rsmd.getColumnCount();
+			String[] result = new String[colsCount];
+			for(int i = 1; i <= colsCount; i++)
+			{
+				result[i-1] = rs.getString(i);
+			}
+			return result;
+		}
+		else
+			return null;
+	}
+
 	static public Object[][] getResultSetRowsAsMatrix(ResultSet rs) throws SQLException
 	{
 		ArrayList result = new ArrayList();
@@ -546,6 +563,20 @@ public class StatementManager extends XmlSource
 
 		if(result.size() > 0)
 			return (Object[][]) result.toArray(new Object[result.size()][]);
+		else
+			return null;
+	}
+
+	static public String[] getResultSetRowsAsStrings(ResultSet rs) throws SQLException
+	{
+		ArrayList result = new ArrayList();
+		while(rs.next())
+		{
+			result.add(rs.getString(0));
+		}
+
+		if(result.size() > 0)
+			return (String[]) result.toArray(new String[result.size()]);
 		else
 			return null;
 	}
