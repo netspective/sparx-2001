@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Row.java,v 1.2 2002-08-04 15:19:54 shahid.shah Exp $
+ * $Id: Row.java,v 1.3 2002-08-29 03:36:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -83,6 +83,11 @@ public interface Row
      * a null value should be assisgned to a column.
      */
     public final static int VALUEHANDLE_ASSIGN = 1;
+
+    /**
+     * Returns the table that this row belongs to
+     */
+    public Table getTable();
 
     /**
      * Returns an array of all the column definitions in the order in which they were specified
@@ -182,6 +187,31 @@ public interface Row
      * </pre>
      */
     public void populateDataByNames(Element element) throws ParseException, DOMException;
+
+    /**
+     * Returns true if the given XML node name is a valid column in this row.
+     */
+    public boolean isValidXmlNodeNameForColumn(String nodeName);
+
+    /**
+     * Set the column identified by an XML nodeName to the given value. XML node names may
+     * be different than the actual column names so it's the responsibility of the row to
+     * set it's appropriate data. This is typically called by Schema.importFromXml().
+     * Append is set to true if the value should be appended to the current value or false
+     * if the value should be replaced.
+     */
+    public boolean populateDataForXmlNodeName(String nodeName, String value, boolean append) throws ParseException;
+
+    /**
+     * Return true if the given node name is valid XML node name for a child table/row
+     */
+    public boolean isValidXmlNodeNameForChildRow(String nodeName);
+
+    /**
+     * If the XML node name represents a valid child table for this row, return a new child row
+     * for the appropriate child table. Otherwise, return null.
+     */
+    public Row createChildRowForXmlNodeName(String nodeName);
 
     /**
      * Given a DialogContext, populate the DialogContext's field values with the Row's column values

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractRow.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AbstractRow.java,v 1.2 2002-08-29 03:36:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -157,6 +157,14 @@ public abstract class AbstractRow implements Row
     abstract public void populateDataByNames(ResultSet resultSet, Map colNameIndexMap) throws SQLException;
 
     abstract public void populateDataByNames(Element element) throws ParseException, DOMException;
+
+    abstract public boolean isValidXmlNodeNameForColumn(String nodeName);
+
+    abstract public boolean populateDataForXmlNodeName(String nodeName, String value, boolean append) throws ParseException;
+
+    abstract public boolean isValidXmlNodeNameForChildRow(String nodeName);
+
+    abstract public Row createChildRowForXmlNodeName(String nodeName);
 
     abstract public void populateDataByNames(DialogContext dc);
 
