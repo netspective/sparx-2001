@@ -12,6 +12,7 @@ public class BasicAuthenticatedUser implements AuthenticatedUser
 	private BitSet userPermissions;
 	private String userOrgName;
 	private String userOrgId;
+	private Map attributes = new HashMap();
 
     public BasicAuthenticatedUser(String name, String id)
     {
@@ -114,5 +115,20 @@ public class BasicAuthenticatedUser implements AuthenticatedUser
 				return true;
 		}
 		return false;
+	}
+
+	public Object getAttribute(String attrName)
+	{
+		return attributes.get(attrName);
+	}
+
+	public void setAttribute(String attrName, Object attrValue)
+	{
+		attributes.put(attrName, attrValue);
+	}
+
+	public void removeAttribute(String attrName)
+	{
+		attributes.remove(attrName);
 	}
 }

@@ -21,4 +21,8 @@ public interface AuthenticatedUser extends Principal
 	public boolean hasPermission(AccessControlList acl, String permissionName);
 	public boolean hasAnyPermission(AccessControlList acl, Integer[] permissionIds);
 	public boolean hasAnyPermission(AccessControlList acl, String[] permissionNames);
+
+	public Object getAttribute(String attrName);
+	public void setAttribute(String attrName, Object attrValue);
+	public void removeAttribute(String attrName);
 }
