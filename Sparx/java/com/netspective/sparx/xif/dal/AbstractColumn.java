@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractColumn.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AbstractColumn.java,v 1.2 2002-04-09 12:42:15 rarora Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -277,7 +277,7 @@ public abstract class AbstractColumn implements Column
 
     public void setIsSequencedPrimaryKey(boolean flag)
     {
-        setOrClearFlag(COLUMNFLAG_ISNATURALPRIMARYKEY, flag);
+        setOrClearFlag(COLUMNFLAG_ISSEQUENCEDPRIMARYKEY, flag);
     }
 
     public void setIsUnique(boolean flag)
