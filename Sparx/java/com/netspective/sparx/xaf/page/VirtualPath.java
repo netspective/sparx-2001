@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: VirtualPath.java,v 1.3 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: VirtualPath.java,v 1.4 2002-11-15 02:56:09 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -177,7 +177,7 @@ public class VirtualPath
     private String title;
     private String heading;
     private ServletPage page;
-    private String url;
+    private String id;
     private List childrenList = new ArrayList();
     private Map childrenMap = new HashMap();
     private Map absPathMap = new HashMap();
@@ -227,14 +227,14 @@ public class VirtualPath
         page = value;
     }
 
-    public String getUrl()
+    public String getId()
     {
-        return url;
+        return id;
     }
 
-    public void setUrl(String value)
+    public void setId(String value)
     {
-        url = value;
+        id = value;
     }
 
     public Map getAbsolutePathsMap()
@@ -318,8 +318,8 @@ public class VirtualPath
                 VirtualPath childPath = new VirtualPath();
                 childPath.setOwner(parent.getOwner());
                 childPath.setParent(parent);
-                childPath.setUrl(childElem.getAttribute("url"));
-                parent.getChildrenMap().put(childPath.getUrl(), childPath);
+                childPath.setId(childElem.getAttribute("id"));
+                parent.getChildrenMap().put(childPath.getId(), childPath);
                 parent.getChildrenList().add(childPath);
                 parent.register(childPath);
 
@@ -362,8 +362,8 @@ public class VirtualPath
 
     public String getAbsolutePath()
     {
-        if(url != null)
-            return url;
+        if(id != null)
+            return id;
 
         StringBuffer path = name != null ? new StringBuffer(name) : new StringBuffer();
         VirtualPath active = getParent();
