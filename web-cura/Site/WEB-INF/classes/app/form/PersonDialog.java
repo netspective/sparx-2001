@@ -2,7 +2,7 @@
  * Description: app.dialog.PersonDialog
  * @author ThuA
  * @created Dec 27, 2001 3:22:08 PM
- * @version 
+ * @version
  */
 package app.form;
 
@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class PersonDialog   extends com.xaf.form.Dialog
 {
@@ -47,6 +48,7 @@ public class PersonDialog   extends com.xaf.form.Dialog
         {
             String personId = dc.getRequest().getParameter("person_id");
             dc.populateValuesFromStatement("person.information", new Object[] {personId});
+            dc.populateValuesFromStatement("person.active-org-memberships", new Object[] {personId});
             dc.populateValuesFromStatement("person.address-by-id", new Object[] {personId});
         }
     }
@@ -78,12 +80,12 @@ public class PersonDialog   extends com.xaf.form.Dialog
         {
             // dialog is in the add data command mode
             this.processAddData(dc);
-
         }
 
         if (dc.editingData())
         {
             // dialog is in the edit data command mode
+            this.processEditData(dc);
         }
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
         String url = request.getContextPath() + "/contact/home.jsp?person_id=" + request.getAttribute("person_id");
@@ -99,6 +101,57 @@ public class PersonDialog   extends com.xaf.form.Dialog
 
         return "";
     }
+
+    /**
+     * Process the update data
+     */
+	protected void processEditData(DialogContext dc)
+	{
+		try
+		{
+            //String personId = (String)dc.getRequest().getParameter("person_id");
+            // begin the transaction
+            dc.beginSqlTransaction();
+
+            StatementManager sm = dc.getStatementManager();
+            DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), dc.getServletContext());
+            // fields represent a mapping for dialog fields to database column names
+            String fields = "name_last,name_first,name_middle,name_prefix," +
+                    "ssn,gender,date_of_birth";
+            String complete_name = dc.getValue("name_first") + " " + dc.getValue("name_last");
+            // columns represent a mapping of database column names to literal values?
+            String columns = "complete_name=custom-sql:'" + complete_name + "'";
+            // create the WHERE clause for the update SQL statement
+            String whereExpr = "person_id = ?";
+            dc.executeSqlUpdate("person", fields, columns, whereExpr, "request:person_id");
+
+            // process address information
+            // 1. Check to see if the entry already exists
+            Map result = sm.executeStmtGetValuesMap(dbContext, dc, null, "person.address-by-id", new Object[]{new Long(dc.getRequest().getParameter("person_id"))});
+            if (result != null)
+            {
+                fields = "line1,line2,city,state,zip,country";
+                columns = "";
+                // create the WHERE clause for the update SQL statement
+                whereExpr = "parent_id = ?";
+                dc.executeSqlUpdate("person_address", fields, columns, whereExpr, "request:person_id");
+            }
+            else
+            {
+                fields = "line1,line2,city,state,zip,country";
+                columns = "parent_id=request:person_id,cr_stamp=custom-sql:sysdate";
+                String autoinc = "system_id,PerAddr_system_id_SEQ";
+                String autoincStore = "request-attr:new_address_id";
+                dc.executeSqlInsert("person_address", fields, columns, autoinc, autoincStore);
+            }
+            dc.endSqlTransaction();
+
+		}
+		catch (Exception e)
+		{
+            e.printStackTrace();
+		}
+	}
 
     /**
      * Process the new data
@@ -128,7 +181,7 @@ public class PersonDialog   extends com.xaf.form.Dialog
             fields = "organization=rel_org_id,organization_relation=rel_type";
             columns = "cr_stamp=custom-sql:sysdate,cr_person_id=custom-sql:" + cr_person_id + ",parent_id=custom-sql:" + person_id +
                 ",rel_begin=custom-sql:sysdate,record_status_id=custom-sql:1" ;
-            autoinc = "system_id,PeORel_system_id_SEQ";
+            autoinc = "system_id,PerRel_system_id_seq";
             autoincStore = "request-attr:new_personorg_rel_id";
             dc.executeSqlInsert("personorg_relationship", fields, columns, autoinc, autoincStore);
 

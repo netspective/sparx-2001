@@ -2,7 +2,7 @@
  * Description: app.form.TaskDialog
  * @author ThuA
  * @created Dec 30, 2001 4:01:21 PM
- * @version 
+ * @version
  */
 package app.form;
 
@@ -99,6 +99,7 @@ public class TaskDialog extends Dialog
     {
         try
         {
+            String task_id = dc.getRequest().getParameter("task_id");
             ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
 
@@ -106,11 +107,12 @@ public class TaskDialog extends Dialog
             dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
             // update the Task table
             TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
-            TaskRow taskRow = taskTable.getTaskByTaskId(cc, rc.getTaskId());
-            taskRow.setTaskDescr(rc.getTaskDescr());
+            TaskRow taskRow = taskTable.getTaskByTaskId(cc, new Long(task_id));
+            if (rc.getTaskDescr() != null)
+                taskRow.setTaskDescr(rc.getTaskDescr());
             taskRow.setPriorityId(new Integer(rc.getPriorityId()));
             taskRow.setTaskStatus(new Integer(rc.getTaskStatus()));
-            taskRow.setTaskResolution(new Integer(rc.getTaskResolution()));
+            //taskRow.setTaskResolution(new Integer(rc.getTaskResolution()));
             taskRow.setOwnerOrgId(new Long(rc.getOwnerOrgId()));
             //taskRow.setOwnerPersonId(new Long());
             taskTable.update(cc, taskRow);
@@ -141,19 +143,21 @@ public class TaskDialog extends Dialog
                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
 
             cc.beginTransaction();
-            // insert a row into the Task table
             TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
             TaskRow taskRow = taskTable.createTaskRow();
+            // this will extract the values from the dialog fields and populate
+            // them into the row.
             taskRow.populateDataByNames(dc);
-
+			// insert a row into the Task table
             taskTable.insert(cc, taskRow);
             cc.endTransaction();
+
             dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        System.out.println("Done");
+
     }
 }

@@ -5,14 +5,13 @@
         <dialog name="registration" heading="create-data-cmd-heading:Contact" retain-params="*" class="app.form.PersonDialog">
             <field.separator heading="Profile Information"/>
             <field.text name="person_id" caption="ID">
-                <conditional action="apply-flag" flag="invisible" data-cmd="add"/>
-                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+                <conditional action="apply-flag" flag="invisible" data-cmd="add,edit,delete"/>
             </field.text>
-            <field.select name="name_prefix" caption="Prefix" choices="Mr;Ms;Mrs" required="yes" >
+            <field.select name="name_prefix" caption="Prefix" choices="Mr;Ms;Mrs"  >
                 <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
             </field.select>
             <field.text name="name_last" caption="Last Name" required="yes">
-                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+                <conditional action="apply-flag" flag="read-only" data-cmd="delete"/>
             </field.text>
             <field.text name="name_first" caption="First Name" required="yes">
                 <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
@@ -25,7 +24,7 @@
             <field.select name="gender" caption="Gender" choices="schema-enum:gender" required="yes">
                 <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
             </field.select>
-            <field.ssn name="ssn" caption="Social Security Number" />
+            <field.ssn name="ssn" caption="Social Security Number" strip-dashes="no"/>
             <field.select name="organization" caption="Organization" choices="query:person.active-org-memberships-name-id" required="yes">
                 <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
             </field.select>
@@ -39,7 +38,7 @@
             <field.text name="line1" caption="Street Address 1" max-length="120" required="yes" />
             <field.text name="line2" caption="Street Address 2" max-length="120" />
             <field.text name="city" caption="City" required="yes"/>
-            <field.text name="state" caption="State" max-length="2" upper="yes" required="yes"/>
+            <field.text name="state" caption="State" max-length="2" uppercase="yes" required="yes"/>
             <field.zip name="zip" caption="Zip Code" required="yes"/>
             <field.text name="country" caption="Country" required="yes"/>
             <field.email name="email" caption="Email"/>

@@ -5,7 +5,7 @@
 
 		<!-- Fields -->
 		<field id="person_id" caption="Contact ID" join="person" column="person_id">
-			<report heading="ID" url="create-app-url:/contact/home.jsp?person_id=${.}" align="right"/>
+			<report heading="ID" url="create-app-url:/contact/home.jsp?person_id=${.}&amp;person_name=%{4}" align="right"/>
 		</field>
 		<field id="name_prefix" caption="Prefix" join="person" column="name_prefix">
 			<report heading="Prefix" />
@@ -13,11 +13,17 @@
 		<field id="gender" caption="Gender" join="person" column="gender">
 			<report heading="Gender"/>
 		</field>
+        <field id="gender_name" caption="Gender Type" join="gender" column="caption">
+            <report heading="Gender"/>
+        </field>
 		<field id="name_last" caption="Last Name" join="person" column="name_last" where-expr="upper(person.name_last)">
 			<report heading="Last Name"/>
 		</field>
 		<field id="name_first" caption="First Name" join="person" column="name_first" where-expr="upper(person.name_first)">
 			<report heading="First Name"/>
+		</field>
+		<field id="complete_name" caption="Full Name" join="person" column="complete_name" where-expr="upper(person.complete_name)">
+            <report heading="Full Name"  display="no" />
 		</field>
 		<field id="ssn" caption="SSN" join="person" column="ssn" column-expr="person.ssn">
 			<report heading="SSN"/>
@@ -38,6 +44,7 @@
 		<!-- Joins -->
 		<join id="person" table="person" auto-include="yes"/>
 		<join id="org" table="org" condition="org.org_id = person.cr_org_id" />
+        <join id="gender" table="gender" condition="gender.id = person.gender" />
 
 		<select-dialog name="person_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Contacts">
 			<field.text query-field="person_id"/>
@@ -51,9 +58,10 @@
 			<select heading="Contact Search Results">
 				<display field="person_id"/>
                 <display field="name_prefix"/>
-				<display field="name_last"/>
-				<display field="name_first"/>
-				<display field="gender"/>
+                <display field="name_last"/>
+                <display field="name_first"/>
+                <display field="complete_name"/>
+				<display field="gender_name"/>
 				<display field="ssn"/>
 				<order-by field="form:sort_order"/>
 

@@ -2,17 +2,33 @@
 
 <xaf>
 	<sql-statements package="task">
+        <statement name="priority-list">
+            select
+                caption,
+                id
+            from
+                task_priority
+        </statement>
+        <statement name="status-list">
+            select
+                caption,
+                id
+            from
+                task_status
+        </statement>
         <statement name="information">
             select
                 task_id,
                 task_type,
                 task_summary,
-                task_status,
-                priority_id
+                task_status.caption,
+                task_priority.caption
             from
-                task
+                task, task_priority, task_status
             where
-                task_id = ?
+                task_id = ? and
+                task.priority_id = task_priority.id and
+                task.task_status = task_status.id
             <report heading="Overview">
 				<banner>
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,task.registration,edit&amp;task_id=${request:task_id}"/>

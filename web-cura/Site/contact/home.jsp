@@ -1,7 +1,10 @@
 <%@ taglib prefix="app" uri="/WEB-INF/tld/page.tld"%>
 <%@ taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"%>
 
-<app:page title="Contact Home" heading="Contact Home">
+<%
+ String heading = request.getParameter("person_name");
+ %>
+<app:page title="Contact Home" heading="<%= heading %>">
 <table>
     <tr>
         <td align='left' valign='top'><xaf:query name="person.information" skin="detail"/></td>

@@ -26,6 +26,7 @@
 		<statement name="registration">
 			select
 				org_code as "Code",
+                org_name as "Name",
 				org_abbrev as "Abbrev",
 				org_ownership.caption as "Ownership",
 				ticker_symbol as "Ticker",

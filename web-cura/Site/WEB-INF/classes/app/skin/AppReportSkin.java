@@ -10,7 +10,7 @@ public class AppReportSkin   extends HtmlReportSkin
 	    outerTableAttrs = "width='300' border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	    innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
 	    frameHdRowAttrs = "bgcolor='#4a74e7'";
-	    frameHdFontAttrs = "face='verdana' color=white";
+	    frameHdFontAttrs = "face='Trebuchet MS,Arial' color=white style='font-size: 10pt;'";
         frameHdTableRowBgcolorAttrs = "#F4F8FA";
         frameFtRowAttrs = "bgcolor='#c4d6ec'";
         frameFtFontAttrs = "face='verdana,arial,helvetica' size=2 color='#000000'";

@@ -19,6 +19,12 @@
 	</table>
 
 	<table name="Project_Relationship_Type" abbrev="PrjRelTy" type="Relationship_Type">
+        <enum id="0" abbrev="Lead">Leader</enum>
+        <enum id="1" abbrev="SE">Member - Software Engineering</enum>
+        <enum id="2" abbrev="RM">Member - Requirements</enum>
+        <enum id="3" abbrev="CM">Member - Configuration Management</enum>
+        <enum id="4" abbrev="QA">Member - Quality Assurance</enum>
+        <enum id="5" abbrev="TE">Member - Test Engineering</enum>
 	</table>
 
 	<table name="Project_Relationship_Status" abbrev="PrjRelSt" type="Relationship_Status"/>
@@ -61,11 +67,11 @@
 		<column name="task_resolution" lookupref="Task_Resolution" descr="The resolution status of this task"/>
 		<column name="task_descr" type="text" size="4000" descr="Description of the task"/>
 	</table>
-    
+
     <table name="Task_Priority" abbrev="TskPrt" type="Enumeration">
         <enum id="0" abbrev="L">Low</enum>
-        <enum id="1" abbrev="M">Medium</enum>        
-        <enum id="2" abbrev="H">High</enum>        
+        <enum id="1" abbrev="M">Medium</enum>
+        <enum id="2" abbrev="H">High</enum>
     </table>
 
 	<table name="Task_Relation" abbrev="TskRel" type="PersonOrg_Relationship">
@@ -75,7 +81,7 @@
 		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
 	</table>
 
-    <table name="Task_Relationship_Type" abbrev="TskRelTy" type="Relationship_Type"/>    
+    <table name="Task_Relationship_Type" abbrev="TskRelTy" type="Relationship_Type"/>
 
     <table name="Task_Relationship_Status" abbrev="TskRelSt" type="Relationship_Status"/>
 
@@ -92,7 +98,7 @@
 		<param name="event-type-enum">Task_Event_Type</param>
 	</table>
 
-    <table name="Task_Event_Type" abbrev="TskEvtTy" type="Event_Type"/>    
+    <table name="Task_Event_Type" abbrev="TskEvtTy" type="Event_Type"/>
 
     <table name="Task_Event_Status" abbrev="TskEvtSt" type="Event_Status"/>
 
@@ -102,18 +108,18 @@
 		<param name="flag-type-enum">Task_Flag_Type</param>
 	</table>
 
-    <table name="Task_Flag_Type" abbrev="TskFlgTy" type="Flag_Type"/>    
+    <table name="Task_Flag_Type" abbrev="TskFlgTy" type="Flag_Type"/>
 
     <table name="Task_Flag_Status" abbrev="TskFlgSt" type="Flag_Status"/>
-    
+
     <table name="Task_Impact" abbrev="TskImpt" type="Enumeration">
         <enum id="0" abbrev="N">None</enum>
-        <enum id="1" abbrev="I">Important</enum>    
+        <enum id="1" abbrev="I">Important</enum>
     </table>
-    
+
     <table name="Task_Status" abbrev="TskSt" type="Status"/>
     <table name="Task_Resolution" abbrev="TskRes" type="Enumeration">
         <enum id="0" abbrev="N">Incomplete</enum>
-        <enum id="1" abbrev="I">Complete</enum>        
+        <enum id="1" abbrev="I">Complete</enum>
     </table>
 </schema>

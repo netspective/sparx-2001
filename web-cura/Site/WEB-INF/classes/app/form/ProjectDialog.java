@@ -2,7 +2,7 @@
  * Description: app.form.ProjectDialog
  * @author ThuA
  * @created Dec 29, 2001 3:30:12 PM
- * @version 
+ * @version
  */
 package app.form;
 
@@ -101,7 +101,7 @@ public class ProjectDialog extends Dialog
     }
 
     /**
-     * process the updated data
+     * Process the update data
      */
     protected void processEditData(DialogContext dc)
     {
@@ -156,19 +156,19 @@ public class ProjectDialog extends Dialog
                 (AuthenticatedUser) session.getAttribute(com.xaf.security.LoginDialog.DEFAULT_ATTRNAME_USERINFO);
         Map personMap = (Map) user.getAttribute("registration");
         BigDecimal personId = (BigDecimal) personMap.get("person_id");
-
+		// the getValue() method retrieves the dialog field values according
+		// to the passed in field name
         String projectDescr = (String) dc.getValue("project_descr");
         String projectName = (String) dc.getValue("project_name");
         String projectCode = (String) dc.getValue("project_code");
         String organization = (String) dc.getValue("organization_id");
-
-
         long mainProject = 0;
         try
         {
             ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
                 dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
 
+			// begin the transaction
             cc.beginTransaction();
 
             ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
@@ -182,9 +182,8 @@ public class ProjectDialog extends Dialog
             projectRow.setRecordStatusId(RecordStatusTable.EnumeratedItem.ACTIVE);
             if (mainProject != 0)
                 projectRow.setParentId(mainProject);
-
+			// insert a new project row
             projectTable.insert(cc, projectRow);
-
 
             // insert the project relationships
             ProjectRelationTable projRelTable = dal.DataAccessLayer.instance.getProjectRelationTable();
@@ -200,10 +199,11 @@ public class ProjectDialog extends Dialog
             projRelRow.setRelType(1);
             if (dc.getValue("notify_email") != null)
                 projRelRow.setNotifyEmail(dc.getValue("notify_email"));
-
+			// insert a new project relationship row
             projRelTable.insert(cc, projRelRow);
-            cc.endTransaction();
 
+            // end the transaction
+            cc.endTransaction();
             dc.getRequest().setAttribute("project_id", projectRow.getProjectId());
         }
         catch (Exception e)

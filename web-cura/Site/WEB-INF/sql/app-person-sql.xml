@@ -59,12 +59,17 @@
         </statement>
 
 		<statement name="active-org-memberships">
-			select org.org_id, org.org_name
-			from org, personorg_relationship por
-			where por.parent_id = ?
-			and por.record_status_id = 1  /* active status only */
-			and por.rel_type = 0       /* member of organization */
-			and por.rel_org_id = org.org_id /* join to get org_name */
+			select
+                org.org_id "organization",
+                org.org_name,
+                por.rel_type "organization_relation"
+			from
+                org, personorg_relationship por
+			where
+                por.parent_id = ?
+                and por.record_status_id = 1  /* active status only */
+                and por.rel_type = 0       /* member of organization */
+                and por.rel_org_id = org.org_id /* join to get org_name */
             <params>
                 <param value="request:person_id"/>
             </params>
@@ -75,6 +80,7 @@
                 </banner>
                 <column heading="ID" align="center"/>
                 <column heading="Name" align="center"/>
+                <column display="no"/>
             </report>
 		</statement>
 
@@ -120,10 +126,10 @@
         </statement>
         <statement name="address-by-id">
             select
-                line1,
-                line2,
-                city,
-                state,
+                line1 "line1",
+                line2 "line2",
+                city "city",
+                state "state",
                 zip,
                 country
             from
@@ -150,18 +156,22 @@
         <statement name="information">
             select
                 person_id ,
+                name_prefix "prefix",
                 name_last ,
                 name_first,
                 name_middle,
                 ssn,
-                date_of_birth,
+                to_char(date_of_birth, 'MM/DD/YYYY') "date_of_birth",
                 age,
-                gender,
-                marital_status
+                person.gender "gender",
+                gender.caption,
+                marital_status.caption
             from
-                person
+                person, gender, marital_status
             where
-                person_id = ?
+                person_id = ? and
+                person.gender = gender.id and
+                person.marital_status = marital_status.id
 
 			<params>
 				<param value="request:person_id"/>
@@ -171,13 +181,15 @@
                     <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
                     <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
                 </banner>
-                <column heading="ID"/>
+                <column heading="ID" display="no"/>
+                <column heading="Prefix"/>
                 <column heading="Last Name"/>
                 <column heading="First Name"/>
                 <column heading="Middle Name"/>
                 <column heading="Social Security"/>
                 <column heading="Date of Birth"/>
                 <column heading="Age"/>
+                <column display="no"/>
                 <column heading="Gender"/>
                 <column heading="Marital Status"/>
 			</report>
