@@ -40,54 +40,58 @@ public class ResultSetNavigatorButtonsField extends DialogField
         int lastPage = state.getTotalPages();
 
 		StringBuffer html = new StringBuffer("<center>");
-		html.append("<nobr>Page ");
-		html.append(state.getActivePage());
-		if(isScrollable)
-		{
-			html.append(" of ");
-	    	html.append(state.getTotalPages());
-		}
-		html.append("</nobr>&nbsp;&nbsp;");
-		if(activePage > 1)
-			html.append("<input type='submit' name='rs_nav_first' value=' First ' " + attrs + "> ");
-
-        if(activePage > 2)
-    		html.append("<input type='submit' name='rs_nav_prev' value=' Prev ' " + attrs + "> ");
-
-		boolean hasMoreRows = false;
-        try
+        if (lastPage > 0)
         {
-            if(state.hasMoreRows())
-			{
-                html.append("<input type='submit' name='rs_nav_next' value=' Next ' " + attrs + "> ");
-				hasMoreRows = true;
-			}
-        }
-        catch(SQLException e)
-        {
-			html.append(e.toString());
-        }
+            html.append("<nobr>Page ");
+            html.append(state.getActivePage());
+            if(isScrollable)
+            {
+                html.append(" of ");
+                html.append(state.getTotalPages());
+            }
+            html.append("</nobr>&nbsp;&nbsp;");
+            if(activePage > 1)
+                html.append("<input type='submit' name='rs_nav_first' value=' First ' " + attrs + "> ");
 
-		if(isScrollable)
-		{
-			if(activePage < lastPage)
-				html.append("<input type='submit' name='rs_nav_last' value=' Last ' " + attrs + "> ");
-			html.append("&nbsp;&nbsp;<nobr>");
-	    	html.append(NumberFormat.getNumberInstance().format(state.getTotalRows()));
-			html.append(" total rows</nobr>");
-		}
-		else if(hasMoreRows)
-		{
-			html.append("&nbsp;&nbsp;<nobr>");
-	    	html.append(NumberFormat.getNumberInstance().format(state.getRowsProcessed()));
-			html.append(" rows so far</nobr>");
-		}
-		else
-		{
-			html.append("&nbsp;&nbsp;<nobr>");
-	    	html.append(NumberFormat.getNumberInstance().format(state.getRowsProcessed()));
-			html.append(" total rows</nobr>");
-		}
+            if(activePage > 2)
+                html.append("<input type='submit' name='rs_nav_prev' value=' Prev ' " + attrs + "> ");
+
+            boolean hasMoreRows = false;
+            try
+            {
+                if(state.hasMoreRows())
+                {
+                    html.append("<input type='submit' name='rs_nav_next' value=' Next ' " + attrs + "> ");
+                    hasMoreRows = true;
+                }
+            }
+            catch(SQLException e)
+            {
+                html.append(e.toString());
+            }
+
+            if(isScrollable)
+            {
+                if(activePage < lastPage)
+                    html.append("<input type='submit' name='rs_nav_last' value=' Last ' " + attrs + "> ");
+                html.append("&nbsp;&nbsp;<nobr>");
+                html.append(NumberFormat.getNumberInstance().format(state.getTotalRows()));
+                html.append(" total rows</nobr>");
+            }
+            else if(hasMoreRows)
+            {
+                html.append("&nbsp;&nbsp;<nobr>");
+                html.append(NumberFormat.getNumberInstance().format(state.getRowsProcessed()));
+                html.append(" rows so far</nobr>");
+            }
+            else
+            {
+                html.append("&nbsp;&nbsp;<nobr>");
+                html.append(NumberFormat.getNumberInstance().format(state.getRowsProcessed()));
+                html.append(" total rows</nobr>");
+            }
+
+        }
 
    		html.append("&nbsp;&nbsp;<input type='submit' name='"+ dc.getDialog().getResetContextParamName() +"' value=' Done ' " + attrs + "> ");
 		html.append("</center>");
