@@ -428,10 +428,10 @@ public class SelectField extends DialogField
 					switch(style)
 					{
 						case SELECTSTYLE_COMBO:
-							return "<select name='"+ id +"'" + defaultControlAttrs + ">" + options + "</select>";
+							return "<select name='"+ id +"' " + defaultControlAttrs + ">" + options + "</select>";
 
 						case SELECTSTYLE_LIST:
-							return "<select name='"+ id +"' size='"+ size +"'" + defaultControlAttrs + ">" + options + "</select>";
+							return "<select name='"+ id +"' size='"+ size +"' " + defaultControlAttrs + ">" + options + "</select>";
 
 						case SELECTSTYLE_MULTILIST:
 							return "<select name='"+ id +"' size='"+ size +"' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>";
