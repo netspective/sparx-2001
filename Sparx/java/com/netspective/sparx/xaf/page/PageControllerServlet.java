@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.10 2002-12-27 17:16:05 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.11 2002-12-28 20:07:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -60,12 +60,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletConfig;
@@ -85,6 +82,8 @@ import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
+import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -112,9 +111,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private static final String DEFAULT_CONTENT_TYPE = "text/html";
 
     private static final String CONFIGITEM_DEFAULT_PREFIX = "app.controller.";
-    private static final String CONFIGITEM_DISCOVER_REDISCOVER = "discover.rediscover-param-name";
-    private static final String CONFIGITEM_DISCOVER_ROOTPATH = "discover.root-path";
-    private static final String CONFIGITEM_DISCOVER_ROOTPKG = "discover.root-package";
     private static final String CONFIGITEM_LOGIN_DIALOGCLASS = "login.dialog-class";
     private static final String CONFIGITEM_LOGIN_DIALOGIMAGE = "login.dialog-image";
     private static final String CONFIGITEM_LOGIN_DIALOGSKIN = "login.dialog-skin-name";
@@ -129,7 +125,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private String loginDialogSkinName;
     private String logoutParamName;
 
-    private String rediscoverParamName;
     private NavigationPath pagesPath;
 
     protected AppServerLogger debugLog;
@@ -239,13 +234,11 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
             }
         }
 
-        rediscoverParamName = appConfig.getTextValue(vc, configItemsPrefix + CONFIGITEM_DISCOVER_REDISCOVER, DEFAULT_REDISCOVER_PARAMNAME);
         registerPages(config);
     }
 
     public void registerPages(ServletConfig config) throws ServletException
     {
-        discoverPages(null, null);
     }
 
     public boolean accept(File dir, String name)
@@ -312,59 +305,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         sharedCssRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "css-url");
     }
 
-    protected void discoverPages(HttpServletRequest req, HttpServletResponse resp) throws ServletException
-    {
-        ServletContext sc = getServletContext();
-        ValueContext vc = new ServletValueContext(sc, this, req, resp);
-
-        String configItemsPrefix = getConfigItemsPrefix();
-        String rootPath = appConfig.getTextValue(vc, configItemsPrefix + CONFIGITEM_DISCOVER_ROOTPATH);
-        String rootPkg = appConfig.getTextValue(vc, configItemsPrefix + CONFIGITEM_DISCOVER_ROOTPKG);
-
-        sc.log("[discover] rootPath = " + rootPath + " (" + configItemsPrefix + CONFIGITEM_DISCOVER_ROOTPATH + ")");
-        sc.log("[discover] rootPkg = " + rootPkg + " (" + configItemsPrefix + CONFIGITEM_DISCOVER_ROOTPKG + ")");
-
-        if(rootPath != null)
-        {
-            List tasks = new ArrayList();
-            discoverPages(tasks, rootPkg, new File(rootPath));
-
-            for(Iterator i = tasks.iterator(); i.hasNext();)
-            {
-                Class cls = (Class) i.next();
-                if(!cls.isInterface() && com.netspective.sparx.xaf.navigate.NavigationPage.class.isAssignableFrom(cls))
-                {
-                    sc.log("[discover] found ServletPage " + cls.getName());
-                    try
-                    {
-                        com.netspective.sparx.xaf.navigate.NavigationPage page = (com.netspective.sparx.xaf.navigate.NavigationPage) cls.newInstance();
-                        page.registerPage(this, pagesPath);
-                    }
-                    catch(InstantiationException e)
-                    {
-                        sc.log("[discover] " + e.toString());
-                    }
-                    catch(IllegalAccessException e)
-                    {
-                        sc.log("[discover] " + e.toString());
-                    }
-                }
-                else
-                {
-                    sc.log("[discover] " + cls.getName() + " is not a ServletPage");
-                }
-            }
-        }
-
-        sc.log("[discover] pagesPath has " + pagesPath.getChildrenMap().size() + " children");
-        for(Iterator i = pagesPath.getAbsolutePathsMap().entrySet().iterator(); i.hasNext();)
-        {
-            Map.Entry entry = (Map.Entry) i.next();
-            VirtualPath path = (VirtualPath) entry.getValue();
-            sc.log("[discover] mapped '" + entry.getKey().toString() + "' to " + path.toString() + " [" + path.getChildrenMap().size() + " children]" + (path.getPage() != null ? " (has page)" : ""));
-        }
-    }
-
     protected boolean doLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
         if(loginDialog == null)
@@ -426,6 +366,11 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         return req.getPathInfo();
     }
 
+    protected NavigationPathSkin getNavigationSkin()
+    {
+        return null;
+    }
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         if(firstRequest)
@@ -439,14 +384,9 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
             startTime = new Date().getTime();
 
         org.apache.log4j.NDC.push(req.getSession(true).getId());
-
-        String rediscover = req.getParameter(rediscoverParamName);
-        if(rediscover != null)
-            discoverPages(req, resp);
-
         resp.setContentType(getDefaultContentType());
 
-        NavigationPathContext nc = new NavigationPathContext(pagesPath, getServletContext(), this, req, resp, getActivePathToFind(req));
+        NavigationPathContext nc = new NavigationPathContext(pagesPath, getServletContext(), this, req, resp, getNavigationSkin(), getActivePathToFind(req));
         NavigationPath.FindResults activePathResults = nc.getActivePathFindResults();
         NavigationPath activePath = activePathResults.getMatchedPath();
         Writer writer = resp.getWriter();
@@ -465,7 +405,14 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
                     }
                 }
 
-                activePage.handlePage(writer, nc);
+                try
+                {
+                    activePage.handlePage(writer, nc);
+                }
+                catch(NavigationPageException e)
+                {
+                    throw new ServletException(e);
+                }
             }
             else
             {

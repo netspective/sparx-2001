@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.2 2002-12-28 15:48:33 shahid.shah Exp $
+ * $Id: NavigationPathContext.java,v 1.3 2002-12-28 20:07:37 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -66,9 +66,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletRequest;
 
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.xif.SchemaDocument;
 
 public class NavigationPathContext extends ServletValueContext
 {
@@ -77,6 +79,7 @@ public class NavigationPathContext extends ServletValueContext
     private static int pageContextNum = 0;
     private NavigationPath ownerTree;
     private NavigationPath activeTree;
+    private NavigationPathSkin skin;
     private NavigationPath.FindResults activePathFindResults;
     private String transactionId;
     private long resultCode;
@@ -85,16 +88,19 @@ public class NavigationPathContext extends ServletValueContext
     private boolean popup;
     private Map navigationStates = new HashMap();
     private int maxLevel = 0;
+    private String rootUrl;
 
-    public NavigationPathContext(NavigationPath ownerTree, ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse, String activePathId)
+    public NavigationPathContext(NavigationPath ownerTree, ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse, NavigationPathSkin skin, String activePathId)
     {
         super(aContext, aServlet, aRequest, aResponse);
 
         pageContextNum++;
         this.ownerTree = ownerTree;
+        this.skin = skin;
         activePathFindResults = ownerTree.findPath(activePathId);
         activeTree = activePathFindResults.getMatchedPath();
         maxLevel = ownerTree.getMaxLevel();
+        rootUrl = ((HttpServletRequest) aRequest).getContextPath();
 
         try
         {
@@ -109,19 +115,34 @@ public class NavigationPathContext extends ServletValueContext
         }
     }
 
+    public String getApplicationName(NavigationPathContext nc)
+    {
+        return SchemaDocument.sqlIdentifierToText(nc.getServletContext().getServletContextName().substring(1), true);
+    }
+
     public final NavigationPath.FindResults getActivePathFindResults()
     {
         return activePathFindResults;
     }
 
-    public NavigationPath getActivePath()
+    public final NavigationPath getActivePath()
     {
         return activeTree;
     }
 
-    public NavigationPath getOwnerTree()
+    public final NavigationPath getOwnerTree()
     {
         return ownerTree;
+    }
+
+    public final NavigationPathSkin getSkin()
+    {
+        return skin;
+    }
+
+    public final String getRootUrl()
+    {
+        return rootUrl;
     }
 
     public int getMaxLevel()

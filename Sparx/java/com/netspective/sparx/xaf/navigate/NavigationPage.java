@@ -51,20 +51,17 @@
  */
 
 /**
- * $Id: NavigationPage.java,v 1.2 2002-12-28 20:07:37 shahid.shah Exp $
+ * $Id: NavigationPage.java,v 1.3 2002-12-28 20:08:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
 
 import com.netspective.sparx.xaf.html.ComponentCommandException;
 import com.netspective.sparx.xaf.html.ComponentCommandFactory;
-import com.netspective.sparx.xaf.page.PageControllerServlet;
 import com.netspective.sparx.util.value.ValueContext;
 
 import java.io.IOException;
 import java.io.Writer;
-
-import javax.servlet.ServletException;
 
 public class NavigationPage extends NavigationPath
 {

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathSkin.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationPathSkin.java,v 1.2 2002-12-28 20:07:37 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -72,12 +72,20 @@ public interface NavigationPathSkin
     public NavigationPathContext createContext(PageContext jspPageContext, NavigationPath tree, String navTreeId, boolean popup);
 
     /**
-     * Render all the navigation prior to the body (the metadata, masthead, headings, etc)
-     * @param writer The output writer
+     * Render the meta data like <html>, <head>, <script> etc.
+     * @param writer The output destination
      * @param nc The current navigation context
-     * @throws java.io.IOException
+     * @throws IOException
      */
-    public void renderNavigationBeforeBody(Writer writer, NavigationPathContext nc) throws IOException;
+    public void renderPageMetaData(Writer writer, NavigationPathContext nc) throws IOException;
+
+    /**
+     * Render the information contained in the page header (anything before the body)
+     * @param writer
+     * @param nc
+     * @throws IOException
+     */
+    public void renderPageHeader(Writer writer, NavigationPathContext nc) throws IOException;
 
     /**
      * Render all the navigation after to the body (the footer)
@@ -85,6 +93,6 @@ public interface NavigationPathSkin
      * @param nc The current navigation context
      * @throws java.io.IOException
      */
-    public void renderNavigationAfterBody(Writer writer, NavigationPathContext nc) throws IOException;
+    public void renderPageFooter(Writer writer, NavigationPathContext nc) throws IOException;
 
 }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.7 2002-12-27 17:16:05 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.8 2002-12-28 20:07:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -75,10 +75,7 @@ import com.netspective.sparx.xaf.security.AccessControlList;
 import com.netspective.sparx.xaf.security.AccessControlListFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
-import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
+import com.netspective.sparx.xaf.navigate.*;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.config.Configuration;
@@ -106,6 +103,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     private long startTime;
     private String navSkinName;
     private String navId;
+    private NavigationPage activePage;
     private NavigationPathContext nc;
 
     public void release()
@@ -345,7 +343,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 return SKIP_BODY;
             }
 
-            NavigationPath appNavigationTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
+            NavigationPage appNavigationTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
             if(appNavigationTree != null)
             {
                 if(navSkin == null)
@@ -363,7 +361,12 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
                 String navId = req.getPathInfo();
                 nc = navSkin.createContext(pageContext, appNavigationTree, navId == null ? this.navId : navId, popup);
-                navSkin.renderNavigationBeforeBody(out, nc);
+                activePage = (NavigationPage) nc.getActivePath();
+                if(activePage != null)
+                {
+                    activePage.handlePageMetaData(out, nc);
+                    activePage.handlePageHeader(out, nc);
+                }
             }
             else
                 out.print("NavigationTree navTree is null.");
@@ -384,11 +387,11 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
     public int doEndTag() throws javax.servlet.jsp.JspException
     {
         HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
-        if(req.getAttribute(ATTRNAME_SKIPPEDBODY) == null)
+        if(req.getAttribute(ATTRNAME_SKIPPEDBODY) == null && activePage != null)
         {
             try
             {
-                navSkin.renderNavigationAfterBody(pageContext.getOut(), nc);
+                activePage.handlePageFooter(pageContext.getOut(), nc);
             }
             catch (Exception e)
             {

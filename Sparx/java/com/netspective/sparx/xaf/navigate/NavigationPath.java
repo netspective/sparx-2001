@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.2 2002-12-28 15:48:33 shahid.shah Exp $
+ * $Id: NavigationPath.java,v 1.3 2002-12-28 20:07:37 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -201,6 +201,8 @@ public class NavigationPath
     private String caption;
     private String title;
     private String heading;
+    private String actionImageUrl;
+    private String entityImageUrl;
     private List childrenList = new ArrayList();
     private Map childrenMap = new HashMap();
     private Map absPathMap = new HashMap();
@@ -238,6 +240,16 @@ public class NavigationPath
         }
     }
 
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String value)
+    {
+        id = value;
+    }
+
     public void setName(String name)
     {
         this.name = name;
@@ -246,6 +258,36 @@ public class NavigationPath
     public String getName()
     {
         return name;
+    }
+
+    public String getCaption(ValueContext vc)
+    {
+        return caption;
+    }
+
+    public void setCaption(String value)
+    {
+        caption = value != null && value.length() > 0 ? value : null;
+    }
+
+    public String getTitle(ValueContext vc)
+    {
+        return title;
+    }
+
+    public void setTitle(String value)
+    {
+        title = value != null && value.length() > 0 ? value : null;
+    }
+
+    public String getHeading(ValueContext vc)
+    {
+        return heading;
+    }
+
+    public void setHeading(String value)
+    {
+        heading = value != null && value.length() > 0 ? value : null;
     }
 
     public NavigationPath getOwner()
@@ -275,16 +317,6 @@ public class NavigationPath
             parent = null;
     }
 
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String value)
-    {
-        id = value;
-    }
-
     public int getLevel()
     {
         return level;
@@ -311,6 +343,26 @@ public class NavigationPath
     {
         if(maxLevel > this.maxLevel)
             this.maxLevel = maxLevel;
+    }
+
+    public String getActionImageUrl()
+    {
+        return actionImageUrl;
+    }
+
+    public void setActionImageUrl(String actionImageUrl)
+    {
+        this.actionImageUrl = actionImageUrl;
+    }
+
+    public String getEntityImageUrl()
+    {
+        return entityImageUrl;
+    }
+
+    public void setEntityImageUrl(String entityImageUrl)
+    {
+        this.entityImageUrl = entityImageUrl;
     }
 
     public Map getAbsolutePathsMap()
@@ -392,38 +444,29 @@ public class NavigationPath
         return null;
     }
 
-    public String getCaption(ValueContext vc)
+    /**
+     * A method that returns the default class used to represent a path available.
+     * @return
+     */
+    public Class getChildPathClass()
     {
-        return caption;
+        return NavigationPath.class;
     }
 
-    public void setCaption(String value)
+    /**
+     * A method that returns the object to represent a new path.
+     * This method can be overwritten to allow the placement of other objects of type <code>NavigationPath</code>.
+     * @return
+     */
+    public NavigationPath createChildPathInstance()
     {
-        caption = value != null && value.length() > 0 ? value : null;
-    }
-
-    public String getTitle(ValueContext vc)
-    {
-        return title;
-    }
-
-    public void setTitle(String value)
-    {
-        title = value != null && value.length() > 0 ? value : null;
-    }
-
-    public String getHeading(ValueContext vc)
-    {
-        return heading;
-    }
-
-    public void setHeading(String value)
-    {
-        heading = value != null && value.length() > 0 ? value : null;
+        return new NavigationPath();
     }
 
     public void importFromXml(Element elem, NavigationPath parent)
     {
+        Class defaultChildClass = getChildPathClass();
+
         NodeList children = elem.getChildNodes();
         for (int c = 0; c < children.getLength(); c++)
         {
@@ -438,11 +481,14 @@ public class NavigationPath
                 NavigationPath childPath = null;
                 if(childClassName.length() > 0)
                 {
-                    ClassPath.InstanceGenerator instGen = new ClassPath.InstanceGenerator(childClassName, NavigationPath.class, true);
+                    ClassPath.InstanceGenerator instGen = new ClassPath.InstanceGenerator(childClassName, defaultChildClass, true);
                     childPath = (NavigationPath) instGen.getInstance();
                 }
                 else
-                    childPath = getChildPathInstance();
+                {
+                    childPath = createChildPathInstance();
+                    childElem.setAttribute("class", childPath.getClass().getName());
+                }
 
                 childPath.setOwner(parent.getOwner());
                 childPath.setParent(parent);
@@ -451,6 +497,15 @@ public class NavigationPath
                 parent.getChildrenMap().put(childPath.getId(), childPath);
                 parent.getChildrenList().add(childPath);
                 parent.register(childPath);
+
+                String name = childElem.getAttribute("name");
+                if(name.length() > 0)
+                    childPath.setName(name);
+                else
+                {
+                    String[] pathItems = getPathItems(id);
+                    childPath.setName(pathItems[pathItems.length-1]);
+                }
 
                 String caption = childElem.getAttribute("caption");
                 childPath.setCaption(caption);
@@ -485,6 +540,14 @@ public class NavigationPath
 
                 String defaultChildId = childElem.getAttribute("default");
                 childPath.setDefaultChildId(defaultChildId);
+
+                String imageUrl = childElem.getAttribute("action-image-url");
+                if (imageUrl.length() > 0)
+                    childPath.setActionImageUrl(url);
+
+                imageUrl = childElem.getAttribute("entity-image-url");
+                if (imageUrl.length() > 0)
+                    childPath.setEntityImageUrl(url);
 
                 //if this is the first child then if there is no default defined for the parent set this id as the
                 //default.
@@ -634,44 +697,12 @@ public class NavigationPath
         return html.toString();
     }
 
-    static public String getDebugHtml(ValueContext vc, NavigationPath parent)
-    {
-        if (parent.childrenList == null || parent.childrenList.size() == 0)
-            return null;
-
-        StringBuffer html = new StringBuffer("<ol>");
-        Iterator i = parent.childrenList.iterator();
-        while (i.hasNext())
-        {
-            NavigationPath path = (NavigationPath) i.next();
-            html.append("<li>");
-            html.append(path.getAbsolutePath() + ": level " + path.getLevel() + " (max "+ path.getMaxLevel() +", "+ path.getAncestorsCount() +" ancestors), " +path.getClass().getName() + ", " + path.getCaption(vc) + ", " + path.getHeading(vc) + ", " + path.getTitle(vc));
-            String children = getDebugHtml(vc, path);
-            if (children != null)
-                html.append(children);
-            html.append("</li>");
-        }
-        html.append("</ol>");
-
-        return html.toString();
-    }
-
     static public String[] getPathItems(String path)
     {
         List items = new ArrayList();
         for (StringTokenizer st = new StringTokenizer(path, PATH_SEPARATOR); st.hasMoreTokens();)
             items.add(st.nextToken());
         return (String[]) items.toArray(new String[items.size()]);
-    }
-
-    /**
-     * A method that returns the object to represent every path available.
-     * This method can be overwritten to allow the placement of other objects of type <code>NavigationPath</code>.
-     * @return
-     */
-    public NavigationPath getChildPathInstance()
-    {
-        return new NavigationPath();
     }
 
     /**
@@ -724,7 +755,7 @@ public class NavigationPath
      */
     public String getUrl(ValueContext vc)
     {
-        return url.getValue(vc);
+        return url != null ? url.getValue(vc) : ((HttpServletRequest) vc.getRequest()).getContextPath() + ((HttpServletRequest) vc.getRequest()).getServletPath() + getAbsolutePath();
     }
 
     /**
@@ -906,6 +937,7 @@ public class NavigationPath
 
     public NavigationPath registerPage(String path, NavigationPage page)
     {
+        page.setId(path);
         return addChild(path, page);
     }
 }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.2 2002-12-28 15:48:33 shahid.shah Exp $
+ * $Id: NavigationTreeManager.java,v 1.3 2002-12-28 20:07:37 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -59,7 +59,6 @@ package com.netspective.sparx.xaf.navigate;
 import com.netspective.sparx.util.xml.XmlSource;
 import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -79,10 +78,10 @@ public class NavigationTreeManager extends XmlSource
         loadDocument(file);
     }
 
-    public NavigationPath getTree(String name)
+    public NavigationPage getTree(String name)
     {
         reload();
-        return (NavigationPath) structures.get(name == null ? NAME_DEFAULT : name);
+        return (NavigationPage) structures.get(name == null ? NAME_DEFAULT : name);
     }
 
     public void catalogNodes()
@@ -103,8 +102,8 @@ public class NavigationTreeManager extends XmlSource
             if(childElem.getNodeName().equals("structure"))
             {
                 setAttrValueDefault(childElem, "name", NAME_DEFAULT);
-                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationPath.class, true);
-                NavigationPath tree = (NavigationPath) instanceGen.getInstance();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationPage.class, true);
+                NavigationPage tree = (NavigationPage) instanceGen.getInstance();
                 tree.setRoot(true);
                 tree.importFromXml(childElem, tree);
                 structures.put(childElem.getAttribute("name"), tree);
