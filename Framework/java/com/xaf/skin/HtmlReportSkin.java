@@ -84,7 +84,13 @@ public class HtmlReportSkin implements ReportSkin
 				for(int i = 0; i < bannerItems.size(); i++)
 				{
 					ReportBanner.Item item = (ReportBanner.Item) bannerItems.get(i);
-					writer.write("<tr><td>*</td><td><font "+bannerItemFontAttrs+"><a href='"+ item.getUrl() +"'>"+ item.getCaption() +"</a></font></td></tr>");
+                    SingleValueSource itemUrl = item.getUrl();
+                    SingleValueSource itemCaption = item.getCaption();
+
+                    if(itemUrl != null && itemCaption != null)
+                        writer.write("<tr><td>-</td><td><font "+bannerItemFontAttrs+"><a href='"+ itemUrl.getValue(rc) +"'>"+ itemCaption.getValue(rc) +"</a></font></td></tr>");
+                    else if(itemCaption != null)
+                        writer.write("<tr><td>-</td><td><font "+bannerItemFontAttrs+">" + itemCaption.getValue(rc) +"</font></td></tr>");
 				}
 				writer.write("</table></td></tr>");
 			}

@@ -9,37 +9,40 @@ package com.xaf.report;
  * @version 1.0
  */
 
+import com.xaf.value.SingleValueSource;
+import com.xaf.value.ValueSourceFactory;
+
 import java.util.*;
 
 public class ReportBanner
 {
     static public class Item
     {
-        private String icon;
-        private String caption;
-        private String url;
+        private SingleValueSource icon;
+        private SingleValueSource caption;
+        private SingleValueSource url;
 
         public Item(String caption, String url)
         {
-            this.caption = caption;
-            this.url = url;
+            this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
+            this.url = ValueSourceFactory.getSingleOrStaticValueSource(url);
         }
 
         public Item(String caption, String url, String icon)
         {
-            this.caption = caption;
-            this.url = url;
-            this.icon = icon;
+            this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
+            this.url = ValueSourceFactory.getSingleOrStaticValueSource(url);
+            this.icon = ValueSourceFactory.getSingleOrStaticValueSource(icon);
         }
 
         public Item(String caption)
         {
-            this.caption = caption;
+            this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
         }
 
-        public String getCaption() { return caption; }
-        public String getUrl() { return url; }
-        public String getIcon() { return icon; }
+        public SingleValueSource getCaption() { return caption; }
+        public SingleValueSource getUrl() { return url; }
+        public SingleValueSource getIcon() { return icon; }
     }
 
     private ArrayList items = new ArrayList();
