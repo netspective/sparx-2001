@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.22 2003-04-18 01:42:41 aye.thu Exp $
+ * $Id: dialog.js,v 1.23 2003-04-18 16:01:41 aye.thu Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -296,6 +296,7 @@ var SELECTSTYLE_LIST       = 2;
 var SELECTSTYLE_MULTICHECK = 3;
 var SELECTSTYLE_MULTILIST  = 4;
 var SELECTSTYLE_MULTIDUAL  = 5;
+var SELECTSTYLE_POPUP      = 6;
 
 var DATE_DTTYPE_DATEONLY = 0;
 var DATE_DTTYPE_TIMEONLY = 1;
@@ -1435,6 +1436,40 @@ function SocialSecurityField_onKeyPress(field, control, event)
 function SelectField_isValid(field, control)
 {
 	var style = field.style;
+    if (style == SELECTSTYLE_POPUP)
+    {
+        if (field.isRequired() && control.value.length == 0)
+        {
+            field.alertRequired(control);
+            return false;
+        }
+        alert(field.name + " " + control.value.length);
+        if (control.value.length > 0 && field.choicesCaption)
+        {
+            var valid = -1;
+
+            for (var i=0; i < field.choicesCaption.length; i++)
+            {
+                if (field.choicesCaption[i] == control.value)
+                    valid = i;
+            }
+            if (valid < 0)
+            {
+                field.alertMessage(control, "Entered field value '" + control.value + "' is not valid. ");
+                return false;
+            }
+            else
+            {
+                adjacentArea = field.getAdjacentArea(activeDialog);
+                if(adjacentArea != null)
+                {
+                    alert("Adjacent set to " + field.choicesValue[valid]);
+                    adjacentArea.innerHTML = field.choicesValue[valid];
+                }
+                return true;
+            }
+        }
+    }
 
 	if(field.isRequired())
 	{
@@ -1492,7 +1527,6 @@ function SelectField_isValid(field, control)
 		}
 		else if(style == SELECTSTYLE_MULTIDUAL)
 		{
-
 			var selectedCount = 0;
 			var options = control.options;
 			for(var o = 0; o < options.length; o++)
@@ -1506,13 +1540,14 @@ function SelectField_isValid(field, control)
 			    return false;
 			}
 		}
+
 	}
 
 	return true;
 }
 
 addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, null, null, TextField_onFocus, TextField_valueChanged, null, null);
-addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, null);
+addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, null, SelectField_isValid, null, null, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.netspective.sparx.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
 addFieldType("com.netspective.sparx.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, null, null, DateField_valueChanged, DateField_onKeyPress, null);
