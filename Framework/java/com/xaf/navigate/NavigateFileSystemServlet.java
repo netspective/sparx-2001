@@ -157,7 +157,10 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 		}
 		else
 		{
-			resp.sendRedirect(req.getContextPath() + activeEntry.getEntryURI());
+            if (req.getQueryString() != null)
+    			resp.sendRedirect(req.getContextPath() + activeEntry.getEntryURI() + "?" + req.getQueryString());
+            else
+            	resp.sendRedirect(req.getContextPath() + activeEntry.getEntryURI());
 		}
     }
 
