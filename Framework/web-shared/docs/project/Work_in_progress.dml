@@ -23,6 +23,7 @@
 
 		<task>
 			<name>User Interface Management</name>
+			<task><name>Bug in query definition that shows "page 1 of 0" if no rows returned</name><new/></task>
 			<task><name>Add ability to auto-generate "form bean" java classes from Dialog XML (at runtime).</name></task>
 			<task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
 			<task><name>Field persistence through cookies still needs to be implemented.</name></task>
@@ -88,6 +89,8 @@
 
 		<task>
 			<name>Security</name>
+			<task><name>Add ACE password (preferrably application specific) need by 7/27-noon</name><new/></task>
+			<task><name>Assist or create security to restrict user access to code directory listing through web page</name><new/></task>
 			<task><name>Add basic User Management functionality to the Access Control framework. Use <a href="http://jakarta.apache.org/tomcat/tomcat-4.0-doc/config/realm.html">Realm</a> design pattern and find a way to use the HttpServletRequest.getUserPrincipal() and HttpServletRequest.isUserInRole() methods.</name></task>
 			<task><name>When sessions time-out, set a flag so that login dialogs can indicate a timeout to the end user. Also add session timing out as a separate activity in the security monitor log.</name></task>
 		</task>
