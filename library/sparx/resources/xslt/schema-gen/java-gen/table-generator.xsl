@@ -184,14 +184,19 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="default"/>);
 	</xsl:when>
 </xsl:choose>
-<xsl:choose>
+<!-- Added by SJ -->
+<xsl:for-each select="default">
+		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);
+</xsl:for-each>
+<!--xsl:choose>
 	<xsl:when test="@default">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@default"/>&quot;);
 	</xsl:when>
 	<xsl:when test="default[not(@type)]">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="default"/>&quot;);
 	</xsl:when>
-</xsl:choose>
+</xsl:choose -->
+<!-- End of Addition -->
 <xsl:if test="size and size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="size"/>);
 </xsl:if>
 <xsl:if test="@size and @size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="@size"/>);

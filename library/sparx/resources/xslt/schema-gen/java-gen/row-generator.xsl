@@ -89,12 +89,18 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:for-each select="column">
 <xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
 <xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
+<xsl:variable name="method-name"><xsl:value-of select="@_gen-method-name"/></xsl:variable>
 <xsl:if test="@default-java or default[@type = 'java']">
 	<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = table.get<xsl:value-of select="@_gen-method-name"/>Column().getDefaultValue();
 </xsl:if>
-<xsl:if test="@default or default">
+<!-- Added by Shahbaz Javeed -->
+<xsl:for-each select="default">
+	<xsl:text>		</xsl:text>setCustomSqlExpr(COLAI_<xsl:value-of select="$constant-name"/>, &quot;<xsl:value-of select="@dbms"/>&quot;, table.get<xsl:value-of select="$method-name"/>Column().getDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;));
+</xsl:for-each>
+<!--xsl:if test="@default or default">
 	<xsl:text>		</xsl:text>setCustomSqlExpr(COLAI_<xsl:value-of select="$constant-name"/>, table.get<xsl:value-of select="@_gen-method-name"/>Column().getDefaultSqlExprValue());
-</xsl:if>
+</xsl:if -->
+<!-- End of Addition -->
 </xsl:for-each>
 	}
 
@@ -136,14 +142,41 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		return true;
 	}
 
+/*
 	public List getDataForDmlStatement()
 	{
 		List data = new ArrayList();
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
-<xsl:for-each select="column">		data.add(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] ? ((Object) new DmlStatement.CustomSql(sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])) : table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>));
+<xsl:for-each select="column">
+	<xsl:text>		</xsl:text>data.add(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] ? ((Object) new DmlStatement.CustomSql(sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])) : table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>));
 </xsl:for-each>
 		return data;
 	}
+*/
+<!-- Complete this routine -->
+	public List getDataForDmlStatement(DatabasePolicy dbPolicy)
+	{
+		List data = new ArrayList();
+		String dbms = dbPolicy.getDBMSName();
+		
+		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+<xsl:for-each select="column">
+<xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
+<xsl:choose>
+	<xsl:when test="(@allow-sql-expr = 'no' or allow-sql-expr = 'no')">
+		<xsl:text>		</xsl:text>data.add(table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>));
+	</xsl:when>
+	<xsl:when test="default">
+		<xsl:text>		</xsl:text>data.add(haveSqlExprData (dbms, COLAI_<xsl:value-of select="$constant-name"/>) ? ((Object) new DmlStatement.CustomSql(dbms, getCustomSqlExpr(COLAI_<xsl:value-of select="$constant-name"/>, dbms))) : table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>));
+	</xsl:when>
+	<xsl:otherwise>
+		<xsl:text>		</xsl:text>data.add(haveSqlExprData (DEFAULT_DBMS, COLAI_<xsl:value-of select="$constant-name"/>) ? ((Object) new DmlStatement.CustomSql(getCustomSqlExpr(COLAI_<xsl:value-of select="$constant-name"/>, DEFAULT_DBMS))) : table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>));
+	</xsl:otherwise>
+</xsl:choose>
+</xsl:for-each>
+		return data;
+	}
+<!-- End of modifications -->
 
 	public void populateDataByIndexes(ResultSet rs) throws SQLException
 	{
@@ -389,6 +422,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
+		String dbms = databasePolicy.getDBMSName();
 		Object value;
 
 <xsl:for-each select="column[@type = 'autoinc']">
@@ -396,11 +430,11 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:text>		</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
 <xsl:text>		</xsl:text>value = databasePolicy.handleAutoIncPreDmlExecute(cc.getConnection(), <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName(), <xsl:value-of select="@_gen-member-name"/>Col.getName());
-<xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, value);
+<xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, dbms, value);
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 		} else {
 			dml.removeColumn("<xsl:value-of select="@name"/>");
-			dml.createSql();
+			dml.createSql(dbms);
 		}
 </xsl:for-each>
 
@@ -413,7 +447,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 		} else {
 			dml.removeColumn("<xsl:value-of select="@name"/>");
-			dml.createSql();
+			dml.createSql(dbms);
 		}
 </xsl:for-each>
 		return true;
@@ -425,17 +459,18 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 			return false;
 
 		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
+		String dbms = databasePolicy.getDBMSName();
 
 <xsl:for-each select="column[@type = 'autoinc']">
 		if (!databasePolicy.retainAutoIncColInDml()) {
 			dml.removeColumn("<xsl:value-of select="@name"/>");
-			dml.createSql();
+			dml.createSql(dbms);
 		}
 </xsl:for-each>
 <xsl:for-each select="column[@type = 'guid32']">
 		if (!databasePolicy.retainGUIDColInDml()) {
 			dml.removeColumn("<xsl:value-of select="@name"/>");
-			dml.createSql();
+			dml.createSql(dbms);
 		}
 </xsl:for-each>
 		return true;
@@ -547,8 +582,11 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
         }
         else
             str.append("NULL");
-		if(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])
-			str.append(" [SQL Expr: [" + sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] + "]]");
+		if(haveSqlExprData(COLAI_<xsl:value-of select="@_gen-constant-name"/>))
+			str.append(" [SQL Expr: [" + sqlExprDataToString(COLAI_<xsl:value-of select="@_gen-constant-name"/>) + "]]");
+
+//		if(haveSqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>])
+//			str.append(" [SQL Expr: [" + sqlExprData[COLAI_<xsl:value-of select="@_gen-constant-name"/>] + "]]");
 		else
 			str.append(" [No SQL Expr]");
 		str.append("\n");

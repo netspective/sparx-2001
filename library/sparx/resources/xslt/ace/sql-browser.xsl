@@ -107,7 +107,7 @@
 	<tr class="data_table">
 		<td class="data_table">
 			<a title="Click here to see test statement">
-				<xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/test/',@qualified-name)"/></xsl:attribute>
+				<xsl:attribute name="href"><xsl:value-of select="concat($root-url,'/test/',@qualified-name,'?ui=yes')"/></xsl:attribute>
 				<xsl:attribute name="target"><xsl:value-of select="concat('statement.',@qualified-name)"/></xsl:attribute>
 				<img border="0">
 					<xsl:attribute name="src"><xsl:value-of select="$sparx.ace.images-root-url"/>/icons/exec_sql.gif</xsl:attribute>
@@ -160,9 +160,9 @@
 	<tr><td colspan="2">
     <h1>Test this SQL Statement</h1>
     <ul>
-        <li>by <a href="{concat($root-url,'/test/',@qualified-name)}" target="{concat('statement.', @qualified-name)}">supplying parameters</a> in a dialog with pageable results</li>
-        <li>by using parameters supplied in the XML and <a href="{concat($root-url,'/test/',@qualified-name,'?ui=no&amp;pageable=yes')}" target="{concat('statement.', @qualified-name)}">with</a> pageable results</li>
-        <li>by using parameters supplied in the XML but <a href="{concat($root-url,'/test/',@qualified-name,'?ui=no')}" target="{concat('statement.', @qualified-name)}">without</a> pageable results</li>
+        <li>by <a href="{concat($root-url,'/test/',@qualified-name,'?ui=yes')}" target="{concat('statement.', @qualified-name)}">supplying parameters</a> in a dialog with pageable results</li>
+        <li>by using parameters supplied in the XML and <a href="{concat($root-url,'/test/',@qualified-name,'?pageable=yes')}" target="{concat('statement.', @qualified-name)}">with</a> pageable results</li>
+        <li>by using parameters supplied in the XML but <a href="{concat($root-url,'/test/',@qualified-name)}" target="{concat('statement.', @qualified-name)}">without</a> pageable results</li>
     </ul>
 	<h1>SQL</h1>
 	<pre>

@@ -7,6 +7,8 @@
 <xsl:variable name="generate-constraints">no</xsl:variable>
 <xsl:variable name="generate-seq">yes</xsl:variable>
 <xsl:variable name="system-date-function">now()</xsl:variable>
+<xsl:variable name="system-boolean-false">'0'</xsl:variable>
+<xsl:variable name="system-boolean-true">'1'</xsl:variable>
 
 <xsl:template name="sequence-definition">
 	<xsl:param name="table"/>
