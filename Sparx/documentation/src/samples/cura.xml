@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<page name="samples/web-cura">
+<page name="samples/cura">
     <summary>
         <i>Cura</i> is a latin words that means <i>to manage</i>/. From a functionality point of a view, Cura is a
         project management application. It allows management of individual people, projects and clients. From the utility
@@ -8,7 +8,7 @@
         that demonstrates a large number of Sparx development Best Practices.  It also demonstrates alternative
         development styles that serve two purposes. In short, Cura is a very usable full-blown application that shows
         what a few days of Sparx development can accomplish.
-        <br/>App: <a target="web-cura" href="http://developer.netspective.com/samples/cura">http://developer.netspective.com/samples/cura</a>
-        <br/>ACE: <a target="web-cura-ace" href="http://developer.netspective.com/samples/cura/ace?_dc.user_id=ace&amp;_dc.password=ace">http://developer.netspective.com/samples/cura/ace</a> (username 'ace', password 'ace')
+        <br/>App: <a target="cura" href="http://developer.netspective.com/samples/cura">http://developer.netspective.com/samples/cura</a>
+        <br/>ACE: <a target="cura-ace" href="http://developer.netspective.com/samples/cura/ace?_dc.user_id=ace&amp;_dc.password=ace">http://developer.netspective.com/samples/cura/ace</a> (username 'ace', password 'ace')
     </summary>
 </page>

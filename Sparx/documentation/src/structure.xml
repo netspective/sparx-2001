@@ -25,10 +25,10 @@
             <page level="2" name="overview/eval-kit" caption="Evaluation Kit" heading="Netspective Sparx Evaluation Kit"/>
         </page>
         <page level="1" name="samples" caption="Samples" heading="Netspective Sparx Sample Applications">
-            <page level="2" name="samples/web-hello" caption="Hello World"/>
-            <page level="2" name="samples/web-library" caption="Library"/>
-            <page level="2" name="samples/web-cura" caption="Cura"/>
-            <page level="2" name="samples/web-babyreg" caption="Gift Registry"/>
+            <page level="2" name="samples/hello" caption="Hello World"/>
+            <page level="2" name="samples/library" caption="Library"/>
+            <page level="2" name="samples/cura" caption="Cura"/>
+            <page level="2" name="samples/babyreg" caption="Gift Registry"/>
         </page>
 		<page level="1" name="ace" caption="ACE" heading="Netspective Sparx ACE">
 			<page level="2" name="ace/impl-doc" caption="Implementation Docs" heading="Automatic Implementation Documentation">

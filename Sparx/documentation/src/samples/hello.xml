@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<page name="samples/web-hello">
+<page name="samples/hello">
     <summary>
         The <i>Hello World</i> example is a classic in nearly all texts dealing with programming.  It is the simplest
         way to demonstrate the syntax of the language, how to compile a program written in the language and how to run
@@ -10,7 +10,7 @@
         output to the screen of the phrase "Hello, World". The Sparx version, however, has a more interactive version
         of this example: it gets some information about you and then give you a Hello World greeting tailored to the
         information you provide.
-        <br/>App: <a target="web-hello" href="http://developer.netspective.com/samples/hello">http://developer.netspective.com/samples/hello</a>
-        <br/>ACE: <a target="web-hello-ace" href="http://developer.netspective.com/samples/hello/ace?_dc.user_id=ace&amp;_dc.password=ace">http://developer.netspective.com/samples/hello/ace</a> (username 'ace', password 'ace')
+        <br/>App: <a target="hello" href="http://developer.netspective.com/samples/hello">http://developer.netspective.com/samples/hello</a>
+        <br/>ACE: <a target="hello-ace" href="http://developer.netspective.com/samples/hello/ace?_dc.user_id=ace&amp;_dc.password=ace">http://developer.netspective.com/samples/hello/ace</a> (username 'ace', password 'ace')
     </summary>
 </page>

@@ -8,5 +8,5 @@
 	<p/>
 	<channel xsdn-element="/xaf/dialogs/dialog/field.text/conditional"/>
 	<p/>
-	<channel heading="Sample Dialog" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_10']"/>
+	<channel heading="Sample Dialog" type="xml-source" include="../../../cura/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_10']"/>
 </page>

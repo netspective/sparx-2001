@@ -48,7 +48,7 @@
 
     <section heading="Database Requirements">
         Our Developer Kit for evaluation is bundled with several sample applications. The two simpler sample applications,
-        called web-hello and web-library, can be run using the bundled (free) HSQL Java database.
+        called <i>hello</i> and <i>library</i>, can be run using the bundled (free) HSQL Java database.
         <p/>
         One of the larger samples is Cura,
         a web based project management application for demonstration purposes. If you plan to evaluate Cura you will

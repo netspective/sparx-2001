@@ -25,7 +25,7 @@
 
     <section heading="Database Requirements">
         Our Developer Kit for evaluation is bundled with several sample applications. The two simpler sample applications,
-        called web-hello and web-library, can be run using the bundled (free) Hypersonic SQL Java database.
+        called <i>hello</i> and <i>library</i>, can be run using the bundled (free) Hypersonic SQL Java database.
         <p/>
         One of the larger samples is Cura, a web based project management application for demonstration purposes. If you
         plan to evaluate Cura on your own servers, you will need to install Oracle (version 8 or newer) on a server
@@ -62,7 +62,7 @@
                 <td class="data">Hello, Library</td>
                 <td class="data">
                     Introduces Sparx by describing most of the functionality and walking the reader through the
-                    development of two full-scale sample applications web-hello and web-library (Hello World and
+                    development of two full-scale sample applications <i>hello</i> and <i>library</i> (Hello World and
                     Sparx Collection).
                 </td>
             </tr>

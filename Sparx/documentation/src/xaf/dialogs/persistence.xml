@@ -11,7 +11,7 @@
 		times a page is re-displayed to get valid user data.
 	</summary>
 
-	<channel heading="Sample Dialog" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_01_B']"/>
+	<channel heading="Sample Dialog" type="xml-source" include="../../../cura/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_01_B']"/>
 
 	<section heading="How the Sample Dialog would Automatically Process Errors">
 		<table>
