@@ -253,7 +253,7 @@ public class SelectStmtGenerator
 
 						sql.append("  " + field.getOrderByClauseExpr());
 						if(sortRef.isDescending())
-							sql.append(" descending");
+							sql.append(" desc");
 
 						if(i != lastField)
 						{
