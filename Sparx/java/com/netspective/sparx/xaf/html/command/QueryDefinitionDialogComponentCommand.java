@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryDefinitionDialogComponentCommand.java,v 1.6 2003-02-26 07:54:14 aye.thu Exp $
+ * $Id: QueryDefinitionDialogComponentCommand.java,v 1.7 2003-03-05 23:32:11 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -78,6 +78,7 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
                          new StatementComponentCommand.SkinParameter(),
                      });
 
+    private String reportName;
     private String dialogName;
     private String source;
     private String dialogSkinName;
@@ -114,6 +115,15 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
         }
         else
             reportSkinName = null;
+
+        if(params.hasMoreTokens())
+        {
+            reportName = params.nextToken();
+            if(reportName.equals(PARAMVALUE_DEFAULT))
+                reportName = null;
+        }
+        else
+            reportName = null;
     }
 
     public String getSource()
@@ -134,6 +144,16 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
     public String getReportSkinName()
     {
         return reportSkinName;
+    }
+
+    public String getReportName()
+    {
+        return reportName;
+    }
+
+    public void setReportName(String reportName)
+    {
+        this.reportName = reportName;
     }
 
     public void setSource(String dataCmd)
@@ -202,6 +222,7 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
             out.write("QuerySelectDialog '" + dialogName + "' not found in QueryDefinition '" + source + "'");
             return;
         }
+        dialog.setReportId(reportName);
 
         com.netspective.sparx.xaf.form.DialogSkin skin =
                 dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc) : com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc, dialogSkinName);
