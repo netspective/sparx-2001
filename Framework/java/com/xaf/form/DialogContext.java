@@ -14,6 +14,7 @@ import com.xaf.task.TaskExecuteException;
 import com.xaf.task.TaskContext;
 import com.xaf.task.sql.DmlTask;
 import com.xaf.task.sql.TransactionTask;
+import com.xaf.skin.SkinFactory;
 
 public class DialogContext extends ServletValueContext
 {
@@ -130,8 +131,12 @@ public class DialogContext extends ServletValueContext
 		if(servlet instanceof DialogContextListener)
 			listeners.add(servlet);
 
+        String overrideSkin = aRequest.getParameter(Dialog.PARAMNAME_OVERRIDE_SKIN);
+        if(overrideSkin != null)
+            aSkin = SkinFactory.getDialogSkin(overrideSkin);
+
 		dialog = aDialog;
-		skin = aSkin;
+		skin = aSkin == null ? SkinFactory.getDialogSkin() : aSkin;
 		activeMode = DIALOGMODE_UNKNOWN;
 		nextMode = DIALOGMODE_UNKNOWN;
 		validationStage = VALSTAGE_NOT_PERFORMED;
