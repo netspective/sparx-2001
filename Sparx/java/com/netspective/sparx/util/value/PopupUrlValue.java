@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PopupUrlValue.java,v 1.2 2003-04-17 16:05:57 aye.thu Exp $
+ * $Id: PopupUrlValue.java,v 1.3 2003-04-18 00:31:02 aye.thu Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -68,11 +68,22 @@ public class PopupUrlValue extends ValueSource
     {
         Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(vc.getServletContext());
         // Check if the application has its own popup url, if not use the default one
-        String popupPageUrl = config.getTextValue(vc, APP_CONFIGPROP_POPUP_PAGE_URL);
+        String popupPageUrl = null;
+        try
+        {
+            popupPageUrl = config.getTextValue(vc, APP_CONFIGPROP_POPUP_PAGE_URL);
+        }
+        catch (Exception e)
+        {
+            // if the application does not have the property defined, it will throw a runtime exception
+            // Just capture the exception
+            e.printStackTrace();
+        }
         if (popupPageUrl == null || popupPageUrl.length() == 0)
         {
             popupPageUrl = config.getTextValue(vc, CONFIGPROP_POPUP_PAGE_URL);
         }
+
         return valueKey != null ? (popupPageUrl + "?" + valueKey) : popupPageUrl;
     }
 }
