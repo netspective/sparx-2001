@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.10 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.11 2003-01-01 19:24:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -79,6 +79,10 @@ import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPageException;
+import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.html.ComponentCommandFactory;
+import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.html.command.StatementComponentCommand;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSqlPage extends AceServletPage
@@ -112,14 +116,7 @@ public class DatabaseSqlPage extends AceServletPage
     {
         String testItem = getTestCommandItem(nc);
         if(testItem != null)
-        {
-            handleUnitTestPageBegin(writer, nc, "Static SQL Unit Test");
-            if (useDialogParams(nc))
-                handleTestStatementWithUI(nc, testItem);
-            else
-                handleTestStatementNoUI(nc, testItem);
-            handleUnitTestPageEnd(writer, nc);
-        }
+            handleUnitTest(writer, nc, testItem);
         else
         {
             ServletContext context = nc.getServletContext();
@@ -130,31 +127,69 @@ public class DatabaseSqlPage extends AceServletPage
         }
     }
 
-    public void handleTestStatementWithUI(NavigationPathContext nc, String stmtId) throws NavigationPageException, IOException
+    private void handleUnitTest(Writer writer, NavigationPathContext nc, String testItem) throws IOException, NavigationPageException
     {
+        if (useDialogParams(nc))
+            handleTestStatementWithUI(writer, nc, testItem);
+        else
+            handleTestStatementCommand(writer, nc, testItem);
+    }
+
+    public void handleTestStatementWithUI(Writer writer, NavigationPathContext nc, String stmtId) throws NavigationPageException, IOException
+    {
+        handleUnitTestPageBegin(writer, nc, "Static SQL Unit Test");
         ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
-
-        PrintWriter out = nc.getResponse().getWriter();
 
         StatementInfo si = manager.getStatement(nc.getServletContext(), null, stmtId);
         if(si != null)
         {
-            out.write("<h1>SQL Unit Test: " + stmtId + "</h1>");
+            writer.write("<h1>SQL Unit Test: " + stmtId + "</h1>");
             StatementDialog dialog = si.getDialog();
             if(dialog != null)
             {
                 DialogContext dc = dialog.createContext(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
                 dialog.prepareContext(dc);
-                dialog.renderHtml(out, dc, true);
-                out.write("<p>");
-                out.write(si.getDebugHtml(nc, false, false, null));
+                dialog.renderHtml(writer, dc, true);
+                writer.write("<p>");
+                writer.write(si.getDebugHtml(nc, false, false, null));
             }
             else
-                out.write("Statement '"+ stmtId +"' produced a NULL dialog.");
+                writer.write("Statement '"+ stmtId +"' produced a NULL dialog.");
         }
         else
-            out.write("Statement '"+ stmtId +"' not found in default context.");
+            writer.write("Statement '"+ stmtId +"' not found in default context.");
+        handleUnitTestPageEnd(writer, nc);
+    }
+
+    public void handleTestStatementCommand(Writer writer, NavigationPathContext nc, String testItem) throws NavigationPageException, IOException
+    {
+        StatementComponentCommand scmd = ComponentCommandFactory.getStatementCommand(testItem);
+        NavigationPath.FindResults path = nc.getActivePathFindResults();
+
+        handleUnitTestPageBegin(writer, nc, "SQL Statement Unit Test");
+        writer.write("<h1>SQL Statement Unit Test: " + scmd.getStatementName() + "</h1><p>");
+        try
+        {
+            scmd.handleCommand(nc, nc.getResponse().getWriter(), true);
+        }
+        catch (ComponentCommandException e)
+        {
+            throw new NavigationPageException(e);
+        }
+        writer.write("<p>");
+        writer.write("Try out additional options by using the following format:<br>");
+        writer.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/"+ scmd.getDocumentation().getUsageHtml(null, scmd.getParametersDelimiter(), true) +"</code>");
+        writer.write("<p>The command system used by this unit test page is implemented by the class<br><font color=green><code>" + scmd.getClass().getName() +"</code></font>");
+        writer.write("<br>Click <a href='"+ nc.getServletRootUrl() + "/application/factory/component-commands#"+
+                        StatementComponentCommand.COMMAND_ID +"' target='component-command'>here</a> for documentation on usage of <code>"+
+                        StatementComponentCommand.COMMAND_ID +"</code> command parameters.");
+
+        scmd.setSkinName("record-editor-compressed");
+        writer.write("<p>For example, to try the statement using the 'record-editor-compressed' skin:<br>");
+        writer.write("<a href='"+ scmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + scmd.getCommand() + "</a><p>");
+
+        handleUnitTestPageEnd(writer, nc);
     }
 
     public void handleTestStatementNoUI(NavigationPathContext nc, String stmtId) throws NavigationPageException, IOException

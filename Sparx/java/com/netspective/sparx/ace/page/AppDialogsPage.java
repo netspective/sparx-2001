@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.8 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.9 2003-01-01 19:24:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -127,36 +127,7 @@ public class AppDialogsPage extends AceServletPage
 
         String testItem = getTestCommandItem(nc);
         if(testItem != null)
-        {
-            PrintWriter out = nc.getResponse().getWriter();
-            DialogComponentCommand dcmd = ComponentCommandFactory.getDialogCommand(testItem);
-            NavigationPath.FindResults path = nc.getActivePathFindResults();
-
-            handleUnitTestPageBegin(writer, nc, "Form (Dialog) Unit Test");
-            out.write("<h1>Form (Dialog) Unit Test: " + dcmd.getDialogName() + "</h1><p>");
-            try
-            {
-                dcmd.handleCommand(nc, nc.getResponse().getWriter(), true);
-            }
-            catch (ComponentCommandException e)
-            {
-                throw new NavigationPageException(e);
-            }
-            out.write("<p>");
-            out.write("Try out additional options by using the following format:<br>");
-            out.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/dialogId,data-cmd,skin-name,debug-flags</code><p>");
-
-            dcmd.setDataCmd("add");
-            dcmd.setSkinName("standard");
-            out.write("For example, to try the dialog in 'add' mode using the 'standard' skin:<br>");
-            out.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
-
-            dcmd.setDataCmd("edit");
-            dcmd.setSkinName(null);
-            out.write("To try the dialog in 'edit' mode using the default skin:<br>");
-            out.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
-            handleUnitTestPageEnd(writer, nc);
-        }
+            handleUnitTest(writer, nc, testItem);
         else
         {
             NavigationPath.FindResults results = nc.getActivePathFindResults();
@@ -168,5 +139,41 @@ public class AppDialogsPage extends AceServletPage
                 transform(nc, manager.getDocument(context, null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
             }
         }
+    }
+
+    private void handleUnitTest(Writer writer, NavigationPathContext nc, String testItem) throws IOException, NavigationPageException
+    {
+        DialogComponentCommand dcmd = ComponentCommandFactory.getDialogCommand(testItem);
+        NavigationPath.FindResults path = nc.getActivePathFindResults();
+
+        handleUnitTestPageBegin(writer, nc, "Form (Dialog) Unit Test");
+        writer.write("<h1>Form (Dialog) Unit Test: " + dcmd.getDialogName() + "</h1><p>");
+        try
+        {
+            dcmd.handleCommand(nc, nc.getResponse().getWriter(), true);
+        }
+        catch (ComponentCommandException e)
+        {
+            throw new NavigationPageException(e);
+        }
+        writer.write("<p>");
+        writer.write("Try out additional options by using the following format:<br>");
+        writer.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/"+ dcmd.getDocumentation().getUsageHtml(null, dcmd.getParametersDelimiter(), true) +"</code>");
+        writer.write("<p>The command system used by this unit test page is implemented by the class<br><font color=green><code>" + dcmd.getClass().getName() +"</code></font>");
+        writer.write("<br>Click <a href='"+ nc.getServletRootUrl() + "/application/factory/component-commands#"+
+                        DialogComponentCommand.COMMAND_ID +"' target='component-command'>here</a> for documentation on usage of <code>"+
+                        DialogComponentCommand.COMMAND_ID +"</code> command parameters.");
+
+        dcmd.setDataCmd("add");
+        dcmd.setSkinName("standard");
+        writer.write("<p>For example, to try the dialog in 'add' mode using the 'standard' skin:<br>");
+        writer.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
+
+        dcmd.setDataCmd("print");
+        dcmd.setSkinName(null);
+        writer.write("To try the dialog in 'print' mode using the default skin:<br>");
+        writer.write("<a href='"+ dcmd.getCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.getCommand() + "</a><p>");
+
+        handleUnitTestPageEnd(writer, nc);
     }
 }
