@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.7 2002-10-13 18:35:43 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.8 2002-12-11 21:42:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -61,7 +61,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -161,6 +160,7 @@ public class XmlSource
     protected Element metaInfoElem;
     protected Element metaInfoOptionsElem;
     protected Set inheritanceHistorySet = new HashSet();
+    protected Set defaultExcludeElementsFromInherit = new HashSet();
     protected Map templates = new HashMap();
     protected String catalogedNodeIdentifiersClassName;
 
@@ -383,7 +383,7 @@ public class XmlSource
      */
     public void processTemplates(Element elem)
     {
-        inheritNodes(elem, templates, "template");
+        inheritNodes(elem, templates, "template", defaultExcludeElementsFromInherit);
 
         NodeList includes = elem.getElementsByTagName("include-template");
         if(includes != null && includes.getLength() > 0)
@@ -432,11 +432,11 @@ public class XmlSource
                 }
 
                 // now do the actual replacement
-                inheritNodes((Element) incCopy, templates, "template");
+                inheritNodes((Element) incCopy, templates, "template", defaultExcludeElementsFromInherit);
                 elem.replaceChild(incCopy, childNode);
             }
             else
-                inheritNodes((Element) childNode, templates, "template");
+                inheritNodes((Element) childNode, templates, "template", defaultExcludeElementsFromInherit);
         }
     }
 
@@ -522,7 +522,7 @@ public class XmlSource
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public void inheritNodes(Element element, Map sourcePool, String attrName)
+    public void inheritNodes(Element element, Map sourcePool, String attrName, Set excludeElems)
     {
         String inheritAttr = element.getAttribute(attrName);
         while(inheritAttr != null && inheritAttr.length() > 0)
@@ -580,7 +580,8 @@ public class XmlSource
                     Node childNode = inhChildren.item(i);
 
                     // only add if there isn't an attribute overriding this element
-                    if(element.getAttribute(childNode.getNodeName()).length() == 0)
+                    final String nodeName = childNode.getNodeName();
+                    if(element.getAttribute(nodeName).length() == 0 && (! excludeElems.contains(nodeName)))
                     {
                         Node cloned = childNode.cloneNode(true);
                         if(cloned.getNodeType() == Node.ELEMENT_NODE)
@@ -620,7 +621,6 @@ public class XmlSource
         if(params == null || params.size() == 0)
             return;
 
-        String nodeType = inNode.getParentNode().getNodeName() + "." + inNode.getNodeName();
         Enumeration e = params.keys();
         while(e.hasMoreElements())
         {
