@@ -33,6 +33,7 @@ public class DialogManager extends XmlSource
 		public Dialog dialog;
 		public Class dialogClass;
 		public Class dialogContextClass;
+        public Class directorClass;
 
 		public DialogInfo(ServletContext servletContext, String pkgName, Element elem)
 		{
@@ -68,6 +69,24 @@ public class DialogManager extends XmlSource
 	                defnElement.setAttribute("_class-name", e.toString());
 				dialogClass = Dialog.class;
 			}
+
+            String directorClassName = elem.getAttribute("director-class");
+            if(directorClassName != null && directorClassName.length() > 0)
+            {
+                try
+                {
+                    directorClass = Class.forName(directorClassName);
+                    elem.setAttribute("_director-class-name", directorClassName);
+                    elem.setAttribute("_director-class-file-name", com.xaf.BuildConfiguration.getClassFileName(directorClassName));
+                }
+                catch(Exception e)
+                {
+                    directorClass = DialogDirector.class;
+                    elem.setAttribute("_director-class-name", e.toString());
+                }
+            }
+            else
+                directorClass = DialogDirector.class;
 		}
 
         public Element getDefnElem() { return defnElement; }
@@ -107,6 +126,7 @@ public class DialogManager extends XmlSource
 				}
 				dialog.importFromXml(pkgName, defnElement);
 				dialog.setDialogContextClass(dialogContextClass);
+                dialog.setDialogDirectorClass(directorClass);
 			}
 			return dialog;
 		}

@@ -29,10 +29,11 @@
 					<th class="data_table">ID</th>
 					<th class="data_table">Heading</th>
 					<th class="data_table" title="Retain Request Parameters">Retain</th>
-					<th class="data_table">Fields</th>
+					<th class="data_table" title="Number of fields contained in the dialog">Fields</th>
 					<th class="data_table">Tasks</th>
-					<th class="data_table">Class</th>
-					<th class="data_table">DC-Class</th>
+					<th class="data_table" title="Dialog Class Name and Path">Class</th>
+					<th class="data_table" title="Dialog Context (Bean) Class Name and Path">DC-Class</th>
+					<th class="data_table" title="Dialog Director Class Name and Path">Dir-Class</th>
 				</tr>
 				<xsl:apply-templates select="dialogs/dialog" mode="toc">
 					<xsl:sort select="@qualified-name"/>
@@ -130,6 +131,7 @@
 		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(execute-tasks/*)"/></font></td>
 		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_class-name"/></font></td>
 		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_dc-class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_dc-class-name"/></font></td>
+		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_director-class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_director-class-name"/></font></td>
 	</tr>
 </xsl:template>
 

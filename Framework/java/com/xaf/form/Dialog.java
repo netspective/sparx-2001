@@ -64,6 +64,7 @@ public class Dialog
 	private int layoutColumnsCount = 1;
 	private String[] retainRequestParams;
 	private Class dcClass = DialogContext.class;
+    private Class directorClass = DialogDirector.class;
 
 	public Dialog()
 	{
@@ -120,6 +121,7 @@ public class Dialog
 
 	public final DialogDirector getDirector() { return director; }
 	public void setDirector(DialogDirector value) { director = value; }
+    public void setDialogDirectorClass(Class cls) { directorClass = cls; }
 
 	public static Class findDialogContextClass(String packageName, Element elem) throws ClassNotFoundException
 	{
@@ -187,8 +189,17 @@ public class Dialog
 		if(hideHints.equals("yes"))
 			setFlag(DLGFLAG_HIDE_READONLY_HINTS);
 
-		if(director == null)
-			director = new DialogDirector();
+        if(director == null)
+        {
+            try
+            {
+                director = (DialogDirector) directorClass.newInstance();
+            }
+            catch(Exception e)
+            {
+                director = new DialogDirector();
+            }
+        }
 
 		String retainRequestParamsStr = elem.getAttribute("retain-params");
 		if(retainRequestParamsStr.length() > 0)
