@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.15 2002-12-15 17:45:01 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.16 2002-12-23 04:33:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -952,7 +952,17 @@ public class Dialog
 
     public void handlePostExecute(Writer writer, DialogContext dc) throws IOException
     {
+        dc.setExecuteStageHandled(true);
         dc.performDefaultRedirect(writer);
+    }
+
+    public void handlePostExecuteException(Writer writer, DialogContext dc, String message, Exception e) throws IOException
+    {
+        dc.setExecuteStageHandled(true);
+        LogManager.recordException(this.getClass(), "handlePostExecuteException", message, e);
+        dc.setRedirectDisabled(true);
+        dc.performDefaultRedirect(writer);
+        writer.write(message + e.toString());
     }
 
     /**
@@ -1146,7 +1156,7 @@ public class Dialog
         while(i.hasNext())
         {
             DialogField field = (DialogField) i.next();
-            if(field.isVisible(dc) && (!field.isValid(dc)))
+            if((field.isVisible(dc) && !field.isInputHidden(dc)) && (!field.isValid(dc)))
                 invalidFieldsCount++;
         }
 
