@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: InComparison.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: InComparison.java,v 1.2 2002-02-12 12:23:11 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn.comparison;
@@ -73,7 +73,6 @@ public class InComparison extends BinaryOpComparison
 
     public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator statement, QueryCondition cond)
     {
-
         select.setAlwaysDirty(true);
         int bindCount = 0;
         SingleValueSource vs = cond.getValue();
@@ -89,6 +88,7 @@ public class InComparison extends BinaryOpComparison
         }
         else
         {
+            bindCount = 1;
             statement.addParam(vs);
         }
 
