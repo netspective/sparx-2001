@@ -3,6 +3,8 @@ package com.xaf.form.field;
 import java.io.*;
 import org.w3c.dom.*;
 import com.xaf.form.*;
+import com.xaf.value.SingleValueSource;
+import com.xaf.value.ValueSourceFactory;
 
 public class BooleanField extends DialogField
 {
@@ -19,6 +21,8 @@ public class BooleanField extends DialogField
 
 	private int style = BOOLSTYLE_CHECK;
 	private int choices = CHOICES_YESNO;
+    private SingleValueSource trueText;
+    private SingleValueSource falseText;
 
 	public BooleanField()
 	{
@@ -81,7 +85,21 @@ public class BooleanField extends DialogField
 				choices = BooleanField.CHOICES_ONOFF;
 			else
 				choices = BooleanField.CHOICES_YESNO;
+
+            String falseText = CHOICES_TEXT[(choices * 2) + 0];
+            String trueText = CHOICES_TEXT[(choices * 2) + 1];
+
+            this.falseText = ValueSourceFactory.getSingleOrStaticValueSource(falseText);
+            this.trueText = ValueSourceFactory.getSingleOrStaticValueSource(trueText);
 		}
+
+        String falseText = elem.getAttribute("false");
+        if(falseText.length() > 0)
+            this.falseText = ValueSourceFactory.getSingleOrStaticValueSource(falseText);
+
+        String trueText = elem.getAttribute("true");
+        if(trueText.length() > 0)
+            this.trueText = ValueSourceFactory.getSingleOrStaticValueSource(trueText);
 	}
 
 	public String getControlHtml(DialogContext dc)
@@ -94,8 +112,8 @@ public class BooleanField extends DialogField
 		if(strValue != null)
 			value = new Integer(strValue).intValue() == 0 ? false : true;
 
-		String falseText = CHOICES_TEXT[(choices * 2) + 0];
-		String trueText = CHOICES_TEXT[(choices * 2) + 1];
+		String falseText = this.falseText.getValue(dc);
+		String trueText = this.trueText.getValue(dc);
 
 		if(isReadOnly(dc))
 		{
