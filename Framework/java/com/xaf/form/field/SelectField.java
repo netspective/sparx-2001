@@ -30,7 +30,7 @@ public class SelectField extends DialogField
 	private int multiDualWidth = 125;
 	private String multiDualCaptionLeft = "Available";
 	private String multiDualCaptionRight = "Selected";
-	private boolean splitRadioCheck = true;
+    private String radioCheckSeparator = "<br>";
 
 	public SelectField()
 	{
@@ -168,6 +168,10 @@ public class SelectField extends DialogField
 		blank = elem.getAttribute("append-blank");
 		if(blank.length() > 0 && blank.equals("yes"))
 			setFlag(FLDFLAG_APPENDBLANK);
+
+        String controlSep = elem.getAttribute("control-separator");
+        if(controlSep.length() > 0)
+            radioCheckSeparator = controlSep;
 	}
 
 	public boolean isValid(DialogContext dc)
@@ -339,49 +343,25 @@ public class SelectField extends DialogField
 		switch(style)
 		{
 			case SELECTSTYLE_RADIO:
-				if(splitRadioCheck)
-				{
-					while(i.hasNext())
-					{
-						SelectChoice choice = (SelectChoice) i.next();
-						if(options.length() > 0)
-							options.append("<br>");
-						options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
-						itemIndex++;
-					}
-				}
-				else
-				{
-					while(i.hasNext())
-					{
-						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
-						itemIndex++;
-					}
-				}
+                while(i.hasNext())
+                {
+                    SelectChoice choice = (SelectChoice) i.next();
+                    if(options.length() > 0)
+                        options.append(radioCheckSeparator);
+                    options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                    itemIndex++;
+                }
 				return options.toString();
 
 			case SELECTSTYLE_MULTICHECK:
-				if(splitRadioCheck)
-				{
-					while(i.hasNext())
-					{
-						SelectChoice choice = (SelectChoice) i.next();
-						if(options.length() > 0)
-							options.append("<br>");
-						options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
-						itemIndex++;
-					}
-				}
-				else
-				{
-					while(i.hasNext())
-					{
-						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
-						itemIndex++;
-					}
-				}
+                while(i.hasNext())
+                {
+                    SelectChoice choice = (SelectChoice) i.next();
+                    if(options.length() > 0)
+                        options.append(radioCheckSeparator);
+                    options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value=\""+ choice.value +"\" "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                    itemIndex++;
+                }
 				return options.toString();
 
 			case SELECTSTYLE_COMBO:
