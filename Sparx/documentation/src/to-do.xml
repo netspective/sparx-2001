@@ -115,6 +115,7 @@
                         <name>Static SQL Statements</name>
                         <task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
                         <task><name>For each SQL statement package, generate a class so that each SQL statement defined in the XML becomes a method of that class.</name></task>
+                        <task><name>Allow creating SQL statements with the same IDs but for different databases; at runtime, the proper SQL statement would be selected and executed based on the DB at runtime.</name></task>
                     </task>
 
                     <task>
@@ -124,6 +125,7 @@
                         <task><name>Add logging of SQL Query Definitions.</name></task>
                         <task><name>When we specify reports in querydefs, we have to refer to columns by number e.g. {10}. It becomes very difficult if someone added another colulmn later on. Is it possible to refer by field_id e.g. {proj_cd}</name></task>
                         <task><name>The order-by-expr attribute in the field node of the query def XML needs quotes around the expression so SQL is generated correctly. SQL is generated correctly if the order by defaults to the column-expr attribute</name></task>
+                        <task><name>Where different SQL might be required for different RDBMSs, allow creating SQL for ANSI and then specializing the behavior other databases.</name></task>
                     </task>
 
                     <task>
