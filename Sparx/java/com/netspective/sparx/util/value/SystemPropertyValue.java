@@ -51,20 +51,10 @@
  */
  
 /**
- * $Id: SystemPropertyValue.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: SystemPropertyValue.java,v 1.2 2002-02-02 00:00:30 snshah Exp $
  */
 
 package com.netspective.sparx.util.value;
-
-/**
- * Title:        The eXtensible Application Framework
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author
- * @version 1.0
- */
-
 
 public class SystemPropertyValue extends ValueSource
 {

@@ -51,20 +51,10 @@
  */
  
 /**
- * $Id: StatementNotFoundException.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: StatementNotFoundException.java,v 1.2 2002-02-02 00:00:31 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
-
-/**
- * Title:        The Extensible Application Platform
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author Shahid N. Shah
- * @version 1.0
- */
-
 
 public class StatementNotFoundException extends Exception
 {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractDatabaseContext.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AbstractDatabaseContext.java,v 1.2 2002-02-02 00:00:31 snshah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -69,15 +69,6 @@ import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
-
-/**
- * Title:        The eXtensible Application Framework
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author       Shahid N. Shah
- * @version 1.0
- */
 
 public abstract class AbstractDatabaseContext implements DatabaseContext
 {

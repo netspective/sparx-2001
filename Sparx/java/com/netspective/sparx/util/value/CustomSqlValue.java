@@ -51,19 +51,10 @@
  */
  
 /**
- * $Id: CustomSqlValue.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: CustomSqlValue.java,v 1.2 2002-02-02 00:00:30 snshah Exp $
  */
 
 package com.netspective.sparx.util.value;
-
-/**
- * Title:        The eXtensible Application Framework
- * Description:  This is a placeholder class used specifically in DmlTask.java
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author       Shahid N. Shah
- * @version 1.0
- */
 
 public class CustomSqlValue extends StaticValue
 {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldConditionalApplyFlag.java,v 1.3 2002-01-31 11:04:27 snshah Exp $
+ * $Id: DialogFieldConditionalApplyFlag.java,v 1.4 2002-02-02 00:00:30 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form.conditional;
@@ -77,15 +77,6 @@ import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.field.SelectField;
-
-/**
- * Title:        The Extensible Application Platform
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author Shahid N. Shah
- * @version 1.0
- */
 
 public class DialogFieldConditionalApplyFlag extends DialogFieldConditionalAction
 {

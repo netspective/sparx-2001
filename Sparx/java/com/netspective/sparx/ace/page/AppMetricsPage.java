@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppMetricsPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppMetricsPage.java,v 1.2 2002-02-02 00:00:30 snshah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -79,15 +79,6 @@ import com.netspective.sparx.xaf.form.DialogManagerFactory;
 import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
-
-/**
- * Title:        The eXtensible Application Framework
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author Shahid N. Shah
- * @version 1.0
- */
 
 public class AppMetricsPage extends AceServletPage
 {
