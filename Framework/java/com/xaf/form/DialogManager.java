@@ -35,7 +35,7 @@ public class DialogManager extends XmlSource
 		public Class dialogContextClass;
         public Class directorClass;
 
-		public DialogInfo(ServletContext servletContext, String pkgName, Element elem)
+		public DialogInfo(String pkgName, Element elem)
 		{
 			this.pkgName = pkgName;
 			this.defnElement = elem;
@@ -155,12 +155,10 @@ public class DialogManager extends XmlSource
 	}
 
 	static final String REQPARAMNAME_DIALOG = "dlg";
-	private ServletContext servletContext;
 	private Map dialogs = new Hashtable();
 
-	public DialogManager(ServletContext servletContext, File file)
+	public DialogManager(File file)
 	{
-		this.servletContext = servletContext;
 		loadDocument(file);
 	}
 
@@ -232,7 +230,7 @@ public class DialogManager extends XmlSource
 	    			if(scName.equals("dialog"))
 					{
 						Element dialogElem = (Element) dialogsChild;
-						DialogInfo di = new DialogInfo(servletContext, stmtPkg, dialogElem);
+						DialogInfo di = new DialogInfo(stmtPkg, dialogElem);
 		    			dialogs.put(di.getLookupName(), di);
 					}
                     else if(scName.equals("register-field"))

@@ -59,7 +59,7 @@ public class DialogTag extends TagSupport
 			}
 			else
 			{
-				manager = DialogManagerFactory.getManager(context, source);
+				manager = DialogManagerFactory.getManager(source);
 				if(manager == null)
 				{
 					out.write("DialogManager '"+source+"' not found.");
