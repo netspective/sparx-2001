@@ -3,18 +3,18 @@ var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
 var ALLOW_CLIENT_VALIDATION = true;
-var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
 
-var validTimeStrings = ["noon", "midnight"];
-var validNumbers =  ["0","1","2","3","4","5","6","7","8","9"];
+var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
+var ENABLE_KEYPRESS_FILTERS        = true;
 
 //****************************************************************************
 // FieldType class
 //****************************************************************************
 
-function FieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress)
+function FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress)
 {
     this.type = name;
+    this.finalizeDefn = onFinalizeDefn;
     this.isValid = onValidate;
     this.getFocus = onFocus;
     this.valueChanged = onChange;
@@ -24,9 +24,9 @@ function FieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress)
 
 var FIELD_TYPES = new Array();
 
-function addFieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress)
+function addFieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress)
 {
-    FIELD_TYPES[name] = new FieldType(name, onValidate, onChange, onFocus, onBlur, onKeyPress);
+    FIELD_TYPES[name] = new FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress);
 }
 
 //****************************************************************************
@@ -174,6 +174,11 @@ function DialogField_getControl()
 
 function DialogField_finalizeContents(dialog)
 {
+	if(this.type != null)
+	{
+		if(this.type.finalizeDefn != null)
+			this.type.finalizeDefn(dialog, this);
+	}
 
     if(this.style != null && this.style == SELECTSTYLE_MULTIDUAL)
         this.requiresPreSubmit = true;
@@ -208,7 +213,7 @@ function DialogField_evaluateConditionals(dialog)
 function DialogField_alertMessage(control, message)
 {
     alert(this.caption + ": " + message);
-    control.focus();    
+    control.focus();
 }
 
 function DialogField_alertRequired(control)
@@ -368,7 +373,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
         alert("control is null in DialogFieldConditionalDisplay.evaluate(control)");
         return;
     }
-   
+
     var fieldAreaId = FIELDROW_PREFIX + this.source;
     var fieldAreaElem = document.all.item(fieldAreaId);
     if(fieldAreaElem == null)
@@ -388,7 +393,7 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
             }
         }
     }
-    
+
     // now that we have the fieldArea that we want to show/hide go ahead
     // and evaluate the js expression to see if the field should be shown
     // or hidden. remember, the expression is evaluted in the current context
@@ -552,16 +557,108 @@ function controlOnBlur(control)
 }
 
 //****************************************************************************
-// Field-specific functions
+// Keyboard-management utility functions
 //****************************************************************************
+
+var KEYCODE_ENTER          = 13;
+var NUM_KEYS_RANGE         = [48,  57];
+var PERIOD_KEY_RANGE       = [46,  46];
+var SLASH_KEY_RANGE        = [47,  47];
+var DASH_KEY_RANGE         = [45,  45];
+var UPPER_ALPHA_KEYS_RANGE = [65,  90];
+var LOW_ALPHA_KEYS_RANGE   = [97, 122];
+var UNDERSCORE_KEY_RANGE   = [95,  95];
+
+function keypressAcceptRanges(field, control, acceptKeyRanges)
+{
+	if(! ENABLE_KEYPRESS_FILTERS)
+		return true;
+
+	// if the default document keypress handler handled the event, 
+	// it returns "FALSE" so we don't want to bother with the event
+	if(! documentOnKeyDown())
+		return true;
+
+	var event = window.event;
+	for (i in acceptKeyRanges)
+	{
+		var keyCodeValue = null;
+		if (event.keyCode)
+			keyCodeValue = event.keyCode;
+		else
+			keyCodeValue = event.which;
+
+		var keyInfo = acceptKeyRanges[i];
+		if(keyCodeValue >= keyInfo[0] && keyCodeValue <= keyInfo[1])
+			return true;
+	}
+
+	// if we get to here, it means we didn't accept any of the ranges
+    window.event.cancelBubble = true;
+    window.event.returnValue = false;
+	return false;
+}
+
+//****************************************************************************
+// Field-specific validation and keypress filtering functions
+//****************************************************************************
+
+function IntegerField_onKeyPress(field, control)
+{
+	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE]);
+}
+
+function IntegerField_isValid(field, control)
+{
+	if(field.isRequired() && control.value.length == 0)
+	{
+		field.alertRequired(control);
+		return false;
+	}
+
+	var intValue = control.value - 0;
+	if(isNaN(intValue))
+	{
+		field.alertMessage(control, "'"+ control.value +"' is an invalid integer.");
+		return false;
+	}
+	return true;
+}
+
+function FloatField_onKeyPress(field, control)
+{
+	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE]);
+}
+
+function FloatField_isValid(field, control)
+{
+	if(field.isRequired() && control.value.length == 0)
+	{
+		field.alertRequired(control);
+		return false;
+	}
+
+	var floatValue = control.value - 0;
+	if(isNaN(floatValue))
+	{
+		field.alertMessage(control, "'"+ control.value +"' is an invalid decimal.");
+		return false;
+	}
+	return true;
+}
 
 function MemoField_isValid(field, control) 
 {
+	if(field.isRequired() && control.value.length == 0)
+	{
+		field.alertRequired(control);
+		return false;
+	}
+
     maxlimit = field.maxLength;    
     if (control.value.length > maxlimit)
     {
-        alert(field.caption + ": Maximum number of characters allowed is " + maxlimit);
-        control.focus();
+        field.alertMessage(control, "Maximum number of characters allowed is " + maxlimit);
         return false;
     }    
     return true;
@@ -572,29 +669,61 @@ function MemoField_onKeyPress(field, control)
     maxlimit = field.maxLength;    
     if (control.value.length >= maxlimit)
     {        
-        alert(field.caption + ": Maximum number of characters allowed is " + maxlimit);
+        field.alertMessage(control, "Maximum number of characters allowed is " + maxlimit);
         return false;
     }    
     return true;
 }
 
+function DateField_finalizeDefn(dialog, field)
+{
+   	field.dateFmtIsKnownFormat = false;
+   	field.dateItemDelim = null;
+   	field.dateItemDelimKeyRange = null;
+    if (field.dateDataType == DATE_DTTYPE_DATEONLY)
+    {
+        if (field.dateFormat == "MM/dd/yyyy" || field.dateFormat == "MM/dd/yy")
+        {
+            field.dateItemDelim = '/';
+		   	field.dateItemDelimKeyRange = SLASH_KEY_RANGE;
+            field.dateFmtIsKnownFormat = true;
+        }
+        else if (field.dateFormat == "MM-dd-yyyy" || field.dateFormat == "MM-dd-yy")
+        {
+            field.dateItemDelim = '-';
+		   	field.dateItemDelimKeyRange = DASH_KEY_RANGE;
+            field.dateFmtIsKnownFormat = true;
+        }
+    }
+}
+
 function DateField_isValid(field, control)
 {
+	if(field.isRequired() && control.value.length == 0)
+	{
+		field.alertRequired(control);
+		return false;
+	}
+
     return DateField_valueChanged(field, control);
 }
 
 function DateField_valueChanged(field, control)
 {
-    if (field.dateDataType == DATE_DTTYPE_DATEONLY)
+    if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
     {
-        var delim = null;
-        if (field.dateFormat == "MM/dd/yyyy" || field.dateFormat == "MM/dd/yy")
-            delim = '/';
-        else if (field.dateFormat == "MM-dd-yyyy" || field.dateFormat == "MM-dd-yy")
-            delim = '-';        
-        var retVal = formatDate(field, control, delim, field.dateStrictYear);
-        control.value = retVal[1];
-        return retVal[0];
+        var result = formatDate(field, control, field.dateItemDelim, field.dateStrictYear);
+        control.value = result[1];
+        return result[0];
+    }
+    return true;
+}
+
+function DateField_onKeyPress(field, control)
+{
+    if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
+    {
+		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange]);
     }
     return true;
 }
@@ -652,13 +781,17 @@ function SelectField_isValid(field, control)
     return true;
 }
 
-addFieldType("com.xaf.form.field.SelectField", SelectField_isValid);
-addFieldType("com.xaf.form.field.MemoField", MemoField_isValid, null, null, null, MemoField_onKeyPress);
-addFieldType("com.xaf.form.field.DateTimeField", DateField_isValid, DateField_valueChanged);
+addFieldType("com.xaf.form.field.SelectField", null, SelectField_isValid);
+addFieldType("com.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
+addFieldType("com.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, DateField_valueChanged, null, null, DateField_onKeyPress);
+addFieldType("com.xaf.form.field.IntegerField", null, IntegerField_isValid, null, null, null, IntegerField_onKeyPress);
+addFieldType("com.xaf.form.field.FloatField", null, FloatField_isValid, null, null, null, FloatField_onKeyPress);
 
 //****************************************************************************
 // Date Formatting
 //****************************************************************************
+
+var VALID_NUMBERS =  ["0","1","2","3","4","5","6","7","8","9"];
 
 // returns a string of exactly count characters left padding with zeros
 function padZeros(number, count)
@@ -688,7 +821,7 @@ function formatDate(field, control, delim, strictYear)
     var fmtMessage = "Date must be in correct format: 'D', 'M" + delim + "D', 'M" + delim + "D" + delim + "Y', or 'M" + delim + "D" + delim + "YYYY'";
 
     inDate = inDate.toLowerCase();
-    var a = splitNotInArray(inDate, validNumbers);
+    var a = splitNotInArray(inDate, VALID_NUMBERS);
     for (i in a)
     {
         a[i] = '' + a[i];
@@ -804,20 +937,15 @@ function splitNotInArray(strString, arrArray)
     return a;
 }
 
-
-
-
 //****************************************************************************
 // Event handlers
 //****************************************************************************
 
-function documentOnKeyDown(control)
+function documentOnKeyDown()
 {
-    if(TRANSLATE_ENTER_KEY_TO_TAB_KEY && window.event.keyCode == 13)
+    if(TRANSLATE_ENTER_KEY_TO_TAB_KEY && window.event.keyCode == KEYCODE_ENTER)
     {
-        var control = window.event.srcElement;
-        //alert(control.name);
-        
+        var control = window.event.srcElement;        
         var field = activeDialog.fieldsById[control.name];
         if(field == null)
         {
