@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2000-2002 Netspective Corporation -- all rights reserved
+ * Copyright (c) 2000-2002 Netspective Corporation. All rights reserved.
  *
  * Netspective Corporation permits redistribution, modification and use
  * of this file in source and binary form ("The Software") under the
@@ -51,5 +51,5 @@
  */
  
 /**
- * $Id: LICENSE.TXT,v 1.1 2002-04-06 16:44:58 snshah Exp $
+ * $Id: LICENSE.TXT,v 1.2 2002-06-24 11:08:51 snshah Exp $
  */
