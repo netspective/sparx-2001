@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogBeanGenerateClassDialog.java,v 1.2 2002-01-22 12:46:35 jruss Exp $
+ * $Id: DialogBeanGenerateClassDialog.java,v 1.3 2002-08-18 20:58:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -93,7 +93,7 @@ public class DialogBeanGenerateClassDialog extends Dialog
 
         generatedPkgPrefixField = new TextField("pkg_prefix", "Package Prefix");
         generatedPkgPrefixField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        generatedPkgPrefixField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("dialog.context."));
+        generatedPkgPrefixField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("app.form.context."));
 
         ListValueSource allDialogs = ValueSourceFactory.getListValueSource("dialogs:.*");
         dialogsSelectField = new SelectField("dialogs", "Dialogs", SelectField.SELECTSTYLE_MULTIDUAL, allDialogs);
