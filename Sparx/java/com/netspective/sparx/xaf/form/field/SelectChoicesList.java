@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectChoicesList.java,v 1.5 2003-04-18 16:01:09 aye.thu Exp $
+ * $Id: SelectChoicesList.java,v 1.6 2003-04-22 15:17:50 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -211,8 +211,8 @@ public class SelectChoicesList
         ReportContext.ColumnState[] state = rc.getStates();
         if(isPopup)
         {
-            state[0].setUrl("javascript:opener.activeDialogPopup.populateControls(\"${1}\", \"${0}\")");
-            state[1].setUrl("javascript:opener.activeDialogPopup.populateControls(\"${1}\", \"${0}\")");
+            state[0].setUrl("javascript:opener.activeDialogPopup.populateControls(\"${0}\", \"${1}\")");
+            state[1].setUrl("javascript:opener.activeDialogPopup.populateControls(\"${0}\", \"${1}\")");
         }
         if(urlFormats != null)
         {
