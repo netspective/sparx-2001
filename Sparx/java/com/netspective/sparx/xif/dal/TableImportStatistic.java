@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TableImportStatistic.java,v 1.2 2002-12-04 17:51:56 shahbaz.javeed Exp $
+ * $Id: TableImportStatistic.java,v 1.3 2002-12-11 14:07:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -67,6 +67,7 @@ public class TableImportStatistic
     private long successfulRows;
     private long unsuccessfulRows;
     private List importErrors;
+    private List idReferences;
 
     public TableImportStatistic(String tableName)
     {
@@ -129,6 +130,11 @@ public class TableImportStatistic
         return importErrors;
     }
 
+    public List getIdReferences()
+    {
+        return idReferences;
+    }
+
     public void addImportError(String message, Locator locator)
     {
         importErrors.add(message + " at " + locator.getSystemId() + " line " + locator.getColumnNumber() + " column " + locator.getColumnNumber());
@@ -137,5 +143,13 @@ public class TableImportStatistic
     public void setImportErrors(List importErrors)
     {
         this.importErrors = importErrors;
+    }
+
+    public void addIdReference(String id, Object value)
+    {
+        if(idReferences == null)
+            idReferences = new ArrayList();
+
+        idReferences.add("IDREF '"+ id +"' is '"+ value +"'");
     }
 }

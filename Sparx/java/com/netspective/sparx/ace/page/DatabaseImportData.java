@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportData.java,v 1.4 2002-10-10 22:36:59 shahid.shah Exp $
+ * $Id: DatabaseImportData.java,v 1.5 2002-12-11 14:07:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -280,6 +280,16 @@ public class DatabaseImportData extends AceServletPage
                             TableImportStatistic stat = (TableImportStatistic) entry.getValue();
                             out.write("<li>");
                             out.write("Table "+ stat.getTableName() +": "+ stat.getSuccessfulRows() +" successful, "+ stat.getUnsuccessfulRows() +" unsuccessful");
+                            List idReferences = stat.getIdReferences();
+                            if(idReferences != null && idReferences.size() > 0)
+                            {
+                                out.write("<br><b>ID References</b><ul>");
+                                for(int j = 0; j < idReferences.size(); j++)
+                                {
+                                    out.write("<li>" + (String) idReferences.get(j) + "</li>");
+                                }
+                                out.write("</ul>");
+                            }
                             List importErrors = stat.getImportErrors();
                             if(importErrors != null && importErrors.size() > 0)
                             {
