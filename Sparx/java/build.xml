@@ -302,8 +302,8 @@ Build targets:
     <target name="sparx" depends="init,compile,jar,javadoc,web-shared,clean"/>
 
     <target name="change-log" depends="init">
-        <cvschangelog dir=".." destfile="change-log.xml"/>
-        <style in="change-log.xml" out="change-log.html" style="${web-shared.dir}/resources/xslt/change-log.xsl">
+        <cvschangelog dir=".." destfile="../documentation/change-log.xml"/>
+        <style in="../documentation/change-log.xml" out="../documentation/change-log.html" style="${web-shared.dir}/resources/xslt/change-log.xsl">
             <param name="title" expression="Sparx ChangeLog"/>
             <param name="module" expression="Sparx"/>
         </style>
