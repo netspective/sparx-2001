@@ -321,7 +321,7 @@ public class PageTag extends TagSupport
             }
             catch(IOException e)
             {
-                throw new JspException(e);
+                throw new JspException(e.toString());
             }
             return false;
         }
