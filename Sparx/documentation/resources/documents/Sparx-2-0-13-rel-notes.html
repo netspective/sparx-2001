@@ -4,10 +4,9 @@ xmlns="http://www.w3.org/TR/REC-html40">
 
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 10">
+<meta name=ProgId content=FrontPage.Editor.Document>
+<meta name=Generator content="Microsoft FrontPage 5.0">
 <meta name=Originator content="Microsoft Word 10">
-<link rel=File-List href="Sparx-2-0-13-rel-notes_files/filelist.xml">
 <title>Sparx 2</title>
 <!--[if gte mso 9]><xml>
  <o:DocumentProperties>
@@ -66,12 +65,11 @@ xmlns="http://www.w3.org/TR/REC-html40">
  /* Style Definitions */
  p.MsoNormal, li.MsoNormal, div.MsoNormal
 	{mso-style-parent:"";
-	margin:0in;
 	margin-bottom:.0001pt;
 	mso-pagination:widow-orphan;
 	font-size:12.0pt;
 	font-family:"Times New Roman";
-	mso-fareast-font-family:"Times New Roman";}
+	mso-fareast-font-family:"Times New Roman"; margin-left:0in; margin-right:0in; margin-top:0in}
 h1
 	{mso-style-next:Normal;
 	margin-top:12.0pt;
@@ -106,10 +104,10 @@ a:visited, span.MsoHyperlinkFollowed
 	text-underline:single;}
 span.SpellE
 	{mso-style-name:"";
-	mso-spl-e:yes;}
+	mso-spl-e:yes}
 span.GramE
 	{mso-style-name:"";
-	mso-gram-e:yes;}
+	mso-gram-e:yes}
 @page Section1
 	{size:8.5in 11.0in;
 	margin:1.0in 1.25in 1.0in 1.25in;
@@ -191,7 +189,7 @@ ul
 	mso-para-margin-bottom:.0001pt;
 	mso-pagination:widow-orphan;
 	font-size:10.0pt;
-	font-family:"Times New Roman";}
+	font-family:"Times New Roman"}
 table.MsoTableGrid
 	{mso-style-name:"Table Grid";
 	mso-tstyle-rowband-size:0;
@@ -263,7 +261,9 @@ table.MsoTableGrid
      you need to start copying your other (web-xxx) application’s UI, SQL,
      CLASSES, JSP, and other files to the new application. Don’t worry if you
      mess anything up since you can always run new-<span class=SpellE>sparx</span>-app
-     again to create a new shell.</li>
+     again to create a new shell. DO NOT copy your old configuration.xml file -- 
+ the new one in WEB-INF/conf/sparx.xml is more recent. Also, DO NOT copy over 
+ the WEB-INF/tld directory contents -- the new ones are more current. </li>
  <li class=MsoNormal style='mso-list:l3 level1 lfo5;tab-stops:list .5in'>Once
      you have copied all of your files over, make sure to change the location
      of your application file in <span class=SpellE><span style='font-family:
@@ -274,7 +274,9 @@ table.MsoTableGrid
      longer shared across apps by default.</li>
  <li class=MsoNormal style='mso-list:l3 level1 lfo5;tab-stops:list .5in'>This
      might be a good opportunity to download and install Resin 2.1.4 (latest
-     version) as well. <o:p></o:p></li>
+     version) as well. </li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo5;tab-stops:list .5in'>Once 
+ you're all done run &quot;build&quot; from <span style='font-family:"Lucida Console"'>c:\Projects\abc\WEB-INF.</span></li>
 </ol>
 
 <h2>Directory structure has changed to support standard .war file creation and
