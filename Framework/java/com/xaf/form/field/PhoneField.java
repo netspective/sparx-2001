@@ -16,8 +16,8 @@ import com.xaf.form.*;
 public class PhoneField extends TextField
 {
     static public final long FLDFLAG_STRIPBRACKETS = TextField.FLDFLAG_STARTCUSTOM;
-	public static final String DASH_PATTERN_MATCH  = "^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})[ ]?([x][\\d]{1,5})?$";
-    public static final String BRACKET_PATTERN_MATCH = "^[\\(]?([\\d][\\d][\\d])[\\)]?[ ]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})[ ]?([x][\\d]{1,5})?$";
+	public static final String DASH_PATTERN_MATCH  = "^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})([ ][x][\\d]{1,5})?$";
+    public static final String BRACKET_PATTERN_MATCH = "^[\\(]?([\\d][\\d][\\d])[\\)]?[ ]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})([ ][x][\\d]{1,5})?$";
 
     private String formatType;
 
