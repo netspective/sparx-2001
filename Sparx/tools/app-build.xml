@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: app-build.xml,v 1.31 2002-12-27 00:31:45 shahid.shah Exp $
+$Id: app-build.xml,v 1.32 2002-12-30 22:16:10 shahid.shah Exp $
 -->
 
 <project name="app" default="all-but-docs">
@@ -184,6 +184,8 @@ $Id: app-build.xml,v 1.31 2002-12-27 00:31:45 shahid.shah Exp $
     </target>
 
     <target name="copy-sparx-templates" depends="global">
+        <copy file="${sparx.shared.resources.templates.dir}/index.jsp" todir="${app.root.dir}"/>
+        <copy file="${sparx.shared.resources.templates.dir}/popup.jsp" todir="${app.root.dir}"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/resin-web.xml" todir="${app.WEB-INF.dir}/conf"/>
@@ -214,6 +216,10 @@ $Id: app-build.xml,v 1.31 2002-12-27 00:31:45 shahid.shah Exp $
 
         <uptodate property="log4j.properties-is-uptodate" targetfile="${app.WEB-INF.dir}/classes/log4j.properties">
             <srcfiles dir= "${sparx.shared.resources.templates.WEB-INF.dir}/classes" includes="log4j.properties"/>
+        </uptodate>
+
+        <uptodate property="page.tld-is-uptodate" targetfile="${app.WEB-INF.dir}/tld/page.tld">
+            <srcfiles dir= "${sparx.shared.resources.templates.WEB-INF.dir}/tld" includes="page.tld"/>
         </uptodate>
 
         <copy file="${sparx.tools.dir}/app-build.xml" tofile="${app.WEB-INF.dir}/build.xml"/>
@@ -275,11 +281,22 @@ $Id: app-build.xml,v 1.31 2002-12-27 00:31:45 shahid.shah Exp $
         <echo message="   You can use the 'upgrade-log4j.properties' target to update this file."/>
     </target>
 
+    <target name="check-page.tld" depends="copy-sparx-libs" unless="page.tld-is-uptodate">
+        <echo message="** NOTE ** Please check the following files to see if there are updates you need:"/>
+        <echo message="    ${app.WEB-INF.dir}/tld/page.tld is older than"/>
+        <echo message="    ${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld"/>
+        <echo message="   You can use the 'upgrade-page.tld' target to update this file."/>
+    </target>
+
     <target name="upgrade-log4j.properties" depends="global">
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
     </target>
 
-    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh,check-log4j.properties">
+    <target name="upgrade-page.tld" depends="global">
+        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
+    </target>
+
+    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh,check-log4j.properties,check-page.tld">
         <echo message="Sparx libraries and resources have been updated."/>
     </target>
 
@@ -548,6 +565,7 @@ $Id: app-build.xml,v 1.31 2002-12-27 00:31:45 shahid.shah Exp $
         <echo message="                  latest version available in SPARX_HOME (basically runs these"/>
         <echo message="                  two targets: copy-sparx-libs and copy-sparx-resources"/>
         <echo message="  upgrade-log4j.properties Upgrades WEB-INF/classes/log4.properties file"/>
+        <echo message="  upgrade-page.tld Upgrades WEB-INF/tld/page.tld file"/>
         <echo message="  "/>
         <echo message="  compile         Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal             Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
