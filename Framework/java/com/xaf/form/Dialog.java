@@ -27,6 +27,7 @@ public class Dialog
 	static public final int DLGFLAG_CUSTOM_START               = DLGFLAG_ENCTYPE_MULTIPART_FORMDATA * 2;
 
 	static public final String PARAMNAME_AUTOEXECUTE   = "_d_exec";
+    static public final String PARAMNAME_OVERRIDE_SKIN = "_d_skin";
 	static public final String PARAMNAME_DIALOGPREFIX  = "_d.";
 	static public final String PARAMNAME_CONTROLPREFIX = "_dc.";
 	static public final String PARAMNAME_DIALOGQNAME   = "_d.dialog_qname";
