@@ -1,0 +1,11 @@
+com.netspective.sparx.xif.dal
+com.netspective.sparx.xif.db
+com.netspective.sparx.xif.db.context
+com.netspective.sparx.xif.db.policy
+dal
+dal.column
+dal.domain
+dal.domain.row
+dal.domain.rows
+dal.table
+dal.table.type

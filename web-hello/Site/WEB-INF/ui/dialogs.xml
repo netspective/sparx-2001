@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<dialogs package="tutorial">
+		<dialog name="hello_first" heading="Hello" class="tutorial.dialog.HelloFirstDialog">
+			<field.text name="personName" caption="Name" required="yes"/>
+		</dialog>
+		
+		<dialog name="hello_second" heading="Hello">
+			<field.text name="personName" caption="Name" required="yes"/>
+			<field.select name="personGender" caption="Gender" required="yes" choices="schema-enum:Gender"/>
+			<field.integer name="personAge" caption="Age" required="no"/>
+		</dialog>
+	</dialogs>
+</xaf>

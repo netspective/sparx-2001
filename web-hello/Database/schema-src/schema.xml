@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<schema name="db">
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+	<include file="person.xml"/>
+</schema>

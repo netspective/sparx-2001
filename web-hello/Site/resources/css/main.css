@@ -1,0 +1,58 @@
+A:Link
+{
+    font-size: 8pt;
+    color: #336699;
+    font-family: Trebuchet MS;
+    Text-decoration: underline
+}
+A:Top
+{
+    font-size: 8pt;
+    color: #336699;
+    font-family: Trebuchet MS;
+    Text-decoration: none
+}
+A:Visited
+{
+    font-size: 8pt;
+    color: #663366;
+    font-family: Trebuchet MS;
+    Text-decoration: underline
+}
+A:Hover
+{
+    font-size: 8pt;
+    background: #AFD997;
+    color: #000000;
+    font-family: Trebuchet MS;
+    Text-decoration: underline
+}
+A.Menu:Link
+{
+    font-size: 8pt;
+    background: #0000A0;
+    color: #FFFFFF;    
+    font-family: Trebuchet MS;
+    Text-decoration: none
+}
+A.Menu:Visited
+{
+    font-size: 8pt;
+    color: #FFFFFF;
+    font-family: Trebuchet MS;
+    Text-decoration: none
+}
+A.Menu:Hover
+{
+    font-size: 9pt;
+    background: #0000A0;
+    color: yellow;
+    font-family: Trebuchet MS;
+    text-decoration: underline
+}
+
+.Font8pt
+{
+	font-size:8pt;
+	font-family:Trebuchet MS;
+}
