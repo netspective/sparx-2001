@@ -51,21 +51,19 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.13 2002-11-28 21:13:36 shahid.shah Exp $
+ * $Id: DialogField.java,v 1.14 2002-12-23 04:39:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.NamedNodeMap;
 
 import com.netspective.sparx.xaf.form.field.SelectField;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalApplyFlag;
@@ -73,6 +71,11 @@ import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalData;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalDisplay;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.xif.SchemaDocument;
+import com.netspective.sparx.xif.SchemaDocFactory;
+import com.netspective.sparx.xif.dal.Schema;
+import com.netspective.sparx.xif.dal.Table;
+import com.netspective.sparx.xif.dal.Column;
 
 /**
  * A <code>DialogField</code> object represents a data field of a form/dialog. It contains functionalities
@@ -131,6 +134,13 @@ public class DialogField
     private long flags;
     private DialogFieldPopup popup;
     private SingleValueSource hint;
+    private String schemaName;
+    private Schema schema;
+    private String tableName;
+    private Table table;
+    private String columnName;
+    private Column column;
+    private Map dalProperties;
 
     /**
      * Creates a dialog field
@@ -270,6 +280,25 @@ public class DialogField
                 setFlag(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE);
             else if(colBreak.equals("after") || colBreak.equals("yes"))
                 setFlag(DialogField.FLDFLAG_COLUMN_BREAK_AFTER);
+        }
+
+        if(elem.getAttribute("schema").length() > 0)
+            setSchemaName(elem.getAttribute("schema"));
+
+        if(elem.getAttribute("table").length() > 0)
+            setTableName(elem.getAttribute("table"));
+
+        if(elem.getAttribute("column").length() > 0)
+        {
+            setColumnName(elem.getAttribute("column"));
+            dalProperties = new HashMap();
+            NamedNodeMap nnm = elem.getAttributes();
+            for(int i = 0; i < nnm.getLength(); i++)
+            {
+                Node attr = nnm.item(i);
+                if(attr.getNodeName().startsWith("dal-"))
+                    dalProperties.put(attr.getNodeName(), attr.getNodeValue());
+            }
         }
 
         importChildrenFromXml(elem);
@@ -469,6 +498,118 @@ public class DialogField
     public String getId()
     {
         return id;
+    }
+
+    /**
+     * If this dialog is a "table-dialog" then this is the name of the schema the table belongs to (null if default)
+     */
+    public String getSchemaName()
+    {
+        return schemaName;
+    }
+
+    /**
+     * Set the schema name for a "table-dialog"
+     */
+    public void setSchemaName(String schemaName)
+    {
+        this.schemaName = schemaName;
+        schema = null;
+    }
+
+    /**
+     * Return the schema document associated with the schema of this table-dialog (if it's a table-dialog)
+     */
+    public SchemaDocument getSchemaDoc(DialogContext dc)
+    {
+        return schemaName == null ? SchemaDocFactory.getDoc(dc.getServletContext()) : SchemaDocFactory.getDoc(schemaName);
+    }
+
+    /**
+     * Return the actual schema instance associated with the schema document
+     */
+    public Schema getSchema(DialogContext dc)
+    {
+        if(schema != null)
+            return schema;
+
+        SchemaDocument schemaDoc = getSchemaDoc(dc);
+        if(schemaDoc != null)
+            schema = schemaDoc.getSchema();
+        else
+            schema = null;
+
+        return schema;
+    }
+
+    /**
+     * If this dialog is a "table-dialog" then this is the name of the table (null if not a table-dialog)
+     */
+    public String getTableName()
+    {
+        return tableName;
+    }
+
+    public Table getTable(DialogContext dc)
+    {
+        if(table != null)
+            return table;
+
+        if(tableName != null)
+        {
+            Schema schema = getSchema(dc);
+            if(schema != null)
+                table = schema.getTable(tableName);
+            else
+                table = null;
+        }
+        else
+            table = null;
+
+        return table;
+    }
+
+    /**
+     * Set the table name for a "table-dialog"
+     */
+    public void setTableName(String tableName)
+    {
+        this.tableName = tableName;
+        table = null;
+    }
+
+    public String getColumnName()
+    {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName)
+    {
+        this.columnName = columnName;
+    }
+
+    public Column getColumn(DialogContext dc)
+    {
+        if(column != null)
+            return column;
+
+        if(columnName != null)
+        {
+            Table table = getTable(dc);
+            if(table != null)
+                column = table.getColumnByName(columnName);
+            else
+                column = null;
+        }
+        else
+            column = null;
+
+        return column;
+    }
+
+    public boolean isTableColumnField()
+    {
+        return tableName != null && columnName != null;
     }
 
     /**
@@ -1323,7 +1464,6 @@ public class DialogField
         List jsList = this.getClientJavascripts();
         if(jsList != null)
         {
-            String jsType = "";
             String eventName = "";
 
             StringBuffer jsBuffer = new StringBuffer();
@@ -1364,6 +1504,7 @@ public class DialogField
         String memberName = mi.getMemberName();
         String fieldName = mi.getFieldName();
 
+        mi.addJavaCode("\t/* To change the following auto-generated code, modify createDialogContextMemberInfo() method in "+ this.getClass().getName() +" */\n");
         mi.addJavaCode("\tpublic boolean is" + memberName + "ValueSet() { return hasValue(\"" + fieldName + "\"); }\n");
         mi.addJavaCode("\tpublic boolean is" + memberName + "FlagSet(long flag) { return flagIsSet(\"" + fieldName + "\", flag); }\n");
         mi.addJavaCode("\tpublic void set" + memberName + "Flag(long flag) { setFlag(\"" + fieldName + "\", flag); }\n");
@@ -1372,6 +1513,12 @@ public class DialogField
         mi.addJavaCode("\tpublic DialogField get" + memberName + "Field() { return getField(\"" + fieldName + "\"); }\n");
         mi.addJavaCode("\tpublic DialogContext.DialogFieldState get" + memberName + "FieldState() { return getFieldState(\"" + fieldName + "\"); }\n");
         mi.addJavaCode("\tpublic void add" + memberName + "ErrorMsg(String msg) { addErrorMessage(\"" + fieldName + "\", msg); }\n");
+
+        if(isTableColumnField())
+        {
+            mi.addJavaCode("\tpublic "+ dalProperties.get("dal-column-data-type-class") +" get" + memberName + "Column() { return ("+ dalProperties.get("dal-column-data-type-class") +") getField(\"" + fieldName + "\").getColumn(this); }\n");
+            mi.addJavaCode("\tpublic "+ dalProperties.get("dal-table-class-name") +" get" + memberName + "Table() { return ("+ dalProperties.get("dal-table-class-name") +") getField(\"" + fieldName + "\").getTable(this); }\n");
+        }
 
         return mi;
     }
