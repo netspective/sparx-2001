@@ -134,6 +134,8 @@ public class Configuration extends HashMap
 	public Collection getValues(ValueContext vc, String name)
 	{
 		PropertiesCollection property = (PropertiesCollection) get(name);
+		if(property == null)
+			return null;
 		return property.getCollection();
 	}
 
