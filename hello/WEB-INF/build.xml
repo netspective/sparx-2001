@@ -17,7 +17,7 @@ Setup instructions:
        * Java Servlet API 2.2 or above (http://java.sun.com)
        * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
        
-$Id: build.xml,v 1.1 2002-08-09 15:58:53 shahid.shah Exp $       
+$Id: build.xml,v 1.2 2002-08-09 21:36:48 shahid.shah Exp $
 -->
 
 <project name="app" default="all" basedir="${basedir}">
@@ -338,6 +338,12 @@ $Id: build.xml,v 1.1 2002-08-09 15:58:53 shahid.shah Exp $
 		<delete>
 			<fileset dir="${app.classes.dir}" includes="**/*.class"/>
 		</delete>
+		
+		<delete dir="${app.java.dal.dir}"/>
+		<delete dir="${app.java.dal.doc.dir}"/>
+		<delete dir="${app.java.dcb.dir}"/>
+		<delete dir="${app.java.dcb.doc.dir}"/>
+		
 		<delete dir="${resin.work.dir}"/>
 		<delete dir="${config.app.site-temp-path}"/>
 		<mkdir dir="${config.app.site-temp-path}"/>
