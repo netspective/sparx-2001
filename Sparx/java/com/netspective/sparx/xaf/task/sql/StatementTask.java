@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.4 2002-09-03 22:29:20 aye.thu Exp $
+ * $Id: StatementTask.java,v 1.5 2002-09-17 18:30:35 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -100,9 +100,9 @@ public class StatementTask extends BasicTask
     private String stmtSourceId;
     private SingleValueSource dataSourceValueSource;
     private String reportId;
-    private String storeValueName;
+    private String storeValueName = null;
     private SingleValueSource skinValueSource = new StaticValue(DEFAULT_REPORTSKINID);
-    private SingleValueSource storeValueSource;
+    private SingleValueSource storeValueSource = null;
     private SingleValueSource reportDestValueSource;
     private boolean produceReport = true;
     private boolean pageableReport = false;
@@ -112,10 +112,12 @@ public class StatementTask extends BasicTask
     public StatementTask()
     {
         super();
+        System.out.println("StatementTask!");
     }
 
     public void reset()
     {
+        System.out.println("Task reset");
         super.reset();
         statementInfo = null;
         stmtName = null;
@@ -247,7 +249,7 @@ public class StatementTask extends BasicTask
 
     public void setPageableReport(String value)
     {
-        if (value.equalsIgnoreCase("yes"))
+        if ("yes".equalsIgnoreCase(value))
             setPageableReport(true);
         else
             setPageableReport(false);
@@ -309,7 +311,8 @@ public class StatementTask extends BasicTask
 
         setReportDestId(elem.getAttribute("destination"));
 
-        if (elem.getAttribute("pageable").equals("yes"))
+        String pageable = elem.getAttribute("pageable");
+        if (pageable != null && pageable.equals("yes"))
         {
             this.pageableReport = true;
             String rowStr = elem.getAttribute("rows");
@@ -325,7 +328,7 @@ public class StatementTask extends BasicTask
     {
         tc.registerTaskExecutionBegin(this);
 
-        if(storeValueName != null && storeValueSource == null)
+        if(storeValueName != null)
         {
             storeValueSource = ValueSourceFactory.getStoreValueSource(storeValueName);
             if(storeValueSource == null)
@@ -408,9 +411,10 @@ public class StatementTask extends BasicTask
                 StatementDialog stmtDialog = new StatementDialog(stmtManager.getStatement(stmtName), getReport(), getSkin() != null ? getSkin().getValue(tc) : null);
                 stmtDialog.setRowsPerPage(getRowsPerPage());
                 DialogSkin skin = com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin();
-                DialogContext dc = stmtDialog.createContext(context, (javax.servlet.Servlet) tc.getServlet(),
+                DialogContext dc = stmtDialog.createContext(context, tc.getServlet(),
                         (javax.servlet.http.HttpServletRequest) tc.getRequest(),
                         (javax.servlet.http.HttpServletResponse) tc.getResponse(), skin);
+                stmtDialog.prepareContext(dc);
                 stmtDialog.renderHtml(out, dc, false);
             }
             else if(produceReport && storeValueSource == null)
@@ -426,6 +430,7 @@ public class StatementTask extends BasicTask
                     stmtManager.executeAndStore(dbContext, tc, dataSourceId, statementInfo, storeValueSource, storeValueType);
                 else
                     stmtManager.executeAndStore(dbContext, tc, dataSourceId, stmtName, storeValueSource, storeValueType);
+               System.out.println(storeValueSource.getId() + " " + storeValueType);
             }
             else if(produceReport && storeValueSource != null)
             {
