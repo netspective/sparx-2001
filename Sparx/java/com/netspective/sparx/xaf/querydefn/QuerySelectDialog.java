@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectDialog.java,v 1.3 2003-01-21 04:11:32 shahid.shah Exp $
+ * $Id: QuerySelectDialog.java,v 1.4 2003-03-05 23:26:21 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -67,6 +67,8 @@ import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.field.BooleanField;
+import com.netspective.sparx.xaf.form.field.SelectField;
+import com.netspective.sparx.xaf.form.field.ReportSelectedItemsField;
 
 public class QuerySelectDialog extends QueryBuilderDialog
 {
@@ -142,6 +144,7 @@ public class QuerySelectDialog extends QueryBuilderDialog
 
         addReportSkinField();
         addOutputDestinationFields();
+        addReportSelectionField();
 
         if(flagIsSet(QBDLGFLAG_ALLOW_DEBUG))
         {
@@ -166,6 +169,17 @@ public class QuerySelectDialog extends QueryBuilderDialog
             addField(new ResultSetNavigatorButtonsField());
     }
 
+    /**
+     * Add a selection field that keeps track of selected rows of the report
+     */
+    public void addReportSelectionField()
+    {
+        ReportSelectedItemsField selectedItemsField = new ReportSelectedItemsField("selected_item_list", "Selected IDs");
+        selectedItemsField.setSize(5);
+        selectedItemsField.setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
+        addField(selectedItemsField);
+    }
+
     public void makeStateChanges(DialogContext dc, int stage)
     {
         Iterator k = this.getFields().iterator();
@@ -182,13 +196,17 @@ public class QuerySelectDialog extends QueryBuilderDialog
             List fields = this.getFields();
             int flag = flagIsSet(QBDLGFLAG_HIDE_CRITERIA) ? DialogField.FLDFLAG_INVISIBLE : DialogField.FLDFLAG_READONLY;
             for(int i = 0; i < fields.size(); i++)
+            {
                 dc.setFlag(((DialogField) fields.get(i)).getQualifiedName(), flag);
+            }
 
             dc.setFlag("output", DialogField.FLDFLAG_INVISIBLE);
             if(flagIsSet(QBDLGFLAG_ALLOW_DEBUG))
                 dc.setFlag("options", DialogField.FLDFLAG_INVISIBLE);
 
             dc.setFlag("director", DialogField.FLDFLAG_INVISIBLE);
+            dc.clearFlag("selected_item_list", DialogField.FLDFLAG_INVISIBLE);
+            dc.clearFlag("selected_item_list", DialogField.FLDFLAG_READONLY);
             dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
         }
         else
