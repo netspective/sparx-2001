@@ -3,9 +3,11 @@
 
 <app:page title="The Sparx Collection" heading="The Sparx Collection">
 
-	<sparx:query name="library.sel_all_books"/>
-	
-	<p>&nbsp;<p>
+	<sparx:query name="library.sel_all_books" skin="record-editor"/>
+    <!--
+	<sparx:query name="library.sel_all_books" skin="record-viewer"/>
+    -->
+
 	<table>
 		<tr valign=top>
 			<td width='50%' align=center>
