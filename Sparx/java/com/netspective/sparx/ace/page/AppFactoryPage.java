@@ -51,14 +51,13 @@
  */
  
 /**
- * $Id: AppFactoryPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppFactoryPage.java,v 1.2 2002-12-26 19:20:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,6 +73,7 @@ import com.netspective.sparx.xaf.report.ReportColumnFactory;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.querydefn.SqlComparisonFactory;
 import com.netspective.sparx.xaf.task.TaskFactory;
+import com.netspective.sparx.xaf.html.ComponentCommandFactory;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
 public class AppFactoryPage extends AceServletPage
@@ -84,6 +84,7 @@ public class AppFactoryPage extends AceServletPage
     static public final int FACTORY_TASK = 3;
     static public final int FACTORY_SKIN = 4;
     static public final int FACTORY_SQL_COMPARE = 5;
+    static public final int FACTORY_COMPONENT_COMMANDS = 6;
 
     private String name;
     private String caption;
@@ -124,7 +125,6 @@ public class AppFactoryPage extends AceServletPage
 
     public void handlePageBody(PageContext pc) throws ServletException, IOException
     {
-        ServletContext context = pc.getServletContext();
         Document doc = null;
         try
         {
@@ -166,6 +166,9 @@ public class AppFactoryPage extends AceServletPage
             case FACTORY_SQL_COMPARE:
                 SqlComparisonFactory.createCatalog(rootElem);
                 break;
+
+            case FACTORY_COMPONENT_COMMANDS:
+                ComponentCommandFactory.createCatalog(rootElem);
         }
 
         transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
