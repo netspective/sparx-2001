@@ -310,14 +310,19 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
 		Object value;
-		if (databasePolicy.retainAutoIncColInDml()) {
+    String seqOrTableName = "";
 <xsl:for-each select="column[@type = 'autoinc']">
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
-<xsl:text>			</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-<xsl:text>			</xsl:text>value = databasePolicy.handleAutoIncPostDmlExecute(cc.getConnection(), <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName(), <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());
-<xsl:text>			</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
-</xsl:for-each>
+<xsl:text>	</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
+		if (databasePolicy.retainAutoIncColInDml()) {
+				seqOrTableName = <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName();
+		} else {
+				seqOrTableName = table.getName();
 		}
+<xsl:text>	</xsl:text>value = databasePolicy.handleAutoIncPostDmlExecute(cc.getConnection(), seqOrTableName, <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());
+<xsl:text>	</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
+</xsl:for-each>
+
 		super.afterInsert(cc);
 	}
 </xsl:if>
