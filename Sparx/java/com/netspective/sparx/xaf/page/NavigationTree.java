@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: NavigationTree.java,v 1.3 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationTree.java,v 1.4 2002-12-27 00:24:46 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.ValueContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -115,12 +116,12 @@ public class NavigationTree extends VirtualPath
      * A ValueSource that represents what the URL of the element should be.  Unlike VIrtualPath, where its Id is the
      * URL that get rendered with the element, a NavigationTree's Id is simply to uniquely identify an element on the
      * tree.  If a url is not provided, the id is used for the url.
-     * @param  pc  An object of type ValueContext to enable us to get the value from a ValueSource.
+     * @param  vc  An object of type ValueContext to enable us to get the value from a ValueSource.
      * @return
      */
-    public String getUrl(PageContext pc)
+    public String getUrl(ValueContext vc)
     {
-        return url.getValue(pc);
+        return url.getValue(vc);
     }
 
     /**
@@ -400,14 +401,14 @@ public class NavigationTree extends VirtualPath
      * @param popup set to true if page is being called for a popup-window
      * @return
      */
-    public NavigationContext createContext(javax.servlet.jsp.PageContext jspPageContext, NavigationSkin skin, boolean popup)
+    public NavigationContext createContext(javax.servlet.jsp.PageContext jspPageContext, String navTreeId, NavigationSkin skin, boolean popup)
     {
         NavigationContext result = new NavigationContext(this,
                 jspPageContext.getServletContext(),
                 (Servlet) jspPageContext.getPage(),
                 (HttpServletRequest) jspPageContext.getRequest(),
                 (HttpServletResponse) jspPageContext.getResponse(),
-                this.getId(), skin);
+                navTreeId, skin);
         if(popup) result.setPopup(true);
         return result;
     }
