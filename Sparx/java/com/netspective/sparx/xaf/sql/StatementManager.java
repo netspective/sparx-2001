@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.10 2002-09-03 22:29:19 aye.thu Exp $
+ * $Id: StatementManager.java,v 1.11 2002-09-28 04:19:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -248,6 +248,11 @@ public class StatementManager extends XmlSource
         }
     }
 
+    public String[] getCatalogedNodeIdentifiers()
+    {
+        return (String[]) statements.keySet().toArray(new String[statements.size()]);
+    }
+
     public void catalogNodes()
     {
 
@@ -283,6 +288,9 @@ public class StatementManager extends XmlSource
                 String stmtPkgDataSrc = statementsElem.getAttribute("data-source");
                 if(stmtPkgDataSrc.length() == 0)
                     stmtPkgDataSrc = null;
+                String idClassName = statementsElem.getAttribute("id-class");
+                if(idClassName.length() > 0)
+                    catalogedNodeIdentifiersClassName = idClassName;
 
                 NodeList statementsChildren = node.getChildNodes();
                 for(int c = 0; c < statementsChildren.getLength(); c++)

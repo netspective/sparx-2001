@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConfigurationManager.java,v 1.1 2002-01-20 14:53:21 snshah Exp $
+ * $Id: ConfigurationManager.java,v 1.2 2002-09-28 04:19:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.config;
@@ -146,6 +146,11 @@ public class ConfigurationManager extends XmlSource
         String value = getTextValue(vc, propertyName);
         if(value == null) return defaultValue;
         return Float.parseFloat(value);
+    }
+
+    public String[] getCatalogedNodeIdentifiers()
+    {
+        return (String[]) defaultConfig.keySet().toArray(new String[defaultConfig.size()]);
     }
 
     public void catalogNodes()

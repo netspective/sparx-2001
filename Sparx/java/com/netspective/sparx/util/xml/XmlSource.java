@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.5 2002-09-04 16:33:26 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.6 2002-09-28 04:19:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -59,6 +59,9 @@ package com.netspective.sparx.util.xml;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -71,6 +74,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Arrays;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -158,6 +162,7 @@ public class XmlSource
     protected Element metaInfoOptionsElem;
     protected Set inheritanceHistorySet = new HashSet();
     protected Map templates = new HashMap();
+    protected String catalogedNodeIdentifiersClassName;
 
     public static void defineClassAttributes(Element defnElement, Class cls, String attrPrefix)
     {
@@ -254,6 +259,33 @@ public class XmlSource
         {
             char ch = xml.charAt(i);
             constant.append(Character.isJavaIdentifierPart(ch) ? Character.toUpperCase(ch) : '_');
+        }
+        return constant.toString();
+    }
+
+    /**
+     * Given a text string, return a string that would be suitable for that string to be used
+     * as a Java constant (public static final XXX). The rule is to basically take every letter
+     * or digit and return it in uppercase and every non-letter or non-digit as an underscore.
+     * This trims all non-letter/digit characters from the beginning of the string.
+     */
+    public static String xmlTextToJavaConstantTrimmed(String xml)
+    {
+        if(xml == null || xml.length() == 0)
+            return xml;
+
+        boolean stringStarted = false;
+        StringBuffer constant = new StringBuffer();
+        for(int i = 0; i < xml.length(); i++)
+        {
+            char ch = xml.charAt(i);
+            if(Character.isJavaIdentifierPart(ch))
+            {
+                stringStarted = true;
+                constant.append(Character.toUpperCase(ch));
+            }
+            else if(stringStarted)
+                constant.append('_');
         }
         return constant.toString();
     }
@@ -647,6 +679,172 @@ public class XmlSource
                 errorsElem.appendChild(errorElem);
             }
         }
+    }
+
+    static public String getClassName(String pkgAndClassName, char sep)
+    {
+        int classNameDelimPos = pkgAndClassName.lastIndexOf(sep);
+        return classNameDelimPos != -1 ? pkgAndClassName.substring(classNameDelimPos+1) : pkgAndClassName;
+    }
+
+    static public String getPackageName(String pkgAndClassName, char sep)
+    {
+        int classNameDelimPos = pkgAndClassName.lastIndexOf(sep);
+        return classNameDelimPos != -1 ? pkgAndClassName.substring(0, classNameDelimPos) : null;
+    }
+
+    /**
+     * Return the list of identifiers that this class has cataloged via catalogNodes. This list is used to
+     * store the identifers in a Java class.
+     */
+
+    public String[] getCatalogedNodeIdentifiers()
+    {
+        return null;
+    }
+
+    public String getCatalogedNodeIdentifiersClassName()
+    {
+        return catalogedNodeIdentifiersClassName;
+    }
+
+    public class NodeIdentifiersClassInfo
+    {
+        private String rootPath;
+        private String defaultPkgAndClassName;
+        private String pkgAndClassName;
+        private String[] identifiers;
+        private char subPackageSeparator = '.';
+
+        public NodeIdentifiersClassInfo(String rootPath, String defaultPkgAndClassName)
+        {
+            this.rootPath = rootPath;
+            this.defaultPkgAndClassName = defaultPkgAndClassName;
+
+            identifiers = getCatalogedNodeIdentifiers();
+            Arrays.sort(identifiers, String.CASE_INSENSITIVE_ORDER);
+
+            pkgAndClassName = getCatalogedNodeIdentifiersClassName();
+            if(pkgAndClassName == null)
+                pkgAndClassName = defaultPkgAndClassName;
+        }
+
+        public NodeIdentifiersClassInfo(String rootPath, String pkgAndClassName, char subPackageSeparator)
+        {
+            this(rootPath, pkgAndClassName);
+            this.subPackageSeparator = subPackageSeparator;
+        }
+
+        public void generateCode(String subPkgAndClassName, List ids) throws IOException
+        {
+            String fullPkgName, className;
+            File file;
+
+            if(subPkgAndClassName == null)
+            {
+                fullPkgName = getPackageName(pkgAndClassName, '.');
+                className = getClassName(pkgAndClassName, '.');
+                file = new File(rootPath, pkgAndClassName.replace('.', '/') + ".java");
+            }
+            else
+            {
+                String subPkgName = getPackageName(subPkgAndClassName, subPackageSeparator);
+                if(subPkgName == null)
+                    fullPkgName = pkgAndClassName.toLowerCase();
+                else
+                    fullPkgName = (pkgAndClassName + subPackageSeparator + subPkgName).toLowerCase();
+                className = getClassName(subPkgAndClassName, subPackageSeparator);
+                String fullClassSpec = fullPkgName + subPackageSeparator + xmlTextToJavaIdentifier(className, true);
+                file = new File(rootPath, fullClassSpec.replace(subPackageSeparator, '/') + ".java");
+            }
+
+            file.getParentFile().mkdirs();
+            FileWriter writer = new FileWriter(file);
+
+            writer.write("\n/* this file is generated by com.netspective.sparx.util.xml.XmlSource.createNodeIdentifiersClass(), do not modify (you can extend it, though) */\n\n");
+            if(fullPkgName != null)
+                writer.write("package " + fullPkgName.replace(subPackageSeparator, '.') + ";\n\n");
+
+            writer.write("public class " + xmlTextToJavaIdentifier(className, true) + "\n");
+            writer.write("{\n");
+
+            for(int i = 0; i < ids.size(); i++)
+            {
+                String identifier = (String) ids.get(i);
+                String constant = xmlTextToJavaConstantTrimmed(subPkgAndClassName != null ? identifier.substring(subPkgAndClassName.length()+1) : identifier);
+                if(constant.length() > 0)
+                    writer.write("    static public final String " + constant + " = \"" + identifier + "\";\n");
+                else
+                    writer.write("    // static public final String " + constant + " = \"" + identifier + "\";\n");
+            }
+
+            writer.write("}\n");
+            writer.close();
+        }
+
+        public void generateCode() throws IOException
+        {
+            List idsWithNoPackages = new ArrayList();
+            Map idsInPackages = new HashMap();
+
+            for(int i = 0; i < identifiers.length; i++)
+            {
+                String identifier = identifiers[i];
+                if(identifier.indexOf(subPackageSeparator) > 0)
+                {
+                    String packageName = identifier.substring(0, identifier.lastIndexOf(subPackageSeparator));
+                    List ids = (List) idsInPackages.get(packageName);
+                    if(ids == null)
+                    {
+                        ids = new ArrayList();
+                        idsInPackages.put(packageName, ids);
+                    }
+                    ids.add(identifier);
+                }
+                else if(identifier.length() > 0)
+                    idsWithNoPackages.add(identifier);
+            }
+
+            if(idsWithNoPackages.size() > 0)
+                generateCode(null, idsWithNoPackages);
+
+            Iterator idsInPackage = idsInPackages.entrySet().iterator();
+            while(idsInPackage.hasNext())
+            {
+                Map.Entry entry = (Map.Entry) idsInPackage.next();
+                String subPackageName = ((String) entry.getKey()).toLowerCase();
+                List ids = (List) entry.getValue();
+                generateCode(subPackageName, ids);
+            }
+        }
+
+        public String getDefaultPkgAndClassName()
+        {
+            return defaultPkgAndClassName;
+        }
+
+        public String[] getIdentifiers()
+        {
+            return identifiers;
+        }
+
+        public String getPkgAndClassName()
+        {
+            return pkgAndClassName;
+        }
+
+        public String getRootPath()
+        {
+            return rootPath;
+        }
+    }
+
+    public NodeIdentifiersClassInfo createNodeIdentifiersClass(String rootPath, String defaultPkgAndClassName) throws IOException
+    {
+        NodeIdentifiersClassInfo result = new NodeIdentifiersClassInfo(rootPath, defaultPkgAndClassName);
+        if(result.identifiers != null)
+            result.generateCode();
+        return result;
     }
 
     public void catalogNodes()

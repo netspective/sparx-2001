@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogManager.java,v 1.3 2002-08-25 17:34:09 shahid.shah Exp $
+ * $Id: DialogManager.java,v 1.4 2002-09-28 04:19:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -279,6 +279,11 @@ public class DialogManager extends XmlSource
         }
     }
 
+    public String[] getCatalogedNodeIdentifiers()
+    {
+        return (String[]) dialogs.keySet().toArray(new String[dialogs.size()]);
+    }
+
     public void catalogNodes()
     {
         dialogs.clear();
@@ -298,6 +303,9 @@ public class DialogManager extends XmlSource
             {
                 Element dialogsElem = (Element) node;
                 String stmtPkg = dialogsElem.getAttribute("package");
+                String idClassName = dialogsElem.getAttribute("id-class");
+                if(idClassName.length() > 0)
+                    catalogedNodeIdentifiersClassName = idClassName;
 
                 NodeList dialogsChildren = node.getChildNodes();
                 for(int c = 0; c < dialogsChildren.getLength(); c++)

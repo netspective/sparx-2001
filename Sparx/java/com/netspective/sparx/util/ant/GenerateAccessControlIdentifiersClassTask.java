@@ -51,67 +51,74 @@
  */
 
 /**
- * $Id: BuildConfiguration.java,v 1.65 2002-09-28 04:19:56 shahid.shah Exp $
+ * $Id: GenerateAccessControlIdentifiersClassTask.java,v 1.1 2002-09-28 04:19:56 shahid.shah Exp $
  */
 
-package com.netspective.sparx;
+package com.netspective.sparx.util.ant;
 
-public class BuildConfiguration
+import java.io.IOException;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+
+import com.netspective.sparx.xaf.security.AccessControlList;
+import com.netspective.sparx.xaf.security.AccessControlListFactory;
+import com.netspective.sparx.util.xml.XmlSource;
+
+public class GenerateAccessControlIdentifiersClassTask extends Task
 {
-    public static final String productName = "Sparx";
-    public static final String productId = "sparx";
+    static public final String DEFAULT_CLASS_NAME = "app.id.ACL";
 
-    public static final int releaseNumber = 2;
-    public static final int versionMajor = 1;
-    public static final int versionMinor = 5;
+    private String destRoot;
+    private String className = DEFAULT_CLASS_NAME;
+    private String source;
+    private boolean debug;
 
-    static public final int getReleaseNumber()
+    public GenerateAccessControlIdentifiersClassTask()
     {
-        return releaseNumber;
     }
 
-    static public final int getVersionMajor()
+    public void setDebug(boolean debug)
     {
-        return versionMajor;
+        this.debug = debug;
     }
 
-    static public final int getVersionMinor()
+    public void setDest(String dest)
     {
-        return versionMinor;
+        destRoot = dest;
     }
 
-    static public final int getBuildNumber()
+    public void setSource(String source)
     {
-        return BuildLog.BUILD_NUMBER;
+        this.source = source;
     }
 
-    static public final String getBuildPathPrefix()
+    public void setClass(String className)
     {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor + "_" + BuildLog.BUILD_NUMBER;
+        this.className = className;
     }
 
-    static public final String getBuildFilePrefix()
+    public void init() throws BuildException
     {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor;
+        destRoot = null;
+        className = DEFAULT_CLASS_NAME;
+        source = null;
+        debug = false;
     }
 
-    static public final String getVersion()
+    public void execute() throws BuildException
     {
-        return releaseNumber + "." + versionMajor + "." + versionMinor;
-    }
+        log("Opening ACL (XML) file " + source + "...");
 
-    static public final String getVersionAndBuild()
-    {
-        return "Version " + getVersion() + " Build " + BuildLog.BUILD_NUMBER;
-    }
-
-    static public final String getProductBuild()
-    {
-        return productName + " Version " + getVersion() + " Build " + BuildLog.BUILD_NUMBER;
-    }
-
-    static public final String getVersionAndBuildShort()
-    {
-        return "v" + getVersion() + " b" + BuildLog.BUILD_NUMBER;
+        AccessControlList acl = AccessControlListFactory.getACL(source);
+        try
+        {
+            XmlSource.NodeIdentifiersClassInfo classInfo = acl.createNodeIdentifiersClass(destRoot, className);
+            log("Created " + classInfo.getPkgAndClassName());
+        }
+        catch (IOException e)
+        {
+            throw new BuildException(e);
+        }
     }
 }

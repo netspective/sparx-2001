@@ -51,12 +51,13 @@
  */
  
 /**
- * $Id: AccessControlList.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: AccessControlList.java,v 1.2 2002-09-28 04:19:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.security;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -237,6 +238,11 @@ public class AccessControlList extends XmlSource implements FactoryListener
                 generatePermissions(childElem);
             }
         }
+    }
+
+    public String[] getCatalogedNodeIdentifiers()
+    {
+        return (String[]) permissionsByName.keySet().toArray(new String[permissionsByName.size()]);
     }
 
     public void catalogNodes()
