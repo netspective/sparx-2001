@@ -1,30 +1,29 @@
 @echo off
 
-REM $Id: app-build.bat,v 1.6 2002-08-10 03:44:11 shahid.shah Exp $
+REM $Id: app-build.bat,v 1.7 2002-08-09 15:55:12 shahid.shah Exp $
 
 REM **************************************************************************
 REM ** This script should be be run from the APP_ROOT\WEB-INF directory.    **
+REM ** It is basically a "launcher" for Ant and the actual work is done in  **
+REM ** the build.xml file.                                                  **
 REM **************************************************************************
 
 if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\java\jdk1.3.1
 
 
 REM **************************************************************************
-REM ** NOTE: The command "for %%D in (.) do set BASEDIR" will only work in **
+REM ** NOTE: The command "for %%D in (.) do set BASEDIR" will only work in  **
 REM ** Windows NT/2k/XP. If you are not running under Windows NT/2k/XP then **
 REM ** you need to replace the line with with                               **
-REM **    set BASEDIR=[your path name]                                     **
+REM **    set BASEDIR=[your path name]                                      **
 REM **************************************************************************
 
 for %%D in (.) do set BASEDIR=%%~fD
 
-
-REM **************************************************************************
-REM ** Setup location of Sparx distribution, application build file, and    **
-REM ** the Sparx JAR file. Just set the SPARX_HOME environment variable and **
-REM ** the others will be set automatically. You can set SPARX_HOME in your **
-REM ** environment (shell) or change default value in this file.            **
-REM **************************************************************************
+REM The SPARX_HOME, if not set, is assumed to be at the same level as apps.
+REM For example: if application hello is at C:\some\where\hello and this script
+REM              is executing from C:\some\where\hello\WEB-INF then the Sparx
+REM              home directory is assumed be C:\some\where\Sparx.
 
 if "%SPARX_HOME%" == "" set SPARX_HOME=%BASEDIR%\..\..\Sparx
 

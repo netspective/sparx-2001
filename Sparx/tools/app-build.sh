@@ -1,16 +1,11 @@
 #!/bin/sh
 
-# $Id: app-build.sh,v 1.3 2002-08-10 03:44:11 shahid.shah Exp $
+# $Id: app-build.sh,v 1.4 2002-08-09 15:55:12 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
-# **************************************************************************
-
-# **************************************************************************
-# ** Setup location of Sparx distribution, application build file, and    **
-# ** the Sparx JAR file. Just set the SPARX_HOME environment variable and **
-# ** the others will be set automatically. You can set SPARX_HOME in your **
-# ** environment (shell) or change default value in this file.            **
+# ** It is basically a "launcher" for Ant and the actual work is done in  **
+# ** the build.xml file.                                                  **
 # **************************************************************************
 
 if [ ! -d $JAVA_HOME ]; then
@@ -19,7 +14,12 @@ fi
 
 BASEDIR=`pwd`
 
-# the SPARX_HOME, if not set, is assumed to be at the same level as apps
+#
+# The SPARX_HOME, if not set, is assumed to be at the same level as apps.
+# For example: if application hello is at /some/where/hello and this script
+#              is executing from /some/where/hello/WEB-INF then the Sparx
+#              home directory is assumed be /some/where/Sparx.
+#
 
 if [ ! -d $SPARX_HOME ]; then
 	SPARX_HOME=$BASEDIR/../../Sparx
