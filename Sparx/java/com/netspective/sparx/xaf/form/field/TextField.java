@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.7 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: TextField.java,v 1.8 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -67,6 +67,7 @@ import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.log.LogManager;
 
 public class TextField extends DialogField
 {
@@ -218,8 +219,8 @@ public class TextField extends DialogField
             }
             catch(MalformedPerl5PatternException e)
             {
-                e.printStackTrace();
                 value = e.toString();
+                LogManager.recordException(this.getClass(), "formatDisplayValue", "malformed perl expression", e);
             }
         }
         return value;
@@ -248,7 +249,7 @@ public class TextField extends DialogField
             }
             catch(MalformedPerl5PatternException e)
             {
-                e.printStackTrace();
+                LogManager.recordException(this.getClass(), "formatSubmitValue", "malformed perl expression", e);
                 value = e.toString();
             }
         }
@@ -322,7 +323,7 @@ public class TextField extends DialogField
             }
             catch(MalformedPerl5PatternException e)
             {
-                e.printStackTrace();
+                LogManager.recordException(this.getClass(), "isValid", "malformed perl expression", e);
                 invalidate(dc, e.toString());
                 result = false;
             }

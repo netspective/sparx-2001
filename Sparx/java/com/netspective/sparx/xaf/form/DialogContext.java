@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.23 2002-10-16 14:19:41 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.24 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -99,6 +99,7 @@ import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
@@ -408,6 +409,7 @@ public class DialogContext extends ServletValueContext
             catch(NoSuchAlgorithmException e)
             {
                 transactionId = "No MessageDigest Algorithm found!";
+                LogManager.recordException(this.getClass(), "initialize", transactionId, e);
             }
             dataCmdStr = (String) aRequest.getAttribute(Dialog.PARAMNAME_DATA_CMD_INITIAL);
             if(dataCmdStr == null)
@@ -1703,7 +1705,12 @@ public class DialogContext extends ServletValueContext
         }
         catch(Exception e)
         {
-            throw new RuntimeException(e.toString() + " [" + sql + "]");
+            LogManager.recordException(this.getClass(), "populateValuesFromSql", "[SQL: " + sql + "]", e);
+            throw new RuntimeException(
+                        ConfigurationManagerFactory.isProductionEnvironment(servletContext) ?
+                            "Error in populateValuesFromSql: please view '"+ LogManager.DEBUG_EXCEPTION +"' logger for details." :
+                            "Error in populateValuesFromSql: [" + sql + "] " + e.toString()
+                      );
         }
     }
 

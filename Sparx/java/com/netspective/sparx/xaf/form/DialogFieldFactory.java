@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogFieldFactory.java,v 1.4 2002-07-08 21:27:45 aye.thu Exp $
+ * $Id: DialogFieldFactory.java,v 1.5 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -64,6 +64,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.factory.Factory;
+import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xaf.form.field.BooleanField;
 import com.netspective.sparx.xaf.form.field.CurrencyField;
 import com.netspective.sparx.xaf.form.field.DateTimeField;
@@ -217,6 +218,7 @@ public class DialogFieldFactory implements Factory
         }
         catch(Exception e)
         {
+            LogManager.recordException(DialogField.class, "createField", "unable to instantiate field '"+ fieldClass.getName() +"'", e);
             return null;
         }
     }
@@ -233,6 +235,7 @@ public class DialogFieldFactory implements Factory
         }
         catch(Exception e)
         {
+            LogManager.recordException(DialogField.class, "createConditional", "unable to instantiate conditional '"+ condClass.getName() +"'", e);
             return null;
         }
     }

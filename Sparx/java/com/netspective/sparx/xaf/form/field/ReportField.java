@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: ReportField.java,v 1.2 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -70,6 +70,7 @@ import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.xaf.task.sql.StatementTask;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.log.LogManager;
 
 public class ReportField extends DialogField
 {
@@ -160,6 +161,7 @@ public class ReportField extends DialogField
             catch(TaskInitializeException e)
             {
                 taskException = e;
+                LogManager.recordException(this.getClass(), "importFromXml", "unable to initialize task", e);
             }
         }
     }
@@ -187,6 +189,7 @@ public class ReportField extends DialogField
         catch(TaskExecuteException e)
         {
             writer.write(e.toString());
+            LogManager.recordException(this.getClass(), "renderControlHtml", "unable to execute task", e);
             return;
         }
         writer.write(tc.hasError() ? tc.getErrorMessage() : tc.getResultMessage());

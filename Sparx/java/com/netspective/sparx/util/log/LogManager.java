@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LogManager.java,v 1.2 2002-08-18 20:56:03 shahid.shah Exp $
+ * $Id: LogManager.java,v 1.3 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.log;
@@ -60,9 +60,13 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 public class LogManager
 {
     public static String MONITOR_ENTRY_FIELD_SEPARATOR = "\t";
+
+    public static final String DEBUG_EXCEPTION = "sparx.debug.exception";
 
     public static final String DEBUG_PAGE = "sparx.debug.page";
     public static final String DEBUG_SQL = "sparx.debug.sql";
@@ -95,4 +99,21 @@ public class LogManager
         logger.info(info.toString());
     }
 
+    public static void recordException(Class srcClass, String srcMethod, String addlInfo, Exception e)
+    {
+        Logger logger = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_EXCEPTION);
+        if(logger.isDebugEnabled())
+        {
+            StringBuffer info = new StringBuffer();
+            info.append(srcClass != null ? srcClass.getName() : "no class provided");
+            info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+            info.append(srcMethod != null ? srcMethod : "no method provided");
+            if(addlInfo != null)
+            {
+                info.append(LogManager.MONITOR_ENTRY_FIELD_SEPARATOR);
+                info.append(addlInfo);
+            }
+            logger.debug(info, e);
+        }
+    }
 }

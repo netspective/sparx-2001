@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.12 2002-10-14 00:15:43 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.13 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -634,6 +634,7 @@ public class Dialog
             }
             catch(Exception e)
             {
+                LogManager.recordException(this.getClass(), "importFromXml", "Unable to instantiate dialog director '"+ directorClass.getName() +"'", e);
                 addField(new StaticField("error", "Dialog director problem: " + e.toString()));
                 director = new DialogDirector();
             }
@@ -701,6 +702,7 @@ public class Dialog
                 catch(TaskInitializeException e)
                 {
                     addField(new StaticField("exception in populate-tasks", e.toString()));
+                    LogManager.recordException(this.getClass(), "importFromXml", "unable to initalize populate tasks", e);
                 }
             }
             else if(childName.equals("execute-tasks"))
@@ -724,6 +726,7 @@ public class Dialog
                 catch(TaskInitializeException e)
                 {
                     addField(new StaticField("exception in execute-tasks", e.toString()));
+                    LogManager.recordException(this.getClass(), "importFromXml", "unable to initalize execute tasks", e);
                 }
             }
             else if(childName.equals("director"))
@@ -831,6 +834,7 @@ public class Dialog
                 catch(TaskExecuteException e)
                 {
                     dc.addErrorMessage(e.getMessage());
+                    LogManager.recordException(this.getClass(), "processPopulateTasks", "unable to execute populate tasks", e);
                 }
             }
         }
@@ -869,6 +873,7 @@ public class Dialog
                 {
                     dc.setExecuteStageHandled(true);
                     writer.write("<pre>" + e.getDetailedMessage() + "</pre>");
+                    LogManager.recordException(this.getClass(), "processExecuteTasks", "unable to execute tasks", e);
                 }
             }
 

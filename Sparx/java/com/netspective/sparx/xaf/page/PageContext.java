@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageContext.java,v 1.2 2002-09-23 03:47:27 shahid.shah Exp $
+ * $Id: PageContext.java,v 1.3 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -64,6 +64,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.util.value.ServletValueContext;
+import com.netspective.sparx.util.log.LogManager;
 
 public class PageContext extends ServletValueContext
 {
@@ -92,6 +93,7 @@ public class PageContext extends ServletValueContext
         catch(NoSuchAlgorithmException e)
         {
             transactionId = "No MessageDigest Algorithm found!";
+            LogManager.recordException(this.getClass(), "constructor", transactionId, e);
         }
     }
 

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: VirtualPath.java,v 1.2 2002-09-23 03:47:27 shahid.shah Exp $
+ * $Id: VirtualPath.java,v 1.3 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -74,6 +74,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.netspective.sparx.util.log.LogManager;
 
 public class VirtualPath
 {
@@ -343,6 +345,7 @@ public class VirtualPath
                     }
                     catch (Exception e)
                     {
+                        LogManager.recordException(VirtualPath.class, "importFromXml", "Unable to instantiate page class '" + pageClass + "'", e);
                         childPath.setCaption(caption + " (" + e.toString() + ")");
                     }
                 }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DateTimeField.java,v 1.5 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: DateTimeField.java,v 1.6 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -69,6 +69,7 @@ import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
 import com.netspective.sparx.xaf.form.DialogField;
@@ -467,7 +468,7 @@ public class DateTimeField extends TextField
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace();
+                    LogManager.recordException(this.getClass(), "translateDateString", null, e);
                 }
             }
             else

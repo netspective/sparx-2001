@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.6 2002-10-16 03:14:57 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.7 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -237,7 +237,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
             }
             catch(Exception e)
             {
-                debugLog.error("Unable to instantiate login dialog class '" + loginDialogClassName + "' not found", e);
+                LogManager.recordException(this.getClass(), "init", "Unable to instantiate login dialog class '" + loginDialogClassName + "' not found", e);
                 throw new ServletException(e);
             }
         }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DurationField.java,v 1.3 2002-10-13 21:20:34 shahid.shah Exp $
+ * $Id: DurationField.java,v 1.4 2002-11-03 23:26:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -63,6 +63,7 @@ import org.w3c.dom.Element;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.log.LogManager;
 
 public class DurationField extends DialogField
 {
@@ -218,7 +219,7 @@ public class DurationField extends DialogField
         catch(Exception e)
         {
             invalidate(dc, "One of the min and max values is invalid. This error should never happen.");
-            e.printStackTrace();
+            LogManager.recordException(this.getClass(), "isValid", "One of the min and max values is invalid. This error should never happen.", e);
             return false;
         }
 
