@@ -405,12 +405,12 @@ where
     <section id="xmltags-jsptags">
         <title>XML Task Tags and JSP Tags</title>
         <para>
-        A task is a piece of code that can be executed and Sparx provides the ability to
+        A task is a piece of code that can be executed and &product-name; provides the ability to
         execute tasks either through XML tags or through custom tags in JSP pages. This flexibility 
         gives developers the choice of defining  application logic within XML files or within JSP files.
         </para>
 
-       <section id="xmltags">
+       <section id="xmltags-tasks">
             <title>XML Task Tags</title>
             <para>
             Available XML task tags can be viewed in the Application Component Explorer(ACE)'s menu item
@@ -429,6 +429,10 @@ where
             </mediaobject>   
             </para>
             <para>
+            There are two XML tasks available: <emphasis>execute-tasks</emphasis> and <emphasis>populate-tasks</emphasis>.
+            The first tasks are ran when the dialog is being executed and the latter tasks are ran before the
+            dialog is created. 
+            
             The following is an example of how multiple tasks to be executed by a dialog is defined with the
             dialog itself instead of defined inside a JSP:
             <programlisting>
@@ -447,8 +451,36 @@ where
                 &lt;/execute-tasks&gt;
             &lt;/dialog&gt;
              </programlisting>
+             
+             The <sgmltag class="starttag">execute-tasks</sgmltag> by default will execute the tasks defined within it
+             all the time unless its attribute called <sgmltag class="attribute">data-cmd</sgmltag> is set to 
+             one or more of these values: <sgmltag class="attvalue">add</sgmltag>, <sgmltag class="attvalue">edit</sgmltag>,
+             <sgmltag class="attvalue">delete</sgmltag>. When this attribute is set the tasks will only be executed
+             when the dialog is in one of the data command modes. The  <sgmltag class="attribute">data-cmd</sgmltag> 
+             attribute and its values are also available for the <sgmltag class="starttag">populate-tasks</sgmltag> XML tag.
+             The following is an example of a definition of <sgmltag class="starttag">populate-tasks</sgmltag> using
+             the <sgmltag class="attribute">data-cmd</sgmltag> attribute:
+             <programlisting>
+             <![CDATA[
+        <dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
+            ...
+            <populate-tasks data-cmd="edit,delete">
+                <exec-statement report="none" store-type="row-fields" store="form:*">
+                    select * from org where org_id = ?
+                    <params>
+                        <param value="request:org_id"/>
+                    </params>
+                </exec-statement>
+            </populate-tasks>
+            ...
+        </dialog>
+             ]]>
+             </programlisting>
+             As shown in the example above, the <sgmltag class="starttag">populate-tasks</sgmltag> is usually used
+             to populate a dialog with data from a database.
             </para>
         </section>
+        
        <section id="jsptags">
             <title>JSP Tags</title>
             <para>

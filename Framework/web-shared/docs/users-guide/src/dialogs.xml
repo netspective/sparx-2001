@@ -29,7 +29,7 @@
         </para>
     </section>
 
-    <section id="datafields">
+    <section id="Dialogs-DataFields">
         <title>Data Fields</title>
         <para>
         One can think of a dialog as a container/manager object consisting of data fields which have their own
@@ -355,7 +355,7 @@ public class NewField extends com.xaf.form.DialogField
             <example>
                 <title>Conditional fields</title>
                 <para>
-                    &product-name; provides a dynamic field displaying and hiding functionality which is
+                    &framework-name; provides a dynamic field displaying and hiding functionality which is
                     defined by the <sgmltag class="element">conditional </sgmltag> XML element. The following
                     is an example dialog definition:
                     <programlisting>
@@ -416,6 +416,15 @@ public class NewField extends com.xaf.form.DialogField
                     </imageobject>
                     </mediaobject>
                 </para>
+                <para>
+                Aside from the <sgmltag class="attribute">action</sgmltag> attribute, there are other useful attributes
+                available such as <sgmltag class="attribute">apply-flag</sgmltag> and <sgmltag class="attribute">clear-flag</sgmltag>.
+                The more common values for these two attributes are <sgmltag class="attvalue">invisible</sgmltag>, 
+                <sgmltag class="attvalue">read-only</sgmltag>, and <sgmltag class="attvalue">browser-read-only</sgmltag>.
+                For setting or removing these flags depend upon other attributes such as <sgmltag class="attribute">
+                data-cmd</sgmltag>, <sgmltag class="attribute">has-permission</sgmltag>, and <sgmltag class="attribute">
+                lack-permission</sgmltag>. 
+                </para>
             </example>
 
             <example>
@@ -454,7 +463,7 @@ public class NewField extends com.xaf.form.DialogField
     </section>
 
 
-    <section id="Skins">
+    <section id="Dialogs-Skins">
         <title>Look &amp; Feel: Skins</title>
         <para>
         Skins provide consistent look and feel and allows the same code to run on a variety of
@@ -515,6 +524,60 @@ public class NewField extends com.xaf.form.DialogField
             <imagedata fileref="./resources/images/dialogs/skin2.jpg" format="JPEG"/>
         </imageobject>
         </mediaobject>
+        </para>
+    </section>
+
+    <section id="Dialogs-DataCommands">
+        <title>Data Commands</title>
+        <para>
+        One of the common usage of dialogs is to create, modify, and delete the same data such as users,
+        orders, and contact information. The differences between these dialogs are minor in a sense that
+        they all tend to display the same fields (but in different modes such as read-only or invisible). 
+        To avoid defining the same dialog three times (with slight variations in field attributes) just to 
+        provide create, edit, and delete functionality of the same data, &framework-name; provides 
+        a feature called <emphasis class="bold">data commands</emphasis>. A dialog functions differently
+        based upon the data command it receives; for example, it can display fields as read only when
+        the data command is delete and it can hide some fields when the data command is create.
+        As hinted above, &framework-name; dialogs recognizes three types of data commands: <emphasis>add</emphasis>,
+        <emphasis>edit</emphasis>, and <emphasis>delete</emphasis>.
+        </para>
+        
+        <para>
+        Data commands are recognized by the dialog in two ways: as a request parameter or as a request attribute  
+        called <varname>data_cmd</varname>. The dialog behaves in different ways according to the data command by 
+        changing the name of the submit action button and also making all the fields read only for the <emphasis>delete</emphasis> mode. 
+        By default, there is very little difference in the behavior of the dialog when it is in either the 
+        <emphasis>add</emphasis> or <emphasis>edit</emphasis>. The funtionality of the <emphasis>add</emphasis> or 
+        <emphasis>edit</emphasis> modes are enhanced more through the power of the conditional fields assigned to the
+        dialog. Conditional fields can be configured to depend upon the mode the dialog is in so that fields
+        can be read-only or invisible.
+        
+        <example>            
+            <title>Conditional fields dependent upon the Dialog's data mode</title>
+            <para> 
+            <programlisting>
+            <![CDATA[
+    <dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
+        <field.debug visible="no"/>
+        <field.text name="org_code" caption="Account Code" required="yes"/>
+        <field.text name="org_name" caption="Name" required="yes"/>
+        <field.text name="org_abbrev" caption="Abbreviation"/>
+        <field.select name="org_type" caption="Type" choices="schema-enum:Org_Type_Enum">
+            <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+        </field.select>
+        <field.select name="org_industry" caption="Industry" choices="schema-enum:Org_Industry_Enum">
+            <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+        </field.select>            
+        ...
+    </dialog>
+            ]]>
+            </programlisting>
+            In the above dialog definition, the select field <sgmltag class="attvalue">org_type</sgmltag> and 
+            <sgmltag class="attvalue">org_industry</sgmltag> has conditions defined based upon the mode of the dialog.
+            When the dialog is in edit or delete mode, the <emphasis>invisible</emphasis> flag is applied to
+            the fields. For more information on conditional fields, go to <xref linkend="Dialogs-DataFields"/>.
+            </para>
+        </example>
         </para>
     </section>
 

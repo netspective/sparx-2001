@@ -339,6 +339,82 @@
                 </varlistentry>   
             </variablelist>
         </para>
+        
+        <section>
+            <title>Defining custom behavior of dialogs within XML </title>
+            <para>
+            Custom tags within JSP files allow for a more organized and controlled desgin but &product-name; provides
+            an even more object-oriented way of defining custom action and tasks with custom dialogs. Each dialog can have
+            its execution tasks and actions defined at the same time with its component fields. This way, the whole
+            functionality of a dialog (its' properties and behavior) is defined in one place. The following is an example of
+            a dialog definition which consists of all its field components and its execution tasks:
+            <example>
+                <para>
+                <programlisting>
+                <![CDATA[
+    <dialogs package="org">
+        <dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
+            <field.debug visible="no"/>
+            <field.text name="org_code" caption="Account Code" required="yes"/>
+            <field.text name="org_name" caption="Name" required="yes"/>
+            <field.text name="org_abbrev" caption="Abbreviation"/>
+            <field.select name="org_type" caption="Type" choices="schema-enum:Org_Type_Enum">
+                <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+            </field.select>
+            <field.select name="org_industry" caption="Industry" choices="schema-enum:Org_Industry_Enum">
+                <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+            </field.select>
+            <field.select name="ownership" caption="Ownership" choices="schema-enum:Org_Ownership"/>
+            <field.text name="ticker_symbol" caption="Ticker Symbol"/>
+            <field.integer name="employees" caption="Employees"/>
+            <field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
+
+            <populate-tasks data-cmd="edit,delete">
+                <exec-statement report="none" store-type="row-fields" store="form:*">
+                    select * from org where org_id = ?
+                    <params>
+                        <param value="request:org_id"/>
+                    </params>
+                </exec-statement>
+            </populate-tasks>
+            
+            <execute-tasks data-cmd="add">
+                <exec-transaction command="begin"/>
+                <exec-dml command="insert" table="org" auto-inc="org_id,org_org_id_seq" auto-inc-store="request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/>
+                <exec-dml command="insert" table="org_industry" columns="org_id=request-attr:org_id,system_id=custom-sql:oind_system_id_seq.nextval" fields="org_industry"/>
+                <exec-dml command="insert" table="org_type" columns="org_id=request-attr:org_id,system_id=custom-sql:otyp_system_id_seq.nextval" fields="org_type"/>
+                <exec-transaction command="end"/>
+                <exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
+            </execute-tasks>
+
+            <execute-tasks data-cmd="edit">
+                <exec-dml command="update" table="org" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request:org_id}"/>
+            </execute-tasks>
+
+            <execute-tasks data-cmd="delete">
+                <exec-transaction command="begin"/>
+                <exec-dml command="delete" table="org_industry" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-dml command="delete" table="org_type" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-dml command="delete" table="org" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-transaction command="end"/>
+                <exec-redirect url="create-app-url:/account"/>
+            </execute-tasks>
+        </dialog>
+    </dialogs>                
+                ]]>
+                </programlisting>
+                
+                In the above example, the dialog <literal>registration</literal> is defined with the usual field components
+                but there are extra elements: <sgmltag class="starttag">populate-tasks</sgmltag> and
+                <sgmltag class="starttag">execute-tasks</sgmltag>. These elements are dependent upon the mode the dialog is in
+                through their attribute, <sgmltag class="attribute">data-cmd</sgmltag>.
+                For a detailed description of these elements and their respective attributes, go to <xref linkend="xmltags-tasks"/>.
+                
+                </para>
+            </example>
+            </para>
+        </section>
     </section>
 
 </chapter>
