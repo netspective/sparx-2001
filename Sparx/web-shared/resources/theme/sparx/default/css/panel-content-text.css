@@ -1,0 +1,4 @@
+.text  { color: #000; font-size: 11px; font-family: Tahoma; padding: 1px 4px }
+.text-field { color: white; font-weight: bold; font-size: 11px; font-family: Tahoma; background-color: #a9a9a9; padding: 1px 4px; border: solid 1px #696969 }
+.text-alternative  { color: #000; font-size: 11px; font-family: Tahoma; background-color: #f1eeee; padding: 1px 4px }
+.text-summary  { color: #333; font-weight: bold; font-size: 11px; font-family: Tahoma; padding: 1px 4px; border-top: 1px solid #333; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }

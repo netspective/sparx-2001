@@ -1,0 +1,25 @@
+.panel-input        { background-color: #009 }
+
+.panel-frame-heading-input  { color: #fff0f5; font-weight: bold; font-size: 10px; font-family: Tahoma; background: url(../images/panel/input/frame-heading.gif) no-repeat left top; text-transform: uppercase; padding: 1px 8px 3px }
+
+.panel-frame-heading-action-left-blank-input  { background: url(../images/panel/input/frame-heading-action-left.gif) no-repeat; width: 17px; height: 19px }
+.panel-frame-heading-action-right-blank-input  { background: url(../images/panel/input/frame-heading-action-right.gif) no-repeat; width: 17px; height: 19px }
+.panel-frame-heading-action-collapse-input  { background: url(../images/panel/input/frame-heading-action-up.gif) no-repeat; width: 17px; height: 19px }
+.panel-frame-heading-action-expand-input  { background: url(../images/panel/input/frame-heading-action-down.gif) no-repeat; width: 17px; height: 19px }
+.panel-frame-heading-action-drag-input { background: url(../images/panel/input/frame-heading-action-drag.gif) no-repeat; width: 17px; height: 19px }
+.panel-frame-action-search-input { background: url(../images/panel/input/frame-action-search.gif) no-repeat; width: 17px; height: 14px }
+.panel-frame-action-add-input { background: url(../images/panel/input/frame-action-add.gif) no-repeat; width: 17px; height: 14px }
+.panel-frame-mid-input { background-image: url(../images/panel/input/mid.gif); width: 100%; height: 19px }
+.panel-frame-end-cap-input { background: url(../images/panel/input/end-cap.gif) no-repeat left top; width: 2px; height: 19px }
+
+.panel-frame-action-input       { color: #999; font-weight: normal; font-size: 9px; font-family: Tahoma; text-decoration: none; text-transform: uppercase; width: 100% }
+.panel-frame-action-box-input  { background-color: #f1eeee; text-transform: uppercase; padding-top: 1px; border-top: 1px solid #999; border-right: 1px solid #999 }
+.panel-frame-action-box-input:hover  { background-color: #a9a9a9; text-transform: uppercase; padding-top: 1px; border-top: 1px solid #999; border-right: 1px solid #999 }
+.panel-frame-action-input:link    { color: #999; font-weight: normal; font-size: 9px; font-family: Tahoma; text-decoration: none }
+.panel-frame-action-input:visited    { color: #999; font-weight: normal; font-size: 9px; font-family: Tahoma; text-decoration: none }
+.panel-frame-action-input:hover       { color: #009; font-weight: normal; font-size: 9px; font-family: Tahoma; text-decoration: none }
+
+.panel-banner-input        { color: #009; font-weight: bold; font-size: 12px; font-family: Verdana; text-decoration: none; text-align: left; padding-top: 4px; padding-left: 3px; border-top: 1px solid #009; border-right: 1px solid #009; border-left: 1px solid #009 }
+.panel-banner-footer-input       { color: #009; font-weight: bold; font-size: 10px; font-family: Verdana; text-decoration: none; text-align: left; padding-left: 3px; border-right: 1px solid #009; border-bottom: 1px solid #009; border-left: 1px solid #009 }
+
+.panel-content-input        { background-image: url(../images/panel/input/banner-pattern.gif); border: solid 1px #009 }

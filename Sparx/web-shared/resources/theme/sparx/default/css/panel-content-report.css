@@ -1,0 +1,4 @@
+.report { color: #000; font-size: 11px; font-family: Tahoma; background-color: white; padding: 1px 4px; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
+.report-field  { color: #000; font-weight: bold; font-size: 11px; font-family: Tahoma; background-color: #f5f5f5; padding: 1px 4px; border: solid 1px #696969 }
+.report-alternative { color: #000; font-size: 11px; font-family: Tahoma; background-color: #f1eeee; padding: 1px 4px; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
+.report-summary  { color: #333; font-weight: bold; font-size: 11px; font-family: Tahoma; background-color: #f5f5f5; padding: 1px 4px; border-top: 1px solid #696969; border-bottom: 1px solid #dcdcdc; border-left: 1px solid #dcdcdc }
