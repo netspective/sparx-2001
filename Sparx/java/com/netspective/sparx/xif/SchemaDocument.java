@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.2 2002-01-27 21:01:27 snshah Exp $
+ * $Id: SchemaDocument.java,v 1.3 2002-01-29 11:25:48 snshah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -62,15 +62,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -81,12 +73,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
@@ -112,7 +99,7 @@ public class SchemaDocument extends XmlSource
 {
     public static final String ATTRNAME_TYPE = "type";
 
-    public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size"};
+    public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
@@ -123,9 +110,9 @@ public class SchemaDocument extends XmlSource
     public static final int REFTYPE_SELF = 3;
     public static final int REFTYPE_USETYPE = 4;
 
-    static HashSet replaceMacrosInColumnNodes = null;
-    static HashSet replaceMacrosInTableNodes = null;
-    static HashSet replaceMacrosInIndexNodes = null;
+    static Set replaceMacrosInColumnNodes = null;
+    static Set replaceMacrosInTableNodes = null;
+    static Set replaceMacrosInIndexNodes = null;
 
     private Map dataTypeNodes = new HashMap();
     private Map tableTypeNodes = new HashMap();
@@ -135,32 +122,179 @@ public class SchemaDocument extends XmlSource
     private Map tableParams = new HashMap(); // key is table name, value is hash-table of key/value pairs
     private Map enumTableDataChoices = new HashMap(); // key is an enum data table name, value is SelectChoicesList
 
+    /**
+     * Class which holds information about a JDBC type and its associated JavaClass and primitive type
+     */
+    static class JdbcDataType
+    {
+        private String typeName;
+        private Integer jdbcType;
+        private String javaType;
+        private String javaTypeDefault;
+        private String javaClassPkg;
+        private String javaClass;
+
+        public JdbcDataType(int jdtype)
+        {
+            jdbcType = new Integer(jdtype);
+        }
+
+        public JdbcDataType(String name, int jdtype, String jprimitive, String primDefault, String jclassPkg, String jclass)
+        {
+            typeName = name;
+            jdbcType = new Integer(jdtype);
+            javaType = jprimitive;
+            javaTypeDefault = primDefault;
+            javaClassPkg = jclassPkg;
+            javaClass = jclass;
+        }
+
+        public JdbcDataType(String name, int jdtype, String jclassPkg, String jclass)
+        {
+            typeName = name;
+            jdbcType = new Integer(jdtype);
+            javaClassPkg = jclassPkg;
+            javaClass = jclass;
+        }
+
+        public Element createTextElem(Element parent, String elemName, String elemText)
+        {
+            Element elem = parent.getOwnerDocument().createElement(elemName);
+            Text textElem = parent.getOwnerDocument().createTextNode(elemText);
+            elem.appendChild(textElem);
+            parent.appendChild(elem);
+            return elem;
+        }
+
+        public void setJavaItems(Element dataTypeElem)
+        {
+            if(javaClass != null)
+            {
+                Element javaClassElem = createTextElem(dataTypeElem, "java-class", javaClass);
+                javaClassElem.setAttribute("package", javaClassPkg);
+            }
+            else
+            {
+                Element javaClassElem = createTextElem(dataTypeElem, "java-class", "Object");
+                javaClassElem.setAttribute("package", "java.lang");
+            }
+
+            if(javaType != null)
+            {
+                Element javaTypeElem = createTextElem(dataTypeElem, "java-type", javaType);
+                javaTypeElem.setAttribute("default", javaTypeDefault);
+            }
+
+            switch(jdbcType.intValue())
+            {
+                case java.sql.Types.DATE:
+                case java.sql.Types.TIME:
+                case java.sql.Types.TIMESTAMP:
+                    Element dateFmtInstance = null;
+                    switch(jdbcType.intValue())
+                    {
+                        case java.sql.Types.DATE:
+                            dateFmtInstance = createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getDateInstance()");
+                            break;
+
+                        case java.sql.Types.TIME:
+                            dateFmtInstance = createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getTimeInstance()");
+                            break;
+
+                        case java.sql.Types.TIMESTAMP:
+                            dateFmtInstance = createTextElem(dataTypeElem, "java-date-format-instance",  "java.text.DateFormat.getDateTimeInstance()");
+                            break;
+
+                    }
+                    break;
+            }
+        }
+
+        /**
+         * Define a <datatype> element under the given parent
+         */
+        public void define(Element parent, String dbmsId, Map jdbcTypeInfoMap, Map dbmdTypeInfoByName, Map dbmdTypeInfoByJdbcType)
+        {
+            Element dataTypeElem = parent.getOwnerDocument().createElement("datatype");
+            dataTypeElem.setAttribute("name", typeName);
+
+            createTextElem(dataTypeElem, "jdbc-type", jdbcType.toString());
+
+            Element sqlDefnElem = null;
+            Object[] dbmdTypeInfo = (Object[]) dbmdTypeInfoByJdbcType.get(jdbcType);
+            if(dbmdTypeInfo != null)
+            {
+                // the original meta data was 1-based, but the Object[] is zero-based (be careful)
+                String dmbdTypeName = dbmdTypeInfo[0] != null ? dbmdTypeInfo[0].toString() : "unknown";
+                switch(jdbcType.intValue())
+                {
+                    case java.sql.Types.VARCHAR:
+                        sqlDefnElem = sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName + "(%size%)");
+                        break;
+
+                    case java.sql.Types.NUMERIC:
+                        sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName + "(%size%, %decimals%)");
+                        break;
+
+                    default:
+                        sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName);
+                }
+            }
+            else
+                sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", "jdbc-type-" + jdbcType);
+            sqlDefnElem.setAttribute("dbms", dbmsId);
+
+            setJavaItems(dataTypeElem);
+            parent.appendChild(dataTypeElem);
+        }
+
+        /**
+         * Using the columnMetaData, assign the data type of the provided columnElem
+         */
+        public void assign(ResultSet columnMetaData, Map jdbcTypeInfoMap, Map dbmdTypeInfoByName, Map dbmdTypeInfoByJdbcType, Element columnElem) throws SQLException
+        {
+            if(typeName == null)
+            {
+                typeName = columnMetaData.getString(6);
+                jdbcTypeInfoMap.put(typeName, this);
+            }
+            setAttribute(columnElem, "type", typeName);
+
+            int size = columnMetaData.getInt(7);
+            if(size > 0)
+                setAttribute(columnElem, "size", Integer.toString(size));
+
+            int decimals = columnMetaData.getInt(9);
+            if(decimals > 0)
+                setAttribute(columnElem, "decimals", Integer.toString(decimals));
+        }
+    }
+
+    static
+    {
+        replaceMacrosInColumnNodes = new HashSet();
+        replaceMacrosInTableNodes = new HashSet();
+        replaceMacrosInIndexNodes = new HashSet();
+
+        for(int i = 0; i < MACROSIN_COLUMNNODES.length; i++)
+            replaceMacrosInColumnNodes.add(MACROSIN_COLUMNNODES[i]);
+        for(int i = 0; i < MACROSIN_TABLENODES.length; i++)
+            replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
+        for(int i = 0; i < MACROSIN_INDEXNODES.length; i++)
+            replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
+    }
+
     public SchemaDocument()
     {
-        if(replaceMacrosInColumnNodes == null)
-        {
-            replaceMacrosInColumnNodes = new HashSet();
-            replaceMacrosInTableNodes = new HashSet();
-            replaceMacrosInIndexNodes = new HashSet();
-
-            for(int i = 0; i < MACROSIN_COLUMNNODES.length; i++)
-                replaceMacrosInColumnNodes.add(MACROSIN_COLUMNNODES[i]);
-            for(int i = 0; i < MACROSIN_TABLENODES.length; i++)
-                replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
-            for(int i = 0; i < MACROSIN_INDEXNODES.length; i++)
-                replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
-        }
     }
 
     public SchemaDocument(File file)
     {
-        this();
         loadDocument(file);
     }
 
     public SchemaDocument(Connection conn, String catalog, String schemaPattern) throws ParserConfigurationException, SQLException
     {
-        this();
         loadDocument(conn, catalog, schemaPattern);
     }
 
@@ -981,43 +1115,57 @@ public class SchemaDocument extends XmlSource
 
     /*------------------------------------------------------------------------*/
 
-    public void initializeConnection(Connection conn)
-    {
-        /*
-		   ORACLE connections don't do remarks reporting automatically, they have
-		   to be turned-on separately. First we check to see if it's a pooled
-		   connection (like Resin's connection pooling) which actually keeps a
-		   handle to a "real" connection. We use reflection just in case the
-		   connection isn't an ORACLE connection (will fail gracefully).
-		*/
-
-        Connection realConn = conn;
-        try
-        {
-            Method getConnection = conn.getClass().getMethod("getConnection", null);
-            realConn = (Connection) getConnection.invoke(conn, null);
-        }
-        catch(Exception e)
-        {
-            // means that the conn object is the real connection
-        }
-
-        try
-        {
-            Method remarksReporting = realConn.getClass().getMethod("setRemarksReporting", new Class[]{boolean.class});
-            remarksReporting.invoke(realConn, new Object[]{new Boolean(true)});
-        }
-        catch(Exception e)
-        {
-        }
-    }
-
-    public void setAttribute(Element elem, String name, String value)
+    static public void setAttribute(Element elem, String name, String value)
     {
         if(value != null && value.length() > 0)
             elem.setAttribute(name, value);
     }
 
+    public Map prepareJdbcTypeInfoMap()
+    {
+        Map jdbcTypeInfoMap = new HashMap();
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.VARCHAR), new JdbcDataType("text", java.sql.Types.VARCHAR, "java.lang", "String"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.BIGINT), new JdbcDataType("bigint", java.sql.Types.BIGINT, "long", "0", "java.lang", "Long"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.INTEGER), new JdbcDataType("integer", java.sql.Types.INTEGER, "int", "0", "java.lang", "Integer"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.DECIMAL), new JdbcDataType("decimal", java.sql.Types.DECIMAL, "float", "0.0", "java.lang", "Float"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.FLOAT), new JdbcDataType("float", java.sql.Types.FLOAT, "float", "0.0", "java.lang", "Float"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.DOUBLE), new JdbcDataType("double", java.sql.Types.DOUBLE, "double", "0.0", "java.lang", "Double"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.DATE), new JdbcDataType("date", java.sql.Types.DATE, "java.util", "Date"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.TIME), new JdbcDataType("time", java.sql.Types.TIME, "java.util", "Date"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.TIMESTAMP), new JdbcDataType("timestamp", java.sql.Types.TIMESTAMP, "java.util", "Date"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.BIT), new JdbcDataType("bit", java.sql.Types.BIT, "boolean", "false", "java.lang", "Boolean"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.NUMERIC), new JdbcDataType("numeric", java.sql.Types.NUMERIC, "0.0", "double", "java.lang", "Double"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.REAL), new JdbcDataType("real", java.sql.Types.REAL, "double", "0.0", "java.lang", "Double"));
+        jdbcTypeInfoMap.put(new Integer(java.sql.Types.TINYINT), new JdbcDataType("tinyint", java.sql.Types.TINYINT, "0", "short", "java.lang", "Short"));
+
+        return jdbcTypeInfoMap;
+    }
+
+    /* make the table name title cased (cap each letter after _) */
+    public String fixupTableNameCase(String tableNameOrig)
+    {
+         StringBuffer tableNameBuf = new StringBuffer(tableNameOrig.toLowerCase());
+         boolean capNext = false;
+         for(int i = 0; i < tableNameBuf.length(); i++)
+         {
+             if(tableNameBuf.charAt(i) == '_')
+                 capNext = true;
+             else
+             {
+                 if(i == 0 || capNext)
+                 {
+                     tableNameBuf.setCharAt(i, Character.toUpperCase(tableNameBuf.charAt(i)));
+                     capNext = false;
+                 }
+             }
+         }
+        return tableNameBuf.toString();
+    }
+
+    /**
+     * Generate an XML document from an existing connection (reverse-engineer from an existing
+     * database using the JDBC MetaData class)
+     */
     public void loadDocument(Connection conn, String catalog, String schemaPattern) throws ParserConfigurationException, SQLException
     {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -1026,40 +1174,37 @@ public class SchemaDocument extends XmlSource
 
         Element root = xmlDoc.createElement("schema");
         root.setAttribute("name", "generated");
+        root.setAttribute("catalog", catalog);
+        root.setAttribute("schema", schemaPattern);
         xmlDoc.appendChild(root);
-        //initializeConnection(conn);
 
+        Map dataTypesMap = prepareJdbcTypeInfoMap();
         DatabaseMetaData dbmd = conn.getMetaData();
-        Map types = new HashMap();
+
+        root.setAttribute("driver", dbmd.getDriverName());
+        root.setAttribute("driver-version", dbmd.getDriverVersion());
+        root.setAttribute("product", dbmd.getDatabaseProductName());
+        root.setAttribute("product-version", dbmd.getDatabaseProductVersion());
+
+        Map dbmdTypeInfoByName = new HashMap();
+        Map dbmdTypeInfoByJdbcType = new HashMap();
         ResultSet typesRS = dbmd.getTypeInfo();
         while(typesRS.next())
         {
-            types.put(typesRS.getString(2), typesRS.getString(1));
+            int colCount = typesRS.getMetaData().getColumnCount();
+            Object[] typeInfo = new Object[colCount];
+            for(int i = 1; i <= colCount; i++)
+                typeInfo[i-1] = typesRS.getObject(i);
+            dbmdTypeInfoByName.put(typesRS.getString(1), typeInfo);
+            dbmdTypeInfoByJdbcType.put(new Integer(typesRS.getInt(2)), typeInfo);
         }
         typesRS.close();
 
-        ResultSet tables = dbmd.getTables(catalog, schemaPattern, null, new String[]{"TABLE"});
+        ResultSet tables = dbmd.getTables(catalog, schemaPattern, null, new String[]{ "TABLE" });
         while(tables.next())
         {
-            /* make the table name title cased (cap each letter after _) */
             String tableNameOrig = tables.getString(3);
-            StringBuffer tableNameBuf = new StringBuffer(tableNameOrig.toLowerCase());
-            boolean capNext = false;
-            for(int i = 0; i < tableNameBuf.length(); i++)
-            {
-                if(tableNameBuf.charAt(i) == '_')
-                    capNext = true;
-                else
-                {
-                    if(i == 0 || capNext)
-                    {
-                        tableNameBuf.setCharAt(i, Character.toUpperCase(tableNameBuf.charAt(i)));
-                        capNext = false;
-                    }
-                }
-            }
-
-            String tableName = tableNameBuf.toString();
+            String tableName = fixupTableNameCase(tableNameOrig);
             Element table = xmlDoc.createElement("table");
             table.setAttribute("name", tableName);
             root.appendChild(table);
@@ -1079,28 +1224,54 @@ public class SchemaDocument extends XmlSource
                 // driver may not support this function
             }
 
+            Map fKeys = new HashMap();
+            try
+            {
+                ResultSet fkRS = dbmd.getImportedKeys(null, null, tableNameOrig);
+                while(fkRS.next())
+                {
+                    fKeys.put(fkRS.getString(8), fixupTableNameCase(fkRS.getString(3)) + "." + fkRS.getString(4).toLowerCase());
+                }
+                fkRS.close();
+            }
+            catch(Exception e)
+            {
+                // driver may not support this function
+            }
+
+            // we keep track of processed columns so we don't duplicate them in the XML
+            Set processedColsMap = new HashSet();
             ResultSet columns = dbmd.getColumns(null, null, tableNameOrig, null);
             while(columns.next())
             {
                 String columnNameOrig = columns.getString(4);
+                if(processedColsMap.contains(columnNameOrig))
+                    continue;
+                processedColsMap.add(columnNameOrig);
+
                 String columnName = columnNameOrig.toLowerCase();
                 Element column = xmlDoc.createElement("column");
                 try
                 {
                     setAttribute(column, "name", columnName);
-                    setAttribute(column, "type", columns.getString(6));
                     if(primaryKeys.containsKey(columnNameOrig))
                         setAttribute(column, "primarykey", "yes");
 
-                    String sqlDefn = columns.getString(5);
-                    String size = columns.getString(7);
+                    if(fKeys.containsKey(columnNameOrig))
+						setAttribute(column, "lookupref", (String) fKeys.get(columnNameOrig));
+                    else
+                    {
+                        short jdbcType = columns.getShort(5);
+                        JdbcDataType dataType = (JdbcDataType) dataTypesMap.get(new Integer(jdbcType));
+                        if(dataType == null) dataType = new JdbcDataType(jdbcType);
+                        dataType.assign(columns, dataTypesMap, dbmdTypeInfoByName, dbmdTypeInfoByJdbcType, column);
+                    }
 
-                    sqlDefn = (sqlDefn == null ? columns.getString(6) : (String) types.get(sqlDefn));
-                    if(sqlDefn == null) sqlDefn = columns.getString(6);
-
-                    setAttribute(column, "sqldefn", sqlDefn + "(" + size + ")");
-                    setAttribute(column, "descr", columns.getString(12));
                     setAttribute(column, "default", columns.getString(13));
+                    setAttribute(column, "descr", columns.getString(12));
+
+                    if(columns.getString(18).equals("NO"))
+                        setAttribute(column, "required", "yes");
                 }
                 catch(Exception e)
                 {
@@ -1111,6 +1282,13 @@ public class SchemaDocument extends XmlSource
             columns.close();
         }
         tables.close();
+
+        Iterator dataTypeValues = dataTypesMap.values().iterator();
+        while(dataTypeValues.hasNext())
+        {
+            JdbcDataType jdt = (JdbcDataType) dataTypeValues.next();
+            jdt.define(root, "generated", dataTypesMap, dbmdTypeInfoByName, dbmdTypeInfoByJdbcType);
+        }
     }
 
     static public class SqlDdlGenerator
