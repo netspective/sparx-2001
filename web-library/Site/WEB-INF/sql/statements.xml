@@ -1,4 +1,13 @@
 <?xml version="1.0"?>
 
 <xaf>
+	<sql-statements package="library">
+		<statement name="select_all">
+			select * from Book_Type
+			
+			<report>
+				<column heading="" align="center" url="abc" xoutput="&lt;a href=&quot;?data_cmd=edit&amp;bookid=${0}&quot;&gt;edit&lt;/a&gt;"/>
+			</report>
+		</statement>
+	</sql-statements>
 </xaf>
