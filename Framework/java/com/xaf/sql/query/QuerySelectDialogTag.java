@@ -46,16 +46,16 @@ public class QuerySelectDialogTag extends TagSupport
             }
 
     		QueryDefinition queryDefn = manager.getQueryDefn(source);
-            if(manager == null)
+            if(queryDefn == null)
             {
                 out.write("QueryDefinition '"+source+"' not found in StatementManager");
                 return SKIP_BODY;
             }
 
 	    	QuerySelectDialog dialog = queryDefn.getSelectDialog(name);
-            if(manager == null)
+            if(dialog == null)
             {
-                out.write("QuerySelectDialog '"+name+"' not found in QueryDefinition");
+                out.write("QuerySelectDialog '"+name+"' not found in QueryDefinition '"+ source +"'");
                 return SKIP_BODY;
             }
 
