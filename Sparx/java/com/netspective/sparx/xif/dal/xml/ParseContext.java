@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ParseContext.java,v 1.4 2002-12-04 17:56:21 shahbaz.javeed Exp $
+ * $Id: ParseContext.java,v 1.5 2002-12-23 05:07:02 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
@@ -83,6 +83,7 @@ public class ParseContext
     private Locator locator;
     private boolean throwSyntaxErrorException;
     private List errors;
+    private List messages;
     private Map statistics; // key is table name, value is a TableImportStatistic object
 
     public ParseContext(Schema schema, ConnectionContext cc) throws ParserConfigurationException, SAXException
@@ -90,6 +91,7 @@ public class ParseContext
         this.schema = schema;
         this.cc = cc;
         this.errors = new ArrayList();
+        this.messages = new ArrayList();
         this.statistics = new HashMap();
 
         SAXParser saxParser = getParserFactory().newSAXParser();
@@ -169,5 +171,15 @@ public class ParseContext
     public List getErrors()
     {
         return errors;
+    }
+
+    public void addMessage(String message)
+    {
+        messages.add(message + " at " + locator.getSystemId() + " line " + locator.getLineNumber());
+    }
+
+    public List getMessages()
+    {
+        return messages;
     }
 }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractRow.java,v 1.6 2002-12-04 17:50:20 shahbaz.javeed Exp $
+ * $Id: AbstractRow.java,v 1.7 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -63,8 +63,11 @@ import com.netspective.sparx.xif.dal.validation.result.RowValidationResult;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import javax.naming.NamingException;
+import javax.servlet.ServletRequest;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -74,25 +77,12 @@ import java.util.*;
 public abstract class AbstractRow implements Row
 {
     protected Table rowTable;
-    protected Column[] rowColumns;
     protected Map haveSqlExprDataMap = new HashMap();
     protected Map sqlExprDataMap = new HashMap();
     protected boolean[] haveSqlExprData;
 
-    /* The following are used for data validation */
-/*
-    public static PatternMatcher patternMatcher = new Perl5Matcher();
-    public static PatternCompiler patternCompiler = new Perl5Compiler();
-*/
-
-
     public static String DEFAULT_DBMS = "ansi";
     public static String NO_SQL_EXPRESSION = "No SQL Expression";
-
-    public AbstractRow(com.netspective.sparx.xif.dal.Column[] columns)
-    {
-        setColumns(columns);
-    }
 
     public AbstractRow(Table table)
     {
@@ -109,14 +99,14 @@ public abstract class AbstractRow implements Row
         if (null == this.haveSqlExprData)
         {
             // The Master haveSqlExprData doesnt exist - Create it...
-            this.haveSqlExprData = new boolean[getColumns().length];
+            this.haveSqlExprData = new boolean[rowTable.getColumnsCount()];
         }
 
         boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
 
         if (null == haveSqlExprData)
         {
-            haveSqlExprData = new boolean[getColumns().length];
+            haveSqlExprData = new boolean[rowTable.getColumnsCount()];
             haveSqlExprDataMap.put(dbms, haveSqlExprData);
         }
 
@@ -134,7 +124,7 @@ public abstract class AbstractRow implements Row
         boolean[] haveSqlExprData = (boolean[]) haveSqlExprDataMap.get(dbms);
 
         if (null == haveSqlExprData)
-            haveSqlExprData = new boolean[getColumns().length];
+            haveSqlExprData = new boolean[rowTable.getColumnsCount()];
 
         haveSqlExprData[column] = value;
         haveSqlExprDataMap.put(dbms, haveSqlExprData);
@@ -152,7 +142,7 @@ public abstract class AbstractRow implements Row
 
             if (null == haveSqlExprData)
             {
-                haveSqlExprData = new boolean[getColumns().length];
+                haveSqlExprData = new boolean[rowTable.getColumnsCount()];
                 haveSqlExprDataMap.put(dbms, haveSqlExprData);
             }
 
@@ -192,7 +182,7 @@ public abstract class AbstractRow implements Row
         String[] sqlExprData = (String[]) sqlExprDataMap.get(dbms);
 
         if (null == sqlExprData)
-            sqlExprData = new String[getColumns().length];
+            sqlExprData = new String[rowTable.getColumnsCount()];
 
         sqlExprData[column] = sqlExpr;
 
@@ -206,7 +196,7 @@ public abstract class AbstractRow implements Row
 
         if (null == sqlExprData)
         {
-            sqlExprData = new String[getColumns().length];
+            sqlExprData = new String[rowTable.getColumnsCount()];
             sqlExprDataMap.put(dbms, sqlExprData);
         }
 
@@ -260,20 +250,117 @@ public abstract class AbstractRow implements Row
         haveSqlExprData = new boolean[rowTable.getColumnsCount()];
     }
 
-    public com.netspective.sparx.xif.dal.Column[] getColumns()
-    {
-        return rowTable != null ? rowTable.getAllColumns() : rowColumns;
-    }
-
-    public void setColumns(com.netspective.sparx.xif.dal.Column[] value)
-    {
-        rowColumns = value;
-        haveSqlExprData = new boolean[rowColumns.length];
-    }
-
     abstract public Object[] getData();
 
-    // abstract public List getDataForDmlStatement();
+    abstract public Object getDataByColumn(Column column);
+    abstract public void setDataByColumn(Column column, Object value);
+    abstract public void setSqlExprByColumn(Column column, String sqlExpr, String dbms);
+    abstract public void setTextByColumn(Column column, String text, boolean append) throws ParseException;
+
+    public Object getDataByColumnIndex(int columnIndex) throws IndexOutOfBoundsException
+    {
+        Column column = rowTable.getColumn(columnIndex);
+        if(column == null)
+            throw new IndexOutOfBoundsException("Column index "+ columnIndex +" not found in class '"+ this.getClass().getName() +"'");
+        else
+            return getDataByColumn(column);
+    }
+
+    public boolean setDataByColumnIndex(int columnIndex, Object value)
+    {
+        Column column = rowTable.getColumn(columnIndex);
+        if(column == null)
+            return false;
+        else
+        {
+            setDataByColumn(column, value);
+            return true;
+        }
+    }
+
+    public boolean setTextByColumnIndex(int columnIndex, String text, boolean append) throws ParseException
+    {
+        Column column = rowTable.getColumn(columnIndex);
+        if(column == null)
+            return false;
+        else
+        {
+            setTextByColumn(column, text, append);
+            return true;
+        }
+    }
+
+    public boolean setDataByColumnName(String name, Object value)
+    {
+        int index = rowTable.getColumnIndexInRowByName(name);
+        if(index != Table.COLUMN_INDEX_NOT_FOUND)
+            return false;
+        else
+        {
+            setDataByColumnIndex(index, value);
+            return true;
+        }
+    }
+
+    public boolean setDataByColumnNameOrXmlNodeName(String name, Object value)
+    {
+        int index = rowTable.getColumnIndexInRowByNameOrXmlNodeName(name);
+        if(index != Table.COLUMN_INDEX_NOT_FOUND)
+            return false;
+        else
+        {
+            setDataByColumnIndex(index, value);
+            return true;
+        }
+    }
+
+    public boolean setDataByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(String name, Object value)
+    {
+        int index = rowTable.getColumnIndexInRowByNameOrXmlNodeNameOrServleReqParamOrAttrName(name);
+        if(index != Table.COLUMN_INDEX_NOT_FOUND)
+            return false;
+        else
+        {
+            setDataByColumnIndex(index, value);
+            return true;
+        }
+    }
+
+    public boolean setTextByColumnName(String name, String text, boolean append) throws ParseException
+    {
+        Column column = rowTable.getColumnByName(name);
+        if(column == null)
+            return false;
+        else
+        {
+            setTextByColumn(column, text, append);
+            return true;
+        }
+    }
+
+    public boolean setTextByColumnNameOrXmlNodeName(String name, String text, boolean append) throws ParseException
+    {
+        Column column = rowTable.getColumnByNameOrXmlNodeName(name);
+        if(column == null)
+            return false;
+        else
+        {
+            setTextByColumn(column, text, append);
+            return true;
+        }
+    }
+
+    public boolean setTextByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(String name, String text, boolean append) throws ParseException
+    {
+        Column column = rowTable.getColumnByNameOrXmlNodeNameOrServleReqParamOrAttrName(name);
+        if(column == null)
+            return false;
+        else
+        {
+            setTextByColumn(column, text, append);
+            return true;
+        }
+    }
 
     abstract public List getDataForDmlStatement(DatabasePolicy dbPolicy);
 
@@ -297,25 +384,206 @@ public abstract class AbstractRow implements Row
 
     abstract public void populateDataByNames(ResultSet resultSet, Map colNameIndexMap) throws SQLException;
 
-    abstract public void populateDataByNames(Element element) throws ParseException, DOMException;
+    // TODO: need to get this to work just like the SAX methods in XML importing (but using DOM)
+    public void populateDataByNames(Element element) throws ParseException, DOMException
+    {
+        NodeList rowChildren = element.getChildNodes();
+        int rowChildrenCount = rowChildren.getLength();
+        for(int i = 0; i < rowChildrenCount; i++)
+        {
+            Node rowChildNode = rowChildren.item(i);
+            if(rowChildNode.getNodeType() != Node.ELEMENT_NODE)
+                continue;
 
-    abstract public boolean isValidXmlNodeNameForColumn(String nodeName);
+            Element columnDataElem = (Element) rowChildNode;
+            String columnName = columnDataElem.getNodeName();
+            String columnValue = columnDataElem.getFirstChild().getNodeValue();
 
-    abstract public boolean populateDataForXmlNodeName(String nodeName, String value, boolean append) throws ParseException;
+            //TODO: finish this with attributes and children
+        }
+    }
 
-    abstract public boolean populateSqlExprForXmlNodeName(String nodeName, String expr) throws ParseException;
+    public boolean isValidXmlNodeNameForColumn(String nodeName)
+    {
+        int index = rowTable.getColumnIndexInRowByNameOrXmlNodeName(nodeName);
+        return index == Table.COLUMN_INDEX_NOT_FOUND ? false : true;
+    }
 
-    abstract public boolean isValidXmlNodeNameForChildRow(String nodeName);
+    public boolean populateDataForXmlNodeName(String nodeName, String value, boolean append) throws ParseException
+    {
+        return setTextByColumnNameOrXmlNodeName(nodeName, value, append);
+    }
 
-    abstract public Row createChildRowForXmlNodeName(String nodeName);
+    public boolean populateSqlExprForXmlNodeName(String nodeName, String expr, String dbms) throws ParseException
+    {
+        Column column = rowTable.getColumnByNameOrXmlNodeName(nodeName);
+        if(column == null)
+            return false;
+        else
+        {
+            setSqlExprByColumn(column, expr, dbms);
+            return true;
+        }
+    }
 
-    abstract public void populateDataByNames(DialogContext dc);
+    public boolean isValidXmlNodeNameForChildRow(String nodeName)
+    {
+        if(! isParentRow()) return false;
+        return rowTable.getChildTableForXmlNode(nodeName) != null;
+    }
 
-    abstract public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap);
+    public Row createChildRowForXmlNodeName(String nodeName)
+    {
+        Table childTable = rowTable.getChildTableForXmlNode(nodeName);
+        if(childTable != null)
+            return childTable.createRow();
+        else
+            return null;
+    }
+
+    public void populateDataByNames(DialogContext dc, int valueHandling)
+    {
+        Column[] rowColumns = rowTable.getAllColumns();
+        Map fieldStates = dc.getFieldStates();
+        switch(valueHandling)
+        {
+            case VALUEHANDLE_NULLIGNORE:
+                for(int c = 0; c < rowColumns.length; c++)
+                {
+                    Column column = rowColumns[c];
+                    DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(column.getDialogFieldName());
+                    if(state != null && state.value != null && state.value.length() > 0)
+                    {
+                        String dataClassName = column.getDataClassName();
+                        if(dataClassName.equals("java.lang.String"))
+                            setDataByColumn(column, state.value);
+                        else if(dataClassName.equals("java.util.Date"))
+                            setDataByColumn(column, state.field.getValueForSqlBindParam(state.value));
+                        else
+                        {
+                            try { setTextByColumn(column, state.value, false); } catch (ParseException e) { }
+                        }
+                    }
+                }
+                break;
+
+            case VALUEHANDLE_ASSIGN:
+                for(int c = 0; c < rowColumns.length; c++)
+                {
+                    Column column = rowColumns[c];
+                    DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(column.getDialogFieldName());
+                    if(state != null)
+                    {
+                        String dataClassName = column.getDataClassName();
+                        if(dataClassName.equals("java.lang.String"))
+                            setDataByColumn(column, state.value);
+                        else if(dataClassName.equals("java.util.Date"))
+                            setDataByColumn(column, state.value != null && state.value.length() > 0 ? state.field.getValueForSqlBindParam(state.value) : null);
+                        else
+                        {
+                            try { setTextByColumn(column, state.value != null && state.value.length() > 0 ? state.value : null, false); } catch (ParseException e) { }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap, int valueHandling)
+    {
+        Column[] rowColumns = rowTable.getAllColumns();
+        Map fieldStates = dc.getFieldStates();
+        switch(valueHandling)
+        {
+            case VALUEHANDLE_NULLIGNORE:
+                for(int c = 0; c < rowColumns.length; c++)
+                {
+                    Column column = rowColumns[c];
+                    String fieldNameForColumn = (String) colNameFieldNameMap.get(column.getNameForMapKey());
+                    DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(fieldNameForColumn != null ? fieldNameForColumn : column.getDialogFieldName());
+                    if(state != null && state.value != null && state.value.length() > 0)
+                    {
+                        String dataClassName = column.getDataClassName();
+                        if(dataClassName.equals("java.lang.String"))
+                            setDataByColumn(column, state.value);
+                        else if(dataClassName.equals("java.util.Date"))
+                            setDataByColumn(column, state.field.getValueForSqlBindParam(state.value));
+                        else
+                        {
+                            try { setTextByColumn(column, state.value, false); } catch (ParseException e) { }
+                        }
+                    }
+                }
+                break;
+
+            case VALUEHANDLE_ASSIGN:
+                for(int c = 0; c < rowColumns.length; c++)
+                {
+                    Column column = rowColumns[c];
+                    String fieldNameForColumn = (String) colNameFieldNameMap.get(column.getNameForMapKey());
+                    DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(fieldNameForColumn != null ? fieldNameForColumn : column.getDialogFieldName());
+                    if(state != null)
+                    {
+                        String dataClassName = column.getDataClassName();
+                        if(dataClassName.equals("java.lang.String"))
+                            setDataByColumn(column, state.value);
+                        else if(dataClassName.equals("java.util.Date"))
+                            setDataByColumn(column, state.value != null && state.value.length() > 0 ? state.field.getValueForSqlBindParam(state.value) : null);
+                        else
+                        {
+                            try { setTextByColumn(column, state.value != null && state.value.length() > 0 ? state.value : null, false); } catch (ParseException e) { }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public void populateDataByNames(DialogContext dc)
+    {
+        populateDataByNames(dc, VALUEHANDLE_NULLIGNORE);
+    }
+
+    public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap)
+    {
+        populateDataByNames(dc, colNameFieldNameMap, VALUEHANDLE_NULLIGNORE);
+    }
 
     abstract public void setData(DialogContext dc);
 
     abstract public void setData(DialogContext dc, Map colNameFieldNameMap);
+
+    public void populateDataByNames(ServletRequest request, int attributesHandling)
+    {
+        Enumeration e = null;
+
+        if(attributesHandling == ATTRHANDLE_PARAMSOVERRIDE)
+        {
+            e = request.getAttributeNames();
+            while(e.hasMoreElements())
+            {
+                String name = (String) e.nextElement();
+                try { setTextByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(name, request.getAttribute(name).toString(), false); } catch (ParseException e1) { }
+            }
+        }
+
+        e = request.getParameterNames();
+        while(e.hasMoreElements())
+        {
+            String name = (String) e.nextElement();
+            try { setTextByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(name, request.getParameter(name), false); } catch (ParseException e1) { }
+        }
+
+        if(attributesHandling == ATTRHANDLE_OVERRIDEPARAMS)
+        {
+            e = request.getAttributeNames();
+            while(e.hasMoreElements())
+            {
+                String name = (String) e.nextElement();
+                try { setTextByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(name, request.getAttribute(name).toString(), false); } catch (ParseException e1) { }
+            }
+        }
+    }
 
     public boolean valuesAreEqual(Object primary, Object compareTo)
     {

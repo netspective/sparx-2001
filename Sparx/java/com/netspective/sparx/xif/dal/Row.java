@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Row.java,v 1.6 2002-12-04 17:50:50 shahbaz.javeed Exp $
+ * $Id: Row.java,v 1.7 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -64,6 +64,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
 import javax.naming.NamingException;
+import javax.servlet.ServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -85,15 +86,24 @@ public interface Row
     public final static int VALUEHANDLE_ASSIGN = 1;
 
     /**
+     * Passed into methods when the value of attributes should be ignored.
+     */
+    public final static int ATTRHANDLE_IGNORE = 0;
+
+    /**
+     * Passed into methods when the value of attributes should override servlet parameters.
+     */
+    public final static int ATTRHANDLE_OVERRIDEPARAMS = 1;
+
+    /**
+     * Passed into methods when the value of parameters should override servlet attributes.
+     */
+    public final static int ATTRHANDLE_PARAMSOVERRIDE = 0;
+
+    /**
      * Returns the table that this row belongs to
      */
     public Table getTable();
-
-    /**
-     * Returns an array of all the column definitions in the order in which they were specified
-     * for table creation.
-     */
-    public Column[] getColumns();
 
     /**
      * Returns an array that contains the current values of each of the columns in the Row.
@@ -102,10 +112,107 @@ public interface Row
     public Object[] getData();
 
     /**
-     * Returns a List that of the current values of each of the columns in the Row. This list is
-     * suitable for passing into the DmlStatement object.
+     * Return data stored in given Column
+     * @param column the column
+     * @return the data current stored in the column
      */
-    // public List getDataForDmlStatement();
+    public Object getDataByColumn(Column column);
+
+    /**
+     * Set column data
+     * @param column the column
+     * @param value the new value of the column
+     */
+    public void setDataByColumn(Column column, Object value);
+
+    /**
+     * Set column's sql expression
+     * @param column the column
+     * @param sqlExpr the new sql expression for the column
+     * @param dbms which database the SQL expression is being set for
+     */
+    public void setSqlExprByColumn(Column column, String sqlExpr, String dbms);
+
+    /**
+     * Returns the value of the column in the given index
+     */
+    public Object getDataByColumnIndex(int columnIndex) throws IndexOutOfBoundsException;
+
+    /**
+     * Set column data
+     * @param columnIndex the index of the column
+     * @param value the value to assign to the column
+     * @return true if the value was set or false if the column index is invalid
+     */
+    public boolean setDataByColumnIndex(int columnIndex, Object value);
+
+    /**
+     * Set column data
+     * @param column the table's column
+     * @param text the value to assign to the column
+     * @param append true to append, false to replace
+     */
+    public void setTextByColumn(Column column, String text, boolean append) throws ParseException;
+
+    /**
+     * Set column data
+     * @param columnIndex the index of the column
+     * @param text the value to assign to the column
+     * @param append true to append, false to replace
+     * @return true if text was set, false if columnIndex was invalid
+     */
+    public boolean setTextByColumnIndex(int columnIndex, String text, boolean append) throws ParseException;
+
+    /**
+     * Set column data
+     * @param name The name of the column which must strictly match the column name in the data except (not case-sensitive)
+     * @param value The new value of the column
+     * @return true if name is valid and the data was set appropriately
+     */
+    public boolean setDataByColumnName(String name, Object value);
+
+    /**
+     * Set column data
+     * @param name The name of the column which may match either the name of the column or the XML node name
+     * @param value The new value of the column
+     * @return true if name is valid and the data was set appropriately
+     */
+    public boolean setDataByColumnNameOrXmlNodeName(String name, Object value);
+
+    /**
+     * Set column data
+     * @param name The name of the column which may match either the name of the column or the XML node name or servlet request param/attr name
+     * @param value The new value of the column
+     * @return true if name is valid and the data was set appropriately
+     */
+    public boolean setDataByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(String name, Object value);
+
+    /**
+     * Set column data
+     * @param name The name of the column which must strictly match the column name in the data except (not case-sensitive)
+     * @param text The new value of the column
+     * @param append True if value should be appened, false if it should replace the existing value
+     * @return true if name is valid and the data was set appropriately
+     */
+    public boolean setTextByColumnName(String name, String text, boolean append) throws ParseException;
+
+    /**
+     * Set column data
+     * @param name The name of the column which may match either the name of the column or the XML node name
+     * @param text The new value of the column
+     * @param append True if value should be appened, false if it should replace the existing value
+     * @return true if name is valid and the data was set appropriately
+     */
+    public boolean setTextByColumnNameOrXmlNodeName(String name, String text, boolean append) throws ParseException;
+
+    /**
+     * Set column data
+     * @param name The name of the column which may match either the name of the column or the XML node name or servlet request param/attr name
+     * @param text The new value of the column
+     * @param append True if value should be appened, false if it should replace the existing value
+     * @return true if name is valid and the data was set appropriately
+     */
+    public boolean setTextByColumnNameOrXmlNodeNameOrServletReqParamNameOrAttrName(String name, String text, boolean append) throws ParseException;
 
     /**
      * Returns a List that of the current values of each of the columns in the Row. This list is
@@ -139,6 +246,15 @@ public interface Row
     public void populateDataByNames(ResultSet resultSet, Map colNameIndexMap) throws SQLException;
 
     /**
+     * Given a ServletRequest, populate the Row's column values with the values of the parameters
+     * in the ServletRequest that match the names of the columns. For each column in the Row, if
+     * a matching parameter name is not found, the value of the column will remain unchanged. The names
+     * that are match follow the same rule as XML node names (parameter name abc_def or abc-def will
+     * match column abc_def). Use ATTRHANDLE_* constants for attributes handling.
+     */
+    public void populateDataByNames(ServletRequest request, int attributesHandling);
+
+    /**
      * Given a DialogContext, populate the Row's column values with the values of the fields
      * in the DialogContext that match the names of the columns. For each column in the Row, if
      * a matching field value is not found, the value of the column will remain unchanged. If
@@ -153,8 +269,8 @@ public interface Row
      * colNameFieldNameMap is checked for the mapping of a column name to a field name. If a
      * matching field name is found in the map, it is used. If a matching name is not found in
      * the map, then a field name the same as the column name will be located. In the
-     * colNameFieldNameMap, the key is the column name and the value of
-     * the key is the name of field that column's value comes from. If no matching column is
+     * colNameFieldNameMap, the key is the upper-cased column name and the value of
+     * the key is the name of the field that column's value comes from. If no matching column is
      * found either in the map or the regular field name, the column's current value is maintained. If
      * valueHandling is set to VALUEHANDLE_NULLIGNORE then nulls will not be assigned
      * (use VALUEHANDLE_ASSIGN to set).
@@ -213,7 +329,7 @@ public interface Row
      * be different than the actual column names so it's the responsibility of the row to
      * set it's appropriate data. This is typically called by Schema.importFromXml().
      */
-    public boolean populateSqlExprForXmlNodeName(String nodeName, String expr) throws ParseException;
+    public boolean populateSqlExprForXmlNodeName(String nodeName, String expr, String dbms) throws ParseException;
 
     /**
      * Return true if the given node name is valid XML node name for a child table/row

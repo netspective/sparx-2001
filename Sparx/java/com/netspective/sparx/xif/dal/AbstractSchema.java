@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractSchema.java,v 1.5 2002-12-04 17:51:27 shahbaz.javeed Exp $
+ * $Id: AbstractSchema.java,v 1.6 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -157,7 +157,7 @@ public abstract class AbstractSchema implements Schema
         Table table = getTable(tableName);
         if (table == null)
             return null;
-        return table.getColumn(tableColumn);
+        return table.getColumnByName(tableColumn);
     }
 
     public ForeignKey getForeignKey(Column srcColumn, short type, String ref)
@@ -181,7 +181,7 @@ public abstract class AbstractSchema implements Schema
         if (table == null)
             return null;
 
-        Column refColumn = table.getColumn(refColumnName);
+        Column refColumn = table.getColumnByName(refColumnName);
         if (refColumn == null)
             return null;
 
@@ -200,7 +200,7 @@ public abstract class AbstractSchema implements Schema
         return null;
     }
 
-    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws ImportException, FileNotFoundException, IOException
+    public ParseContext importFromXml(ConnectionContext cc, File srcFile) throws FileNotFoundException, IOException
     {
         String uri = "file:" + srcFile.getAbsolutePath().replace('\\', '/');
         for (int index = uri.indexOf('#'); index != -1; index = uri.indexOf('#'))
@@ -223,7 +223,7 @@ public abstract class AbstractSchema implements Schema
         }
     }
 
-    public ParseContext importFromXml(ConnectionContext cc, InputSource inputSource) throws ImportException, IOException
+    public ParseContext importFromXml(ConnectionContext cc, InputSource inputSource) throws IOException
     {
         ParseContext pc = null;
 
@@ -248,9 +248,10 @@ public abstract class AbstractSchema implements Schema
             Throwable t = exc.getException();
             if (t instanceof ImportException)
             {
-                throw (ImportException) t;
+                pc.addError(t.getMessage());
             }
-            throw new ImportException(exc.getMessage(), t);
+            else
+                pc.addError(exc.getMessage());
         }
 
         return pc;

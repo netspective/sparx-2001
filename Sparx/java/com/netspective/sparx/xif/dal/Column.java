@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Column.java,v 1.3 2002-12-04 17:51:27 shahbaz.javeed Exp $
+ * $Id: Column.java,v 1.4 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -79,9 +79,45 @@ public interface Column
     public String getNameForMapKey();
 
     /**
+     * Returns the name of the column suitable for use as an XML node name (e.g. abc_def becomes abc-def)
+     */
+    public String getXmlNodeName();
+
+    /**
+     * Returns the name of the column suitable for use as the name of a servlet request param
+     */
+    public String getServletReqParamName();
+
+    /**
+     * Returns the name of the column suitable for use as a dialog field name
+     */
+    public String getDialogFieldName();
+
+    /**
+     * Returns the name of the column suitable for use as the name of a servlet request attribute
+     */
+    public String getServletReqAttrName();
+
+    /**
+     * Returns the name of the column suitable for use as a URL parameter or servlet request attribute name
+     */
+    public String getNameForServletParameter();
+
+    /**
      * Sets the name of the column as it appears in the database.
      */
     public void setName(String value);
+
+    /**
+     * Returns the index of the column in the row (as an array)
+     */
+    public int getIndexInRow();
+
+    /**
+     * Sets the index of the column in the row (as an array)
+     * @param value the index of the column in the row
+     */
+    public void setIndexInRow(int value);
 
     /**
      * Return the SQL definition that can be used to create this column for the

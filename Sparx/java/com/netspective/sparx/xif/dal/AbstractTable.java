@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.10 2002-12-04 17:51:27 shahbaz.javeed Exp $
+ * $Id: AbstractTable.java,v 1.11 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -82,6 +82,8 @@ public abstract class AbstractTable implements Table
     private String description;
     private List columnsList = new ArrayList();
     private Map columnsMap = new HashMap();
+    private Map columnsByNameOrXmlNodeNameMap = new HashMap();
+    private Map columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap = new HashMap();
     private List columnNames = new ArrayList(); // useful for caching just the names (used in DmlStatement)
     private String columNamesForSelect;
     private String selectByPrimaryKeySql;
@@ -89,9 +91,9 @@ public abstract class AbstractTable implements Table
     private Map childTablesByName;
     private Map childTablesByXmlNodeName;
     private Column[] allColumns;
+    private Column primaryKey;
     private Column[] requiredColumns;
     private Column[] sequencedColumns;
-    private Column[] primaryKeys;
     private QueryDefinition queryDefn;
 
     static public String convertTableNameForMapKey(String name)
@@ -125,12 +127,16 @@ public abstract class AbstractTable implements Table
         List sequencedCols = new ArrayList();
         List requiredCols = new ArrayList();
 
-        for (Iterator i = getColumnsList().iterator(); i.hasNext();)
+        for(int i = 0; i < columnsList.size(); i++ )
         {
-            Column column = (Column) i.next();
+            Column column = (Column) columnsList.get(i);
+            column.setIndexInRow(i);
             column.finalizeDefn();
             if (column.isPrimaryKey())
+            {
+                primaryKey = column;
                 primaryKeyBindSql = column.getName() + " = ?";
+            }
             if (column.getSequenceName() != null)
                 sequencedCols.add(column);
             if (column.isRequired() && !column.isSequencedPrimaryKey())
@@ -199,14 +205,51 @@ public abstract class AbstractTable implements Table
         return columnsMap;
     }
 
-    public Column getColumn(String name)
+    public Column getColumnByName(String name)
     {
         return (Column) columnsMap.get(AbstractColumn.convertColumnNameForMapKey(name));
+    }
+
+    public Column getColumnByNameOrXmlNodeName(String name)
+    {
+        return (Column) columnsByNameOrXmlNodeNameMap.get(AbstractColumn.convertColumnNameForMapKey(name));
+    }
+
+    public Column getColumnByNameOrXmlNodeNameOrServleReqParamOrAttrName(String name)
+    {
+        return (Column) columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap.get(AbstractColumn.convertColumnNameForMapKey(name));
     }
 
     public Column getColumn(int index)
     {
         return (Column) columnsList.get(index);
+    }
+
+    public int getColumnIndexInRowByName(String name)
+    {
+        Column column = (Column) columnsMap.get(AbstractColumn.convertColumnNameForMapKey(name));
+        if(column != null)
+            return column.getIndexInRow();
+        else
+            return COLUMN_INDEX_NOT_FOUND;
+    }
+
+    public int getColumnIndexInRowByNameOrXmlNodeName(String name)
+    {
+        Column column = (Column) columnsByNameOrXmlNodeNameMap.get(AbstractColumn.convertColumnNameForMapKey(name));
+        if(column != null)
+            return column.getIndexInRow();
+        else
+            return COLUMN_INDEX_NOT_FOUND;
+    }
+
+    public int getColumnIndexInRowByNameOrXmlNodeNameOrServleReqParamOrAttrName(String name)
+    {
+        Column column = (Column) columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap.get(AbstractColumn.convertColumnNameForMapKey(name));
+        if(column != null)
+            return column.getIndexInRow();
+        else
+            return COLUMN_INDEX_NOT_FOUND;
     }
 
     public List getColumnNames()
@@ -224,9 +267,14 @@ public abstract class AbstractTable implements Table
         return sequencedColumns;
     }
 
-    public Column[] getPrimaryKeyColumns()
+    public Column[] getRequiredColumns()
     {
-        return primaryKeys;
+        return requiredColumns;
+    }
+
+    public Column getPrimaryKeyColumn()
+    {
+        return primaryKey;
     }
 
     public QueryDefinition getQueryDefinition()
@@ -247,6 +295,14 @@ public abstract class AbstractTable implements Table
         columnNames.add(column.getName());
         columnsList.add(column);
         columnsMap.put(column.getNameForMapKey(), column);
+
+        columnsByNameOrXmlNodeNameMap.put(column.getNameForMapKey(), column);
+        columnsByNameOrXmlNodeNameMap.put(AbstractColumn.convertColumnNameForMapKey(column.getXmlNodeName()), column);
+
+        columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap.put(column.getNameForMapKey(), column);
+        columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap.put(AbstractColumn.convertColumnNameForMapKey(column.getXmlNodeName()), column);
+        columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap.put(AbstractColumn.convertColumnNameForMapKey(column.getServletReqAttrName()), column);
+        columnsByNameOrXmlNodeNameOrServletReqParamOrAttrNameMap.put(AbstractColumn.convertColumnNameForMapKey(column.getServletReqParamName()), column);
     }
 
     public String getColumnNamesForSelect()
@@ -273,17 +329,18 @@ public abstract class AbstractTable implements Table
             childTablesByXmlNodeName = new HashMap();
         }
         childTablesByName.put(table.getNameForMapKey(), table);
-        childTablesByXmlNodeName.put(table.getNameForXmlNode(), table);
+        childTablesByXmlNodeName.put(table.getNameForMapKey(), table);
+        childTablesByXmlNodeName.put(convertTableNameForMapKey(table.getNameForXmlNode()), table);
     }
 
     public Table getChildTable(String name)
     {
-        return childTablesByName != null ? ((Table) childTablesByName.get(name)) : null;
+        return childTablesByName != null ? ((Table) childTablesByName.get(convertTableNameForMapKey(name))) : null;
     }
 
     public Table getChildTableForXmlNode(String nodeName)
     {
-        return childTablesByXmlNodeName != null ? ((Table) childTablesByXmlNodeName.get(nodeName)) : null;
+        return childTablesByXmlNodeName != null ? ((Table) childTablesByXmlNodeName.get(convertTableNameForMapKey(nodeName))) : null;
     }
 
     public int getChildTablesCount()
@@ -306,7 +363,7 @@ public abstract class AbstractTable implements Table
         return !row.equals(compareTo);
     }
 
-    protected Row getRecordByPrimaryKey(ConnectionContext cc, Object pkValue, Row row) throws NamingException, SQLException
+    public Row getRecordByPrimaryKey(ConnectionContext cc, Object pkValue, Row row) throws NamingException, SQLException
     {
         Row result = row;
 
@@ -662,8 +719,8 @@ public abstract class AbstractTable implements Table
         // if we are the "referenced" foreign key, then the source is a child of ours
         if (fKey.getType() == ForeignKey.FKEYTYPE_PARENT)
         {
-            Table childTable = fKey.getSourceColumn().getParentTable();
-            registerChildTable(childTable);
+            Table parentTable = fKey.getReferencedColumn().getParentTable();
+            parentTable.registerChildTable(this);
         }
     }
 
@@ -680,7 +737,6 @@ public abstract class AbstractTable implements Table
 
     public boolean executeDml(ConnectionContext cc, Row row, DmlStatement dml, Object[] additionalBindParams) throws NamingException, SQLException
     {
-        boolean result = false;
         PreparedStatement stmt = null;
         String dbms = cc.getDatabasePolicy().getDBMSName();
 

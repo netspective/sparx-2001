@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Table.java,v 1.4 2002-12-04 17:51:56 shahbaz.javeed Exp $
+ * $Id: Table.java,v 1.5 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -65,6 +65,11 @@ import java.util.Map;
 
 public interface Table
 {
+    /**
+     * This is the value passed when a column index is requested but is not found in this table
+     */
+    public static final int COLUMN_INDEX_NOT_FOUND = -1;
+
     /**
      * This method is called to give the Table the opportunity to fill its
      * columns.
@@ -151,6 +156,12 @@ public interface Table
     public Map getColumnsMap();
 
     /**
+     * Returns the primary key column
+     * @return the Column object that represents the primary key of this table
+     */
+    public Column getPrimaryKeyColumn();
+
+    /**
      * Returns all the of the Column definitions in this table as an array
      */
     public Column[] getAllColumns();
@@ -161,14 +172,47 @@ public interface Table
     public Column[] getSequencedColumns();
 
     /**
-     * Returns the column with the specified name.
+     * Returns all the of the Column definitions of the required columns in this table as an array
      */
-    public Column getColumn(String name);
+    public Column[] getRequiredColumns();
+
+    /**
+     * Returns the column with the specified name that strictly matches just the column name as it appears in the
+     * database.
+     */
+    public Column getColumnByName(String name);
+
+    /**
+     * Returns the column with the specified name that mataches either the column as it appears in the database or
+     * as an XML node name.
+     */
+    public Column getColumnByNameOrXmlNodeName(String name);
+
+    /**
+     * Returns the column with the specified name that mataches either the column as it appears in the database or
+     * as an XML node name or as a servlet request attribute or parameter name.
+     */
+    public Column getColumnByNameOrXmlNodeNameOrServleReqParamOrAttrName(String name);
 
     /**
      * Returns the column at the specified index.
      */
     public Column getColumn(int index);
+
+    /**
+     * Returns the column index for column
+     */
+    public int getColumnIndexInRowByName(String name);
+
+    /**
+     * Returns the column index for column
+     */
+    public int getColumnIndexInRowByNameOrXmlNodeName(String name);
+
+    /**
+     * Returns the column index for column
+     */
+    public int getColumnIndexInRowByNameOrXmlNodeNameOrServleReqParamOrAttrName(String name);
 
     /**
      * Returns the auto-generated QueryDefinition associated with this table
@@ -195,6 +239,15 @@ public interface Table
      * Returns the number of child tables for this table
      */
     public int getChildTablesCount();
+
+    /**
+     * Retrieve the row identified by the given primary key
+     * @param cc The active connection context
+     * @param pkValue The value of the primary key
+     * @param row The row in which to store the data
+     * @return the row passed in
+     */
+    public Row getRecordByPrimaryKey(ConnectionContext cc, Object pkValue, Row row) throws NamingException, SQLException;
 
     /**
      * Create a single row object suitable for storing data for this table's columns
@@ -256,14 +309,14 @@ public interface Table
     /**
      * Update the given Row in the database using the whereCond and bind parameter.
      * @param whereCond The condition that is appened to the update statement like <code>" where " + whereCond</code>
-     * @param whereCondBindParams A single bind parameters that should be bound to the whereCond
+     * @param whereCondBindParam A single bind parameters that should be bound to the whereCond
      */
     public boolean update(ConnectionContext cc, Row row, String whereCond, Object whereCondBindParam) throws NamingException, SQLException;
 
     /**
      * Delete the given Row in the database using the whereCond and bind parameter.
      * @param whereCond The condition that is appened to the delete statement like <code>" where " + whereCond</code>
-     * @param whereCondBindParams A single bind parameters that should be bound to the whereCond
+     * @param whereCondBindParam A single bind parameters that should be bound to the whereCond
      */
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object whereCondBindParam) throws NamingException, SQLException;
 }

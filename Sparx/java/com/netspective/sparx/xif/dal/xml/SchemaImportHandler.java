@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaImportHandler.java,v 1.5 2002-12-11 14:07:57 shahid.shah Exp $
+ * $Id: SchemaImportHandler.java,v 1.6 2002-12-23 05:07:02 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
@@ -180,7 +180,7 @@ public class SchemaImportHandler implements ContentHandler
             this.storeId = storeId;
         }
 
-        public void write() throws NamingException, SQLException, ValidationException
+        public void write() throws NamingException, SQLException
         {
             if (!written && row != null)
             {
@@ -190,7 +190,14 @@ public class SchemaImportHandler implements ContentHandler
                 {
                     written = true;
                     Table table = row.getTable();
-                    table.insert(parseContext.getConnectionContext(), row);
+                    try
+                    {
+                        table.insert(parseContext.getConnectionContext(), row);
+                    }
+                    catch (SQLException e)
+                    {
+                        throw new SQLException(e.getMessage() + "\n" + row);
+                    }
                     TableImportStatistic tis = parseContext.getStatistics(table);
                     tis.incSuccessfulRows();
 
@@ -199,13 +206,12 @@ public class SchemaImportHandler implements ContentHandler
                         idReferences.put(storeId, row.getActivePrimaryKeyValue());
                         tis.addIdReference(storeId, row.getActivePrimaryKeyValue());
                     }
-
                 }
                 else
                 {
                     written = false;
                     ValidationException exception = new ValidationException(rvResult);
-                    parseContext.addError("<b>Validation Error!</b><br>" + exception.getHtmlMessage());
+                    parseContext.addError("<b>Validation Error!</b><br>" + exception.getHtmlMessage() + row.toString());
                 }
             }
         }
@@ -242,7 +248,7 @@ public class SchemaImportHandler implements ContentHandler
             if (text == null || text.trim().length() == 0)
                 return;
             if (entry.isSqlExpression())
-                entry.row.populateSqlExprForXmlNodeName(entry.rowColumnName, text);
+                entry.row.populateSqlExprForXmlNodeName(entry.rowColumnName, text, null);
             else
                 entry.row.populateDataForXmlNodeName(entry.rowColumnName, text, true);
         }

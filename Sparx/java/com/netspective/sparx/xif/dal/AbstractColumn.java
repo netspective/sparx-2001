@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractColumn.java,v 1.5 2002-12-04 17:49:57 shahbaz.javeed Exp $
+ * $Id: AbstractColumn.java,v 1.6 2002-12-23 05:07:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -80,6 +80,11 @@ public abstract class AbstractColumn implements Column
 
     private Table parentTable;
     private String name;
+    private String nameForMapKey;
+    private String xmlNodeName;
+    private String dialogFieldName;
+    private String servletReqParamName;
+    private String servletReqAttrName;
     private int size = -1;
     private int indexInRow;
     private Map sqlDefn = new HashMap();
@@ -98,10 +103,14 @@ public abstract class AbstractColumn implements Column
         return name.toLowerCase();
     }
 
-    public AbstractColumn(Table table, String name)
+    public AbstractColumn(Table table, String name, String dialogFieldName, String xmlNodeName, String servletReqParamName, String servletReqAttrName)
     {
         setParentTable(table);
         setName(name);
+        setXmlNodeName(xmlNodeName);
+        setServletReqParamName(servletReqParamName);
+        setServletReqAttrName(servletReqAttrName);
+        setDialogFieldName(dialogFieldName);
         parentTable.addColumn(this);
     }
 
@@ -112,12 +121,63 @@ public abstract class AbstractColumn implements Column
 
     public String getNameForMapKey()
     {
+        return nameForMapKey;
+    }
+
+    public String getDialogFieldName()
+    {
+        return dialogFieldName;
+    }
+
+    public void setDialogFieldName(String value)
+    {
+        dialogFieldName = value;
+    }
+
+    public String getNameForServletParameter()
+    {
         return name.toLowerCase();
     }
 
     public void setName(String value)
     {
         name = value;
+        nameForMapKey = convertColumnNameForMapKey(name);
+    }
+
+    public String getXmlNodeName()
+    {
+        return xmlNodeName;
+    }
+
+    public String getServletReqAttrName()
+    {
+        return servletReqAttrName;
+    }
+
+    public void setXmlNodeName(String xmlNodeName)
+    {
+        this.xmlNodeName = xmlNodeName;
+    }
+
+    public String getServletReqParamName()
+    {
+        return servletReqParamName;
+    }
+
+    public void setServletReqAttrName(String value)
+    {
+        servletReqAttrName = value;
+    }
+
+    public void setServletReqParamName(String value)
+    {
+        servletReqParamName = value;
+    }
+
+    public int getArrayIndex()
+    {
+        return 0;
     }
 
     public Table getParentTable()
