@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.3 2002-12-28 15:48:33 shahid.shah Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.4 2002-12-28 15:50:08 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -290,29 +290,6 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("</body>");
     }
 
-    public void renderNavigation(Writer writer, TabbedNavigationPathContext nc, int level, NavigationStyle style) throws IOException
-    {
-        NavigationPath activePath = nc.getActivePath();
-
-        List ancestorList = activePath.getAncestorsList();
-        NavigationPath currentNavTree = null;
-
-        if (level < ancestorList.size())
-        {
-            currentNavTree = (NavigationPath) ancestorList.get(level);
-        }
-        else if (level == ancestorList.size())
-        {
-            currentNavTree = activePath;
-        }
-        else
-        {
-            return;
-        }
-
-        style.renderHtml(writer, currentNavTree, nc);
-    }
-
     public void renderNavigationBeforeBody(Writer writer, com.netspective.sparx.xaf.navigate.NavigationPathContext nc) throws IOException
     {
         TabbedNavigationPathContext htmlNC = (TabbedNavigationPathContext) nc;
@@ -322,7 +299,6 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         renderPageMenusLevelTwo(writer, htmlNC);
         renderPageHeading(writer, htmlNC);
         renderPageMenusLevelThree(writer, htmlNC);
-        //writer.write(nc.getActivePath().getDebugHtml(nc));
     }
 
     public void renderNavigationAfterBody(Writer writer, com.netspective.sparx.xaf.navigate.NavigationPathContext nc) throws IOException
