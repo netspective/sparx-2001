@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.1 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationTreeManager.java,v 1.2 2002-12-27 00:23:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -117,7 +117,7 @@ public class NavigationTreeManager extends XmlSource
                 }
                 catch (Exception e)
                 {
-                    addError("Error registering skin '"+ name +"': "+ e.getMessage());
+                    addError("Error registering skin '"+ name +"': "+ e.toString());
                 }
             }
         }
