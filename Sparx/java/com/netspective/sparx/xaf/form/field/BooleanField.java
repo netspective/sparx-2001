@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BooleanField.java,v 1.3 2002-05-28 14:54:36 jruss Exp $
+ * $Id: BooleanField.java,v 1.4 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -192,7 +192,7 @@ public class BooleanField extends DialogField
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
-        if(dc.flagIsSet(getQualifiedName(), FLDFLAG_INPUT_HIDDEN))
+        if(isInputHidden(dc))
         {
             writer.write(getHiddenControlHtml(dc));
             return;

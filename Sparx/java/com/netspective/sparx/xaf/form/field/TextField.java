@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.6 2002-08-17 15:15:29 shahid.shah Exp $
+ * $Id: TextField.java,v 1.7 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -333,7 +333,7 @@ public class TextField extends DialogField
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
-        if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+        if(isInputHidden(dc))
         {
             writer.write(getHiddenControlHtml(dc));
             return;

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.8 2002-09-18 17:49:38 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.9 2002-10-03 14:54:54 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -115,7 +115,9 @@ public class Dialog
     static public final int DLGFLAG_HIDE_READONLY_HINTS = DLGFLAG_APPEND_WHEN_LOOPING * 2;
     static public final int DLGFLAG_ENCTYPE_MULTIPART_FORMDATA = DLGFLAG_HIDE_READONLY_HINTS * 2;
     static public final int DLGFLAG_HIDE_HEADING_IN_EXEC_MODE = DLGFLAG_ENCTYPE_MULTIPART_FORMDATA * 2;
-    static public final int DLGFLAG_CUSTOM_START = DLGFLAG_HIDE_HEADING_IN_EXEC_MODE * 2;
+    static public final int DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA = DLGFLAG_HIDE_HEADING_IN_EXEC_MODE * 2;
+    static public final int DLGFLAG_READONLY_FIELDS_INVISIBLE_UNLESS_HAVE_DATA = DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA * 2;
+    static public final int DLGFLAG_CUSTOM_START = DLGFLAG_READONLY_FIELDS_INVISIBLE_UNLESS_HAVE_DATA * 2;
 
     static public final int DLGDEBUGFLAG_NONE = 0;
     /**
@@ -599,6 +601,12 @@ public class Dialog
         String hideHints = elem.getAttribute("hide-readonly-hints");
         if(hideHints.equals("yes"))
             setFlag(DLGFLAG_HIDE_READONLY_HINTS);
+
+        if(elem.getAttribute("read-only-fields-hidden-unless-have-data").equalsIgnoreCase("yes"))
+            setFlag(DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA);
+
+        if(elem.getAttribute("read-only-fields-invisible-unless-have-data").equalsIgnoreCase("yes"))
+            setFlag(DLGFLAG_READONLY_FIELDS_INVISIBLE_UNLESS_HAVE_DATA);
 
         if(director == null)
         {

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.17 2002-09-23 03:47:27 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.18 2002-10-03 14:54:54 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -237,6 +237,11 @@ public class DialogContext extends ServletValueContext
                 fieldElem.appendChild(valueElem);
                 parent.appendChild(fieldElem);
             }
+        }
+
+        public final boolean flagIsSet(long flag)
+        {
+            return (flags & flag) != 0;
         }
     }
     /**
@@ -1267,7 +1272,7 @@ public class DialogContext extends ServletValueContext
     public boolean flagIsSet(String fieldQName, long flag)
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(fieldQName);
-        return (state.flags & flag) != 0;
+        return state.flagIsSet(flag);
     }
 
     public void setFlag(String fieldQName, long flag)

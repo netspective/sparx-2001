@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.7 2002-09-03 22:29:19 aye.thu Exp $
+ * $Id: QueryBuilderDialog.java,v 1.8 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -128,7 +128,7 @@ public class QueryBuilderDialog extends Dialog
     {
         setName("queryDialog");
         setQueryDefn(queryDefn);
-        setFlag(QBDLGFLAG_ALLOW_DEBUG);
+        setFlag(QBDLGFLAG_ALLOW_DEBUG | QBDLGFLAG_ALWAYS_SHOW_RSNAV);
         setMaxConditions(5);
         setLoopEntries(true);
     }
@@ -146,8 +146,8 @@ public class QueryBuilderDialog extends Dialog
         if(elem.getAttribute("show-criteria").equals("no"))
             setFlag(QBDLGFLAG_HIDE_CRITERIA);
 
-        if(elem.getAttribute("always-show-rs-nav").equals("yes"))
-            setFlag(QBDLGFLAG_ALWAYS_SHOW_RSNAV);
+        if(elem.getAttribute("always-show-rs-nav").equals("no"))
+            clearFlag(QBDLGFLAG_ALWAYS_SHOW_RSNAV);
     }
 
     public void addInputFields()
@@ -630,12 +630,6 @@ public class QueryBuilderDialog extends Dialog
 
     public void renderHtml(Writer writer, DialogContext dc, boolean contextPreparedAlready) throws IOException
     {
-        if(flagIsSet(QBDLGFLAG_ALWAYS_SHOW_RSNAV))
-        {
-            super.renderHtml(writer, dc, contextPreparedAlready);
-            return;
-        }
-
         if(!contextPreparedAlready)
             prepareContext(dc);
 
@@ -646,7 +640,7 @@ public class QueryBuilderDialog extends Dialog
             if(state != null)
             {
                 int totalPages = state.getTotalPages();
-                if(totalPages == -1 || totalPages > 1)
+                if(flagIsSet(QBDLGFLAG_ALWAYS_SHOW_RSNAV) || (totalPages == -1 || totalPages > 1))
                 {
                     writer.write(getLoopSeparator());
                     dc.getSkin().renderHtml(writer, dc);

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.10 2002-08-30 00:28:14 shahid.shah Exp $
+ * $Id: DialogField.java,v 1.11 2002-10-03 14:54:54 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -97,8 +97,10 @@ public class DialogField
     static public final int FLDFLAG_COLUMN_BREAK_BEFORE = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
     static public final int FLDFLAG_COLUMN_BREAK_AFTER = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
     static public final int FLDFLAG_BROWSER_READONLY = FLDFLAG_COLUMN_BREAK_AFTER * 2;
-    public static final int FLDFLAG_IDENTIFIER = FLDFLAG_BROWSER_READONLY * 2;
-    static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_IDENTIFIER * 2; // all DialogField "children" will use this
+    static public final int FLDFLAG_IDENTIFIER = FLDFLAG_BROWSER_READONLY * 2;
+    static public final int FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA = FLDFLAG_IDENTIFIER * 2;
+    static public final int FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
+    static public final int FLDFLAG_STARTCUSTOM = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -255,6 +257,12 @@ public class DialogField
 
         if(elem.getAttribute("identifier").equalsIgnoreCase("yes"))
             setFlag(DialogField.FLDFLAG_IDENTIFIER);
+
+        if(elem.getAttribute("read-only-hidden-unless-has-data").equalsIgnoreCase("yes"))
+            setFlag(DialogField.FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA);
+
+        if(elem.getAttribute("read-only-invisible-unless-has-data").equalsIgnoreCase("yes"))
+            setFlag(DialogField.FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA);
 
         String colBreak = elem.getAttribute("col-break");
         if(colBreak.length() > 0)
@@ -445,7 +453,7 @@ public class DialogField
      *
      * @return DialogField
      */
-    public final DialogField getParent()
+    public DialogField getParent()
     {
         return parent;
     }
@@ -460,7 +468,7 @@ public class DialogField
         parent = newParent;
     }
 
-    public final String getId()
+    public String getId()
     {
         return id;
     }
@@ -470,7 +478,7 @@ public class DialogField
      *
      * @return String
      */
-    public final String getSimpleName()
+    public String getSimpleName()
     {
         return simpleName;
     }
@@ -480,7 +488,7 @@ public class DialogField
      *
      * @return String
      */
-    public final String getQualifiedName()
+    public String getQualifiedName()
     {
         return qualifiedName;
     }
@@ -517,7 +525,7 @@ public class DialogField
      *
      * @return String cookie name
      */
-    public final String getCookieName()
+    public String getCookieName()
     {
         return "DLG_" + parent.getSimpleName() + "_FLD_" + (cookieName.length() > 0 ? cookieName : simpleName);
     }
@@ -578,7 +586,7 @@ public class DialogField
      *
      * @return String
      */
-    public final String getHint(DialogContext dc)
+    public String getHint(DialogContext dc)
     {
         return hint != null ? hint.getValue(dc) : null;
     }
@@ -608,7 +616,7 @@ public class DialogField
      *
      * @return String
      */
-    public final String getErrorMessage()
+    public String getErrorMessage()
     {
         return errorMessage;
     }
@@ -628,7 +636,7 @@ public class DialogField
      *
      * @return SingleValueSource    value source containing the field's value
      */
-    public final SingleValueSource getDefaultValue()
+    public SingleValueSource getDefaultValue()
     {
         return defaultValue;
     }
@@ -643,7 +651,7 @@ public class DialogField
         defaultValue = value;
     }
 
-    public final DialogFieldPopup getPopup()
+    public DialogFieldPopup getPopup()
     {
         return popup;
     }
@@ -658,7 +666,7 @@ public class DialogField
      *
      * @return List list of children fields
      */
-    public final List getChildren()
+    public List getChildren()
     {
         return children;
     }
@@ -690,7 +698,7 @@ public class DialogField
      *
      * @return List list of errors
      */
-    public final List getErrors()
+    public List getErrors()
     {
         return errors;
     }
@@ -700,7 +708,7 @@ public class DialogField
      *
      * @param msg error message
      */
-    public final void addErrorMessage(String msg)
+    public void addErrorMessage(String msg)
     {
         if(errors == null) errors = new ArrayList();
         errors.add(msg);
@@ -711,7 +719,7 @@ public class DialogField
      *
      * @return List a list of conditional actions
      */
-    public final List getConditionalActions()
+    public List getConditionalActions()
     {
         return conditionalActions;
     }
@@ -736,7 +744,7 @@ public class DialogField
      *
      * @return ArrayList
      */
-    public final List getClientJavascripts()
+    public List getClientJavascripts()
     {
         return this.clientJavascripts;
     }
@@ -836,7 +844,7 @@ public class DialogField
         }
     }
 
-    public final List getDependentConditions()
+    public List getDependentConditions()
     {
         return dependentConditions;
     }
@@ -904,7 +912,7 @@ public class DialogField
      *
      * @param dc  dialog context
      */
-    public final boolean isRequired(DialogContext dc)
+    public boolean isRequired(DialogContext dc)
     {
         String qName = getQualifiedName();
         if(qName != null)
@@ -935,7 +943,7 @@ public class DialogField
      * @param dc dialog context
      * @return boolean True if the field is visible
      */
-    public final boolean isVisible(DialogContext dc)
+    public boolean isVisible(DialogContext dc)
     {
         if(flagIsSet(FLDFLAG_HAS_CONDITIONAL_DATA))
         {
@@ -958,7 +966,19 @@ public class DialogField
         String qName = getQualifiedName();
         if(qName != null)
         {
-            return dc.flagIsSet(qName, FLDFLAG_INVISIBLE) ? false : true;
+            DialogContext.DialogFieldState state = dc.getFieldState(qName);
+            if(state.flagIsSet(FLDFLAG_INVISIBLE))
+                return false;
+
+            if(state.flagIsSet(FLDFLAG_READONLY) &&
+               (state.flagIsSet(FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA) ||
+                    dc.getDialog().flagIsSet(Dialog.DLGFLAG_READONLY_FIELDS_INVISIBLE_UNLESS_HAVE_DATA)))
+            {
+                Object value = state.getValueAsObject();
+                return value == null ? false : (value instanceof String ? (((String) value).length() == 0? false : true) : true);
+            }
+            else
+                return true;
         }
         else
         {
@@ -966,7 +986,7 @@ public class DialogField
         }
     }
 
-    public final boolean isReadOnly(DialogContext dc)
+    public boolean isReadOnly(DialogContext dc)
     {
         String qName = getQualifiedName();
         if(qName != null)
@@ -975,7 +995,7 @@ public class DialogField
             return flagIsSet(FLDFLAG_READONLY);
     }
 
-    public final boolean isBrowserReadOnly(DialogContext dc)
+    public boolean isBrowserReadOnly(DialogContext dc)
     {
         String qName = getQualifiedName();
         if(qName != null)
@@ -984,20 +1004,47 @@ public class DialogField
             return flagIsSet(FLDFLAG_BROWSER_READONLY);
     }
 
-    public final boolean isInputHidden(DialogContext dc)
+    public boolean isInputHiddenFlagSet(DialogContext dc)
     {
-        if(simpleName != null)
-            return dc.flagIsSet(getQualifiedName(), FLDFLAG_INPUT_HIDDEN);
+        String qName = getQualifiedName();
+        if(qName != null)
+        {
+            DialogContext.DialogFieldState state = dc.getFieldState(qName);
+            return state.flagIsSet(FLDFLAG_INPUT_HIDDEN);
+        }
         else
             return flagIsSet(FLDFLAG_INPUT_HIDDEN);
     }
 
-    public final boolean persistValue()
+    public boolean isInputHidden(DialogContext dc)
+    {
+        String qName = getQualifiedName();
+        if(qName != null)
+        {
+            DialogContext.DialogFieldState state = dc.getFieldState(qName);
+            if(state.flagIsSet(FLDFLAG_INPUT_HIDDEN))
+                return true;
+
+            if(state.flagIsSet(FLDFLAG_READONLY) &&
+               (state.flagIsSet(FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA) ||
+                    dc.getDialog().flagIsSet(Dialog.DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA)))
+            {
+                Object value = state.getValueAsObject();
+                return value == null ? true : (value instanceof String ? ( ((String) value).length() == 0 ? true : false ) : false);
+            }
+            else
+                return false;
+        }
+        else
+            return flagIsSet(FLDFLAG_INPUT_HIDDEN);
+    }
+
+    public boolean persistValue()
     {
         return (flags & FLDFLAG_PERSIST) == 0 ? false : true;
     }
 
-    public final boolean showCaptionAsChild()
+    public boolean showCaptionAsChild()
     {
         return (flags & FLDFLAG_SHOWCAPTIONASCHILD) == 0 ? false : true;
     }
@@ -1069,7 +1116,7 @@ public class DialogField
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
-        if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+        if(isInputHidden(dc))
         {
             getHiddenControlHtml(dc);
             return;

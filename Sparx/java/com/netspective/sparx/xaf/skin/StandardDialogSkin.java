@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.5 2002-09-07 21:56:50 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.6 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -497,7 +497,7 @@ public class StandardDialogSkin implements DialogSkin
 
     public void appendFieldHtml(DialogContext dc, DialogField field, StringBuffer fieldsHtml, StringBuffer fieldsJSDefn, List fieldErrorMsgs) throws IOException
     {
-        if(field.flagIsSet(DialogField.FLDFLAG_INPUT_HIDDEN))
+        if(field.isInputHidden(dc))
         {
             StringWriter writer = new StringWriter();
             field.renderControlHtml(writer, dc);

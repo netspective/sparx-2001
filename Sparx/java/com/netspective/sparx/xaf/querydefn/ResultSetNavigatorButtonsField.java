@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetNavigatorButtonsField.java,v 1.3 2002-09-03 22:29:19 aye.thu Exp $
+ * $Id: ResultSetNavigatorButtonsField.java,v 1.4 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -140,6 +140,15 @@ public class ResultSetNavigatorButtonsField extends DialogField
             doneUrl = ValueSourceFactory.getSingleOrStaticValueSource(doneUrlText);
         else
             doneUrl = null;
+    }
+
+    /**
+     * Normally returns true if the input is hidden via a flag or if data might be missing. In our case, we only want
+     * to use the flags because we don't really have any "data".
+     */
+    public boolean isInputHidden(DialogContext dc)
+    {
+        return isInputHiddenFlagSet(dc);
     }
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HandHeldDialogSkin.java,v 1.2 2002-08-30 00:28:29 shahid.shah Exp $
+ * $Id: HandHeldDialogSkin.java,v 1.3 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -169,7 +169,7 @@ public class HandHeldDialogSkin implements DialogSkin
 
     public void appendFieldHtml(DialogContext dc, DialogField field, StringBuffer fieldsHtml) throws IOException
     {
-        if(field.flagIsSet(DialogField.FLDFLAG_INPUT_HIDDEN))
+        if(field.isInputHidden(dc))
         {
             StringWriter fieldHtml = new StringWriter();
             field.renderControlHtml(fieldHtml, dc);

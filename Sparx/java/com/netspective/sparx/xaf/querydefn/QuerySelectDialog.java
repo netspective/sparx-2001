@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectDialog.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QuerySelectDialog.java,v 1.2 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -65,6 +65,7 @@ import org.w3c.dom.NodeList;
 
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.field.BooleanField;
 
 public class QuerySelectDialog extends QueryBuilderDialog
@@ -78,6 +79,7 @@ public class QuerySelectDialog extends QueryBuilderDialog
     {
         setQueryDefn(queryDefn);
         setLoopEntries(true);
+        setFlag(DLGFLAG_READONLY_FIELDS_HIDDEN_UNLESS_HAVE_DATA | DLGFLAG_HIDE_HEADING_IN_EXEC_MODE | QBDLGFLAG_ALWAYS_SHOW_RSNAV);
     }
 
     public QuerySelect createSelect(DialogContext dc)

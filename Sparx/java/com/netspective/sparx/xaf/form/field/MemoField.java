@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: MemoField.java,v 1.2 2002-04-12 12:30:06 snshah Exp $
+ * $Id: MemoField.java,v 1.3 2002-10-03 14:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -196,7 +196,7 @@ public class MemoField extends DialogField
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
-        if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+        if(isInputHidden(dc))
         {
             writer.write(getHiddenControlHtml(dc));
             return;
