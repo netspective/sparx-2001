@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 
-public class HelloFirstDialog   extends com.netspective.sparx.xaf.form.Dialog
+public class HelloFirstDialog extends com.netspective.sparx.xaf.form.Dialog
 {
     /**
      * This dialog greets the user once the user enters a valid name.  The method used to process and

@@ -1,33 +1,18 @@
-<%@ taglib prefix="xaf" uri="/WEB-INF/tld/sparx.tld"%>
+<jsp:directive.include file="/resources/include/site-header.jsp"/>
 
-<html>
-	<head>
-		<link rel='stylesheet' href='/hello/resources/css/main.css'>
-		<title>Tutorial 1, Part 1: Hello World</title>
-	</head>
+	<center>
+		<br>
+		<font size="5">
+			<b>Welcome to Tutorial I, Part I</b>
+			<br>Hello World
+		</font>
+		<p>
+		<sparx:dialog name="tutorial.hello_first"/>
+		<p>
+		<font size="2">
+		Click <a href="<%= request.getContextPath() + "/ace/documents/project?_dc.user_id=ace&_dc.password=ace" %>" target="hello-ace">here</a> to view the Sparx administration console (ACE) source browser for this app.<br>
+		Click <a href="index2.jsp">here</a> to try Sparx Hello World Tutorial II.
+		</font>
+	</center>
 
-	<body bgcolor='white'  text='black' marginheight='0' marginwidth='0' topmargin=0 leftmargin=0>
-		<table width='100%' border='0' cellpadding='0' cellspacing='0'>
-			<tr>
-				<td align='center' bgcolor='#660000' valign='center' width='750'>
-					<font size='+3' color='white'>Tutorial I, Part I: Hello World</font></td>
-			</tr>
-
-			<tr>
-				<td align='left' valign='top' width='750'>
-					<table border='0' width='100%' cellpadding='5' cellspacing='0'>
-						<tr>
-							<td align='center' valign='top'>
-								<xaf:dialog name="tutorial.hello_first"/></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-		<p>&nbsp;<p>
-		<center>
-			<a href="http://www.netspective.com"><img src="sparx/resources/images/powered-by-sparx.gif" border=0></a><br>
-			<font size=1><%= com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() %></font>
-		</center>
-	</body>
-</html>
+<jsp:directive.include file="/resources/include/site-footer.jsp"/>
