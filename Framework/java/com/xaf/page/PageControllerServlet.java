@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.xaf.config.*;
 import com.xaf.form.*;
+import com.xaf.log.*;
 import com.xaf.security.*;
 import com.xaf.skin.*;
 import com.xaf.value.*;
@@ -57,11 +58,37 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 	private String rediscoverParamName;
 	private VirtualPath pagesPath = new VirtualPath();
 
+	protected AppServerCategory debugLog;
+	protected AppServerCategory traceLog;
+	protected AppServerCategory monitorLog;
+
 	protected ConfigurationManager manager;
 	protected Configuration appConfig;
 	protected String sharedImagesRootURL;
 	protected String sharedScriptsRootURL;
 	protected String sharedCssRootURL;
+
+	public AppServerCategory getDebugLog()
+	{
+		return debugLog;
+	}
+
+	public AppServerCategory getTraceLog()
+	{
+		return traceLog;
+	}
+
+	public AppServerCategory getMonitorLog()
+	{
+		return monitorLog;
+	}
+
+	public void createLogs()
+	{
+		debugLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_PAGE);
+		traceLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.TRACE_PAGE);
+		monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
+	}
 
 	public String getConfigItemsPrefix()
 	{
@@ -101,6 +128,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     public void init(ServletConfig config) throws ServletException
 	{
         super.init(config);
+		createLogs();
 
 		ServletContext context = config.getServletContext();
 		manager = ConfigurationManagerFactory.getManager(context);
@@ -131,16 +159,9 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 				if(imageSrc != null)
 					loginDialog.setImageSrc(imageSrc);
 			}
-			catch(ClassNotFoundException e)
+			catch(Exception e)
 			{
-				throw new ServletException(e);
-			}
-			catch(InstantiationException e)
-			{
-				throw new ServletException(e);
-			}
-			catch(IllegalAccessException e)
-			{
+				debugLog.error("Unable to instantiate login dialog class '"+loginDialogClassName+"' not found", e);
 				throw new ServletException(e);
 			}
 		}
@@ -149,6 +170,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		sharedImagesRootURL = appConfig.getValue(vc, "framework.shared.images-url");
 		sharedScriptsRootURL = appConfig.getValue(vc, "framework.shared.scripts-url");
 		sharedCssRootURL = appConfig.getValue(vc, "framework.shared.css-url");
+
 		registerPages(config);
     }
 
@@ -268,6 +290,9 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		if(loginDialog == null)
 			return false;
 
+		if(traceLog.isInfoEnabled())
+			traceLog.info("enter PageControllerServlet.doLogin()");
+
 		String logout = req.getParameter(logoutParamName);
 		if(logout != null)
 		{
@@ -298,7 +323,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		ServletContext servletContext = getServletContext();
 		if(! loginDialog.accessAllowed(servletContext, req, resp))
 		{
-			DialogContext dc = new DialogContext(servletContext, this, req, resp, loginDialog, loginDialogSkinName == null ? SkinFactory.getDialogSkin() : SkinFactory.getDialogSkin(loginDialogSkinName));
+			DialogContext dc = new DialogContext(servletContext, this, req, resp, loginDialog, loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getDialogSkin(loginDialogSkinName));
 			loginDialog.prepareContext(dc);
 			if(dc.inExecuteMode())
 			{
@@ -316,6 +341,15 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+		long startTime = 0;
+		if(monitorLog.isInfoEnabled())
+			startTime = new Date().getTime();
+
+		org.apache.log4j.NDC.push(req.getSession(true).getId());
+
+		if(traceLog.isInfoEnabled())
+			traceLog.info("enter PageControllerServlet.doGet()");
+
 		String rediscover = req.getParameter(rediscoverParamName);
 		if(rediscover != null)
 			discoverPages(req, resp);
@@ -346,11 +380,24 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		{
 			resp.getWriter().print("Unable to find a ServletPage to match this URL path.");
 		}
+
+		LogManager.recordAccess(req, monitorLog, "page", req.getRequestURI(), startTime);
+
+		if(traceLog.isDebugEnabled())
+			traceLog.debug("exit PageControllerServlet.doGet()");
+		org.apache.log4j.NDC.pop();
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-		doGet(req, resp);
+		if(traceLog.isInfoEnabled())
+		{
+			traceLog.info("enter PageControllerServlet.doPost()");
+	    	doGet(req, resp);
+		    traceLog.info("exit PageControllerServlet.doPost()");
+		}
+		else
+	    	doGet(req, resp);
     }
 
 }
