@@ -6,14 +6,18 @@ import javax.servlet.http.*;
 
 import com.xaf.form.*;
 import com.xaf.form.field.*;
+import com.xaf.value.*;
 
 public class LoginDialog extends Dialog
 {
 	static public final String FIELDNAME_USERID = "user_id";
 	static public final String COOKIENAME_USERID = "xaf_user_id_01";
+	static public final String ATTRNAME_USERINFO = "authenticated-user";
 
 	private TextField userIdField;
 	private TextField passwordField;
+	private String userNameCookieName;
+	private String userInfoSessionAttrName;
 
     public LoginDialog()
     {
@@ -28,32 +32,62 @@ public class LoginDialog extends Dialog
 		addField(userIdField);
 		addField(passwordField);
 		addField(new DialogDirector());
+
+		userNameCookieName = COOKIENAME_USERID;
+		userInfoSessionAttrName = ATTRNAME_USERINFO;
     }
 
-	static public boolean accessAllowed(HttpServletRequest request, HttpServletResponse response, ServletContext context)
+	public String getUserNameCookieName() { return userNameCookieName; }
+	public void setUserNameCookieName(String value) { userNameCookieName = value; }
+
+	public String getUserInfoSessionAttrName() { return userInfoSessionAttrName; }
+	public void setUserInfoSessionAttrName(String value) { userInfoSessionAttrName = value; }
+
+	public boolean accessAllowed(ServletContext context, HttpServletRequest request, HttpServletResponse response)
 	{
-		Cookie[] cookies = request.getCookies();
-		for(int i = 0; i < cookies.length; i++)
+		return request.getSession(true).getAttribute(userInfoSessionAttrName) != null;
+	}
+
+	public boolean isValid(DialogContext dc)
+	{
+		if(! super.isValid(dc))
+			return false;
+
+		String password = dc.getValue(passwordField);
+		if(! password.equals("sparx"))
 		{
-			if(cookies[i].getName().equals(COOKIENAME_USERID))
-				return true;
+			passwordField.invalidate(dc, "Password is invalid. Should be 'sparx' :-).");
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public void producePage(DialogContext dc, Writer writer) throws IOException
 	{
-		writer.write("&nbsp;<p>&nbsp;<p>&nbsp;<p><center>");
+		writer.write("&nbsp;<p>&nbsp;<p>&nbsp;<p><center><h1>Welcome to Sparx</h1>");
 		writer.write(getHtml(dc, true));
 		writer.write("</center>");
 	}
 
 	public String execute(DialogContext dc)
 	{
-		Cookie cookie = new Cookie(COOKIENAME_USERID, dc.getValue(FIELDNAME_USERID));
+		AuthenticatedUser userInfo = new BasicAuthenticatedUser(
+			dc.getValue(userIdField), dc.getValue(userIdField), dc.getValue(passwordField));
+		((HttpServletRequest) dc.getRequest()).getSession(true).setAttribute(userInfoSessionAttrName, userInfo);
+
+		Cookie cookie = new Cookie(userNameCookieName, dc.getValue(userIdField));
 		cookie.setPath("/");
 		((HttpServletResponse) dc.getResponse()).addCookie(cookie);
 		return null;
+	}
+
+	public void logout(ValueContext vc)
+	{
+		((HttpServletRequest) vc.getRequest()).getSession(true).removeAttribute(userInfoSessionAttrName);
+		Cookie cookie = new Cookie(userNameCookieName, "");
+		cookie.setPath("/");
+		cookie.setMaxAge(-1);
+		((HttpServletResponse) vc.getResponse()).addCookie(cookie);
 	}
 }

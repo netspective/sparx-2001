@@ -29,8 +29,6 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 	{
         super.init(config);
 
-		loginDialog = new LoginDialog();
-
 		ServletContext context = config.getServletContext();
 		manager = ConfigurationManagerFactory.getManager(context);
 		if(manager == null)
@@ -39,11 +37,37 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 		if(appConfig == null)
 			throw new ServletException("Unable to obtain the default Configuration");
 
-		ValueContext vc = new ServletValueContext(context, null, null, null);
+		ValueContext vc = new ServletValueContext(context, this, null, null);
 		skinJspPageName = appConfig.getValue(vc, "app.navigate.skin-jsp");
 		rootURL = appConfig.getValue(vc, "app.navigate.root-url");
 		rootPath = appConfig.getValue(vc, "app.navigate.root-path");
 		rootCaption = appConfig.getValue(vc, "app.navigate.root-caption");
+		String loginDialogClassName = appConfig.getValue(vc, "app.navigate.login.dialog-class");
+		String loginDialogCookieName = appConfig.getValue(vc, "app.navigate.login.user-id.cookie-name");
+		String loginDialogUserInfoAttrName = appConfig.getValue(vc, "app.navigate.login.user.session-attr-name");
+
+		if(loginDialogClassName != null)
+		{
+			try
+			{
+				Class loginDialogClass = Class.forName(loginDialogClassName);
+				loginDialog = (LoginDialog) loginDialogClass.newInstance();
+				loginDialog.setUserNameCookieName(loginDialogCookieName);
+				loginDialog.setUserInfoSessionAttrName(loginDialogUserInfoAttrName);
+			}
+			catch(ClassNotFoundException e)
+			{
+				throw new ServletException(e);
+			}
+			catch(InstantiationException e)
+			{
+				throw new ServletException(e);
+			}
+			catch(IllegalAccessException e)
+			{
+				throw new ServletException(e);
+			}
+		}
 
 		excludeEntryNames.add(skinJspPageName);
 		excludeEntryNames.add("WEB-INF");
@@ -116,16 +140,24 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+		ServletContext servletContext = getServletContext();
 		resp.setContentType(CONTENT_TYPE);
+
+		if(req.getParameter("_logout") != null)
+		{
+		    ValueContext vc = new ServletValueContext(servletContext, this, req, resp);
+			loginDialog.logout(vc);
+			resp.sendRedirect(appConfig.getValue(vc, "app.navigate.root-url"));
+			return;
+		}
 
 		String relativePath = req.getPathInfo();
 		FileSystemContext fsContext = new FileSystemContext(req.getContextPath() + req.getServletPath(), rootPath, rootCaption, relativePath);
 
-		req.getSession().setAttribute("NavigateFileSystemServlet", this);
-		req.getSession().setAttribute("NavigateFileSystemServlet.fsContext", fsContext);
+		req.getSession(true).setAttribute("NavigateFileSystemServlet", this);
+		req.getSession(true).setAttribute("NavigateFileSystemServlet.fsContext", fsContext);
 
-		ServletContext servletContext = getServletContext();
-		if(! loginDialog.accessAllowed(req, resp, servletContext))
+		if(! loginDialog.accessAllowed(servletContext, req, resp))
 		{
 			DialogContext dc = new DialogContext(servletContext, this, req, resp, loginDialog, SkinFactory.getDialogSkin());
 			loginDialog.prepareContext(dc);
