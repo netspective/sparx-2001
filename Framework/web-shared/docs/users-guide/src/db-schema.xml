@@ -5,19 +5,85 @@
         <title>Overview</title>
         <para>
 		Database Programmers spend time on essential tables and schema elements significant to a specific
-		application instead of rewriting common schema elements for each application. Sparx allows
-        for re-use of Schemas across applications and produces and maintains Schema documentation.
+		application instead of rewriting common schema elements for each application. &product-name; allows
+        for re-use of Schemas across applications and produces and maintains Schema documentation
+        through &schema-name; (eXtensible Information Framework).  &schema-name; is a Java class library 
+        and a standard schema <quote>template</quote> for managing information in a database.
         The entire schema is managed in XML as an XML document (a SchemaDoc) and SQL is generated
         through XSLT style sheets (the templates). The same SchemaDoc can be used to generate database-specific
         SQL DDL.
-
+        </para>
+        
+        <para>
+        &schema-name; encourages the creation and re-use of a set of datatypes and tabletypes that define standard 
+        behaviors for columns and tables. Datatypes and tabletypes comprise the SchemaDoc database dictionary 
+        and can easily be inherited and extended.
         </para>
     </section>
 
     <section>
-        <title>Creating Data Types</title>
+        <title>Creating Datatypes</title>
         <para>
-        ...
+        Datatypes should be considered <quote>column templates</quote> that allow a programmer to specify a column type.
+        They are completely schema dependent but may be reused across applications. This means that the basic
+        templating system (SchemaDoc to XSLT generator) does not have any <quote>built-in</quote> datatypes.
+        Datatypes may be inherited from other datatypes, allowing better reuse and object-orientation in relational databases.
+        They can be easily generated and maintains a database-independent data dictionary.
+        The XML tag for creating datatypes is <sgmltag class="element">datatype</sgmltag>.
+        </para>
+        
+        <para>
+        The database schema datatypes are created in one central location which is application
+        specific, <filename class="conf">Database/schema-src/datatypes.xml</filename>.
+        The &product-name; DTD is located in <filename class="conf">&web-shared-dir-lit;/resources/dtd/schema-markup.dtd</filename>
+        and it needs to be referenced to create datatypes. The following is a sample header for 
+        <filename class="conf">Database/schema-src/datatypes.xml</filename>:
+        <programlisting>
+        <![CDATA[
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "D:/projects/Framework/web-shared/resources/dtd/schema-markup.dtd">  
+        ]]>        
+        </programlisting>
+        The data types can be defined within the <sgmltag class="element">schema</sgmltag> XML tag. The following
+        is an example of several common data types defined for a relational database:
+        <programlisting>
+        <![CDATA[        
+<schema name="generic-datatypes"> 
+    <datatype name="text" test="1">
+        <sqldefn>varchar2(%size%)</sqldefn>
+        <size>32</size>
+    </datatype>
+    
+    <datatype name="float">
+        <sqldefn>float</sqldefn>
+    </datatype>
+
+    <datatype name="number">
+        <sqldefn>number(%size%)</sqldefn>
+        <size>3</size>
+    </datatype>
+
+    <datatype name="integer">
+        <sqldefn>integer</sqldefn>
+    </datatype>
+
+    <datatype name="date">
+        <sqldefn>date</sqldefn>
+    </datatype>
+
+    <datatype name="duration">
+        <composite>
+            <column name="$name$_begin_date" type="date"/>
+            <column name="$name$_end_date" type="date"/>
+        </composite>
+    </datatype>    
+</schema>
+        ]]>        
+        </programlisting>
+        Datatypes provide their SQL DDL using the <sgmltag class="element">sqldefn</sgmltag> tag.
+        Datatypes are usually simple types like <quote>text</quote>, <quote>integer</quote>, or <quote>float</quote>. More complex types 
+        like <quote>duration</quote> can be created by using the <sgmltag class="element">composite</sgmltag> tag allowing
+        a single datatype to automatically generate multiple columns in tables.
         </para>
 
     </section>
@@ -26,15 +92,252 @@
     <section>
         <title>Creating Table Types</title>
         <para>
-        ...
+        Tabletypes should be considered <quote>table templates</quote> that allow a programmer to specify a table type.
+        They are completely schema dependent but may be reused across applications. This means that the basic 
+        templating system (SchemaDoc to XSLT generator) does not have any <quote>built-in</quote> tabletypes.
+        Tabletypes may be inherited from other tabletypes, allowing better reuse and object-orientation in 
+        relational databases. They can be created using the <sgmltag class="element">tabletype</sgmltag> tag.
+        The following is an example of defining tables in <filename class="conf">Database/schema-src/tabletypes.xml</filename>:
+        <programlisting>
+        <![CDATA[    
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "D:/projects/Framework/web-shared/resources/dtd/schema-markup.dtd">  
+
+<schema name="tabletypes">
+    <tabletype name="Default">
+        <column name="cr_stamp" type="stamp" required="dbms" default="sysdate"/>
+        <column name="cr_person_id" lookupref="Person.person_id"/>
+        <column name="cr_org_id" lookupref="Org.org_id"/>
+    </tabletype>
+</schema>    
+        ]]>
+        </programlisting>
+        The <sgmltag class="element">column</sgmltag> element in the <sgmltag class="element">tabletype</sgmltag> elements 
+        creates actual columns derived from a particular <sgmltag class="element">datatype</sgmltag>.
+        The <sgmltag class="element">column</sgmltag> elements will automatically maintain all type definitions and 
+        links to foreign keys automatically. The columns are arguably the most important definitions in the 
+        entire SchemaDoc. They take abstract representations of datatypes and instantiate actual columns in tables.
+        The following are attributes for the <sgmltag class="element">column</sgmltag> element:
+        <variablelist>            
+            <varlistentry>
+                <term> <sgmltag class="attribute">name</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    Name of the column. If the column definition is within a composite datatype definition 
+                    (a composite datatype is defined as two or more columns), the name will contain the special 
+                    variable $name$, which will be replaced with the name of the column that use        
+                    </para>
+                </listitem>
+            </varlistentry>       
+            <varlistentry>
+                <term> <sgmltag class="attribute">type</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    This datatype of the column. Must be a previously defined <sgmltag class="element">datatype</sgmltag>. 
+                    </para>
+                </listitem>
+            </varlistentry>    
+            <varlistentry>
+                <term> <sgmltag class="attribute">size</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    The size attribute of the specified data type. What the size means depends on the data type. 
+                    For example, in text fields, it specifies the number of characters used.
+                    </para>
+                </listitem>
+            </varlistentry>     
+            <varlistentry>
+                <term> <sgmltag class="attribute">lookupref</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    Will be parsed one of two ways, either as <quote>TableName</quote> or as 
+                    <quote>TableName.FieldName</quote>. If just the table name is given, then the table's 
+                    primary key will be used as the field. If used, the <sgmltag class="attribute">type</sgmltag>
+                    attribute is unnecessary.
+                    </para>
+                </listitem>
+            </varlistentry>          
+            <varlistentry>
+                <term> <sgmltag class="attribute">parentref</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    The primary key of the parent table. This creates a foreign-key constraint. 
+                    The string is parsed as follow: <quote>TableName.PrimaryKeyName</quote>.
+                    </para>
+                </listitem>
+            </varlistentry> 
+            <varlistentry>
+                <term> <sgmltag class="attribute">selfref</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    The value from one of the other columns in the table. In most cases this will pointing to the 
+                    primary key. This creates a self-referencing foreign-key constraint.
+                    </para>
+                </listitem>
+            </varlistentry>             
+            <varlistentry>
+                <term> <sgmltag class="attribute">descr</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    Description
+                    </para>
+                </listitem>
+            </varlistentry>  
+            <varlistentry>
+                <term> <sgmltag class="attribute">required</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    Possible values: <quote>yes</quote>, <quote>no</quote> or <quote>dbms</quote>.
+                    </para>
+                </listitem>
+            </varlistentry>      
+            <varlistentry>
+                <term> <sgmltag class="attribute">default</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    The value that is used if the user doesn't specify a value.
+                    </para>
+                </listitem>
+            </varlistentry>   
+            <varlistentry>
+                <term> <sgmltag class="attribute">unique</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    If column requires a unique value for each row, set to "yes." This creates a unique constraint.
+                    </para>
+                </listitem>
+            </varlistentry>               
+        </variablelist>     
         </para>
     </section>
 
     <section>
+        <title>Creating Tables</title>
+        <para>
+        A table type is a set of one or more column definitions. So when you create a table based on a table type, 
+        that table will include all the columns of the table type as well as its own. 
+        Each <sgmltag class="element">table</sgmltag> can be based on one or more table types as
+        shown in the following example:
+        <programlisting>
+        <![CDATA[      
+<table name="Person" abbrev="Per" type="Default">
+    <description>Any person (client, staff member, etc.)</description>
+    <column name="person_id" primarykey="yes" type="autoinc"/>
+    <column name="name_prefix" type="text" size="16"/>
+    <column name="name_first" type="text" required="yes" size="32"/>
+    <column name="name_middle" type="text" size="32"/>
+    <column name="name_last" type="text" required="yes" size="32"/>
+    <column name="name_suffix" type="text" size="16"/>
+    <column name="short_name" type="text" required="dbms" size="42"/>
+    <column name="simple_name" type="text" required="dbms" size="96"/>
+    <column name="complete_name" type="text" required="dbms" size="128"/>
+    <column name="short_sortable_name" type="text" required="dbms" size="42"/>
+    <column name="complete_sortable_name" type="text" required="dbms" size="128"/>
+    <column name="ssn" indexed="yes" type="text" size="11"/>
+    <column name="gender" lookupref="Gender" default="0"/>
+    <column name="marital_status" lookupref="Marital_Status" default="0"/>
+    <column name="date_of_birth" type="date"/>
+    <column name="age" type="integer"/>
+</table>        
+        ]]>
+        </programlisting>     
+        Using table types, one can quickly and consistently create similar tables that are automatically 
+        updated whenever the tabletypes change.
+        The following attributes are allowed for the <sgmltag class="element">table</sgmltag> element:
+        <variablelist>            
+            <varlistentry>
+                <term> <sgmltag class="attribute">Name</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    the name of the table
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term> <sgmltag class="attribute">Abbrev</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    should be kept to 3 or 4 characters to allow constraint names and indexe 
+                    names to be created properly
+                    </para>
+                </listitem>
+            </varlistentry>                
+            <varlistentry>
+                <term> <sgmltag class="attribute">Type</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    the tabletype of the table
+                    </para>
+                </listitem>
+            </varlistentry>             
+            <varlistentry>
+                <term> <sgmltag class="attribute">Parent</sgmltag> </term>                
+                <listitem>
+                    <para>
+                    the parent table if a parent-child relationship is desired
+                    </para>
+                </listitem>
+            </varlistentry> 
+
+        </variablelist>
+                
+        </para>
+    </section>
+
+
+    <section>
         <title>Generating  SQL DDL File</title>
         <para>
-        ...
+        Using &explorer-name;, a database-independent SchemaDoc XML file becomes a database-dependent SQL DDL file.
+        Regenerating SQL DDL is the preferred method to modifying DDL during the design and construction phases (pre-production)
+        of a web application. In post-production usage, the entire SQL is regenerated for changed tables and relationships 
+        but a experienced DBA should be involved for the alteration of live schemas.
+        
+        The main XML file, <filename class="conf">Database/schema-src/schema.xml</filename>, which is used to generate the 
+        SQL DDL contains all the different component XML files as shown in the example below:
+        <programlisting>
+        <![CDATA[              
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "D:/projects/Framework/web-shared/resources/dtd/schema-markup.dtd">
+
+<schema name="db">
+
+    <include file="datatypes.xml"/>
+    <include file="tabletypes.xml"/>        
+    ....
+    ...
+</schema>
+        ]]>
+        </programlisting>
+        All the schema definitions can be viewed by going to &explorer-name; and selecting the
+            <menuchoice>
+                <guimenu>Database</guimenu>  
+                <guimenuitem>Schema (XML)</guimenuitem>                
+            </menuchoice> menu item. A sample screenshot of the page is as shown below:
         </para>
+        
+        <para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/db-schema/ace-schema.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>            
+        </para>
+        <para>
+        The SQL DLL file is generated by going to the 
+            <menuchoice>
+                <guimenu>Database</guimenu>  
+                <guimenuitem>Generate DDL</guimenuitem>                
+            </menuchoice> menu item in &explorer-name; and selecting the location of the physical file
+            as shown below:            
+        </para>
+        <para>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="./resources/images/db-schema/ace-ddl.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject>            
+        </para>        
     </section>
 
 </chapter>
