@@ -10,6 +10,7 @@ import com.xaf.config.*;
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 import com.xaf.value.*;
+import java.net.URLEncoder;
 
 public class StandardDialogSkin implements DialogSkin
 {
@@ -675,9 +676,10 @@ public class StandardDialogSkin implements DialogSkin
 	public String getSeparatorHtml(DialogContext dc, SeparatorField field)
 	{
 		String heading = field.getHeading();
+
 		if(heading != null)
 		{
-			String sep = "<font "+separatorFontAttrs+"><b>"+ heading +"</b></font>";
+			String sep = "<font "+separatorFontAttrs+"><a name=\"" + URLEncoder.encode(heading) + "\"><b>"+ heading +"</b></a></font>";
 			if(! field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE))
 				sep += separatorHtml;
 
