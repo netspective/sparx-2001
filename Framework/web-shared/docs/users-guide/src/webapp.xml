@@ -1,13 +1,41 @@
 <chapter>
 	<title>Creating the Web Application</title>
     <para>
-    Both servlets and JSPs can be used by the developer using Sparx.
+    The two main configuration files, <filename class="conf">Site/WEB-INF/web.xml</filename> 
+    and <filename class="conf">Site/WEB-INF/configuration.xml</filename>, must exist for
+    a web application using &framework-name; libraries. Both Java servlets and JSPs can be 
+    used by the developer using &product-name; libraries. 
     </para>
 
     <section>
         <title>JSPs</title>
+        <para>
+        All JSP files (or the directories in which they reside) must exist under <filename class="directory">Site</filename> 
+        directory.
+        
+        </para>
     </section>
     <section>
         <title>Servlet</title>
+        <para>
+        All Java classes must exist under <filename class="directory">Site/WEB-INF/classes</filename>
+        and all Java libraries must exist under <filename class="directory">Site/WEB-INF/lib</filename> 
+        directory. Servlets can be named and mapped in  <filename class="conf">Site/WEB-INF/web.xml</filename> 
+        as shown below:
+        <programlisting>
+        <![CDATA[
+    <servlet>
+        <servlet-name>Navigator</servlet-name>
+        <servlet-class>com.xaf.navigate.NavigateFileSystemServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Navigator</servlet-name>
+        <url-pattern>/navigate/*</url-pattern>
+    </servlet-mapping>        
+        ]]>
+        </programlisting>
+        The above example is a navigation servlet provided by &framework-name; and can be used
+        to display directory listings.
+        </para>
     </section>
 </chapter>

@@ -7,11 +7,80 @@
             Sparx provides a built-in fine-grained security through the use of hierarchical
             access control lists (ACLs). Personalization features allow specific components
             to be shown based on user names, locations, etc.
-
-
         </para>
     </section>
-
+    <section>
+        <title>Defining the permissions</title>
+        <para>
+           The implementation of this security
+            feature is centralized through <filename class="conf">WEB-INF/security/access-control.xml</filename>
+            file. Within this XML file, one can create user roles and capabilities which can be fine-grained
+            down to the dialog level.
+        </para>
+        
+        <para>
+            The following is an example of how to define roles and capabilities:
+            <programlisting>
+            <![CDATA[
+<?xml version="1.0"?>
+<xaf>
+    <access-control name="default">
+        <permission name="app">
+            <generate-permissions name="dialog" class="com.xaf.form.DialogManagerFactory"/>
+            <permission name="orders">
+                <permission name="order_list"/>
+                <permission name="add_order"/>                
+                <permission name="delete_order"/>
+            </permission>                           
+        </permission>
+        
+        <permission name="role">
+            <permission name="super-user">
+                <grant permission="/app/orders"/>
+            </permission>
+            <permission name="normal-user">
+                <grant permission="/app/orders"/>                
+                <revoke permission="/app/orders/delete_order"/>
+            </permission>
+        </permission>
+    </access-control>
+</xaf>                        
+            ]]>
+            </programlisting>
+            The <sgmltag class="element">permission</sgmltag> element is used to define
+            capabilities based on application specific tasks and does not represent direct mapping 
+            of capabilities to physical files or directories. In the above example, the 
+            <emphasis>app</emphasis> permission grouping defines the various tasks which
+            can be performed on orders such as listing orders, adding orders, and deleting orders.
+            The <emphasis>role</emphasis> permission group utilizes the capabilities set 
+            up by the <emphasis>app</emphasis> permission grouping. The <sgmltag class="element">grant</sgmltag> 
+            element allows the parent permission element to inherit the capabilities defined by another
+            permission element. In the example above, <emphasis>super-user</emphasis> role inherits all
+            the capabilities defined by the <emphasis>orders</emphasis> permission. The <emphasis>normal-user</emphasis>
+            role also inherits the capabilities defined by the <emphasis>orders</emphasis> permission but
+            the <emphasis>delete_order</emphasis> capability is revoked through the 
+            <sgmltag class="element">revoke</sgmltag> element.
+            
+            
+        </para>
+    </section>
+    <section>
+        <title>Utilizing the login dialog</title>
+        <para>
+        &product-name; provides a basic login dialog which is defined by the Java class 
+        <classname>com.xaf.security.LoginDialog</classname>. Developers can either use this
+        or extend this class to implement their own application specific dialog object. The 
+        configuration to use this dialog is in <filename class="conf">WEB-INF/configuration.xml</filename>
+        and it is as follows:
+        <programlisting>
+        <![CDATA[
+        <property name="framework.ace.login.dialog-class" value="com.xaf.ace.LoginDialog"/>
+        ]]>
+        </programlisting>
+        This class contains methods to produce the login dialog, apply access controls for the user,
+        and storing user data.
+        </para>
+    </section>
 
 
 </chapter>

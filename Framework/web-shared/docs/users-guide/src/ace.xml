@@ -75,30 +75,81 @@
 
 	<section>
 		<title>Application Dialogs Page</title>
-		<para>
-			...
-		</para>
+        <para>
+        All dialogs defined in <filename class="conf">WEB-INF/ui/dialog.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Dialogs</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/dialogs/ace-dialogs.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>
 	</section>
 
 	<section>
 		<title>Application Configuration Page</title>
-		<para>
-			...
-		</para>
+        <para>
+        All configuration items defined in <filename class="conf">WEB-INF/configuration.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Configurations</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/ace/configurations.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>
 	</section>
 
 	<section>
 		<title>Application Servlet Context Page</title>
 		<para>
-			...
-		</para>
+        The servlet context items defined in <filename class="conf">WEB-INF/web.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Servlet Context</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/ace/servletcontext.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>            
+	
 	</section>
 
 	<section>
 		<title>Application Access Control Page</title>
-		<para>
-			...
-		</para>
+        <para>
+        The permissions defined in <filename class="conf">WEB-INF/security/access-control.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Access Control</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/ace/acl.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>        
 	</section>
 
 </chapter>

@@ -2,7 +2,7 @@
 	<title>Key concepts</title>
 
 
-    <section>
+    <section id="centralized-config">
         <title>Centralized Configuration</title>
         <para>
         All &product-name; applications use centralized XML-based repositories for configuration items 
@@ -38,7 +38,7 @@
         </para>
     </section>
     
-    <section>
+    <section id="valuesources">
         <title>Value Sources</title>
         <para>
             <!-- Unlike Java properties, Sparx configuration files allow programmers to define dynamic properties 
@@ -240,7 +240,7 @@
         </section>
     </section>
         
-    <section>
+    <section id="datasources">
         <title>Data Sources</title>
         <para>
         All data sources are defined as resources in <filename class="conf">WEB-INF/web.xml</filename> using the
@@ -278,11 +278,31 @@
             <imagedata fileref="./resources/images/statements/ace-datasrcs.jpg" format="JPEG"/>
         </imageobject>
         </mediaobject>            
+
+        <important>            
+            <para>
+            The method of specifying datasources is dependent upon the application
+            server being used and that the example provided above uses the default JNDI provider 
+            of <trademark>Resin</trademark>. &framework-name;'s Java class <classname>com.xaf.db.BasicDatabaseContext</classname>
+            uses this JNDI provider to provide database pool connections. For other application
+            servers, &framework-name;  provides an interface called <classname>com.xaf.db.DatabaseContext</classname>
+            which can be used to implement a new database object dependent upon the 
+            application server's preferred way of obtaining datasources. The way to register the
+            application server specific database object is to set the property in 
+            <filename class="conf">WEB-INF/configuration.xml</filename>:
+            <programlisting>
+            <![CDATA[
+<system-property name="com.netspective.sparx.DatabaseContext.class" value="com.xaf.db.BasicDatabaseContext"/>
+            ]]>
+            </programlisting>
+            </para>
+        </important>
+        
         </para>
     </section>
 
 
-    <section>
+    <section id="xmltags-jsptags">
         <title>XML Task Tags and JSP Tags</title>
         <para>
         A task is a piece of code that can be executed and Sparx provides the ability to
@@ -290,7 +310,7 @@
         gives developers the choice of defining  application logic within XML files or within JSP files.
         </para>
 
-       <section>
+       <section id="xmltags">
             <title>XML Task Tags</title>
             <para>
             Available XML task tags can be viewed in the Application Component Explorer(ACE)'s menu item
@@ -300,13 +320,15 @@
                 <guisubmenu>Tasks</guisubmenu>
             </menuchoice>                 
             as shown below:
-            
+            </para>
+            <para>
             <mediaobject>
                 <imageobject align="left">
                     <imagedata fileref="./resources/images/key-concepts/ace-tasks.jpg" format="JPEG"/>
                 </imageobject>
             </mediaobject>   
-            
+            </para>
+            <para>
             The following is an example of how multiple tasks to be executed by a dialog is defined with the
             dialog itself instead of defined inside a JSP:
             <programlisting>
@@ -327,12 +349,17 @@
              </programlisting>
             </para>
         </section>
-       <section>
+       <section id="jsptags">
             <title>JSP Tags</title>
+            <para>
             Inside JSPs, any task to be executed when a dialog is executed defined as a child node within
             the <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> custom tag.
-            <para>
-
+            <note>
+                <para>
+                Refer to <xref linkend="Using-Dialog"/> for more information on using JSP custom tags 
+                within a dialog.
+                </para>
+            </note>
             </para>
         </section>
     </section>

@@ -1,7 +1,7 @@
 <chapter>
     <title>The User Interface: Dialogs</title>
 
-    <section>
+    <section id="dialogs">
         <title>Overview</title>
         <para>
         The first step in developing a web application is giving the user the ability to
@@ -29,7 +29,7 @@
         </para>
     </section>
 
-    <section>
+    <section id="datafields">
         <title>Data Fields</title>
         <para>
         One can think of a dialog as a container/manager object consisting of data fields which have their own
@@ -97,7 +97,7 @@
             </programlisting>
             The above example contains multiple fields of various types and some of the attributes available for
             the different types. The attribute <sgmltag class="attribute">retain-params</sgmltag> of the 
-            <sgmltag class="element">dialog</sgmltag> tag is useful for retaining field values(whether they were
+            <sgmltag class="element">dialog</sgmltag> tag is useful for retaining field values (whether they were
             entered by the user or from value sources) as the dialog goes through its different stages before execution.
             The default values for the dialog fields can be empty or they can be specified in the 
             XML file. The attribute <sgmltag class="attribute">default</sgmltag> is available for specifying
@@ -109,13 +109,14 @@
 
             The following is a screenshot of how the actual dialog looks like:
             </para>
+            <para>
                 <mediaobject>
                 <imageobject align="left">
                     <imagedata fileref="./resources/images/dialogs/test1.jpg" format="JPEG"/>
                 </imageobject>
                 </mediaobject>            
-
-            </section>
+            </para>
+        </section>
         <section>
             <title>Example 2</title>
             <para>          
@@ -187,7 +188,7 @@
                         entered value: user enters 11021999 and it gets displayed as 11/02/1999. The default value
                         of the date field accepts special strings such as "<emphasis>today</emphasis>" and "<emphasis>now</emphasis>"
                         and interprets them as present date. Any numerical operation defined after the special string
-                        is used to recalculate the default date(for example, "<emphasis>today+1</emphasis>" will
+                        is used to recalculate the default date (for example, "<emphasis>today+1</emphasis>" will
                         display tomorrow's date)
                         </para>
                     </listitem>
@@ -258,7 +259,7 @@
                 The XML tag, <sgmltag class="element">field.select</sgmltag>, is based upon the
                 SELECT HTML element. It can be used as a list capable of allowing the user to choose
                 one selection or multiple selections based on the configuration. There are six styles
-                of selection list available(<emphasis>combo</emphasis>, <emphasis>radio</emphasis>, <emphasis>list</emphasis>, 
+                of selection list available (<emphasis>combo</emphasis>, <emphasis>radio</emphasis>, <emphasis>list</emphasis>, 
                 <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and <emphasis>multidual</emphasis>)
                 and they can be defined using the <sgmltag class="attribute">style</sgmltag>
                 attribute. The <emphasis>multilist</emphasis>, <emphasis>multicheck</emphasis>, and 
@@ -272,7 +273,7 @@
                 
                 There is another way to define the choices available for a selection and it is by using 
                 a value source called <emphasis>query</emphasis>. This way builds the option list from
-                the result of a static query(the query must be defined in <filename class="conf">WEB-INF/ui/statement.xml</filename>).
+                the result of a static query (the query must be defined in <filename class="conf">WEB-INF/ui/statement.xml</filename>).
                 For example, the following SQL can be used as <emphasis>choices="query:test.user_list</emphasis>
                 attribute setting:
                 <programlisting>
@@ -300,12 +301,13 @@
                 is to prepend a blank to the choice list and to append a blank to the choice list respectively.
                 The following is a screenshot of the dialog defined above:
             </para>
+            <para>
                 <mediaobject>
                 <imageobject align="left">
                     <imagedata fileref="./resources/images/dialogs/test3.jpg" format="JPEG"/>
                 </imageobject>
                 </mediaobject>    
-            <para>
+
             </para>                
         </section>
         <section>
@@ -335,7 +337,7 @@
             named <emphasis>sel_field_list</emphasis>. This is done by adding the <sgmltag class="element">conditional </sgmltag>
             element as a child node to the text field and setting the attribute <sgmltag class="attribute">partner</sgmltag>
             to the name of the select field. The condition for displaying the text field is created by setting the
-             <sgmltag class="attribute">js-expr</sgmltag>(Javascript expression) attribute. In the definition above, 
+             <sgmltag class="attribute">js-expr</sgmltag> (Javascript expression) attribute. In the definition above, 
              the text field named <emphasis>text_field</emphasis> will only be displayed if the selected option of the
              <emphasis>sel_field_list</emphasis> is not the first option.
              </para>
@@ -345,36 +347,76 @@
              and its' display status is dependent upon the <emphasis>checkbox_field</emphasis> being "checked". The
              following is a screen shot of the initial stage of the dialog:             
             </para>
+            <para>
                 <mediaobject>
                 <imageobject align="left">
                     <imagedata fileref="./resources/images/dialogs/test6_1.jpg" format="JPEG"/>
                 </imageobject>
                 </mediaobject>  
+            </para>
             <para>
             The following is a screen shot of the dialog after the select field's selection has been changed:
             </para>
+            <para>
                 <mediaobject>
                 <imageobject align="left">
                     <imagedata fileref="./resources/images/dialogs/test6_2.jpg" format="JPEG"/>
                 </imageobject>
                 </mediaobject>              
+            </para>                
             <para>
             The following is a screen shot of the dialog after the checkbox has been checked:
             </para>  
+            <para>            
                 <mediaobject>
                 <imageobject align="left">
                     <imagedata fileref="./resources/images/dialogs/test6_3.jpg" format="JPEG"/>
                 </imageobject>
                 </mediaobject>                 
+            </para>                
         </section>
+        
+        <section>
+            <title>Example 5</title>
+            <para>
+            &product-name; provides a feature to display a popup dialog box when a popup icon
+            is clicked and values from a selection in the popup can be returned to the main window.
+            The following XML definition creates a field that has a popup dialog associated with it:
+            <programlisting>
+            <![CDATA[
+        <dialog name="Test7" heading="Test Popup" loop="yes">
+            <field.text name="text_field_1" caption="Text Field 1" />
+            <field.text name="text_field_2" caption="Text Field 2" read-only="browser" 
+                hint="Click on the icon to select a value">
+                <popup action="create-app-url:/textJS.html" fill="text_field_1,text_field_2"/>
+            </field.text>
+        </dialog>            
+            ]]>
+            </programlisting>
+            The above example displays a dialog with a text field named <emphasis>text_field_2</emphasis> 
+            which cannot be filled in by the user but can only be filled in from a popup box associated with it.
+            By clicking on the popup icon (
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="../../../resources/images/dialogs/magnifying-glass-sm.gif" format="GIF"/>
+                </imageobject>
+                </mediaobject>)
+            the URL defined as the action, <literal>textJS.html</literal>, will be displayed in a popup window.
+            The process through a value or multiple values  being returned into the <emphasis>text_field_2</emphasis>
+            is to invoke a Javascript method called <literal>populateValues()</literal> provided by &product-name;. 
+            The following is an example of a HTML string to invoke the Javascript method:
+            <programlisting>
+            <![CDATA[
+            <input type="button" value="OK" onClick="populateValues('This is the filled in text!');"/>
+            ]]>
+            </programlisting>
+            </para>
+        </section>
+        
     </section>
 
-    <section>
-        <title>Dialog Manager</title>
 
-    </section>
-
-    <section>
+    <section id="Skins">
         <title>Look &amp; Feel: Skins</title>
         <para>
         Skins provide consistent look and feel and allows the same code to run on a variety of
@@ -403,16 +445,43 @@
         The created skin can be used by a dialog in a JSP:
         <programlisting>
             <![CDATA[
-     <xaf:dialog name="test.Test1" skin="TestSkin"/>
+     <xaf:dialog name="Test.Test1" skin="TestSkin"/>
             ]]>
         </programlisting>  
-        Note: Refer to the <xref linkend="Using the dialog"/> section for the complete description on how
+        <note>
+        <para>
+        Refer to <xref linkend="Using-Dialog"/> for the complete description on how
         to use the <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis> tag.
         </para>
+        </note>
+        
+        The following is a screenshot of the dialog with the default skin:
+        </para>
+        
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/dialogs/skin1.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>
+        
+        <para>
+        The following is a screenshot of the dialog after the <emphasis>TestSkin</emphasis>
+        was configured:
+        </para>
+
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/dialogs/skin2.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>        
     </section>
 
 
-    <section>
+    <section id="Testing-Dialog">
         <title>Testing the dialog</title>
         <section>
             <title>Unit Testing</title>
@@ -424,38 +493,44 @@
                 <guimenuitem>Dialogs</guimenuitem>                
             </menuchoice>    menu item.
             </para>
+
+            <para>
             <mediaobject>
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-dialogs.jpg" format="JPEG"/>
             </imageobject>
             </mediaobject>              
-            
+            </para>
+
             <para>
-            Clicking on the Action(<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_dialog.gif" format="GIF"/>
+            Clicking on the Action (<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_dialog.gif" format="GIF"/>
             </imageobject>) icon of any dialog displays a test page with the dialog in it.
             Each dialog can be tested by entering values for the dialog and then pressing the OK button:
             </para>
+
+            <para>
             <mediaobject>
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-testdialog.jpg" format="JPEG"/>
             </imageobject>
             </mediaobject>              
-            
+            </para>
+
             <para>            
             This will display the entered values:
             </para>
+
+            <para>
             <mediaobject>
             <imageobject align="left">
                 <imagedata fileref="./resources/images/dialogs/ace-testresult.jpg" format="JPEG"/>
             </imageobject>
             </mediaobject>              
-            
-            <para>                                    
             </para>
         </section>
     </section>
 
-    <section id="Using the dialog" xreflabel="Using the dialog">
+    <section id="Using-Dialog">
         <title>Using the dialog</title>
         <para>
             &product-name; provides convenient yet flexible ways to use and enhance the behavior of
@@ -469,7 +544,7 @@
             </programlisting>                
             This utilizes the built-in functionality and behavior of a &product-name; dialog. The user does not
             need to be concerned with various processes of a HTML form submittal such as
-            data validations, verifying the correct stage execution(blocking redundant submittals), and
+            data validations, verifying the correct stage execution (blocking redundant submittals), and
             processing the form's action.
 
             The common way to define an action for a dialog is to insert the action items within the

@@ -19,7 +19,7 @@
 <!ENTITY xaf-version "1.2.8">
 <!ENTITY xaf-jar "<literal>xaf-1_2_8.jar</literal>">
 
-<!ENTITY win32-default-drive "c:">
+<!ENTITY win32-default-drive "D:">
 <!ENTITY projects-dir-lit "&win32-default-drive;\Projects">
 <!ENTITY projects-dir-ref "<emphasis>Projects</emphasis> directory">
 <!ENTITY framework-dir-lit "&projects-dir-lit;\Framework">
@@ -37,9 +37,10 @@
 <!ENTITY appservers-dir-ref "<emphasis>Application Servers</emphasis> directory">
 <!ENTITY resin-dir-ref "<emphasis>Resin Home</emphasis> directory">
 <!ENTITY product-name "<trademark>Sparx</trademark>">
-<!ENTITY framework-name "XAF">
+<!ENTITY framework-name "<trademark class='registered'>XAF</trademark>">
 <!ENTITY explorer-name "ACE">
 <!ENTITY valuesource "Value Source">
+<!ENTITY schema-name "<trademark class='registered'>XIF</trademark>">
 ]>
 
 <book>
