@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 
 <xaf>
-    <!--
-    <register-navigation-skin name="default" class="app.skin.NavigationSkin"/>
-    -->
+    <register-navigation-skin name="default" class="app.skin.AppNavigationSkin"/>
 
 	<structure>
-		<page id="/home" caption="Home" title="Welcome to the App" heading="Welcome to the app" url="simple-expr:${create-app-url:/index.jsp}"/>
+		<page id="/home" caption="Home" class="app.page.HomePage" title="Welcome to the App" heading="Welcome to the app" url="simple-expr:${create-app-url:/index.jsp}"/>
 
 		<!-- NOTE:
 		     to see how the "cmd" is used in URLs, go to ACE -> Application -> Factory -> Component Commands
