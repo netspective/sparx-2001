@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageContext.java,v 1.4 2002-11-25 14:56:29 roque.hernandez Exp $
+ * $Id: PageContext.java,v 1.5 2002-12-04 14:24:39 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -103,8 +103,7 @@ public class PageContext extends ServletValueContext
     {
         super(aServletContext, aServlet, aRequest, aResponse);
 
-        pageContextNum++;
-        System.out.println("path to find:" + NavTreeId );
+        pageContextNum++;        
         activePath = pagesPath.findPath(NavTreeId);
 
         try

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: VirtualPath.java,v 1.6 2002-11-22 15:46:44 aye.thu Exp $
+ * $Id: VirtualPath.java,v 1.7 2002-12-04 14:24:38 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -337,7 +337,7 @@ public class VirtualPath
 
                 String pageClass = childElem.getAttribute("class");
                 if(pageClass.length() != 0)
-                {
+                {                    
                     try
                     {
                         Class cls = Class.forName(pageClass);
@@ -345,7 +345,7 @@ public class VirtualPath
                         childPath.setPage(page);
                     }
                     catch (Exception e)
-                    {
+                    {                                      
                         LogManager.recordException(VirtualPath.class, "importFromXml", "Unable to instantiate page class '" + pageClass + "'", e);
                         childPath.setCaption(caption + " (" + e.toString() + ")");
                     }
