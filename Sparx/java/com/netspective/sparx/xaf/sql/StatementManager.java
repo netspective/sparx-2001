@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.5 2002-07-03 17:11:01 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.6 2002-07-03 21:12:47 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -445,6 +445,17 @@ public class StatementManager extends XmlSource
             throw new StatementNotFoundException(this, statementId);
 
         return execute(dc, vc, dataSourceId, si, params);
+    }
+
+    public ResultInfo execute(ConnectionContext cc, ValueContext vc, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        reload();
+
+        StatementInfo si = (StatementInfo) statements.get(statementId);
+        if(si == null)
+            throw new StatementNotFoundException(this, statementId);
+
+        return execute(cc, vc, si, params);
     }
 
     public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId) throws StatementNotFoundException, NamingException, SQLException
