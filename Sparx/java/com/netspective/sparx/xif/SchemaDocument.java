@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.7 2002-04-05 12:19:12 snshah Exp $
+ * $Id: SchemaDocument.java,v 1.8 2002-04-10 23:08:35 snshah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -469,10 +469,15 @@ public class SchemaDocument extends XmlSource
         NodeList colInfo = column.getChildNodes();
         ArrayList sqlDefnElems = new ArrayList();
         String size = null;
+        String decimals = null;
 
         size = column.getAttribute("size");
         if(size != null && size.length() == 0)
             size = null;
+
+        decimals = column.getAttribute("decimals");
+        if(decimals != null && decimals.length() == 0)
+            decimals = null;
 
         for(int i = 0; i < colInfo.getLength(); i++)
         {
@@ -488,12 +493,19 @@ public class SchemaDocument extends XmlSource
                 sqlDefnElems.add(childNode);
             else if(size == null && nodeName.equals("size"))
                 size = childNode.getFirstChild().getNodeValue();
+            else if(decimals == null && nodeName.equals("decimals"))
+                decimals = childNode.getFirstChild().getNodeValue();;
         }
 
         if(size != null && sqlDefnElems.size() > 0)
         {
             for(int i = 0; i < sqlDefnElems.size(); i++)
                 replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "%size%", size);
+        }
+        if(decimals != null && sqlDefnElems.size() > 0)
+        {
+            for(int i = 0; i < sqlDefnElems.size(); i++)
+                replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "%decimals%", decimals);
         }
     }
 
