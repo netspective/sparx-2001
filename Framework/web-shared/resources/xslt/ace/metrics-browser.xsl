@@ -15,20 +15,33 @@
 
 <xsl:template match="xaf">
 	<div class="content">
-	<table class="data_table" cellspacing="0" cellpadding="2" border="0">
-		<tr class="data_table_header">
-			<th class="data_table">Name</th>
-			<th class="data_table">Value</th>
-			<th class="data_table">&#160;</th>
+	<table>
+		<tr valign="top">
+			<td>
+				<h1>General Metrics</h1>
+				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+					<tr class="data_table_header">
+						<th class="data_table">Name</th>
+						<th class="data_table">Value</th>
+						<th class="data_table">&#160;</th>
+					</tr>
+					<xsl:for-each select="metric">
+						<xsl:apply-templates select="metric[not(@type)]"/>
+					</xsl:for-each>
+				</table>
+			</td>
+			<td>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</td>
+			<td>
+				<xsl:for-each select="metric">
+					<xsl:apply-templates select="metric[@type = 'file-types']"/>	
+				</xsl:for-each>
+			</td>
 		</tr>
-		<xsl:for-each select="metric">
-			<xsl:apply-templates/>
-		</xsl:for-each>
 	</table>
 	</div>
 </xsl:template>
 
-<xsl:template match="metric">
+<xsl:template match="metric[not(@type)]">
 	<xsl:param name="indent"/>
 	
 	<tr valign="top" class="data_table">
@@ -64,17 +77,120 @@
 	</tr>
 	<xsl:choose>
 		<xsl:when test="@sort-children = 'yes'">
-			<xsl:apply-templates>
+			<xsl:apply-templates select="metric[not(@type)]">
 				<xsl:sort select="@name"/>
 				<xsl:with-param name="indent" select="concat($indent, $indent-str)"/>
 			</xsl:apply-templates>
 		</xsl:when>
 		<xsl:otherwise>
-			<xsl:apply-templates>
+			<xsl:apply-templates select="metric[not(@type)]">
 				<xsl:with-param name="indent" select="concat($indent, $indent-str)"/>
 			</xsl:apply-templates>
 		</xsl:otherwise>
 	</xsl:choose>
+</xsl:template>
+
+<xsl:template match="metric[@type = 'file-types']">	
+	<p/>
+	<h1><xsl:value-of select="@name"/></h1>
+	<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+		<tr class="data_table_header">
+			<th class="data_table" style="border-bottom: 0">&#160;</th>
+			<th class="data_table" style="border-bottom: 0">&#160;</th>
+			<th class="data_table" colspan="2" style="border-bottom: 0">Bytes</th>			
+			<th class="data_table" colspan="2" style="border-bottom: 0">Lines</th>			
+		</tr>
+		<tr class="data_table_header">
+			<th class="data_table">Name</th>
+			<th class="data_table">Count</th>
+			<th class="data_table">Total</th>
+			<th class="data_table">Avg</th>
+			<th class="data_table">Total</th>
+			<th class="data_table">Avg</th>
+		</tr>
+
+		<xsl:for-each select="metric">
+		<xsl:sort select="not(@is-code)"/>
+		<xsl:sort select="@name"/>	
+		<tr valign="top" class="data_table">
+			<td class="data_table">
+				<xsl:value-of select="@name"/>
+			</td>
+			<td class="data_table" align="right">
+				<xsl:value-of select="@count"/>
+			</td>
+			<td class="data_table" align="right">
+				<xsl:value-of select="@total-bytes"/>
+			</td>
+			<td class="data_table" align="right">
+				<xsl:choose>
+					<xsl:when test="@avg-bytes != @total-bytes">
+						<xsl:value-of select="@avg-bytes"/>
+					</xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>
+				</xsl:choose>
+			</td>
+			<td class="data_table" align="right">
+				<xsl:choose>
+					<xsl:when test="@total-lines">
+						<xsl:value-of select="@total-lines"/>
+					</xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>
+				</xsl:choose>
+			</td>
+			<td class="data_table" align="right">
+				<xsl:choose>
+					<xsl:when test="@avg-lines != @total-lines">
+						<xsl:value-of select="@avg-lines"/>
+					</xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>
+				</xsl:choose>
+			</td>
+		</tr>
+		</xsl:for-each>
+		
+		<tr valign="top" class="data_table">
+			<td class="data_table">
+				<b><xsl:value-of select="@name"/></b>
+			</td>
+			<td class="data_table" align="right">
+				<b><xsl:value-of select="@count"/></b>
+			</td>
+			<td class="data_table" align="right">
+				<b><xsl:value-of select="@total-bytes"/></b>
+			</td>
+			<td class="data_table" align="right">
+				<b>
+				<xsl:choose>
+					<xsl:when test="@avg-bytes != @total-bytes">
+						<xsl:value-of select="@avg-bytes"/>
+					</xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>
+				</xsl:choose>
+				</b>
+			</td>
+			<td class="data_table" align="right">
+				<b>
+				<xsl:choose>
+					<xsl:when test="@total-lines">
+						<xsl:value-of select="@total-lines"/>
+					</xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>
+				</xsl:choose>
+				</b>
+			</td>
+			<td class="data_table" align="right">
+				<b>
+				<xsl:choose>
+					<xsl:when test="@avg-lines != @total-lines">
+						<xsl:value-of select="@avg-lines"/>
+					</xsl:when>
+					<xsl:otherwise>&#160;</xsl:otherwise>
+				</xsl:choose>
+				</b>
+			</td>
+		</tr>
+	</table>
 </xsl:template>
 
 </xsl:stylesheet>

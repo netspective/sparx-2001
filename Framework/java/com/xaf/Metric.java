@@ -19,6 +19,7 @@ public class Metric
 	public static final int METRIC_TYPE_GROUP      = 0;
 	public static final int METRIC_TYPE_SIMPLE_SUM = 1;
 	public static final int METRIC_TYPE_AVERAGE    = 2;
+	public static final int METRIC_TYPE_LAST       = 3; /* for extension classes */
 
 	static public final int METRICFLAG_SORT_CHILDREN      = 1;
 	static public final int METRICFLAG_SHOW_PCT_OF_PARENT = METRICFLAG_SORT_CHILDREN * 2;
@@ -151,6 +152,17 @@ public class Metric
 		return metric;
 	}
 
+	public FileTypeMetric createChildMetricFileType(String name, boolean isCode)
+	{
+		FileTypeMetric metric = (FileTypeMetric) getChild(name);
+		if(metric != null)
+			return metric;
+
+		metric = new FileTypeMetric(this, name, isCode);
+		addChild(metric);
+		return metric;
+	}
+
 	public Metric getChild(String name)
 	{
 		if(childMap == null)
@@ -193,8 +205,13 @@ public class Metric
 				break;
 
 			case METRIC_TYPE_AVERAGE:
-		   		metricElem.setAttribute("value", Double.toString(getSum() / count));
-				metricElem.setAttribute("value-detail", "(min = " + min + ", max = " + max + ")");
+				if(count > 0)
+				{
+			   		metricElem.setAttribute("value", Double.toString(getSum() / count));
+					metricElem.setAttribute("value-detail", "(min = " + min + ", max = " + max + ")");
+				}
+				else
+			   		metricElem.setAttribute("value", "0.0");
 				break;
 
 			default:

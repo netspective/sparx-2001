@@ -9,7 +9,7 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
-import com.xaf.Metric;
+import com.xaf.*;
 import com.xaf.ace.*;
 import com.xaf.config.*;
 import com.xaf.form.*;
@@ -27,40 +27,23 @@ import com.xaf.sql.*;
 
 public class AppMetricsPage extends AceServletPage
 {
-	private Set countLinesInFileExtn;
+	public static final String METRICS_CFG_PREFIX = "framework.ace.metrics";
+	public static final String FILESYS_CFG_PREFIX = METRICS_CFG_PREFIX + ".filesys";
+
+	private Set countLinesInFileExtn = new HashSet();
+	private boolean ignoreCaseInFileExtn;
 
 	public final String getName() { return "metrics"; }
 	public final String getPageIcon() { return "metrics.gif"; }
 	public final String getCaption(PageContext pc) { return "Metrics"; }
 	public final String getHeading(PageContext pc) { return "Application Metrics"; }
 
-	public long getLineCount(File entry) throws IOException
-	{
-		int result = 0;
-
-		BufferedReader reader = new BufferedReader(new FileReader(entry));
-		while(reader.readLine() != null)
-			result++;
-		reader.close();
-
-		return result;
-	}
-
-	public void calcFileSystemMetrics(File path, int depth, Metric dirMetrics, Metric fileMetrics)
+	public void calcFileSystemMetrics(File path, int depth, Metric dirMetrics, Metric allFileMetrics, FileTypeMetric codeFileMetrics, FileTypeMetric appFileMetrics)
 	{
 		Metric totalDirsMetric = dirMetrics.createChildMetricSimple("Total folders");
 		Metric avgEntriesMetric = dirMetrics.createChildMetricAverage("Average entries per folder");
 		Metric avgDepthMetric = dirMetrics.createChildMetricAverage("Average Depth");
 		avgDepthMetric.incrementAverage(depth);
-
-		Metric fileTypesMetric = fileMetrics.createChildMetricSimple("Total files");
-		fileTypesMetric.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
-
-		Metric fileLinesMetric = fileMetrics.createChildMetricSimple("Total lines of code (LOC)");
-		fileLinesMetric.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
-
-		Metric avgLinesMetric = fileMetrics.createChildMetricAverage("Average LOC per file");
-		avgLinesMetric.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
 
 		File[] entries = path.listFiles();
 		for(int i = 0; i < entries.length; i++)
@@ -71,54 +54,36 @@ public class AppMetricsPage extends AceServletPage
 				totalDirsMetric.incrementCount();
 				File[] childEntries = entry.listFiles();
 				avgEntriesMetric.incrementAverage(childEntries.length);
-				calcFileSystemMetrics(entry, depth+1, dirMetrics, fileMetrics);
+				calcFileSystemMetrics(entry, depth+1, dirMetrics, allFileMetrics, codeFileMetrics, appFileMetrics);
 			}
 			else
 			{
 				String entryCaption = entry.getName();
-				String entryExtension = "(none)";
+				String entryExtension = "(no extension)";
 				int extnIndex = entryCaption.lastIndexOf('.');
 				if(extnIndex > -1)
 					entryExtension = entryCaption.substring(extnIndex);
+				if(ignoreCaseInFileExtn)
+					entryExtension = entryExtension.toLowerCase();
+
+				Metric fileMetric = allFileMetrics.createChildMetricSimple(entryExtension);
+				fileMetric.setFlag(Metric.METRICFLAG_SHOW_PCT_OF_PARENT);
+				fileMetric.incrementCount();
 
 				if(countLinesInFileExtn.contains(entryExtension))
 				{
-					Metric fileLineMetric = fileLinesMetric.getChild(entryExtension);
-					if(fileLineMetric == null)
-					{
-						fileLineMetric = fileLinesMetric.createChildMetricSimple(entryExtension);
-						fileLineMetric.setFlag(Metric.METRICFLAG_SHOW_PCT_OF_PARENT);
-					}
-
-					Metric avgLineMetric = avgLinesMetric.getChild(entryExtension);
-					if(avgLineMetric == null)
-						avgLineMetric = avgLinesMetric.createChildMetricAverage(entryExtension);
-
-					long lines = 0;
-					try
-					{
-						lines = getLineCount(entry);
-					}
-					catch(IOException e)
-					{
-					}
-
-					fileLinesMetric.incrementAverage(lines);
-					fileLineMetric.incrementAverage(lines);
-
-					avgLinesMetric.incrementAverage(lines);
-					avgLineMetric.incrementAverage(lines);
+					FileTypeMetric ftMetric = (FileTypeMetric) codeFileMetrics.getChild(entryExtension);
+	    			if(ftMetric == null)
+		    			ftMetric = codeFileMetrics.createChildMetricFileType(entryExtension, true);
+			    	ftMetric.incrementCount(entry);
 				}
-
-				Metric fileTypeMetric = fileTypesMetric.getChild(entryExtension);
-				if(fileTypeMetric == null)
+				else
 				{
-					fileTypeMetric = fileTypesMetric.createChildMetricSimple(entryExtension);
-					fileTypeMetric.setFlag(Metric.METRICFLAG_SHOW_PCT_OF_PARENT);
+					FileTypeMetric ftMetric = (FileTypeMetric) appFileMetrics.getChild(entryExtension);
+	    			if(ftMetric == null)
+		    			ftMetric = appFileMetrics.createChildMetricFileType(entryExtension, false);
+			    	ftMetric.incrementCount(entry);
 				}
-
-				fileTypesMetric.incrementCount();
-				fileTypeMetric.incrementCount();
 			}
 		}
 	}
@@ -127,30 +92,39 @@ public class AppMetricsPage extends AceServletPage
 	{
 		Metric fsMetrics = parentMetric.createChildMetricGroup("Application Files");
 		Metric dirMetrics = fsMetrics.createChildMetricGroup("Folders");
-		Metric fileMetrics = fsMetrics.createChildMetricGroup("Files");
+		Metric allFileMetrics = fsMetrics.createChildMetricSimple("Files");
+		allFileMetrics.setFlag(Metric.METRICFLAG_SUM_CHILDREN);
+		allFileMetrics.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
+
+		FileTypeMetric codeFileMetrics = parentMetric.createChildMetricFileType("Code Files", false);
+		codeFileMetrics.setFlag(Metric.METRICFLAG_SUM_CHILDREN);
+		codeFileMetrics.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
+
+		FileTypeMetric appFileMetrics = parentMetric.createChildMetricFileType("App Files", false);
+		appFileMetrics.setFlag(Metric.METRICFLAG_SUM_CHILDREN);
+		appFileMetrics.setFlag(Metric.METRICFLAG_SORT_CHILDREN);
 
 		File path = new File(pathStr);
-		calcFileSystemMetrics(path, 1, dirMetrics, fileMetrics);
+		calcFileSystemMetrics(path, 1, dirMetrics, allFileMetrics, codeFileMetrics, appFileMetrics);
 	}
 
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
-		if(countLinesInFileExtn == null)
+		ServletContext context = pc.getServletContext();
+		ConfigurationManager config = ConfigurationManagerFactory.getManager(context);
+
+		ignoreCaseInFileExtn = config.getBooleanValue(pc, FILESYS_CFG_PREFIX + ".ignore-case", true);
+		String[] codeExtns = config.getDelimitedValues(pc, FILESYS_CFG_PREFIX + ".code-extensions", null, ",");
+		if(codeExtns != null)
 		{
-			countLinesInFileExtn = new HashSet();
-			countLinesInFileExtn.add(".java");
-			countLinesInFileExtn.add(".jsp");
-			countLinesInFileExtn.add(".sql");
-			countLinesInFileExtn.add(".xml");
-			countLinesInFileExtn.add(".xsl");
+			countLinesInFileExtn.clear();
+			for(int i = 0; i < codeExtns.length; i++)
+				countLinesInFileExtn.add("." + codeExtns[i]);
 		}
 
 		Metric metrics = new Metric(null, "Application Metrics", Metric.METRIC_TYPE_GROUP);
 
-		ServletContext context = pc.getServletContext();
-
-		ConfigurationManager cmanager = ConfigurationManagerFactory.getManager(context);
-		createFileSystemMetrics(metrics, cmanager.getValue(pc, "app.project-root"));
+		createFileSystemMetrics(metrics, config.getValue(pc, "app.project-root"));
 
 		DialogManager dmanager = DialogManagerFactory.getManager(context);
 		dmanager.getMetrics(metrics);
