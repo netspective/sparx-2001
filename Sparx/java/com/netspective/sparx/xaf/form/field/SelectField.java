@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SelectField.java,v 1.8 2003-03-06 20:57:22 aye.thu Exp $
+ * $Id: SelectField.java,v 1.9 2003-04-18 00:07:29 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -110,6 +110,13 @@ public class SelectField extends TextField
         public void prepareForPopup(DialogContext dc)
         {
             ((HttpServletRequest) dc.getRequest()).getSession(true).setAttribute(lvsSessionAttrName, listSource);
+        }
+
+        public void initialize()
+        {
+            setActionUrl("popup-url:cmd=lvs,reference;session:LVSPOPUP_"+ getQualifiedName()+";yes");
+            setFillFields(new String[] { getQualifiedName(), getQualifiedName() + "_adjacent"});
+            lvsSessionAttrName = "LVSPOPUP_"+ getQualifiedName();
         }
     }
 
@@ -323,8 +330,31 @@ public class SelectField extends TextField
 
         if(style == SELECTSTYLE_POPUP)
         {
-            setFlag(FLDFLAG_CREATEADJACENTAREA);
+            String showAdjacent = elem.getAttribute("hide-adjacent");
+            if (showAdjacent != null && showAdjacent.equals("yes"))
+                setFlag(FLDFLAG_CREATEADJACENTAREA_HIDDEN);
+            else
+                setFlag(FLDFLAG_CREATEADJACENTAREA);
             setPopup(new SelectFieldPopup());
+        }
+
+    }
+
+    /**
+     * Sets the qualified name of the dialog
+     *
+     * @param newName new qualified name
+     */
+    public void setQualifiedName(String newName)
+    {
+        super.setQualifiedName(newName);
+
+        // if this select field is a child of another field and of popup style, then the qualified name change needs to
+        // be passed to popup
+        if (style == SELECTSTYLE_POPUP)
+        {
+            SelectFieldPopup popup = (SelectFieldPopup) getPopup();
+            popup.initialize();
         }
     }
 
@@ -452,6 +482,7 @@ public class SelectField extends TextField
         // as a popup, we're a simple text field so just use it's rendering method
         super.renderControlHtml(writer, dc);
     }
+
 
     public String getHiddenControlHtml(DialogContext dc, boolean showCaptions)
     {
@@ -656,6 +687,18 @@ public class SelectField extends TextField
             case SELECTSTYLE_RADIO:
             case SELECTSTYLE_COMBO:
             case SELECTSTYLE_LIST:
+                mi = createDialogContextMemberInfo("String");
+                fieldName = mi.getFieldName();
+                memberName = mi.getMemberName();
+                dataType = mi.getDataType();
+
+                mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { return getValue(\"" + fieldName + "\"); }\n");
+                mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { return getValue(\"" + fieldName + "\", defaultValue); }\n");
+                mi.addJavaCode("\tpublic int get" + memberName + "Int() { String s = getValue(\"" + fieldName + "\"); return s == null ? -1 : Integer.parseInt(s); }\n");
+                mi.addJavaCode("\tpublic int get" + memberName + "Int(int defaultValue) { String s = getValue(\"" + fieldName + "\"); return s == null ? defaultValue : Integer.parseInt(s); }\n");
+                mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", value); }\n");
+                mi.addJavaCode("\tpublic void set" + memberName + "(int value) { setValue(\"" + fieldName + "\", Integer.toString(value)); }\n");
+                break;
             case SELECTSTYLE_POPUP:
                 mi = createDialogContextMemberInfo("String");
                 fieldName = mi.getFieldName();
@@ -668,6 +711,7 @@ public class SelectField extends TextField
                 mi.addJavaCode("\tpublic int get" + memberName + "Int(int defaultValue) { String s = getValue(\"" + fieldName + "\"); return s == null ? defaultValue : Integer.parseInt(s); }\n");
                 mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", value); }\n");
                 mi.addJavaCode("\tpublic void set" + memberName + "(int value) { setValue(\"" + fieldName + "\", Integer.toString(value)); }\n");
+                mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "_AdjacentValue() { return getAdjacentAreaValue(\"" + fieldName + "\"); }\n");
                 break;
 
             case SELECTSTYLE_MULTICHECK:
