@@ -26,6 +26,7 @@ public class ValueSourceFactory
 		srcClasses.put("session", SessionAttributeValue.class);
 		srcClasses.put("schema-tables", SchemaDocTablesListValue.class);
         srcClasses.put("generate-id", GenerateIdValue.class);
+        srcClasses.put("system-property", SystemPropertyValue.class);
         defaultsAvailable = true;
     }
 
