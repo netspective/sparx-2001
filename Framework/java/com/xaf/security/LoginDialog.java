@@ -18,7 +18,7 @@ public class LoginDialog extends Dialog
 
 	private TextField userIdField;
 	private TextField passwordField;
-	private String loginImageSrc;
+    private String loginImageSrc;
 	private String userNameCookieName;
 	private String userInfoSessionAttrName;
 
@@ -37,6 +37,36 @@ public class LoginDialog extends Dialog
 		return SkinFactory.getDialogSkin();
 	}
 
+    public TextField getUserIdField()
+    {
+        return userIdField;
+    }
+
+    public void setUserIdField(TextField userIdField)
+    {
+        this.userIdField = userIdField;
+    }
+
+    public TextField getPasswordField()
+    {
+        return passwordField;
+    }
+
+    public void setPasswordField(TextField passwordField)
+    {
+        this.passwordField = passwordField;
+    }
+
+    public String getLoginImageSrc()
+    {
+        return loginImageSrc;
+    }
+
+    public void setLoginImageSrc(String loginImageSrc)
+    {
+        this.loginImageSrc = loginImageSrc;
+    }
+
 	public TextField createUserIdField()
 	{
 		TextField result = new TextField("user_id", "User ID");
@@ -52,16 +82,29 @@ public class LoginDialog extends Dialog
 		return result;
 	}
 
+    /**
+     * Allow additional fields to be added after the user id and password fields.
+     */
+    public void customInitialize()
+    {
+    }
+
+    /**
+     * Add the user id and password fields and provide custom initialization.
+     */
 	public void initialize()
 	{
 		this.setHeading("Please Login");
 		this.setName("login");
 
-		userIdField = createUserIdField();
-		passwordField = createPasswordField();
+		setUserIdField(createUserIdField());
+		setPasswordField(createPasswordField());
 
 		addField(userIdField);
 		addField(passwordField);
+
+        customInitialize();
+
 		addField(new DialogDirector());
 	}
 
