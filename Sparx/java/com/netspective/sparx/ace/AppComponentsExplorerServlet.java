@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppComponentsExplorerServlet.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppComponentsExplorerServlet.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -64,6 +64,8 @@ import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.page.AppAccessControlListPage;
 import com.netspective.sparx.ace.page.AppConfigurationPage;
@@ -100,9 +102,9 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
     private Component[] menus;
     private VirtualPath homePath;
 
-    public void init(ServletConfig config) throws ServletException
+    protected void initFirstRequest(HttpServletRequest req, HttpServletResponse resp)
     {
-        super.init(config);
+        super.initFirstRequest(req, resp);
 
         List menuBar = new ArrayList();
 

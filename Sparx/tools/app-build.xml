@@ -111,6 +111,7 @@ Setup instructions:
     	<mkdir dir="Documents"/>
 
     	<mkdir dir="Site"/>
+	<mkdir dir="Site/sparx/resources"/>
     	<mkdir dir="Site/WEB-INF"/>
     	<mkdir dir="Site/WEB-INF/classes"/>
     	<mkdir dir="Site/WEB-INF/lib"/>
@@ -129,6 +130,10 @@ Setup instructions:
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="Site/WEB-INF/security"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="Site/WEB-INF/ui"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="Site/WEB-INF/sql"/>
+
+		<copy todir="${app.site.root.dir}/sparx/resources">
+			<fileset dir="${sparx.shared.resources.dir}"/>
+		</copy>
     </target>
 
     <target name="setup-sparx-libs" depends="global">
@@ -140,6 +145,13 @@ Setup instructions:
 		<copy file="${sparx.lib.dir}/redist/xalan.jar" todir="Site/WEB-INF/lib"/>
 		<copy file="${sparx.lib.dir}/redist/xerces.jar" todir="Site/WEB-INF/lib"/>
     </target>
+    
+    <target name="copy-sparx-resources" depends="global">
+    		<mkdir dir="${app.site.root.dir}/sparx/resources"/>
+		<copy todir="${app.site.root.dir}/sparx/resources">
+			<fileset dir="${sparx.shared.resources.dir}"/>
+		</copy>
+    </target>    
 
     <target name="setup-sparx" depends="global">
     	<!-- Setup Sparx TagLib Descriptor File (sparx.tld) -->
@@ -338,16 +350,18 @@ Setup instructions:
         <echo message="ANT build targets for Application"/>
         <echo message=""/>
         <echo message="The following targets are available:"/>
-        <echo message="  all          Run all of the targets in this order: clean, dal, dal-doc, dcb, dcb-doc"/>
+        <echo message="  all          Run all of the targets in this order: clean, dal, dcb, compile, dal-doc, dcb-doc"/>
         <echo message="  clean        Clean directories"/>
         <echo message="  clean-log    Clean only the log directory (remove all entries and re-create)"/>
         <echo message="  setup-sparx-structure Setup sparx structure (directories, etc)"/>
         <echo message="  setup-sparx  Setup sparx files (configuration.xml, log4j, etc.)"/>
         <echo message="  start-sparx-app In an empty directory, start a new sparx app"/>
+        <echo message="  setup-sparx-libs  Copy all the applicable Sparx libraries into the application"/>
         <echo message="  compile      Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal          Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
         <echo message="  dal-doc      Generate the Data Access Layer (DAL) API Documentation"/>
         <echo message="  dcb          Generate the Dialog Context Beans from Dialogs (XML)"/>
         <echo message="  dcb-doc      Generate the Dialog Context Beans API Documentation"/>
+        <echo message="  copy-sparx-resources  Copy all the web-based resources need for Sparx (SPARX_HOME/web-shared/resources)"/>
     </target>
 </project>

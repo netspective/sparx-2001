@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.3 2002-02-10 16:31:24 snshah Exp $
+ * $Id: HtmlReportSkin.java,v 1.4 2002-05-19 23:31:29 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -525,7 +525,11 @@ public class HtmlReportSkin implements ReportSkin
         int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
 
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
+        {
+            Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
+            String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='1' width='100%'></td></tr>");
+        }
         writer.write("<tr bgcolor='lightyellow'><td><font " + dataFtFontAttrs + ">&nbsp;&nbsp;</font></td>");
         for(int i = 0; i < dataColsCount; i++)
         {

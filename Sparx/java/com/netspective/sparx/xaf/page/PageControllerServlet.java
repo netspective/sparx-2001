@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: PageControllerServlet.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -133,6 +133,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     protected AppServerCategory debugLog;
     protected AppServerCategory monitorLog;
 
+    protected boolean firstRequest = true;
     protected ConfigurationManager manager;
     protected Configuration appConfig;
     protected String sharedImagesRootURL;
@@ -232,10 +233,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         }
 
         rediscoverParamName = appConfig.getTextValue(vc, configItemsPrefix + CONFIGITEM_DISCOVER_REDISCOVER, DEFAULT_REDISCOVER_PARAMNAME);
-        sharedImagesRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url");
-        sharedScriptsRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "scripts-url");
-        sharedCssRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "css-url");
-
         registerPages(config);
     }
 
@@ -295,6 +292,17 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
                 }
             }
         }
+    }
+
+    /**
+     * Called when the first request is made to this servlet
+     */
+    protected void initFirstRequest(HttpServletRequest req, HttpServletResponse resp)
+    {
+        ValueContext vc = new ServletValueContext(getServletContext(), this, req, resp);
+        sharedImagesRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url");
+        sharedScriptsRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "scripts-url");
+        sharedCssRootURL = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "css-url");
     }
 
     protected void discoverPages(HttpServletRequest req, HttpServletResponse resp) throws ServletException
@@ -403,6 +411,12 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        if(firstRequest)
+        {
+            initFirstRequest(req, resp);
+            firstRequest = false;
+        }
+
         long startTime = 0;
         if(monitorLog.isInfoEnabled())
             startTime = new Date().getTime();

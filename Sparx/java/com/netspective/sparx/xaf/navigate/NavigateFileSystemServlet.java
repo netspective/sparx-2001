@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigateFileSystemServlet.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: NavigateFileSystemServlet.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -113,7 +113,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 
         ValueContext vc = new ServletValueContext(context, this, null, null);
         sharedImagesUrl = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url");
-        skinJspPageName = appConfig.getTextValue(vc, "app.navigate.skin-jsp");
+        skinJspPageName = appConfig.getTextValue(vc, "app.navigate.skin-jsp", null);
         rootURL = appConfig.getTextValue(vc, "app.navigate.root-url");
         rootPath = appConfig.getTextValue(vc, "app.navigate.root-path");
         rootCaption = appConfig.getTextValue(vc, "app.navigate.root-caption");

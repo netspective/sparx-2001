@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: LoginDialog.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: LoginDialog.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -69,6 +69,7 @@ import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.security.AuthenticatedUser;
 import com.netspective.sparx.xaf.skin.StandardDialogSkin;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.BuildConfiguration;
 
 public class LoginDialog extends com.netspective.sparx.xaf.security.LoginDialog
 {
@@ -114,6 +115,7 @@ public class LoginDialog extends com.netspective.sparx.xaf.security.LoginDialog
         writer.write("				</td>");
         writer.write("			</tr>");
         writer.write("		</table>");
+        writer.write("      <font face='tahoma' size='1'>"+ BuildConfiguration.getProductBuild() +"</font>");
         writer.write("	</center>");
         writer.write("</body>");
     }
