@@ -34,5 +34,8 @@ public class HelloFirstDialog extends com.netspective.sparx.xaf.form.Dialog
 		returnValue = "<b>Hello <i>" + personName + "</i>!!</b>  I'm so glad to finally be introduced to you!";
 
 		writer.write(returnValue);
+
+		// this is necessary to let the framework know we handled the execute
+		dc.setExecuteStageHandled(true);
     }
 }

@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
+$Id: build.xml,v 1.7 2002-09-08 03:54:12 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -31,30 +31,20 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
 
     <target name="global" depends="check-java-home,check-sparx-home">
 
-        <condition property="sparx.home.exists">
-            <available file="${env.SPARX_HOME}/lib/sparx.jar"/>
-        </condition>
-
-        <fail message="${env.SPARX_HOME} is not set to a valid SPARX_HOME." unless="sparx.home.exists"/>
-
-        <echo message="SPARX_HOME is ${env.SPARX_HOME}"/>
-
-        <path id="project.class.path">
-            <fileset dir="classes"/>
-            <fileset dir="lib">
-                <include name="**/*.jar"/>
-            </fileset>
-            <fileset dir="${env.JAVA_HOME}/lib">
-                <include name="tools.jar"/>
-                <include name="classes.jar"/>
-            </fileset>
-            <pathelement path="${classpath}"/>
-        </path>
-        
-        <!-- setup the important paths so that we can do path conversions -->
         <path id="sparx.home.path">
             <pathelement location="${env.SPARX_HOME}"/>
         </path>
+        <pathconvert targetos="unix" property="sparx.home" refid="sparx.home.path"/>
+
+        <condition property="sparx.home.exists">
+            <available file="${sparx.home}/lib/sparx.jar"/>
+        </condition>
+
+        <fail message="${sparx.home} is not set to a valid SPARX_HOME." unless="sparx.home.exists"/>
+
+        <echo message="SPARX_HOME is ${sparx.home}"/>
+
+        <!-- setup the important paths so that we can do path conversions -->
         <path id="app.root.path">
             <pathelement location="${basedir}/.."/>
         </path>
@@ -62,10 +52,25 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
             <pathelement location="${basedir}"/>
         </path>
 
-        <pathconvert targetos="unix" property="sparx.home" refid="sparx.home.path"/>
         <pathconvert targetos="unix" property="app.root.dir" refid="app.root.path"/>
         <pathconvert targetos="unix" property="app.WEB-INF.dir" refid="app.WEB-INF.path"/>
+
+        <path id="project.class.path">
+            <pathelement path="classes"/>
+            <fileset dir="lib">
+                <include name="**/*.jar"/>
+                <exclude name="*-dal.jar"/> <!-- don't include the app-generated DAL JAR (database) -->
+                <exclude name="*-dcb.jar"/> <!-- don't include the app-generated DCB JAR (UI) -->
+            </fileset>
+            <fileset dir="${sparx.home}/lib/redist">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
         
+        <!-- optimize and show all the active classpath (classp task will remove duplicate entries in the classpath) -->
+        <taskdef name="classp" classname="com.netspective.sparx.util.ant.ClassPathTask" classpathref="project.class.path"/>
+        <classp listall="yes" additionalref="project.class.path"/>
+                
         <property name="sparx.lib.dir" value="${sparx.home}/lib"/>
         <property name="sparx.java.dir" value="${sparx.home}/java"/>
         <property name="sparx.tools.dir" value="${sparx.home}/tools"/>
@@ -96,7 +101,6 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <taskdef name="config" classname="com.netspective.sparx.util.ant.ImportConfigurationTask" classpathref="project.class.path"/>
         <taskdef name="dal" classname="com.netspective.sparx.util.ant.GenerateJavaDALTask" classpathref="project.class.path"/>
         <taskdef name="dcb" classname="com.netspective.sparx.util.ant.GenerateDialogBeansTask" classpathref="project.class.path"/>
-        <taskdef name="cp" classname="com.netspective.sparx.util.ant.ClassPathTask" classpathref="project.class.path"/>
 
         <!-- read all of the sparx.xml configuration entries into config.* entries -->
         <config file="${app.config.file}" prefix="config." debug="no"/>
@@ -111,14 +115,16 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <property name="app.javadoc.root.dir" value="${config.app.documents-root-path}/javadoc"/>
 
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
+        <property name="app.java.dal.jar.name" value="${app.name}-dal.jar"/>
         <property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
-        <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.name}-dal.jar"/>
+        <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.java.dal.jar.name}"/>
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
 
         <available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
+        <property name="app.java.dcb.jar.name" value="${app.name}-dcb.jar"/>
         <property name="app.java.dcb.package" value="app.form.context"/>
         <property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
-        <property name="app.java.dcb.jar" value="${app.java.dcb.dir}/${app.name}-dcb.jar"/>
+        <property name="app.java.dcb.jar" value="${app.java.dcb.dir}/${app.java.dcb.jar.name}"/>
         <property name="app.java.dcb.doc.dir" value="${app.javadoc.root.dir}/dcb"/>
 
         <available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
@@ -126,9 +132,6 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <echo message="app.classes.dir-exists = ${app.classes.dir-exists}"/>
         <echo message="app.schema.source-file-exists = ${app.schema.source-file-exists}"/>
         <echo message="app.ui.source-file-exists = ${app.ui.source-file-exists}"/>
-
-        <!-- show all the active classpaths -->
-        <cp listall="yes" additional="project.class.path"/>
     </target>
 
     <!--
@@ -159,6 +162,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/resin-web.xml" todir="${app.WEB-INF.dir}/conf"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
+        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml" todir="${app.WEB-INF.dir}/conf"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" todir="${app.WEB-INF.dir}/conf"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
@@ -201,7 +205,11 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
             <fileset dir="${sparx.shared.resources.dir}"/>
         </copy>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
+        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
         <replace file="${app.root.dir}/sparx/resources/css/dialog.css" token="background-image: url(/shared/resources/images/dialog/required-field.gif)" value="background-image: url(/${app.name}/sparx/resources/images/dialog/required-field.gif)" summary="yes"/>
+
+        <available property="app.config.exists" file="${app.WEB-INF.dir}/conf/app-config.xml"/>
+        <fail message="Please copy ${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml to conf/app-config.xml and run upgrade-sparx again." unless="app.config.exists"/>
     </target>    
 
     <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-templates,copy-sparx-resources,copy-sparx-libs">
@@ -278,7 +286,14 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
     -->
 
     <target name="compile" depends="init" if="app.classes.dir-exists">
-        <javac srcdir="${app.classes.dir}" classpath="${project.class.path}" deprecation="on"/>
+        <javac srcdir="${app.classes.dir}" classpathref="project.class.path" deprecation="on">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*-dal.jar"/>
+                    <include name="*-dcb.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
     </target>
 
     <!--
@@ -291,7 +306,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <dal schema="${config.app.schema.source-file}" dest="${app.java.dal.dir}" stylesheetroot="${java.dal.stylesheet.root.dir}"/>
         <property name="dal.temp.build.dir" value="${app.java.dal.dir}/classes"/>
         <mkdir dir="${dal.temp.build.dir}"/>
-        <javac srcdir="${app.java.dal.dir}" destdir="${dal.temp.build.dir}" classpath="${project.class.path}"/>
+        <javac srcdir="${app.java.dal.dir}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
         <jar jarfile="${app.java.dal.jar}" basedir="${dal.temp.build.dir}">
             <include name="**"/>
         </jar>
@@ -299,6 +314,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <!-- now move the file to the application's lib directory -->
         <delete dir="${dal.temp.build.dir}"/>
         <mkdir dir="${app.lib.dir}"/>
+        <delete file="${app.lib.dir}/${app.java.dal.jar.name}" verbose="true"/>
         <move file="${app.java.dal.jar}" todir="${app.lib.dir}"/>
         <echo message="The Data Access Library JAR file is in ${app.lib.dir}"/>
     </target>
@@ -307,6 +323,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <mkdir dir="${app.java.dal.doc.dir}" />
         <javadoc packagenames="dal.*,com.netspective.sparx.xif.db.*,com.netspective.sparx.xif.dal.*,com.netspective.sparx.xaf.form.DialogContext,com.netspective.sparx.xaf.sql.DmlStatement"
              destdir="${app.java.dal.doc.dir}"
+             classpathref="project.class.path"
              author="true"
              version="true"
              use="true"
@@ -330,7 +347,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
 
         <property name="dcb.temp.build.dir" value="${app.java.dcb.dir}/build"/>
         <mkdir dir="${dcb.temp.build.dir}"/>
-        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}" classpath="${project.class.path}"/>
+        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}" classpathref="project.class.path"/>
         <jar jarfile="${app.java.dcb.jar}" basedir="${dcb.temp.build.dir}">
             <include name="**"/>
         </jar>
@@ -338,6 +355,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <!-- now move the file to the application's lib directory -->
         <delete dir="${dal.temp.build.dir}"/>
         <mkdir dir="${app.lib.dir}"/>
+        <delete file="${app.lib.dir}/${app.java.dcb.jar.name}" verbose="true"/>
         <move file="${app.java.dcb.jar}" todir="${app.lib.dir}"/>
         <echo message="The Dialog Context Beans JAR file is in ${app.lib.dir}"/>
     </target>
@@ -346,6 +364,7 @@ $Id: build.xml,v 1.6 2002-09-04 23:22:01 shahid.shah Exp $
         <mkdir dir="${app.java.dcb.doc.dir}"/>
         <javadoc packagenames="${app.java.dcb.package}.*,com.netspective.sparx.xaf.form.*"
              destdir="${app.java.dcb.doc.dir}"
+             classpathref="project.class.path"
              author="true"
              version="true"
              use="true"

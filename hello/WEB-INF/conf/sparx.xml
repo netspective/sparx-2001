@@ -88,28 +88,8 @@
             <property name="sparx.monitor.sql" value="style-tab,Date,Host,NDC,SQL Statement,Ok,Conn,Bind,SQL,Total,Source"/>
         </properties>
 
-        <!--
-        **********************************************************************
-        * Sparx Application-specific configuration properites                *
-        ********************************************************************** -->
-        <property name="app.site-temp-path" value="${app.site-root-path}/temp"/>
-        <property name="app.documents-root-path" value="${app.web-inf-root-path}/documents"/>
-        
-        <property name="app.report-file-store-path" value="${app.site-temp-path}/reports"/>
-        <property name="app.report-file-download-url" value="${create-app-url:/temp/reports}"/>
-
-        <property name="app.security.root-path" value="${app.web-inf-root-path}/security"/>
-        <property name="app.security.acl-file" value="${app.security.root-path}/access-control.xml"/>
-
-        <property name="app.schema.root-path" value="${app.web-inf-root-path}/schema"/>
-        <property name="app.schema.source-file" value="${app.schema.root-path}/schema.xml"/>
-
-        <property name="app.sql.root-path" value="${app.web-inf-root-path}/sql"/>
-        <property name="app.sql.source-file" value="${app.sql.root-path}/statements.xml"/>
-
-        <property name="app.ui.root-path" value="${app.web-inf-root-path}/ui"/>
-        <property name="app.ui.source-file" value="${app.ui.root-path}/dialogs.xml"/>
-        <property name="app.ui.structure-file" value="${app.ui.root-path}/structure.xml"/>
-
     </configuration>
+    
+    <include file="app-config.xml"/>
+        
 </xaf>
