@@ -86,8 +86,6 @@ public class DeleteTaskDialog extends Dialog
             TaskHandler taskHandler = new TaskHandler();
             for (int i=0; i < taskList.length; i++)
             {
-                if ( i > 1)
-                    throw new Exception();
                 //if (taskHandler.checkDeleteStatus(cc, Long.parseLong(taskList[i])))
                     taskHandler.deleteTask(cc, Long.parseLong(taskList[i]));
             }

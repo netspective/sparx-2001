@@ -177,8 +177,12 @@ public class ProjectDialog extends Dialog
             projectRow.setProjectName(rc.getProjectName());
             projectRow.setProjectDescr(rc.getProjectDescr());
             projectRow.setProjectStatus(rc.getProjectStatusInt());
-            if (rc.getActualEndDate() != null)
-                projectRow.setActualEndDate(new java.sql.Date(rc.getActualEndDate().getTime()));
+            java.util.Date endDate = rc.getActualEndDate();
+            // if actual end date is specified, set the row value else set the row value to null
+            if (endDate != null && endDate.getTime() > 0)
+                projectRow.setActualEndDate(new java.sql.Date(endDate.getTime()));
+            else
+                projectRow.setActualEndDateSqlExpr("null");
 
             projectTable.update(cc, projectRow);
 

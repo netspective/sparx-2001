@@ -130,7 +130,7 @@ public class TaskDialog extends Dialog
 
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
         String url = "";
-        if (request.getParameter("project_id") != null)
+        if (request.getParameter("project_id") != null && request.getParameter("project_name") != null)
         {
             url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getParameter("project_id") +
                 "&project_name=" + URLEncoder.encode(request.getParameter("project_name"));

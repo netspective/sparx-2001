@@ -26,6 +26,7 @@
         <statement name="information">
             select
                 task_id,
+                task_type.id as "task_type",
                 task_type.caption,
                 task_summary,
                 task.parent_task_id,
@@ -48,9 +49,10 @@
                     <item caption="Delete" url="config-expr:delete.jsp?project_id=${request:project_id}&amp;task_id=${request:task_id}"/>
                 </banner>
                 <column heading="Task ID" align="left"/>
+                <column heading="Type" display="no"/>
                 <column heading="Type" />
                 <column heading="Summary" />
-                <column heading="Parent Task" align="left" url="config-expr:home.jsp?project_id=${request:project_id}&amp;task_id=${3}"/>
+                <column heading="Parent Task" align="left" url="config-expr:home.jsp?project_id=${request:project_id}&amp;task_id=${4}"/>
                 <column heading="Status ID" display="no"/>
                 <column heading="Status" />
                 <column heading="Priority ID" display="no"/>
@@ -130,10 +132,6 @@
                 task.task_status = task_status.id and
                 task.task_type = task_type.id
             <report heading="Child Task(s)">
-				<banner style="horizontal">
-                    <item caption="Add" url="config-expr:create.jsp?project_id=${request:project_id}&amp;parent_task_id=${request:task_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,task.registration,delete&amp;task_id=${request:task_id}"/>
-                </banner>
                 <column heading="Task ID" align="left"/>
                 <column heading="Name" url="config-expr:home.jsp?project_id=${request:project_id}&amp;task_id=${0}"/>
                 <column heading="Type" />

@@ -15,13 +15,13 @@
             <field.select name="task_owner" caption="Owner" hidden="yes" />
             <field.memo name="task_descr" caption="Description" />
             <field.select name="priority_id" caption="Priority" required="yes" choices="query:task.priority-list"/>
-            <field.select name="parent_task_id" caption="Parent Task" prepend-blank="yes"
+            <field.select name="parent_task_id" caption="Parent Task" prepend-blank="yes" visible="no"
                 choices="query:task.parent-task-list" default="request:parent_task_id">
                 <conditional action="apply-flag" flag="invisible" clear="yes" has-value="request:project_id"/>
                 <conditional action="apply-flag" flag="read-only" has-value="request:parent_task_id"/>
             </field.select>
             <field.select name="dependent_task" caption="Dependent on Task" choices="query:org.task-list" prepend-blank="yes"/>
-            <field.select name="task_type" caption="Type" required="yes" prepend-blank="yes" choices="query:task.type-list" default="2">
+            <field.select name="task_type" caption="Type" read-only="yes"  choices="query:task.type-list" default="2">
                 <conditional action="apply-flag" flag="read-only" has-value="request:project_id"/>
                 <conditional action="set-value" value="1" has-value="request:project_id"/>
             </field.select>
