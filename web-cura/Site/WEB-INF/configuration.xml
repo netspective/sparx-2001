@@ -61,6 +61,7 @@
             <property name="xaf.monitor.security" value="style-tab,Date,Host,NDC,Activity,App User,User Org,Remote User,Remote Host,Remote Addr,Permissions,Roles"/>
             <property name="xaf.monitor.sql" value="style-tab,Date,Host,NDC,SQL Statement,Ok,Conn,Bind,SQL,Total,Source"/>
         </properties>
+
         <property name="app.database-root-path" value="${app.project-root}/Database"/>
         <property name="app.documents-root-path" value="${app.project-root}"/>
         <property name="app.site-root-path" value="${app.project-root}/Site"/>
@@ -69,17 +70,9 @@
         <property name="app.report-file-store-path" value="${app.site-temp-path}/reports"/>
         <property name="app.report-file-download-url" value="${create-app-url:/temp/reports}"/>
 
-        <property name="app.navigate.root-caption" value="Welcome to CURA"/>
-        <property name="app.navigate.root-path" value="${servlet-context-path:/}" final="yes"/>
-        <property name="app.navigate.root-url" value="${create-app-url:/}"/>
-        <property name="app.navigate.structure-file" value="${app.ui.root-path}/structure.xml"/>
-        <property name="app.navigate.skin-jsp" value="navigate-skin.jsp"/>
-		<property name="app.navigate.login.dialog-class" value="app.security.AppLoginDialog"/>
-        <property name="app.navigate.login.user-id.cookie-name" value="app-user-id"/>
-        <property name="app.navigate.login.user.session-attr-name" value="authenticated-user"/>
-
         <property name="app.ui.root-path" value="${app.web-inf-root-path}/ui"/>
         <property name="app.ui.source-file" value="${app.ui.root-path}/dialogs.xml"/>
+        <property name="app.ui.structure-file" value="${app.ui.root-path}/structure.xml"/>
 
         <property name="app.sql.root-path" value="${app.web-inf-root-path}/sql"/>
         <property name="app.sql.source-file" value="${app.sql.root-path}/statements.xml"/>
@@ -87,25 +80,11 @@
         <property name="app.security.root-path" value="${app.web-inf-root-path}/security"/>
         <property name="app.security.acl-file" value="${app.security.root-path}/access-control.xml"/>
 
-        <!-- property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/ -->
         <property name="app.schema.source-path" value="${app.database-root-path}/schema-src"/>
         <property name="app.schema.source-file" value="${app.schema.source-path}/schema.xml"/>
-
-        <property name="app.xml.root-path" value="${app.web-inf-root-path}/xml"/>
-        <property name="app.xml.main-menu" value="${app.xml.root-path}/main_menu.xml"/>
 
         <system-property name="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
         <system-property name="com.netspective.sparx.DatabaseContext.class" value="com.xaf.db.BasicDatabaseContext"/>
 
-        <property name="app.jndi.ldap.context-factory" value="com.sun.jndi.ldap.LdapCtxFactory"/>
-        <properties name="app.jndi.ldap.provider-urls">
-            <property name="primary" value="ldap://jbwksta10:389"/>
-            <property name="secondary" value="ldap://jbwksta10:389"/>
-        </properties>
-        <property name="app.jndi.ldap.security-authentication" value="simple"/>
-        <property name="app.jndi.ldap.environment" value="Software Engineering"/>
-        <property name="app.jndi.ldap.database-context" value="ou=Software Engineering,ou=Environment,ou=eimo,ou=Applications,ou=NBCS-DC,dc=arc,dc=org"/>
-
-        <!-- <property name="app.data-src.default" value="jdbc/otrack"/> -->
     </configuration>
 </xaf>
