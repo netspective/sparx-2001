@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.13 2003-01-08 05:23:15 shahid.shah Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.14 2003-01-09 03:44:58 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -189,9 +189,8 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("</head>\n");
     }
 
-    public void renderPageMasthead(Writer writer, NavigationPathContext nc) throws IOException
+    public void renderAuthenticatedUser(Writer writer, NavigationPathContext nc) throws IOException
     {
-        writer.write("<body>");
         AuthenticatedUser authUser = (AuthenticatedUser) nc.getSession().getAttribute("authenticated-user");
         if (authUser != null)
         {
@@ -217,6 +216,13 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             writer.write("	    </tr>");
             writer.write("   </table>");
         }
+    }
+
+    public void renderPageMasthead(Writer writer, NavigationPathContext nc) throws IOException
+    {
+        writer.write("<body>");
+
+        renderAuthenticatedUser(writer, nc);
 
         writer.write("<!-- Application Header Ends -->");
 
@@ -354,9 +360,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
     private void renderPageSubHeading(Writer writer, NavigationPathContext nc) throws IOException
     {
-
         NavigationPage page = (NavigationPage) nc.getActivePath();
-
         String subHeading = page.getSubHeading(nc);
 
         if (subHeading != null && subHeading.length() > 0)
