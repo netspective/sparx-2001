@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.10 2002-10-13 18:45:11 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.11 2002-10-13 19:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -143,6 +143,7 @@ public class Dialog
     static public final String PARAMNAME_RUNSEQ = ".run_sequence";
     static public final String PARAMNAME_EXECSEQ = ".exec_sequence";
     static public final String PARAMNAME_ORIG_REFERER = ".orig_referer";
+    static public final String PARAMNAME_POST_EXECUTE_REDIRECT = ".post_exec_redirect";
     static public final String PARAMNAME_TRANSACTIONID = ".transaction_id";
     static public final String PARAMNAME_RESETCONTEXT = ".reset_context";
 
@@ -382,6 +383,11 @@ public class Dialog
         return loopSeparator;
     }
 
+    public final String getPostExecuteRedirectUrlParamName()
+    {
+        return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_POST_EXECUTE_REDIRECT;
+    }
+
     public final String getOriginalRefererParamName()
     {
         return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_ORIG_REFERER;
@@ -499,7 +505,7 @@ public class Dialog
             return defaultUrl;
 
         String result = director.getNextActionUrl(dc);
-        if(result == null)
+        if(result == null || result.equals("-"))
             return defaultUrl;
 
         return result;
@@ -932,6 +938,11 @@ public class Dialog
             writer.write("Need to add Dialog actions or override Dialog.execute(DialogContext)." + dc.getDebugHtml());
             dc.setExecuteStageHandled(true);
         }
+    }
+
+    public void handlePostExecute(Writer writer, DialogContext dc) throws IOException
+    {
+        dc.performDefaultRedirect(writer);
     }
 
     /**

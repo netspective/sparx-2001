@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.20 2002-10-13 18:45:11 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.21 2002-10-13 19:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -61,6 +61,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -123,6 +124,11 @@ import com.netspective.sparx.xif.db.DatabaseContextFactory;
  */
 public class DialogContext extends ServletValueContext
 {
+    /**
+     * The name of a URL parameter, if present, that will be used as the redirect string after dialog execution
+     */
+    static public final String DEFAULT_REDIRECT_PARAM_NAME = "redirect";
+
     /* if dialog fields need to be pre-populated (before the context is created)
      * then a java.util.Map can be created and stored in the request attribute
      * called "dialog-field-values". All keys in the map are field names, and values
@@ -335,6 +341,7 @@ public class DialogContext extends ServletValueContext
     private int dataCmd;
     private String[] retainReqParams;
     private int errorsCount;
+    private boolean redirectDisabled;
 
     public DialogContext()
     {
@@ -432,12 +439,41 @@ public class DialogContext extends ServletValueContext
         LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
     }
 
+    public boolean isRedirectDisabled()
+    {
+        return redirectDisabled;
+    }
+
+    public void setRedirectDisabled(boolean value)
+    {
+        redirectDisabled = value;
+    }
+
     /**
      * Return the next action url (where to redirect after execute) based on user input or other method.
      */
     public String getNextActionUrl(String defaultUrl)
     {
         return dialog.getNextActionUrl(this, defaultUrl);
+    }
+
+    public void performDefaultRedirect(Writer writer) throws IOException
+    {
+        if(redirectDisabled)
+            return;
+
+        String redirect = request.getParameter(DEFAULT_REDIRECT_PARAM_NAME);
+        if(redirect == null)
+        {
+            redirect = request.getParameter(dialog.getPostExecuteRedirectUrlParamName());
+            if(redirect == null)
+                redirect = getNextActionUrl(getOriginalReferer());
+        }
+        HttpServletResponse response = (HttpServletResponse) getResponse();
+        if(response.isCommitted())
+            skin.renderRedirectHtml(writer, this, redirect);
+        else
+            response.sendRedirect(redirect);
     }
 
     /**
@@ -1211,6 +1247,7 @@ public class DialogContext extends ServletValueContext
     {
         StringBuffer hiddens = new StringBuffer();
         hiddens.append("<input type='hidden' name='" + dialog.getOriginalRefererParamName() + "' value='" + originalReferer + "'>\n");
+        hiddens.append("<input type='hidden' name='" + dialog.getPostExecuteRedirectUrlParamName() + "' value='" + (runSequence > 1 ? request.getParameter(dialog.getPostExecuteRedirectUrlParamName()) : request.getParameter(DialogContext.DEFAULT_REDIRECT_PARAM_NAME)) + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getTransactionIdParamName() + "' value='" + transactionId + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getRunSequenceParamName() + "' value='" + (runSequence + 1) + "'>\n");
         hiddens.append("<input type='hidden' name='" + dialog.getExecuteSequenceParamName() + "' value='" + execSequence + "'>\n");

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogSkin.java,v 1.3 2002-07-10 20:56:24 aye.thu Exp $
+ * $Id: DialogSkin.java,v 1.4 2002-10-13 19:54:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -88,6 +88,11 @@ public interface DialogSkin
     public void renderSeparatorHtml(Writer writer, DialogContext dc, SeparatorField field) throws IOException;
 
     /**
+     * Perform a redirect to the given page
+     */
+    public void renderRedirectHtml(Writer writer, DialogContext dc, String redirectUrl) throws IOException;
+
+    /**
      * Gets the default control attributes for each of the dialog field
      * (the control string for the &lt;input&gt; HTML tag)
      *
@@ -112,4 +117,5 @@ public interface DialogSkin
     public String getControlAreaStyleAttrs();
 
     public void importFromXml(Element elem);
+
 }

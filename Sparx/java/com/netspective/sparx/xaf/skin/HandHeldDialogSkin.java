@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HandHeldDialogSkin.java,v 1.3 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: HandHeldDialogSkin.java,v 1.4 2002-10-13 19:54:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -314,5 +314,12 @@ public class HandHeldDialogSkin implements DialogSkin
             if(!field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
                 writer.write(field.flagIsSet(SeparatorField.FLDFLAG_HIDERULE) ? "<br>" : "<hr size=1 color=silver>");
         }
+    }
+
+    public void renderRedirectHtml(Writer writer, DialogContext dc, String redirectUrl) throws IOException
+    {
+        writer.write("<script>window.location = \"");
+        writer.write(redirectUrl);
+        writer.write("\";</script>");
     }
 }
