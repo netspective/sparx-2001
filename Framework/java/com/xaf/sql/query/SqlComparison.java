@@ -8,11 +8,11 @@ package com.xaf.sql.query;
  * @author Shahid N. Shah
  * @version 1.0
  */
-
+import com.xaf.value.*;
 public interface SqlComparison
 {
 	public String getName();
 	public String getCaption();
 	public String getGroupName();
-	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond);
+	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator statement, QueryCondition cond);
 }

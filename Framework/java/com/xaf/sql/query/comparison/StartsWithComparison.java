@@ -20,7 +20,7 @@ public class StartsWithComparison extends BinaryOpComparison
 		super("starts-with", "starts with", "string");
 	}
 
-	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond)
+	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator statement, QueryCondition cond)
 	{
 		statement.addParam(new ConcatValueSource(cond.getValue(), null, "%"));
         String retString = "";

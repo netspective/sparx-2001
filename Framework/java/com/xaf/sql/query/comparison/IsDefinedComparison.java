@@ -20,7 +20,7 @@ public class IsDefinedComparison extends BinaryOpComparison
 		super("is-defined", "is defined", "general");
 	}
 
-	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond)
+	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator statement, QueryCondition cond)
 	{
 		return cond.getField().getWhereClauseExpr() + " is not null";
 	}

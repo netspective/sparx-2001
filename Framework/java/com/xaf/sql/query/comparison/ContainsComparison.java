@@ -20,7 +20,7 @@ public class ContainsComparison extends BinaryOpComparison
 		super("contains", "contains", "string");
 	}
 
-	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond)
+	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator statement, QueryCondition cond)
 	{
 		statement.addParam(new ConcatValueSource(cond.getValue(), "%", "%"));
         String retString = "";

@@ -10,6 +10,7 @@ package com.xaf.sql.query.comparison;
  */
 
 import com.xaf.sql.query.*;
+import com.xaf.value.*;
 
 public class BinaryOpComparison implements SqlComparison
 {
@@ -37,7 +38,7 @@ public class BinaryOpComparison implements SqlComparison
 	public final String getCaption() { return caption; }
 	public final String getGroupName() { return groupName; }
 
-	public String getWhereCondExpr(SelectStmtGenerator statement, QueryCondition cond)
+	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator statement, QueryCondition cond)
 	{
         String retString = "";
 		statement.addParam(cond.getValue());
