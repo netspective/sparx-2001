@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.7 2002-10-13 19:54:56 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.8 2002-10-13 21:14:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -105,7 +105,8 @@ public class StandardDialogSkin implements DialogSkin
     protected String gridRowCaptionFontAttrs;   // grid row font attributes
     protected String gridCaptionCellAttrs;      // grid column display attributes
     protected String gridTableAttrs;            // grid table display attribute
-    protected String gridCellAttrs;
+    protected String gridHeadCellAttrs;
+    protected String gridBodyCellAttrs;
     protected String captionCellAttrs;
     protected String captionFontAttrs;
     protected String controlAreaFontAttrs;
@@ -139,7 +140,8 @@ public class StandardDialogSkin implements DialogSkin
         fieldRowErrorAttrs = "bgcolor='#DDDDDD' ";
         captionCellAttrs = "align='right' ";
         captionFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
-        gridCellAttrs = "align='center'";
+        gridHeadCellAttrs = "align='center'";
+        gridBodyCellAttrs = "";
         gridTableAttrs = "cellpadding='2' cellspacing='0' border='0'";
         gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
@@ -209,8 +211,10 @@ public class StandardDialogSkin implements DialogSkin
                 gridRowCaptionFontAttrs = nodeText;
             else if(nodeName.equals("grid-caption-cell-attrs") && nodeText != null)
                 gridCaptionCellAttrs = nodeText;
+            else if(nodeName.equals("grid-head-attrs") && nodeText != null)
+                gridHeadCellAttrs = nodeText;
             else if(nodeName.equals("grid-cell-attrs") && nodeText != null)
-                gridCellAttrs = nodeText;
+                gridBodyCellAttrs = nodeText;
             else if(nodeName.equals("control-area-font-attrs") && nodeText != null)
                 controlAreaFontAttrs = nodeText;
             else if(nodeName.equals("control-area-style-attrs") && nodeText != null)
@@ -381,7 +385,7 @@ public class StandardDialogSkin implements DialogSkin
                     headerHtml.append("</font></td>");
 
 
-                    rowHtml.append("<td " + gridCellAttrs + ">");
+                    rowHtml.append("<td " + gridHeadCellAttrs + ">");
                     appendGridControlBasics(dc, field, rowHtml);
                     rowHtml.append("</td>");
                 }
@@ -406,7 +410,7 @@ public class StandardDialogSkin implements DialogSkin
                 DialogField field = (DialogField) i.next();
                 if(field.isVisible(dc))
                 {
-                    rowHtml.append("<td " + gridCellAttrs + ">");
+                    rowHtml.append("<td " + gridBodyCellAttrs + ">");
                     appendGridControlBasics(dc, field, rowHtml);
                     rowHtml.append("</td>");
                 }
