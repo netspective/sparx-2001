@@ -199,6 +199,8 @@ public class StandardDialogSkin implements DialogSkin
 			DialogField field = (DialogField) i.next();
 			if(field.isVisible(dc))
 			{
+                if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_BEFORE))
+					html.append("<br>");
 				boolean showCaption = field.showCaptionAsChild();
 				if(showCaption)
 				{
@@ -212,6 +214,8 @@ public class StandardDialogSkin implements DialogSkin
 				}
 				html.append(field.getControlHtml(dc) + "&nbsp;");
 				if(showCaption) html.append("</nobr>");
+                if(field.flagIsSet(DialogField.FLDFLAG_COLUMN_BREAK_AFTER))
+                    html.append("<br>");
 			}
 		}
 		return html.toString();

@@ -280,9 +280,11 @@
 						</xsl:if>
 						<xsl:choose>
 							<xsl:when test="completed = 100">
+								<font color="silver">
 							 	<strike>
 									<xsl:apply-templates select="name"/>
 								</strike>
+								</font>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:apply-templates select="name"/>
@@ -336,7 +338,7 @@
 				    <xsl:attribute name="STYLE">
 				      text-align:center;
 				      position:relative;
-				      background-color:green;
+				      background-color:#389cce;
 				      width: <xsl:value-of select="number(completed) div 2"/>px;
 				    </xsl:attribute>
 				  </DIV>

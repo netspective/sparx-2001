@@ -235,19 +235,10 @@ public class DialogManager extends XmlSource
 						DialogInfo di = new DialogInfo(servletContext, stmtPkg, dialogElem);
 		    			dialogs.put(di.getLookupName(), di);
 					}
-					else if(scName.equals("register-field"))
-					{
-						Element typeElem = (Element) dialogsChild;
-						String className = typeElem.getAttribute("class");
-						try
-						{
-							DialogFieldFactory.addFieldType(typeElem.getAttribute("tag-name"), className);
-						}
-						catch(ClassNotFoundException e)
-						{
-							errors.add("Field class '"+className+"' not found: " + e.toString());
-						}
-					}
+                    else if(scName.equals("register-field"))
+                    {
+                        throw new RuntimeException("The register-field tag should be specified under the root tag now (not in dialogs tag).");
+                    }
 				}
 			}
 			else if(nodeName.equals("dialog-skin"))
@@ -283,6 +274,19 @@ public class DialogManager extends XmlSource
 				skin.importFromXml(skinElem);
 				SkinFactory.addDialogSkin(skinElem.getAttribute("name"), skin);
 			}
+            else if(nodeName.equals("register-field"))
+            {
+                Element typeElem = (Element) node;
+                String className = typeElem.getAttribute("class");
+                try
+                {
+                    DialogFieldFactory.addFieldType(typeElem.getAttribute("tag-name"), className);
+                }
+                catch(ClassNotFoundException e)
+                {
+                    errors.add("Field class '"+className+"' not found: " + e.toString());
+                }
+            }
 		}
 
 		addMetaInformation();

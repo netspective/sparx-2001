@@ -23,7 +23,17 @@ public class ZipField extends TextField
         // set the dafault regex pattern for the zip field
         setValidatePattern("/" + VALIDATE_PATTERN + "/");
         setValidatePatternErrorMessage(VALIDATE_ERROR_MSG);
+        setSize(11);
     }
 
+    public ZipField(String aName, String aCaption)
+    {
+        super(aName, aCaption);
+
+        // set the dafault regex pattern for the zip field
+        setValidatePattern("/" + VALIDATE_PATTERN + "/");
+        setValidatePatternErrorMessage(VALIDATE_ERROR_MSG);
+        setSize(11);
+    }
 
 }
