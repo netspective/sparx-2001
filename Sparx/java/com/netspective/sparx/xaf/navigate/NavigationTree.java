@@ -56,13 +56,13 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.io.File;
-import java.io.FilenameFilter;
 
-public class NavigationTree extends NavigationPage {
-
+public class NavigationTree extends NavigationPage
+{
     protected Map resources;
 
-    public void discoverResources(String appRoot, String rootUrl, Map inheritResources) {
+    public void discoverResources(String appRoot, String rootUrl, Map inheritResources)
+    {
         if (resources == null)
             resources = new HashMap();
 
@@ -70,18 +70,22 @@ public class NavigationTree extends NavigationPage {
         discoverResources(inheritResources, rootUrl, "/", dir);
     }
 
-    protected void discoverResources(Map inheritResources, String rootUrl, String currentPathId, File dir) {
+    protected void discoverResources(Map inheritResources, String rootUrl, String currentPathId, File dir)
+    {
 
         File[] files = dir.listFiles();
 
-        Map singlePathResources = (inheritResources == null ? new HashMap() : (inheritResources.get(currentPathId) == null ? new HashMap() : (Map)inheritResources.get(currentPathId) ) );
+        Map singlePathResources = (inheritResources == null ? new HashMap() : (inheritResources.get(currentPathId) == null ? new HashMap() : (Map) inheritResources.get(currentPathId)));
 
-        for (int i = 0; files!= null && i < files.length; i++) {
+        for (int i = 0; files != null && i < files.length; i++)
+        {
             File file = files[i];
-            if (file.isDirectory()) {
+            if (file.isDirectory())
+            {
                 discoverResources(inheritResources, rootUrl, currentPathId + (currentPathId.endsWith("/") ? "" : "/") + file.getName(), file);
             }
-            else {
+            else
+            {
                 String fileName = file.getName();
                 int extnIndex = fileName.lastIndexOf(".");
                 String justNameNoExtn = extnIndex == -1 ? fileName : fileName.substring(0, extnIndex);
@@ -91,13 +95,16 @@ public class NavigationTree extends NavigationPage {
         resources.put(currentPathId, singlePathResources);
     }
 
-    public Map getResources() {
+    public Map getResources()
+    {
         return resources;
     }
 
-    public void resolveResources() {
+    public void resolveResources()
+    {
         List children = this.getChildrenList();
-        for (int i = 0; i < children.size(); i++) {
+        for (int i = 0; i < children.size(); i++)
+        {
             NavigationPath navPath = (NavigationPath) children.get(i);
             navPath.resolveResources(getResources());
         }
