@@ -189,6 +189,7 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
     this.name = name;
     this.qualifiedName = qualifiedName;
     this.caption = caption;
+    this.customHandlers = new FieldType("Custom", null, null, null, null, null, null, null);
     this.flags = flags;
     this.dependentConditions = new Array();
     this.style = null;
@@ -342,8 +343,22 @@ function DialogField_isValid()
     // now see if there are any type-specific validations to perform
     var fieldType = this.type;
     if(fieldType != null && fieldType.isValid != null)
-    {
-        return fieldType.isValid(this, control);
+    {  
+        if (this.customHandlers.isValid != null)
+        {            
+            var valid = true;
+            if (this.customHandlers.isValidType == 'extends')
+                valid = fieldType.isValid(this, control);        
+            if (valid)
+            {             
+                valid = this.customHandlers.isValid(this, control);
+            }
+            return valid;
+        }
+        else
+        {
+            return fieldType.isValid(this, control);
+        }
     }
 
     // no type-specific validation found so try and do a generic one
@@ -651,37 +666,83 @@ function SimpleSort(objSelect)
 //****************************************************************************
 // Event handlers
 //****************************************************************************
-function controlOnClick(control)
+function controlOnClick(control, event)
 {            
     field = activeDialog.fieldsById[control.name];    
     if(typeof field == "undefined" || field == null || field.type == null) return;
-    if (field.type.click != null)
-        return field.type.click(field, control);
+    
+    if (field.customHandlers.click != null)
+    {    
+        var retval = true;
+        if (field.customHandlers.clickType == 'extends')   
+        {
+            if (field.type.click != null)
+                retval = field.type.click(field, control);
+        }
+        if (retval)
+            field.customHandlers.click(field, control);
+        return retval;
+    }
     else
-        return true;
+    {
+        if (field.type.click != null)
+            return field.type.click(field, control);
+        else
+            return true;
+    }
 }
 
-function controlOnKeypress(control)
-{
-    field = activeDialog.fieldsById[control.name];
-    if(typeof field == "undefined" || field == null || field.type == null) return;
-    if (field.type.keyPress != null)
-        return field.type.keyPress(field, control);
-    else
-        return true;
-}
-                                            
-function controlOnFocus(control)
+function controlOnKeypress(control, event)
 {    
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
-    if (field.type.getFocus != null)
-        return field.type.getFocus(field, control);
+    if (field.customHandlers.keyPress != null)
+    {
+        var retval = true;
+        if (field.customHandlers.keyPressType == 'extends')
+        {
+            if (field.type.keyPress != null)
+                retval =  field.type.keyPress(field, control);      
+        }
+        if (retval)
+            retval =  field.customHandlers.keyPress(field, control);
+        return retval;             
+    }
     else
-        return true;        
+    {
+        if (field.type.keyPress != null)
+            return field.type.keyPress(field, control, event);
+        else
+            return true;
+    }            
+}
+                                            
+function controlOnFocus(control, event)
+{    
+    field = activeDialog.fieldsById[control.name];
+    if(typeof field == "undefined" || field == null || field.type == null) return;
+    if (field.customHandlers.getFocus != null)
+    {
+        var retval = true;
+        if (field.customHandlers.getFocusType == 'extends')
+        {
+            if (field.type.getFocus != null)
+                retval =  field.type.getFocus(field, control);      
+        }
+        if (retval)
+            retval =  field.customHandlers.getFocus(field, control);
+        return retval;             
+    }
+    else
+    {
+        if (field.type.getFocus != null)
+            return field.type.getFocus(field, control);
+        else
+            return true;        
+    }
 }
 
-function controlOnChange(control)
+function controlOnChange(control, event)
 {
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null) return;
@@ -692,20 +753,50 @@ function controlOnChange(control)
             conditionalFields[i].evaluate(activeDialog, control);
     }
     if(field.type == null) return;
-    if (field.type.valueChanged != null)
-        return field.type.valueChanged(field, control);
+    if (field.customHandlers.valueChanged != null)
+    {
+        var retval = true;
+        if (field.customHandlers.valueChangedType == 'extends')
+        {
+            if (field.type.valueChanged != null)
+                retval = field.type.valueChanged(field, control);
+        }
+        if (retval)
+            retval =  field.customHandlers.valueChanged(field, control);
+        return retval;            
+    }
     else
-        return true;        
+    {
+        if (field.type.valueChanged != null)
+            return field.type.valueChanged(field, control);
+        else
+            return true;        
+    }
 }
 
-function controlOnBlur(control)
+function controlOnBlur(control, event)
 {
     field = activeDialog.fieldsById[control.name];
     if(typeof field == "undefined" || field == null || field.type == null) return;
-    if (field.type.loseFocus != null)
-        return field.type.loseFocus(field, control);
+    if (field.customHandlers.loseFocus != null)
+    {    
+        var retval = true;
+        if (field.customHandlers.loseFocusType == 'extends')
+        {
+            if (field.type.loseFocus != null)
+                retval = field.type.loseFocus(field, control);
+        }
+        if (retval)
+            retval =  field.customHandlers.loseFocus(field, control);
+        return retval;          
+    }
     else
-        return true;     
+    {
+        if (field.type.loseFocus != null)
+            return field.type.loseFocus(field, control);
+        else
+            return true;     
+    }            
 }
 
 //****************************************************************************
@@ -722,7 +813,7 @@ var LOW_ALPHA_KEYS_RANGE   = [97, 122];
 var UNDERSCORE_KEY_RANGE   = [95,  95];
 var COLON_KEY_RANGE        = [58, 58];
 
-function keypressAcceptRanges(field, control, acceptKeyRanges)
+function keypressAcceptRanges(field, control, acceptKeyRanges, event)
 {
 	if(! ENABLE_KEYPRESS_FILTERS)
 		return true;
@@ -731,19 +822,21 @@ function keypressAcceptRanges(field, control, acceptKeyRanges)
 	// it returns "FALSE" so we don't want to bother with the event
 	if(! documentOnKeyDown())
 		return true;
-
-	var event = window.event;
+    // the event should have been passed in here but for some reason
+    // its null, look for it in the window object (works only in IE)
+    if (event == null || typeof event == "undefined")
+        event = window.event;
 	for (i in acceptKeyRanges)
-	{
+	{        
 		var keyCodeValue = null;        
-        if (typeof event != "undefined" && event.keyCode)
+        if (event.keyCode)
 			keyCodeValue = event.keyCode;
 		else
 			keyCodeValue = event.which;
 
 		var keyInfo = acceptKeyRanges[i];
 		if(keyCodeValue >= keyInfo[0] && keyCodeValue <= keyInfo[1])
-			return true;
+			return true;        
 	}
 
 	// if we get to here, it means we didn't accept any of the ranges
@@ -755,9 +848,9 @@ function keypressAcceptRanges(field, control, acceptKeyRanges)
 //****************************************************************************
 // Field-specific validation and keypress filtering functions
 //****************************************************************************
-function CurrencyField_onKeyPress(field, control)
+function CurrencyField_onKeyPress(field, control, event)
 {
-    return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE]);
+    return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE], event);
 }
 
 function CurrencyField_isValid(field, control)
@@ -863,9 +956,9 @@ function SocialSecurityField_isValid(field, control)
     return true;
 }
 
-function IntegerField_onKeyPress(field, control)
+function IntegerField_onKeyPress(field, control, event)
 {
-	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE]);
+	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE], event);
 }
 
 function IntegerField_isValid(field, control)
@@ -885,9 +978,9 @@ function IntegerField_isValid(field, control)
 	return true;
 }
 
-function FloatField_onKeyPress(field, control)
+function FloatField_onKeyPress(field, control, event)
 {
-	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE]);
+	return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, DASH_KEY_RANGE, PERIOD_KEY_RANGE], event);
 }
 
 function FloatField_isValid(field, control)
@@ -924,7 +1017,7 @@ function MemoField_isValid(field, control)
     return true;
 }
 
-function MemoField_onKeyPress(field, control)
+function MemoField_onKeyPress(field, control, event)
 {
     maxlimit = field.maxLength;    
     if (control.value.length >= maxlimit)
@@ -984,15 +1077,15 @@ function DateField_valueChanged(field, control)
     return true;
 }
 
-function DateField_onKeyPress(field, control)
+function DateField_onKeyPress(field, control, event)
 {
     if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
     {
-		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange]);
+		return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, field.dateItemDelimKeyRange], event);
     }
     else if (field.dateDataType == DATE_DTTYPE_TIMEONLY)
     {  
-        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, COLON_KEY_RANGE]);
+        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, COLON_KEY_RANGE], event);
     }
     return true;
 }

@@ -65,6 +65,7 @@ public class Dialog
 	private String[] retainRequestParams;
 	private Class dcClass = DialogContext.class;
     private Class directorClass = DialogDirector.class;
+    private SingleValueSource includeJSFile = null;
 
 	public Dialog()
 	{
@@ -124,7 +125,12 @@ public class Dialog
 	public void setDirector(DialogDirector value) { director = value; }
     public void setDialogDirectorClass(Class cls) { directorClass = cls; }
 
-	public static Class findDialogContextClass(String packageName, Element elem) throws ClassNotFoundException
+    public SingleValueSource getIncludeJSFile()
+    {
+        return includeJSFile;
+    }
+
+    public static Class findDialogContextClass(String packageName, Element elem) throws ClassNotFoundException
 	{
 		Class dcClass = null;
 
@@ -271,6 +277,12 @@ public class Dialog
 			{
 				director.importFromXml((Element) node);
 			}
+            else if (childName.equals("client-js"))
+            {
+                Element jsElem = (Element) node;
+                String hrefStr = jsElem.getAttribute("href");
+                this.includeJSFile = (hrefStr != null ? ValueSourceFactory.getSingleOrStaticValueSource(hrefStr): null);
+            }
 		}
 
 		Iterator j = fields.iterator();

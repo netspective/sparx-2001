@@ -63,8 +63,8 @@ public class StandardDialogSkin implements DialogSkin
 		gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
 		controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
-		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this)' onchange='controlOnChange(this)' " +
-            "onblur='controlOnBlur(this)' onkeypress='controlOnKeypress(this)' onclick='controlOnClick(this) '";
+		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this, event)' onchange='controlOnChange(this, event)' " +
+            "onblur='controlOnBlur(this, event)' onkeypress='controlOnKeypress(this, event)' onclick='controlOnClick(this, event) '";
 		separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
 		separatorHtml = "<hr size=1 color=#555555>";
         hintFontAttrs = "color='navy'";
@@ -603,7 +603,7 @@ public class StandardDialogSkin implements DialogSkin
             }
             errorMsgsHtml.append("</ul></td></tr>\n");
         }
-
+        String dialogIncludeJS = (dialog.getIncludeJSFile() != null ? dialog.getIncludeJSFile().getValue(dc) : null);
 		String html =
 			(includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
 			"<link rel='stylesheet' href='"+ appConfig.getValue(dc, "framework.shared.css-url") +"/dialog.css'>\n"+
@@ -623,6 +623,7 @@ public class StandardDialogSkin implements DialogSkin
 			"		alert('ERROR: "+ sharedScriptsUrl +"/dialog.js could not be loaded');\n"+
 			"	}\n"+
 			"</script>\n"+
+            (dialogIncludeJS != null ? "<script language='JavaScript' src='"+ dialogIncludeJS +"'></script>\n" : EMPTY) +
 			(includePostScripts != null ? includePostScripts : EMPTY) +
 			(prependPostScript != null ? prependPostScript : EMPTY) +
 			"<table "+ outerTableAttrs +">\n" +
@@ -644,6 +645,7 @@ public class StandardDialogSkin implements DialogSkin
 			"       dialog.finalizeContents();\n" +
 			"</script>\n"+
 			(appendPostScript != null ? appendPostScript : EMPTY);
+
 
 		com.xaf.log.LogManager.recordAccess((HttpServletRequest) dc.getRequest(), null, this.getClass().getName(), dc.getLogId(), startTime);
 		return html;

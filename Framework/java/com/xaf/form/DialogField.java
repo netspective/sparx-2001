@@ -45,6 +45,7 @@ public class DialogField
 	private ArrayList children;
 	private ArrayList conditionalActions;
 	private ArrayList dependentConditions;
+    private ArrayList clientJavascripts;
 	private long flags;
 	private DialogFieldPopup popup;
     private String hint;
@@ -166,8 +167,62 @@ public class DialogField
 			{
 				importPopupFromXml((Element) node);
 			}
+            else if (childName.equals("client-js"))
+            {
+                importCustomJavaScriptFromXml((Element) node);
+            }
 		}
 	}
+
+    /**
+     * Reads the XML for Custom Javascript configuration assigned to a dialog field
+     *
+     * @param elem client-js node
+     * @returns none
+     */
+    public void importCustomJavaScriptFromXml(Element elem)
+    {
+        // what time of event should this custom JS respond to
+        String event = elem.getAttribute("event");
+        if(event == null || event.length() == 0)
+        {
+            addErrorMessage("No 'event' specified for custom Javascript.");
+            return;
+        }
+        else if (!DialogFieldClientJavascript.isValidEvent(event))
+        {
+            addErrorMessage("Invalid 'event' specified for custom Javascript.");
+            return;
+        }
+
+        // whether or not if this JS script should overwrite or extend the existing default JS
+        // assigned to the event
+        String type = elem.getAttribute("type");
+        if (type == null || type.length() == 0)
+        {
+            addErrorMessage("No 'type' specified for custom Javascript.");
+            return;
+        }
+        else if (!type.equals("extends") && !type.equals("override"))
+        {
+            addErrorMessage("Invalid 'type' specified for custom Javascript.");
+            return;
+        }
+
+        // get the custom script
+        String script = elem.getAttribute("js-expr");
+        if (script == null || script.length() == 0)
+        {
+            addErrorMessage("No custom Javascript defined.");
+            return;
+        }
+        DialogFieldClientJavascript customJS = new DialogFieldClientJavascript();
+        customJS.setEvent(event);
+        customJS.setType(type);
+        customJS.setScript(script);
+
+        this.addClientJavascript(customJS);
+    }
 
 	public void importConditionalFromXml(Element elem)
 	{
@@ -323,6 +378,26 @@ public class DialogField
 
 		conditionalActions.add(action);
 	}
+
+    /**
+     * get all the javascripts defined for this field
+     *
+     * @returns ArrayList
+     */
+    public final  ArrayList getClientJavascripts() { return this.clientJavascripts; }
+
+    /**
+     * Add a javascript to the list of scripts defined for this field
+     *
+     * @param script custom js object
+     */
+    public void addClientJavascript(DialogFieldClientJavascript script)
+    {
+        if(this.clientJavascripts == null)
+            this.clientJavascripts = new ArrayList();
+        this.clientJavascripts.add(script);
+
+    }
 
 	public DialogField findField(String qualifiedName)
 	{
@@ -632,8 +707,8 @@ public class DialogField
 		String js =
 			"field = new DialogField(\"" + fieldClassName + "\", \""+ this.getId() + "\", \"" + this.getSimpleName() + "\", \"" + this.getQualifiedName() + "\", \"" + this.getCaption(dc) + "\", " + this.getFlags() +");\n" +
 			"dialog.registerField(field);\n";
-
-        String customStr = this.getCustomJavaScriptDefn(dc);
+        String customStr = this.getEventJavaScriptFunctions(dc);
+        customStr += this.getCustomJavaScriptDefn(dc);
         if (customStr != null)
             js += customStr;
 
@@ -672,7 +747,41 @@ public class DialogField
 	}
 
     /**
-     * Empty method. Overwritten by extending classes needing to to extra Javascript definition.
+     * Retrieves user defined java script strings for this field and creates JS functions
+     * out of them
+     */
+    public String getEventJavaScriptFunctions(DialogContext dc)
+    {
+        String ret = "";
+
+        ArrayList jsList = this.getClientJavascripts();
+        if (jsList != null)
+        {
+            String jsType = "";
+            String eventName = "";
+
+            StringBuffer jsBuffer = new StringBuffer();
+            Iterator i = jsList.iterator();
+			while(i.hasNext())
+			{
+				DialogFieldClientJavascript jsObject = (DialogFieldClientJavascript) i.next();
+                String script = (jsObject.getScript() != null ? jsObject.getScript().getValue(dc) : null);
+                eventName = com.xaf.xml.XmlSource.xmlTextToJavaIdentifier(jsObject.getEvent().getValue(dc), false);
+                // append function signature
+                if (script != null)
+                {
+                    jsBuffer.append("field.customHandlers." + eventName + " = new Function(\"field\", \"control\", \"" +
+                        jsObject.getScript().getValue(dc) + "\");\n");
+                    jsBuffer.append("field.customHandlers." + eventName + "Type = '" + jsObject.getType().getValue(dc) + "';\n");
+                }
+            }
+            ret = ret + jsBuffer.toString();
+        }
+        return ret;
+    }
+
+    /**
+     * Empty method. Overwritten by extending classes that define extra Javascript definitions.
      */
     public String getCustomJavaScriptDefn(DialogContext dc)
     {
