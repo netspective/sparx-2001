@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportData.java,v 1.5 2002-12-11 14:07:57 shahid.shah Exp $
+ * $Id: DatabaseImportData.java,v 1.6 2002-12-23 04:28:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -260,6 +260,15 @@ public class DatabaseImportData extends AceServletPage
                 {
                     // do the actual parsing
                     ParseContext parseContext = schema.importFromXml(cc, new File(sourceFile));
+
+                    List messages = parseContext.getMessages();
+                    if(messages != null && messages.size() > 0)
+                    {
+                        out.write("<font color=blue><b>Messages</b><ul>");
+                        for(int i = 0; i < messages.size(); i++)
+                            out.write("<li>"+ (String) messages.get(i) +"</li>");
+                        out.write("</ul></font>");
+                    }
 
                     List errors = parseContext.getErrors();
                     if(errors != null && errors.size() > 0)
