@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.4 2002-12-15 18:03:17 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.5 2002-12-23 04:23:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -129,7 +129,7 @@ public class AppDialogsPage extends AceServletPage
 
             handleUnitTestPageBegin(pc, "Form (Dialog) Unit Test");
             out.write("<h1>Form (Dialog) Unit Test: " + dcmd.getDialogName() + "</h1><p>");
-            dcmd.handleDialog(pc);
+            dcmd.handleDialog(pc, true);
             out.write("<p>");
             out.write("Try out additional options by using the following format:<br>");
             out.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/dialogId,data-cmd,skin-name,debug-flags</code><p>");
@@ -153,7 +153,7 @@ public class AppDialogsPage extends AceServletPage
                 handleBeanGenerator(pc);
             else
             {
-                transform(pc, manager.getDocument(context), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
+                transform(pc, manager.getDocument(context, null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
             }
         }
     }
