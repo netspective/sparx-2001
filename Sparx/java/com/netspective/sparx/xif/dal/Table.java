@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Table.java,v 1.5 2002-12-23 05:07:01 shahid.shah Exp $
+ * $Id: Table.java,v 1.6 2002-12-29 17:08:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -213,11 +213,6 @@ public interface Table
      * Returns the column index for column
      */
     public int getColumnIndexInRowByNameOrXmlNodeNameOrServleReqParamOrAttrName(String name);
-
-    /**
-     * Returns the auto-generated QueryDefinition associated with this table
-     */
-    public QueryDefinition getQueryDefinition();
 
     /**
      * Register the given table as a child table of this table

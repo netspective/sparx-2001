@@ -51,13 +51,14 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.6 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.7 2002-12-29 17:08:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,9 +72,6 @@ import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xif.SchemaDocument;
-import com.netspective.sparx.xif.dal.Schema;
-import com.netspective.sparx.xif.dal.Table;
-import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSchemaDocPage extends AceServletPage
@@ -99,8 +97,8 @@ public class DatabaseSchemaDocPage extends AceServletPage
         String[] unmatchedItems = results.unmatchedPathItems();
         if(unmatchedItems != null && unmatchedItems[0].equals("query"))
         {
-            if(unmatchedItems.length > 2)
-                return "Query " + unmatchedItems[2] + " Table";
+            if(unmatchedItems.length >= 2)
+                return "Query " + unmatchedItems[1] + " Table";
             else
                 return "Query -- Error";
         }
@@ -119,26 +117,31 @@ public class DatabaseSchemaDocPage extends AceServletPage
             return;
         }
 
+        if(schemaDoc == null)
+        {
+            out.write("<p>SchemaDocument not found.");
+            return;
+        }
+
         String tableName = params[1];
-
-        Schema schema = schemaDoc.getSchema();
-        if(schema == null)
+        Map tableQueryDefDefns = schemaDoc.getTableQueryDefDefns(tableName);
+        if(tableQueryDefDefns == null)
         {
-            out.write("<p>Schema class '"+ schemaDoc.getDALProperties().getSchemaQualifiedClassName() +"' not found.");
+            out.write("<p>No query definitions available for table '"+ tableName +"'.");
             return;
         }
 
-        Table table = schema.getTable(tableName);
-        if(table == null)
+        SchemaDocument.TableQueryDefDefinition queryDefDefinition = (SchemaDocument.TableQueryDefDefinition) tableQueryDefDefns.get(SchemaDocument.QUERYDEFID_DEFAULT.toUpperCase());
+        if(queryDefDefinition == null)
         {
-            out.write("<p>Table '"+ tableName +"' not found in schema class "+ schema.getClass().getName() +" in "+ ClassPath.getClassFileName(schema.getClass().getName()));
+            out.write("<p>No query definition '"+ SchemaDocument.QUERYDEFID_DEFAULT +"' found for table '"+ tableName +"'.");
             return;
         }
 
-        QueryDefinition queryDefn = table.getQueryDefinition();
+        QueryDefinition queryDefn = queryDefDefinition.getQueryDefinition();
         if(queryDefn == null)
         {
-            out.write("Default QueryDefinition not found in table '"+ tableName +"' of schema '"+ schemaDoc.getDALProperties().getSchemaQualifiedClassName() +"'.");
+            out.write("<p>Query definition '"+ SchemaDocument.QUERYDEFID_DEFAULT +"' in table '"+ tableName +"' could not be instantiated.");
             return;
         }
 

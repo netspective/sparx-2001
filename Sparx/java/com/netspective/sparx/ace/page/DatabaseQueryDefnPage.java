@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseQueryDefnPage.java,v 1.6 2002-12-28 20:07:36 shahid.shah Exp $
+ * $Id: DatabaseQueryDefnPage.java,v 1.7 2002-12-29 17:08:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -132,7 +132,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
 
         out.write("<h1>Query Definition: " + queryDefnId + "</h1>");
 
-        QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
+        QueryDefinition queryDefn = manager.getQueryDefn(nc.getServletContext(), null, queryDefnId);
         if(queryDefn == null)
         {
             out.write("QueryDefinition not found.");
@@ -152,7 +152,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
 
         out.write("<h1>Query Definition: " + queryDefnId + ", Dialog: " + dialogId + "</h1>");
 
-        QueryDefinition queryDefn = manager.getQueryDefn(queryDefnId);
+        QueryDefinition queryDefn = manager.getQueryDefn(nc.getServletContext(), null, queryDefnId);
         QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogId);
         dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
     }

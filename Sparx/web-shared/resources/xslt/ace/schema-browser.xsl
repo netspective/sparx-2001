@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html"/>
 
+<xsl:param name="ace-url"/>
 <xsl:param name="root-url"/>
 <xsl:param name="detail-type"/>
 <xsl:param name="detail-name"/>
@@ -246,7 +247,7 @@
 		<tr>
 			<td class="table_info_caption">Actions:</td>
 			<td class="table_description">
-                <a href="{concat($root-url, '/query/', $app.dal.schema.class-name, '/', @name)}"><img src="{concat($sparx.ace.images-root-url, '/icons/exec_query_defn.gif')}" border="0"/> Execute Query Definition</a>
+                <a href="{concat($ace-url, '/database/query-defn/test/query-defn/', @name)}"><img src="{concat($sparx.ace.images-root-url, '/icons/exec_query_defn.gif')}" border="0"/> Execute Query Definition</a>
 			</td>
 		</tr>
 		<tr valign="top">

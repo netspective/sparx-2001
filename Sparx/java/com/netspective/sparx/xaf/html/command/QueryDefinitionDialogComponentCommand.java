@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryDefinitionDialogComponentCommand.java,v 1.1 2002-12-26 19:30:27 shahid.shah Exp $
+ * $Id: QueryDefinitionDialogComponentCommand.java,v 1.2 2002-12-29 17:08:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -160,7 +160,7 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
             return;
         }
 
-        com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(source);
+        com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(vc.getServletContext(), null, source);
         if(queryDefn == null)
         {
             out.write("QueryDefinition '" + source + "' not found in StatementManager");

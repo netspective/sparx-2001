@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.14 2002-12-26 19:26:07 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.15 2002-12-29 17:08:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -171,7 +171,7 @@ public class StatementManager extends XmlSource
                                 Element actualStmtElem = defn.createStatementElement(pkgElem, defnElem);
                                 actualStmtElem.setAttribute("table", matchedTableName);
                                 String stmtPkg = pkgElem.getAttribute("package");
-                                if(defnElem.getAttribute("prefix-table").equals("yes"))
+                                if(! defnElem.getAttribute("prefix-table").equals("no"))
                                     stmtPkg = stmtPkg + "." + defn.getTable().getAttribute("name");
                                 String stmtPkgDataSrc = pkgElem.getAttribute("data-source");
                                 if(stmtPkgDataSrc.length() == 0)
@@ -187,12 +187,82 @@ public class StatementManager extends XmlSource
         }
     }
 
+    public class TableQueryDefnReference
+    {
+        private Element parentElem;
+        private Element defnElem;
+
+        public TableQueryDefnReference(Element parentElem, Element defnElem)
+        {
+            this.parentElem = parentElem;
+            this.defnElem = defnElem;
+        }
+
+        public void resolveTableQueryDefn(XmlSource xmlSource, ServletContext context, SchemaDocument defaultSchemaDoc)
+        {
+            final String schemaFileName = defnElem.getAttribute("schema");
+
+            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? (defaultSchemaDoc != null ? defaultSchemaDoc : SchemaDocFactory.getDoc(context)) : SchemaDocFactory.getDoc(schemaFileName);
+            if(schemaDoc == null)
+                addError("Schema '"+ schemaFileName +"' not found");
+            else
+            {
+                if(dependentSchemaDocs == null)
+                    dependentSchemaDocs = new HashSet();
+                dependentSchemaDocs.add(schemaDoc);
+
+                List namesOfTablesWithQueryDefns = schemaDoc.getNamesOfTablesWithQueryDefDefns();
+                if(namesOfTablesWithQueryDefns != null && namesOfTablesWithQueryDefns.size() > 0)
+                {
+                    String tableNamePattern = defnElem.getAttribute("table");
+                    if(tableNamePattern.length() == 0) tableNamePattern = defnElem.getAttribute("tables");
+
+                    StringListMatcher matcher = new StringListMatcher(namesOfTablesWithQueryDefns, tableNamePattern);
+                    List matchedTableNames = matcher.getMatchedItems();
+                    for(int i = 0; i < matchedTableNames.size(); i++)
+                    {
+                        String matchedTableName = (String) matchedTableNames.get(i);
+                        Map tableQueryDefDefinitions = schemaDoc.getTableQueryDefDefns(matchedTableName);
+                        if(tableQueryDefDefinitions != null)
+                        {
+                            Iterator defns = tableQueryDefDefinitions.entrySet().iterator();
+                            while(defns.hasNext())
+                            {
+                                Map.Entry entry = (Map.Entry) defns.next();
+                                SchemaDocument.TableQueryDefDefinition defn = (SchemaDocument.TableQueryDefDefinition) entry.getValue();
+                                Element actualQueryDefnElem = defn.createQueryDefnElement(parentElem, defnElem);
+                                actualQueryDefnElem.setAttribute("table", matchedTableName);
+
+                                if(! defnElem.getAttribute("prefix-table").equals("no"))
+                                {
+                                    String queryDefId = actualQueryDefnElem.getAttribute("id");
+                                    actualQueryDefnElem.setAttribute("id", queryDefId.equals(SchemaDocument.QUERYDEFID_DEFAULT) ? defn.getTable().getAttribute("name") : defn.getTable().getAttribute("name") + "." + queryDefId);
+                                }
+
+                                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(actualQueryDefnElem.getAttribute("class"), QueryDefinition.class, true);
+                                QueryDefinition queryDefn = (QueryDefinition) instanceGen.getInstance();
+                                processTemplates(actualQueryDefnElem);
+                                queryDefn.importFromXml(xmlSource, actualQueryDefnElem);
+                                queryDefns.put(queryDefn.getName(), queryDefn);
+                            }
+                        }
+                        else
+                            addError("Table query definitions for table '"+ matchedTableName +"' not found in schema '"+ schemaFileName +"'");
+                    }
+                }
+                else
+                    addError("There are no tables with query definitions.");
+            }
+        }
+    }
+
     private Map statements = new HashMap();
     private Map queryDefns = new HashMap();
     private Map reports = new HashMap();
+    private Set finalizeTableStatements;
+    private Set finalizeTableQueryDefns;
     private Set dependentSchemaDocs;
     private boolean finalized;
-    private Set finalizeTableStatements;
 
     public StatementManager(File file)
     {
@@ -221,21 +291,32 @@ public class StatementManager extends XmlSource
     public Document getDocument(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         Document result = getDocument();
-        finalizeStatements(context, defaultSchemaDoc);
+        if(!finalized) finalizeStatementsAndQueryDefns(context, defaultSchemaDoc);
         return result;
     }
 
-    private void finalizeStatements(ServletContext context, SchemaDocument defaultSchemaDoc)
+    private void finalizeStatementsAndQueryDefns(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         if(finalizeTableStatements != null)
         {
             Iterator i = finalizeTableStatements.iterator();
             while (i.hasNext())
             {
-                TableStatementReference tableDialogReference = (TableStatementReference) i.next();
-                tableDialogReference.resolveTableStatement(this, context, defaultSchemaDoc);
+                TableStatementReference tableStatementReference = (TableStatementReference) i.next();
+                tableStatementReference.resolveTableStatement(this, context, defaultSchemaDoc);
             }
             finalizeTableStatements = null;
+            addMetaInformation();
+        }
+        if(finalizeTableQueryDefns != null)
+        {
+            Iterator i = finalizeTableQueryDefns.iterator();
+            while (i.hasNext())
+            {
+                TableQueryDefnReference tableQueryDefReference = (TableQueryDefnReference) i.next();
+                tableQueryDefReference.resolveTableQueryDefn(this, context, defaultSchemaDoc);
+            }
+            finalizeTableQueryDefns = null;
             addMetaInformation();
         }
         finalized = true;
@@ -244,27 +325,29 @@ public class StatementManager extends XmlSource
     public StatementInfo getStatement(ServletContext context, SchemaDocument defaultSchemaDoc, String stmtId)
     {
         reload();
-        if(!finalized) finalizeStatements(context, defaultSchemaDoc);
+        if(!finalized) finalizeStatementsAndQueryDefns(context, defaultSchemaDoc);
         return (StatementInfo) statements.get(stmtId);
     }
 
     public Map getStatements(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         reload();
-        if(!finalized) finalizeStatements(context, defaultSchemaDoc);
+        if(!finalized) finalizeStatementsAndQueryDefns(context, defaultSchemaDoc);
         return statements;
     }
 
-    public Map getQueryDefns()
+    public Map getQueryDefns(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         reload();
+        if(!finalized) finalizeStatementsAndQueryDefns(context, defaultSchemaDoc);
         return queryDefns;
     }
 
-    public QueryDefinition getQueryDefn(String name)
+    public QueryDefinition getQueryDefn(ServletContext context, SchemaDocument defaultSchemaDoc, String queryDefnId)
     {
         reload();
-        return (QueryDefinition) queryDefns.get(name);
+        if(!finalized) finalizeStatementsAndQueryDefns(context, defaultSchemaDoc);
+        return (QueryDefinition) queryDefns.get(queryDefnId);
     }
 
     public void updateExecutionStatistics()
@@ -335,8 +418,10 @@ public class StatementManager extends XmlSource
     {
         statements.clear();
         queryDefns.clear();
+        reports.clear();
         dependentSchemaDocs = null;
         finalizeTableStatements = null;
+        finalized = false;
 
         if(SQL_TYPES_MAP.size() == 0)
         {
@@ -392,6 +477,12 @@ public class StatementManager extends XmlSource
                 processTemplates((Element) node);
                 queryDefn.importFromXml(this, (Element) node);
                 queryDefns.put(queryDefn.getName(), queryDefn);
+            }
+            else if(nodeName.equals("table-query-defn") || nodeName.equals("table-query-defns"))
+            {
+                if(finalizeTableQueryDefns == null)
+                    finalizeTableQueryDefns = new HashSet();
+                finalizeTableQueryDefns.add(new TableQueryDefnReference(xmlDoc.getDocumentElement(), (Element) node));
             }
             else if(nodeName.equals("report"))
             {
@@ -464,7 +555,7 @@ public class StatementManager extends XmlSource
     public StatementInfo.ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         reload();
-        if(!finalized) finalizeStatements(vc.getServletContext(), null);
+        if(!finalized) finalizeStatementsAndQueryDefns(vc.getServletContext(), null);
 
         StatementInfo si = (StatementInfo) statements.get(statementId);
         if(si == null)
@@ -476,7 +567,7 @@ public class StatementManager extends XmlSource
     public StatementInfo.ResultInfo execute(ConnectionContext cc, ValueContext vc, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         reload();
-        if(!finalized) finalizeStatements(vc.getServletContext(), null);
+        if(!finalized) finalizeStatementsAndQueryDefns(vc.getServletContext(), null);
 
         StatementInfo si = (StatementInfo) statements.get(statementId);
         if(si == null)

@@ -51,28 +51,10 @@
  */
  
 /**
- * $Id: QuerySelectDialogTag.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QuerySelectDialogTag.java,v 1.2 2002-12-29 17:08:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
-
-import java.io.IOException;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
-
-import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.DialogManager;
-import com.netspective.sparx.xaf.form.DialogManagerFactory;
-import com.netspective.sparx.xaf.form.DialogSkin;
-import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.sql.StatementManager;
-import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 
 public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
 {
@@ -126,7 +108,7 @@ public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
                 return SKIP_BODY;
             }
 
-            com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(source);
+            com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(context, null, source);
             if(queryDefn == null)
             {
                 out.write("QueryDefinition '" + source + "' not found in StatementManager");

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.22 2002-12-26 19:29:53 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.23 2002-12-29 17:08:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -90,9 +90,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xif.dal.Schema;
 
 /**
@@ -122,6 +124,7 @@ public class SchemaDocument extends XmlSource
     public static final String ATTRPREFIX_INHERITFIELD = "field.";
 
     public static final String STMTNAME_DEFAULT = "default";
+    public static final String QUERYDEFID_DEFAULT = "default";
 
     public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
@@ -194,6 +197,7 @@ public class SchemaDocument extends XmlSource
     private Map enumTableDataChoices = new HashMap(); // key is an enum data table name, value is SelectChoicesList
     private Map tableDialogDefns = new HashMap(); // key is uppercase TABLE_NAME, value is DialogDefinition instance
     private Map tableStatementDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a map of TableStatementDefinition elements
+    private Map tableQueryDefDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a map of TableQueryDefDefinition elements
     private Map dialogFieldDefns = new HashMap(); // key is uppercase TABLE_NAME.COLUMN_NAME, value is a DialogFieldDefinition instance
     private Map columnsWithFieldDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a string list with names of columns with field defns
     private DataAccessLayerProperties dalProperties = new DataAccessLayerProperties();
@@ -455,12 +459,60 @@ public class SchemaDocument extends XmlSource
 
         public Element createStatementElement(Element parent, Element statementRefPlaceholder)
         {
-            // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
-            overrideAttributes(statementRefPlaceholder, statementDefn);
             Element clonedStatementDefn = (Element) parent.getOwnerDocument().importNode(statementDefn, true);
             clonedStatementDefn.setAttribute("_original-tag", statementRefPlaceholder.getNodeName());
             parent.insertBefore(clonedStatementDefn, statementRefPlaceholder);
             return clonedStatementDefn;
+        }
+    }
+
+    public class TableQueryDefDefinition
+    {
+        protected Element table;
+        protected Element queryDefDefn;
+        protected QueryDefinition queryDefInstance;
+
+        public TableQueryDefDefinition(Element table, Element statementDefn)
+        {
+            this.table = table;
+
+            setAttrValueDefault(statementDefn, "id", QUERYDEFID_DEFAULT);
+            this.queryDefDefn = (Element) statementDefn.cloneNode(true);
+        }
+
+        public Element getQueryDefDefn()
+        {
+            return queryDefDefn;
+        }
+
+        public Element getTable()
+        {
+            return table;
+        }
+
+        public String getMapKey()
+        {
+            return queryDefDefn.getAttribute("id").toUpperCase();
+        }
+
+        public QueryDefinition getQueryDefinition()
+        {
+            if(queryDefInstance == null)
+            {
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(queryDefDefn.getAttribute("class"), QueryDefinition.class, true);
+                queryDefInstance = (QueryDefinition) instanceGen.getInstance();
+                queryDefInstance.importFromXml(null, queryDefDefn);
+            }
+            return queryDefInstance;
+        }
+
+        public Element createQueryDefnElement(Element parent, Element queryDefRefPlaceholder)
+        {
+            addError("here in createQueryDefnElement");
+            Element clonedQueryDefDefn = (Element) parent.getOwnerDocument().importNode(queryDefDefn, true);
+            clonedQueryDefDefn.setAttribute("_original-tag", queryDefRefPlaceholder.getNodeName());
+            parent.insertBefore(clonedQueryDefDefn, queryDefRefPlaceholder);
+            return clonedQueryDefDefn;
         }
     }
 
@@ -624,6 +676,12 @@ public class SchemaDocument extends XmlSource
         return (Map) tableStatementDefns.get(tableName.toUpperCase());
     }
 
+    public Map getTableQueryDefDefns(String tableName)
+    {
+        reload();
+        return (Map) tableQueryDefDefns.get(tableName.toUpperCase());
+    }
+
     /**
      * Given a <field.table-column> element inside a <dialog> element in a DialogManager, return a suitable
      * field.xxx element that will take the place of the <field.table-column> tag. The suitable element is
@@ -673,6 +731,14 @@ public class SchemaDocument extends XmlSource
         reload();
         List result = new ArrayList();
         result.addAll(tableStatementDefns.keySet());
+        return result;
+    }
+
+    public List getNamesOfTablesWithQueryDefDefns()
+    {
+        reload();
+        List result = new ArrayList();
+        result.addAll(tableQueryDefDefns.keySet());
         return result;
     }
 
@@ -1175,15 +1241,11 @@ public class SchemaDocument extends XmlSource
             }
             else if (nodeName.equals("statement"))
             {
-                Map statements = (Map) tableStatementDefns.get(tableName.toUpperCase());
-                if(statements == null)
-                {
-                    statements = new HashMap();
-                    tableStatementDefns.put(tableName.toUpperCase(), statements);
-                }
-
-                TableStatementDefinition tableStatementDefinition = new TableStatementDefinition(table, (Element) node);
-                statements.put(tableStatementDefinition.getMapKey(), tableStatementDefinition);
+                registerTableStatementDefinition(table, (Element) node);
+            }
+            else if(nodeName.equals("query-defn"))
+            {
+                registerTableQueryDefDefinition(table, (Element) node);
             }
         }
 
@@ -1197,6 +1259,34 @@ public class SchemaDocument extends XmlSource
             table.setAttribute("is-lookup", "yes");
 
         resolveIndexes(table);
+    }
+
+    private void registerTableStatementDefinition(Element tableElem, Element statementDefnElem)
+    {
+        String tableName = tableElem.getAttribute("name");
+        Map statements = (Map) tableStatementDefns.get(tableName.toUpperCase());
+        if(statements == null)
+        {
+            statements = new HashMap();
+            tableStatementDefns.put(tableName.toUpperCase(), statements);
+        }
+
+        TableStatementDefinition tableStatementDefinition = new TableStatementDefinition(tableElem, statementDefnElem);
+        statements.put(tableStatementDefinition.getMapKey(), tableStatementDefinition);
+    }
+
+    private void registerTableQueryDefDefinition(Element tableElem, Element queryDefDefnElem)
+    {
+        String tableName = tableElem.getAttribute("name");
+        Map queryDefns = (Map) tableQueryDefDefns.get(tableName.toUpperCase());
+        if(queryDefns == null)
+        {
+            queryDefns = new HashMap();
+            tableQueryDefDefns.put(tableName.toUpperCase(), queryDefns);
+        }
+
+        TableQueryDefDefinition tableQueryDefDefinition = new TableQueryDefDefinition(tableElem, queryDefDefnElem);
+        queryDefns.put(tableQueryDefDefinition.getMapKey(), tableQueryDefDefinition);
     }
 
     class Reference
@@ -1440,6 +1530,62 @@ public class SchemaDocument extends XmlSource
         }
     }
 
+    public void createTableQueryDefns()
+    {
+        Iterator i = tableNodes.values().iterator();
+        while (i.hasNext())
+        {
+            Element table = (Element) i.next();
+            String tableName = table.getAttribute("name");
+
+            Map queryDefDefs = getTableQueryDefDefns(tableName);
+            if(queryDefDefs == null || queryDefDefs.get(QUERYDEFID_DEFAULT) == null)
+            {
+                Element queryDefnElem = table.getOwnerDocument().createElement("query-defn");
+                queryDefnElem.setAttribute("id", QUERYDEFID_DEFAULT);
+                boolean isValid = false;
+
+                NodeList columns = table.getChildNodes();
+                for (int c = 0; c < columns.getLength(); c++)
+                {
+                    Node node = columns.item(c);
+                    if (node.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    Element childElem = (Element) node;
+                    String nodeName = node.getNodeName();
+
+                    if (nodeName.equals("column"))
+                    {
+                        String columnName = childElem.getAttribute("name");
+                        Element queryDefFieldElem = queryDefnElem.getOwnerDocument().createElement("field");
+                        queryDefnElem.appendChild(queryDefFieldElem);
+
+                        queryDefFieldElem.setAttribute("id", columnName);
+                        queryDefFieldElem.setAttribute("column", columnName);
+                        queryDefFieldElem.setAttribute("caption", sqlIdentifierToText(columnName, true));
+                        queryDefFieldElem.setAttribute("join", tableName);
+
+                        isValid = true;
+                    }
+                }
+
+                Element queryDefnJoinElem = queryDefnElem.getOwnerDocument().createElement("join");
+                queryDefnJoinElem.setAttribute("id", tableName);
+                queryDefnJoinElem.setAttribute("table", tableName);
+                queryDefnElem.appendChild(queryDefnJoinElem);
+
+                if(isValid)
+                {
+                    table.appendChild(queryDefnElem);
+                    registerTableQueryDefDefinition(table, queryDefnElem);
+                }
+                else
+                    queryDefnElem = null;
+            }
+        }
+    }
+
     public void keepOnlyLastElement(Element parent, String childName)
     {
         NodeList elems = parent.getElementsByTagName(childName);
@@ -1532,6 +1678,7 @@ public class SchemaDocument extends XmlSource
         tableParams.clear();
         tableDialogDefns.clear();
         tableStatementDefns.clear();
+        tableQueryDefDefns.clear();
         dialogFieldDefns.clear();
         columnsWithFieldDefns.clear();
         dalProperties = new DataAccessLayerProperties();
@@ -1592,6 +1739,7 @@ public class SchemaDocument extends XmlSource
         resolveReferences();
         createAuditTables();
         createStructure();
+        createTableQueryDefns();
 
         // we do this at the very last so that duplicate inheritance doesn't occur in columns -- also,
         // we want to be sure to do it so that data types that are generating Java can be "extended"

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryDefnSelectsListValue.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: QueryDefnSelectsListValue.java,v 1.2 2002-12-29 17:08:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -96,7 +96,7 @@ public class QueryDefnSelectsListValue extends ListSource
         try
         {
             StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
-            QueryDefinition queryDefn = stmtMgr.getQueryDefn(queryDefnName);
+            QueryDefinition queryDefn = stmtMgr.getQueryDefn(vc.getServletContext(), null, queryDefnName);
 
             if(queryDefn == null)
                 choices.add(new SelectChoice("queryDefn '" + queryDefnName + "' not found"));

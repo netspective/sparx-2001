@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryDefnFieldsListValue.java,v 1.2 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: QueryDefnFieldsListValue.java,v 1.3 2002-12-29 17:08:25 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -103,7 +103,7 @@ public class QueryDefnFieldsListValue extends ListSource
             if(queryDefn == null)
             {
                 StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
-                queryDefn = stmtMgr.getQueryDefn(queryDefnName);
+                queryDefn = stmtMgr.getQueryDefn(vc.getServletContext(), null, queryDefnName);
             }
 
             if(queryDefn == null)
