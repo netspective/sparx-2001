@@ -21,7 +21,7 @@
     -->    
     <servlet>
             <servlet-name>AppComponentsExplorer</servlet-name>
-            <servlet-class>com.xaf.ace.AppComponentsExplorerServlet</servlet-class>
+            <servlet-class>com.netspective.sparx.ace.AppComponentsExplorerServlet</servlet-class>
     </servlet>
 
     <!-- 
