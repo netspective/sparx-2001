@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BooleanField.java,v 1.2 2002-05-01 14:09:31 jruss Exp $
+ * $Id: BooleanField.java,v 1.3 2002-05-28 14:54:36 jruss Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -201,9 +201,10 @@ public class BooleanField extends DialogField
         boolean value = false;
         int index = -1;
         String strValue = dc.getValue(this);
-        if(strValue != null)
+        if ((strValue != null) && (strValue.length() > 0))
         {
             value = new Integer(strValue).intValue() == 0 ? false : true;
+            index = new Integer(strValue).intValue();
         }
         String falseText = "";
         String trueText = "";
@@ -225,7 +226,14 @@ public class BooleanField extends DialogField
 
         if(isReadOnly(dc))
         {
-            writer.write("<input type='hidden' name='" + getId() + "' value='" + (strValue != null ? strValue : "") + "'><span id='" + getQualifiedName() + "'>" + (value ? trueText : falseText) + "</span>");
+            if (this.noneText == null) {
+                writer.write("<input type='hidden' name='" + getId() + "' value='" + (strValue != null ? strValue : "") + "'><span id='" + getQualifiedName() + "'>" + (value ? trueText : falseText) + "</span>");
+            } else {
+                writer.write("<input type='hidden' name='" + getId() + "' value='" +
+                        (strValue != null ? strValue : "") + "'><span id='" + getQualifiedName() + "'>" +
+                        (index == 0 ? falseText : (index == 1 ? trueText : noneText)) +
+                        "</span>");
+            }
             return;
         }
 
