@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: GenerateDialogBeansTask.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: GenerateDialogBeansTask.java,v 1.2 2002-12-23 04:30:52 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
@@ -67,6 +67,7 @@ import org.apache.tools.ant.Task;
 
 import com.netspective.sparx.xaf.form.DialogManager;
 import com.netspective.sparx.xaf.form.DialogManagerFactory;
+import com.netspective.sparx.xif.SchemaDocFactory;
 
 public class GenerateDialogBeansTask extends Task
 {
@@ -74,6 +75,7 @@ public class GenerateDialogBeansTask extends Task
     private String destRoot;
     private String pkgName;
     private boolean debug;
+    private String defaultSchemaDoc;
 
     public GenerateDialogBeansTask()
     {
@@ -99,6 +101,11 @@ public class GenerateDialogBeansTask extends Task
         this.pkgName = pgkName;
     }
 
+    public void setSchema(String defaultSchemaDoc)
+    {
+        this.defaultSchemaDoc = defaultSchemaDoc;
+    }
+
     public void init() throws BuildException
     {
         destRoot = null;
@@ -111,7 +118,7 @@ public class GenerateDialogBeansTask extends Task
     {
         log("Opening Dialogs (XML) file " + sourceFile + "...");
         DialogManager manager = DialogManagerFactory.getManager(sourceFile);
-        Map dialogsInfo = manager.getDialogs();
+        Map dialogsInfo = manager.getDialogs(null, SchemaDocFactory.getDoc(defaultSchemaDoc));
 
         List errors = manager.getErrors();
         if(errors.size() > 0)
