@@ -59,7 +59,8 @@ public class StandardDialogSkin implements DialogSkin
 		gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
 		controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
-		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this)' onchange='controlOnChange(this)' onblur='controlOnBlur(this)' onkeypress='controlOnKeypress(this)'";
+		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this)' onchange='controlOnChange(this)' " +
+            "onblur='controlOnBlur(this)' onkeypress='controlOnKeypress(this)' onclick='controlOnClick(this) '";
 		separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
 		separatorHtml = "<hr size=1 color=#555555>";
         hintFontAttrs = "color='navy'";
@@ -589,7 +590,7 @@ public class StandardDialogSkin implements DialogSkin
 			(includePreScripts != null ? includePreScripts : EMPTY) +
 			"<script src='"+ sharedScriptsUrl +"/popup.js' language='JavaScript1.1'></script>\n"+
 			"<script src='"+ sharedScriptsUrl +"/dialog.js' language='JavaScript1.2'></script>\n"+
-			"<script>\n"+
+			"<script language='JavaScript'>\n"+
 			"	if(typeof dialogLibraryLoaded == 'undefined')\n"+
 			"	{\n"+
 			"		alert('ERROR: "+ sharedScriptsUrl +"/dialog.js could not be loaded');\n"+
@@ -607,7 +608,7 @@ public class StandardDialogSkin implements DialogSkin
 			"</form>\n" +
 			"</table></td></tr></table>"+
 			(appendPreScript != null ? appendPreScript : EMPTY) +
-			"<script>\n"+
+			"<script language='JavaScript'>\n"+
 			"       var " + dialogName + " = new Dialog(\"" + dialogName + "\");\n" +
 			"       var dialog = " + dialogName + "; setActiveDialog(dialog);\n" +
 			"       var field;\n" +
