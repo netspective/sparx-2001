@@ -64,6 +64,8 @@ public class DialogContext extends ServletValueContext
 					break;
 			}
 		}
+
+        public Object getValueAsObject() { return field.getValueAsObject(value); }
 	}
 
 	static public final char DIALOGMODE_UNKNOWN  = ' ';
