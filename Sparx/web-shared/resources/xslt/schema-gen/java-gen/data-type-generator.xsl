@@ -74,9 +74,9 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 </xsl:if></xsl:for-each></xsl:for-each>
 	}
 
-	public <xsl:value-of select="$data-type-name"/>(Table table, String name)
+	public <xsl:value-of select="$data-type-name"/>(Table table, String name, String dialogFieldName, String xmlNodeName, String servletReqParamName, String servletReqAttrName)
 	{
-		super(table, name);
+		super(table, name, dialogFieldName, xmlNodeName, servletReqParamName, servletReqAttrName);
 <xsl:for-each select="sqldefn">
 		setSqlDefn(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);
 </xsl:for-each>
@@ -85,8 +85,6 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 <xsl:for-each select="default">
 		setDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);
 </xsl:for-each>
-<xsl:if test="java-default">		setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource(&quot;<xsl:value-of select="java-default"/>&quot;));
-</xsl:if>
 <xsl:if test="size">		setSize(<xsl:value-of select="size"/>);
 </xsl:if>	}
 <!--************************************************************************-->

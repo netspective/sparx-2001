@@ -25,8 +25,6 @@
 		<xsl:when test="$detail-type = 'erd'">
 			<xsl:apply-templates select="table-structure"/>
 		</xsl:when>
-		<xsl:when test="$detail-type = 'generate'">
-		</xsl:when>
 		<xsl:when test="$detail-type = 'graphviz'">
 			<code>
 			digraph G
@@ -126,6 +124,30 @@
 						</xsl:for-each>
 						</ol>
 					</xsl:if>
+
+                    <p/>
+                    <h1>Data Access Layer (DAL) Settings</h1>
+                    <b>Destination-path</b>: <xsl:value-of select="dal-generator/destination-path"/><br/><br/>
+
+                    <table class="data_table" cellspacing="0" cellpadding="2" border="0">
+                        <tr class="data_table_header">
+                            <th class="data_table">Name</th>
+                            <th class="data_table">Package</th>
+                            <th class="data_table">Class</th>
+                            <th class="data_table">Stylesheet</th>
+                        </tr>
+
+                        <xsl:for-each select="dal-generator/*[name() != 'destination-path']">
+                            <tr valign="top" class="data_table">
+                                <td class="data_table"><xsl:value-of select="name()"/></td>
+                                <td class="data_table"><xsl:value-of select="@package"/></td>
+                                <td class="data_table"><xsl:value-of select="@class"/></td>
+                                <td class="data_table"><xsl:value-of select="@style-sheet"/></td>
+                            </tr>
+                        </xsl:for-each>
+
+                    </table>
+
 				</td>
 			</tr>
 		</table>
@@ -483,6 +505,33 @@
 	</table>
 	</xsl:if>
 
+    <p/><h1>DAL Properties</h1>
+    <table border="0" cellspacing="0">
+    <tr bgcolor="beige">
+        <th>Name</th>
+        <th>&#160;</th>
+        <th>Value</th>
+    </tr>
+    <xsl:for-each select="@*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select="*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    </table>
+
 	</td></tr></table>
 </xsl:template>
 
@@ -554,7 +603,7 @@
 	<a href="." style="text-decoration:none">Return to <b><xsl:value-of select="$detail-name"/></b> table.</a>
 	<p/>
 	<table>
-	<xsl:for-each select="@*">
+	<xsl:for-each select="@*[not(starts-with(name(), 'dal-') or starts-with(name(), '_gen'))]">
 		<tr><td class="column_attr_caption"><xsl:value-of select="name()"/>:</td><td class="column_attr_value"><xsl:value-of select="."/></td></tr>
 	</xsl:for-each>
 	<xsl:for-each select="*[name() != 'referenced-by']">
@@ -586,6 +635,34 @@
 		</tr>
 	</xsl:if>
 	</table>
+
+    <p/><h1>DAL Properties</h1>
+    <table border="0" cellspacing="0">
+    <tr bgcolor="beige">
+        <th>Name</th>
+        <th>&#160;</th>
+        <th>Value</th>
+    </tr>
+    <xsl:for-each select="@*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select="*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    </table>
+
 	</td></tr></table>
 </xsl:template>
 

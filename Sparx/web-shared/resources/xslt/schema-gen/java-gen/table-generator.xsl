@@ -172,7 +172,7 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 <xsl:for-each select="column">
 	<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
-<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
+<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.NODENAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>);
 <xsl:if test="@_gen-create-id = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
 		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="@_gen-sequence-name"/>&quot;);
 </xsl:if>
@@ -182,14 +182,6 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if>
 <xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsUnique(true);
 </xsl:if>
-<xsl:choose>
-	<xsl:when test="@default-java">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="@default-java"/>);
-	</xsl:when>
-	<xsl:when test="default[@type = 'java']">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="default"/>);
-	</xsl:when>
-</xsl:choose>
 <xsl:for-each select="default">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);
 </xsl:for-each>
@@ -197,18 +189,13 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if>
 <xsl:if test="@size and @size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="@size"/>);
 </xsl:if>
-<xsl:if test="selfref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_SELF, &quot;<xsl:value-of select="lookupref"/>&quot;);
+<xsl:if test="@selfref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(ForeignKey.FKEYTYPE_SELF, &quot;<xsl:value-of select="@selfref"/>&quot;);
 </xsl:if>
-<xsl:if test="parentref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_PARENT, &quot;<xsl:value-of select="parentref"/>&quot;);
+<xsl:if test="@parentref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(ForeignKey.FKEYTYPE_PARENT, &quot;<xsl:value-of select="@parentref"/>&quot;);
 </xsl:if>
-<xsl:if test="lookupref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_LOOKUP, &quot;<xsl:value-of select="selfref"/>&quot;);
+<xsl:if test="@lookupref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(ForeignKey.FKEYTYPE_LOOKUP, &quot;<xsl:value-of select="@lookupref"/>&quot;);
 </xsl:if>
 </xsl:for-each>
-		setAllColumns(new Column[] {
-<xsl:for-each select="column"><xsl:text>			</xsl:text><xsl:value-of select="@_gen-member-name"/><xsl:if test="position() != last()"><xsl:text>,
-</xsl:text></xsl:if>
-</xsl:for-each>
-		});
 	}
 
 	/**
