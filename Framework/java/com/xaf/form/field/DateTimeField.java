@@ -277,9 +277,9 @@ public class DateTimeField extends TextField
      *
      * @param dc Dialog context
      */
-	public void populateValue(DialogContext dc)
+	public void populateValue(DialogContext dc, int formatType)
 	{
-        super.populateValue(dc);
+        super.populateValue(dc, formatType);
         String value = dc.getValue(this);
 
         String xlatedDate = null;

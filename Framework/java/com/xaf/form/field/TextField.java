@@ -19,9 +19,14 @@ public class TextField extends DialogField
 
 	private int size;
 	private int maxLength;
+    /* regular expression pattern for validating the value */
     private String validatePattern;
+    /* substitution patttern to format the value so that it satisfies the validation regex */
+    private String displaySubstitutionPattern;
+    /* error message for when the validation fails */
     private String regexMessage;
-	private String substPattern;
+    /* substitution pattern to format the value when the value is ready to submitted */
+	private String submitSubstitutionPattern;
 
 	public TextField()
 	{
@@ -37,7 +42,17 @@ public class TextField extends DialogField
 		maxLength = 255;
 	}
 
-	public final int getSize() { return size; }
+    public String getDisplaySubstitutionPattern()
+    {
+        return displaySubstitutionPattern;
+    }
+
+    public void setDisplaySubstitutionPattern(String validateSubstitutionPattern)
+    {
+        this.displaySubstitutionPattern = validateSubstitutionPattern;
+    }
+
+    public final int getSize() { return size; }
 	public void setSize(int value) { size = value; }
 
 	public final int getMaxLength() { return maxLength; }
@@ -76,12 +91,55 @@ public class TextField extends DialogField
         if (value != null && value.length() != 0)
             setValidatePatternErrorMessage(value);
 
+        // extract the substitution/formatting pattern for displaying the value
+        value = elem.getAttribute("display-pattern");
+        if (value != null &&  value.length() != 0)
+            this.setDisplaySubstitutionPattern(value);
+
+        // extract the substituiton/formatting pattern for submitting the value
         value = elem.getAttribute("format-pattern");
         if (value != null && value.length() != 0)
-            setSubstitutePattern(value);
+            setSubmitSubstitutePattern(value);
 	}
 
-	public String formatValue(String value)
+    /**
+     * Format the dialog field value for every dialog stage(display/validation stages) but not
+     * after successful validation(submit stage).
+     *
+     * @param   value field value
+     * @returns String formatted text
+     */
+    public String formatDisplayValue(String value)
+    {
+		if(value == null) return null;
+
+		long flags = getFlags();
+		if((flags & FLDFLAG_UPPERCASE) != 0) value = value.toUpperCase();
+		if((flags & FLDFLAG_LOWERCASE) != 0) value = value.toLowerCase();
+		if((flags & FLDFLAG_TRIM) != 0) value = value.trim();
+
+		if(this.displaySubstitutionPattern != null)
+		{
+			try
+			{
+				value = perlUtil.substitute(displaySubstitutionPattern, value);
+			}
+			catch(MalformedPerl5PatternException e)
+			{
+                e.printStackTrace();
+				value = e.toString();
+			}
+		}
+		return value;
+    }
+
+    /**
+     * Format the dialog field value after successful validation.
+     *
+     * @param   value field value
+     * @returns String formatted text
+     */
+	public String formatSubmitValue(String value)
 	{
 		if(value == null) return null;
 
@@ -90,11 +148,11 @@ public class TextField extends DialogField
 		if((flags & FLDFLAG_LOWERCASE) != 0) value = value.toLowerCase();
 		if((flags & FLDFLAG_TRIM) != 0) value = value.trim();
 
-		if(substPattern != null)
+		if(this.submitSubstitutionPattern != null)
 		{
 			try
 			{
-				value = perlUtil.substitute(substPattern, value);
+				value = perlUtil.substitute(submitSubstitutionPattern, value);
 			}
 			catch(MalformedPerl5PatternException e)
 			{
@@ -102,11 +160,10 @@ public class TextField extends DialogField
 				value = e.toString();
 			}
 		}
-
 		return value;
 	}
 
-	public void populateValue(DialogContext dc)
+	public void populateValue(DialogContext dc, int formatType)
 	{
         String value = dc.getValue(this);
         if(value == null)
@@ -119,9 +176,12 @@ public class TextField extends DialogField
 				(value == null && defaultValue != null))
 				value = defaultValue.getValueOrBlank(dc);
 		}
-
-		dc.setValue(this, formatValue(value));
+        if (formatType == DialogField.DISPLAY_FORMAT)
+		    dc.setValue(this, this.formatDisplayValue(value));
+        else if (formatType == DialogField.SUBMIT_FORMAT)
+            dc.setValue(this, this.formatSubmitValue(value));
 	}
+
 
     public boolean needsValidation(DialogContext dc)
 	{
@@ -214,18 +274,18 @@ public class TextField extends DialogField
      *
      * @returns String regular expression pattern
      */
-    public String getSubstitutePattern()
+    public String getSubmitSubstitutePattern()
     {
-        return substPattern;
+        return submitSubstitutionPattern;
     }
 
     /**
      * Sets the regular expression used for formatting/substituting the field
      * @param str Pattern string
      */
-    public void setSubstitutePattern(String str)
+    public void setSubmitSubstitutePattern(String str)
     {
-        substPattern = str;
+        submitSubstitutionPattern = str;
     }
 
     /**

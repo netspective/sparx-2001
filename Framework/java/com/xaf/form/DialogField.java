@@ -23,6 +23,10 @@ public class DialogField
     static public final int FLDFLAG_BROWSER_READONLY     = FLDFLAG_COLUMN_BREAK_AFTER * 2;
 	static public final int FLDFLAG_STARTCUSTOM          = FLDFLAG_BROWSER_READONLY * 2; // all DialogField "children" will use this
 
+    // flags used to describe what kind of formatting needs to be done to the dialog field
+    public static final int DISPLAY_FORMAT = 1;
+    public static final int SUBMIT_FORMAT  = 2;
+
 	static public int[] CHILD_CARRY_FLAGS = new int[] { FLDFLAG_REQUIRED, FLDFLAG_INVISIBLE, FLDFLAG_READONLY, FLDFLAG_PERSIST, FLDFLAG_CREATEADJACENTAREA, FLDFLAG_SHOWCAPTIONASCHILD  };
 
 	static public String CUSTOM_CAPTION = new String();
@@ -591,7 +595,7 @@ public class DialogField
 	public String getHiddenControlHtml(DialogContext dc)
 	{
 		String value = dc.getValue(this);
-		return "<input type='hidden' name='"+ getId() +"' value='" + (value != null ? value : "") + "'>";
+        return "<input type='hidden' name='"+ getId() +"' value=\"" + (value != null ? value : "") + "\">";
 	}
 
 	public String getControlHtml(DialogContext dc)
@@ -657,10 +661,28 @@ public class DialogField
 		return invalidFieldsCount == 0 ? true : false;
 	}
 
-	public String formatValue(String value)
+    /**
+     * Format the dialog value after it has been validated and is ready for submission
+     *
+     * @param value dialog field value
+     * @returns String
+     */
+	public String formatSubmitValue(String value)
 	{
 		return value;
 	}
+
+    /**
+     * Format the dialog value for every dialog stage except before submission
+     *
+     * @param value dialog field value
+     * @returns String
+     */
+	public String formatDisplayValue(String value)
+	{
+		return value;
+	}
+
 
     public Object getValueAsObject(String value)
     {
@@ -672,7 +694,7 @@ public class DialogField
 		return getValueAsObject(value);
 	}
 
-	public void populateValue(DialogContext dc)
+	public void populateValue(DialogContext dc, int formatType)
 	{
 		if(id == null) return;
 
@@ -685,7 +707,10 @@ public class DialogField
 				(value == null && defaultValue != null))
 				value = defaultValue.getValueOrBlank(dc);
 		}
-		dc.setValue(this, formatValue(value));
+        if (formatType == DialogField.DISPLAY_FORMAT)
+		    dc.setValue(this, this.formatDisplayValue(value));
+        else if (formatType == DialogField.SUBMIT_FORMAT)
+            dc.setValue(this, this.formatSubmitValue(value));
 
 		if(children == null) return;
 
@@ -693,7 +718,7 @@ public class DialogField
 		while(i.hasNext())
 		{
 			DialogField field = (DialogField) i.next();
-			if(field.isVisible(dc)) field.populateValue(dc);
+			if(field.isVisible(dc)) field.populateValue(dc, formatType);
 		}
 	}
 

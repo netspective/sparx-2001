@@ -204,7 +204,7 @@ public class SelectField extends DialogField
 		return super.isValid(dc);
 	}
 
-	public void populateValue(DialogContext dc)
+	public void populateValue(DialogContext dc, int formatType)
 	{
 		if(isMulti())
 		{
@@ -225,7 +225,7 @@ public class SelectField extends DialogField
 				dc.setValues(this, values);
 		}
 		else
-			super.populateValue(dc);
+			super.populateValue(dc, formatType);
 	}
 
 	public String getMultiDualControlHtml(DialogContext dc, SelectChoicesList choices)

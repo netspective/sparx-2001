@@ -11,13 +11,18 @@ package com.xaf.form.field;
 
 public class ZipField extends TextField
 {
-    static public final String PATTERN_MATCHZIP  = "^([\\d]{5})([-][\\d]{4})?$";
+    static public final String VALIDATE_PATTERN  = "^([\\d]{5})([-][\\d]{4})?$";
+    public static final String VALIDATE_ERROR_MSG = "Zip codes must be in the 12345 or 12345-1234 format.";
+    public static final String DISPLAY_PATTERN = "s/" + VALIDATE_PATTERN + "/$1$2/g";
+    public static final String SUBMIT_PATTERN = "s/" + VALIDATE_PATTERN + "/$1$2/g";
+
+
     public ZipField()
     {
         super();
-        // set the dafault regex pattern for the phone field
-        setValidatePattern("/" + PATTERN_MATCHZIP + "/");
-        setValidatePatternErrorMessage("Zip codes must be in the 12345 or 12345-1234 format.");
+        // set the dafault regex pattern for the zip field
+        setValidatePattern("/" + VALIDATE_PATTERN + "/");
+        setValidatePatternErrorMessage(VALIDATE_ERROR_MSG);
     }
 
 

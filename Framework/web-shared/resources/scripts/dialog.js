@@ -1179,7 +1179,7 @@ function testCurrency(field, control)
 {
     if (control.value == '')
         return true;
-    var pattern = field.text_format_pattern;        
+    var pattern = field.text_format_pattern;      
     return pattern.test(control.value) ;        
 }
 
@@ -1203,17 +1203,13 @@ function formatCurrency(field, control)
                 if (field.negative_pos == "after")
                 {
                     if (match[1] == "")
-                        match[1] = "$";
-                    if (match[3] == "")
-                        match[3] = ".00";
+                        match[1] = field.currency_symbol;
                     control.value = match[1] + match[2] + match[3];
                 }
                 else if (field.negative_pos == "before")
                 {
                     if (match[2] == "")
-                        match[2] = "$";
-                    if (match[4] == "")
-                        match[4] = ".00";
+                        match[2] = field.currency_symbol;
                     control.value = match[1] + match[2] + match[3] + match[4]; 
                 }
             }

@@ -16,13 +16,17 @@ import com.xaf.form.*;
 public class SocialSecurityField extends TextField
 {
 	static public final long FLDFLAG_STRIPDASHES = TextField.FLDFLAG_STARTCUSTOM;
-    public static final String PATTERN_MATCH  = "^([\\d]{3})[-]?([\\d]{2})[-]?([\\d]{4})$";
+    public static final String VALIDATE_PATTERN  = "^([\\d]{3})[-]?([\\d]{2})[-]?([\\d]{4})$";
+    public static final String DISPLAY_SUBSTITUTION_PATTERN = "s/" + VALIDATE_PATTERN + "/$1-$2-$3/g";
+    public static final String SUBMIT_SUBSTITUTION_PATTERN = "/s" + VALIDATE_PATTERN + "/$1$2$3/g";
 
     public SocialSecurityField()
     {
         super();
         setFlag(FLDFLAG_STRIPDASHES);
-        setValidatePattern("/" + PATTERN_MATCH + "/");
+        setValidatePattern("/" + VALIDATE_PATTERN + "/");
+        setDisplaySubstitutionPattern(DISPLAY_SUBSTITUTION_PATTERN);
+        setSubmitSubstitutePattern(SUBMIT_SUBSTITUTION_PATTERN);
     }
 
 	public void importFromXml(Element elem)
@@ -38,7 +42,15 @@ public class SocialSecurityField extends TextField
         return true;
 	}
 
-	public String formatValue(String value)
+    /**
+     * Format the SSN value by stripping the dashes if <b>strip-dashes</b> attribute is set
+     * to "yes" (after it has been validated and is ready for submission). Currently, this
+     * method is not using the regular expression for formatting the submittal value.
+     *
+     * @param value dialog field value
+     * @returns String
+     */
+	public String formatSubmitValue(String value)
 	{
         if(! flagIsSet(FLDFLAG_STRIPDASHES))
             return value;

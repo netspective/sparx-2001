@@ -18,6 +18,7 @@ import java.text.*;
 
 public class CurrencyField extends TextField
 {
+
     private DecimalFormat currencyFormat;
     private Locale currencyLocale;
     private String currencySymbol;
@@ -28,6 +29,44 @@ public class CurrencyField extends TextField
     {
         super();
         this.currencyLocale = Locale.US;
+        this.decimal = 2;
+        this.currencySymbol = "$";
+        this.negativePos = "before";
+        this.setValidatePattern("/^([-])?([\\" + this.currencySymbol + "])?([0-9]+)([.]{1}[0-9]{," + this.decimal + "})?$/");
+        this.setDisplaySubstitutionPattern("s/^([-])?([\\" + this.currencySymbol +
+                "])?([0-9]+)([.]{1}[0-9]{," + this.decimal + "})?$/$1\\" + this.currencySymbol + "$3$4/g");
+    }
+
+    /**
+     * Gets the currency symbol
+     */
+    public String getCurrencySymbol()
+    {
+        return currencySymbol;
+    }
+
+    /**
+     * Sets the currency symbol
+     */
+    public void setCurrencySymbol(String currencySymbol)
+    {
+        this.currencySymbol = currencySymbol;
+    }
+
+    /**
+     * Gets the number of decimal places allowed
+     */
+    public int getDecimal()
+    {
+        return decimal;
+    }
+
+    /**
+     * Sets the number of decimal places allowed
+     */
+    public void setDecimal(int decimal)
+    {
+        this.decimal = decimal;
     }
 
     /**
@@ -78,26 +117,45 @@ public class CurrencyField extends TextField
             this.decimal = 2;
         }
 
-        String negativePos = elem.getAttribute("negative");
+        String decimalExpr = "";
+        if (this.decimal < 0)
+        {
+            addErrorMessage("Currency field's 'decimal' value must be greater than or equal to zero.");
+            return;
+        }
+        else if (decimal > 0)
+        {
+            decimalExpr = "([.][\\d]{1," + this.decimal + "})?";
+        }
+        else
+        {
+            decimalExpr = "";
+        }
+
+        this.negativePos = elem.getAttribute("negative");
         if (negativePos == null || negativePos.length() == 0)
             this.negativePos = "before";
         else if (!negativePos.equals("before") && !negativePos.equals("after"))
             this.negativePos = "before";
         if (this.negativePos.equals("before"))
         {
-            this.setValidatePattern("/^([-])?([\\$])?([0-9]+)([.]{1}[0-9]{" + this.decimal + "})?$/");
-            this.setSubstitutePattern("s/" +"^([-])?([\\$])?([0-9]+)([.]{1}[0-9]{" + this.decimal + "})?$" + "/$1$3$4/g");
-            this.setValidatePatternErrorMessage("Currency values must have the format " +
-                this.currencySymbol + "xxx.xx or xxx.xx for positive values and " +
-                "-" + this.currencySymbol + "xxx.xx or -xxx.xx for negative values.");
+            this.setValidatePattern("/^([-])?([\\" + this.currencySymbol + "])?([\\d]+)"+ decimalExpr + "$/");
+            this.setDisplaySubstitutionPattern("s/^([-])?([\\" + this.currencySymbol +
+                    "])?([\\d]+)" + decimalExpr + "$/$1\\" + this.currencySymbol + "$3$4/g");
+            this.setSubmitSubstitutePattern("s/" +"^([-])?([\\" + this.currencySymbol + "])?([\\d]+)" + decimalExpr +
+                    "$/$1$3$4/g");
+            this.setValidatePatternErrorMessage("Currency values must have the format\\n" +
+                this.currencySymbol + "xxx.xx for positive values and " +
+                "-" + this.currencySymbol + "xxx.xx for negative values.");
         }
         else if (this.negativePos.equals("after"))
         {
-            this.setValidatePattern("/^([\\$])?([-]?[0-9]+)([.]{1}[0-9]{" + this.decimal + "})?$/");
-            this.setSubstitutePattern("s/" + "^([\\$])?([-]?[0-9]+)([.]{1}[0-9]{" + this.decimal + "})?$" + "/$2$3/g");
-            this.setValidatePatternErrorMessage("Currency values must have the format " +
-                this.currencySymbol + "xxx.xx or xxx.xx for positive values and " +
-                this.currencySymbol + "-xxx.xx or -xxx.xx for negative values.");
+            this.setValidatePattern("/^([\\" + this.currencySymbol + "])?([-]?[\\d]+)"+ decimalExpr + "$/");
+            this.setDisplaySubstitutionPattern("s/" +"^([\\" + this.currencySymbol + "])?([-]?[\\d]+)"+ decimalExpr + "$/\\"+ this.currencySymbol + "$2$3/g");
+            this.setSubmitSubstitutePattern("s/" + "^([\\" + this.currencySymbol + "])?([-]?[\\d]+)"+ decimalExpr + "$" + "/$2$3/g");
+            this.setValidatePatternErrorMessage("Currency values must have the format\\n" +
+                this.currencySymbol + "xxx.xx for positive values and " +
+                this.currencySymbol + "-xxx.xx for negative values.");
         }
 
     }
@@ -105,37 +163,50 @@ public class CurrencyField extends TextField
     public boolean isValid(DialogContext dc)
 	{
 		String value = dc.getValue(this);
-		if(isRequired(dc) && (value == null || value.length() == 0))
+
+		if(value == null || value.length() == 0)
 		{
-			invalidate(dc, getCaption(dc) + " is required.");
-			return false;
+            if (isRequired(dc))
+            {
+			    invalidate(dc, getCaption(dc) + " is required.");
+			    return false;
+            }
+            else
+            {
+                return true;
+            }
 		}
-        System.out.println(value);
+        int symbolPos = value.indexOf(this.currencySymbol);
+        if (symbolPos  != -1)
+            value = value.substring(0, symbolPos) + value.substring(symbolPos+1);
+
+        Double dbl = null;
         try
         {
             // validate that the value is a valid one
-            double currencyValue = Double.parseDouble(value);
+            dbl = new Double(value);
         }
-        catch (Exception e)
+        catch (NumberFormatException e)
         {
             e.printStackTrace();
             invalidate(dc, getCaption(dc) + " must be in a decimal format.");
             return false;
         }
 
+        if (dbl != null)
+        {
+            String dblStr = dbl.toString();
+            if (dblStr.indexOf(".") != -1)
+            {
+                String decimalStr = dblStr.substring(dblStr.indexOf(".")+1);
+                if (decimalStr.length() > this.decimal)
+                {
+                    invalidate(dc, this.getCaption(dc) + " can only have " + this.decimal + " decimal digits.");
+                    return false;
+                }
+            }
+        }
 
-        /*
-        try
-        {
-            currencyFormat.parse(value);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            invalidate(dc, getCaption(dc) + " must be in " + currencyFormat.toPattern() + " format.");
-            return false;
-        }
-        */
 		return true;
 	}
 

@@ -104,7 +104,7 @@ public class BloodPressureField extends TextField
      * @param value blood pressure string value
      * @returns String
      */
-    public String formatValue(String value)
+    public String postFormatValue(String value)
     {
         return value;
     }

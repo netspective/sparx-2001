@@ -337,14 +337,19 @@ public class Dialog
 		setFlag(DLGFLAG_CONTENTS_FINALIZED);
 	}
 
-	public void populateValues(DialogContext dc)
+    /**
+     * Populate the dialog with field values. If listeners are defined, execute them also.
+     * This should be called everytime the dialog is loaded except when it is ready for
+     * execution (validated already)
+     */
+	public void populateValues(DialogContext dc, int formatType)
 	{
 		Iterator i = fields.iterator();
 		while(i.hasNext())
 		{
 			DialogField field = (DialogField) i.next();
 			if(field.isVisible(dc))
-				field.populateValue(dc);
+				field.populateValue(dc, formatType);
 		}
 
 		List listeners = dc.getListeners();
@@ -422,9 +427,12 @@ public class Dialog
 	{
 		if(! flagIsSet(DLGFLAG_CONTENTS_FINALIZED))
 		    finalizeContents();
+		populateValues(dc, DialogField.DISPLAY_FORMAT);
+        dc.calcState();
+        // validated and the dialog is ready for execution
+        if (dc.inExecuteMode())
+            this.populateValues(dc, DialogField.SUBMIT_FORMAT);
 
-		populateValues(dc);
-		dc.calcState();
 	}
 
 	public String getHtml(DialogContext dc, boolean contextPreparedAlready)

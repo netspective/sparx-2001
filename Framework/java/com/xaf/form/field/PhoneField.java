@@ -16,19 +16,31 @@ import com.xaf.form.*;
 public class PhoneField extends TextField
 {
     static public final long FLDFLAG_STRIPBRACKETS = TextField.FLDFLAG_STARTCUSTOM;
-	public static final String DASH_PATTERN_MATCH  = "^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})([ ][x][\\d]{1,5})?$";
-    public static final String BRACKET_PATTERN_MATCH = "^[\\(]?([\\d][\\d][\\d])[\\)]?[ ]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})([ ][x][\\d]{1,5})?$";
+
+    public static final String DASH_FORMAT = "dash";
+	public static final String DASH_VALIDATE_PATTERN  = "^([\\d][\\d][\\d])[\\.-]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})([ ][x][\\d]{1,5})?$";
+    public static final String DASH_DISPLAY_PATTERN = "s/" + DASH_VALIDATE_PATTERN + "/$1-$2-$3$4/g";
+    public static final String DASH_SUBMIT_PATTERN = "s/" + DASH_VALIDATE_PATTERN + "/$1$2$3$4/g";
+    public static final String DASH_VALIDATE_ERROR_MSG =  "Input must be in the 999-999-9999 x99999 format.";
+
+    public static final String BRACKET_FORMAT = "bracket";
+    public static final String BRACKET_VALIDATE_PATTERN = "^[\\(]?([\\d][\\d][\\d])[\\)]?[ ]?([\\d][\\d][\\d])[\\.-]?([\\d]{4})([ ][x][\\d]{1,5})?$";
+    public static final String BRACKET_DISPLAY_PATTERN =  "s/" + BRACKET_VALIDATE_PATTERN + "/($1) $2-$3$4/g";
+    public static final String BRACKET_SUBMIT_PATTERN =  "s/" + BRACKET_VALIDATE_PATTERN + "/$1$2$3$4/g";
+    public static final String BRACKET_VALIDATE_ERROR_MSG = "Input must be in the (999)999-9999 x99999 format.";
 
     private String formatType;
 
     public PhoneField()
     {
         super();
-        setFlag(FLDFLAG_STRIPBRACKETS);
+        this.setFlag(FLDFLAG_STRIPBRACKETS);
         // set the dafault regex pattern for the phone field
-        setValidatePattern("/" + DASH_PATTERN_MATCH + "/");
-        setValidatePatternErrorMessage("Input must be in the 999-999-9999 x99999 format.");
-        this.formatType = "dash";
+        this.setValidatePattern("/" + DASH_VALIDATE_PATTERN + "/");
+        this.setValidatePatternErrorMessage(DASH_VALIDATE_ERROR_MSG);
+        this.setDisplaySubstitutionPattern(DASH_DISPLAY_PATTERN);
+        this.setSubmitSubstitutePattern(DASH_SUBMIT_PATTERN);
+        this.formatType = DASH_FORMAT;
     }
 
     public void importFromXml(Element elem)
@@ -39,27 +51,35 @@ public class PhoneField extends TextField
             clearFlag(FLDFLAG_STRIPBRACKETS);
 
         attr = elem.getAttribute("format-type");
-        if (attr == null || attr.equals("dash"))
+        if (attr == null || attr.equals(PhoneField.DASH_FORMAT))
         {
-            this.formatType = "dash";
-            setValidatePattern("/" + DASH_PATTERN_MATCH + "/");
-            setValidatePatternErrorMessage("Input must be in the 999-999-9999 x99999 format.");
+            this.formatType = PhoneField.DASH_FORMAT;
+            this.setValidatePattern("/" + DASH_VALIDATE_PATTERN + "/");
+            this.setValidatePatternErrorMessage(DASH_VALIDATE_ERROR_MSG);
+            this.setDisplaySubstitutionPattern(DASH_DISPLAY_PATTERN);
+            this.setSubmitSubstitutePattern(DASH_SUBMIT_PATTERN);
         }
-        else if (attr.equals("bracket"))
+        else if (attr.equals(PhoneField.BRACKET_FORMAT))
         {
-            this.formatType = "bracket";
-            setValidatePattern("/" + BRACKET_PATTERN_MATCH + "/");
-            setValidatePatternErrorMessage("Input must be in the (999)999-9999 x99999 format.");
+            this.formatType = PhoneField.BRACKET_FORMAT;
+            this.setValidatePattern("/" + BRACKET_VALIDATE_PATTERN + "/");
+            this.setValidatePatternErrorMessage(BRACKET_VALIDATE_ERROR_MSG);
+            this.setDisplaySubstitutionPattern(BRACKET_DISPLAY_PATTERN);
+            this.setSubmitSubstitutePattern(BRACKET_SUBMIT_PATTERN);
         }
-
-        if(flagIsSet(FLDFLAG_STRIPBRACKETS))
-		{
-            if (this.formatType.equals("dash"))
-			    setSubstitutePattern("s/" + DASH_PATTERN_MATCH + "/$1$2$3$4/g");
-            else
-                setSubstitutePattern("s/" + BRACKET_PATTERN_MATCH + "/$1$2$3$4/g");
-		}
 	}
+
+    /**
+     * Formats the phone value only if the strip brackets flag is set
+     * else returns the passed in value
+     */
+    public String formatSubmitValue(String value)
+    {
+        if (this.flagIsSet(FLDFLAG_STRIPBRACKETS))
+            return super.formatSubmitValue(value);
+        else
+            return value;
+    }
 
     /**
      *  Passes on the phone format to the client side validations

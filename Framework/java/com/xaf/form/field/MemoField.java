@@ -68,7 +68,7 @@ public class MemoField extends DialogField
 			wrap = MemoField.WORDWRAP_SOFT;
 	}
 
-	public void populateValue(DialogContext dc)
+	public void populateValue(DialogContext dc, int formatType)
 	{
         String value = dc.getValue(this);
         if(value == null)
@@ -81,8 +81,11 @@ public class MemoField extends DialogField
 				(value == null && defaultValue != null))
 				value = defaultValue.getValueOrBlank(dc);
 		}
+        if (formatType == DialogField.DISPLAY_FORMAT)
+		    dc.setValue(this, this.formatDisplayValue(value));
+        else if (formatType == DialogField.SUBMIT_FORMAT)
+            dc.setValue(this, this.formatSubmitValue(value));
 
-		dc.setValue(this, formatValue(value));
 	}
 
 	public boolean isValid(DialogContext dc)
