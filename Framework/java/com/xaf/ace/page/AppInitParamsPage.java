@@ -51,6 +51,20 @@ public class AppInitParamsPage extends AceServletPage
 			propertiesElem.appendChild(propertyElem);
 		}
 
+		propertiesElem = doc.createElement("properties");
+		propertiesElem.setAttribute("name", "Libraries");
+		rootElem.appendChild(propertiesElem);
+
+		Element propertyElem = doc.createElement("property");
+		addText(propertyElem, "name", "XML Document Builder Factory");
+		addText(propertyElem, "value", javax.xml.parsers.DocumentBuilderFactory.newInstance().getClass().getName());
+		propertiesElem.appendChild(propertyElem);
+
+		propertyElem = doc.createElement("property");
+		addText(propertyElem, "name", "XSLT Transformer Factory");
+		addText(propertyElem, "value", javax.xml.transform.TransformerFactory.newInstance().getClass().getName());
+		propertiesElem.appendChild(propertyElem);
+
 		transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
 	}
 }
