@@ -51,12 +51,13 @@
  */
  
 /**
- * $Id: RedirectPage.java,v 1.2 2002-12-27 17:16:05 shahid.shah Exp $
+ * $Id: RedirectPage.java,v 1.3 2002-12-30 21:23:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,8 +65,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPage;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 
-public class RedirectPage extends com.netspective.sparx.xaf.navigate.NavigationPage
+public class RedirectPage extends NavigationPage
 {
     private SingleValueSource redirect;
     private String name;
@@ -85,29 +90,22 @@ public class RedirectPage extends com.netspective.sparx.xaf.navigate.NavigationP
         return name != null ? name : super.getName();
     }
 
-    public String getCaption(PageContext pc)
+    public String getCaption(ValueContext vc)
     {
-        return caption != null ? caption : super.getCaption(pc);
+        return caption != null ? caption : super.getCaption(vc);
     }
 
-    public void handlePage(PageContext pc) throws ServletException
+    public void handlePage(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
-        try
+        if(redirect == null)
         {
-            if(redirect == null)
-            {
-                HttpServletRequest request = (HttpServletRequest) pc.getRequest();
-                ((HttpServletResponse) pc.getResponse()).sendRedirect(request.getContextPath());
-            }
-            else
-            {
-                String redirectStr = redirect.getValue(pc);
-                ((HttpServletResponse) pc.getResponse()).sendRedirect(redirectStr);
-            }
+            HttpServletRequest request = (HttpServletRequest) nc.getRequest();
+            ((HttpServletResponse) nc.getResponse()).sendRedirect(request.getContextPath());
         }
-        catch(IOException e)
+        else
         {
-            throw new ServletException(e);
+            String redirectStr = redirect.getValue(nc);
+            ((HttpServletResponse) nc.getResponse()).sendRedirect(redirectStr);
         }
     }
 }

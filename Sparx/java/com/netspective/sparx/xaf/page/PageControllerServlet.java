@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.11 2002-12-28 20:07:38 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.12 2002-12-30 21:23:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -84,6 +84,7 @@ import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
+import com.netspective.sparx.xaf.navigate.NavigationPage;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -119,7 +120,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private static final String CONFIGITEM_LOGOUT_REDIRECT = "logout.redirect";
 
     private static final String DEFAULT_LOGOUT_PARAMNAME = "_logout";
-    private static final String DEFAULT_REDISCOVER_PARAMNAME = "_rediscover";
 
     private LoginDialog loginDialog;
     private String loginDialogSkinName;
@@ -393,9 +393,9 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 
         if(activePath != null)
         {
-            if(activePath instanceof com.netspective.sparx.xaf.navigate.NavigationPage)
+            if(activePath instanceof NavigationPage)
             {
-                com.netspective.sparx.xaf.navigate.NavigationPage activePage = (com.netspective.sparx.xaf.navigate.NavigationPage) activePath;
+                NavigationPage activePage = (NavigationPage) activePath;
                 if(activePage.requireLogin(nc))
                 {
                     if(doLogin(req, resp))

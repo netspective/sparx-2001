@@ -51,13 +51,12 @@
  */
 
 /**
- * $Id: NavigationIdUrlValue.java,v 1.2 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationIdUrlValue.java,v 1.3 2002-12-30 21:23:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
 import com.netspective.sparx.xaf.navigate.NavigationTreeManagerFactory;
-import com.netspective.sparx.xaf.page.NavigationTree;
 import com.netspective.sparx.xaf.navigate.NavigationTreeManager;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 
@@ -112,7 +111,7 @@ public class NavigationIdUrlValue extends ValueSource
                 return "No '" + source + "' Configuration found in " + getId();
         }
 
-        NavigationTree result = (NavigationTree) navTree.getAbsolutePathsMap().get(valueKey);
+        NavigationPath result = (NavigationPath) navTree.getAbsolutePathsMap().get(valueKey);
         if(result != null)
             return result.getUrl(vc);
         else
