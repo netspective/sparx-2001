@@ -273,36 +273,40 @@
             <column name="value_text" type="text" size="32" descr="The actual text value"/>
         </table>
 
-        <trigger type="dal-row-java" time="after" event="insert" use-db-policy="yes" use-table-instance="yes">
-            java.util.StringTokenizer st = new java.util.StringTokenizer(",");
-            int itemIndex = 0;
-            while(st.hasMoreTokens())
+        <trigger type="dal-row-java" time="after" event="insert">
             {
-                String textItem = st.nextToken().trim();
-                ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
-                row.setValueIndex(itemIndex);
-                row.setValueText(textItem);
-                row.getTable().insert(cc, row);
-                itemIndex++;
+                java.util.StringTokenizer st = new java.util.StringTokenizer(get${column.getAttribute("_gen-method-name")}(), ",");
+                int itemIndex = 0;
+                while(st.hasMoreTokens())
+                {
+                    String textItem = st.nextToken().trim();
+                    ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
+                    row.setValueIndex(itemIndex);
+                    row.setValueText(textItem);
+                    row.getTable().insert(cc, row);
+                    itemIndex++;
+                }
             }
         </trigger>
 
-        <trigger type="dal-row-java" time="after" event="update" use-db-policy="yes" use-table-instance="yes">
-            delete${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-rows-name")}(cc);
-            java.util.StringTokenizer st = new java.util.StringTokenizer(",");
-            int itemIndex = 0;
-            while(st.hasMoreTokens())
+        <trigger type="dal-row-java" time="after" event="update">
             {
-                String textItem = st.nextToken().trim();
-                ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
-                row.setValueIndex(itemIndex);
-                row.setValueText(textItem);
-                row.getTable().insert(cc, row);
-                itemIndex++;
+                delete${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-rows-name")}(cc);
+                java.util.StringTokenizer st = new java.util.StringTokenizer(get${column.getAttribute("_gen-method-name")}(), ",");
+                int itemIndex = 0;
+                while(st.hasMoreTokens())
+                {
+                    String textItem = st.nextToken().trim();
+                    ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
+                    row.setValueIndex(itemIndex);
+                    row.setValueText(textItem);
+                    row.getTable().insert(cc, row);
+                    itemIndex++;
+                }
             }
         </trigger>
 
-        <trigger type="dal-row-java" time="after" event="delete" use-db-policy="yes" use-dbms-id="yes">
+        <trigger type="dal-row-java" time="after" event="delete">
             delete${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-rows-name")}(cc);
         </trigger>
 
