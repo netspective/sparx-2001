@@ -139,7 +139,7 @@ public class DmlTask extends AbstractTask
             {
                 DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) i.next();
                 columnNames.add(state.field.getSimpleName());
-                columnValues.add(state.value == null ? null : state.field.getValueForSqlBindParam(state.value));
+                columnValues.add((state.value == null  || state.value.length() == 0)? null : state.field.getValueForSqlBindParam(state.value));
             }
         }
         else
@@ -161,7 +161,7 @@ public class DmlTask extends AbstractTask
                 DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) dc.get(fieldName);
                 if(state == null)
                     throw new RuntimeException("In dml tag, field '"+fieldName+"' does not exist in DialogContext");
-                columnValues.add(state.value == null ? null : state.field.getValueForSqlBindParam(state.value));
+                columnValues.add((state.value == null || state.value.length() == 0) ? null : state.field.getValueForSqlBindParam(state.value));
             }
         }
     }
