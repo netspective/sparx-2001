@@ -20,7 +20,7 @@ import com.xaf.value.*;
  * @version 1.0
  */
 
-public class AbstractDatabaseContext implements DatabaseContext
+public abstract class AbstractDatabaseContext implements DatabaseContext
 {
 	private static boolean forceNonScrollableRS;
 
@@ -28,15 +28,19 @@ public class AbstractDatabaseContext implements DatabaseContext
     {
     }
 
+    public DatabasePolicy getDatabasePolicy(Connection conn) throws SQLException
+    {
+        return DatabaseContextFactory.getDatabasePolicy(conn);
+    }
+
+    public abstract Connection getConnection(String dataSourceId) throws NamingException, SQLException;
+
 	public String translateDataSourceId(ValueContext vc, String dataSourceId)
 	{
 		return dataSourceId != null ? dataSourceId : vc.getServletContext().getInitParameter("default-data-source");
 	}
 
-	public Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException
-	{
-		return null;
-	}
+	public abstract Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException;
 
     static public void setNonScrollableResultSet(boolean force)
 	{

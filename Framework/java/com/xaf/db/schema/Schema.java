@@ -13,18 +13,16 @@ import java.util.List;
 
 public interface Schema
 {
-    public String getName();
-    public void setName(String value);
-
     public void initializeDefn();
     public void finalizeDefn();
 
     public void addTable(Table table);
     public Table getTable(String name);
+    public int getTablesCount();
+
     public Column getColumn(String tableName, String tableColumn);
 
-    public List getTablesList();
     public Map getTablesMap();
 
-    public ForeignKey getForeignKey(short type, String ref);
+    public ForeignKey getForeignKey(Column srcColumn, short type, String ref);
 }

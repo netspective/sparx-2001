@@ -24,7 +24,7 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
 {
 	static private Context env;
 
-	static public Connection getConnection(String dataSourceId) throws NamingException, SQLException
+	public Connection getConnection(String dataSourceId) throws NamingException, SQLException
 	{
 		if(env == null)
 			env = (Context) new InitialContext().lookup("java:comp/env");
@@ -46,8 +46,12 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
         // check to see if there is already a connection bound with the request
         // meaning we're within a transaction. Reuse the connection if we are
         // within a connection
-        ServletRequest request = vc.getRequest();
-        Connection conn = (Connection) request.getAttribute(dataSourceId);
+        Connection conn = null;
+        if(vc != null)
+        {
+            ServletRequest request = vc.getRequest();
+            conn = (Connection) request.getAttribute(dataSourceId);
+        }
         if (conn == null)
         {
             DataSource source = (DataSource) env.lookup(dataSourceId);

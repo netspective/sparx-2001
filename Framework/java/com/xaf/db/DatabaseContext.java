@@ -17,6 +17,11 @@ public interface DatabaseContext
 {
 	static public final int RESULTSET_NOT_SCROLLABLE = -9999;
 
+    /**
+	 * Given a connection, return the DatabasePolicy object for the specific database.
+	 */
+	public DatabasePolicy getDatabasePolicy(Connection conn) throws SQLException;
+
 	/**
 	 * Given a data source identifier, translate the name to a suitable name for
 	 * the given ValueContext. For example, if the dataSourceId is null, return
@@ -25,8 +30,14 @@ public interface DatabaseContext
 	 */
 	public String translateDataSourceId(ValueContext vc, String dataSourceId);
 
+    /**
+	 * Returns a connection (with appropriate pooling) for the given dataSourceId (no datasource translation performed)
+	 */
+    public Connection getConnection(String dataSourceId) throws NamingException, SQLException;
+
 	/**
-	 * Returns a connection (with appropriate pooling) for the given dataSourceId.
+	 * Returns a connection (with appropriate pooling) for the given dataSourceId. Datasource translation is performed
+     * by using the translateDataSourceId() method (e.g. null dataSource is the "default" data source).
 	 */
 	public Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException;
 

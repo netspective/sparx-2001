@@ -8,12 +8,15 @@
  */
 package com.xaf.db.schema;
 
+import java.util.List;
+
 import com.xaf.value.SingleValueSource;
 import com.xaf.value.ValueContext;
+import org.w3c.dom.Element;
 
 public interface Column
 {
-    public void finalizeDefn(Schema schema, Table table);
+    public void finalizeDefn();
 
     public String getName();
     public String getNameForMapKey();
@@ -25,15 +28,17 @@ public interface Column
     public String getDescription();
     public void setDescription(String value);
 
-    public Table getTable();
-    public void setTable(Table value);
+    public Table getParentTable();
+    public void setParentTable(Table value);
 
-    public int getIndexInRow();
-    public void setIndexInRow(int value);
+    public String getSequenceName();
+    public void setSequenceName(String value);
 
     public ForeignKey getForeignKey();
     public void setForeignKey(ForeignKey value);
     public void setForeignKeyRef(short type, String value);
+    public void registerForeignKeyDependency(ForeignKey fKey);
+    public List getDependentForeignKeys();
 
     public int getSize();
     public void setSize(int value);
@@ -41,16 +46,8 @@ public interface Column
     public String getDataClassName();
     public void setDataClassName(String value);
 
-    public boolean hasValue(RowData rowData);
-    public Object getObjectValue(RowData rowData);
-    public void setValueObject(RowData rowData, Object value);
-    public void setValueSqlExpr(RowData rowData, String expr);
-
-    public boolean hasValue(DataContext dc);
-    public Object getObjectValue(DataContext dc);
-
-    public ColumnData getDefaultValue();
-    public void setDefaultValue(ColumnData value);
+    public String getDefaultSqlExprValue();
+    public void setDefaultSqlExprValue(String value);
 
     public boolean isIndexed();
     public boolean isNaturalPrimaryKey();

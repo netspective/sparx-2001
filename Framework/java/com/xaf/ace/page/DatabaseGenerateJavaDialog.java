@@ -43,12 +43,18 @@ public class DatabaseGenerateJavaDialog extends Dialog
     protected SelectField dataTypesGeneratorField;
     protected TextField tablesPkgField;
     protected SelectField tablesGeneratorField;
-    protected SelectField tablesField;
+    protected TextField rowsPkgField;
+    protected SelectField rowsGeneratorField;
+    protected TextField rowsListPkgField;
+    protected SelectField rowsListGeneratorField;
+    protected TextField schemaPkgField;
+    protected TextField schemaClassNameField;
+    protected SelectField schemaGeneratorField;
     protected FilesystemEntriesListValue generatorsList;
 
     public DatabaseGenerateJavaDialog()
     {
-		super("schemagen", "Generate DDL");
+		super("schemagen", "Generate Object-Relational Objects");
 
         sourceFileField = new TextField("source_file", "Source file");
         sourceFileField.setSize(60);
@@ -80,11 +86,40 @@ public class DatabaseGenerateJavaDialog extends Dialog
         tablesGeneratorField = new SelectField("tables_gen", "Tables Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
         tablesGeneratorField.setDefaultValue(new StaticValue("table-generator.xsl"));
 
-        ListValueSource allTables = ValueSourceFactory.getListValueSource("schema-tables:.*");
-        tablesField = new SelectField("tables", "Tables", SelectField.SELECTSTYLE_MULTIDUAL, allTables);
-        tablesField.setFlag(DialogField.FLDFLAG_REQUIRED);
-        tablesField.setDefaultListValue(allTables);
-        tablesField.setSize(8);
+        rowsPkgField = new TextField("rows_pkg", "Rows Package");
+        rowsPkgField.setSize(60);
+		rowsPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        rowsPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.row"));
+
+        rowsGeneratorField = new SelectField("rows_gen", "Rows Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
+        rowsGeneratorField.setDefaultValue(new StaticValue("row-generator.xsl"));
+
+        rowsListPkgField = new TextField("rows_list_pkg", "Rows List Package");
+        rowsListPkgField.setSize(60);
+		rowsListPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        rowsListPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema.rows"));
+
+        rowsListGeneratorField = new SelectField("rows_list_gen", "Rows List Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
+        rowsListGeneratorField.setDefaultValue(new StaticValue("rows-generator.xsl"));
+
+        schemaPkgField = new TextField("schema_pkg", "Schema Package");
+        schemaPkgField.setSize(60);
+		schemaPkgField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        schemaPkgField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("schema"));
+
+        schemaClassNameField = new TextField("schema_class_name", "Schema Class Name");
+        schemaClassNameField.setSize(60);
+		schemaClassNameField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        schemaClassNameField.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource("AppSchema"));
+
+        schemaGeneratorField = new SelectField("schema_gen", "Schema Generator", SelectField.SELECTSTYLE_COMBO, generatorsList);
+        schemaGeneratorField.setDefaultValue(new StaticValue("schema-generator.xsl"));
+
+        //ListValueSource allTables = ValueSourceFactory.getListValueSource("schema-tables:.*");
+        //tablesField = new SelectField("tables", "Tables", SelectField.SELECTSTYLE_MULTIDUAL, allTables);
+        //tablesField.setFlag(DialogField.FLDFLAG_REQUIRED);
+        //tablesField.setDefaultListValue(allTables);
+        //tablesField.setSize(8);
 
         addField(sourceFileField);
 		addField(destRootField);
@@ -92,154 +127,59 @@ public class DatabaseGenerateJavaDialog extends Dialog
         addField(dataTypesGeneratorField);
         addField(tablesPkgField);
         addField(tablesGeneratorField);
-        addField(tablesField);
+        addField(rowsPkgField);
+        addField(rowsGeneratorField);
+        addField(rowsListPkgField);
+        addField(rowsListGeneratorField);
+        addField(schemaPkgField);
+        addField(schemaClassNameField);
+        addField(schemaGeneratorField);
+        //addField(tablesField);
 
 		setDirector(new DialogDirector());
     }
 
-    public void createDataTypesClasses(DialogContext dc, SchemaDocument schemaDoc, Map dataTypesClassMap, StringBuffer output)
-    {
-        String destRoot = dc.getValue("dest_root");
-        String dataTypesPkg = dc.getValue("data_types_pkg");
-        String dataTypesPkgDirName = dataTypesPkg.replace('.', '/');
-        File dataTypesDir = new File(destRoot + "/" + dataTypesPkgDirName);
-        dataTypesDir.mkdirs();
-
-        String dataTypesStyleSheet = generatorsList.getRootPath().getValue(dc) + "/" + dc.getValue("data_types_gen");
-        try
-		{
-			TransformerFactory tFactory = TransformerFactory.newInstance();
-			Transformer dataTypesTransformer = tFactory.newTransformer(new StreamSource(dataTypesStyleSheet));
-            dataTypesTransformer.setParameter("package-name", dataTypesPkg);
-            Map dataTypes = schemaDoc.getDataTypes();
-
-            DATATYPES:
-            for(Iterator i = dataTypes.values().iterator(); i.hasNext(); )
-            {
-                Element dataTypeElem = (Element) i.next();
-                String dataTypeName = XmlSource.xmlTextToJavaIdentifier(dataTypeElem.getAttribute("name"), true) + "Column";
-                String dataTypeFile = dataTypesDir.getAbsolutePath() + "/" + dataTypeName + ".java";
-                String javaTypeInitCap = null;
-                dataTypesClassMap.put(dataTypeElem.getAttribute("name"), dataTypesPkg + "." + dataTypeName);
-
-                NodeList children = dataTypeElem.getChildNodes();
-                for(int c = 0; c < children.getLength(); c++)
-                {
-                    Node child = children.item(c);
-                    if(child.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
-
-                    String childName = child.getNodeName();
-                    if("composite".equals(childName))
-                    {
-                        // composites will already have been "expanded" by the SchemaDocument so we don't create any classes
-                        if(dataTypeElem.getElementsByTagName("composite").getLength() > 0)
-                            continue DATATYPES;
-                    }
-                    else if("java-type".equals(childName))
-                        javaTypeInitCap = XmlSource.xmlTextToJavaIdentifier(child.getFirstChild().getNodeValue(), true);
-                }
-
-                dataTypesTransformer.setParameter("data-type-name", dataTypeName);
-                if(javaTypeInitCap != null)
-                    dataTypesTransformer.setParameter("java-type-init-cap", javaTypeInitCap);
-
-                dataTypesTransformer.transform
-                    (new javax.xml.transform.dom.DOMSource(dataTypeElem),
-                     new javax.xml.transform.stream.StreamResult(dataTypeFile));
-
-                output.append("<p>Saved generated java for data type '"+ dataTypeName +"' in <a href='" + dataTypeFile + "'>"+ dataTypeFile +"</a>");
-            }
-		}
-		catch(TransformerConfigurationException e)
-		{
-            StringWriter stack = new StringWriter();
-            e.printStackTrace(new PrintWriter(stack));
-			output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
-		}
-		catch(TransformerException e)
-		{
-            StringWriter stack = new StringWriter();
-            e.printStackTrace(new PrintWriter(stack));
-			output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
-		}
-    }
-
-    public void createTablesClasses(DialogContext dc, SchemaDocument schemaDoc, Map dataTypesClassMap, StringBuffer output)
-    {
-        String destRoot = dc.getValue("dest_root");
-        String tablesPkg = dc.getValue("tables_pkg");
-        String tablesPkgDirName = tablesPkg.replace('.', '/');
-        File tablesDir = new File(destRoot + "/" + tablesPkgDirName);
-        tablesDir.mkdirs();
-
-        String rowsStyleSheet = generatorsList.getRootPath().getValue(dc) + "/" + dc.getValue("tables_gen");
-        try
-		{
-			TransformerFactory tFactory = TransformerFactory.newInstance();
-            Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsStyleSheet));
-            rowsTransformer.setParameter("package-name", tablesPkg);
-            Map tables = schemaDoc.getTables();
-
-            TABLES:
-            for(Iterator i = tables.values().iterator(); i.hasNext(); )
-            {
-                Element tableElem = (Element) i.next();
-                String tableName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Table";
-                String rowsFile = tablesDir.getAbsolutePath() + "/" + tableName + ".java";
-
-                NodeList children = tableElem.getChildNodes();
-                for(int c = 0; c < children.getLength(); c++)
-                {
-                    Node child = children.item(c);
-                    if(child.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
-
-                    String childName = child.getNodeName();
-                    if("column".equals(childName))
-                    {
-                        Element columnElem = (Element) child;
-                        columnElem.setAttribute("_gen-method-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), true));
-                        columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
-
-                        NodeList jtnl = columnElem.getElementsByTagName("java-type");
-                        if(jtnl.getLength() > 0)
-                            columnElem.setAttribute("_gen-java-type-init-cap", XmlSource.xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
-                    }
-                }
-
-                rowsTransformer.setParameter("table-name", tableName);
-                rowsTransformer.transform
-                    (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(rowsFile));
-
-                output.append("<p>Saved generated java for table row '"+ tableName +"' in <a href='" + rowsFile + "'>"+ rowsFile +"</a>");
-            }
-		}
-		catch(TransformerConfigurationException e)
-		{
-            StringWriter stack = new StringWriter();
-            e.printStackTrace(new PrintWriter(stack));
-			output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
-		}
-		catch(TransformerException e)
-		{
-            StringWriter stack = new StringWriter();
-            e.printStackTrace(new PrintWriter(stack));
-			output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
-		}
-    }
-
     public String execute(DialogContext dc)
 	{
-        Map dataTypesClassMap = new HashMap();
         SchemaDocument schemaDoc = SchemaDocFactory.getDoc(dc.getValue("source_file"));
-        String destRoot = dc.getValue("dest_root");
-        new File(destRoot).mkdirs();
+        if(schemaDoc == null)
+            return "Schema file '"+ dc.getValue("source_file") +"' not found.";
 
-        StringBuffer output = new StringBuffer("<p align='left'>");
-        createDataTypesClasses(dc, schemaDoc, dataTypesClassMap, output);
-        createTablesClasses(dc, schemaDoc, dataTypesClassMap, output);
-        output.append("</p>");
+        String generatorsListRootPath = generatorsList.getRootPath().getValue(dc);
+        SchemaDocument.ObjectRelationalGenerator orGenerator = new SchemaDocument.ObjectRelationalGenerator();
+        orGenerator.setDestRoot(dc.getValue("dest_root"));
+        orGenerator.setDataTypesPkg(dc.getValue("data_types_pkg"));
+        orGenerator.setDataTypesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("data_types_gen"));
+        orGenerator.setTablesPkg(dc.getValue("tables_pkg"));
+        orGenerator.setTablesGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("tables_gen"));
+        orGenerator.setRowsPkg(dc.getValue("rows_pkg"));
+        orGenerator.setRowsGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_gen"));
+        orGenerator.setRowsListPkg(dc.getValue("rows_list_pkg"));
+        orGenerator.setRowsListGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("rows_list_gen"));
+        orGenerator.setSchemaPkg(dc.getValue("schema_pkg"));
+        orGenerator.setSchemaClassName(dc.getValue("schema_class_name"));
+        orGenerator.setSchemaGeneratorStyleSheet(generatorsListRootPath + "/" + dc.getValue("schema_gen"));
+
+        StringBuffer output = new StringBuffer("<p align='center'>");
+        try
+		{
+            orGenerator.generate(schemaDoc);
+            output.append("Generated " + orGenerator.getDataTypesGeneratedCount() + " data types, ");
+            output.append(orGenerator.getRowsGeneratedCount() + " rows, and ");
+            output.append(orGenerator.getTablesGeneratedCount() + " tables.");
+		}
+		catch(TransformerConfigurationException e)
+		{
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
+		}
+		catch(TransformerException e)
+		{
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			output.append("<pre>" + e.toString() + stack.toString() + "</pre>");
+		}
         return output.toString();
 	}
 

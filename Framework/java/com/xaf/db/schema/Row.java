@@ -9,48 +9,39 @@
 package com.xaf.db.schema;
 
 import com.xaf.form.DialogContext;
+import com.xaf.sql.DmlStatement;
+import com.xaf.value.ValueContext;
+import com.xaf.db.ConnectionContext;
 
-import javax.servlet.ServletContext;
-import javax.servlet.Servlet;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.naming.NamingException;
 import java.util.List;
 import java.util.Map;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Connection;
 
 public interface Row
 {
-    public int getColumnsCount();
-    public void addColumn(Column column);
     public Column[] getColumns();
-    public List getColumnsList();
-    public Map getColumnsMap();
 
-    public Column getColumn(String name);
-    public Column getColumn(int index);
+    public Object[] getData();
+    public List getDataForDmlStatement();
+    public Object getActivePrimaryKeyValue();
 
-    public void finalizeDefn(Schema schema);
+    public void populateData(ResultSet resultSet) throws SQLException;
+    public void populateData(DialogContext dc);
 
-    public RowData createRowData();
+    public void setData(DialogContext dc);
 
-    public DataContext createDataContext(DialogContext dc, boolean fillFieldValues);
-    public DataContext createDataContext(ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response);
+    public DmlStatement createInsertDml(Table table);
+    public DmlStatement createUpdateDml(Table table, String whereCond);
+    public DmlStatement createDeleteDml(Table table, String whereCond);
 
-/*
-    public void initializeRowData(RowData rowData);
+    public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
+    public boolean beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
+    public boolean beforeDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
-    public boolean isRowDataValid(RowData rowData);
-    public boolean isRowDataValidForInsert(RowData rowData);
-    public boolean isRowDataValidForUpdate(RowData rowData);
-    public boolean isRowDataValidForRemove(RowData rowData);
-
-    public boolean allowInsert(Connection conn, RowData rowData);
-    public void insertCompleted(Connection conn, RowData rowData);
-
-    public boolean allowUpdate(Connection conn, RowData rowData);
-    public void updateCompleted(Connection conn, RowData rowData);
-
-    public boolean allowDelete(Connection conn, RowData rowData);
-    public void deleteCompleted(Connection conn, RowData rowData);
-*/
+    public void afterInsert(ConnectionContext cc) throws NamingException, SQLException;
+    public void afterUpdate(ConnectionContext cc) throws NamingException, SQLException;
+    public void afterDelete(ConnectionContext cc) throws NamingException, SQLException;
 }

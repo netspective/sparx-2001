@@ -8,11 +8,13 @@
  */
 package com.xaf.db.schema;
 
-import com.xaf.value.SingleValueSource;
-import com.xaf.value.ValueContext;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+
+import com.xaf.value.SingleValueSource;
+import com.xaf.value.ValueContext;
 
 public abstract class AbstractColumn implements Column
 {
@@ -20,16 +22,13 @@ public abstract class AbstractColumn implements Column
     public static long COLUMNFLAG_ISUNIQUE = COLUMNFLAG_ISREQUIRED * 2;
     public static long COLUMNFLAG_ISNATURALPRIMARYKEY = COLUMNFLAG_ISUNIQUE * 2;
     public static long COLUMNFLAG_ISSEQUENCEDPRIMARYKEY = COLUMNFLAG_ISNATURALPRIMARYKEY * 2;
-    public static long COLUMNFLAG_HASDEFAULTVALUE = COLUMNFLAG_ISSEQUENCEDPRIMARYKEY * 2;
-    public static long COLUMNFLAG_ISDEFAULTVALUESQLEXPR = COLUMNFLAG_HASDEFAULTVALUE * 2;
-    public static long COLUMNFLAG_ISDEFAULTVALUESINGLEVALUESRC = COLUMNFLAG_ISDEFAULTVALUESQLEXPR * 2;
-    public static long COLUMNFLAG_ISINDEXED = COLUMNFLAG_ISDEFAULTVALUESINGLEVALUESRC * 2;
+    public static long COLUMNFLAG_ISINDEXED = COLUMNFLAG_ISSEQUENCEDPRIMARYKEY * 2;
     public static long COLUMNFLAG_SQLDEFNHASSIZE = COLUMNFLAG_ISINDEXED * 2;
     public static long COLUMNFLAG_CUSTOMSTART = COLUMNFLAG_SQLDEFNHASSIZE * 2;
 
     public static String SIZE_REPLACEMENT_FMT = "%size%";
 
-    private Table table;
+    private Table parentTable;
     private String name;
     private int size = -1;
     private int indexInRow;
@@ -38,23 +37,33 @@ public abstract class AbstractColumn implements Column
     private long flags;
     private ForeignKey foreignKey;
     private String foreignKeyRef;
+    private String sequenceName;
     private short foreignKeyRefType;
-    private ColumnData defaultValue;
+    private String defaultSqlExprValue;
     private String dataClassName;
+    private List dependentFKeys;
+
+    static public String convertColumnNameForMapKey(String name)
+    {
+        return name.toLowerCase();
+    }
 
     public AbstractColumn(Table table, String name)
     {
-        this.table = table;
-        this.name = name;
-        table.getRow().addColumn(this);
+        setParentTable(table);
+        setName(name);
+        parentTable.addColumn(this);
     }
-
-    public Table getTable() { return table; }
-    public void setTable(Table value) { table = value; }
 
     public String getName() { return name; }
     public String getNameForMapKey() { return name.toLowerCase(); }
     public void setName(String value) { name = value; }
+
+    public Table getParentTable() { return parentTable; }
+    public void setParentTable(Table value) { parentTable = value; }
+
+    public String getSequenceName() { return sequenceName; }
+    public void setSequenceName(String value) { sequenceName = value; }
 
     public String getSqlDefn(String dbms)
     {
@@ -85,20 +94,20 @@ public abstract class AbstractColumn implements Column
     public ForeignKey getForeignKey() { return foreignKey; }
     public void setForeignKey(ForeignKey value) { foreignKey = value; }
     public void setForeignKeyRef(short type, String value) { foreignKeyRefType = type; foreignKeyRef = value; }
+    public List getDependentForeignKeys() { return dependentFKeys; }
+
+    public void registerForeignKeyDependency(ForeignKey fKey)
+    {
+        if(dependentFKeys == null) dependentFKeys = new ArrayList();
+        dependentFKeys.add(fKey);
+        fKey.getSourceColumn().getParentTable().registerForeignKeyDependency(fKey);
+    }
 
     public int getIndexInRow() { return indexInRow; }
     public void setIndexInRow(int value) { indexInRow = value; }
 
-    public boolean hasValue(RowData rowData) { return getObjectValue(rowData) != null; }
-    public Object getObjectValue(RowData rowData) { ColumnData data = rowData.getData(this); return data != null ? data.getValue() : null; }
-    public void setValueObject(RowData rowData, Object value) { rowData.setData(this, new BasicColumnData(value)); }
-    public void setValueSqlExpr(RowData rowData, String expr) { rowData.setData(this, new BasicColumnData(expr)); }
-
-    public boolean hasValue(DataContext dc) { return getObjectValue(dc) != null; }
-    public Object getObjectValue(DataContext dc) { ColumnData data = dc.getRowData().getData(this); return data != null ? data.getValue(dc) : null; }
-
-    public ColumnData getDefaultValue() { return defaultValue; }
-    public void setDefaultValue(ColumnData value) { defaultValue = value; }
+    public String getDefaultSqlExprValue() { return defaultSqlExprValue; }
+    public void setDefaultSqlExprValue(String value) { defaultSqlExprValue = value; }
 
     public boolean isIndexed() { return flagIsSet(COLUMNFLAG_ISINDEXED); }
     public boolean isNaturalPrimaryKey() { return flagIsSet(COLUMNFLAG_ISNATURALPRIMARYKEY); }
@@ -119,10 +128,13 @@ public abstract class AbstractColumn implements Column
     protected void setOrClearFlag(long flag, boolean set) { if(set) flags |= flag; else flags &= ~flag; }
 	protected void clearFlag(long flag) { flags &= ~flag; }
 
-    public void finalizeDefn(Schema schema, Table table)
+    public void finalizeDefn()
     {
         if(foreignKeyRefType != ForeignKey.FKEYTYPE_NONE)
-            setForeignKey(schema.getForeignKey(foreignKeyRefType, foreignKeyRef));
+        {
+            Schema schema = getParentTable().getParentSchema();
+            setForeignKey(schema.getForeignKey(this, foreignKeyRefType, foreignKeyRef));
+        }
     }
 
     static public String replaceValueInStr(String srcStr, String findStr, String replStr)

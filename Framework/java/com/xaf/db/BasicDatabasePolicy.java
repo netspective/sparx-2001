@@ -16,6 +16,16 @@ import java.util.List;
 
 public class BasicDatabasePolicy implements DatabasePolicy
 {
+    public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
+    {
+        return null;
+    }
+
+    public Object handleAutoIncPostDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName, Object autoIncColumnValue) throws SQLException
+    {
+        return autoIncColumnValue;
+    }
+
     public Object handleAutoIncPreDmlExecute(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName, List columnNames, List columnValues) throws SQLException
     {
         return null;
@@ -23,7 +33,7 @@ public class BasicDatabasePolicy implements DatabasePolicy
 
     public Object handleAutoIncPostDmlExecute(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName, Object autoIncColumnValue) throws SQLException
     {
-        return null;
+        return autoIncColumnValue;
     }
 
     public Object getAutoIncCurrentValue(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName) throws SQLException

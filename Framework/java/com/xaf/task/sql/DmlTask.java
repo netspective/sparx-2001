@@ -218,7 +218,7 @@ public class DmlTask extends BasicTask
 					   very useful for things like sequences
 					*/
 					columnNames.add(colName);
-					columnValues.add(new Generator.CustomSql(colValue.toString()));
+					columnValues.add(new DmlStatement.CustomSql(colValue.toString()));
 				}
                 else
                 {
@@ -269,7 +269,7 @@ public class DmlTask extends BasicTask
         String autoIncColName = autoIncDefn;
         Object autoIncColValue = null;
 
-        Generator.DmlStatement dml = null;
+        DmlStatement dml = null;
         List columnNames = new ArrayList();
         List columnValues = new ArrayList();
 
@@ -350,7 +350,7 @@ public class DmlTask extends BasicTask
                         autoIncColValue = databasePolicy.handleAutoIncPreDmlExecute(conn, tc, autoIncSeqOrTableName, autoIncColName, columnNames, columnValues);
                     }
 
-	                dml = Generator.createInsertStmt(tableName, columnNames, columnValues);
+	                dml = new DmlStatement(tableName, columnNames, columnValues);
 					break;
 
 				case DMLCMD_INSERT_OR_UPDATE:
@@ -359,11 +359,11 @@ public class DmlTask extends BasicTask
 				case DMLCMD_UPDATE:
 					if(whereCond == null)
 						throw new TaskExecuteException("No 'where' attribute provided.");
-					dml = Generator.createUpdateStmt(tableName, columnNames, columnValues, whereCond.getValue(tc));
+					dml = new DmlStatement(tableName, columnNames, columnValues, whereCond.getValue(tc));
 					break;
 
 				case DMLCMD_REMOVE:
-					dml = Generator.createDeleteStmt(tableName, whereCond.getValue(tc));
+					dml = new DmlStatement(tableName, whereCond.getValue(tc));
 					break;
 				case DMLCMD_UNKNOWN:
 					throw new TaskExecuteException("No appropriate DML command provided.");
@@ -377,14 +377,15 @@ public class DmlTask extends BasicTask
                 return;
             }
 
-            stmt = conn.prepareStatement(dml.sql);
+            stmt = conn.prepareStatement(dml.getSql());
 
             int columnNum = 1;
-            if(dml.bindValues != null)
+            boolean[] bindValues = dml.getBindValues();
+            if(bindValues != null)
             {
-                for(int c = 0; c < dml.bindValues.length; c++)
+                for(int c = 0; c < bindValues.length; c++)
                 {
-                    if(dml.bindValues[c])
+                    if(bindValues[c])
                     {
                         stmt.setObject(columnNum, columnValues.get(c));
                         columnNum++;

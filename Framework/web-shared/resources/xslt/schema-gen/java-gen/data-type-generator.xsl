@@ -19,6 +19,8 @@ import com.xaf.value.*;
 
 public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 {
+	private <xsl:value-of select="$java-class-spec"/> defaultValue;
+
 	public <xsl:value-of select="$data-type-name"/>(Table table, String name)
 	{
 		super(table, name);
@@ -32,39 +34,9 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 <xsl:if test="size">		setSize(<xsl:value-of select="size"/>);
 </xsl:if>
 	}
-<xsl:if test="java-type">
-	public <xsl:value-of select="java-type"/> get<xsl:value-of select="$java-type-init-cap"/>Value(DataContext dc, <xsl:value-of select="java-type"/> defaultValue)
-	{
-		Object o = getObjectValue(dc);
-		return o != null ? (((<xsl:value-of select="$java-class-spec"/>) o).<xsl:value-of select="java-type"/>Value()) : defaultValue;
-	}		
-
-	public <xsl:value-of select="java-type"/> get<xsl:value-of select="$java-type-init-cap"/>Value(DataContext dc)
-	{
-		return get<xsl:value-of select="$java-type-init-cap"/>Value(dc, (<xsl:value-of select="java-type"/>) <xsl:value-of select="java-type/@default"/>);
-	}		
-
-	public void set<xsl:value-of select="$java-type-init-cap"/>Value(DataContext dc, <xsl:value-of select="java-type"/> value)
-	{
-		setValue(dc, new <xsl:value-of select="$java-class-spec"/>(value));
-	}		
-</xsl:if>	
-	public <xsl:value-of select="$java-class-spec"/> getValue(DataContext dc, <xsl:value-of select="$java-class-spec"/> defaultValue)
-	{
-		Object o = getObjectValue(dc);
-		return o != null ? ((<xsl:value-of select="$java-class-spec"/>) o) : defaultValue;
-	}
-
-	public <xsl:value-of select="$java-class-spec"/> getValue(DataContext dc)
-	{
-		return (<xsl:value-of select="$java-class-spec"/>) getObjectValue(dc);
-	}
-
-	public void setValue(DataContext dc, <xsl:value-of select="$java-class-spec"/> value)
-	{
-		setValueObject(dc, value);
-	}
+	
+	public <xsl:value-of select="$java-class-spec"/> getDefaultValue() { return defaultValue; }	
+	public void setDefaultValue(<xsl:value-of select="$java-class-spec"/> value) { defaultValue = value; }
 }
 </xsl:template>
-
 </xsl:stylesheet>

@@ -81,11 +81,14 @@ public class XmlSource
 		if(xml == null || xml.length() == 0)
 			return xml;
 
-		boolean uCase = ucaseInitial;
 		StringBuffer identifier = new StringBuffer();
-		for(int i = 0; i < xml.length(); i++)
+        char ch = xml.charAt(0);
+        identifier.append(ucaseInitial ? Character.toUpperCase(ch) : Character.toLowerCase(ch));
+
+        boolean uCase = false;
+		for(int i = 1; i < xml.length(); i++)
 		{
-			char ch = xml.charAt(i);
+			ch = xml.charAt(i);
             if(ch == '.')
             {
                 identifier.append('_');

@@ -9,90 +9,122 @@
 package com.xaf.db.schema;
 
 import com.xaf.form.DialogContext;
+import com.xaf.sql.DmlStatement;
+import com.xaf.db.ConnectionContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import javax.naming.NamingException;
+import java.util.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Connection;
 
 public abstract class AbstractRow implements Row
 {
-    private List columnsList = new ArrayList();
-    private Map columnsMap = new HashMap();
-
-    public AbstractRow()
-    {
-    }
-
-    public AbstractRow(List columns)
-    {
-        for(int i = 0; i < columns.size(); i++)
-            addColumn((Column) columns.get(i));
-    }
+    protected Table rowTable;
+    protected Column[] rowColumns;
+    protected boolean[] haveSqlExprData;
+    protected String[] sqlExprData;
 
     public AbstractRow(Column[] columns)
     {
-        for(int i = 0; i < columns.length; i++)
-            addColumn(columns[i]);
+        setColumns(columns);
     }
 
-    public int getColumnsCount()
+    public AbstractRow(Table table)
     {
-        return columnsList.size();
+        setTable(table);
     }
 
-    public void addColumn(Column column)
+    public Object getActivePrimaryKeyValue()
     {
-        column.setIndexInRow(columnsList.size());
-        columnsList.add(column);
-        columnsMap.put(column.getNameForMapKey(), column);
+        return null;
     }
 
-    public Column[] getColumns()
+    public void setCustomSqlExpr(int column, String sqlExpr)
     {
-        return (Column[]) columnsList.toArray(new Column[columnsList.size()]);
+        Column[] columns = getColumns();
+        if(sqlExprData == null)
+            sqlExprData = new String[columns.length];
+        sqlExprData[column] = sqlExpr;
+        haveSqlExprData[column] = true;
     }
 
-    public List getColumnsList()
+    public Table getTable() { return rowTable; }
+    public void setTable(Table value)
     {
-        return columnsList;
+        rowTable = value;
+        haveSqlExprData = new boolean[rowTable.getColumnsCount()];
     }
 
-    public Map getColumnsMap()
+    public Column[] getColumns() { return rowTable != null ? rowTable.getAllColumns() : rowColumns; }
+    public void setColumns(Column[] value)
     {
-        return columnsMap;
+        rowColumns = value;
+        haveSqlExprData = new boolean[rowColumns.length];
     }
 
-    public Column getColumn(String name)
+    abstract public Object[] getData();
+    abstract public List getDataForDmlStatement();
+
+    abstract public void populateData(ResultSet rs) throws SQLException;
+    abstract public void populateData(DialogContext dc);
+
+    abstract public void setData(DialogContext dc);
+
+    public boolean valuesAreEqual(Object primary, Object compareTo)
     {
-        return (Column) columnsMap.get(name);
+        if(primary == null && compareTo == null)
+            return true;
+
+        if((primary == null && compareTo != null) || (primary != null && compareTo == null))
+            return false;
+
+        return primary.equals(compareTo);
     }
 
-    public Column getColumn(int index)
+    public DmlStatement createInsertDml(Table table)
     {
-        return (Column) columnsList.get(index);
+        return new DmlStatement(table.getName(), table.getColumnNames(), getDataForDmlStatement());
     }
 
-    public RowData createRowData()
+    public DmlStatement createUpdateDml(Table table, String whereCond)
     {
-        return new BasicRowData(this);
+        return new DmlStatement(table.getName(), table.getColumnNames(), getDataForDmlStatement(), whereCond);
     }
 
-    public DataContext createDataContext(DialogContext dc, boolean fillFieldValues)
+    public DmlStatement createDeleteDml(Table table, String whereCond)
     {
-        return new DataContext(this, dc, fillFieldValues);
+        return new DmlStatement(table.getName(), whereCond);
     }
 
-    public DataContext createDataContext(ServletContext context, Servlet servlet, ServletRequest request, ServletResponse response)
+    public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
     {
-        return new DataContext(this, context, servlet, request, response);
+        return true;
     }
 
-    public void finalizeDefn(Schema schema)
+    public boolean beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        return true;
+    }
+
+    public boolean beforeDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        return true;
+    }
+
+    public void afterInsert(ConnectionContext cc) throws NamingException, SQLException
+    {
+    }
+
+    public void afterUpdate(ConnectionContext cc) throws NamingException, SQLException
+    {
+    }
+
+    public void afterDelete(ConnectionContext cc) throws NamingException, SQLException
     {
     }
 }

@@ -18,16 +18,47 @@ import java.util.List;
 
 public class OracleDatabasePolicy extends BasicDatabasePolicy
 {
+    public Object executeAndGetSingleValue(Connection conn, String sql) throws SQLException
+    {
+        Object value = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try
+        {
+            stmt = conn.createStatement();
+            try
+            {
+                rs = stmt.executeQuery(sql);
+                if(rs.next())
+                    value = rs.getObject(1);
+            }
+            finally
+            {
+                if(rs != null) rs.close();
+            }
+        }
+        catch(SQLException e)
+        {
+            throw new SQLException(e.toString() + " ["+ sql +"]");
+        }
+        finally
+        {
+            if(stmt != null) stmt.close();
+        }
+        return value;
+    }
+
+    public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
+    {
+        Object autoIncValue = executeAndGetSingleValue(conn, "select "+ seqOrTableName +".nextval from dual");
+        if(autoIncValue == null)
+            throw new SQLException("Unable to obtain next ORACLE sequence value from sequence '"+ seqOrTableName +"'");
+        return autoIncValue;
+    }
+
     public Object handleAutoIncPreDmlExecute(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName, List columnNames, List columnValues) throws SQLException
     {
-        Object autoIncValue = null;
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select "+ seqOrTableName +".nextval from dual");
-        if(rs.next())
-            autoIncValue = rs.getObject(1);
-        rs.close();
-        stmt.close();
-
+        Object autoIncValue = executeAndGetSingleValue(conn, "select "+ seqOrTableName +".nextval from dual");
         if(autoIncValue != null)
         {
             columnNames.add(autoIncColumnName);
@@ -38,24 +69,8 @@ public class OracleDatabasePolicy extends BasicDatabasePolicy
             throw new SQLException("Unable to obtain next ORACLE sequence value from sequence '"+ seqOrTableName +"'");
     }
 
-    public Object handleAutoIncPostDmlExecute(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName, Object autoIncColumnValue) throws SQLException
-    {
-        return autoIncColumnValue;
-    }
-
     public Object getAutoIncCurrentValue(Connection conn, ValueContext vc, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
-        Object autoIncValue = null;
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select "+ seqOrTableName +".currval from dual");
-        if(rs.next())
-            autoIncValue = rs.getObject(1);
-        rs.close();
-        stmt.close();
-
-        if(autoIncValue != null)
-            return autoIncValue;
-        else
-            throw new SQLException("Unable to obtain current ORACLE sequence value from sequence '"+ seqOrTableName +"'");
+        return executeAndGetSingleValue(conn, "select "+ seqOrTableName +".currval from dual");
     }
 }

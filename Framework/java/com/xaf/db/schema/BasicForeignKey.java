@@ -17,9 +17,7 @@ public class BasicForeignKey implements ForeignKey
     {
         source = src;
         referenced = ref;
-
-        source.getTable().registerForeignKey(this, true);
-        referenced.getTable().registerForeignKey(this, false);
+        referenced.registerForeignKeyDependency(this);
     }
 
     public short getType() { return ForeignKey.FKEYTYPE_LOOKUP; }
