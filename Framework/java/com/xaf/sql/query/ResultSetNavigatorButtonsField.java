@@ -66,10 +66,10 @@ public class ResultSetNavigatorButtonsField extends DialogField
 		if(isScrollable && activePage < lastPage)
 		{
 			html.append("<input type='submit' name='rs_nav_last' value=' Last ' " + attrs + "> ");
-			html.append("&nbsp;&nbsp;<nobr>");
-	    	html.append(NumberFormat.getNumberInstance().format(state.getTotalRows()));
-		    html.append(" total rows</nobr>");
 		}
+		html.append("&nbsp;&nbsp;<nobr>");
+		html.append(NumberFormat.getNumberInstance().format(state.getTotalRows()));
+		html.append(" total rows</nobr>");
 		html.append("</center>");
 
 		return html.toString();
