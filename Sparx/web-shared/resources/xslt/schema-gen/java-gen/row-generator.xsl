@@ -242,7 +242,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 
             case VALUEHANDLE_ASSIGN:
 <xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		state = (DialogContext.DialogFieldState) fieldStates.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:text>            </xsl:text>if(state != null) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
+<xsl:text>            </xsl:text>if(state != null) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">state.value != null &amp;&amp; state.value.length() > 0 ? (<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value) : null</xsl:when><xsl:otherwise>state.value != null &amp;&amp; state.value.length() > 0 ? table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value) : null</xsl:otherwise></xsl:choose>);
 </xsl:for-each>      break;
         }
 	}
@@ -265,7 +265,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
             case VALUEHANDLE_ASSIGN:
 <xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		    fieldName = (String) colNameFieldNameMap.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
                     state = (DialogContext.DialogFieldState) fieldStates.get(fieldName != null ? fieldName : COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:text>				</xsl:text>if(state != null) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">(<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value)</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value)</xsl:otherwise></xsl:choose>);
+<xsl:text>				</xsl:text>if(state != null) set<xsl:value-of select="@_gen-method-name"/>(<xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">state.value</xsl:when><xsl:when test="$java-class-spec = 'java.util.Date'">state.value != null &amp;&amp; state.value.length() > 0 ? (<xsl:value-of select="$java-class-spec"/>) state.field.getValueForSqlBindParam(state.value) : null</xsl:when><xsl:otherwise>state.value != null &amp;&amp; state.value.length() > 0 ? table.get<xsl:value-of select="@_gen-method-name"/>Column().parse(state.value) : null</xsl:otherwise></xsl:choose>);
 </xsl:for-each>         break;
         }
 	}
