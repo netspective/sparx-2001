@@ -51,14 +51,17 @@
  */
 
 /**
- * $Id: DialogFieldClientJavascript.java,v 1.2 2002-03-26 17:57:52 eoliphan Exp $
+ * $Id: DialogFieldClientJavascript.java,v 1.3 2002-07-10 20:56:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
-
+/**
+ * A <code>DialogFieldClientJavascript</code> object is created for custom JavaScript defined
+ * as the action script for an event generated from a dialog field.
+ */
 public class DialogFieldClientJavascript
 {
     private SingleValueSource event;

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.7 2002-07-08 13:13:50 aye.thu Exp $
+ * $Id: DialogField.java,v 1.8 2002-07-10 20:56:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -75,11 +75,11 @@ import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
 /**
- * A dialog field provides various dialog data operations such as data entry, validation, and formatting.
- * One can think of a dialog as a container/manager object consisting of data fields which have their own behaviors and
- * properties: a <code>DialogField</b> object provides the default behavior and functionality for all types of
- * dialog fields. Child classes extending <code>DialogField</code> class overwrites or extends its functionalities.
- *
+ * A <code>DialogField</code> object represents a data field of a form/dialog. It contains functionalities
+ * such as data validation rules, dynamic data binding, HTML rendering, and conditional logics.
+ * It provides the default behavior and functionality for all types of dialog fields.
+ * All dialog classes representing specialized  fields such as text fields, numerical fields, and phone fields subclass
+ * the <code>DialogField</code> class.
  */
 public class DialogField
 {

@@ -51,11 +51,14 @@
  */
  
 /**
- * $Id: DialogFieldPopup.java,v 1.2 2002-02-02 00:00:30 snshah Exp $
+ * $Id: DialogFieldPopup.java,v 1.3 2002-07-10 20:56:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
 
+/**
+ * <code>DialogFieldPopup</code> class represents a dialog field with up a pop up window associated with it.
+ */
 public class DialogFieldPopup
 {
     public final String DEFAULT_WINDOW_CLASS = "default";
@@ -67,12 +70,23 @@ public class DialogFieldPopup
     private boolean allowMulti = false;
     private boolean closeAfter = true;
 
+    /**
+     * Construct <code>DialogFieldPopup</code>
+     *
+     * @param action    URL for the pop up window
+     * @param fill      array of field names to fill the data with
+     */
     public DialogFieldPopup(String action, String[] fill)
     {
         actionUrl = action;
         fillFields = fill;
     }
-
+    /**
+     * Constuct <code>DialogFieldPopup</code>
+     *
+     * @param action    action URL for the popup window
+     * @param fill      field name to fill the data with
+     */
     public DialogFieldPopup(String action, String fill)
     {
         actionUrl = action;

@@ -51,39 +51,65 @@
  */
  
 /**
- * $Id: DialogFieldConditionalAction.java,v 1.2 2002-02-02 00:00:30 snshah Exp $
+ * $Id: DialogFieldConditionalAction.java,v 1.3 2002-07-10 20:56:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
 
 import org.w3c.dom.Element;
 
+/**
+ * Abstract class for defining conditional actions for dialog fields.
+ */
 public abstract class DialogFieldConditionalAction
 {
     private DialogField sourceField = null;
     private DialogField partnerField = null;
     private String partnerFieldName = null;
 
+    /**
+     * Empty constructor
+     */
     public DialogFieldConditionalAction()
     {
     }
 
+    /**
+     * Construct a <code>DialogFieldConditionalAction</code> object
+     */
     public DialogFieldConditionalAction(DialogField sourceField)
     {
         setSourceField(sourceField);
     }
 
+    /**
+     * Construct a <code>DialogFieldConditionalAction</code> object whose source dialog
+     * field is related to another dialog field
+     *
+     * @param sourceField   parent dialog field
+     * @param partnerName   name of the parter dialog field
+     */
     public DialogFieldConditionalAction(DialogField sourceField, String partnerName)
     {
         setSourceField(sourceField);
         setPartnerFieldName(partnerName);
     }
 
+    /**
+     * Indicates whether or not a parter field is required for the dialog field condition
+     */
     public boolean isPartnerRequired()
     {
         return true;
     }
 
+    /**
+     * Import the condition from XML
+     *
+     * @param sourceField       parent dialog field
+     * @param elem              conditional XML element
+     * @param conditionalItem   conditional item name
+     */
     public boolean importFromXml(DialogField sourceField, Element elem, int conditionalItem)
     {
         this.sourceField = sourceField;

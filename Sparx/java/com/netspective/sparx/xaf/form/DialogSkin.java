@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogSkin.java,v 1.2 2002-07-08 21:27:45 aye.thu Exp $
+ * $Id: DialogSkin.java,v 1.3 2002-07-10 20:56:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -66,8 +66,7 @@ import com.netspective.sparx.xaf.form.field.SeparatorField;
 
 /**
  * The <code>DialogSkin</code> interface describes methods available for
- * creating the HTML/DHTML string for displaying the dialog and its contents. All implementing
- * classes
+ * creating the HTML/DHTML rendering rules for displaying the dialog and its contents.
  */
 public interface DialogSkin
 {
