@@ -508,6 +508,25 @@ function SimpleSort(objSelect)
 //****************************************************************************
 // Event handlers
 //****************************************************************************
+function controlOnClick(control)
+{
+    
+    field = activeDialog.fieldsById[control.name];
+    if(field == null) return;
+    if (control.type == 'checkbox' || control.type == 'radio')
+    {
+        if(field.dependentConditions.length > 0)    
+        {    
+            var conditionalFields = field.dependentConditions;
+            for(var i = 0; i < conditionalFields.length; i++)
+                conditionalFields[i].evaluate(activeDialog, control);
+        }    
+    }    
+    if (control.type.clicked != null)
+        return control.type.clicked(field, control);
+    else
+        return true;
+}
 
 function controlOnKeypress(control)
 {
