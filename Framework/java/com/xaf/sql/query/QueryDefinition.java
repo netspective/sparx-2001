@@ -13,6 +13,7 @@ import java.util.*;
 import org.w3c.dom.*;
 import com.xaf.db.*;
 import com.xaf.value.*;
+import com.xaf.xml.XmlSource;
 
 public class QueryDefinition
 {
@@ -90,7 +91,7 @@ public class QueryDefinition
 		return (QueryField[]) result.toArray(new QueryField[result.size()]);
 	}
 
-	public void importFromXml(Element elem)
+	public void importFromXml(XmlSource xs, Element elem)
 	{
 		name = elem.getAttribute("id");
 
@@ -204,7 +205,9 @@ public class QueryDefinition
 		for(Iterator i = selectDialogElems.iterator(); i.hasNext(); )
 		{
 			QuerySelectDialog dialog = new QuerySelectDialog(this);
-			dialog.importFromXml(null, (Element) i.next());
+            Element dialogElem = (Element) i.next();
+            xs.processTemplates(dialogElem);
+			dialog.importFromXml(null, dialogElem);
 			selectDialogsList.add(dialog);
 			selectDialogsMap.put(dialog.getName(), dialog);
 		}

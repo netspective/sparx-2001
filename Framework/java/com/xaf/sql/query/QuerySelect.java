@@ -276,8 +276,8 @@ public class QuerySelect
         PreparedStatement stmt = null;
         stmt =
             rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
-                dc.getConnection(vc, dataSourceId).prepareStatement(selectSql) :
-                dc.getConnection(vc, dataSourceId).prepareStatement(selectSql, rsType, ResultSet.CONCUR_READ_ONLY);
+                conn.prepareStatement(selectSql) :
+                conn.prepareStatement(selectSql, rsType, ResultSet.CONCUR_READ_ONLY);
 
 		if(overrideParams != null)
 		{

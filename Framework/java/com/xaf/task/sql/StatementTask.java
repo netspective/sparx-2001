@@ -120,7 +120,7 @@ public class StatementTask extends BasicTask
             if(elem.getAttribute("name").length() == 0)
                 elem.setAttribute("name", "SqlExecuteAction-" + getTaskNum());
             statementInfo = new StatementInfo();
-            statementInfo.importFromXml(elem, "Task", null);
+            statementInfo.importFromXml(null, elem, "Task", null);
         }
         else
         {

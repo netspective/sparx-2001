@@ -69,11 +69,19 @@ public class StatementManager extends XmlSource
 
 		public void close() throws SQLException
 		{
-			Connection conn = rs.getStatement().getConnection();
-			rs.close();
+            Statement stmt = rs.getStatement();
+            Connection conn = stmt.getConnection();
+            rs.close();
+            stmt.close();
 			if (conn.getAutoCommit() == true)
 				conn.close();
 		}
+
+        protected void finalize() throws Throwable
+        {
+            close();
+            super.finalize();
+        }
 	}
 
     static private Hashtable dynamicSql = new Hashtable();
@@ -105,14 +113,6 @@ public class StatementManager extends XmlSource
 		reload();
 		return queryDefns;
 	}
-
-	/*
-	public Map getReports()
-	{
-		reload();
-		return reports;
-	}
-	*/
 
 	public QueryDefinition getQueryDefn(String name)
 	{
@@ -226,39 +226,27 @@ public class StatementManager extends XmlSource
 					{
 						Element stmtElem = (Element) stmtsChild;
 		    			StatementInfo si = new StatementInfo();
-						si.importFromXml(stmtElem, stmtPkg, stmtPkgDataSrc);
+                        processTemplates(stmtElem);
+						si.importFromXml(this, stmtElem, stmtPkg, stmtPkgDataSrc);
 
 						String statementId = si.getId();
 						statements.put(statementId, si);
 						stmtElem.setAttribute("qualified-name", si.getId());
 						stmtElem.setAttribute("package", stmtPkg);
-
-						/*
-						if(si.getReportElems() != null)
-						{
-							for(Iterator i = si.getReportElems().iterator(); i.hasNext(); )
-							{
-								Element reportElem = (Element) i.next();
-								String reportName = reportElem.getAttribute("name");
-								if(reportName.length() > 0)
-									reports.put(statementId + "." + reportName, reportElem);
-								else
-									reports.put(statementId, reportElem);
-							}
-						}
-						*/
 					}
 				}
 			}
 			else if(nodeName.equals("query-defn"))
 			{
 				QueryDefinition queryDefn = new QueryDefinition();
-				queryDefn.importFromXml((Element) node);
+                processTemplates((Element) node);
+				queryDefn.importFromXml(this, (Element) node);
 				queryDefns.put(queryDefn.getName(), queryDefn);
 			}
 			else if(nodeName.equals("report"))
 			{
 				Report report = new StandardReport();
+                processTemplates((Element) node);
 				report.importFromXml((Element) node);
 				reports.put(report.getName(), report);
 			}
@@ -296,6 +284,10 @@ public class StatementManager extends XmlSource
 					errors.add("ColumnDataCalculator class '"+className+"' not found: " + e.toString());
 				}
 			}
+            else
+            {
+                catalogElement((Element) node);
+            }
 		}
 
 		addMetaInformation();

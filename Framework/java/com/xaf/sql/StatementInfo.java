@@ -160,7 +160,7 @@ public class StatementInfo
 		}
 	}
 
-	public void importFromXml(Element stmtElem, String pkgName, String pkgDataSourceId)
+	public void importFromXml(XmlSource xs, Element stmtElem, String pkgName, String pkgDataSourceId)
 	{
 		this.pkgName = pkgName;
 		this.stmtElem = stmtElem;
@@ -188,9 +188,16 @@ public class StatementInfo
 			if(stmtChild.getNodeType() != Node.ELEMENT_NODE)
 				continue;
             String childName = stmtChild.getNodeName();
-			if(childName.equals("report"))
+            if(childName.equals("sql"))
+            {
+                sql = stmtChild.getNodeValue();
+                if(sql.indexOf(REPLACEMENT_PREFIX) != -1)
+                    sqlIsDynamic = true;
+            }
+			else if(childName.equals("report"))
 			{
 				Element reportElem = (Element) stmtChild;
+                if(xs != null) xs.processTemplates(reportElem);
 				String reportName = reportElem.getAttribute("name");
 				if(reportName.length() == 0)
 					defaultReportElem = reportElem;

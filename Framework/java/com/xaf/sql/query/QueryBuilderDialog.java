@@ -17,12 +17,14 @@ import com.xaf.value.*;
 
 public class QueryBuilderDialog extends Dialog
 {
-	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS = DLGFLAG_CUSTOM_START;
-	static public final int QBDLGFLAG_ALLOW_DEBUG       = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
-	static public final int QBDLGFLAG_HIDE_CRITERIA     = QBDLGFLAG_ALLOW_DEBUG * 2;
-    static public final int QBDLGFLAG_ALWAYS_SHOW_RSNAV = QBDLGFLAG_HIDE_CRITERIA * 2;
+	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS   = DLGFLAG_CUSTOM_START;
+	static public final int QBDLGFLAG_ALLOW_DEBUG         = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
+	static public final int QBDLGFLAG_HIDE_CRITERIA       = QBDLGFLAG_ALLOW_DEBUG * 2;
+    static public final int QBDLGFLAG_ALWAYS_SHOW_RSNAV   = QBDLGFLAG_HIDE_CRITERIA * 2;
+    static public final int QBDLGFLAG_ALLOW_MULTIPLE_QSSS = QBDLGFLAG_ALWAYS_SHOW_RSNAV * 2; // allow multiple query select scroll states to be active
 
 	static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
+    static public final String QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME = "active-query-select-scroll-state";
 
 	static public final int MAX_ROWS_IN_SINGLE_BROWSER_PAGE = 9999;
 
@@ -314,6 +316,16 @@ public class QueryBuilderDialog extends Dialog
              */
 			if(state == null || (state != null && dc.isInitialExecute()))
 			{
+                // if our transaction does not have a scroll state, but there is an active scroll state available, then it
+                // means that we need to get close the previous one and remove the attribute so that the connection can be
+                // closed and returned to the pool
+                QuerySelectScrollState activeState = (QuerySelectScrollState) session.getAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+                if(activeState != null && ! flagIsSet(QBDLGFLAG_ALLOW_MULTIPLE_QSSS))
+                {
+                    activeState.close();
+                    session.removeAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+                }
+
 				QuerySelect select = createSelect(dc);
                 // check to see if user has created a field called 'rows_per_page'
                 // which overwrites the default one
@@ -322,7 +334,10 @@ public class QueryBuilderDialog extends Dialog
                     rowsPerPageStr = dc.getValue("output.rows_per_page");
 				state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize);
 				if(state.isValid())
+                {
 					session.setAttribute(transactionId, state);
+                    session.setAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME, state);
+                }
 				else
 					return "Could not execute SQL: " + state.getErrorMsg();
 			}

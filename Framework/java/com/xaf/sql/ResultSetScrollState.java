@@ -125,4 +125,20 @@ public class ResultSetScrollState
 	{
 		setPage(activePage + delta);
 	}
+
+    public void close() throws SQLException
+    {
+        Statement stmt = resultSet.getStatement();
+        Connection conn = stmt.getConnection();
+        resultSet.close();
+        stmt.close();
+        if (conn.getAutoCommit() == true)
+            conn.close();
+    }
+
+    protected void finalize() throws Throwable
+    {
+        close();
+        super.finalize();
+    }
 }
