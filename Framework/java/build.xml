@@ -39,6 +39,9 @@ Build targets:
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${lib.dir}"/>
 
+	    <property name="build.log.class.package" value="com.xaf"/>
+	    <property name="build.log.class.name" value="BuildLog"/>
+
 	    <property name="ant.home" value="${env.ANT_HOME}"/>
 	    <property name="ant.lib.dir" value="${ant.home}/lib"/>
 	    <property name="ant.jar" value="${ant.lib.dir}/ant.jar"/>
@@ -52,12 +55,16 @@ Build targets:
 
 	    <!-- Compile the BuildConfiguration class -->
 	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"
-			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java"
+			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java,ant/GenerateBuildLogClassTask.java"
             classpath="${CLASSPATH}"
 			debug="${debug}"
 			optimize="${optimize}"
 			deprecation="off"/>
 
+	    <taskdef name="gblc" classname="com.xaf.ant.GenerateBuildLogClassTask" classpath="${build.classes.dir}"/>
+		<gblc package="${build.log.class.package}" class="${build.log.class.name}"/>
+		<echo message="Built on ${build.log.date} (host=${build.log.host.name}; ip=${build.log.host.ip})"/>
+		
 		<!-- put the build configuration items into the properties (com.xaf.ant.BuildConfigurationTask) -->
 	    <taskdef name="config" classname="com.xaf.ant.BuildConfigurationTask" classpath="${build.classes.dir}"/>
 		<config/>
