@@ -20,7 +20,8 @@ public class StandardDialogSkin implements DialogSkin
 	protected String frameHdFontAttrs;
 	protected String fieldRowAttrs;
 	protected String fieldRowErrorAttrs;
-	protected String gridCaptionFontAttrs;
+	protected String gridCaptionFontAttrs;      // grid column font attributes
+    protected String gridRowCaptionFontAttrs;   // grid row font attributes
 	protected String captionCellAttrs;
 	protected String captionFontAttrs;
 	protected String controlAreaFontAttrs;
@@ -43,6 +44,7 @@ public class StandardDialogSkin implements DialogSkin
 		captionCellAttrs = "align='right' ";
 		captionFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
 		gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
+        gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
 		controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
 		controlAttrs = "class='dialog_control' onfocus='controlOnFocus(this)' onchange='controlOnChange(this)' onblur='controlOnBlur(this)' ";
 		separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
@@ -123,12 +125,25 @@ public class StandardDialogSkin implements DialogSkin
 		StringBuffer rowHtml = new StringBuffer("\n<tr valign='top' "+rowAttr+">");
 		Iterator i = compositeField.getChildren().iterator();
 
+        // get the row's name
+        String rowCaption = compositeField.getCaption(dc);
+        if (rowCaption == null)
+        {
+            rowCaption = "";
+        }
 		if(row == 0)
 		{
 			String hRowAttr = " id='" + GRIDHEADROW_PREFIX + compositeField.getQualifiedName() + "' ";
 			StringBuffer headerHtml = new StringBuffer("\n<tr "+hRowAttr+">");
+
 			int fieldNum = 0;
 			String[] fieldCaptions = gridField.getCaptions(dc);
+            // save space in the header for the row captions
+			headerHtml.append("<td></td> ");
+            // append the row caption to the first row
+            rowHtml.append("<td><font " + gridRowCaptionFontAttrs + ">");
+            rowHtml.append(rowCaption);
+            rowHtml.append("</font></td>");
 			while(i.hasNext())
 			{
 				DialogField field = (DialogField) i.next();
@@ -136,7 +151,7 @@ public class StandardDialogSkin implements DialogSkin
 				{
 					String caption = fieldNum < fieldCaptions.length ? fieldCaptions[fieldNum] : field.getCaption(dc);
 
-					headerHtml.append("<td><font ");
+					headerHtml.append("<td align='center'><font ");
 					headerHtml.append(gridCaptionFontAttrs);
 					headerHtml.append(">");
 					if(caption != null && caption != DialogField.CUSTOM_CAPTION)
@@ -145,7 +160,8 @@ public class StandardDialogSkin implements DialogSkin
 					}
 					headerHtml.append("</font></td>");
 
-					rowHtml.append("<td>");
+
+					rowHtml.append("<td align='center'>");
 					appendGridControlBasics(dc, field, rowHtml);
 					rowHtml.append("</td>");
 				}
@@ -160,12 +176,17 @@ public class StandardDialogSkin implements DialogSkin
 		}
 		else
 		{
+            // append the row caption to the first row
+            rowHtml.append("<td><font " + gridRowCaptionFontAttrs + ">");
+            rowHtml.append(rowCaption);
+            rowHtml.append("</font></td>");
+
 			while(i.hasNext())
 			{
 				DialogField field = (DialogField) i.next();
 				if(field.isVisible(dc))
 				{
-					rowHtml.append("<td>");
+					rowHtml.append("<td align='center'>");
 					appendGridControlBasics(dc, field, rowHtml);
 					rowHtml.append("</td>");
 				}
