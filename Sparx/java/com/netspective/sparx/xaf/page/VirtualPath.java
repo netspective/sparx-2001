@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: VirtualPath.java,v 1.7 2002-12-04 14:24:38 roque.hernandez Exp $
+ * $Id: VirtualPath.java,v 1.8 2002-12-12 13:23:02 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -80,7 +80,9 @@ import com.netspective.sparx.util.log.LogManager;
 public class VirtualPath
 {
     static public final String PATH_SEPARATOR = "/";
-
+    /**
+     * A Class that describes the Results of matching the Http Request with the available Paths in VirtualPath.
+     */
     public class FindResults
     {
         private boolean matchedHome;
@@ -88,7 +90,12 @@ public class VirtualPath
         private VirtualPath searched;
         private VirtualPath matchedPath;
         private String[] unmatchedItems;
-
+        /**
+         * Constructs a <code>FindResult</code> object that will contain the appropiate information regarding the matching up of
+         * the path string in the search VirtualPath.
+         * @param search  A <code>VirtualPath</code> object that will be used to search.
+         * @param path  A <code>String</code> object that represents tha path that is being requested.
+         */
         public FindResults(VirtualPath search, String path)
         {
             if(path == null || path.length() == 0)
@@ -130,31 +137,55 @@ public class VirtualPath
             unmatchedItems = (String[]) unmatchedItemsList.toArray(new String[unmatchedItemsList.size()]);
         }
 
+        /**
+         * Determines if the requested path matched the HomePage.
+         * @return  boolean  <code>true</code> if the requested path matched the home page, <code>false</code> otherwise.
+         */
         public boolean matchedHomePage()
         {
             return matchedHome;
         }
 
+        /**
+         * Returns the requested path.
+         * @return  String  A string that represents the requested path.
+         */
         public String getSearchedForPath()
         {
             return searchForPath;
         }
 
+        /**
+         * Returns <code>VirtualPath</code> object that the requested path is being matched against.
+         * @return  VirtualPath  The object that the path is being searched on.
+         */
         public VirtualPath getSearchedInPath()
         {
             return searched;
         }
 
+        /**
+         * Returns the <code>VirtualPath</code> object which id matched the requested path, or there was an absolute path
+         * registered with the string as its id.
+         * @return
+         */
         public VirtualPath getMatchedPath()
         {
             return matchedPath;
         }
 
+        /**
+         * Returns a String array that contains the portions of the path that could not be matched.
+         * @return
+         */
         public String[] unmatchedPathItems()
         {
             return unmatchedItems;
         }
-
+        /**
+         * Returns a concatenatted String of all of the elements of unmatchedPathItems with a "/" as a path separator.
+         * @return
+         */
         public String getUnmatchedPath()
         {
             if(unmatchedItems == null || unmatchedItems.length == 0)
@@ -240,6 +271,36 @@ public class VirtualPath
     public Map getAbsolutePathsMap()
     {
         return absPathMap;
+    }
+
+    /**
+     * Returns the Map that contains all of its sibilings including itself.  It is basically obtained by getting a
+     * reference to the parent and then get a map of all of its children.
+     * @return  Map  A map object containing VirtualPath objects that represent the sibilings of the current object.
+     */
+    public Map getSibilingMap() {
+        if (parent != null)
+            return parent.getChildrenMap();
+
+        if (owner != null)
+            return owner.getChildrenMap();
+
+        return null;
+    }
+
+    /**
+     * Returns the List that contains all of its sibilings including itself.  It is basically obtained by getting a
+     * reference to the parent and then get a list of all of its children.
+     * @return  List  A list object containing VirtualPath objects that represent the sibilings of the current object.
+     */
+    public List getSibilingList() {
+        if (parent != null)
+            return parent.getChildrenList();
+
+        if (owner != null)
+            return owner.getChildrenList();
+
+        return null;
     }
 
     public String getCaption(PageContext pc)
@@ -419,7 +480,7 @@ public class VirtualPath
         VirtualPath child = (VirtualPath) childrenMap.get(childName);
         if(child == null)
         {
-            child = new VirtualPath(childName);
+            child = getChildPathInstance(childName);
             child.setOwner(owner);
             child.setParent(this);
 
@@ -497,12 +558,21 @@ public class VirtualPath
     }
 
     /**
-     * A method that returns the object reference to hold every entry of the tree.
-     * This method can be overwritten to have other objects be placed in the tree.
-      * @return
+     * A method that returns the object to represent every path available.
+     * This method can be overwritten to allow the placement of other objects of type <code>VirtualPath</code>.
+     * @return
      */
     public VirtualPath getChildPathInstance(){
         return new VirtualPath();
+    }
+
+    /**
+     * A method that returns the object to represent every path available.
+     * This method can be overwritten to allow the placement of other objects of type <code>VirtualPath</code>.
+     * @return
+     */
+    public VirtualPath getChildPathInstance(String name){
+        return new VirtualPath(name);
     }
 }
 

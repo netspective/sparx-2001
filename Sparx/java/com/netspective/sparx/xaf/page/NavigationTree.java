@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTree.java,v 1.1 2002-12-04 14:24:39 roque.hernandez Exp $
+ * $Id: NavigationTree.java,v 1.2 2002-12-12 13:23:02 roque.hernandez Exp $
  */
 
 
@@ -74,77 +74,116 @@ public class NavigationTree extends VirtualPath {
 
     private String defaultChildId = null;
     private SingleValueSource url = null;
-    private int level;
-    private Map sibilingMap = new HashMap();
-    private List sibilingList = new ArrayList();
     private Map ancestorMap = new HashMap();
     private List ancestorsList = new ArrayList();
     private boolean visible = true;
 
+    /**
+     * A String that represents the Id of the default child.  This property is relevant when trying to determine which
+     * elements are part of the active path when the current element is not a leaf of the tree.
+     * @return
+     */
     public String getDefaultChildId() {
         return defaultChildId;
     }
 
+    /**
+     * A String that represents the Id of the default child.  This property is relevant when trying to determine which
+     * elements are part of the active path when the current element is not a leaf of the tree.
+     * @param  defaultChildId  The String representing the Id of the child that should be the default.
+     */
     public void setDefaultChildId(String defaultChildId) {
         this.defaultChildId = defaultChildId;
     }
 
+    /**
+     * A ValueSource that represents what the URL of the element should be.  Unlike VIrtualPath, where its Id is the
+     * URL that get rendered with the element, a NavigationTree's Id is simply to uniquely identify an element on the
+     * tree.  If a url is not provided, the id is used for the url.
+     * @return
+     */
     public SingleValueSource getUrl() {
         return url;
     }
 
+    /**
+     * A ValueSource that represents what the URL of the element should be.  Unlike VIrtualPath, where its Id is the
+     * URL that get rendered with the element, a NavigationTree's Id is simply to uniquely identify an element on the
+     * tree.  If a url is not provided, the id is used for the url.
+     * @param  pc  An object of type ValueContext to enable us to get the value from a ValueSource.
+     * @return
+     */
     public String getUrl(PageContext pc) {
         return url.getValue(pc);
     }
 
+    /**
+     * A ValueSource that represents what the URL of the element should be.  Unlike VIrtualPath, where its Id is the
+     * URL that get rendered with the element, a NavigationTree's Id is simply to uniquely identify an element on the
+     * tree.  If a url is not provided, the id is used for the url.
+     * @param  url  The ValueSource to be used.
+     */
     public void setUrl(SingleValueSource url) {
         this.url = url;
     }
 
+    /**
+     * A ValueSource that represents what the URL of the element should be.  Unlike VIrtualPath, where its Id is the
+     * URL that get rendered with the element, a NavigationTree's Id is simply to uniquely identify an element on the
+     * tree.  If a url is not provided, the id is used for the url.
+     * @param  url  The String to obtain a reference to a ValueSource from the factory.
+     */
     public void setUrl(String url) {
         this.url = ValueSourceFactory.getSingleOrStaticValueSource(url);
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public Map getSibilingMap() {
-        return sibilingMap;
-    }
-
-    public void setSibilingMap(Map sibilingMap) {
-        this.sibilingMap = sibilingMap;
-    }
-
-    public List getSibilingList() {
-        return sibilingList;
-    }
-
-    public void setSibilingList(List sibilingList) {
-        this.sibilingList = sibilingList;
-    }
-
+    /**
+     * A List that represents all of the ancestors of the current object.  This list is initialized by getting a
+     * reference to the parents until the method getParent() returns null.  This List is relevant when determining what
+     * elements to render on levels above the active path.
+     * @return
+     */
     public List getAncestorsList() {
         return ancestorsList;
     }
 
+    /**
+     * A List that represents all of the ancestors of the current object.  This list is initialized by getting a
+     * reference to the parents until the method getParent() returns null.  This List is relevant when determining what
+     * elements to render on levels above the active path.
+     * @param  ancestorsList  The List that represents all of the parents of the current object.
+     */
     public void setAncestorsList(List ancestorsList) {
         this.ancestorsList = ancestorsList;
     }
 
+    /**
+     * A Map that represents all of the ancestors of the current object.  This list is initialized by getting a
+     * reference to the parents until the method getParent() returns null.  This Map is relevant when determining what
+     * elements to render on levels above the active path.
+     * @return
+     */
     public Map getAncestorMap() {
         return ancestorMap;
     }
 
+    /**
+     * A Map that represents all of the ancestors of the current object.  This map is initialized by getting a
+     * reference to the parents until the method getParent() returns null.  This Map is relevant when determining what
+     * elements to render on levels above the active path.
+     * @param  ancestorMap  The Map that represents all of the parents of the current object.
+     */
     public void setAncestorMap(Map ancestorMap) {
         this.ancestorMap = ancestorMap;
     }
 
+    /**
+     * Returns a boolean that describes wether the current item of the NavigationTree should be displayed or not.
+     * @param  nc  A NavigationContext object.  This object keeps a runtime state of the NavigationTree.
+     * @return  <code>true</code> if the NavigationContext has true for this NavigationTree's Id.  If the NavigationContext
+     *          does not have a value defined for it, it then looks at the variable defined in NavigationTree.  This variable
+     *          is primarily driven by the importFromXml method.
+     */
     public boolean isVisible(NavigationContext nc) {
         Boolean isVisible = nc.isNavVisible(this.getId());
         if (isVisible != null) {            
@@ -154,11 +193,24 @@ public class NavigationTree extends VirtualPath {
         }
     }
 
+    /**
+     * Sets the boolean variable that defines wether this NavigationTree should be displayed.  Calling this method does
+     * not affect the runtime flag kept by the NavigationContext.
+     * @param visible The boolean value.
+     */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
-    public boolean isCurrent(PageContext pc) {
+    /**
+     * Determines whether the NavigationTree is part of the active path.
+     * @param  pc  A PageContext primarily to obtain the Active NavigationTree.
+     * @return  <code>true</code> if the NavigationTree object is:
+     *              1. The Active NavigationTree.
+     *              2. In the ancestor list of the Active NavigationTree.
+     *              3. One of the Default Children.
+     */
+    public boolean isInActivePath(PageContext pc) {
         //get the current NavigationTree
         NavigationTree currentNavTree = (NavigationTree) pc.getActivePath().getMatchedPath();
 
@@ -188,22 +240,20 @@ public class NavigationTree extends VirtualPath {
         return false;
     }
 
+    /**
+     * Sets additional properties to the object from what VirtualPath is setting.  Specifically it sets the url, visible
+     * and defaultChildId attributes.
+     * @param  elem  The DOM element that contains the structure and values to be read.
+     * @param  parent  The parent object.
+     */
     public void importFromXml(Element elem, VirtualPath parent) {
 
         NavigationTree parentTree = (NavigationTree) parent;
-        int currentLevel = 0;
-        if (parentTree.getParent() != null) {
-            currentLevel = ((NavigationTree) parentTree.getParent()).getLevel() + 1;
-            parentTree.setLevel(currentLevel);
-        } else {
-            parentTree.setLevel(0);
-        }
 
         super.importFromXml(elem, parent);
 
         NodeList children = elem.getChildNodes();
-        Map currentSibilingMap = new HashMap();
-        List currentSibilingList = new ArrayList();
+
         for (int c = 0; c < children.getLength(); c++) {
             Node child = children.item(c);
             if (child.getNodeType() != Node.ELEMENT_NODE)
@@ -214,13 +264,6 @@ public class NavigationTree extends VirtualPath {
 
                 String id = childElem.getAttribute("id");
                 NavigationTree childPath = (NavigationTree) parent.getChildrenMap().get(id);
-
-                currentSibilingMap.put(childPath.getId(),childPath);
-                currentSibilingList.add(childPath);
-                generateAncestorList();
-
-                childPath.setLevel(currentLevel);
-                childPath.setSibilingList(currentSibilingList);
 
                 childPath.generateAncestorList();
 
@@ -243,12 +286,15 @@ public class NavigationTree extends VirtualPath {
                         parentTree.setDefaultChildId(id);
                     }
                 }
-
-                importFromXml(childElem, childPath);
             }
         }
     }
 
+    /**
+     * Populates the ancestorMap and ancestorList.  It looks at its parent and adds a refence to it in the collections.
+     * It then keeps doing that, but now looking at its parent's parent until it returns null.  It then reverses the list
+     * to maintain a 0=top structure.
+     */
     private void generateAncestorList() {
         NavigationTree currentPath = (NavigationTree) this.getParent();
         if (this.getParent() != null) {
@@ -271,14 +317,21 @@ public class NavigationTree extends VirtualPath {
 
     }
 
-    public NavigationTree getTopAncestor(){
-        return (NavigationTree) this.getAncestorsList().get(1);
-    }
-
+    /**
+     * Overrides the method from VirtualPath in order to place NavigationTree objects in the structure.
+     * @return
+     */
     public VirtualPath getChildPathInstance() {
         return new NavigationTree();
     }
 
+    /**
+     * Renders a single level of the NavigationTree.  The actual rendering is done by an implementation of
+     * TabbedNavigationSkin.
+     * @param writer
+     * @param nc
+     * @param level
+     */
     public void renderNavigation(Writer writer, NavigationContext nc, int level) {
         NavigationTree activeNavTree = (NavigationTree) nc.getActivePath().getMatchedPath();
         List ancestorList = activeNavTree.getAncestorsList();
