@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.4 2002-08-09 16:22:52 shahid.shah Exp $
+# $Id: build.sh,v 1.5 2002-08-09 16:27:19 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
@@ -8,7 +8,7 @@
 # ** the build.xml file.                                                  **
 # **************************************************************************
 
-if [ ! -d $JAVA_HOME ]; then
+if [ -z $JAVA_HOME ]; then
 	JAVA_HOME=/usr/java/home
 fi
 
@@ -21,7 +21,7 @@ BASEDIR=`pwd`
 #              home directory is assumed be /some/where/Sparx.
 #
 
-if [ ! -d $SPARX_HOME ]; then
+if [ -z $SPARX_HOME ]; then
 	SPARX_HOME=$BASEDIR/../../Sparx
 fi	
 

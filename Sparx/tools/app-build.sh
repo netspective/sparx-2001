@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: app-build.sh,v 1.4 2002-08-09 15:55:12 shahid.shah Exp $
+# $Id: app-build.sh,v 1.5 2002-08-09 16:28:54 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
@@ -8,7 +8,7 @@
 # ** the build.xml file.                                                  **
 # **************************************************************************
 
-if [ ! -d $JAVA_HOME ]; then
+if [ -z $JAVA_HOME ]; then
 	JAVA_HOME=/usr/java/home
 fi
 
@@ -21,11 +21,11 @@ BASEDIR=`pwd`
 #              home directory is assumed be /some/where/Sparx.
 #
 
-if [ ! -d $SPARX_HOME ]; then
+if [ -z $SPARX_HOME ]; then
 	SPARX_HOME=$BASEDIR/../../Sparx
 fi	
 
-SPARX_REDIST_HOME=$SPARX_HOME\lib\redist
+SPARX_REDIST_HOME=$SPARX_HOME/lib/redist
 APP_CLASSES=$BASEDIR/classes
 APP_LIB=$BASEDIR/lib
 APP_BUILD_FILE=$BASEDIR/build.xml
@@ -49,8 +49,8 @@ LOG4J_JAR=$APP_LIB/log4j.jar
 BSF_JAR=$APP_LIB/bsf.jar
 BSF_JS_JAR=$APP_LIB/js.jar
 
-SERVLETAPI_JAR=%SPARX_REDIST_HOME%\servlet.jar
-JDBC2X_JAR=%SPARX_REDIST_HOME%\jdbc.jar
+SERVLETAPI_JAR=$SPARX_REDIST_HOME/servlet.jar
+JDBC2X_JAR=$SPARX_REDIST_HOME/jdbc.jar
 
 if [ -f $JAVA_HOME/lib/tools.jar ]; then
 	JAVACP=$JAVA_HOME/lib/tools.jar
