@@ -274,6 +274,10 @@
 				</xsl:attribute>
 				<xsl:choose>
 					<xsl:when test="name">
+						<xsl:if test="new">
+							<font color="red"><u>[<B>NEW</B>]</u>: 
+							</font>
+						</xsl:if>
 						<xsl:apply-templates select="name"/>
 						<xsl:if test="comments">
 						<DIV>
