@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractDatabaseContext.java,v 1.2 2002-02-02 00:00:31 snshah Exp $
+ * $Id: AbstractDatabaseContext.java,v 1.3 2002-08-17 15:04:39 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -62,10 +62,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.naming.NamingException;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Element;
+import org.apache.log4j.Category;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.util.log.AppServerCategory;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabasePolicy;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
@@ -73,6 +78,7 @@ import com.netspective.sparx.xif.db.DatabaseContextFactory;
 public abstract class AbstractDatabaseContext implements DatabaseContext
 {
     private static boolean forceNonScrollableRS;
+    private static final String SHARED_CONN_ATTR_PREFIX = "com.netspective.sparx.xif.db.context.SHARED_CONN_";
 
     public AbstractDatabaseContext()
     {
@@ -91,6 +97,51 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
     }
 
     public abstract Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException;
+
+    public Connection beginConnectionSharing(ValueContext vc, String dataSourceId) throws NamingException, SQLException
+    {
+        Connection sharedConn = getSharedConnection(vc, dataSourceId);
+        AppServerCategory log = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SQL);
+        if(sharedConn != null)
+        {
+            if(log.isDebugEnabled())
+                log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " starting shared connection " + dataSourceId + ": " + sharedConn);
+            return sharedConn;
+        }
+
+        Connection conn = getConnection(vc, dataSourceId);
+        conn.setAutoCommit(false);
+        vc.getRequest().setAttribute(SHARED_CONN_ATTR_PREFIX + dataSourceId, conn);
+        if(log.isDebugEnabled())
+            log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " starting shared connection " + dataSourceId + ": " + conn);
+        return conn;
+    }
+
+    public void endConnectionSharing(ValueContext vc, String dataSourceId, boolean commit) throws SQLException
+    {
+        String attrName = SHARED_CONN_ATTR_PREFIX + dataSourceId;
+        Connection conn = (Connection) vc.getRequest().getAttribute(attrName);
+        AppServerCategory log = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SQL);
+        if(log.isDebugEnabled())
+            log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " ending shared connection" + dataSourceId + ": " + conn);
+        if(conn != null)
+        {
+            vc.getRequest().removeAttribute(attrName);
+            if(commit)
+                conn.commit();
+            else
+                conn.rollback();
+            if(log.isDebugEnabled())
+                log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " closing shared connection " + dataSourceId + ": "+ conn.toString());
+            conn.close();
+            conn = null;
+        }
+    }
+
+    public Connection getSharedConnection(ValueContext vc, String dataSourceId)
+    {
+        return (Connection) vc.getRequest().getAttribute(SHARED_CONN_ATTR_PREFIX + dataSourceId);
+    }
 
     static public void setNonScrollableResultSet(boolean force)
     {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseContext.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: DatabaseContext.java,v 1.2 2002-08-17 15:04:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -100,6 +100,28 @@ public interface DatabaseContext
      * by using the translateDataSourceId() method (e.g. null dataSource is the "default" data source).
      */
     public Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException;
+
+    /**
+     * Get a connection for the dataSourceId but set it to be shared, with autoCommit turned off.
+     * In the shared connection mode, anytime the dataSourceId is requested later using getConnection() it will
+     * return the provided shared connection. For example, this is useful when a single connection should used
+     * throughout multiple SQL statements within a transaction.
+     * @param dataSourceId the dataSourceId of the data source to share
+     * @param conn the actual connection object to share
+     */
+    public Connection beginConnectionSharing(ValueContext vc, String dataSourceId) throws NamingException, SQLException;
+
+    /**
+     * Ends the connection sharing the provided dataSourceId. Connection is automatically closed. If rollback
+     * is called then the connection's transaction will be rolled back otherwise the transaction will be committed.
+     **/
+    public void endConnectionSharing(ValueContext vc, String dataSourceId, boolean commit) throws SQLException;
+
+    /**
+     * If beginConnectionSharing method was called, this method returns the shared connection. Otherwise, it returns
+     * null indicating there is currently no shared connection.
+     */
+    public Connection getSharedConnection(ValueContext vc, String dataSourceId);
 
     /**
      * Returns the ResultSet type (scrollabe, non-scrollable) for a given

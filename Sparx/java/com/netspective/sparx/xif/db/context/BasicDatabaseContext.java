@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: BasicDatabaseContext.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: BasicDatabaseContext.java,v 1.2 2002-08-17 15:04:39 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -60,6 +60,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -67,12 +69,15 @@ import javax.naming.NameClassPair;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 /**
@@ -108,20 +113,22 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
 
         // check to see if there is already a connection bound with the request
         // meaning we're within a transaction. Reuse the connection if we are
-        // within a connection
-        Connection conn = null;
-        if(vc != null)
-        {
-            ServletRequest request = vc.getRequest();
-            conn = (Connection) request.getAttribute(dataSourceId);
-        }
+        // within a transaction
+        Connection conn = vc != null ? getSharedConnection(vc, dataSourceId) : null;
         if(conn == null)
         {
             DataSource source = (DataSource) env.lookup(dataSourceId);
             if(source == null)
                 throw new NamingException("Data source '" + dataSourceId + "' not found");
             conn = source.getConnection();
+            AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got new connection for " + dataSourceId + ": " + conn);
+            //Throwable t = new Throwable();
+            //StringWriter stack = new StringWriter();
+            //t.fillInStackTrace().printStackTrace(new PrintWriter(stack));
+            //AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(stack.toString());
         }
+        else
+            AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got shared connection for " + dataSourceId + ": " + conn);
         return conn;
     }
 
