@@ -64,18 +64,18 @@
 	-->
 
     <tabletype name="Column_History" type="Default">
-        <column name="id" type="auto-inc" primarykey="yes" descr="ID of this table's row"/>
+        <column name="id" type="auto-inc" primarykey="yes" descr="unique id"/>
         <column name="parent_id" parentref="${params.parent_id}" descr="ID of parent table"/>
         <column name="start_date" type="date" descr="Start of Duration"/>
         <column name="end_date" type="date" descr="End of Duration"/>
-        <column name="by_whom" lookupref="Person.id"/>
+        <column name="by_whom" lookupref="Person.id" descr="The id of the person who has worked" />
 
         <index name="$tbl_abbrev$_unq" type="unique" columns="id,start_date"/>
     </tabletype>
 
     <tabletype name="Attribute_Value" type="Default">
-        <column name="id" type="auto-inc" primarykey="yes"/>
-        <column name="value" type="text"/>
+        <column name="id" type="auto-inc" primarykey="yes" descr="unique id" />
+        <column name="value" type="text" descr="value of the attribute"/>
         <column name="attribute_id" parentref="${params.attribute_id}" />
         <column name="parent_id" lookupref="${params.parent_id}" />
     </tabletype>
@@ -87,8 +87,8 @@
     <table name="Account_Status" abbrev="AccStatus" type="Status"/>
 
     <tabletype name="Main_Entities" abbrev="MnEnt" type="Default">
-        <column name="id" type="auto-inc" primarykey="yes"/>
-        <column name="name" type="text"/>
+        <column name="id" type="auto-inc" primarykey="yes" descr="unique id"/>
+        <column name="name" type="text" descr="name of the entities"/>
         <column name="type" lookupref="${params.type}"/>
         <column name="status" lookupref="${params.status}"/>
     </tabletype>

@@ -5,50 +5,50 @@
     <indextype name="unique"/>
 
     <table name="Requirement" abbrev="Req" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="account" lookupref="Account.id" />
-        <column name="project" lookupref="Project.id" />
-        <column name="req_number" type="integer" />
-        <column name="description" type="text"/>
-        <column name="version" lookupref="Version.id"/>
-        <column name="module" lookupref="Module.id"/>
-        <column name="current_status" lookupref="Requirement_Status"/>
-        <column name="total_hours" type="integer"/>
+        <column name="id" type="auto-inc"  primarykey="yes" descr="unique requirement number"/>
+        <column name="account" lookupref="Account.id" descr="company for which we are working"/>
+        <column name="project" lookupref="Project.id" descr="that company's project"/>
+        <column name="req_number" type="integer" descr="requirement number of that project"/>
+        <column name="description" type="text"descr="textual description of that project"/>
+        <column name="version" lookupref="Version.id" descr="version of that project"/>
+        <column name="module" lookupref="Module.id" descr="module in which change is requested"/>
+        <column name="current_status" lookupref="Requirement_Status" descr="The status of that requirement"/>
+        <column name="total_hours" type="integer" descr="The time consumed in working on that requirement"/>
         <column name="parent_id" selfref="Requirement.id"/>
     </table>
 
     <table name="Requirement_Detail" abbrev="ReqDtl" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="requirement_id" parentref="Requirement.id"/>
-        <column name="entry_date" type="date"/>
-        <column name="status" lookupref="Requirement_Status"/>
-        <column name="initiated_by" type="text"/>
-        <column name="assigned_to" lookupref="Person.id"/>
-        <column name="assigned_by" lookupref="Person.id"/>
-        <column name="description" type="text"/>
-        <column name="assessment"  type="text"/>
-        <column name="previous_detail_id" selfref="Requirement_Detail.id"/>
+        <column name="id" type="auto-inc"  primarykey="yes" descr="unique number of this table"/>
+        <column name="requirement_id" parentref="Requirement.id" descr="The id of the requirement"/>
+        <column name="entry_date" type="date" descr="the date at which status has been changed"/>
+        <column name="status" lookupref="Requirement_Status" descr="status of that requirement"/>
+        <column name="initiated_by" type="text" descr="initiated by whom"/>
+        <column name="assigned_to" lookupref="Person.id"  descr="assigned to whom"/>
+        <column name="assigned_by" lookupref="Person.id" descr="assigned by whom"/>
+        <column name="description" type="text" descr="added descriptions"/>
+        <column name="assessment"  type="text" descr="assessment of that requirement"/>
+        <column name="previous_detail_id" selfref="Requirement_Detail.id" descr="RequirementDetail ID"/>
     </table>
 
     <table name="Req_Determined_By" abbrev="ReqDetBy" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="requirement_id" parentref="Requirement.id"/>
-        <column name="determinant_id" lookupref="Requirement.id"/>
+        <column name="id" type="auto-inc"  primarykey="yes" descr="the unique id"/>
+        <column name="requirement_id" parentref="Requirement.id" descr="requirement id"/>
+        <column name="determinant_id" lookupref="Requirement.id" descr="determinanat id"/>
 
         <index name="$tbl_abbrev$_unq" type="unique" columns="requirement_id,determinant_id"/>
     </table>
 
     <table name="Req_Depends_On" abbrev="ReqDepOn" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="requirement_id" parentref="Requirement.id"/>
-        <column name="dependent_id" lookupref="Requirement.id"/>
+        <column name="id" type="auto-inc"  primarykey="yes" descr="the unique id"/>
+        <column name="requirement_id" parentref="Requirement.id" descr="requirement id"/>
+        <column name="dependent_id" lookupref="Requirement.id" descr="dependent id"/>
 
         <index name="$tbl_abbrev$_unq" type="unique" columns="requirement_id,dependent_id"/>
     </table>
 
     <table name="Req_Attribute" abbrev="ReqAttr" type="Default">
-        <column name="id"  type="auto-inc" primarykey="yes" />
-        <column name="attribute_name" type="text"/>
+        <column name="id"  type="auto-inc" primarykey="yes" descr="the unique id" />
+        <column name="attribute_name" type="text" descr="the name of the attribute"/>
     </table>
 
     <table name="Req_Attribute_Value" abbrev="ReqAttrVal" type="Attribute_Value">
@@ -57,48 +57,48 @@
     </table>
 
     <table name="Req_Detail_Work" abbrev="ReqDtlWrk" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="detail_id" parentref="Requirement_Detail.id"/>
-        <column name="entry_date" type="date"/>
-        <column name="hours" type="integer"/>
-        <column name="by_whom" lookupref="Person.id"/>
+        <column name="id" type="auto-inc"  primarykey="yes" descr="the unique id"/>
+        <column name="detail_id" parentref="Requirement_Detail.id" descr=" RequirementDetail ID"/>
+        <column name="entry_date" type="date" descr="date at which some work is done on this requirement"/>
+        <column name="hours" type="integer" descr="number of hours put on this date"/>
+        <column name="by_whom" lookupref="Person.id" descr="who did some work on this requirement"/>
     </table>
 
     <table name="Req_Comment" abbrev="ReqCom" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="detail_id" parentref="Requirement_Detail.id"/>
-        <column name="comments" type="text" size="50"/>
-        <column name="by_whom" lookupref="Person.id"/>
-        <column name="entry_date" type="date"/>
+        <column name="id" type="auto-inc"  primarykey="yes" descr="the unique id"/>
+        <column name="detail_id" parentref="Requirement_Detail.id" descr="the RequirementDetail id"/>
+        <column name="comments" type="text" size="50" descr="the comments added"/>
+        <column name="by_whom" lookupref="Person.id" descr="who has added that comments"/>
+        <column name="entry_date" type="date" descr="date at which comments has been added"/>
     </table>
 
     <table name="Req_Exp_Start_Date" abbrev="ReqExpStDt" type="Column_History">
-        <column name="exp_start_date" type="date"/>
+        <column name="exp_start_date" type="date" descr="the expected start date at which work on requirement is suppose to be started"/>
         <param name="parent_id">Requirement.id</param>
     </table>
 
     <table name="Req_Exp_End_Date" abbrev="ReqExpEdDt" type="Column_History">
-        <column name="exp_end_date" type="date"/>
+        <column name="exp_end_date" type="date" descr="the expected end date at which work on requirement is suppose to be ended"/>
         <param name="parent_id">Requirement.id</param>
     </table>
 
     <table name="Req_Act_Start_Date" abbrev="ReqActStDt" type="Column_History">
-        <column name="actual_start_date" type="date"/>
+        <column name="actual_start_date" type="date" descr="the actual start date at which work on requirement is  started"/>
         <param name="parent_id">Requirement.id</param>
     </table>
 
     <table name="Req_Act_End_Date" abbrev="ReqActEdDt" type="Column_History">
-        <column name="actual_end_date" type="date"/>
+        <column name="actual_end_date" type="date" descr="the actual end date at which work on requirement is  ended"/>
         <param name="parent_id">Requirement.id</param>
     </table>
 
     <table name="Req_Verified_By" abbrev="ReqVerBy" type="Column_History">
-        <column name="verified_by" type="text"/>
+        <column name="verified_by" type="text" descr="by whom it has been verified"/>
         <param name="parent_id">Requirement.id</param>
     </table>
 
     <table name="Req_Sign_Off_Date" abbrev="ReqSgnOfDt" type="Column_History">
-        <column name="sign_off_date" type="date"/>
+        <column name="sign_off_date" type="date" descr="the signing off date"/>
         <param name="parent_id">Requirement.id</param>
     </table>
 

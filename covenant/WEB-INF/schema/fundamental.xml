@@ -3,16 +3,16 @@
 <schema name="fundamental">
 
     <table name="Project" abbrev="Prj" type="Main_Entities">
-        <column name="account_id" parentref="Account.id"/>
-        <column name="project_code" type="text"/>
-        <column name="start_date" type="date"/>
-        <column name="end_date" type="date"/>
+        <column name="account_id" parentref="Account.id" descr="company for which we are working"/>
+        <column name="project_code" type="text"descr="The Code ofthe Project"/>
+        <column name="start_date" type="date" descr="The starting date of the project"/>
+        <column name="end_date" type="date" descr="The ending date of the project"/>
         <param name="type">Project_Type</param>
         <param name="status">Project_Status</param>
     </table>
 
     <table name="Person" abbrev="Per" type="Main_Entities">
-        <column name="password" type="text"/>
+        <column name="password" type="text" descr="The password saved by the person"/>
         <param name="type">Person_Type</param>
         <param name="status">Person_Status</param>
     </table>
@@ -23,18 +23,18 @@
     </table>
 
     <table name="Version" abbrev="Ver" type="Default">
-        <column name="id" type="auto-inc" primarykey="yes" />
-        <column name="project_id" parentref="Project.id"/>
-        <column name="version_number" type="text" />
-        <column name="start_date" type="date" />
-        <column name="end_date" type="date" />
+        <column name="id" type="auto-inc" primarykey="yes" descr="The id of the version" />
+        <column name="project_id" parentref="Project.id" descr="The id of the project to which version belongs"/>
+        <column name="version_number" type="text" descr="The number of the version"/>
+        <column name="start_date" type="date" descr="The starting date of the version"/>
+        <column name="end_date" type="date"  descr="The endingdate ofthe version"/>
     </table>
 
     <table name="Module" abbrev="Mod" type="Default">
-        <column name="id" type="auto-inc" primarykey="yes" />
-        <column name="project_id" parentref="Project.id"/>
-        <column name="description" type="text" />
-        <column name="name" type="text" />
+        <column name="id" type="auto-inc" primarykey="yes" descr="The id of the module" />
+        <column name="project_id" parentref="Project.id" descr="the id of the project to which this module belongs"/>
+        <column name="description" type="text" descr="description about the module" />
+        <column name="name" type="text" descr="The name of the module"/>
     </table>
 
 </schema>

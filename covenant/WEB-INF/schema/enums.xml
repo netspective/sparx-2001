@@ -6,5 +6,4 @@
     <table name="Requirement_Status" abbrev="req_status" type="Enumeration">
         <enum>Priority</enum>
     </table>
-
 </schema>

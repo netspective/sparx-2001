@@ -7,5 +7,4 @@
 	<include file="enums.xml"/>
     <include file="fundamental.xml"/>
     <include file="requirement.xml"/>
-
 </schema>
