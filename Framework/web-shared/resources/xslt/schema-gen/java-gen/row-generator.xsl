@@ -108,12 +108,6 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	
 	public void populateData(DialogContext dc)
 	{
-<xsl:for-each select="column">		if(<xsl:value-of select="@_gen-member-name"/> != null) dc.setValue(&quot;<xsl:value-of select="@name"/>&quot;, <xsl:value-of select="@_gen-member-name"/>.toString());
-</xsl:for-each>
-	}
-
-	public void setData(DialogContext dc)
-	{
 <xsl:for-each select="column"><xsl:text>		</xsl:text><xsl:value-of select="@_gen-member-name"/> = (<xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/>) dc.getValueAsObject(&quot;<xsl:value-of select="@name"/>&quot;);
 </xsl:for-each>
 	}
@@ -134,6 +128,12 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 </xsl:for-each>
 		return true;
+	}
+
+	public void setData(DialogContext dc)
+	{
+<xsl:for-each select="column">		if(<xsl:value-of select="@_gen-member-name"/> != null) dc.setValue(&quot;<xsl:value-of select="@name"/>&quot;, <xsl:value-of select="@_gen-member-name"/>.toString());
+</xsl:for-each>
 	}
 
 	public void afterInsert(ConnectionContext cc) throws NamingException, SQLException
