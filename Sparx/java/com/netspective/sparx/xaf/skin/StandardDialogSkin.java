@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.15 2003-02-24 03:46:05 aye.thu Exp $
+ * $Id: StandardDialogSkin.java,v 1.16 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -111,6 +111,9 @@ public class StandardDialogSkin implements DialogSkin
     protected String controlAreaFontAttrs;
     protected String controlAreaStyleAttrs;
     protected String controlAttrs;
+    protected String controlAreaStyleClass;
+    protected String controlAreaRequiredStyleClass;
+    protected String controlAreaReadonlyStyleClass;
     protected String separatorFontAttrs;
     protected String separatorHtml;
     protected String separatorBannerTextFontAttrs;
@@ -146,15 +149,20 @@ public class StandardDialogSkin implements DialogSkin
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
         gridCaptionCellAttrs = "align='center'";
         controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
-        controlAreaStyleAttrs = "style=\"background-color: lightyellow\"";
-        controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this, event)' onchange='controlOnChange(this, event)' " +
+
+        controlAreaStyleAttrs = "";
+        controlAreaStyleClass = "dialog_control";
+        controlAreaRequiredStyleClass = "dialog_control_required";
+        controlAreaReadonlyStyleClass = "dialog_control_readonly";
+
+        controlAttrs = "onfocus='controlOnFocus(this, event)' onchange='controlOnChange(this, event)' " +
                 "onblur='controlOnBlur(this, event)' onkeypress='controlOnKeypress(this, event)' onclick='controlOnClick(this, event) '";
         separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
         separatorBannerTextFontAttrs = "face='arial' size=2 color=#555555";
         separatorHtml = "<hr size=1 color=#555555>";
         hintFontAttrs = "color='navy'";
         errorMsgFontAttrs = "color='red'";
-        captionSuffix = " ";
+        captionSuffix = ": ";
         includePreScripts = null;
         includePostScripts = null;
         includePreStyleSheets = null;
@@ -217,6 +225,12 @@ public class StandardDialogSkin implements DialogSkin
                 controlAreaFontAttrs = nodeText;
             else if(nodeName.equals("control-area-style-attrs") && nodeText != null)
                 controlAreaStyleAttrs = nodeText;
+            else if(nodeName.equals("control-area-style-class") && nodeText != null)
+                controlAreaStyleClass = nodeText;
+            else if(nodeName.equals("control-area-required-style-class") && nodeText != null)
+                controlAreaRequiredStyleClass = nodeText;
+            else if(nodeName.equals("control-area-readonly-style-class") && nodeText != null)
+                controlAreaReadonlyStyleClass = nodeText;
             else if(nodeName.equals("control-attrs") && nodeText != null)
                 controlAttrs = nodeText;
             else if(nodeName.equals("separator-font-attrs") && nodeText != null)
@@ -282,6 +296,33 @@ public class StandardDialogSkin implements DialogSkin
     public final String getDefaultControlAttrs()
     {
         return controlAttrs;
+    }
+
+    /**
+     * Gets the CSS style class for a dialog field control area
+     * @return String
+     */
+    public String getControlAreaStyleClass()
+    {
+        return controlAreaStyleClass;
+    }
+
+    /**
+     * Gets the CSS style class for a required dialog field control area
+     * @return String
+     */
+    public String getControlAreaRequiredStyleClass()
+    {
+        return controlAreaRequiredStyleClass;
+    }
+
+    /**
+     * Gets the CSS style class for a read only dialog field control area
+     * @return String
+     */
+    public String getControlAreaReadonlyStyleClass()
+    {
+        return controlAreaReadonlyStyleClass;
     }
 
     public void renderCompositeControlsHtml(Writer writer, DialogContext dc, DialogField parentField) throws IOException

@@ -27,7 +27,6 @@ public class ReportSelectedItemsField extends SelectField
 
     public void populateValue(DialogContext dc, int formatType)
     {
-        System.out.println("TEST " + this.getCaption(dc) + " " + isMulti());
         if (isMulti())
         {
             // multi select list
@@ -35,17 +34,10 @@ public class ReportSelectedItemsField extends SelectField
             if (values == null || values.length == 0)
                 values = dc.getRequest().getParameterValues(getId());
 
-            if (values != null)
-            {
-                for (int i = 0; i < values.length; i++)
-                    System.out.println("=================" + values[i] + "======================");
-            }
-
             // initial display of the dialog
             if (dc.getRunSequence() == 1)
             {
                 ListValueSource defaultValue = getDefaultListValue();
-                System.out.println(values + " " + defaultValue);
                 // if no request parameter is passed in and the XML defined default value exists
                 if ((values != null && values.length == 0 && defaultValue != null) ||
                         (values == null && defaultValue != null))
@@ -66,7 +58,6 @@ public class ReportSelectedItemsField extends SelectField
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
-        System.out.println("RENDER!!!!!!!");
          // the 'choices' for this special SELECT field comes from the request param only. They are not defined
         // in XML.
         String[] values = dc.getValues(this);
@@ -103,7 +94,6 @@ public class ReportSelectedItemsField extends SelectField
 
         if (readOnly)
         {
-            System.out.println("READONLY!!!!!!!");
             while (i.hasNext())
             {
                 SelectChoice choice = (SelectChoice) i.next();

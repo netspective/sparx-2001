@@ -42,6 +42,7 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
         hintFontAttrs = " class=\"dialog-fields-hint\" ";
         separatorHtml = "";
         frameVisible = true;
+        captionSuffix = " ";
     }
 
     /**
@@ -56,11 +57,6 @@ public class ThemeDialogSkin extends com.netspective.sparx.xaf.skin.StandardDial
     public void setFrameVisible(boolean frameVisible)
     {
         this.frameVisible = frameVisible;
-    }
-
-    public String getControlAreaClass()
-    {
-        return controlAreaStyleAttrs;
     }
 
     public void renderHtml(Writer writer, DialogContext dc) throws IOException

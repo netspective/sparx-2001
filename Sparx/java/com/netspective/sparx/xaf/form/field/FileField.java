@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: FileField.java,v 1.3 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: FileField.java,v 1.4 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -90,7 +90,9 @@ public class FileField extends TextField
 
         if((!isReadOnly(dc)) && (!flagIsSet(FLDFLAG_MASKENTRY)))
         {
-            writer.write("<input type=\"file\" name=\"" + getId() + "\" size=\"" + getSize() + "\" " + (isRequired(dc) ? "class='required'" : "") + dc.getSkin().getDefaultControlAttrs() + ">");
+            writer.write("<input type=\"file\" name=\"" + getId() + "\" size=\"" + getSize() + "\" " +
+                    (isRequired(dc) ? " class=\"" + dc.getSkin().getControlAreaRequiredStyleClass() + "\" " : " ") +
+                    dc.getSkin().getDefaultControlAttrs() + ">");
         }
         else
         {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HandHeldDialogSkin.java,v 1.5 2003-02-24 03:46:04 aye.thu Exp $
+ * $Id: HandHeldDialogSkin.java,v 1.6 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -88,6 +88,9 @@ public class HandHeldDialogSkin implements DialogSkin
     protected String captionFontAttrs;
     protected String controlAreaFontAttrs;
     protected String controlAreaStyleAttrs;
+    protected String controlAreaStyleClass;
+    protected String controlAreaRequiredStyleClass;
+    protected String controlAreaReadonlyStyleClass;
     protected String controlAttrs;
     protected String separatorFontAttrs;
     protected String separatorHtml;
@@ -108,6 +111,9 @@ public class HandHeldDialogSkin implements DialogSkin
         captionFontAttrs = "";
         controlAreaFontAttrs = "";
         controlAreaStyleAttrs = "";
+        controlAreaStyleClass = "";
+        controlAreaRequiredStyleClass = "";
+        controlAreaReadonlyStyleClass = "";
         controlAttrs = "";
         separatorFontAttrs = "";
         separatorHtml = "<hr size=1 color=#555555>";
@@ -139,6 +145,33 @@ public class HandHeldDialogSkin implements DialogSkin
     public String getControlAreaStyleAttrs()
     {
         return controlAreaStyleAttrs;
+    }
+
+    /**
+     * Gets the CSS style class for a dialog field control area
+     * @return String
+     */
+    public String getControlAreaStyleClass()
+    {
+        return controlAreaStyleClass;
+    }
+
+    /**
+     * Gets the CSS style class for a required dialog field control area
+     * @return String
+     */
+    public String getControlAreaRequiredStyleClass()
+    {
+        return controlAreaReadonlyStyleClass;
+    }
+
+    /**
+     * Gets the CSS style class for a read only dialog field control area
+     * @return String
+     */
+    public String getControlAreaReadonlyStyleClass()
+    {
+        return controlAreaReadonlyStyleClass;
     }
 
     public final String getDefaultControlAttrs()

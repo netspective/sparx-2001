@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.2 2003-02-26 07:54:15 aye.thu Exp $
+ * $Id: HtmlReportSkin.java,v 1.3 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -207,6 +207,7 @@ public class HtmlReportSkin implements ReportSkin
                         itemCaption.getValue(rc) + "&nbsp;</a></td>");
                 colCount++;
             }
+
             writer.write("<td nowrap>\n");
             writer.write("    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n");
             writer.write("        <tr>\n");

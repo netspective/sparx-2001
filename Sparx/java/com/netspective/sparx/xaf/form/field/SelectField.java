@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SelectField.java,v 1.7 2003-03-05 23:41:53 aye.thu Exp $
+ * $Id: SelectField.java,v 1.8 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -605,19 +605,19 @@ public class SelectField extends TextField
                     switch(style)
                     {
                         case SELECTSTYLE_COMBO:
-                            writer.write("<select name='" + id + "' " + defaultControlAttrs +
+                            writer.write("<select class=\"" + dc.getSkin().getControlAreaStyleClass() + "\" name='" + id + "' " + defaultControlAttrs +
                                     (isInputHidden(dc) ? " style=\"display:none;\"" : "") +
                                     ">\n" + options + "</select>\n");
                             break;
 
                         case SELECTSTYLE_LIST:
-                            writer.write("<select name='" + id + "' size='" + getSize() + "' " + defaultControlAttrs +
+                            writer.write("<select class=\"" + dc.getSkin().getControlAreaStyleClass() + "\" name='" + id + "' size='" + getSize() + "' " + defaultControlAttrs +
                                     (isInputHidden(dc) ? " style=\"display:none;\"" : "") +
                                     ">\n" + options + "</select>\n");
                             break;
 
                         case SELECTSTYLE_MULTILIST:
-                            writer.write("<select name='" + id + "' size='" + getSize() + "' multiple='yes' " + defaultControlAttrs +
+                            writer.write("<select class=\"" + dc.getSkin().getControlAreaStyleClass() + "\" name='" + id + "' size='" + getSize() + "' multiple='yes' " + defaultControlAttrs +
                                     (isInputHidden(dc) ? " style=\"display:none;\"" : "") +
                                     ">\n" + options + "</select>\n");
                             break;

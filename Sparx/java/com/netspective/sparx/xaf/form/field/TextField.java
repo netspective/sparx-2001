@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.13 2003-02-26 07:54:13 aye.thu Exp $
+ * $Id: TextField.java,v 1.14 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -349,7 +349,6 @@ public class TextField extends DialogField
             value = escapeHTML(value);
 
         String className = "";
-        String requiredClass = null;
         SkinFactory tf = SkinFactory.getInstance();
         Theme theme = tf.getCurrentTheme(dc);
         if (theme != null)
@@ -362,29 +361,30 @@ public class TextField extends DialogField
         }
         else
         {
-            className = isRequired(dc) ? "required" : "";
+            className = isRequired(dc) ? dc.getSkin().getControlAreaRequiredStyleClass() : dc.getSkin().getControlAreaStyleClass();
         }
-        String readonlyStyle = dc.getSkin().getControlAreaStyleAttrs();
+        String controlAreaStyle = dc.getSkin().getControlAreaStyleAttrs();
         if(isReadOnly(dc))
         {
             writer.write("<input type='hidden' name='" + getId() + "' value=\"" + value + "\"><span id='" + getQualifiedName() + "'>" + dc.getValue(this) + "</span>");
         }
         else if(isBrowserReadOnly(dc))
         {
-            writer.write("<input type=\"text\" name=\"" + getId() + "\" readonly " + readonlyStyle + " value=\"" +
-                    value + "\" maxlength=\"" + maxLength + "\" size=\"" + size + "\" " +
-                    "class='" + className + "' " + dc.getSkin().getDefaultControlAttrs() + ">");
+            className = dc.getSkin().getControlAreaReadonlyStyleClass();
+            writer.write("<input type=\"text\" name=\"" + getId() + "\" readonly value=\"" +
+                    value + "\" maxlength=\"" + maxLength + "\" size=\"" + size + "\" " + controlAreaStyle +
+                    " class=\"" + className + "\" " + dc.getSkin().getDefaultControlAttrs() + ">");
         }
         else if(!flagIsSet(FLDFLAG_MASKENTRY))
         {
             writer.write("<input type=\"text\" name=\"" + getId() + "\" value=\"" + value + "\" maxlength=\"" +
-                    maxLength + "\" size=\"" + size + "\"  class='" + className + "' " +
+                    maxLength + "\" size=\"" + size + "\" " + controlAreaStyle + " class=\"" + className + "\" " +
                     dc.getSkin().getDefaultControlAttrs() + ">");
         }
         else
         {
             writer.write("<input type=\"password\" name=\"" + getId() + "\" value=\"" + value + "\" maxlength=\"" +
-                    maxLength + "\" size=\"" + size + "\"  class='" + className + "' " +
+                    maxLength + "\" size=\"" + size + "\" " + controlAreaStyle + " class=\"" + className + "\" " +
                     dc.getSkin().getDefaultControlAttrs() + ">");
         }
     }

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogSkin.java,v 1.4 2002-10-13 19:54:55 shahid.shah Exp $
+ * $Id: DialogSkin.java,v 1.5 2003-03-06 20:57:22 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -115,6 +115,24 @@ public interface DialogSkin
      * @return String
      */
     public String getControlAreaStyleAttrs();
+
+    /**
+     * Gets the CSS style class for a dialog field control area
+     * @return String
+     */
+    public String getControlAreaStyleClass();
+
+    /**
+     * Gets the CSS style class for a required dialog field control area
+     * @return String
+     */
+    public String getControlAreaRequiredStyleClass();
+
+    /**
+     * Gets the CSS style class for a read only dialog field control area
+     * @return String
+     */
+    public String getControlAreaReadonlyStyleClass();
 
     public void importFromXml(Element elem);
 
