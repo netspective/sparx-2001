@@ -70,6 +70,35 @@
 					</table>
 					</td>
 				</tr>
+				<tr>
+					<td colspan="2">
+						<p/><br/>
+						<h1>Source Files</h1>
+						<ol>
+						<xsl:for-each select="meta-info/source-files/source-file">
+							<li>
+								<a>
+								<xsl:attribute name="href"><xsl:value-of select="@abs-path"/></xsl:attribute>
+								<xsl:value-of select="@abs-path"/>
+								</a>
+								<xsl:if test="@included-from">
+									(from <xsl:value-of select="@included-from"/>)
+								</xsl:if>
+							</li>
+						</xsl:for-each>
+						</ol>
+
+						<p/>
+						<xsl:if test="meta-info/errors">
+							<h1>Schema Errors</h1>
+							<ol>
+							<xsl:for-each select="meta-info/errors/error">
+								<li><xsl:value-of select="."/></li>
+							</xsl:for-each>
+							</ol>
+						</xsl:if>
+					</td>
+				</tr>
 			</table>
 		</xsl:otherwise>
 	</xsl:choose>
