@@ -98,8 +98,18 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
 		}
 		else
 		{
-			Map rsMap = StatementManager.getResultSetSingleRowAsMap(rs);
-			vc.getRequest().setAttribute(DialogContext.DIALOG_FIELD_VALUES_ATTR_NAME, rsMap);
+            Map rsMap = StatementManager.getResultSetSingleRowAsMap(rs);
+            DialogContext dc = (DialogContext) vc.getRequest().getAttribute(DialogContext.DIALOG_CONTEXT_ATTR_NAME);
+            if(dc != null)
+            {
+                // dialog context has already been created and is available in the request
+                dc.assignFieldValues(rsMap);
+            }
+            else
+            {
+                // stash this away so when the DialogContext is created, the values are available
+                vc.getRequest().setAttribute(DialogContext.DIALOG_FIELD_VALUES_ATTR_NAME, rsMap);
+            }
 		}
 	}
 }
