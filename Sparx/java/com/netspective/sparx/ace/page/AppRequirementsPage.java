@@ -63,7 +63,10 @@ public class AppRequirementsPage extends AceServletPage
 			String type = unmatchedItems[0];
 			if (type.equals("all"))
 			{
-
+      	handleNavigation(writer, nc);
+				handleStatement(writer, nc);
+				handleQueryDef(writer, nc);
+				handleDialog(writer, nc);
 			}
 			else if (type.equals("generate-mapping"))
 			{
