@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: VirtualPath.java,v 1.5 2002-11-20 13:15:57 roque.hernandez Exp $
+ * $Id: VirtualPath.java,v 1.6 2002-11-22 15:46:44 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -439,6 +439,16 @@ public class VirtualPath
         VirtualPath child = addChild(path);
         child.setPage(page);
         return child;
+    }
+
+    /**
+     * Get a child by its ID
+     * @param id
+     * @return VirtualPath
+     */
+    public VirtualPath getChildById(String id)
+    {
+        return (VirtualPath)childrenMap.get(id);
     }
 
     public List getChildrenList()
