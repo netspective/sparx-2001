@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.27 2002-12-23 04:36:17 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.28 2002-12-31 19:37:51 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -154,6 +154,7 @@ public class DialogContext extends ServletValueContext
         public DialogField field;
         public String value;
         public String[] values;
+        public String adjacentAreaValue;
         public long flags;
         public ArrayList errorMessages;
 
@@ -1522,6 +1523,24 @@ public class DialogContext extends ServletValueContext
             return value != null;
     }
 
+    public String getAdjacentAreaValue(DialogField field)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+        if(state == null)
+            return null;
+        else
+            return state.adjacentAreaValue;
+    }
+
+    public String getAdjacentAreaValue(String qualifiedName)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+        if(state == null)
+            return null;
+        else
+            return state.adjacentAreaValue;
+    }
+
     public String getValue(DialogField field)
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
@@ -1636,6 +1655,18 @@ public class DialogContext extends ServletValueContext
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
         state.value = value;
+    }
+
+    public void setAdjacentAreaValue(DialogField field, String value)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+        state.adjacentAreaValue = value;
+    }
+
+    public void setAdjacentAreaValue(String qualifiedName, String value)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+        state.adjacentAreaValue = value;
     }
 
     public String[] getValues(DialogField field)
