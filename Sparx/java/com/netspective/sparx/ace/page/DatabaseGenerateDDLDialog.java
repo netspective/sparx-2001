@@ -51,11 +51,12 @@
  */
 
 /**
- * $Id: DatabaseGenerateDDLDialog.java,v 1.2 2002-01-22 12:46:35 jruss Exp $
+ * $Id: DatabaseGenerateDDLDialog.java,v 1.3 2002-01-27 21:01:27 snshah Exp $
  */
 
 package com.netspective.sparx.ace.page;
 
+import java.io.File;
 import java.io.Writer;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -123,11 +124,11 @@ public class DatabaseGenerateDDLDialog extends Dialog
 
     public void execute(Writer writer, DialogContext dc) throws IOException
     {
-        String styleSheet = generatorsList.getRootPath().getValue(dc) + "/" + dc.getValue("generator");
+		File styleSheetFile = new File(generatorsList.getRootPath().getValue(dc), dc.getValue("generator"));
 
         try
         {
-            SchemaDocument.SqlDdlGenerator generator = new SchemaDocument.SqlDdlGenerator(styleSheet, dc.getValue("output_file"));
+            SchemaDocument.SqlDdlGenerator generator = new SchemaDocument.SqlDdlGenerator(styleSheetFile, dc.getValue("output_file"));
             SchemaDocument schemaDoc = SchemaDocFactory.getDoc(dc.getValue("source_file"));
             generator.generate(schemaDoc);
 
