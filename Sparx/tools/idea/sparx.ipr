@@ -1,7 +1,15 @@
 <?xml version="1.0"?>
 
 <project version="2">
-  <component class="com.intellij.ant.AntConfiguration" />
+  <component class="com.intellij.ant.AntConfiguration">
+    <buildFile url="file://C:/Projects/Sparx/java/build.xml">
+      <useEmacsModeOutput value="true" />
+      <useCustomJdk value="false" />
+      <useJavaw value="false" />
+      <includeProjectClasspath value="false" />
+      <maximumHeapSize value="128" />
+    </buildFile>
+  </component>
   <component class="com.intellij.ant.AntManager">
     <option name="OPEN_IN_TEXT_VIEW" value="false" />
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -65,9 +73,9 @@
     </Update>
     <Commit>
       <option name="NON_RECURSIVE" value="false" />
-      <option name="REVISION_TAG" />
-      <option name="LOG_MESSAGE" />
-      <option name="ADDITIONAL_OPTIONS" />
+      <option name="REVISION_TAG" value="" />
+      <option name="LOG_MESSAGE" value="Added reference to http://appstats.sourceforge.net/." />
+      <option name="ADDITIONAL_OPTIONS" value="" />
     </Commit>
     <Diff>
       <option name="REVISION_TAG" value="HEAD" />
@@ -282,6 +290,7 @@
   </component>
   <component class="com.intellij.ide.SelectInManager" />
   <component class="com.intellij.ide.bookmarks.BookmarkManager">
+    <editor_bookmark url="file://C:/Projects/Sparx/documentation/src/default.xsl" line="680" />
     <editor_bookmark url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/skin/HtmlReportSkin.java" line="244" />
   </component>
   <component class="com.intellij.ide.commander.Commander">
@@ -291,26 +300,30 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/field/StaticField.java" column="20" line="80" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/field/TextField.java" column="50" line="331" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/field/MemoField.java" column="45" line="229" />
-      <file_info url="file://C:/Projects/Sparx/documentation/src/to-do.xml" column="13" line="10" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/DialogContext.java" column="8" line="1520" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/field/SelectField.java" column="49" line="167" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseSqlPage.java" column="12" line="122" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/xml/XmlSource.java" column="22" line="95" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db/DatabaseContext.java" column="17" line="75" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db/DatabaseContextFactory.java" column="73" line="112" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/sql/StatementExecutionLog.java" column="38" line="112" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/sql/StatementManager.java" column="48" line="404" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/sql/StatementInfo.java" column="68" line="140" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/AppInitParamsPage.java" column="161" line="184" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/AceServletPage.java" column="62" line="160" />
+      <file_info url="file://C:/Projects/Sparx/documentation/src/samples/web-hello.xml" column="42" line="13" />
+      <file_info url="file://C:/Projects/Sparx/documentation/src/index.xml" column="46" line="19" />
+      <file_info url="file://C:/Projects/Sparx/documentation/src/samples.xml" column="0" line="55" />
+      <file_info url="file://C:/Projects/Sparx/documentation/src/overview/eval-kit.xml" column="56" line="19" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/navigate/FileSystemEntry.java" column="63" line="79" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/value/ServletContextPathValue.java" column="117" line="76" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/ant/ImportConfigurationTask.java" column="0" line="102" />
+      <file_info url="file://C:/Projects/Sparx/documentation/src/structure.xml" column="63" line="24" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/SchemaDocument.java" column="40" line="845" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseGenerateDDLDialog.java" column="0" line="99" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseGenerateJavaDialog.java" column="120" line="119" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseMetaDataToSchemaDocDialog.java" column="0" line="70" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseMetaDataPage.java" column="60" line="91" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/BuildConfiguration.java" column="45" line="65" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/AppMetricsPage.java" column="16" line="110" />
     </recent_files>
     <open_files>
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/AppInitParamsPage.java" column="161" line="184" />
-      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/AceServletPage.java" column="62" line="160" />
-      <active_file url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/AceServletPage.java" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseGenerateDDLDialog.java" column="0" line="99" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseGenerateJavaDialog.java" column="120" line="119" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseMetaDataToSchemaDocDialog.java" column="0" line="70" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/DatabaseMetaDataPage.java" column="60" line="91" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/BuildConfiguration.java" column="45" line="65" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/AppMetricsPage.java" column="16" line="110" />
+      <active_file url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace/page/AppMetricsPage.java" />
     </open_files>
   </component>
   <component class="com.intellij.ide.hierarchy.HierarchyBrowserManager">
@@ -322,14 +335,19 @@
   <component class="com.intellij.ide.navigator.impl.ProjectNavigatorSettings">
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation/resources" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt/schema-gen/java-gen" />
       <expanded_node type="directory" url="file://C:/Projects/Sparx/java" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xif/db" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com" />
-      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/ace" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation/src/samples" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation/src" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation/src/overview" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/web-shared/resources/xslt/schema-gen" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation/resources/images/design" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/documentation/resources/images" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false" />
   </component>
@@ -361,31 +379,31 @@
   </component>
   <component class="com.intellij.projectRoots.ProjectRootContainer">
     <jdk name="java version &quot;1.3.1_02&quot;" />
-    <root file="jar://S:/utils/java/lib/sparx-redist/ant.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/ant.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/bsf.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/bsf.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/jdbc.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/jdbc.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/js.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/js.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/log4j.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/log4j.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/oro.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/oro.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/servlet.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/servlet.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/xalan.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/xalan.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://S:/utils/java/lib/sparx-redist/xerces.jar!/">
+    <root file="jar://D:/shared/utils/java/lib/sparx-redist/xerces.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
     <root file="file://$PROJECT_DIR$/classes">
@@ -407,6 +425,9 @@
       <property name="type" value="projectFiles" />
     </root>
     <root file="file://C:/Projects/Sparx/documentation">
+      <property name="type" value="projectFiles" />
+    </root>
+    <root file="file://C:/Projects/Sparx/web-shared">
       <property name="type" value="projectFiles" />
     </root>
     <root file="file://C:/Projects/Sparx/java">

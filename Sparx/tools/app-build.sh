@@ -1,26 +1,69 @@
 #!/bin/sh
 
-SPARX_HOME=$HOME/Projects/Sparx
-export SPARX_HOME
+# $Id: app-build.sh,v 1.3 2002-08-10 03:44:11 shahid.shah Exp $
 
-APP_ROOT=`pwd`
-APP_CLASSES=$APP_ROOT/Site/WEB-INF/classes
-BUILD_FILE=$SPARX_HOME/tools/app-build.xml
+# **************************************************************************
+# ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
+# **************************************************************************
 
-JAVA_LIB=/home/shared/utils/java/lib
-APP_SERVER_LIB=/home/shared/utils/java/app-servers/jakarta-tomcat-4.0.1/common/lib
+# **************************************************************************
+# ** Setup location of Sparx distribution, application build file, and    **
+# ** the Sparx JAR file. Just set the SPARX_HOME environment variable and **
+# ** the others will be set automatically. You can set SPARX_HOME in your **
+# ** environment (shell) or change default value in this file.            **
+# **************************************************************************
 
-ANT_HOME=$JAVA_LIB/jakarta-ant-1.4.1
-XERCES_JAR=$JAVA_LIB/xerces-1_4_4/xerces.jar
-XALAN_JAR=$JAVA_LIB/xalan-j_2_1_0/bin/xalan.jar
-#XALAN_JAR=$JAVA_LIB/xalan-j_2_2_D14/bin/xml-apis.jar:$JAVA_LIB/xalan-j_2_2_D14/bin/xalan.jar
-OROMATCHER_JAR=$JAVA_LIB/jakarta-oro-2.0.4/jakarta-oro-2.0.4.jar
-LOG4J_JAR=$JAVA_LIB/jakarta-log4j-1.1.3/dist/lib/log4j.jar
-SERVLETAPI_JAR=$APP_SERVER_LIB/servlet.jar
-JDBC2X_JAR=$APP_SERVER_LIB/jdbc2_0-stdext.jar
-SPARX_JAR=$SPARX_HOME/lib/sparx.jar
-JAVACP=$JAVA_HOME/lib/tools.jar
+if [ ! -d $JAVA_HOME ]; then
+	JAVA_HOME=/usr/java/home
+fi
 
-USE_CLASS_PATH=$APP_CLASSES:$XERCES_JAR:$SPARX_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR:$XALAN_JAR:$JAVACP
+BASEDIR=`pwd`
 
-java -Dant.home=$ANT_HOME -classpath $USE_CLASS_PATH:$ANT_HOME/lib/ant.jar org.apache.tools.ant.Main -Dbasedir=$APP_ROOT -buildfile $BUILD_FILE $1 $2 $3 $4 $5
+# the SPARX_HOME, if not set, is assumed to be at the same level as apps
+
+if [ ! -d $SPARX_HOME ]; then
+	SPARX_HOME=$BASEDIR/../../Sparx
+fi	
+
+SPARX_REDIST_HOME=$SPARX_HOME\lib\redist
+APP_CLASSES=$BASEDIR/classes
+APP_LIB=$BASEDIR/lib
+APP_BUILD_FILE=$BASEDIR/build.xml
+
+# **************************************************************************
+# ** Setup location of all the Sparx prerequisites                        **
+# **   Apache Xerces 1.4 or above (http://xml.apache.org)                 **
+# **   Apache Xalan 2.1 or above (http://xml.apache.org)                  **
+# **   Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)       **
+# **   Jakarta Log4J 1.1 or above (http://jakarta.apache.org)             **
+# **   Java Servlet API 2.2 or above (http://java.sun.com)                **
+# **   Java JDBC 2.0 Standard Extensions (http://java.sun.com)            **
+# **************************************************************************
+
+SPARX_JAR=$APP_LIB/sparx.jar
+ANT_JAR=$APP_LIB/ant.jar
+XERCES_JAR=$APP_LIB/xerces.jar
+XALAN_JAR=$APP_LIB/xalan.jar
+OROMATCHER_JAR=$APP_LIB/oro.jar
+LOG4J_JAR=$APP_LIB/log4j.jar
+BSF_JAR=$APP_LIB/bsf.jar
+BSF_JS_JAR=$APP_LIB/js.jar
+
+SERVLETAPI_JAR=%SPARX_REDIST_HOME%\servlet.jar
+JDBC2X_JAR=%SPARX_REDIST_HOME%\jdbc.jar
+
+if [ -f $JAVA_HOME/lib/tools.jar ]; then
+	JAVACP=$JAVA_HOME/lib/tools.jar
+fi
+
+if [ -f $JAVA_HOME/lib/classes.zip ]; then
+	JAVACP=$JAVA_HOME/lib/classes.zip
+fi
+
+USE_CLASS_PATH=$APP_CLASSES:$XERCES_JAR:$SPARX_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR:$XALAN_JAR:$JAVACP:$ANT_JAR:$BSF_JAR:$BSF_JS_JAR
+
+# **************************************************************************
+# ** Now that all the variables are set, execute Ant                      **
+# **************************************************************************
+
+java -classpath $USE_CLASS_PATH org.apache.tools.ant.Main -Dbasedir=$BASEDIR -buildfile $APP_BUILD_FILE $1 $2 $3 $4 $5

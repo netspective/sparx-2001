@@ -16,6 +16,8 @@ Setup instructions:
        * Jakarta Log4J 1.1 or above (http://jakarta.apache.org)
        * Java Servlet API 2.2 or above (http://java.sun.com)
        * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
+       
+$Id: app-build.xml,v 1.9 2002-08-10 03:44:11 shahid.shah Exp $       
 -->
 
 <project name="app" default="all" basedir="${basedir}">
@@ -35,6 +37,7 @@ Setup instructions:
 		<pathconvert targetos="unix" property="sparx.home" refid="sparx.home.path"/>
 		<property name="sparx.lib.dir" value="${sparx.home}/lib"/>
 		<property name="sparx.java.dir" value="${sparx.home}/java"/>
+		<property name="sparx.tools.dir" value="${sparx.home}/tools"/>
 		<property name="sparx.shared.dir" value="${sparx.home}/web-shared"/>
 		<property name="sparx.shared.resources.dir" value="${sparx.shared.dir}/resources"/>
 		<property name="sparx.shared.resources.templates.dir" value="${sparx.shared.dir}/resources/templates"/>
@@ -118,34 +121,48 @@ Setup instructions:
     	<mkdir dir="${app.WEB-INF.dir}/sql"/>
     	<mkdir dir="${app.WEB-INF.dir}/tld"/>
     	<mkdir dir="${app.WEB-INF.dir}/ui"/>
+    </target>
+
+    <target name="copy-sparx-templates" depends="global">
+		<copy file="${sparx.tools.dir}/app-build.xml" tofile="${app.WEB-INF.dir}/build.xml"/>
 
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/configuration.xml" todir="${app.WEB-INF.dir}"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/resin.web.xml" todir="${app.WEB-INF.dir}"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" todir="${app.WEB-INF.dir}"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tomcat.web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
-		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/schema.xml" todir="${app.WEB-INF.dir}/schema"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="${app.WEB-INF.dir}/sql"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="${app.WEB-INF.dir}/security"/>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
 		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
-
-		<copy todir="${app.root.dir}/sparx/resources">
-			<fileset dir="${sparx.shared.resources.dir}"/>
-		</copy>
-    </target>
-
+	</target>
+	
     <target name="copy-sparx-libs" depends="global">
+		<uptodate property="build.xml-is-uptodate" targetfile="${app.WEB-INF.dir}/build.xml">
+			<srcfiles dir= "${sparx.tools.dir}" includes="app-build.xml"/>
+		</uptodate>
+
+		<uptodate property="build.bat-is-uptodate" targetfile="${app.WEB-INF.dir}/build.bat">
+			<srcfiles dir= "${sparx.tools.dir}" includes="app-build.bat"/>
+		</uptodate>
+
+		<uptodate property="build.sh-is-uptodate" targetfile="${app.WEB-INF.dir}/build.sh">
+			<srcfiles dir= "${sparx.tools.dir}" includes="app-build.sh"/>
+		</uptodate>
+
+		<copy file="${sparx.tools.dir}/app-build.xml" tofile="${app.WEB-INF.dir}/build.xml"/>
 		<copy file="${sparx.lib.dir}/sparx.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/ant.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/bsf.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/log4j.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/js.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/oro.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/xalan.jar" todir="${app.lib.dir}"/>
 		<copy file="${sparx.lib.dir}/redist/xerces.jar" todir="${app.lib.dir}"/>
+		<copy file="${sparx.lib.dir}/redist/README" todir="${app.lib.dir}"/>
     </target>
     
     <target name="copy-sparx-resources" depends="global">
@@ -153,11 +170,36 @@ Setup instructions:
 		<copy todir="${app.root.dir}/sparx/resources">
 			<fileset dir="${sparx.shared.resources.dir}"/>
 		</copy>
+		<copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
     </target>    
 
-    <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-libs">
-    	<echo message="All Sparx files copied. Please review ${app.WEB-INF.dir} to create a valid web.xml file for your application server."/>
-    	<echo message="Required libraries copied into ${app.lib.dir}, please confirm that you want them in that location."/>
+    <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-templates,copy-sparx-resources,copy-sparx-libs">
+    	<echo message="All Sparx files copied. Please review ${app.WEB-INF.dir} to create a valid"/>
+    	<echo message="web.xml file for your application server."/>
+    </target>
+
+    <target name="upgrade-build-xml" depends="copy-sparx-libs" unless="build.xml-is-uptodate">
+    	<echo message="** NOTE ** ${app.WEB-INF.dir}/build.xml WAS UPGRADED."/>
+    	<echo message="           PLEASE RUN 'build upgrade-sparx' AGAIN WITH THE LATEST"/>
+    	<echo message="           ANT BUILD.XML FILE"/>
+    </target>
+    
+    <target name="upgrade-build-bat" depends="copy-sparx-libs" unless="build.bat-is-uptodate">
+    	<echo message="** NOTE ** ${app.WEB-INF.dir}/build.bat is not current. "/>
+    	<echo message="Please copy"/>
+    	<echo message="    ${sparx.tools.dir}/app-build.bat to"/>
+    	<echo message="    ${app.WEB-INF.dir}/build.bat"/>
+    </target>
+
+    <target name="upgrade-build-sh" depends="copy-sparx-libs" unless="build.sh-is-uptodate">
+    	<echo message="** NOTE ** ${app.WEB-INF.dir}/build.sh is not current. "/>
+    	<echo message="Please copy"/>
+    	<echo message="    ${sparx.tools.dir}/app-build.sh to"/>
+    	<echo message="    ${app.WEB-INF.dir}/build.sh"/>
+    </target>
+
+    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh">
+    	<echo message="Sparx libraries and resources have been updated."/>
     </target>
 
     <target name="migrate-xaf12-sparx20" depends="global">
@@ -313,7 +355,7 @@ Setup instructions:
 
     <target name="targets">
         <echo message=""/>
-        <echo message="ANT build targets for Application"/>
+        <echo message="ANT build targets for for Sparx Applications"/>
         <echo message=""/>
         <echo message="The following targets are available:"/>
         <echo message="  all          Run all of the targets in this order: clean, dal, dcb, compile,"/>
@@ -324,6 +366,9 @@ Setup instructions:
         <echo message="  setup-sparx-structure Setup sparx structure (directories, etc)"/>
         <echo message="  start-sparx-app In an empty directory, start a new sparx app (runs"/>
         <echo message="                  setup-sparx-structure, copy-sparx-libs, copy-sparx-resources"/>
+        <echo message="  upgrade-sparx   Upgrades Sparx libraries and resources in this application to"/>
+        <echo message="                  latest version available in SPARX_HOME (basically runs these"/>
+        <echo message="                  two targets: copy-sparx-libs and copy-sparx-resources"/>
         <echo message="  "/>
         <echo message="  compile      Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal          Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
@@ -331,7 +376,15 @@ Setup instructions:
         <echo message="  dcb          Generate the Dialog Context Beans from Dialogs (XML)"/>
         <echo message="  dcb-doc      Generate the Dialog Context Beans API Documentation"/>
         <echo message="  "/>
-        <echo message="  copy-sparx-libs  Copy all the applicable Sparx libraries into the application"/>
-        <echo message="  copy-sparx-resources  Copy all the web-based resources need for Sparx (SPARX_HOME/web-shared/resources)"/>
+        <echo message="  copy-sparx-libs  Copy all the applicable Sparx libraries into the"/>
+        <echo message="                   application"/>
+        <echo message="  copy-sparx-resources  Copy all the web-based resources needed by Sparx"/>
+        <echo message="                        (SPARX_HOME/web-shared to SITE_ROOT/sparx) plus any"/>
+        <echo message="                        files (like WEB-INF/tld/sparx.tld) that are maintained"/>
+        <echo message="                        only in Sparx distribution"/>
+        <echo message="  copy-sparx-templates  Copy all starter files for a Sparx application (if you"/>
+        <echo message="                        run this on an existing application YOUR files will be"/>
+        <echo message="                        overwritten by the original Sparx templates from"/>
+        <echo message="                        SPARX_HOME"/>
     </target>
 </project>
