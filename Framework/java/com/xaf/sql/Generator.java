@@ -136,4 +136,27 @@ public class Generator
 
 		return stmt;
 	}
+
+    /**
+     * Creates SQL Delete statement
+     *
+     * @param tableName database table name
+     * @param whereCond SQL WHERE string
+     * @param whereCondParams WHERE string bind values
+     * @returns DmlStatement
+     */
+	static public DmlStatement createDeleteStmt(String tableName, String whereCond, Object[] whereCondParams) throws UnknownDBMSException
+	{
+		DmlStatement stmt = new DmlStatement();
+		stmt.tableName = tableName;
+        stmt.columns = new Object[0];
+		stmt.bindColFlags = 0;
+
+
+		stmt.sql = "delete from "+tableName;
+        if(whereCond != null)
+            stmt.sql += " where " + whereCond;
+
+		return stmt;
+	}
 }
