@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPageUrlValue.java,v 1.1 2003-01-22 06:26:31 roque.hernandez Exp $
+ * $Id: NavigationPageUrlValue.java,v 1.2 2003-01-24 12:59:13 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -65,10 +65,10 @@ import java.util.StringTokenizer;
 
 public class NavigationPageUrlValue extends ValueSource
 {
-    private String source;
-    private String navId;
-    private String reqParamsSource;
-    private ValueSource reqParams;
+    protected String source;
+    protected String navId;
+    protected String reqParamsSource;
+    protected ValueSource reqParams;
 
     public NavigationPageUrlValue()
     {
@@ -81,9 +81,11 @@ public class NavigationPageUrlValue extends ValueSource
                 "Retrieves the URL necesary to refer to a NavigationPage defined in a NavigationTree (WEB-INF/ui/structure.xml). If " +
                 "no source-name is provided the navigation-id requested is read from the default NavigationTreeManager " +
                 "of the default configuration file. If a source-name is provided, then the property-name is read from the " +
-                "NavigationTreeManager named source-name in the default configuration file.  The URL is a combination of " +
-                "the page controller's URL and retain-params, the id of the page and the retain-params defined for that page.",
-                new String[]{"navigation-id", "source-name/navigation-id", "navigation-id?req-params"}
+                "NavigationTreeManager named source-name in the default configuration file.  The URL is obtained by combining " +
+                "the page controller's URL, the page's id and retain-params from both the page and controller.  The req-params can " +
+                "can be defined in the form of a=b, a=${b} or simply a. When no equals sign and value is provided, it's assumed that " +
+                "the value is comming from the request value source and that it has the same name.",
+                new String[]{"navigation-id", "navigation-id?req-params", "source-name/navigation-id", "source-name/navigation-id?req-params" }
         );
     }
 
@@ -147,12 +149,15 @@ public class NavigationPageUrlValue extends ValueSource
             String controllerParams = result.getController().getRetainParamsValue(vc);
             String pageParams = result.getRetainParams(vc);
             String finalParams = resolveRequestPrameters(controllerParams, pageParams);
-            String localParams = reqParams.getValue(vc);
+            String localParams = "";
+            if (reqParams != null) {
+                localParams = reqParams.getValue(vc);
+            }
             finalParams = resolveRequestPrameters(finalParams, localParams);
             return contextPath + controllerUrl + pageId + (finalParams != null && finalParams.length() > 0 ? "?" + finalParams : "");
         }
         else
-            return "Navigation id '"+ valueKey +"' not found.";
+            return "Navigation id '"+ navId +"' not found.";
     }
 
     public String resolveRequestPrameters(String origParams, String secondParams){

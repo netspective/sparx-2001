@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPageUrlCmdValue.java,v 1.1 2003-01-22 06:26:31 roque.hernandez Exp $
+ * $Id: NavigationPageUrlCmdValue.java,v 1.2 2003-01-24 12:59:13 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -63,13 +63,9 @@ import com.netspective.sparx.xaf.navigate.NavigationPath;
 import javax.servlet.http.HttpServletRequest;
 import java.util.StringTokenizer;
 
-public class NavigationPageUrlCmdValue extends ValueSource
+public class NavigationPageUrlCmdValue extends NavigationPageUrlValue
 {
-    private String source;
     private String cmd;
-    private String reqParamsSource;
-    private ValueSource reqParams;
-    private String navId;
 
     public NavigationPageUrlCmdValue()
     {
@@ -82,164 +78,42 @@ public class NavigationPageUrlCmdValue extends ValueSource
                 "Retrieves the URL necesary to refer to a NavigationPage defined in a NavigationTree (WEB-INF/ui/structure.xml). If " +
                 "no source-name is provided the navigation-id requested is read from the default NavigationTreeManager " +
                 "of the default configuration file. If a source-name is provided, then the property-name is read from the " +
-                "NavigationTreeManager named source-name in the default configuration file.  The URL is a combination of " +
-                "the page controller's URL and retain-params, the id of the page and the retain-params defined for that page.",
-                new String[]{"navigation-id", "source-name/navigation-id", "navigation-id,cmd", "navigation-d,cmd?req-params"}
+                "NavigationTreeManager named source-name in the default configuration file.  The URL is obtained by combining " +
+                "the page controller's URL, the page's id and retain-params from both the page and controller.  The req-params can " +
+                "can be defined in the form of a=b, a=${b} or simply a separated by & (i.e. a=b&c). When no equals sign and value is provided, it's assumed that " +
+                "the value is comming from the request value source and that it has the same name.  The cmd value definition follows " +
+                "exactly the definition of a command.  It is mainly translated from: navigation-id,cmd-param1,cmd-param2,cmd-param3 " +
+                "directly to a request parameter that looks like this: cmd=cmd-param1,cmd-param2,cmd-param3...",
+                new String[]{"navigation-id", "navigation-id,cmd", "navigation-id?req-params",  "navigation-d,cmd?req-params", "source-name/navigation-id", "source-name/navigation-id,cmd", "source-name/navigation-id?req-params",  "source-name/navigation-d,cmd?req-params"}
         );
     }
 
     public void initializeSource(String srcParams)
     {
+        super.initializeSource(srcParams);
 
-        //TODO: refactor between NavigationPageUrlValue and this class.
-
-        int delimPos = srcParams.indexOf('/');
-        if(delimPos > 0)
-        {
-            source = srcParams.substring(0, delimPos);
-            valueKey = srcParams.substring(delimPos + 1);
-        }
-        else
-            valueKey = srcParams;
-
-
-        int endOfIdDelimPos = valueKey.indexOf(',');
+        //Since the super class puts everthing from the begining of the string to either ? or the end,
+        //the cmd would fall within from what the super class considers the navId.  So, all we have to do
+        //is parse the cmd out of the navId, if any.
+        int endOfIdDelimPos = navId.indexOf(',');
 
         if (endOfIdDelimPos < 0 ) {
-            navId = valueKey;
             cmd = null;
-            reqParamsSource = null;
             return;
         }
-
-        int endOfCmdDelimPos = valueKey.indexOf('?',endOfIdDelimPos);
-        if (endOfCmdDelimPos < 0) {
-            navId = valueKey.substring(0, endOfIdDelimPos);
-            cmd = valueKey.substring(endOfIdDelimPos + 1);
-            reqParamsSource = null;
-            return;
-        }
-
-        navId = valueKey.substring(0, endOfIdDelimPos);
-        cmd = valueKey.substring(endOfIdDelimPos + 1, endOfCmdDelimPos);
-        reqParamsSource = parseSrcParams(valueKey.substring(endOfCmdDelimPos + 1));
-        reqParams = new ConfigurationExprValue();
-        reqParams.initializeSource(reqParamsSource);
-
+        cmd = navId.substring(endOfIdDelimPos + 1);
+        navId = navId.substring(0, endOfIdDelimPos);
     }
 
     public String getValue(ValueContext vc)
     {
-        NavigationPath navTree = null;
+        String url = super.getValue(vc);
 
-        HttpServletRequest request = (HttpServletRequest) vc.getRequest();
-        if(request == null)
-            return "ValueContext.getRequest() is NULL in " + getId();
-
-        String contextPath = request.getContextPath();
-
-        if(source == null || source.length() == 0)
-        {
-            navTree = NavigationTreeManagerFactory.getNavigationTree(vc.getServletContext());
-            if(navTree == null)
-                return "No default NavigationTree found in " + getId();
-        }
-        else
-        {
-            NavigationTreeManager manager = NavigationTreeManagerFactory.getManager(vc.getServletContext());
-            if(manager == null)
-                return "No NavigationTreeManager found in " + getId();
-            navTree = manager.getTree(source);
-            if(navTree == null)
-                return "No '" + source + "' Configuration found in " + getId();
+        if (cmd != null && cmd.length() > 0){
+                url = (url == null ? "cmd=" + cmd : url + "&cmd=" + cmd);
         }
 
-        NavigationPath result = (NavigationPath) navTree.getAbsolutePathsMap().get(navId);
-        if(result != null) {
-            String controllerUrl = result.getController().getUrl();
-            if (controllerUrl == null || controllerUrl.length() ==0 )
-                controllerUrl = "/index.jsp";
-            String pageId = result.getId();
+        return url;
 
-            String finalParams = null;
-            String controllerParams = result.getController().getRetainParamsValue(vc);
-            String pageParams = result.getRetainParams(vc);
-            finalParams = resolveRequestPrameters(controllerParams, pageParams);
-
-            String localParams = null;
-            if (reqParams != null)
-                localParams = reqParams.getValue(vc);
-
-            finalParams = resolveRequestPrameters(finalParams, localParams);
-
-            if (cmd != null && cmd.length() > 0){
-                finalParams = (finalParams == null ? "cmd=" + cmd : finalParams + "&cmd=" + cmd);
-            }
-
-            return contextPath + controllerUrl + pageId + (finalParams != null ? "?" + finalParams : "");
-        }
-        else
-            return "Navigation id '"+ navId +"' not found.";
-    }
-
-    public String resolveRequestPrameters(String origParams, String secondParams){
-        if (origParams == null)
-            origParams = "";
-
-        if (secondParams == null)
-            secondParams = "";
-
-        StringTokenizer origTokens = new StringTokenizer(origParams, "&");
-        StringTokenizer secondTokens = new StringTokenizer(secondParams, "&");
-        String finalString = null;
-
-        while (origTokens.hasMoreTokens()) {
-            String token = origTokens.nextToken();
-            String tokenName = token.substring(0, token.indexOf('='));
-            int tokenIndexInSecondParams = secondParams.indexOf(tokenName);
-
-            if ( tokenIndexInSecondParams >= 0) {
-                int nextTokenDelim = secondParams.indexOf('&', tokenIndexInSecondParams);
-                if (nextTokenDelim < 0)
-                    nextTokenDelim = secondParams.length();
-                finalString = (finalString == null ? "" : finalString + "&" ) + secondParams.substring(tokenIndexInSecondParams, nextTokenDelim);
-            } else {
-                finalString = (finalString == null ? "" : finalString + "&" ) + token;
-            }
-        }
-
-        while (secondTokens.hasMoreTokens()) {
-            String token = secondTokens.nextToken();
-            String tokenName = token.substring(0, token.indexOf('='));
-            int tokenIndexInFinalString = finalString.indexOf(tokenName);
-
-            if ( tokenIndexInFinalString >= 0) {
-                continue;
-            } else {
-                finalString = (finalString == null ? "" : finalString + "&" ) + token;
-            }
-        }
-
-        return finalString;
-    }
-
-    public String parseSrcParams(String originalParams){
-        if (originalParams == null)
-            return null;
-
-        StringTokenizer tokens = new StringTokenizer(originalParams, "&");
-        String finalParams = null;
-
-        while (tokens.hasMoreTokens()) {
-            String token = tokens.nextToken();
-            if (token.indexOf('=') > 0) {
-                finalParams = (finalParams == null ? "" : finalParams + "&") + token;
-            }
-            else {
-                finalParams = (finalParams == null ? "" : finalParams + "&") + token + "=${request:" + token + "}";
-            }
-
-        }
-        return finalParams;
     }
 }
