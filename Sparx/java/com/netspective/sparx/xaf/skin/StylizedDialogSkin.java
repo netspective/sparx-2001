@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StylizedDialogSkin.java,v 1.2 2002-09-07 21:56:50 shahid.shah Exp $
+ * $Id: StylizedDialogSkin.java,v 1.3 2002-12-16 23:53:03 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -79,7 +79,7 @@ public class StylizedDialogSkin extends StandardDialogSkin
         super();
         headColor = "#EEEEEE";
         outerTableAttrs = "";
-        innerTableAttrs = "cellspacing='0' cellpadding='4' bgcolor='#EEEEEE' style='border:1px solid black'";
+        innerTableAttrs = "width='100%' cellspacing='0' cellpadding='4' bgcolor='#EEEEEE' style='border:1px solid black'";
         tabImagesValueSource = ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/tabs/black-on-lgray");
     }
 
@@ -109,38 +109,38 @@ public class StylizedDialogSkin extends StandardDialogSkin
     public void renderTab(Writer writer, DialogContext dc, String heading) throws IOException
     {
         String imagesUrl = tabImagesValueSource.getValue(dc);
-        writer.write("<table border='0' cellspacing='0' cellpadding='0'>");
-        writer.write("	<tr>");
-        writer.write("		<td valign='top' width='3' height='17'><img src='"+ imagesUrl +"/arrow-top.gif'/></td>");
-        writer.write("		<td height='17' bgcolor='"+ headColor +"' style='border-top:1px solid black; border-right:1px solid black; '><font face='tahoma,arial,helvetica' size='2' style='font-size:8pt'>");
-        writer.write("			<nobr>");
-        writer.write("				&nbsp;");
-        writer.write("				<b>"+ heading +"</b>");
-        writer.write("				&nbsp;&nbsp;");
-        writer.write("			</nobr>");
-        writer.write("		</font></td>");
-        writer.write("	</tr>");
-        writer.write("</table>");
-        writer.write("<table height='6' width='100%' border='0' cellspacing='0' cellpadding='0'>");
-        writer.write("	<tr height='6'>");
-        writer.write("		<td width='12'><img src='"+ imagesUrl +"/arrow-bottom.gif'/></td>");
-        writer.write("		<td background='"+ imagesUrl +"/horiz-bar.gif' bgcolor='"+ headColor +"'><img src='"+ imagesUrl +"/spacer.gif'/></td>");
-        writer.write("		<td width='6'><img src='"+ imagesUrl +"/horiz-bar-end.gif'/></td>");
-        writer.write("	</tr>");
-        writer.write("</table>");
+        writer.write("<table border='0' cellspacing='0' cellpadding='0'>\n");
+        writer.write("	<tr>\n");
+        writer.write("		<td valign='top' width='3' height='17'><img src='"+ imagesUrl +"/arrow-top.gif'/></td>\n");
+        writer.write("		<td height='17' bgcolor='"+ headColor +"' style='border-top:1px solid black; border-right:1px solid black; '><font face='tahoma,arial,helvetica' size='2' style='font-size:8pt'>\n");
+        writer.write("			<nobr>\n");
+        writer.write("				&nbsp;\n");
+        writer.write("				<b>"+ heading +"</b>\n");
+        writer.write("				&nbsp;&nbsp;\n");
+        writer.write("			</nobr>\n");
+        writer.write("		</font></td>\n");
+        writer.write("	</tr>\n");
+        writer.write("</table>\n");
+        writer.write("<table height='6' width='100%' border='0' cellspacing='0' cellpadding='0'>\n");
+        writer.write("	<tr height='6'>\n");
+        writer.write("		<td width='12'><img src='"+ imagesUrl +"/arrow-bottom.gif'/></td>\n");
+        writer.write("		<td background='"+ imagesUrl +"/horiz-bar.gif' bgcolor='"+ headColor +"'><img src='"+ imagesUrl +"/spacer.gif'/></td>\n");
+        writer.write("		<td width='6'><img src='"+ imagesUrl +"/horiz-bar-end.gif'/></td>\n");
+        writer.write("	</tr>\n");
+        writer.write("</table>\n");
     }
 
     public void renderContentsHtml(Writer writer, DialogContext dc, Configuration appConfig, String dialogName, String actionURL, String encType, String heading, int dlgTableColSpan, StringBuffer errorMsgsHtml, StringBuffer fieldsHtml) throws IOException
     {
         writer.write(
                 "<table " + outerTableAttrs + ">\n" +
-                "<tr><td>");
+                "<tr><td>\n");
 
         if(heading != null && ! dc.getDialog().hideHeading(dc))
             renderTab(writer, dc, heading);
 
         writer.write(
-                "<table " + innerTableAttrs + "><tr><td>");
+                "<table " + innerTableAttrs + ">\n<tr><td>\n");
 
         if(summarizeErrors)
             writer.write(errorMsgsHtml.toString());
@@ -152,7 +152,7 @@ public class StylizedDialogSkin extends StandardDialogSkin
                 "</form>\n");
 
         writer.write(
-                "</td></tr></table></td></tr></table>");
+                "</td></tr>\n</table>\n</td></tr>\n</table>");
     }
 
 }
