@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.25 2002-11-28 21:13:36 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.26 2002-11-30 16:44:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -105,6 +105,7 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
+import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.task.sql.DmlTask;
@@ -1705,7 +1706,7 @@ public class DialogContext extends ServletValueContext
             ServletContext context = getServletContext();
             StatementManager stmtMgr = StatementManagerFactory.getManager(context);
             DatabaseContext dbContext = DatabaseContextFactory.getContext(getRequest(), context);
-            StatementManager.ResultInfo ri = stmtMgr.execute(dbContext, this, dataSourceId, statementId, params);
+            StatementInfo.ResultInfo ri = stmtMgr.execute(dbContext, this, dataSourceId, statementId, params);
             dialogFieldStoreValueSource.setValue(this, ri.getResultSet(), SingleValueSource.RESULTSET_STORETYPE_SINGLEROWFORMFLD);
             ri.close();
         }
@@ -1731,7 +1732,7 @@ public class DialogContext extends ServletValueContext
         {
             ServletContext context = getServletContext();
             DatabaseContext dbContext = DatabaseContextFactory.getContext(getRequest(), context);
-            StatementManager.ResultInfo ri = StatementManager.executeSql(dbContext, this, dataSourceId, sql, params);
+            StatementInfo.ResultInfo ri = StatementManager.executeSql(dbContext, this, dataSourceId, sql, params);
             dialogFieldStoreValueSource.setValue(this, ri.getResultSet(), SingleValueSource.RESULTSET_STORETYPE_SINGLEROWFORMFLD);
             ri.close();
         }

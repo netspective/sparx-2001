@@ -72,11 +72,8 @@ public class StatementScrollState extends ResultSetScrollState
     private StatementInfo stmtInfo;
     private Report reportDefn;
     private ReportSkin skin;
-    private String dialogData;
     private boolean resultSetValid;
-    private StatementInfo stmt;
     private String datasourceId;
-    private String reportName;
 
     /**
      *
@@ -84,11 +81,10 @@ public class StatementScrollState extends ResultSetScrollState
     public StatementScrollState(StatementInfo si, DatabaseContext dbContext, DialogContext dc, String datasourceId, String reportName, String skinName, int rowsPerPage, int scrollType)
             throws NamingException, SQLException
     {
-        super(StatementManager.execute(dbContext, dc, datasourceId, si, null, scrollType == ResultSetScrollState.SCROLLTYPE_USERESULTSET ? true : false), rowsPerPage, scrollType);
+        super(si.execute(dbContext, dc, datasourceId, null, scrollType == ResultSetScrollState.SCROLLTYPE_USERESULTSET ? true : false), rowsPerPage, scrollType);
         this.skin = SkinFactory.getReportSkin(skinName == null ? "report" : skinName);
         this.stmtInfo = si;
         this.datasourceId = datasourceId;
-        this.reportName = reportName;
 
         this.dbContext = dbContext;
         ResultSet rs = getResultSet();
@@ -136,7 +132,7 @@ public class StatementScrollState extends ResultSetScrollState
     public void produceReport(Writer writer, DialogContext dc) throws SQLException, NamingException, IOException
     {
         if (!isScrollable())
-            scrollToActivePage(StatementManager.execute(dbContext, dc, datasourceId, stmtInfo, null, false));
+            scrollToActivePage(stmtInfo.execute(dbContext, dc, datasourceId, null, false));
         else
             scrollToActivePage();
 

@@ -51,23 +51,20 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.4 2002-09-16 02:07:42 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.5 2002-11-30 16:44:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.io.StringReader;
-import java.io.IOException;
-import java.io.FileWriter;
-import java.io.FileReader;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
+import java.io.Writer;
+import java.io.IOException;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -75,26 +72,28 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 import org.apache.oro.text.perl.Perl5Util;
 
-import com.netspective.sparx.util.config.Configuration;
-import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xif.db.DatabaseContext;
+import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xaf.html.SyntaxHighlight;
-import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogDirector;
 import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.field.TextField;
 import com.netspective.sparx.xaf.form.field.IntegerField;
-import com.netspective.sparx.xaf.form.field.BooleanField;
-import com.netspective.sparx.xaf.form.field.MemoField;
+import com.netspective.sparx.xaf.report.ReportSkin;
+import com.netspective.sparx.xaf.report.Report;
+import com.netspective.sparx.xaf.report.StandardReport;
+import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.ace.page.DatabaseSqlPage;
+
+import javax.naming.NamingException;
 
 public class StatementInfo
 {
@@ -102,13 +101,90 @@ public class StatementInfo
     public final static String LISTPARAM_PREFIX = "param-list:";
     public final static String REQ_ATTR_NAME_DEBUG_APPLY_CONTEXT = "debug-apply-context";
 
+    static public class ResultInfo extends com.netspective.sparx.xaf.sql.ResultInfo
+    {
+        private StatementInfo si;
+        private StatementExecutionLogEntry logEntry;
+
+        ResultInfo(ValueContext vc, Connection conn, StatementInfo si, Statement stmt, StatementExecutionLogEntry logEntry) throws SQLException
+        {
+            super(vc, conn, stmt);
+            this.si = si;
+            this.logEntry = logEntry;
+        }
+
+        public String getSQL(ValueContext vc)
+        {
+            return si.getSql(vc);
+        }
+
+        public StatementInfo getStatementInfo()
+        {
+            return si;
+        }
+
+        public Element getStmtElement()
+        {
+            return si.getStatementElement();
+        }
+
+        public StatementExecutionLogEntry getLogEntry()
+        {
+            return logEntry;
+        }
+
+        public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+        {
+            ResultSet rs = getResultSet();
+
+            Report rd = new StandardReport();
+            if(vc instanceof TaskContext)
+                rd.setCanvas(((TaskContext) vc).getCanvas());
+
+            Element reportElem = si.getReportElement(reportId);
+            if(reportElem == null && reportId != null)
+                writer.write("Report id '" + reportId + "' not found for statement '" + si.getId() + "'");
+
+            rd.initialize(rs, reportElem);
+
+            ReportContext rc = new ReportContext(vc, rd, skin);
+            rc.produceReport(writer, rs);
+            close();
+        }
+
+        public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
+        {
+            ResultSet rs = getResultSet();
+
+            // get the ResultSet into a matrix so that we can stash it away later
+            // use the matrix to produce the report and do the storage so we don't have to run the query multiple times
+
+            Object[][] data = StatementManager.getResultSetRowsAsMatrix(rs);
+            vs.setValue(vc, rs.getMetaData(), data, storeType);
+
+            Report rd = new StandardReport();
+            if(vc instanceof TaskContext)
+                rd.setCanvas(((TaskContext) vc).getCanvas());
+
+            Element reportElem = si.getReportElement(reportId);
+            if(reportElem == null && reportId != null)
+                writer.write("Report id '" + reportId + "' not found for statement '" + si.getId() + "'");
+
+            rd.initialize(rs, reportElem);
+
+            ReportContext rc = new ReportContext(vc, rd, skin);
+            rc.produceReport(writer, data);
+            close();
+        }
+
+    }
+
     private String pkgName;
     private String stmtName;
     private SingleValueSource dataSourceValueSource;
     private Element stmtElem;
     private boolean sqlIsDynamic;
     private String sql;
-    private int sqlLinesCount;
     private int sqlMaxLineSize;
     private StatementParameter[] parameters;
     private Element defaultReportElem;
@@ -173,7 +249,6 @@ public class StatementInfo
             stmtElem.appendChild(sqlText);
         }
 
-        sqlLinesCount = 0;
         sqlMaxLineSize = 0;
         StringTokenizer st = new StringTokenizer(this.sql, "\n");
         while(st.hasMoreTokens())
@@ -181,7 +256,6 @@ public class StatementInfo
             String line = st.nextToken();
             if(line.length() > sqlMaxLineSize)
                 sqlMaxLineSize = line.length();
-            sqlLinesCount++;
         }
     }
 
@@ -283,17 +357,11 @@ public class StatementInfo
         return dialog;
     }
 
-    public String createExceptionMessage(String message)
-    {
-        return "Error in statement '"+ getId() +"': " + message;
-    }
-
     /** Replace ${xxx} values
      */
     public String formatSql(ValueContext vc)
     {
         StringBuffer sb = new StringBuffer();
-        int i = 0;
         int prev = 0;
 
         int pos;
@@ -317,9 +385,8 @@ public class StatementInfo
             {
                 int endName = sql.indexOf('}', pos);
                 if(endName < 0)
-                {
-                    throw new RuntimeException(createExceptionMessage("Syntax error in sql: " + sql));
-                }
+                    throw new RuntimeException("Statement '"+ getId() +"' has syntax error in sql: " + sql);
+
                 String expression = sql.substring(pos + 2, endName);
 
                 if(expression.startsWith(LISTPARAM_PREFIX)) // format is param:# 12 below is length of "param:"
@@ -331,7 +398,7 @@ public class StatementInfo
                         {
                             StatementParameter param = parameters[paramNum];
                             if(!param.isListType())
-                                throw new RuntimeException(createExceptionMessage("Only list parameters may be specified here (param '" + paramNum + "')"));
+                                throw new RuntimeException("Statement '"+ getId() +"': only list parameters may be specified here (param '" + paramNum + "')");
 
                             ListValueSource source = param.getListSource();
                             String[] values = source.getValues(vc);
@@ -344,7 +411,7 @@ public class StatementInfo
                             }
                         }
                         else
-                            throw new RuntimeException(createExceptionMessage("Parameter '" + paramNum + "' does not exist"));
+                            throw new RuntimeException("Statement '"+ getId() +"': parameter '" + paramNum + "' does not exist");
                     }
                     catch(Exception e)
                     {
@@ -355,7 +422,7 @@ public class StatementInfo
                 {
                     SingleValueSource svs = ValueSourceFactory.getSingleValueSource(expression);
                     if(svs == null)
-                        throw new RuntimeException(createExceptionMessage("Single value source expected for '"+ expression +"', but none found"));
+                        throw new RuntimeException("Statement '"+ getId() +"': single value source expected for '"+ expression +"', but none found");
                     sb.append(svs.getValue(vc));
                 }
 
@@ -462,11 +529,17 @@ public class StatementInfo
         }
     }
 
-    public String getDebugHtml(ValueContext vc)
+    public String getDebugHtml(ValueContext vc, boolean showHeading, boolean showId, String exceptionMsg)
     {
         StringBuffer html = new StringBuffer();
-        html.append("<pre>");
-
+        html.append("<table cellspacing=1 border=0 bgcolor=#EEEEEE cellpadding=4>");
+        if(showHeading && exceptionMsg != null)
+            html.append("<tr valign=top bgcolor=white><td colspan=2 align=center><font color=red><b>Sparx SQL Statement Exception</b></font></td></tr>");
+        else if (showHeading)
+            html.append("<tr valign=top bgcolor=white><td colspan=2 align=center>Sparx SQL Statement</td></tr>");
+        if(showId)
+            html.append("<tr valign=top bgcolor=white><td><nobr>Statement id</nobr></td><td><b><code>"+ getId() +"</code></b></td></tr>");
+        html.append("<tr valign=top bgcolor=white><td>SQL</td><td>");
         StringWriter highlSql = new StringWriter();
         try
         {
@@ -478,10 +551,12 @@ public class StatementInfo
         }
 
         html.append(highlSql.toString());
-        html.append("</pre>");
+        html.append("</td></tr>");
+
+        html.append("<tr valign=top bgcolor=white><td>Bind Parameters</td><td>");
         if(parameters != null)
         {
-            html.append("<p>Bind Parameters:<ol>");
+            html.append("<ol>");
             StatementParameter.ApplyContext debugAC = (StatementParameter.ApplyContext) vc.getRequest().getAttribute(REQ_ATTR_NAME_DEBUG_APPLY_CONTEXT);
             if(debugAC != null)
             {
@@ -502,7 +577,174 @@ public class StatementInfo
             }
             html.append("</ol>");
         }
-        html.append("<p>");
+        else
+            html.append("None");
+        html.append("</td></tr>");
+        if(exceptionMsg != null)
+        {
+            html.append("<tr valign=top bgcolor=white><td>Exception</td><td><pre>");
+            html.append(exceptionMsg);
+            html.append("</pre></td></tr>");
+        }
+        html.append("</table>");
         return html.toString();
+    }
+
+    public String createExceptionMessage(ValueContext vc)
+    {
+        StringBuffer text = new StringBuffer();
+
+        text.append("Statement id = ");
+        text.append(getId());
+        text.append("\n");
+        text.append(getSql(vc));
+        text.append("\n");
+        if(parameters != null)
+        {
+            text.append("\nBind Parameters:\n");
+            StatementParameter.ApplyContext debugAC = (StatementParameter.ApplyContext) vc.getRequest().getAttribute(REQ_ATTR_NAME_DEBUG_APPLY_CONTEXT);
+            if(debugAC != null)
+            {
+                Object[] bindValues = debugAC.getDebugBindValues();
+                for(int i = 0; i < bindValues.length; i++)
+                {
+                    Object value = bindValues[i];
+                    text.append(value.getClass().getName() + " = " + value);
+                }
+            }
+            else
+            {
+                int paramsCount = parameters.length;
+                for(int i = 0; i < paramsCount; i++)
+                {
+                    parameters[i].appendExceptionText(text, vc);
+                }
+            }
+            text.append("\n");
+        }
+        return text.toString();
+    }
+
+    public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, Object[] params, boolean scrollable) throws NamingException, SQLException
+    {
+        if(dataSourceId == null)
+        {
+            dataSourceId = getDataSource() != null ? getDataSource().getValue(vc) : null;
+        }
+
+        StatementExecutionLogEntry logEntry = createNewExecLogEntry(vc);
+
+        try
+        {
+            logEntry.registerGetConnectionBegin();
+            Connection conn = dc.getConnection(vc, dataSourceId);
+            logEntry.registerGetConnectionEnd(conn);
+            PreparedStatement stmt = null;
+            String sql = getSql(vc);
+            if (scrollable)
+            {
+                int rsType = dc.getScrollableResultSetType(conn);
+                stmt = (rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
+                        conn.prepareStatement(sql) :
+                        conn.prepareStatement(sql, rsType, ResultSet.CONCUR_READ_ONLY));
+            }
+            else
+            {
+                stmt = conn.prepareStatement(sql);
+            }
+
+            logEntry.registerBindParamsBegin();
+            if(params != null)
+            {
+                for(int i = 0; i < params.length; i++)
+                    stmt.setObject(i + 1, params[i]);
+            }
+            else
+                applyParams(dc, vc, stmt);
+            logEntry.registerBindParamsEnd();
+
+            logEntry.registerExecSqlBegin();
+            stmt.execute();
+            logEntry.registerExecSqlEndSuccess();
+            return new ResultInfo(vc, conn, this, stmt, logEntry);
+        }
+        catch(SQLException e)
+        {
+            logEntry.registerExecSqlEndFailed();
+            LogManager.recordException(this.getClass(), "execute using dbc", createExceptionMessage(vc), e);
+            throw e;
+        }
+        finally
+        {
+            logEntry.finalize(vc);
+        }
+    }
+
+    public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, Object[] params) throws NamingException, SQLException
+    {
+        return execute(dc, vc, dataSourceId, params, false);
+    }
+
+    public ResultInfo execute(ConnectionContext cc, ValueContext vc, Object[] params) throws NamingException, SQLException
+    {
+        StatementExecutionLogEntry logEntry = createNewExecLogEntry(vc);
+
+        try
+        {
+            logEntry.registerGetConnectionBegin();
+            Connection conn = cc.getConnection();
+            logEntry.registerGetConnectionEnd(conn);
+
+            PreparedStatement stmt = conn.prepareStatement(getSql(vc));
+
+            logEntry.registerBindParamsBegin();
+            if(params != null)
+            {
+                for(int i = 0; i < params.length; i++)
+                    stmt.setObject(i + 1, params[i]);
+            }
+            else
+                applyParams(cc.getDatabaseContext(), vc, stmt);
+            logEntry.registerBindParamsEnd();
+
+            logEntry.registerExecSqlBegin();
+            stmt.execute();
+            logEntry.registerExecSqlEndSuccess();
+            return new ResultInfo(vc, conn, this, stmt, logEntry);
+        }
+        catch(SQLException e)
+        {
+            logEntry.registerExecSqlEndFailed();
+            LogManager.recordException(this.getClass(), "execute using cc", createExceptionMessage(vc), e);
+            throw e;
+        }
+        finally
+        {
+            logEntry.finalize(vc);
+        }
+    }
+
+    public ResultInfo executeAndStore(DatabaseContext dc, ValueContext vc, String dataSourceId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException
+    {
+        ResultInfo ri = execute(dc, vc, dataSourceId, null);
+        ResultSet rs = ri.getResultSet();
+        vs.setValue(vc, rs, storeType);
+        if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
+            ri.close();
+        return ri;
+    }
+
+    public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+    {
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, params);
+        if(ri != null)
+            ri.produceReport(writer, dc, vc, skin, params, reportId);
+    }
+
+    public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
+    {
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, params);
+        if(ri != null)
+            ri.produceReportAndStoreResultSet(writer, dc, vc, skin, params, reportId, vs, storeType);
     }
 }

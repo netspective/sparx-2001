@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementParameter.java,v 1.2 2002-09-07 21:58:13 shahid.shah Exp $
+ * $Id: StatementParameter.java,v 1.3 2002-11-30 16:44:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -60,7 +60,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.w3c.dom.Element;
@@ -73,7 +72,6 @@ import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.value.StaticValue;
-import com.netspective.sparx.util.xml.XmlSource;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogFieldFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
@@ -380,6 +378,43 @@ public class StatementParameter
             }
 
             html.append(" (list)</code></li>");
+        }
+    }
+
+    public void appendExceptionText(StringBuffer text, ValueContext vc)
+    {
+        if(paramType != Types.ARRAY)
+        {
+            SingleValueSource vs = (SingleValueSource) valueSource;
+            text.append(vs.getId());
+            text.append(" = ");
+            text.append(vs.getValue(vc));
+            text.append(" (");
+            text.append(StatementManager.getTypeNameForId(paramType));
+            text.append(")\n");
+        }
+        else
+        {
+            ListValueSource vs = (ListValueSource) valueSource;
+            text.append(vs.getId());
+            text.append(" = ");
+
+            String[] values = vs.getValues(vc);
+            if(values != null)
+            {
+                for(int v = 0; v < values.length; v++)
+                {
+                    if(v > 0)
+                        text.append(", ");
+                    text.append("'" + values[v] + "'");
+                }
+            }
+            else
+            {
+                text.append("null");
+            }
+
+            text.append(" (list)\n");
         }
     }
 }

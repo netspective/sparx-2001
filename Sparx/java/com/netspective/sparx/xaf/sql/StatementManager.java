@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.12 2002-10-02 03:42:30 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.13 2002-11-30 16:44:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -59,17 +59,13 @@ package com.netspective.sparx.xaf.sql;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -84,15 +80,14 @@ import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.xaf.report.ColumnDataCalculatorFactory;
 import com.netspective.sparx.xaf.report.Report;
-import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
-import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
 
 /**
  * <code>StatementManager</code> class contains methods for executing static queries and generating
@@ -125,39 +120,11 @@ public class StatementManager extends XmlSource
         return null;
     }
 
-    static public class ResultInfo extends com.netspective.sparx.xaf.sql.ResultInfo
-    {
-        private StatementInfo si;
-        private StatementExecutionLogEntry logEntry;
+    static private Map dynamicSql = new HashMap();
 
-        ResultInfo(ValueContext vc, Connection conn, StatementInfo si, Statement stmt, StatementExecutionLogEntry logEntry) throws SQLException
-        {
-            super(vc, conn, stmt);
-            this.si = si;
-            this.logEntry = logEntry;
-        }
-
-        public String getSQL(ValueContext vc)
-        {
-            return si.getSql(vc);
-        }
-
-        public Element getStmtElement()
-        {
-            return si.getStatementElement();
-        }
-
-        public StatementExecutionLogEntry getLogEntry()
-        {
-            return logEntry;
-        }
-    }
-
-    static private Hashtable dynamicSql = new Hashtable();
-
-    private Hashtable statements = new Hashtable();
-    private Hashtable queryDefns = new Hashtable();
-    private Hashtable reports = new Hashtable();
+    private Map statements = new HashMap();
+    private Map queryDefns = new HashMap();
+    private Map reports = new HashMap();
 
     public StatementManager(File file)
     {
@@ -297,7 +264,8 @@ public class StatementManager extends XmlSource
                     if(childName.equals("statement"))
                     {
                         Element stmtElem = (Element) stmtsChild;
-                        StatementInfo si = new StatementInfo();
+                        ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(stmtElem.getAttribute("class"), StatementInfo.class, true);
+                        StatementInfo si = (StatementInfo) instanceGen.getInstance();
                         processTemplates(stmtElem);
                         si.importFromXml(this, stmtElem, stmtPkg, stmtPkgDataSrc);
 
@@ -310,14 +278,16 @@ public class StatementManager extends XmlSource
             }
             else if(nodeName.equals("query-defn"))
             {
-                QueryDefinition queryDefn = new QueryDefinition();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(((Element) node).getAttribute("class"), QueryDefinition.class, true);
+                QueryDefinition queryDefn = (QueryDefinition) instanceGen.getInstance();
                 processTemplates((Element) node);
                 queryDefn.importFromXml(this, (Element) node);
                 queryDefns.put(queryDefn.getName(), queryDefn);
             }
             else if(nodeName.equals("report"))
             {
-                Report report = new StandardReport();
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(((Element) node).getAttribute("class"), StandardReport.class, true);
+                Report report = (Report) instanceGen.getInstance();
                 processTemplates((Element) node);
                 report.importFromXml((Element) node);
                 reports.put(report.getName(), report);
@@ -365,104 +335,7 @@ public class StatementManager extends XmlSource
         addMetaInformation();
     }
 
-    static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params, boolean scrollable) throws NamingException, SQLException
-    {
-        if(dataSourceId == null)
-        {
-            dataSourceId = si.getDataSource() != null ?si.getDataSource().getValue(vc) : null;
-        }
-
-        StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(vc);
-
-        try
-        {
-            logEntry.registerGetConnectionBegin();
-            Connection conn = dc.getConnection(vc, dataSourceId);
-            logEntry.registerGetConnectionEnd(conn);
-            PreparedStatement stmt = null;
-            String sql = si.getSql(vc);
-            if (scrollable)
-            {
-                int rsType = dc.getScrollableResultSetType(conn);
-                stmt = (rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
-                        conn.prepareStatement(sql) :
-                        conn.prepareStatement(sql, rsType, ResultSet.CONCUR_READ_ONLY));
-            }
-            else
-            {
-                stmt = conn.prepareStatement(sql);
-            }
-
-            logEntry.registerBindParamsBegin();
-            if(params != null)
-            {
-                for(int i = 0; i < params.length; i++)
-                    stmt.setObject(i + 1, params[i]);
-            }
-            else
-                si.applyParams(dc, vc, stmt);
-            logEntry.registerBindParamsEnd();
-
-            logEntry.registerExecSqlBegin();
-            stmt.execute();
-            logEntry.registerExecSqlEndSuccess();
-            return new ResultInfo(vc, conn, si, stmt, logEntry);
-        }
-        catch(SQLException e)
-        {
-            logEntry.registerExecSqlEndFailed();
-            throw e;
-        }
-        finally
-        {
-            logEntry.finalize(vc);
-        }
-    }
-
-    static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params) throws NamingException, SQLException
-    {
-        return execute(dc, vc, dataSourceId, si, params, false);
-    }
-
-    static public ResultInfo execute(ConnectionContext cc, ValueContext vc, StatementInfo si, Object[] params) throws NamingException, SQLException
-    {
-        StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(vc);
-
-        try
-        {
-            logEntry.registerGetConnectionBegin();
-            Connection conn = cc.getConnection();
-            logEntry.registerGetConnectionEnd(conn);
-
-            PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
-
-            logEntry.registerBindParamsBegin();
-            if(params != null)
-            {
-                for(int i = 0; i < params.length; i++)
-                    stmt.setObject(i + 1, params[i]);
-            }
-            else
-                si.applyParams(cc.getDatabaseContext(), vc, stmt);
-            logEntry.registerBindParamsEnd();
-
-            logEntry.registerExecSqlBegin();
-            stmt.execute();
-            logEntry.registerExecSqlEndSuccess();
-            return new ResultInfo(vc, conn, si, stmt, logEntry);
-        }
-        catch(SQLException e)
-        {
-            logEntry.registerExecSqlEndFailed();
-            throw e;
-        }
-        finally
-        {
-            logEntry.finalize(vc);
-        }
-    }
-
-    public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    public StatementInfo.ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         reload();
 
@@ -470,10 +343,10 @@ public class StatementManager extends XmlSource
         if(si == null)
             throw new StatementNotFoundException(this, statementId);
 
-        return execute(dc, vc, dataSourceId, si, params);
+        return si.execute(dc, vc, dataSourceId, params);
     }
 
-    public ResultInfo execute(ConnectionContext cc, ValueContext vc, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    public StatementInfo.ResultInfo execute(ConnectionContext cc, ValueContext vc, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         reload();
 
@@ -481,27 +354,17 @@ public class StatementManager extends XmlSource
         if(si == null)
             throw new StatementNotFoundException(this, statementId);
 
-        return execute(cc, vc, si, params);
+        return si.execute(cc, vc, params);
     }
 
-    public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId) throws StatementNotFoundException, NamingException, SQLException
+    public StatementInfo.ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId) throws StatementNotFoundException, NamingException, SQLException
     {
         return execute(dc, vc, dataSourceId, statementId, null);
     }
 
-    public ResultInfo executeAndStore(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException
+    public StatementInfo.ResultInfo executeAndStore(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, null);
-        ResultSet rs = ri.getResultSet();
-        vs.setValue(vc, rs, storeType);
-        if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
-            ri.close();
-        return ri;
-    }
-
-    public ResultInfo executeAndStore(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException
-    {
-        ResultInfo ri = execute(dc, vc, dataSourceId, si, null);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, null);
         ResultSet rs = ri.getResultSet();
         vs.setValue(vc, rs, storeType);
         if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
@@ -578,7 +441,7 @@ public class StatementManager extends XmlSource
             return null;
     }
 
-    static public Object getResultSetSingleColumn(Object[][] data) throws SQLException
+    static public Object getResultSetSingleColumn(Object[][] data)
     {
         if(data.length > 0)
             return data[0][0];
@@ -701,80 +564,16 @@ public class StatementManager extends XmlSource
 
     public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         if(ri != null)
-            produceReport(ri, writer, dc, vc, skin, params, reportId);
-    }
-
-    public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, StatementInfo si, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
-    {
-        ResultInfo ri = execute(dc, vc, dataSourceId, si, params);
-        if(ri != null)
-            produceReport(ri, writer, dc, vc, skin, params, reportId);
-    }
-
-    public void produceReport(ResultInfo ri, Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
-    {
-        ResultSet rs = ri.getResultSet();
-
-        Report rd = new StandardReport();
-        if(vc instanceof TaskContext)
-            rd.setCanvas(((TaskContext) vc).getCanvas());
-
-        String statementId = ri.si.getId();
-        Element reportElem = ri.si.getReportElement(reportId);
-        if(reportElem == null && reportId != null)
-        {
-            writer.write("Report id '" + reportId + "' not found for statement '" + statementId + "'");
-        }
-
-        rd.initialize(rs, reportElem);
-
-        ReportContext rc = new ReportContext(vc, rd, skin);
-        rc.produceReport(writer, rs);
-
-        ri.close();
+            ri.produceReport(writer, dc, vc, skin, params, reportId);
     }
 
     public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
-        produceReportAndStoreResultSet(writer, dc, vc, skin, ri, params, reportId, vs, storeType);
-    }
-
-    public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, StatementInfo si, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
-    {
-        ResultInfo ri = execute(dc, vc, dataSourceId, si, params);
-        produceReportAndStoreResultSet(writer, dc, vc, skin, ri, params, reportId, vs, storeType);
-    }
-
-    public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, ResultInfo ri, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
-    {
-        ResultSet rs = ri.getResultSet();
-
-        // get the ResultSet into a matrix so that we can stash it away later
-        // use the matrix to produce the report and do the storage so we don't have to run the query multiple times
-
-        Object[][] data = StatementManager.getResultSetRowsAsMatrix(rs);
-        vs.setValue(vc, rs.getMetaData(), data, storeType);
-
-        Report rd = new StandardReport();
-        if(vc instanceof TaskContext)
-            rd.setCanvas(((TaskContext) vc).getCanvas());
-
-        String statementId = ri.si.getPkgName() + ri.si.getStmtName();
-        Element reportElem = ri.si.getReportElement(reportId);
-        if(reportElem == null && reportId != null)
-        {
-            writer.write("Report id '" + reportId + "' not found for statement '" + statementId + "'");
-        }
-
-        rd.initialize(rs, reportElem);
-
-        ReportContext rc = new ReportContext(vc, rd, skin);
-        rc.produceReport(writer, data);
-
-        ri.close();
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        if(ri != null)
+            ri.produceReportAndStoreResultSet(writer, dc, vc, skin, params, reportId, vs, storeType);
     }
 
     /**
@@ -783,7 +582,7 @@ public class StatementManager extends XmlSource
     public boolean stmtRecordExists(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         boolean result = false;
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         if(ri.getResultSet().next())
             result = true;
         ri.close();
@@ -795,7 +594,7 @@ public class StatementManager extends XmlSource
      */
     public Object executeStmtGetValue(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         Object result = getResultSetSingleColumn(ri.getResultSet());
         ri.close();
         return result;
@@ -806,7 +605,7 @@ public class StatementManager extends XmlSource
      */
     public Object[] executeStmtGetValues(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         Object[] result = getResultSetSingleRowArray(ri.getResultSet());
         ri.close();
         return result;
@@ -817,7 +616,7 @@ public class StatementManager extends XmlSource
      */
     public Map executeStmtGetValuesMap(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         Map result = getResultSetSingleRowAsMap(ri.getResultSet());
         ri.close();
         return result;
@@ -828,7 +627,7 @@ public class StatementManager extends XmlSource
      */
     public Map[] executeStmtGetValuesMapArray(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         Map[] result = getResultSetRowsAsMapArray(ri.getResultSet());
         ri.close();
         return result;
@@ -839,7 +638,7 @@ public class StatementManager extends XmlSource
      */
     public Object[][] executeStmtGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         Object[][] result = getResultSetRowsAsMatrix(ri.getResultSet());
         ri.close();
         return result;
@@ -850,7 +649,7 @@ public class StatementManager extends XmlSource
      */
     public String[] executeStmtGetRowsAsStrings(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
-        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
         String[] result = getResultSetRowsAsStrings(ri.getResultSet());
         ri.close();
         return result;
@@ -859,7 +658,7 @@ public class StatementManager extends XmlSource
     /**
      * Executes dynamic (passed into method) SQL instead of requiring the SQL to be stored in the XML file
      */
-    static public ResultInfo executeSql(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    static public StatementInfo.ResultInfo executeSql(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
         StatementInfo si = (StatementInfo) dynamicSql.get(sql);
         if(si == null)
@@ -867,16 +666,16 @@ public class StatementManager extends XmlSource
             si = new StatementInfo(sql);
             dynamicSql.put(sql, si);
         }
-        return execute(dc, vc, dataSourceId, si, params);
+        return si.execute(dc, vc, dataSourceId, params);
     }
 
     /**
      * Executes dynamic (passed into method) SQL and returns true if any results were found
      */
-    static public boolean sqlRecordExists(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    static public boolean sqlRecordExists(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
         boolean result = false;
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         if(ri.getResultSet().next())
             result = true;
         ri.close();
@@ -888,7 +687,7 @@ public class StatementManager extends XmlSource
      */
     static public Object executeSqlGetValue(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         Object result = getResultSetSingleColumn(ri.getResultSet());
         ri.close();
         return result;
@@ -899,7 +698,7 @@ public class StatementManager extends XmlSource
      */
     static public Object[] executeSqlGetValues(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         Object[] result = getResultSetSingleRowArray(ri.getResultSet());
         ri.close();
         return result;
@@ -910,7 +709,7 @@ public class StatementManager extends XmlSource
      */
     static public Map executeSqlGetValuesMap(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         Map result = getResultSetSingleRowAsMap(ri.getResultSet());
         ri.close();
         return result;
@@ -921,7 +720,7 @@ public class StatementManager extends XmlSource
      */
     static public Map[] executeSqlGetValuesMapArray(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         Map[] result = getResultSetRowsAsMapArray(ri.getResultSet());
         ri.close();
         return result;
@@ -932,7 +731,7 @@ public class StatementManager extends XmlSource
      */
     static public Object[][] executeSqlGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         Object[][] result = getResultSetRowsAsMatrix(ri.getResultSet());
         ri.close();
         return result;
@@ -943,7 +742,7 @@ public class StatementManager extends XmlSource
      */
     static public String[] executeSqlGetRowsAsStrings(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
-        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        StatementInfo.ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
         String[] result = getResultSetRowsAsStrings(ri.getResultSet());
         ri.close();
         return result;
@@ -963,7 +762,7 @@ public class StatementManager extends XmlSource
         Metric skinsMetric = uiMetrics.createChildMetricSimple("Custom Report Skins");
 
         Metric metrics = root.createChildMetricGroup("Database");
-        Metric packagesMetric = metrics.createChildMetricSimple("Total Packages");
+        metrics.createChildMetricSimple("Total Packages");
         Metric stmtsMetric = metrics.createChildMetricSimple("Total SQL Statements");
         Metric qdMetric = metrics.createChildMetricSimple("Total Query Definitions");
         Metric qdfMetric = qdMetric.createChildMetricSimple("Query Definition Fields");

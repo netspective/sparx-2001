@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryColumnsListValue.java,v 1.4 2002-02-09 13:02:12 snshah Exp $
+ * $Id: QueryColumnsListValue.java,v 1.5 2002-11-30 16:44:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -64,10 +64,7 @@ import javax.naming.NamingException;
 
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
-import com.netspective.sparx.xaf.sql.StatementExecutionException;
-import com.netspective.sparx.xaf.sql.StatementManager;
-import com.netspective.sparx.xaf.sql.StatementManagerFactory;
-import com.netspective.sparx.xaf.sql.StatementNotFoundException;
+import com.netspective.sparx.xaf.sql.*;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
@@ -113,11 +110,11 @@ public class QueryColumnsListValue extends ListSource
             this.stmtName = srcParams;
     }
 
-    public StatementManager.ResultInfo getResultInfo(ValueContext vc) throws NamingException, StatementNotFoundException, SQLException, StatementExecutionException
+    public StatementInfo.ResultInfo getResultInfo(ValueContext vc) throws NamingException, StatementNotFoundException, SQLException, StatementExecutionException
     {
         StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
         DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), vc.getServletContext());
-        StatementManager.ResultInfo ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName);
+        StatementInfo.ResultInfo ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName);
         return ri;
     }
 
@@ -125,7 +122,7 @@ public class QueryColumnsListValue extends ListSource
     {
         SelectChoicesList choices = new SelectChoicesList();
 
-        StatementManager.ResultInfo ri = null;
+        StatementInfo.ResultInfo ri = null;
         try
         {
             ri = getResultInfo(vc);
@@ -164,7 +161,7 @@ public class QueryColumnsListValue extends ListSource
 
     public String[] getValues(ValueContext vc)
     {
-        StatementManager.ResultInfo ri = null;
+        StatementInfo.ResultInfo ri = null;
         try
         {
             ri = getResultInfo(vc);

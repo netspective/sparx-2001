@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.7 2002-11-03 16:42:55 shahid.shah Exp $
+ * $Id: StatementTask.java,v 1.8 2002-11-30 16:44:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -64,7 +64,6 @@ import java.sql.SQLException;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Element;
 
@@ -77,7 +76,6 @@ import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.sql.StatementNotFoundException;
-import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.xaf.sql.StatementDialog;
 import com.netspective.sparx.xaf.task.BasicTask;
 import com.netspective.sparx.xaf.task.TaskContext;
@@ -363,13 +361,8 @@ public class StatementTask extends BasicTask
             if(si == null)
                 debugMessage.append("SQL: statement '" + stmtName + "' doesn't exist");
             else
-            {
-                debugMessage.append("<p>SQL: statement '");
-                debugMessage.append(si.getId());
-                debugMessage.append("</p></pre>");
-                debugMessage.append(si.getDebugHtml(tc));
-                debugMessage.append("</pre>");
-            }
+                debugMessage.append(si.getDebugHtml(tc, true, true, null));
+
             tc.addErrorMessage(debugMessage.toString(), false);
             return;
         }
@@ -418,14 +411,14 @@ public class StatementTask extends BasicTask
             else if(produceReport && storeValueSource == null)
             {
                 if(statementInfo != null)
-                    stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, statementInfo, null, reportId);
+                    statementInfo.produceReport(out, dbContext, tc, dataSourceId, reportSkin, null, reportId);
                 else
                     stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId);
             }
             else if(!produceReport && storeValueSource != null)
             {
                 if(statementInfo != null)
-                    stmtManager.executeAndStore(dbContext, tc, dataSourceId, statementInfo, storeValueSource, storeValueType);
+                    statementInfo.executeAndStore(dbContext, tc, dataSourceId, storeValueSource, storeValueType);
                 else
                     stmtManager.executeAndStore(dbContext, tc, dataSourceId, stmtName, storeValueSource, storeValueType);
                System.out.println(storeValueSource.getId() + " " + storeValueType);
@@ -433,15 +426,15 @@ public class StatementTask extends BasicTask
             else if(produceReport && storeValueSource != null)
             {
                 if(statementInfo != null)
-                    stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, statementInfo, null, reportId, storeValueSource, storeValueType);
+                    statementInfo.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, null, reportId, storeValueSource, storeValueType);
                 else
                     stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
             }
             else // we're not producing a report nor are we storing values so just execute and leave (could be DML)
             {
-                ResultInfo ri = null;
+                StatementInfo.ResultInfo ri = null;
                 if(statementInfo != null)
-                    ri = stmtManager.execute(dbContext, tc, dataSourceId, statementInfo, null);
+                    ri = statementInfo.execute(dbContext, tc, dataSourceId, null);
                 else
                     ri = stmtManager.execute(dbContext, tc, dataSourceId, stmtName, null);
                 if(ri != null)
@@ -460,11 +453,7 @@ public class StatementTask extends BasicTask
             StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
 
-            errorMsg.append("<pre>");
-            errorMsg.append(si.getDebugHtml(tc));
-            errorMsg.append("\n\n");
-            errorMsg.append(stack.toString());
-            errorMsg.append("</pre>");
+            errorMsg.append(si.getDebugHtml(tc, true, true, stack.toString()));
 
             tc.addErrorMessage(errorMsg.toString(), false);
             return;
