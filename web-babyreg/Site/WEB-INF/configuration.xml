@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xaf>
 	<register-value-source name="picture" class="app.value.GiftImageFileValue"/>
+    <register-value-source name="flow-control" class="app.value.FlowControlValue"/>
 	<configuration>
 		<!--
         **********************************************************************
