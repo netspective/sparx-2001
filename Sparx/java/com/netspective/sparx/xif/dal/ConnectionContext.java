@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConnectionContext.java,v 1.2 2002-01-30 03:40:35 thua Exp $
+ * $Id: ConnectionContext.java,v 1.3 2002-08-29 03:35:35 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -217,5 +217,30 @@ public class ConnectionContext
             conn.close();
             conn = null;
         }
+    }
+
+    /**
+     * Rolls back database operations executed within the transaction but leaves the connection open.
+     * No action is taken if the connection is not a transaction type.
+     *
+     * @exception SQLException
+     * @since Version 2.0.2 Build 0
+     */
+    public void rollbackActiveTransaction() throws SQLException
+    {
+        if (conn != null && type == CONNCTXTYPE_TRANSACTION)
+            conn.rollback();
+    }
+
+    /**
+     * Commits database operations executed within the transaction but leaves the connection open
+     * No action is taken if the connection is not a transaction type.
+     *
+     * @exception SQLException
+     */
+    public void commitActiveTransaction() throws SQLException
+    {
+        if(conn != null && type == CONNCTXTYPE_TRANSACTION)
+            conn.commit();
     }
 }
