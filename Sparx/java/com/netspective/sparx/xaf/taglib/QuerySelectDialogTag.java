@@ -51,23 +51,26 @@
  */
  
 /**
- * $Id: QuerySelectDialogTag.java,v 1.2 2002-12-29 17:08:26 shahid.shah Exp $
+ * $Id: QuerySelectDialogTag.java,v 1.3 2003-01-16 16:38:07 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
+
+import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
 
 public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
 {
     private String name;
     private String source;
-    private String skinName;
+    private String dialogSkinName;
+    private String reportSkinName;
 
     public void release()
     {
         super.release();
         name = null;
         source = null;
-        skinName = null;
+        dialogSkinName = null;
     }
 
     public void setName(String value)
@@ -77,7 +80,12 @@ public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
 
     public void setSkin(String value)
     {
-        skinName = value;
+        dialogSkinName = value;
+    }
+
+    public void setReportSkin(String value)
+    {
+        reportSkinName = value;
     }
 
     public void setSource(String value)
@@ -122,15 +130,18 @@ public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
                 return SKIP_BODY;
             }
 
-            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
+            com.netspective.sparx.xaf.form.DialogSkin skin = dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(dialogSkinName);
             if(skin == null)
             {
-                out.write("DialogSkin '" + skinName + "' not found in skin factory.");
+                out.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");
                 return SKIP_BODY;
             }
 
             com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(pageContext.getServletContext(), (javax.servlet.Servlet) pageContext.getPage(), (javax.servlet.http.HttpServletRequest) pageContext.getRequest(), (javax.servlet.http.HttpServletResponse) pageContext.getResponse(), skin);
             dialog.prepareContext(dc);
+
+            if(reportSkinName != null)
+                dc.setValue(QueryBuilderDialog.QBDIALOG_REPORT_SKIN_FIELD_NAME, reportSkinName);
 
             dialog.renderHtml(out, dc, true);
             return SKIP_BODY;

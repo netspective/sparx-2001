@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.10 2002-11-30 17:14:34 shahid.shah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.11 2003-01-16 16:38:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -87,7 +87,6 @@ import com.netspective.sparx.xaf.report.ReportColumnsList;
 import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportDestination;
 import com.netspective.sparx.xaf.report.ReportSkin;
-import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
@@ -108,6 +107,7 @@ public class QueryBuilderDialog extends Dialog
     static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
     static public final String QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME = "active-query-select-scroll-state";
     static public final String QBDIALOG_RESORT_PARAMNAME = "_qbd_resort";
+    static public final String QBDIALOG_REPORT_SKIN_FIELD_NAME = "report_skin";
 
     static public final int MAX_ROWS_IN_SINGLE_BROWSER_PAGE = 9999;
 
@@ -200,6 +200,11 @@ public class QueryBuilderDialog extends Dialog
 
     public void addInputFields()
     {
+        TextField reportSkin = new TextField("report_skin", "Report Skin");
+        reportSkin.setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
+        reportSkin.setDefaultValue(new StaticValue("report"));
+        addField(reportSkin);
+
         int lastConditionNum = maxConditions - 1;
         QueryDefnFieldsListValue fieldsList = null;
         if(queryDefn.isDynamic())
@@ -261,7 +266,6 @@ public class QueryBuilderDialog extends Dialog
         }
         else
             fieldsList = (QueryDefnFieldsListValue) ValueSourceFactory.getListValueSource("query-defn-fields:" + queryDefn.getName());
-        ListValueSource compList = ValueSourceFactory.getListValueSource("sql-comparisons:all");
 
         SelectField predefinedSels = null;
         List predefinedSelects = queryDefn.getSelectsList();
@@ -358,7 +362,6 @@ public class QueryBuilderDialog extends Dialog
             dc.setFlag("director", DialogField.FLDFLAG_INVISIBLE);
             dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
 
-            int lastCondition = maxConditions - 1;
             int flag = flagIsSet(QBDLGFLAG_HIDE_CRITERIA) ? DialogField.FLDFLAG_INVISIBLE : DialogField.FLDFLAG_READONLY;
             for(int i = 0; i < maxConditions; i++)
             {
@@ -441,7 +444,7 @@ public class QueryBuilderDialog extends Dialog
         dc.setValue("sort_order", resortBy);
     }
 
-    public void executeHtml(Writer writer, DialogContext dc, int destination) throws IOException
+    public void executeHtml(Writer writer, DialogContext dc, int destination, ReportSkin skin) throws IOException
     {
         String transactionId = dc.getTransactionId();
         HttpSession session = dc.getSession();
@@ -492,7 +495,9 @@ public class QueryBuilderDialog extends Dialog
                 String rowsPerPageStr = dc.getValue("rows_per_page");
                 if(rowsPerPageStr == null || rowsPerPageStr.length() == 0)
                     rowsPerPageStr = dc.getValue("output.rows_per_page");
-                state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select, pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize, ResultSetScrollState.SCROLLTYPE_USERESULTSET);
+                state = new QuerySelectScrollState(DatabaseContextFactory.getContext(dc), dc, select,
+                        pageSize == -1 ? (rowsPerPageStr == null ? 20 : Integer.parseInt(rowsPerPageStr)) : pageSize,
+                        ResultSetScrollState.SCROLLTYPE_USERESULTSET, skin);
                 if(state.isValid())
                 {
                     if(keepScrollState)
@@ -627,7 +632,10 @@ public class QueryBuilderDialog extends Dialog
         switch(outputStyle)
         {
             case OUTPUTSTYLE_HTML:
-                executeHtml(writer, dc, outputDest);
+                String reportSkinName = dc.getValue(QBDIALOG_REPORT_SKIN_FIELD_NAME);
+                ReportSkin reportSkin = SkinFactory.getReportSkin(reportSkinName);
+                if(reportSkin == null) throw new RuntimeException("ReportSkin '"+ reportSkinName +"' could not be found.");
+                executeHtml(writer, dc, outputDest, reportSkin);
                 break;
 
             case OUTPUTSTYLE_TEXT_CSV:

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogComponentCommand.java,v 1.2 2003-01-01 19:27:45 shahid.shah Exp $
+ * $Id: DialogComponentCommand.java,v 1.3 2003-01-16 16:38:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -251,7 +251,7 @@ public class DialogComponentCommand extends AbstractComponentCommand
     {
         public SkinParameter()
         {
-            super("skin-name", false, null, SkinFactory.DEFAULT_DIALOG_SKIN_NAME, "The name of a DialogSkin implementation registered in the SkinFactory.");
+            super("dialog-skin-name", false, null, SkinFactory.DEFAULT_DIALOG_SKIN_NAME, "The name of a DialogSkin implementation registered in the SkinFactory.");
         }
 
         public String[] getEnums()

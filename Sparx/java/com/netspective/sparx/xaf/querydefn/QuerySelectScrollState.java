@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.7 2002-12-30 17:46:46 aye.thu Exp $
+ * $Id: QuerySelectScrollState.java,v 1.8 2003-01-16 16:38:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -74,7 +74,6 @@ import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.ReportColumnsList;
 import com.netspective.sparx.xaf.report.ReportFrame;
-import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
 import com.netspective.sparx.util.value.ValueContext;
 import org.w3c.dom.Element;
@@ -82,7 +81,6 @@ import org.w3c.dom.Element;
 public class QuerySelectScrollState extends ResultSetScrollState
 {
     private DatabaseContext dbContext;
-    private ValueContext valueContext;
     private QuerySelect select;
     private Report reportDefn;
     private ReportSkin skin;
@@ -103,7 +101,7 @@ public class QuerySelectScrollState extends ResultSetScrollState
      * @throws NamingException
      * @throws SQLException
      */
-    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, String reportId, int rowsPerPage, int scrollType) throws NamingException, SQLException
+    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, String reportId, int rowsPerPage, int scrollType, ReportSkin skin) throws NamingException, SQLException
     {
         super(select.execute(dc, vc), rowsPerPage, scrollType);
         try
@@ -116,7 +114,6 @@ public class QuerySelectScrollState extends ResultSetScrollState
             throw new RuntimeException(e.toString());
         }
 
-        this.valueContext = vc;
         this.dbContext = dc;
         this.select = select;
 
@@ -170,7 +167,7 @@ public class QuerySelectScrollState extends ResultSetScrollState
                     primaryOrderByColIndex = i;
             }
 
-            this.skin = SkinFactory.getReportSkin("report");
+            this.skin = skin;
             this.resultSetValid = true;
         }
         else
@@ -187,9 +184,9 @@ public class QuerySelectScrollState extends ResultSetScrollState
      * @throws NamingException
      * @throws SQLException
      */
-    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage, int scrollType) throws NamingException, SQLException
+    public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage, int scrollType, ReportSkin skin) throws NamingException, SQLException
     {
-        this(dc, vc, select, null, rowsPerPage, scrollType);
+        this(dc, vc, select, null, rowsPerPage, scrollType, skin);
     }
 
     public QueryDefinition.QueryFieldSortInfo getSortFieldInfo()

@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: QueryDefinitionDialogComponentCommand.java,v 1.3 2003-01-01 19:27:45 shahid.shah Exp $
+ * $Id: QueryDefinitionDialogComponentCommand.java,v 1.4 2003-01-16 16:38:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
 
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
 
 import java.util.StringTokenizer;
 import java.io.IOException;
@@ -73,12 +74,14 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
                      {
                          new Documentation.Parameter("query-defn-name", true, null, null, "The name of the query definition."),
                          new Documentation.Parameter("query-select-dialog-name", true, null, null, "The name of the query select dialog."),
+                         new DialogComponentCommand.SkinParameter(),
                          new StatementComponentCommand.SkinParameter(),
                      });
 
     private String dialogName;
     private String source;
-    private String skinName;
+    private String dialogSkinName;
+    private String reportSkinName;
 
     public Documentation getDocumentation()
     {
@@ -96,12 +99,21 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
 
         if(params.hasMoreTokens())
         {
-            skinName = params.nextToken();
-            if(skinName.equals(PARAMVALUE_DEFAULT))
-                skinName = null;
+            dialogSkinName = params.nextToken();
+            if(dialogSkinName.equals(PARAMVALUE_DEFAULT))
+                dialogSkinName = null;
         }
         else
-            skinName = null;
+            dialogSkinName = null;
+
+        if(params.hasMoreTokens())
+        {
+            reportSkinName = params.nextToken();
+            if(reportSkinName.equals(PARAMVALUE_DEFAULT))
+                reportSkinName = null;
+        }
+        else
+            reportSkinName = null;
     }
 
     public String getSource()
@@ -114,9 +126,14 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
         return dialogName;
     }
 
-    public String getSkinName()
+    public String getDialogSkinName()
     {
-        return skinName;
+        return dialogSkinName;
+    }
+
+    public String getReportSkinName()
+    {
+        return reportSkinName;
     }
 
     public void setSource(String dataCmd)
@@ -129,9 +146,14 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
         this.dialogName = dialogName;
     }
 
-    public void setSkinName(String skinName)
+    public void setDialogSkinName(String dialogSkinName)
     {
-        this.skinName = skinName;
+        this.dialogSkinName = dialogSkinName;
+    }
+
+    public void setReportSkinName(String reportSkinName)
+    {
+        this.reportSkinName = reportSkinName;
     }
 
     public String getCommand()
@@ -140,10 +162,17 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
         StringBuffer sb = new StringBuffer(source);
         sb.append(delim);
         sb.append(dialogName != null ? source : PARAMVALUE_DEFAULT);
-        if(skinName != null)
+        if(dialogSkinName != null)
         {
             sb.append(delim);
-            sb.append(skinName);
+            sb.append(dialogSkinName);
+        }
+        else
+            sb.append(PARAMVALUE_DEFAULT);
+        if(reportSkinName != null)
+        {
+            sb.append(delim);
+            sb.append(reportSkinName);
         }
         return sb.toString();
     }
@@ -174,16 +203,19 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
             return;
         }
 
-        com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
+        com.netspective.sparx.xaf.form.DialogSkin skin = dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(dialogSkinName);
         if(skin == null)
         {
-            out.write("DialogSkin '" + skinName + "' not found in skin factory.");
+            out.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");
             return;
         }
 
         com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(vc.getServletContext(), vc.getServlet(), (javax.servlet.http.HttpServletRequest) vc.getRequest(), (javax.servlet.http.HttpServletResponse) vc.getResponse(), skin);
         dc.setRetainRequestParams(DialogComponentCommand.DIALOG_COMMAND_RETAIN_PARAMS);
         dialog.prepareContext(dc);
+
+        if(reportSkinName != null)
+            dc.setValue(QueryBuilderDialog.QBDIALOG_REPORT_SKIN_FIELD_NAME, reportSkinName);
 
         dialog.renderHtml(out, dc, true);
     }
