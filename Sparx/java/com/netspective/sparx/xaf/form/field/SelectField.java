@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SelectField.java,v 1.6 2003-02-03 14:25:01 yousuf.sayed Exp $
+ * $Id: SelectField.java,v 1.7 2003-03-05 23:41:53 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -287,13 +287,20 @@ public class SelectField extends TextField
         if(defaultv.length() > 0)
         {
             if(isMulti())
+            {
                 defaultValue = ValueSourceFactory.getListValueSource(defaultv);
+                if (defaultValue == null)
+                {
+                    // if it is not a defined list value source, assume it is a comma seperated list
+                    defaultValue = new StringsListValue();
+                    defaultValue.initializeSource(defaultv);
+                }
+            }
             else
                 super.setDefaultValue(ValueSourceFactory.getSingleOrStaticValueSource(defaultv));
         }
         else
             defaultValue = null;
-
         String choicesValue = elem.getAttribute("choices");
         if(choicesValue.length() > 0)
             setChoices(choicesValue);
@@ -360,12 +367,15 @@ public class SelectField extends TextField
     {
         if(isMulti())
         {
+            // multi select list
             String[] values = dc.getValues(this);
-            if(values == null)
+            if(values == null || values.length == 0)
                 values = dc.getRequest().getParameterValues(getId());
 
+            // initial display of the dialog
             if(dc.getRunSequence() == 1)
             {
+                // if no request parameter is passed in and the XML defined default value exists
                 if((values != null && values.length == 0 && defaultValue != null) ||
                         (values == null && defaultValue != null))
                 {
@@ -492,13 +502,13 @@ public class SelectField extends TextField
             renderPopupControlHtml(writer, dc);
             return;
         }
-
+        /*
         if(isInputHidden(dc))
         {
             writer.write(getHiddenControlHtml(dc, false));
             return;
         }
-
+        */
         if(isReadOnly(dc))
         {
             writer.write(getHiddenControlHtml(dc, true));
@@ -581,29 +591,35 @@ public class SelectField extends TextField
                     }
 
                     if(prependBlank)
-                        options.append("<option value=''></option>");
+                        options.append("    <option value=''></option>\n");
 
                     while(i.hasNext())
                     {
                         SelectChoice choice = (SelectChoice) i.next();
-                        options.append("<option value=\"" + choice.value + "\" " + (choice.selected ? "selected" : "") + ">" + choice.caption + "</option>");
+                        options.append("    <option value=\"" + choice.value + "\" " + (choice.selected ? "selected" : "") + ">" + choice.caption + "</option>\n");
                     }
 
                     if(appendBlank)
-                        options.append("<option value=''></option>");
+                        options.append("    <option value=''></option>\n");
 
                     switch(style)
                     {
                         case SELECTSTYLE_COMBO:
-                            writer.write("<select name='" + id + "' " + defaultControlAttrs + ">" + options + "</select>");
+                            writer.write("<select name='" + id + "' " + defaultControlAttrs +
+                                    (isInputHidden(dc) ? " style=\"display:none;\"" : "") +
+                                    ">\n" + options + "</select>\n");
                             break;
 
                         case SELECTSTYLE_LIST:
-                            writer.write("<select name='" + id + "' size='" + getSize() + "' " + defaultControlAttrs + ">" + options + "</select>");
+                            writer.write("<select name='" + id + "' size='" + getSize() + "' " + defaultControlAttrs +
+                                    (isInputHidden(dc) ? " style=\"display:none;\"" : "") +
+                                    ">\n" + options + "</select>\n");
                             break;
 
                         case SELECTSTYLE_MULTILIST:
-                            writer.write("<select name='" + id + "' size='" + getSize() + "' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>");
+                            writer.write("<select name='" + id + "' size='" + getSize() + "' multiple='yes' " + defaultControlAttrs +
+                                    (isInputHidden(dc) ? " style=\"display:none;\"" : "") +
+                                    ">\n" + options + "</select>\n");
                             break;
                     }
 
