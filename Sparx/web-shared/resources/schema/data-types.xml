@@ -312,6 +312,66 @@
 
     </datatype>
 
+    <datatype name="enum-set">
+        <java-class package="java.lang">String</java-class>
+        <sqldefn dbms="ansi">varchar(${size})</sqldefn>
+        <sqldefn dbms="mssql">varchar(${size})</sqldefn>
+        <size>255</size>
+
+        <validate type="max-length" length="getSize()"/>
+
+        <field.text size="20"/>
+
+        <table name="${parentColTable.getAttribute('abbrev')}_${parentColumn.getAttribute('name')}_Set">
+            <column name="system_id" type="auto-inc" descr="Unique record identifier"/>
+            <column name="parent_id" parentref="${this.getParentNode().getAttribute('_gen-parent-column-table-pri-key-ref')}" descr="The parent of this record"/>
+            <column name="enum_index" type="integer" descr="The ordinal value (index) of the enumeration or null if not important"/>
+            <column name="enum_value" lookupref="${this.getParentNode().getParentNode().getAttribute('enumeration-table')}" descr="The value of the enumeration item"/>
+        </table>
+
+        <trigger type="dal-row-java" time="after" event="insert">
+            {
+                java.util.StringTokenizer st = new java.util.StringTokenizer(get${column.getAttribute("_gen-method-name")}(), ",");
+                int itemIndex = 0;
+                while(st.hasMoreTokens())
+                {
+                    String enumCaption = st.nextToken().trim();
+                    Integer enumValue = ${column.getAttribute('_gen-enumeration-table-item-class')}.getItemByCaption(enumCaption).getIdAsInteger();
+                    
+                    ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
+                    row.setEnumIndex(itemIndex);
+                    row.setEnumValue(enumValue);
+                    row.getTable().insert(cc, row);
+                    itemIndex++;
+                }
+            }
+        </trigger>
+
+        <trigger type="dal-row-java" time="after" event="update">
+            {
+                delete${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-rows-name")}(cc);
+                java.util.StringTokenizer st = new java.util.StringTokenizer(get${column.getAttribute("_gen-method-name")}(), ",");
+                int itemIndex = 0;
+                while(st.hasMoreTokens())
+                {
+                    String enumCaption = st.nextToken().trim();
+                    Integer enumValue = ${column.getAttribute('_gen-enumeration-table-item-class')}.getItemByCaption(enumCaption).getIdAsInteger();
+
+                    ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
+                    row.setEnumIndex(itemIndex);
+                    row.setEnumValue(enumValue);
+                    row.getTable().insert(cc, row);
+                    itemIndex++;
+                }
+            }
+        </trigger>
+
+        <trigger type="dal-row-java" time="after" event="delete">
+            delete${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-rows-name")}(cc);
+        </trigger>
+
+    </datatype>
+
     <!-- ***********************************************************************************************************
                Validation rules
          *********************************************************************************************************** -->

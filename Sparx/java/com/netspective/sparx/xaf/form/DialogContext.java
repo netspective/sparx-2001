@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.29 2003-01-01 19:26:02 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.30 2003-01-20 21:57:40 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1688,6 +1688,44 @@ public class DialogContext extends ServletValueContext
             return null;
         else
             return state.values;
+    }
+
+    public String getValuesAsTextSet(DialogField field)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
+        if(state == null)
+            return null;
+
+        String returnValue = "";
+
+        for(int i = 0; i < state.values.length; i ++)
+        {
+            if (i == 0)
+                returnValue += state.values[i];
+            else
+                returnValue += "," + state.values[i];
+        }
+
+        return returnValue;
+    }
+
+    public String getValuesAsTextSet(String qualifiedName)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+        if(state == null)
+            return null;
+
+        String returnValue = "";
+
+        for(int i = 0; i < state.values.length; i ++)
+        {
+            if (i == 0)
+                returnValue += state.values[i];
+            else
+                returnValue += "," + state.values[i];
+        }
+
+        return returnValue;
     }
 
     public void setValues(String qualifiedName, String[] values)

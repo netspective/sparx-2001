@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BooleanField.java,v 1.4 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: BooleanField.java,v 1.5 2003-01-20 21:57:40 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -203,6 +203,11 @@ public class BooleanField extends DialogField
         String strValue = dc.getValue(this);
         if ((strValue != null) && (strValue.length() > 0))
         {
+            char firstChar = strValue.charAt(0);
+
+            if ('f' == firstChar || 'F' == firstChar) strValue = "0";
+            if ('t' == firstChar || 'T' == firstChar) strValue = "1";
+
             value = new Integer(strValue).intValue() == 0 ? false : true;
             index = new Integer(strValue).intValue();
         }

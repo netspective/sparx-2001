@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.25 2003-01-12 22:40:36 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.26 2003-01-20 21:57:40 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -865,6 +865,13 @@ public class SchemaDocument extends XmlSource
         if (decimals != null && decimals.length() == 0)
             decimals = null;
 
+        String enumerationTable = null;
+        enumerationTable = column.getAttribute("enumeration-table");
+        if (null == enumerationTable) enumerationTable = "";
+        String enumerationTableItemClass = XmlSource.xmlTextToJavaIdentifier(enumerationTable, true);
+        enumerationTableItemClass += "Table.EnumeratedItem";
+        column.setAttribute("_gen-enumeration-table-item-class", enumerationTableItemClass);
+
         for (int i = 0; i < colInfo.getLength(); i++)
         {
             Node childNode = colInfo.item(i);
@@ -1123,7 +1130,7 @@ public class SchemaDocument extends XmlSource
         replaceNodeMacros(table, replaceMacrosInTableNodes, expressionVariables);
 
         if (table.getAttribute("abbrev").length() == 0)
-            table.setAttribute("abbrev", table.getAttribute("abbrev"));
+            table.setAttribute("abbrev", table.getAttribute("name"));
 
         Element generatedInfo = parentColumn.getOwnerDocument().createElement("generated-child-table");
         generatedInfo.setAttribute("name", table.getAttribute("name"));
