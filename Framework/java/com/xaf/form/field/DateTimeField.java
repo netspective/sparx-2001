@@ -11,6 +11,9 @@ public class DateTimeField extends TextField
 {
 	static public final long FLDFLAG_FUTUREONLY = TextField.FLDFLAG_STARTCUSTOM;
 	static public final long FLDFLAG_PASTONLY   = FLDFLAG_FUTUREONLY * 2;
+   	static public final long FLDFLAG_MAX_LIMIT  = FLDFLAG_PASTONLY * 2;
+    static public final long FLDFLAG_MIN_LIMIT  = FLDFLAG_MAX_LIMIT * 2;
+
 
 	static public final int DTTYPE_DATEONLY = 0;
 	static public final int DTTYPE_TIMEONLY = 1;
@@ -23,6 +26,7 @@ public class DateTimeField extends TextField
     private SimpleDateFormat sqlFormat;
 	private Date preDate = null;
 	private Date postDate = null;
+    private String maxDateStr = null;
 
 	public DateTimeField()
 	{
@@ -106,6 +110,21 @@ public class DateTimeField extends TextField
 		else if(nodeName.equals("field.time"))
 			setDataType(DTTYPE_TIMEONLY);
 
+        // make sure the format setting is after the data type setting
+        String value = elem.getAttribute("format");
+        if (value != null && value.length() > 0)
+        {
+            this.format = new SimpleDateFormat(value);
+        }
+
+
+        String maxDateTime = elem.getAttribute("max-value");
+        if (maxDateTime != null && maxDateTime.length() > 0)
+        {
+            this.maxDateStr = maxDateTime;
+           	setFlag(FLDFLAG_MAX_LIMIT);
+        }
+
 		if(elem.getAttribute("future-only").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_REQUIRED);
 
@@ -129,9 +148,27 @@ public class DateTimeField extends TextField
 		}
 		catch(Exception e)
 		{
-			invalidate(dc, "'" + strValue + "' is not valid (format is "+ formats[dataType] +").");
+			invalidate(dc, "'" + strValue + "' is not valid (format is "+ format.toPattern() +").");
 			return false;
 		}
+
+        try
+        {
+            if (flagIsSet(FLDFLAG_MAX_LIMIT))
+            {
+                Date maxDate = format.parse(this.maxDateStr);
+                if (value.after(maxDate))
+                {
+                    invalidate(dc, getCaption(dc) + " must not be greater than " + maxDateStr + ".");
+                    return false;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            invalidate(dc, "Maximum date '" + this.maxDateStr + "' is not valid (format is "+ formats[dataType] +").");
+            e.printStackTrace();
+        }
 
 		Date now = new Date();
 		long flags = getFlags();
