@@ -151,6 +151,8 @@ public class StatementManager extends XmlSource
 
 				if(! entry.wasSuccessful())
 				{
+					execLogEntryElem.setAttribute("init-date",   fmt.format(entry.getInitDate()));
+					execLogEntryElem.setAttribute("src", entry.getSource());
 					execLogEntryElem.setAttribute("total-time", "FAILED");
 					continue;
 				}
@@ -283,30 +285,38 @@ public class StatementManager extends XmlSource
 
 		StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(vc);
 
-		logEntry.registerGetConnectionBegin();
-		Connection conn = dc.getConnection(vc, dataSourceId);
-		logEntry.registerGetConnectionEnd(conn);
-
-        PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
-
-		logEntry.registerBindParamsBegin();
-        if(params != null)
-        {
-            for(int i = 0; i < params.length; i++)
-                stmt.setObject(i, params[i]);
-        }
-        else
-            si.applyParams(dc, vc, stmt);
-		logEntry.registerBindParamsEnd();
-
-		logEntry.registerExecSqlBegin();
-        if(stmt.execute())
+		try
 		{
-			logEntry.registerExecSqlEndSuccess();
-            return new ResultInfo(si, stmt.getResultSet(), logEntry);
+			logEntry.registerGetConnectionBegin();
+			Connection conn = dc.getConnection(vc, dataSourceId);
+			logEntry.registerGetConnectionEnd(conn);
+
+			PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
+
+			logEntry.registerBindParamsBegin();
+			if(params != null)
+			{
+				for(int i = 0; i < params.length; i++)
+					stmt.setObject(i, params[i]);
+			}
+			else
+				si.applyParams(dc, vc, stmt);
+			logEntry.registerBindParamsEnd();
+
+			logEntry.registerExecSqlBegin();
+			if(stmt.execute())
+			{
+				logEntry.registerExecSqlEndSuccess();
+				logEntry.finalize(vc);
+				return new ResultInfo(si, stmt.getResultSet(), logEntry);
+			}
+			logEntry.registerExecSqlEndFailed();
+		}
+		finally
+		{
+			logEntry.finalize(vc);
 		}
 
-		logEntry.registerExecSqlEndFailed();
 		return null;
 	}
 

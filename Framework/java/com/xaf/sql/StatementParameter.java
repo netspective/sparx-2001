@@ -64,6 +64,7 @@ public class StatementParameter
 	public SingleValueSource getValueSource() { return (SingleValueSource) valueSource; }
 	public ListValueSource getListSource() { return (ListValueSource) valueSource; }
 	public boolean isListType() { return paramType == Types.ARRAY; }
+	public int getParamType() { return paramType; }
 
 	public void apply(ApplyContext ac, DatabaseContext dc, ValueContext vc, PreparedStatement stmt) throws SQLException
 	{
@@ -117,8 +118,23 @@ public class StatementParameter
 			html.append("<li><code><b>");
 			html.append(vs.getId());
 			html.append("</b> = ");
-			html.append(vs.getValues(vc));
-			html.append("</code></li>");
+
+			String[] values = vs.getValues(vc);
+			if(values != null)
+			{
+				for(int v = 0; v < values.length; v++)
+				{
+					if(v > 0)
+						html.append(", ");
+					html.append("'" + values[v] + "'");
+				}
+			}
+			else
+			{
+				html.append("null");
+			}
+
+			html.append(" (list)</code></li>");
 		}
 	}
 }
