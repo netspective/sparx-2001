@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.11 2003-01-28 02:03:22 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.12 2003-01-28 06:15:46 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -200,9 +200,10 @@ public class NavigationPath
     private long flags;
     private String id;
     private String name;
-    private String caption;
-    private String title;
-    private String heading;
+    private SingleValueSource caption;
+    private SingleValueSource title;
+    private SingleValueSource heading;
+    private SingleValueSource subHeading;
     private String actionImageUrl;
     private String entityImageUrl;
     private String controllerName;
@@ -269,32 +270,32 @@ public class NavigationPath
 
     public String getCaption(ValueContext vc)
     {
-        return caption;
+        return caption.getValue(vc);
     }
 
     public void setCaption(String value)
     {
-        caption = value != null && value.length() > 0 ? value : null;
+        caption = ValueSourceFactory.getSingleOrStaticValueSource(value);
     }
 
     public String getTitle(ValueContext vc)
     {
-        return title;
+        return title.getValue(vc);
     }
 
     public void setTitle(String value)
     {
-        title = value != null && value.length() > 0 ? value : null;
+        title = ValueSourceFactory.getSingleOrStaticValueSource(value);
     }
 
     public String getHeading(ValueContext vc)
     {
-        return heading;
+        return heading.getValue(vc);
     }
 
     public void setHeading(String value)
     {
-        heading = value != null && value.length() > 0 ? value : null;
+        heading = ValueSourceFactory.getSingleOrStaticValueSource(value);
     }
 
     public NavigationTree getOwner()
@@ -536,7 +537,12 @@ public class NavigationPath
                     heading = caption;
                     childElem.setAttribute("heading", caption);
                 }
-                childPath.setHeading(heading);
+
+                String subHeading = childElem.getAttribute("sub-heading");
+                if (subHeading != null && subHeading.length() > 0)
+                {
+                    childPath.setSubHeading(subHeading);
+                }
 
                 String title = childElem.getAttribute("title");
                 if (title.length() == 0)
@@ -593,9 +599,7 @@ public class NavigationPath
 
                 //TODO: develop a value source that will do the page hiding depending on entity.
 
-                //TODO: Add sub-heading as a property
-
-                //TODO: Make sure this is modified to inherit retain-params and a way to set them to nothing
+                //TODO: Asses if it's worth to inherit retain-params and a way to set them to nothing and make sure to take care of double entries.
                 String retainParams = childElem.getAttribute("retain-params");
                 if (retainParams != null && retainParams.length() > 0) {
                     childPath.setRetainParams(retainParams);
@@ -845,14 +849,7 @@ public class NavigationPath
      */
     public String getUrl(ValueContext vc)
     {
-        String startOfUrl = url != null ? url.getValue(vc) : ((HttpServletRequest) vc.getRequest()).getContextPath() + ((HttpServletRequest) vc.getRequest()).getServletPath() + getAbsolutePath();
-        return startOfUrl;
-        /*
-        String params = controller.getRetainParamsValue(vc);
-        //TODO: This code will need to be smarter in order to NOT double parameters that have already been included as part of the URL
-        //      For example, the url defines param a and the controller does as well, then currently this param will show up twice in the request.
-        return startOfUrl + (params != null && params.length() > 0 ? "?" + params : "");
-        */
+        return url != null ? url.getValue(vc) : ((HttpServletRequest) vc.getRequest()).getContextPath() + ((HttpServletRequest) vc.getRequest()).getServletPath() + getAbsolutePath();
     }
 
     /**
@@ -965,6 +962,14 @@ public class NavigationPath
     public void setRetainParams(String retainParams){
         this.retainParams.initializeSource(retainParams);
         hasRetainParams = true;
+    }
+
+    public String getSubHeading(ValueContext vc) {
+        return subHeading.getValue(vc);
+    }
+
+    public void setSubHeading(String value) {
+        this.subHeading = ValueSourceFactory.getSingleOrStaticValueSource(value);;
     }
 
     /**

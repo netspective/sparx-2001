@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPage.java,v 1.4 2003-01-07 10:46:05 roque.hernandez Exp $
+ * $Id: NavigationPage.java,v 1.5 2003-01-28 06:15:46 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -82,10 +82,6 @@ public class NavigationPage extends NavigationPath
             return getName();
         else
             return result;
-    }
-
-    public String getSubHeading(ValueContext vc){
-        return null;  //To be extended by subclasses that represent instances of pages and need a sub-heading.
     }
 
     public String getHeading(ValueContext vc)
