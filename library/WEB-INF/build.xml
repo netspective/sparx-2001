@@ -6,14 +6,14 @@ Build file for Application - for use with the Jakarta Ant java build tool
 Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
-       
-$Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
+
+$Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
-   
+
     <property environment="env"/>
-    
+
     <target name="check-java-home">
         <condition property="java.home.exists">
             <or>
@@ -24,7 +24,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <fail message="JAVA_HOME is not set to a valid JDK directory." unless="java.home.exists"/>
         <echo message="JAVA_HOME is ${env.JAVA_HOME}"/>
     </target>
-    
+
     <target name="check-sparx-home" unless="env.SPARX_HOME">
         <input message="SPARX_HOME environment variable is invalid. Please enter it now:" addproperty="env.SPARX_HOME"/>
     </target>
@@ -67,11 +67,11 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
                 <include name="**/*.jar"/>
             </fileset>
         </path>
-        
+
         <!-- optimize and show all the active classpath (classp task will remove duplicate entries in the classpath) -->
         <taskdef name="classp" classname="com.netspective.sparx.util.ant.ClassPathTask" classpathref="project.class.path"/>
         <classp listall="yes" additionalref="project.class.path"/>
-                
+
         <property name="sparx.lib.dir" value="${sparx.home}/lib"/>
         <property name="sparx.tools.dir" value="${sparx.home}/tools"/>
         <property name="sparx.shared.dir" value="${sparx.home}/web-shared"/>
@@ -117,7 +117,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <property name="app.java.identifiers.build.dir" value="${app.java.identifiers.dir}/build"/>
         <property name="app.java.identifiers.jar" value="${app.WEB-INF.dir}/conf/${app.java.identifiers.jar.name}"/>
         <property name="app.java.identifiers.doc.dir" value="${app.javadoc.root.dir}/identifiers"/>
-        
+
         <property name="app.java.identifiers.config-props.class-name" value="${app.java.identifiers.pkg-name}.Config"/>
 
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
@@ -187,7 +187,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
     </target>
-    
+
     <target name="copy-sparx-libs" depends="global">
         <uptodate property="build.xml-is-uptodate" targetfile="${app.WEB-INF.dir}/build.xml">
             <srcfiles dir= "${sparx.tools.dir}" includes="app-build.xml"/>
@@ -201,12 +201,16 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
             <srcfiles dir= "${sparx.tools.dir}" includes="app-build.sh"/>
         </uptodate>
 
+        <uptodate property="log4j.properties-is-uptodate" targetfile="${app.WEB-INF.dir}/classes/log4j.properties">
+            <srcfiles dir= "${sparx.shared.resources.templates.WEB-INF.dir}/classes" includes="log4j.properties"/>
+        </uptodate>
+
         <copy file="${sparx.tools.dir}/app-build.xml" tofile="${app.WEB-INF.dir}/build.xml"/>
         <copy file="${sparx.lib.dir}/sparx.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/ant.jar" todir="${app.lib.dir}"/>
-        <copy file="${sparx.lib.dir}/redist/bsf.jar" todir="${app.lib.dir}"/>
+        <copy file="${sparx.lib.dir}/redist/commons-logging.jar" todir="${app.lib.dir}"/>
+        <copy file="${sparx.lib.dir}/redist/commons-jexl.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/log4j.jar" todir="${app.lib.dir}"/>
-        <copy file="${sparx.lib.dir}/redist/js.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/oro.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/syntax.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/xalan.jar" todir="${app.lib.dir}"/>
@@ -214,7 +218,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <copy file="${sparx.lib.dir}/redist/xerces.jar" todir="${app.lib.dir}"/>
         <copy file="${sparx.lib.dir}/redist/README" todir="${app.lib.dir}"/>
     </target>
-    
+
     <target name="copy-sparx-resources" depends="global">
         <mkdir dir="${app.root.dir}/sparx/resources"/>
         <copy todir="${app.root.dir}/sparx/resources">
@@ -226,7 +230,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
 
         <available property="app.config.exists" file="${app.WEB-INF.dir}/conf/app-config.xml"/>
         <fail message="Please copy ${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml to conf/app-config.xml and run upgrade-sparx again." unless="app.config.exists"/>
-    </target>    
+    </target>
 
     <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-templates,copy-sparx-resources,copy-sparx-libs">
         <echo message="All Sparx files copied. Please review ${app.WEB-INF.dir} to create a valid"/>
@@ -238,7 +242,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <echo message="           PLEASE RUN 'build upgrade-sparx' AGAIN WITH THE LATEST"/>
         <echo message="           ANT BUILD.XML FILE"/>
     </target>
-    
+
     <target name="upgrade-build-bat" depends="copy-sparx-libs" unless="build.bat-is-uptodate">
         <echo message="** NOTE ** ${app.WEB-INF.dir}/build.bat is not current. "/>
         <echo message="Please copy"/>
@@ -253,7 +257,18 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <echo message="    ${app.WEB-INF.dir}/build.sh"/>
     </target>
 
-    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh">
+    <target name="check-log4j.properties" depends="copy-sparx-libs" unless="log4j.properties-is-uptodate">
+        <echo message="** NOTE ** Please check the following files to see if there are updates you need:"/>
+        <echo message="    ${app.WEB-INF.dir}/classes/log4j.properties is older than"/>
+        <echo message="    ${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties"/>
+        <echo message="   You can use the 'upgrade-log4j.properties' target to update this file."/>
+    </target>
+
+    <target name="upgrade-log4j.properties" depends="global">
+        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
+    </target>
+
+    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh,check-log4j.properties">
         <echo message="Sparx libraries and resources have been updated."/>
     </target>
 
@@ -360,7 +375,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
     <target name="dcb" depends="init" if="app.ui.source-file-exists">
         <javac srcdir="${app.classes.dir}" classpathref="project.class.path" deprecation="on">
             <include name="**/form/field/*.java"/>
-        </javac>    
+        </javac>
         <!-- generate the dialog context beans files -->
         <dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" debug="no"/>
 
@@ -442,7 +457,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
 
     <target name="identifiers-doc" depends="identifiers">
         <mkdir dir="${app.java.identifiers.doc.dir}"/>
-        <javadoc 
+        <javadoc
              packagenames="${app.java.identifiers.pkg-name}.*"
              destdir="${app.java.identifiers.doc.dir}"
              classpathref="project.class.path"
@@ -468,14 +483,14 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <delete>
             <fileset dir="${app.classes.dir}" includes="**/*.class"/>
         </delete>
-        
+
         <delete dir="${app.java.dal.dir}"/>
         <delete dir="${app.java.dal.doc.dir}"/>
         <delete dir="${app.java.dcb.dir}"/>
         <delete dir="${app.java.dcb.doc.dir}"/>
         <delete dir="${app.java.identifiers.dir}"/>
         <delete dir="${app.java.identifiers.doc.dir}"/>
-        
+
         <delete dir="${config.app.site-temp-path}"/>
         <mkdir dir="${config.app.site-temp-path}"/>
     </target>
@@ -486,7 +501,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
     </target>
 
     <!-- =============================== Help =============================== -->
-    
+
     <target name="all" depends="init,clean,dal,dcb,identifiers,compile,dal-doc,dcb-doc,identifiers-doc">
         <echo message="Complete"/>
     </target>
@@ -512,6 +527,7 @@ $Id: build.xml,v 1.9 2002-10-20 16:46:09 shahid.shah Exp $
         <echo message="  upgrade-sparx   Upgrades Sparx libraries and resources in this application to"/>
         <echo message="                  latest version available in SPARX_HOME (basically runs these"/>
         <echo message="                  two targets: copy-sparx-libs and copy-sparx-resources"/>
+        <echo message="  upgrade-log4j.properties Upgrades WEB-INF/classes/log4.properties file"/>
         <echo message="  "/>
         <echo message="  compile         Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal             Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
