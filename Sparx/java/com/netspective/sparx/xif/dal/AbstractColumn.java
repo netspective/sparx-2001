@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractColumn.java,v 1.3 2002-11-14 02:57:14 shahbaz.javeed Exp $
+ * $Id: AbstractColumn.java,v 1.4 2002-12-01 19:23:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -63,8 +63,9 @@ import java.util.Map;
 
 public abstract class AbstractColumn implements Column
 {
-    public static long COLUMNFLAG_ISREQUIRED = 1;
-    public static long COLUMNFLAG_ISUNIQUE = COLUMNFLAG_ISREQUIRED * 2;
+    public static long COLUMNFLAG_ISREQUIRED_APPLICATION = 1;
+    public static long COLUMNFLAG_ISREQUIRED_DBMS = COLUMNFLAG_ISREQUIRED_APPLICATION * 2;
+    public static long COLUMNFLAG_ISUNIQUE = COLUMNFLAG_ISREQUIRED_DBMS * 2;
     public static long COLUMNFLAG_ISNATURALPRIMARYKEY = COLUMNFLAG_ISUNIQUE * 2;
     public static long COLUMNFLAG_ISSEQUENCEDPRIMARYKEY = COLUMNFLAG_ISNATURALPRIMARYKEY * 2;
     public static long COLUMNFLAG_ISINDEXED = COLUMNFLAG_ISSEQUENCEDPRIMARYKEY * 2;
@@ -259,7 +260,12 @@ public abstract class AbstractColumn implements Column
 
     public boolean isRequired()
     {
-        return flagIsSet(COLUMNFLAG_ISREQUIRED);
+        return flagIsSet(COLUMNFLAG_ISREQUIRED_APPLICATION);
+    }
+
+    public boolean isRequiredByDbms()
+    {
+        return flagIsSet(COLUMNFLAG_ISREQUIRED_DBMS);
     }
 
     public boolean isSequencedPrimaryKey()
@@ -284,7 +290,12 @@ public abstract class AbstractColumn implements Column
 
     public void setIsRequired(boolean flag)
     {
-        setOrClearFlag(COLUMNFLAG_ISREQUIRED, flag);
+        setOrClearFlag(COLUMNFLAG_ISREQUIRED_APPLICATION, flag);
+    }
+
+    public void setIsRequiredByDbms(boolean flag)
+    {
+        setOrClearFlag(COLUMNFLAG_ISREQUIRED_DBMS, flag);
     }
 
     public void setIsSequencedPrimaryKey(boolean flag)

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: Column.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: Column.java,v 1.2 2002-12-01 19:23:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -147,7 +147,7 @@ public interface Column
 
     /**
      * Registers foreign key dependency for this column.
-     * @param fkey The foreign key from another table that references this column
+     * @param fKey The foreign key from another table that references this column
      */
     public void registerForeignKeyDependency(ForeignKey fKey);
 
@@ -194,6 +194,8 @@ public interface Column
 
     public boolean isRequired();
 
+    public boolean isRequiredByDbms();
+
     public boolean isSequencedPrimaryKey();
 
     public boolean isUnique();
@@ -203,6 +205,8 @@ public interface Column
     public void setIsNaturalPrimaryKey(boolean flag);
 
     public void setIsRequired(boolean flag);
+
+    public void setIsRequiredByDbms(boolean flag);
 
     public void setIsSequencedPrimaryKey(boolean flag);
 
