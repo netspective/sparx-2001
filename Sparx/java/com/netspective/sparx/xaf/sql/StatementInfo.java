@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.2 2002-09-07 21:58:13 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.3 2002-09-07 23:06:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -88,6 +88,7 @@ import com.netspective.sparx.xaf.form.field.IntegerField;
 import com.netspective.sparx.xaf.form.field.BooleanField;
 import com.netspective.sparx.xaf.form.field.MemoField;
 import com.netspective.sparx.xaf.task.TaskContext;
+import com.netspective.sparx.ace.page.DatabaseSqlPage;
 
 public class StatementInfo
 {
@@ -227,7 +228,7 @@ public class StatementInfo
     public void createDefaultDialog()
     {
         dialog = new StatementDialog(this, null, null);
-        dialog.setName("statement_" + getId().replace('.', '_'));
+        dialog.setName("statement_" + XmlSource.xmlTextToJavaIdentifier(getId(), false));
         dialog.setHeading("Test " + getId());
 
         /*
@@ -348,7 +349,7 @@ public class StatementInfo
         if(parameters == null)
             return;
 
-        if(vc instanceof DialogContext && (((DialogContext) vc).getDialog() instanceof StatementDialog))
+        if(vc instanceof DialogContext && (((DialogContext) vc).getDialog() instanceof StatementDialog) && DatabaseSqlPage.useDialogParams(vc))
         {
             // we're probably running a StatementInfo unit test dialog so get the values from the DialogContext
             StatementParameter.ApplyContext ac = new StatementParameter.ApplyContext(this, true);

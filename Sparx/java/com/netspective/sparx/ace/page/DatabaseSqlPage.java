@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.3 2002-09-07 21:54:10 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.4 2002-09-07 23:06:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -81,6 +81,7 @@ import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSqlPage extends AceServletPage
 {
@@ -104,15 +105,20 @@ public class DatabaseSqlPage extends AceServletPage
         return "SQL Statements";
     }
 
+    public static boolean useDialogParams(ValueContext vc)
+    {
+        return ! "no".equals(vc.getRequest().getParameter("ui"));
+    }
+
     public void handlePageBody(PageContext pc) throws ServletException, IOException
     {
         String testItem = getTestCommandItem(pc);
         if(testItem != null)
         {
-            if ("no".equals(pc.getRequest().getParameter("ui")))
-                handleTestStatementNoUI(pc, testItem);
-            else
+            if (useDialogParams(pc))
                 handleTestStatementWithUI(pc, testItem);
+            else
+                handleTestStatementNoUI(pc, testItem);
         }
         else
         {
@@ -155,29 +161,6 @@ public class DatabaseSqlPage extends AceServletPage
             out.write("Statement '"+ stmtId +"' not found in default context.");
     }
 
-    public void handleTestStatementNoUIPageable(PageContext pc, String stmtId) throws ServletException, IOException, TaskExecuteException
-    {
-        StatementTask task = new StatementTask();
-        task.setPageableReport(true);
-        task.setStmtName(stmtId);
-        String rows = pc.getRequest().getParameter("rows");
-        if (rows != null && rows.length() > 0)
-            task.setRowsPerPage(Integer.parseInt(rows));
-
-        TaskContext tc = new TaskContext(pc);
-        task.execute(tc);
-        PrintWriter out = pc.getResponse().getWriter();
-        if(tc.hasError())
-        {
-            out.write(tc.getErrorMessage());
-        }
-        else if(tc.hasResultMessage())
-        {
-            out.write(tc.getResultMessage());
-        }
-
-    }
-
     public void handleTestStatementNoUI(PageContext pc, String stmtId) throws ServletException, IOException
     {
         ServletContext context = pc.getServletContext();
@@ -187,24 +170,35 @@ public class DatabaseSqlPage extends AceServletPage
         DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
 
         out.write("<h1>SQL: " + stmtId + "</h1>");
-        if ("yes".equals(pc.getRequest().getParameter("pageable")))
-        {
-            try
-            {
-                handleTestStatementNoUIPageable(pc, stmtId);
-            }
-            catch (TaskExecuteException e)
-            {
-                throw new ServletException(e);
-            }
-            return;
-        }
-
         try
         {
             StatementInfo si = manager.getStatement(stmtId);
+            if ("yes".equals(pc.getRequest().getParameter("pageable")))
+            {
+                try
+                {
+                    StatementTask task = new StatementTask();
+                    task.setPageableReport(true);
+                    task.setStmtName(stmtId);
+                    String rows = pc.getRequest().getParameter("rows");
+                    if (rows != null && rows.length() > 0)
+                        task.setRowsPerPage(Integer.parseInt(rows));
+
+                    TaskContext tc = new TaskContext(pc);
+                    task.execute(tc);
+                    if(tc.hasError())
+                        out.write(tc.getErrorMessage());
+                    else if(tc.hasResultMessage())
+                        out.write(tc.getResultMessage());
+                }
+                catch (TaskExecuteException e)
+                {
+                    throw new ServletException(e);
+                }
+            }
+            else
+                manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null);
             out.write(si.getDebugHtml(pc));
-            manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null);
         }
         catch(Exception e)
         {
