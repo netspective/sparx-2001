@@ -51,28 +51,24 @@
  */
 
 /**
- * $Id: SchemaImportHandler.java,v 1.3 2002-10-08 11:10:04 shahid.shah Exp $
+ * $Id: SchemaImportHandler.java,v 1.4 2002-12-04 17:56:37 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
 
-import java.util.List;
-import java.util.Stack;
-import java.text.ParseException;
-import java.sql.SQLException;
-
-import javax.naming.NamingException;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.Locator;
-
+import com.netspective.sparx.xif.dal.Row;
 import com.netspective.sparx.xif.dal.Schema;
 import com.netspective.sparx.xif.dal.Table;
-import com.netspective.sparx.xif.dal.Row;
 import com.netspective.sparx.xif.dal.TableImportStatistic;
+import com.netspective.sparx.xif.dal.validation.ValidationException;
+import com.netspective.sparx.xif.dal.validation.result.RowValidationResult;
+import org.xml.sax.*;
+
+import javax.naming.NamingException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Handler for all tables/rows.
@@ -80,7 +76,7 @@ import com.netspective.sparx.xif.dal.TableImportStatistic;
 public class SchemaImportHandler implements ContentHandler
 {
     static public final String ATTRNAME_SQL_EXPR = "_sql-expr";
-    static public final String ATTRNAME_FORMAT   = "_format";
+    static public final String ATTRNAME_FORMAT = "_format";
 
     private class NodeStackEntry
     {
@@ -126,15 +122,26 @@ public class SchemaImportHandler implements ContentHandler
             return isSqlExpr;
         }
 
-        public void write() throws NamingException, SQLException
+        public void write() throws NamingException, SQLException, ValidationException
         {
-            if(! written && row != null)
+            if (!written && row != null)
             {
-                written = true;
-                Table table = row.getTable();
-                table.insert(parseContext.getConnectionContext(), row);
-                TableImportStatistic tis = parseContext.getStatistics(table);
-                tis.incSuccessfulRows();
+                RowValidationResult rvResult = row.getValidationResult();
+
+                if (rvResult.isValid())
+                {
+                    written = true;
+                    Table table = row.getTable();
+                    table.insert(parseContext.getConnectionContext(), row);
+                    TableImportStatistic tis = parseContext.getStatistics(table);
+                    tis.incSuccessfulRows();
+                }
+                else
+                {
+                    written = false;
+                    ValidationException exception = new ValidationException(rvResult);
+                    parseContext.addError("<b>Validation Error!</b><br>" + exception.getHtmlMessage());
+                }
             }
         }
     }
@@ -153,11 +160,11 @@ public class SchemaImportHandler implements ContentHandler
 
     public void characters(char[] buf, int start, int end) throws SAXParseException
     {
-        if(nodeStack.size() == 0)
+        if (nodeStack.size() == 0)
             return;
 
         NodeStackEntry entry = (NodeStackEntry) nodeStack.peek();
-        if(! entry.isColumnEntry())
+        if (!entry.isColumnEntry())
             return;
 
         try
@@ -165,7 +172,7 @@ public class SchemaImportHandler implements ContentHandler
             String text = new String(buf, start, end);
             if (text == null || text.trim().length() == 0)
                 return;
-            if(entry.isSqlExpression())
+            if (entry.isSqlExpression())
                 entry.row.populateSqlExprForXmlNodeName(entry.rowColumnName, text);
             else
                 entry.row.populateDataForXmlNodeName(entry.rowColumnName, text, true);
@@ -183,7 +190,7 @@ public class SchemaImportHandler implements ContentHandler
     public final String getDepthStr()
     {
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < depth; i++)
+        for (int i = 0; i < depth; i++)
             sb.append(" ");
         return sb.toString();
     }
@@ -193,21 +200,21 @@ public class SchemaImportHandler implements ContentHandler
         try
         {
             Schema schema = parseContext.getSchema();
-            if(depth == 0)
+            if (depth == 0)
             {
                 // root node, do nothing
                 nodeStack.push(new NodeStackEntry(qName, depth));
             }
-            else if(depth == 1)
+            else if (depth == 1)
             {
                 // all the primary (top level) row inserts are done as single transactions and all children of
                 // top-level rows are part of the same transaction
                 parseContext.getConnectionContext().beginTransaction();
                 Table childTable = schema.getTableForXmlNode(qName);
-                if(childTable == null)
+                if (childTable == null)
                 {
                     nodeStack.push(new NodeStackEntry(qName, depth));
-                    parseContext.addError("Table '"+ qName +"' not found in the schema");
+                    parseContext.addError("Table '" + qName + "' not found in the schema");
                 }
                 else
                 {
@@ -216,10 +223,10 @@ public class SchemaImportHandler implements ContentHandler
                     for (int i = 0; i < attributes.getLength(); i++)
                     {
                         String attrName = attributes.getQName(i);
-                        if(! attrName.equals(ATTRNAME_SQL_EXPR))
+                        if (!attrName.equals(ATTRNAME_SQL_EXPR))
                         {
-                            if(! childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
-                                parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                            if (!childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
+                                parseContext.addError("Column '" + attrName + "' not found for attribute in table '" + childRow.getTable().getName() + "'");
                         }
                     }
                 }
@@ -227,11 +234,11 @@ public class SchemaImportHandler implements ContentHandler
             else
             {
                 NodeStackEntry entry = (NodeStackEntry) nodeStack.peek();
-                if(entry.row != null)
+                if (entry.row != null)
                 {
                     // if we're starting a child row, be sure to write out the active entry so that if there
                     // are relational dependencies everything will work
-                    if(entry.row.isValidXmlNodeNameForChildRow(qName))
+                    if (entry.row.isValidXmlNodeNameForChildRow(qName))
                     {
                         entry.write();
                         Row childRow = entry.row.createChildRowForXmlNodeName(qName);
@@ -239,28 +246,28 @@ public class SchemaImportHandler implements ContentHandler
                         for (int i = 0; i < attributes.getLength(); i++)
                         {
                             String attrName = attributes.getQName(i);
-                            if(! attrName.equals(ATTRNAME_SQL_EXPR))
+                            if (!attrName.equals(ATTRNAME_SQL_EXPR))
                             {
-                                if(!childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
-                                    parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                                if (!childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
+                                    parseContext.addError("Column '" + attrName + "' not found for attribute in table '" + childRow.getTable().getName() + "'");
                             }
                         }
                     }
                     else
                     {
-                        if(entry.row.isValidXmlNodeNameForColumn(qName))
+                        if (entry.row.isValidXmlNodeNameForColumn(qName))
                             nodeStack.push("yes".equals(attributes.getValue(ATTRNAME_SQL_EXPR)) ?
-                                            new NodeStackEntry(qName, entry.row, qName, depth, true) :
-                                            new NodeStackEntry(qName, entry.row, qName, depth));
+                                    new NodeStackEntry(qName, entry.row, qName, depth, true) :
+                                    new NodeStackEntry(qName, entry.row, qName, depth));
                         else
                         {
                             nodeStack.push(new NodeStackEntry(qName, depth));
-                            parseContext.addError("Column '"+ qName +"' not found in table '"+ entry.row.getTable().getName() +"'");
+                            parseContext.addError("Column '" + qName + "' not found in table '" + entry.row.getTable().getName() + "'");
                         }
                     }
                 }
                 else
-                    parseContext.addError("Don't know what to do with element '"+ qName +"'");
+                    parseContext.addError("Don't know what to do with element '" + qName + "'");
             }
         }
         catch (NamingException exc)
@@ -273,7 +280,7 @@ public class SchemaImportHandler implements ContentHandler
             {
                 parseContext.getConnectionContext().rollbackActiveTransaction();
             }
-            catch(SQLException se)
+            catch (SQLException se)
             {
                 throw new SAXParseException(exc.getMessage(), parseContext.getLocator(), exc);
             }
@@ -299,12 +306,12 @@ public class SchemaImportHandler implements ContentHandler
         try
         {
             depth--;
-            if(nodeStack.size() > 0)
+            if (nodeStack.size() > 0)
             {
                 NodeStackEntry entry = (NodeStackEntry) nodeStack.pop();
-                if(entry != null && ! entry.isColumnEntry() && entry.row != null)
+                if (entry != null && !entry.isColumnEntry() && entry.row != null)
                     entry.write();
-                if(entry.depth == 1)
+                if (entry.depth == 1)
                     parseContext.getConnectionContext().commitActiveTransaction();
             }
         }
@@ -312,13 +319,13 @@ public class SchemaImportHandler implements ContentHandler
         {
             throw new SAXParseException(exc.getMessage(), parseContext.getLocator(), exc);
         }
-        catch(SQLException se)
+        catch (SQLException se)
         {
             try
             {
                 parseContext.getConnectionContext().rollbackActiveTransaction();
             }
-            catch(SQLException se2)
+            catch (SQLException se2)
             {
                 throw new SAXParseException(se2.getMessage(), parseContext.getLocator(), se2);
             }
