@@ -33,6 +33,7 @@ public class DatabaseSqlPage extends AceServletPage
 			ServletContext context = pc.getServletContext();
 			StatementManager manager = StatementManagerFactory.getManager(context);
 			manager.updateExecutionStatistics();
+			manager.addMetaInfoOptions();
 			transform(pc, manager.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "sql-browser-xsl");
 		}
 	}

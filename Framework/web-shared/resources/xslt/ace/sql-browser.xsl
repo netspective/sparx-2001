@@ -39,7 +39,22 @@
 						<xsl:sort select="@qualified-name"/>
 					</xsl:apply-templates>
 				</table>
-					
+
+				<div class="content_head">Options</div>
+				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
+					<tr class="data_table_header">
+						<th class="data_table">Name</th>
+						<th class="data_table">Value</th>
+					</tr>
+					<xsl:for-each select="meta-info/options">
+						<xsl:sort select="@name"/>
+						<tr valign="top" class="data_table">
+							<td class="data_table"><xsl:value-of select="@name"/></td>
+							<td class="data_table"><font color="green"><xsl:value-of select="@value"/></font></td>
+						</tr>
+					</xsl:for-each>
+				</table>
+						
 				<div class="content_head">Source Files</div>
 				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
 				<tr class="data_table_header">

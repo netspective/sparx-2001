@@ -48,6 +48,7 @@ public class SchemaDocFactory
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
 		ValueContext vc = new ServletValueContext(context, null, null, null);
 		doc = getDoc(appConfig.getValue(vc, "app.schema.source-file"));
+		doc.initializeForServlet(context);
 		context.setAttribute(ATTRNAME_SCHEMADOC, doc);
 		return doc;
 	}

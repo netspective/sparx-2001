@@ -21,6 +21,7 @@ public class AppDialogsPage extends AceServletPage
 	{
 		ServletContext context = pc.getServletContext();
 		DialogManager manager = DialogManagerFactory.getManager(context);
+		manager.addMetaInfoOptions();
 
 		String testItem = getTestCommandItem(pc);
 		if(testItem != null)

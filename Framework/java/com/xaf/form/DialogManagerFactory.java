@@ -86,6 +86,7 @@ public class DialogManagerFactory
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
 		ValueContext vc = new ServletValueContext(context, null, null, null);
 		manager = getManager(appConfig.getValue(vc, "app.ui.source-file"));
+		manager.initializeForServlet(context);
 		context.setAttribute(ATTRNAME_DIALOGMGR, manager);
 		return manager;
 	}

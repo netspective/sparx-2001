@@ -43,6 +43,7 @@ public class StatementManagerFactory
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
 		ValueContext vc = new ServletValueContext(context, null, null, null);
 		manager = getManager(appConfig.getValue(vc, "app.sql.source-file"));
+		manager.initializeForServlet(context);
 		context.setAttribute(ATTRNAME_STATEMENTMGR, manager);
 		return manager;
 	}

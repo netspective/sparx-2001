@@ -34,6 +34,7 @@ public class AccessControlListFactory
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
 		ValueContext vc = new ServletValueContext(context, null, null, null);
 		acl = getACL(appConfig.getValue(vc, "app.security.acl-file"));
+		acl.initializeForServlet(context);
 		context.setAttribute(ATTRNAME_ACL, acl);
 		return acl;
 	}

@@ -21,15 +21,10 @@ public class DatabaseSchemaDocPage extends AceServletPage
 	public final String getCaption(PageContext pc) { return "Schema (XML)"; }
 	public final String getHeading(PageContext pc) { return "Database Schema (XML Source)"; }
 
-	public SchemaDocument getSchemaDocument(PageContext pc)
-	{
-		Configuration appConfig = ((PageControllerServlet) pc.getServlet()).getAppConfig();
-		return SchemaDocFactory.getDoc(appConfig.getValue(pc, "app.schema.source-file"));
-	}
-
 	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
-		SchemaDocument schema = getSchemaDocument(pc);
+		SchemaDocument schema = SchemaDocFactory.getDoc(pc.getServletContext());
+		schema.addMetaInfoOptions();
 		transform(pc, schema.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "schema-browser-xsl");
 	}
 }

@@ -38,7 +38,8 @@ public class HomePage extends AceServletPage
 			out.print("							<tr>");
 			out.print("								<td valign='middle' align='right' class='list'>");
 			out.print("									<div align='right'>");
-			out.print("										<span class='dialog_control'><b>"+ BuildConfiguration.getProductBuild() +"</b><br>");
+			out.print("										<span class='dialog_control'><b>"+ com.xaf.config.ConfigurationManagerFactory.getExecutionEvironmentName(pc.getServletContext()) + " </b>Environment<b><br>" +
+														    BuildConfiguration.getProductBuild() +"</b><br>");
 			out.print("											");
 			out.print("											 by Netspective Corp.</span></div>");
 			out.print("								</td>");

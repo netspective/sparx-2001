@@ -59,6 +59,7 @@ public class AppConfigurationPage extends AceServletPage
 
 		ConfigurationManager manager = ConfigurationManagerFactory.getManager(context);
 		configItemsElem.setAttribute("source-file", manager.getSourceDocument().getFile().getAbsolutePath());
+		configItemsElem.setAttribute("allow-reload", manager.getAllowReload() ? "Yes" : "No");
 
 		Configuration defaultConfig = manager.getDefaultConfiguration();
 		for(Iterator i = defaultConfig.entrySet().iterator(); i.hasNext(); )

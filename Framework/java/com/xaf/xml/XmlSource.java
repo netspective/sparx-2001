@@ -12,6 +12,8 @@ package com.xaf.xml;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import javax.servlet.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 
@@ -50,7 +52,18 @@ public class XmlSource
 	protected SourceInfo docSource;
 	protected Hashtable sourceFiles = new Hashtable();
 	protected Document xmlDoc;
+	protected Element metaInfoElem;
+	protected Element metaInfoOptionsElem;
 	protected Set inheritanceHistorySet = new HashSet();
+
+	public boolean getAllowReload() { return allowReload; }
+	public void setAllowReload(boolean value) { allowReload = value; }
+
+	public void initializeForServlet(ServletContext servletContext)
+	{
+		if(com.xaf.config.ConfigurationManagerFactory.isProductionOrTestEnvironment(servletContext))
+			setAllowReload(false);
+	}
 
     /**
      * returns the boolean equivalent of a string, which is considered true
@@ -262,13 +275,26 @@ public class XmlSource
         }
     }
 
+	public void addMetaInfoOptions()
+	{
+		if(metaInfoOptionsElem != null)
+		    metaInfoElem.removeChild(metaInfoOptionsElem);
+
+	    metaInfoOptionsElem = xmlDoc.createElement("options");
+		metaInfoOptionsElem.setAttribute("name", "Allow reload");
+		metaInfoOptionsElem.setAttribute("value", (allowReload ? "Yes" : "No"));
+		metaInfoElem.appendChild(metaInfoOptionsElem);
+	}
+
 	public void addMetaInformation()
 	{
-		Element metaElem = xmlDoc.createElement("meta-info");
-		xmlDoc.getDocumentElement().appendChild(metaElem);
+		metaInfoElem = xmlDoc.createElement("meta-info");
+		xmlDoc.getDocumentElement().appendChild(metaInfoElem);
+
+		addMetaInfoOptions();
 
 		Element filesElem = xmlDoc.createElement("source-files");
-		metaElem.appendChild(filesElem);
+		metaInfoElem.appendChild(filesElem);
 
 		for(Iterator sfi = sourceFiles.values().iterator(); sfi.hasNext(); )
 		{
@@ -283,7 +309,7 @@ public class XmlSource
 		if(errors.size() > 0)
 		{
 			Element errorsElem = xmlDoc.createElement("errors");
-	    	metaElem.appendChild(errorsElem);
+	    	metaInfoElem.appendChild(errorsElem);
 
 			for(Iterator ei = errors.iterator(); ei.hasNext(); )
 			{
@@ -305,6 +331,8 @@ public class XmlSource
 		{
 			errors.clear();
 			sourceFiles.clear();
+			metaInfoElem = null;
+			metaInfoOptionsElem = null;
 		}
 
 		SourceInfo sourceInfo = new SourceInfo(docSource, file);

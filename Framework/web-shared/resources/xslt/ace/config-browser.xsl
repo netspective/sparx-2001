@@ -16,6 +16,7 @@
 <xsl:template match="xaf/config-items">
 	<div class="page_source">
 		Source: <xsl:value-of select="@source-file"/>
+		(Allow reload: <xsl:value-of select="@allow-reload"/>)
 	</div>
 
 	<div class="content">
@@ -53,8 +54,8 @@
 			</xsl:for-each>
 			</xsl:if>
 		</xsl:for-each>
-	</table>
-	</div>
+	</table>	
+	</div>	
 </xsl:template>
 
 </xsl:stylesheet>

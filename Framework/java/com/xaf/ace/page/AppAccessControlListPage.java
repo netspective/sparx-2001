@@ -22,6 +22,7 @@ public class AppAccessControlListPage extends AceServletPage
 	{
 		ServletContext context = pc.getServletContext();
 		AccessControlList acl = AccessControlListFactory.getACL(context);
+		acl.addMetaInfoOptions();
 		transform(pc, acl.getDocument(), ACE_CONFIG_ITEMS_PREFIX + "acl-browser-xsl");
 	}
 }

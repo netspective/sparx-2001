@@ -9,6 +9,7 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 import com.xaf.ace.*;
+import com.xaf.config.*;
 import com.xaf.form.*;
 import com.xaf.page.*;
 import com.xaf.skin.*;
@@ -39,12 +40,36 @@ public class AppInitParamsPage extends AceServletPage
 		doc.appendChild(rootElem);
 
 		Element propertiesElem = doc.createElement("properties");
+		propertiesElem.setAttribute("name", "Execution Environment");
+		rootElem.appendChild(propertiesElem);
+
+		Element propertyElem = doc.createElement("property");
+		addText(propertyElem, "name", "Is Production Environment");
+		addText(propertyElem, "value", ConfigurationManagerFactory.isProductionEnvironment(context) ? "Yes" : "No");
+		propertiesElem.appendChild(propertyElem);
+
+		propertyElem = doc.createElement("property");
+		addText(propertyElem, "name", "Is Production or Testing Environment");
+		addText(propertyElem, "value", ConfigurationManagerFactory.isProductionOrTestEnvironment(context) ? "Yes" : "No");
+		propertiesElem.appendChild(propertyElem);
+
+		propertyElem = doc.createElement("property");
+		addText(propertyElem, "name", "Is Testing Environment");
+		addText(propertyElem, "value", ConfigurationManagerFactory.isTestEnvironment(context) ? "Yes" : "No");
+		propertiesElem.appendChild(propertyElem);
+
+		propertyElem = doc.createElement("property");
+		addText(propertyElem, "name", "Is Development Environment");
+		addText(propertyElem, "value", ConfigurationManagerFactory.isDevelopmentEnvironment(context) ? "Yes" : "No");
+		propertiesElem.appendChild(propertyElem);
+
+		propertiesElem = doc.createElement("properties");
 		propertiesElem.setAttribute("name", "Init Parameters");
 		rootElem.appendChild(propertiesElem);
 
 		for(Enumeration e = context.getInitParameterNames(); e.hasMoreElements(); )
 		{
-			Element propertyElem = doc.createElement("property");
+			propertyElem = doc.createElement("property");
 			String paramName = (String) e.nextElement();
 			addText(propertyElem, "name", paramName);
 			addText(propertyElem, "value", context.getInitParameter(paramName));
@@ -55,7 +80,7 @@ public class AppInitParamsPage extends AceServletPage
 		propertiesElem.setAttribute("name", "Libraries");
 		rootElem.appendChild(propertiesElem);
 
-		Element propertyElem = doc.createElement("property");
+		propertyElem = doc.createElement("property");
 		addText(propertyElem, "name", "XML Document Builder Factory");
 		addText(propertyElem, "value", javax.xml.parsers.DocumentBuilderFactory.newInstance().getClass().getName());
 		propertiesElem.appendChild(propertyElem);
