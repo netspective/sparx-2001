@@ -27,6 +27,9 @@ public class ValueSourceFactory
 		srcClasses.put("schema-tables", SchemaDocTablesListValue.class);
         srcClasses.put("generate-id", GenerateIdValue.class);
         srcClasses.put("system-property", SystemPropertyValue.class);
+        srcClasses.put("servlet-context-init-param", ServletContextInitParamValue.class);
+        srcClasses.put("servlet-context-path", ServletContextPathValue.class);
+        srcClasses.put("create-app-url", ServletContextUriValue.class);
         defaultsAvailable = true;
     }
 

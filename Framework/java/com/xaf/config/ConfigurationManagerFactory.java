@@ -17,6 +17,8 @@ import javax.servlet.http.*;
 
 public class ConfigurationManagerFactory
 {
+	private static final String CONFIGMGR_ATTR_NAME = "framework.config-mgr";
+	private static final String APPCONFIG_ATTR_NAME = "framework.app-config";
 	private static Map managers = new Hashtable();
 
 	public static ConfigurationManager getManager(String file)
@@ -32,9 +34,27 @@ public class ConfigurationManagerFactory
 
 	public static ConfigurationManager getManager(ServletContext context)
 	{
-		String configFile = context.getInitParameter("config-file");
+		ConfigurationManager manager = (ConfigurationManager) context.getAttribute(CONFIGMGR_ATTR_NAME);
+		if(manager != null)
+			return manager;
+
+		String configFile = context.getInitParameter("framework.config-file");
 		if(configFile == null)
 			configFile = "WEB-INF/configuration.xml";
-		return getManager(context.getRealPath(configFile));
+		manager = getManager(context.getRealPath(configFile));
+		context.setAttribute(CONFIGMGR_ATTR_NAME, manager);
+		context.setAttribute(APPCONFIG_ATTR_NAME, manager.getDefaultConfiguration());
+		return manager;
+	}
+
+	public static Configuration getDefaultConfiguration(ServletContext context)
+	{
+		Configuration config = (Configuration) context.getAttribute(APPCONFIG_ATTR_NAME);
+		if(config != null)
+			return config;
+
+		// when we call getManager(context) it will automatically set the APPCONFIG attribute
+		getManager(context);
+		return (Configuration) context.getAttribute(APPCONFIG_ATTR_NAME);
 	}
 }

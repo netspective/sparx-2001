@@ -14,27 +14,29 @@ import com.xaf.value.*;
 
 abstract public class AbstractProperty implements Property
 {
+	private long flags;
 	private String name;
 	private String expression;
-	private boolean hasReplacements;
+	private String description;
 
     public AbstractProperty()
     {
     }
 
-	public boolean isDynamic()
-	{
-		return false;
-	}
+	public final long getFlags() { return flags; }
+	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }
+	public final void setFlag(long flag) { flags |= flag; }
+	public final void clearFlag(long flag) { flags &= ~flag; }
 
 	public boolean hasReplacements()
 	{
-		return hasReplacements;
+		return (flags & PROPFLAG_HAS_REPLACEMENTS) == 0 ? false : true;
 	}
 
-	public void setHasReplacements(boolean value)
+	public void setFinalValue(String value)
 	{
-		hasReplacements = value;
+		setFlag(PROPFLAG_IS_FINAL);
+		clearFlag(PROPFLAG_HAS_REPLACEMENTS);
 	}
 
 	public String getName()
@@ -57,10 +59,20 @@ abstract public class AbstractProperty implements Property
 		expression = expr;
 	}
 
+	public String getDescription()
+	{
+		return description;
+	}
+
 	abstract public String getValue(ValueContext vc);
 
 	public void importFromXml(Element elem)
 	{
 		name = elem.getAttribute("name");
+		if(elem.getAttribute("final").equals("yes"))
+			setFlag(PROPFLAG_FINALIZE_ON_FIRST_GET);
+		String descr = elem.getAttribute("descr");
+		if(descr.length() > 0)
+			description = descr;
 	}
 }

@@ -132,7 +132,8 @@
 								<xsd:complexType>
 									<xsd:attribute name="name" type="xsd:string" use="required"/>
 									<xsd:attribute name="value" type="xsd:string" use="optional"/>
-									<xsd:attribute name="value-source" type="single-value-source" use="optional"/>
+									<xsd:attribute name="final" type="yes-no-enum" use="optional" value="no"/>
+									<xsd:attribute name="descr" type="xsd:string" use="optional"/>
 								</xsd:complexType>
 							</xsd:element>
 						</xsd:choice>

@@ -6,6 +6,14 @@ import com.xaf.value.*;
 
 public class Configuration extends HashMap
 {
+	static public class ReplacementInfo
+	{
+		public StringBuffer result = new StringBuffer();
+		public int dynamicReplacementsCount;
+
+		public boolean isFinal() { return dynamicReplacementsCount == 0 ? true : false; }
+	}
+
 	public final static String REPLACEMENT_PREFIX = "${";
 	private String name;
 
@@ -24,10 +32,15 @@ public class Configuration extends HashMap
 	}
 
     /** Replace ${NAME} with the property value
+	 *  and keep track of whether there are any "dynamic" values that are within
+	 *  the property. As a property replacement value becomes final (only replacements
+	 *  with other static values) replace the expression with a specific value.
      */
-    public String replaceProperties(ValueContext vc, String value)
+    public ReplacementInfo replaceProperties(ValueContext vc, String value)
     {
-        StringBuffer sb = new StringBuffer();
+		ReplacementInfo ri = new ReplacementInfo();
+
+        StringBuffer sb = ri.result;
         int i = 0;
         int prev = 0;
 
@@ -45,12 +58,12 @@ public class Configuration extends HashMap
             }
             else if (value.charAt( pos + 1 ) != '{')
 			{
-                sb.append( value.charAt( pos + 1 ) );
+                sb.append(value.charAt(pos + 1));
                 prev=pos+2;
             }
 			else
 			{
-                int endName=value.indexOf( '}', pos );
+                int endName=value.indexOf('}', pos);
                 if( endName < 0 )
 				{
                     throw new RuntimeException("Syntax error in prop: " + value);
@@ -59,7 +72,14 @@ public class Configuration extends HashMap
 				Property property = (Property) get(expression);
 				if(property != null)
 				{
-                    sb.append(property.hasReplacements() ? replaceProperties(vc, property.getValue(vc)) : property.getValue(vc));
+					ReplacementInfo subRi = replaceProperties(vc, property.getValue(vc));
+					if(subRi.isFinal())
+						property.setFinalValue(subRi.result.toString());
+					else if(property.flagIsSet(Property.PROPFLAG_FINALIZE_ON_FIRST_GET))
+						property.setFinalValue(subRi.result.toString());
+					else
+						ri.dynamicReplacementsCount += subRi.dynamicReplacementsCount;
+                    sb.append(subRi.result);
 				}
 				else
 				{
@@ -68,6 +88,7 @@ public class Configuration extends HashMap
 						sb.append(vs.getValueOrBlank(vc));
 					else
 		                sb.append("${" + expression + "}");
+					ri.dynamicReplacementsCount++;
 				}
 
                 prev=endName+1;
@@ -75,7 +96,7 @@ public class Configuration extends HashMap
         }
 
         if(prev < value.length()) sb.append(value.substring(prev));
-        return sb.toString();
+        return ri;
     }
 
 	public String getValue(ValueContext vc, String name)
@@ -85,7 +106,15 @@ public class Configuration extends HashMap
 		{
 		    String value = property.getValue(vc);
 			if(property.hasReplacements())
-				return replaceProperties(vc, value);
+			{
+				ReplacementInfo ri = replaceProperties(vc, value);
+				String result = ri.result.toString();
+				if(ri.isFinal())
+					property.setFinalValue(result);
+				else if(property.flagIsSet(Property.PROPFLAG_FINALIZE_ON_FIRST_GET))
+					property.setFinalValue(result);
+				return result;
+			}
 			else
 				return value;
 		}
@@ -113,15 +142,17 @@ public class Configuration extends HashMap
 			if(childName.equals("property"))
 			{
 				Element propertyElem = (Element) childNode;
-
-				Property prop = null;
-				if(propertyElem.getAttribute("value").length() > 0)
-				    prop = new StaticProperty();
-				else if(propertyElem.getAttribute("value-source").length() > 0)
-					prop = new ValueSourceProperty();
-
-				prop.importFromXml(propertyElem);
-				put(prop.getName(), prop);
+				String propType = propertyElem.getAttribute("type");
+				if(propType.length() == 0 || propType.equals("text"))
+				{
+					Property prop = new StringProperty();
+					prop.importFromXml(propertyElem);
+					put(prop.getName(), prop);
+				}
+				else
+				{
+					manager.addError("Unknown property type '"+propType+"'");
+				}
 			}
 		}
 	}

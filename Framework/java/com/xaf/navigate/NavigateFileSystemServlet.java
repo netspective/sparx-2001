@@ -5,14 +5,18 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
 
+import com.xaf.config.*;
 import com.xaf.form.*;
 import com.xaf.security.*;
 import com.xaf.skin.*;
+import com.xaf.value.*;
 
 public class NavigateFileSystemServlet extends HttpServlet implements FilenameFilter
 {
     private static final String CONTENT_TYPE = "text/html";
 
+	protected ConfigurationManager manager;
+	protected Configuration appConfig;
 	protected String skinJspPageName;
 	protected String rootPath;
 	protected String rootURL;
@@ -28,10 +32,18 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 		loginDialog = new LoginDialog();
 
 		ServletContext context = config.getServletContext();
-		skinJspPageName = context.getInitParameter("navigate.skin-jsp");
-		rootURL = context.getInitParameter("navigate.root-url");
-		rootPath = context.getInitParameter("navigate.root-path");
-		rootCaption = context.getInitParameter("navigate.root-caption");
+		manager = ConfigurationManagerFactory.getManager(context);
+		if(manager == null)
+			throw new ServletException("Unable to obtain a ConfigurationManager");
+		appConfig = manager.getDefaultConfiguration();
+		if(appConfig == null)
+			throw new ServletException("Unable to obtain the default Configuration");
+
+		ValueContext vc = new ServletValueContext(null, null, context);
+		skinJspPageName = appConfig.getValue(vc, "app.navigate.skin-jsp");
+		rootURL = appConfig.getValue(vc, "app.navigate.root-url");
+		rootPath = appConfig.getValue(vc, "app.navigate.root-path");
+		rootCaption = appConfig.getValue(vc, "app.navigate.root-caption");
 
 		excludeEntryNames.add(skinJspPageName);
 		excludeEntryNames.add("WEB-INF");

@@ -15,8 +15,12 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import com.xaf.config.*;
+import com.xaf.value.*;
+
 public class StatementManagerFactory
 {
+	static final String ATTRNAME_STATEMENTMGR = "framework.statement-mgr";
 	private static Map managers = new Hashtable();
 
 	public static StatementManager getManager(String file)
@@ -32,6 +36,14 @@ public class StatementManagerFactory
 
 	public static StatementManager getManager(ServletContext context)
 	{
-		return getManager(context.getRealPath(context.getInitParameter("sql-statements-file")));
+		StatementManager manager = (StatementManager) context.getAttribute(ATTRNAME_STATEMENTMGR);
+		if(manager != null)
+			return manager;
+
+		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
+		ValueContext vc = new ServletValueContext(null, null, context);
+		manager = getManager(appConfig.getValue(vc, "app.sql.source-file"));
+		context.setAttribute(ATTRNAME_STATEMENTMGR, manager);
+		return manager;
 	}
 }

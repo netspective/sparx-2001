@@ -113,13 +113,23 @@
 		</xsl:for-each>
 	</table>
 	<h1>Configuration Properties</h1>
-	<table>
+	<table cellspacing="0" cellpadding="2">
+		<tr bgcolor="beige">
+			<th>Name</th>
+			<th>Value</th>
+			<th>Expression</th>
+			<th>Final</th>
+		</tr>
+		<tr><td colspan="4"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		<xsl:for-each select="context/config-items/*">
 			<xsl:sort select="name"/>
 			<tr>
-				<td class="param_name"><xsl:value-of select="name"/>:</td>
-				<td class="param_value"><xsl:value-of select="value"/></td>
+				<td><xsl:value-of select="name"/></td>
+				<td><font color="green"><xsl:value-of select="value"/></font></td>
+				<td><font color="red"><xsl:value-of select="expression"/></font></td>
+				<td><font color="red"><xsl:value-of select="final"/></font></td>
 			</tr>
+			<tr><td colspan="4"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$images-root-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 		</xsl:for-each>
 	</table>
 	<h1>Data Sources</h1>

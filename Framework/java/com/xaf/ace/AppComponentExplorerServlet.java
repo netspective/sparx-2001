@@ -26,20 +26,22 @@ public class AppComponentExplorerServlet extends HttpServlet
     private static final String CONTENT_TYPE = "text/html";
 
 	private Map appAreaElemsMap = new Hashtable();
+	private ConfigurationManager manager;
+	private Configuration appConfig;
 	private Document appComponents;
 	private Element rootElem;
 	private Element contextElem;
 	private Hashtable styleSheetParams = new Hashtable();
-	private String aceStyleSheet;
+	private String aceHomeStyleSheet;
 	private SchemaGeneratorDialog dialog;
 
-	public class GenerateOptions
+	public class GenerateDDLOptions
 	{
 		String[] tableNames;
 		int generatingItems;
 		boolean[] generate = new boolean[SchemaGeneratorSkin.GENERATE_ITEMS_COUNT];
 
-		public GenerateOptions(DialogContext dc, SchemaDocument schema)
+		public GenerateDDLOptions(DialogContext dc, SchemaDocument schema)
 		{
 			int tablesOption = Integer.parseInt(dc.getValue("tables_option"));
 			if(tablesOption == 0)
@@ -47,13 +49,13 @@ public class AppComponentExplorerServlet extends HttpServlet
 			else
 				tableNames = dc.getValues("tables");
 
-			String[] generateOptions = dc.getValues("generate_options");
-			if(generateOptions != null)
+			String[] GenerateDDLOptions = dc.getValues("generate_options");
+			if(GenerateDDLOptions != null)
 			{
-				generatingItems = generateOptions.length;
+				generatingItems = GenerateDDLOptions.length;
 				for(int i = 0; i < generatingItems; i++)
 				{
-					int option = Integer.parseInt(generateOptions[i]);
+					int option = Integer.parseInt(GenerateDDLOptions[i]);
 					generate[option] = true;
 				}
 			}
@@ -64,8 +66,15 @@ public class AppComponentExplorerServlet extends HttpServlet
     {
         super.init(config);
 		ServletContext context = config.getServletContext();
-		aceStyleSheet = context.getInitParameter("ace.browser-xsl");
+		manager = ConfigurationManagerFactory.getManager(context);
+		if(manager == null)
+			throw new ServletException("Unable to obtain a ConfigurationManager");
+		appConfig = manager.getDefaultConfiguration();
+		if(appConfig == null)
+			throw new ServletException("Unable to obtain the default Configuration");
 
+		ValueContext vc = new ServletValueContext(null, null, context);
+		aceHomeStyleSheet = appConfig.getValue(vc, "app.ace.browse-xsl");
 		try
 		{
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -114,12 +123,11 @@ public class AppComponentExplorerServlet extends HttpServlet
 		contextElem.appendChild(configItemsElem);
 		ConfigurationManager manager = ConfigurationManagerFactory.getManager(context);
 		Element itemElem = appComponents.createElement("config-item");
-		addText(itemElem, "name", "source-file");
+		addText(itemElem, "name", "app.config.source-file");
 		addText(itemElem, "value", manager.getSourceDocument().getFile().getAbsolutePath());
 		configItemsElem.appendChild(itemElem);
 
 		Configuration defaultConfig = manager.getDefaultConfiguration();
-		ValueContext vc = new ServletValueContext(null, null, context);
 		for(Iterator i = defaultConfig.entrySet().iterator(); i.hasNext(); )
 		{
 			itemElem = appComponents.createElement("config-item");
@@ -128,10 +136,15 @@ public class AppComponentExplorerServlet extends HttpServlet
 			Property property = (Property) configEntry.getValue();
 			String expression = property.getExpression();
 			String value = defaultConfig.getValue(vc, property.getName());
-			if(expression.equals(value))
-				addText(itemElem, "value", value);
-			else
-				addText(itemElem, "value", value + " (" + expression + ")");
+			addText(itemElem, "value", value);
+			if(! expression.equals(value))
+			{
+				addText(itemElem, "expression", expression);
+				if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
+					addText(itemElem, "final", "no");
+			}
+			if(property.getDescription() != null)
+				addText(itemElem, "description", property.getDescription());
 			configItemsElem.appendChild(itemElem);
 		}
 
@@ -176,14 +189,15 @@ public class AppComponentExplorerServlet extends HttpServlet
 		parent.appendChild(elemNode);
 	}
 
-    public void doGenerate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    public void doGenerateDDL(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         PrintWriter out = response.getWriter();
 		if(dialog == null)
 			dialog = new SchemaGeneratorDialog();
 
 		ServletContext context = getServletContext();
-		SchemaDocument schema = SchemaDocFactory.getDoc(context.getInitParameter("schema.file"));
+		ValueContext vc = new ServletValueContext(request, response, context);
+		SchemaDocument schema = SchemaDocFactory.getDoc(appConfig.getValue(vc, "app.schema.source-file"));
 
 		out.write("<table class='heading' border='0' cellspacing='0' cellpadding='5'><tr class='heading'><td class='heading'>Generate DDL</td></tr>");
 		out.write("<tr class='heading_rule'><td height='1' colspan='2'></td></tr><table>");
@@ -198,13 +212,13 @@ public class AppComponentExplorerServlet extends HttpServlet
 			return;
 		}
 
-		GenerateOptions generateOptions = new GenerateOptions(dc, schema);
-		if(generateOptions.tableNames == null || generateOptions.tableNames.length == 0)
+		GenerateDDLOptions GenerateDDLOptions = new GenerateDDLOptions(dc, schema);
+		if(GenerateDDLOptions.tableNames == null || GenerateDDLOptions.tableNames.length == 0)
 		{
 			out.write("No tables selected.");
 			return;
 		}
-		if(generateOptions.generatingItems == 0)
+		if(GenerateDDLOptions.generatingItems == 0)
 		{
 			out.write("No generate items selected.");
 			return;
@@ -215,10 +229,10 @@ public class AppComponentExplorerServlet extends HttpServlet
 
 		for(int generateItem = 0; generateItem < SchemaGeneratorSkin.GENERATE_ITEMS_COUNT; generateItem++)
 		{
-			if(! generateOptions.generate[generateItem])
+			if(! GenerateDDLOptions.generate[generateItem])
 				continue;
 
-			String[] tableNames = generateOptions.tableNames;
+			String[] tableNames = GenerateDDLOptions.tableNames;
 			Map tableElems = schema.getTables();
 			for(int i = 0; i < tableNames.length; i++)
 			{
@@ -238,8 +252,9 @@ public class AppComponentExplorerServlet extends HttpServlet
 	public void doSchema(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		ServletContext context = getServletContext();
-		SchemaDocument schema = SchemaDocFactory.getDoc(context.getInitParameter("schema.file"));
-		String styleSheet = context.getInitParameter("ace.schema-browser-xsl");
+		ValueContext vc = new ServletValueContext(request, response, context);
+		SchemaDocument schema = SchemaDocFactory.getDoc(appConfig.getValue(vc, "app.schema.source-file"));
+		String styleSheet = appConfig.getValue(vc, "app.ace.schema-browser-xsl");
 
         PrintWriter out = response.getWriter();
 		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + "/schema");
@@ -250,7 +265,8 @@ public class AppComponentExplorerServlet extends HttpServlet
 	{
 		ServletContext context = getServletContext();
 		DialogManager manager = DialogManagerFactory.getManager(context);
-		String styleSheet = context.getInitParameter("ace.ui-browser-xsl");
+		ValueContext vc = new ServletValueContext(request, response, context);
+		String styleSheet = appConfig.getValue(vc, "app.ace.ui-browser-xsl");
 
         PrintWriter out = response.getWriter();
 		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + "/ui");
@@ -261,7 +277,8 @@ public class AppComponentExplorerServlet extends HttpServlet
 	{
 		ServletContext context = getServletContext();
 		StatementManager manager = StatementManagerFactory.getManager(context);
-		String styleSheet = context.getInitParameter("ace.sql-browser-xsl");
+		ValueContext vc = new ServletValueContext(request, response, context);
+		String styleSheet = appConfig.getValue(vc, "app.ace.sql-browser-xsl");
 
         PrintWriter out = response.getWriter();
 		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + "/sql");
@@ -345,7 +362,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		ServletContext context = getServletContext();
 
 		String area = null, command = null, commandParam = null, commandSubParam = null;
-		String styleSheet = aceStyleSheet;
+		String styleSheet = aceHomeStyleSheet;
 		styleSheetParams.clear();
 		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath());
 		styleSheetParams.put("test-url", request.getContextPath() + request.getServletPath() + "/test");
@@ -421,14 +438,15 @@ public class AppComponentExplorerServlet extends HttpServlet
 		else
 		{
 			out.write(Transform.nodeToString(styleSheet, appComponents, styleSheetParams));
+			ValueContext vc = new ServletValueContext(request, response, context);
 			if("javadoc".equals(area))
-				response.sendRedirect(context.getInitParameter("ace.javadoc-url"));
+				response.sendRedirect(appConfig.getValue(vc, "app.ace.javadoc-url"));
 			else if("tagdoc".equals(area))
-				response.sendRedirect(context.getInitParameter("ace.tagdoc-url"));
+				response.sendRedirect(appConfig.getValue(vc, "app.ace.tagdoc-url"));
 			else if("schema".equals(area))
 				doSchema(request, response);
 			else if("ddl".equals(area))
-				doGenerate(request, response);
+				doGenerateDDL(request, response);
 			else if("ui".equals(area))
 				doUI(request, response);
 			else if("sql".equals(area))

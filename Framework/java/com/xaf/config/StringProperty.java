@@ -12,15 +12,15 @@ package com.xaf.config;
 import org.w3c.dom.*;
 import com.xaf.value.*;
 
-public class StaticProperty extends AbstractProperty
+public class StringProperty extends AbstractProperty
 {
 	private String value;
 
-	public StaticProperty()
+	public StringProperty()
 	{
 	}
 
-    public StaticProperty(String name, String value)
+    public StringProperty(String name, String value)
     {
 		setName(name);
 		setExpression(value);
@@ -32,12 +32,20 @@ public class StaticProperty extends AbstractProperty
 		return value;
 	}
 
+	public void setFinalValue(String value)
+	{
+		super.setFinalValue(value);
+		this.value = value;
+	}
+
 	public void importFromXml(Element elem)
 	{
 		super.importFromXml(elem);
 		value = elem.getAttribute("value");
 		setExpression(value);
 		if(value.indexOf(Configuration.REPLACEMENT_PREFIX) != -1)
-			setHasReplacements(true);
+			setFlag(PROPFLAG_HAS_REPLACEMENTS);
+		else
+			setFinalValue(value);
 	}
 }

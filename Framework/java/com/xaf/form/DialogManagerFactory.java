@@ -15,8 +15,12 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import com.xaf.config.*;
+import com.xaf.value.*;
+
 public class DialogManagerFactory
 {
+	static final String ATTRNAME_DIALOGMGR = "framework.dialog-mgr";
 	static final String REQPARAMNAME_SOURCE = "dlgsrc";
 	static Hashtable managers = new Hashtable();
 
@@ -33,7 +37,15 @@ public class DialogManagerFactory
 
 	public static DialogManager getManager(ServletContext context)
 	{
-		return getManager(context.getRealPath(context.getInitParameter("dialogs-file")));
+		DialogManager manager = (DialogManager) context.getAttribute(ATTRNAME_DIALOGMGR);
+		if(manager != null)
+			return manager;
+
+		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
+		ValueContext vc = new ServletValueContext(null, null, context);
+		manager = getManager(appConfig.getValue(vc, "app.ui.source-file"));
+		context.setAttribute(ATTRNAME_DIALOGMGR, manager);
+		return manager;
 	}
 
 	public static DialogManager getManager(ServletRequest request, ServletContext context)
