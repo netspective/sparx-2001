@@ -51,10 +51,12 @@
  */
 
 /**
- * $Id: AbstractColumn.java,v 1.7 2002-12-30 18:06:53 shahid.shah Exp $
+ * $Id: AbstractColumn.java,v 1.8 2003-01-08 06:39:36 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
+
+import com.netspective.sparx.xif.dal.validation.result.DataValidationResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -421,5 +423,51 @@ public abstract class AbstractColumn implements Column
         else
             return srcStr;
     }
+
+    public DataValidationResult getValidationResult(int phase, Object data)
+    {
+        DataValidationResult dvResult = null;
+
+        switch (phase)
+        {
+            case Row.PHASE_INSERT:
+                dvResult = getInsertValidationResult(data);
+                break;
+
+            case Row.PHASE_UPDATE:
+                dvResult = getUpdateValidationResult(data);
+                break;
+
+            case Row.PHASE_DELETE:
+                dvResult = getDeleteValidationResult(data);
+                break;
+
+            default:
+                dvResult = getValidationResult(data);
+                break;
+        }
+
+        return dvResult;
+    }
+
+    public DataValidationResult getValidationResult(Object data) {
+        return null;
+    }
+
+    public DataValidationResult getInsertValidationResult(Object data)
+    {
+        return null;
+    }
+
+    public DataValidationResult getUpdateValidationResult(Object data)
+    {
+        return null;
+    }
+
+    public DataValidationResult getDeleteValidationResult(Object data)
+    {
+        return null;
+    }
+
 
 }

@@ -178,7 +178,9 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if>
 <xsl:if test="not(@_gen-create-id = 'autoinc') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setNaturalPrimaryKey(true);
 </xsl:if>
-<xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setRequired(true);
+<xsl:if test="@required = 'yes' or @required = 'application'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setRequired(true);
+</xsl:if>
+<xsl:if test="@required = 'yes' or @required = 'dbms'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setRequiredByDbms(true);
 </xsl:if>
 <xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setUnique(true);
 </xsl:if>

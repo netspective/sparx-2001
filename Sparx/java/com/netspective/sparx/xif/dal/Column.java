@@ -51,10 +51,12 @@
  */
 
 /**
- * $Id: Column.java,v 1.5 2002-12-30 18:06:53 shahid.shah Exp $
+ * $Id: Column.java,v 1.6 2003-01-08 06:39:37 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
+
+import com.netspective.sparx.xif.dal.validation.result.DataValidationResult;
 
 import java.util.List;
 
@@ -252,4 +254,14 @@ public interface Column
     public void setSequencedPrimaryKey(boolean flag);
 
     public void setUnique(boolean flag);
+
+    DataValidationResult getValidationResult(int phase, Object data);
+
+    DataValidationResult getValidationResult(Object data);
+
+    DataValidationResult getInsertValidationResult(Object data);
+
+    DataValidationResult getUpdateValidationResult(Object data);
+
+    DataValidationResult getDeleteValidationResult(Object data);
 }

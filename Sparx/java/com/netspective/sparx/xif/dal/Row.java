@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Row.java,v 1.8 2002-12-30 18:07:27 shahid.shah Exp $
+ * $Id: Row.java,v 1.9 2003-01-08 06:39:37 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -99,6 +99,17 @@ public interface Row
      * Passed into methods when the value of parameters should override servlet attributes.
      */
     public final static int ATTRHANDLE_PARAMSOVERRIDE = 0;
+
+    /**
+     * Passed into getValidation(int phase) to determine the kind of validation that is needed
+     */
+    public final static int PHASE_UNIVERSAL = 0;
+
+    public final static int PHASE_INSERT = 1;
+
+    public final static int PHASE_UPDATE = PHASE_INSERT << 1;
+
+    public final static int PHASE_DELETE = PHASE_UPDATE << 1;
 
     /**
      * Returns the table that this row belongs to
@@ -436,5 +447,13 @@ public interface Row
      * validity checks before a row-wide validity check is done on the data.
      */
     public RowValidationResult getValidationResult();
+
+    public RowValidationResult getValidationResult(int phase);
+
+    public RowValidationResult getInsertValidationResult();
+
+    public RowValidationResult getUpdateValidationResult();
+
+    public RowValidationResult getDeleteValidationResult();
 
 }

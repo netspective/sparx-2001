@@ -51,12 +51,13 @@
  */
 
 /**
- * $Id: Table.java,v 1.6 2002-12-29 17:08:26 shahid.shah Exp $
+ * $Id: Table.java,v 1.7 2003-01-08 06:39:37 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
+import com.netspective.sparx.xaf.sql.DmlStatement;
 
 import javax.naming.NamingException;
 import java.sql.SQLException;
@@ -314,4 +315,6 @@ public interface Table
      * @param whereCondBindParam A single bind parameters that should be bound to the whereCond
      */
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object whereCondBindParam) throws NamingException, SQLException;
+
+    public Row createRow(Row parentRow);
 }

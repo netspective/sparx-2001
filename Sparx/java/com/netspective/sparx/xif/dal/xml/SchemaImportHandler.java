@@ -51,17 +51,16 @@
  */
 
 /**
- * $Id: SchemaImportHandler.java,v 1.7 2003-01-06 20:26:20 shahid.shah Exp $
+ * $Id: SchemaImportHandler.java,v 1.8 2003-01-08 06:39:37 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
 
-import com.netspective.sparx.xif.dal.Row;
-import com.netspective.sparx.xif.dal.Schema;
-import com.netspective.sparx.xif.dal.Table;
-import com.netspective.sparx.xif.dal.TableImportStatistic;
+import com.netspective.sparx.xif.dal.*;
 import com.netspective.sparx.xif.dal.validation.ValidationException;
 import com.netspective.sparx.xif.dal.validation.result.RowValidationResult;
+import com.netspective.sparx.xif.db.DatabasePolicy;
+import com.netspective.sparx.xaf.sql.DmlStatement;
 import org.xml.sax.*;
 
 import javax.naming.NamingException;
@@ -189,7 +188,7 @@ public class SchemaImportHandler implements ContentHandler
         {
             if (!written && row != null)
             {
-                RowValidationResult rvResult = row.getValidationResult();
+                RowValidationResult rvResult = row.getInsertValidationResult();
 
                 if (rvResult.isValid())
                 {

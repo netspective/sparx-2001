@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.13 2002-12-30 18:08:00 shahid.shah Exp $
+ * $Id: AbstractTable.java,v 1.14 2003-01-08 06:39:36 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -91,6 +91,7 @@ public abstract class AbstractTable implements Table
     private Column primaryKey;
     private Column[] requiredColumns;
     private Column[] sequencedColumns;
+    private Column[] parentRefColumns;
 
     static public String convertTableNameForMapKey(String name)
     {
@@ -122,6 +123,7 @@ public abstract class AbstractTable implements Table
     {
         List sequencedCols = new ArrayList();
         List requiredCols = new ArrayList();
+        List parentRefCols = new ArrayList();
 
         for(int i = 0; i < columnsList.size(); i++ )
         {
@@ -137,6 +139,8 @@ public abstract class AbstractTable implements Table
                 sequencedCols.add(column);
             if (column.isRequired() && !column.isSequencedPrimaryKey())
                 requiredCols.add(column);
+            if (column.getForeignKey() instanceof ParentForeignKey)
+                parentRefCols.add(column);
         }
 
         if (allColumns == null)
@@ -147,6 +151,9 @@ public abstract class AbstractTable implements Table
 
         if (requiredCols.size() > 0)
             requiredColumns = (Column[]) requiredCols.toArray(new Column[requiredCols.size()]);
+
+        if (parentRefCols.size() > 0)
+            parentRefColumns = (Column[]) parentRefCols.toArray(new Column[parentRefCols.size()]);
     }
 
     public String getName()
@@ -264,6 +271,11 @@ public abstract class AbstractTable implements Table
     public Column[] getRequiredColumns()
     {
         return requiredColumns;
+    }
+
+    public Column[] getParentRefColumns()
+    {
+        return parentRefColumns;
     }
 
     public Column getPrimaryKeyColumn()
@@ -876,5 +888,23 @@ public abstract class AbstractTable implements Table
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object whereCondBindParam) throws NamingException, SQLException
     {
         return delete(cc, row, whereCond, new Object[]{whereCondBindParam});
+    }
+
+    public Row createRow(Row parentRow)
+    {
+        Row childRow = createRow();
+
+        Column[] parentRefs = getParentRefColumns();
+        if(parentRefs != null)
+        {
+            for(int i = 0; i < parentRefs.length; i++)
+            {
+                Column column = parentRefs[i];
+                ForeignKey fkey = column.getForeignKey();
+                childRow.setDataByColumn(fkey.getSourceColumn(), parentRow.getDataByColumn(fkey.getReferencedColumn()));
+            }
+        }
+
+        return childRow;
     }
 }

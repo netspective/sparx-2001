@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractRow.java,v 1.8 2002-12-30 18:07:27 shahid.shah Exp $
+ * $Id: AbstractRow.java,v 1.9 2003-01-08 06:39:36 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -436,7 +436,7 @@ public abstract class AbstractRow implements Row
     {
         Table childTable = rowTable.getChildTableForXmlNode(nodeName);
         if(childTable != null)
-            return childTable.createRow();
+            return childTable.createRow(this);
         else
             return null;
     }
@@ -688,6 +688,47 @@ public abstract class AbstractRow implements Row
             str.append("\n");
         }
         return str.toString();
+    }
+
+    public RowValidationResult getValidationResult(int phase)
+    {
+        RowValidationResult rvResult = null;
+
+        switch (phase)
+        {
+            case Row.PHASE_INSERT:
+                rvResult = getInsertValidationResult();
+                break;
+
+            case Row.PHASE_UPDATE:
+                rvResult = getUpdateValidationResult();
+                break;
+
+            case Row.PHASE_DELETE:
+                rvResult = getDeleteValidationResult();
+                break;
+
+            default:
+                rvResult = getValidationResult();
+                break;
+        }
+
+        return rvResult;
+    }
+
+    public RowValidationResult getInsertValidationResult()
+    {
+        return null;
+    }
+
+    public RowValidationResult getUpdateValidationResult()
+    {
+        return null;
+    }
+
+    public RowValidationResult getDeleteValidationResult()
+    {
+        return null;
     }
 
 }

@@ -268,7 +268,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 <xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
 		{
-			BasicDataValidationResult bdvResult = table.get<xsl:value-of select="@_gen-method-name"/>Column().getValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
+			BasicDataValidationResult bdvResult = (BasicDataValidationResult) table.get<xsl:value-of select="@_gen-method-name"/>Column().getValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
 			if (null == bdvResult) throw new NullPointerException ("WTH?");
 
 			brvResult.addDataValidationResult(bdvResult);
@@ -278,6 +278,60 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		return brvResult;
 	}
 
+    public RowValidationResult getInsertValidationResult()
+    {
+        boolean status = true;
+        BasicRowValidationResult brvResult = new BasicRowValidationResult();
+
+        <xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+<xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
+        {
+            BasicDataValidationResult bdvResult = (BasicDataValidationResult) table.get<xsl:value-of select="@_gen-method-name"/>Column().getInsertValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
+            if (null == bdvResult) throw new NullPointerException ("WTH?");
+
+            brvResult.addDataValidationResult(bdvResult);
+        }
+</xsl:for-each>
+
+        return brvResult;
+    }
+
+    public RowValidationResult getUpdateValidationResult()
+    {
+        boolean status = true;
+        BasicRowValidationResult brvResult = new BasicRowValidationResult();
+
+        <xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+<xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
+        {
+            BasicDataValidationResult bdvResult = (BasicDataValidationResult) table.get<xsl:value-of select="@_gen-method-name"/>Column().getUpdateValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
+            if (null == bdvResult) throw new NullPointerException ("WTH?");
+
+            brvResult.addDataValidationResult(bdvResult);
+        }
+</xsl:for-each>
+
+        return brvResult;
+    }
+
+    public RowValidationResult getDeleteValidationResult()
+    {
+        boolean status = true;
+        BasicRowValidationResult brvResult = new BasicRowValidationResult();
+
+        <xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
+<xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
+        {
+            BasicDataValidationResult bdvResult = (BasicDataValidationResult) table.get<xsl:value-of select="@_gen-method-name"/>Column().getDeleteValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
+            if (null == bdvResult) throw new NullPointerException ("WTH?");
+
+            brvResult.addDataValidationResult(bdvResult);
+        }
+</xsl:for-each>
+
+        return brvResult;
+    }
+
 	public RowValidationResult getValidationResult(Writer writer) throws IOException
 	{
 		BasicRowValidationResult brvResult = new BasicRowValidationResult();
@@ -286,7 +340,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 
 <xsl:for-each select="column"><xsl:variable name="constant-name"><xsl:value-of select="@_gen-constant-name"/></xsl:variable>
 		{
-			BasicDataValidationResult bdvResult = table.get<xsl:value-of select="@_gen-method-name"/>Column().getValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
+			BasicDataValidationResult bdvResult = (BasicDataValidationResult) table.get<xsl:value-of select="@_gen-method-name"/>Column().getValidationResult(this.<xsl:value-of select="@_gen-member-name"/>);
 			if (null == bdvResult) throw new NullPointerException ("WTH?");
 
 			writer.write ("BDV Result: " + bdvResult.toString() + "&lt;br&gt;");
