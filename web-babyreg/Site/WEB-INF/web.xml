@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<web-app>
+    <!--
+    *********************************************************************
+    * You will need to ensure that the following libraries are          *
+    * either in the application server's lib directory, in the app's    *
+    * WEB-INF/lib directory, or somewhere else in the class path:       *
+	*   Apache Xerces 1.4 or above (http://xml.apache.org)              *
+	*   Apache Xalan 2.1 or above (http://xml.apache.org)               *
+	*   Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)    *
+	*   Jakarta Log4J 1.1 or above (http://jakarta.apache.org)          *
+	*                                                                   *
+	* NOTE: Xerces, Xalan, and ORO are shareable but Log4j.jar must be  *
+	*       copied into WEB-INF/lib because each web app requires its   *
+	*       own copy of it.                                             *
+    *********************************************************************
+    -->
+
+    <!--
+    *********************************************************************
+    * Setup application's execution environment. The variable is called *
+    * "app-exec-environment" and must one of "Production", "Testing" or *
+    * "Development". These values are case-sensitive.                   *
+    *********************************************************************
+    -->
+	<!-- Setup execution environment -->
+	<context-param>
+	  <param-name>app-exec-environment</param-name>
+<!--	  <param-value>Production</param-value>	-->
+<!--	  <param-value>Testing</param-value>	-->
+	  <param-value>Development</param-value>
+	</context-param>
+
+    <!--
+    *********************************************************************
+    * Setup ACE (administrative interface) servlet                      *
+    *********************************************************************
+    -->
+	<servlet>
+		<servlet-name>AppComponentsExplorer</servlet-name>
+		<servlet-class>com.netspective.sparx.ace.AppComponentsExplorerServlet</servlet-class>
+	</servlet>
+
+    <!--
+    *********************************************************************
+    * Setup ACE (administrative interface) servlet mapping              *
+    *********************************************************************
+    -->
+	<servlet-mapping>
+		<servlet-name>AppComponentsExplorer</servlet-name>
+		<url-pattern>/ace/*</url-pattern>
+	</servlet-mapping>
+
+    <!--
+    *********************************************************************
+    * Specify the default database connection - the default-data-source *
+    * context-param's value is defined as a resource-ref in this        *
+    * web.xml file (see below).                                         *
+    *********************************************************************
+    -->
+	<context-param>
+	  <param-name>default-data-source</param-name>
+	  <param-value>jdbc/babyreg</param-value>
+	</context-param>
+
+	<resource-ref>
+		<res-ref-name>jdbc/babyreg</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<init-param driver-name="org.hsqldb.jdbcDriver"/>
+		<init-param url="jdbc:hsqldb:D:\netspective\web-babyreg\Database\web-babyreg.hsqldb"/>
+		<init-param user="sa"/>
+		<init-param password=""/>
+		<init-param max-connections="20"/>
+		<init-param enable-transaction="false"/>
+	</resource-ref>
+
+</web-app>

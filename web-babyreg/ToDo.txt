@@ -1,0 +1,14 @@
+These are the things that are still left to do:
+
+1. Add User Admin Screens
+2. Refactor "Suggestion", "Tell me what you got" and "Gift Detail"
+3. Security for the ADmin pages.
+4. Change the hardcoded values of -1 and 0 to use value sources or config values.
+5. Add Delete to the Admin List of gifts
+6. Look at the status-category foreing key problem on brand new gifts.
+7. Finish "Suggestion" and "Tell me ... got" with latest changes on the schema.
+8. Asses if we really need to use DMLs or could we move to SQL stored in the statements.xml
+9. See how we could avoid showing "null" for some values when deleting.
+10. See if we could extend the select field to have "All" instead of "" as the first element or
+    simply have a value source that adds that at the begining of the List.
+11. Take a closer look at the way the images are being done.  It could be improved.

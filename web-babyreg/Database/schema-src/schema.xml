@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "schema-markup.dtd">
+<schema name="db">
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+	<include file="babyschema.xml"/>
+</schema>

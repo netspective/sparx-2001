@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<access-control name="default">
+		<permission name="app">
+			<!--generate-permissions name="dialog" class="com.netspective.sparx.xaf.form.DialogManagerFactory"/-->
+            <permission name="orders">
+                <permission name="order_list"/>
+                <permission name="create_order"/>
+                <permission name="edit_order"/>
+                <permission name="view_order"/>
+                <permission name="delete_order"/>
+            </permission>
+		</permission>
+		
+		<permission name="role">
+            <permission name="super-user">
+                <grant permission="/app/orders"/>
+            </permission>        
+            <permission name="normal-user">
+                <grant permission="/app/orders"/>
+                <revoke permission="/app/orders/delete_order"/>
+            </permission>            
+		</permission>
+	</access-control>
+</xaf>

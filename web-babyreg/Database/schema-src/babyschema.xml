@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<schema name="dtatool">
+	<table name="Status" type="Lookup">
+		<enum id="0">Bought</enum>
+		<enum id="1">Picked</enum>
+		<enum id="2">Needed</enum>
+		<enum id="3">Desired</enum>
+		<enum id="4">Suggested</enum>
+	</table>
+	<table name="Category" type="Lookup">
+		<enum id="0">Clouthing</enum>
+		<enum id="1">Toys</enum>
+		<enum id="2">Furniture</enum>
+		<enum id="3">Supplies</enum>
+		<enum id="4">Bedding</enum>
+		<enum id="5">Bathing</enum>
+		<enum id="6">Feeding</enum>
+		<enum id="7">Diapering</enum>
+		<enum id="8">Nursery</enum>
+		<enum id="9">Gear</enum>
+		<enum id="10">Baby Care</enum>
+		<enum id="11">Safety</enum>
+		<enum id="12">Activity</enum>
+	</table>
+	<table name="Relationship" type="Lookup">
+		<!-- This table also serves as a roles definition for users. Only Dad and Mom have Administrative priviledges in the App -->
+		<enum id="-1">No Relation</enum>
+		<enum id="0">Dad</enum>
+		<enum id="1">Mom</enum>
+		<enum id="2">Grandmom</enum>
+		<enum id="3">Granddad</enum>
+		<enum id="4">Uncle</enum>
+		<enum id="5">Aunt</enum>
+		<enum id="6">Friend</enum>
+	</table>
+	<table name="Age_Range_Unit" type="Enumeration">
+		<enum>Days</enum>
+		<enum>Weeks</enum>
+		<enum>Months</enum>
+		<enum>Years</enum>
+	</table>
+	<table name="Gift" type="Default">
+		<description>Gift Items</description>
+		<column name="name" unique="yes" required="yes" type="text" descr="Name of Item"/>
+		<column name="category_id" lookupref="Category" unique="yes" required="yes" descr="Foreing Key to Category ID"/>
+		<column name="status_id" required="yes" lookupref="Status" descr="Status of the Item"/>
+		<column name="user_id" type="longint" parentref="User.id" descr="ID of the person that bought it or is going to buy it"/>
+		<column name="picture_path" type="longtext" descr="Path of the Picture of the Item"/>
+		<column name="url" type="longtext" descr="URL of the Item"/>
+		<column name="decription" type="longtext" descr="Description of the Item"/>
+		<column name="age_range" type="age_range" descr="Range of the age for usage of the Item"/>
+		<column name="price" type="currency" descr="Actual or estimated price"/>
+		<column name="brand" type="text" descr="Brand of the Item"/>
+		<column name="description" type="longtext" descr="Description of the Item"/>
+		<column name="reference" type="text" descr="Reference of where this item could be found"/>
+	</table>
+	<table name="User" type="Default">
+		<!--It needs a -1 user id to reflect the gifts that have not been picked yet-->
+		<!--It also needs Mom and Dad preloaded into this table-->
+		<description>Application users</description>
+		<column name="name" type="name" descr="First Middle and Last name"/>
+		<!-- column name="username" required="yes" type="text" descr="Login User name"/ -->
+		<!-- column name="password" required="yes" type="text" size="16" default="' '" descr="Password"/ -->
+		<column name="relationship_id" required="yes" lookupref="Relationship.id" descr="Relationship"/>
+		<column name="email_addr" type="email" descr="Email Address"/>
+		<column name="phone" type="text" descr="Contact phone number"/>
+	</table>
+	<table name="Baby_data">
+		<column name="name" required="yes" type="text" descr="Name"/>
+		<column name="value" required="yes" type="text" descr="Value"/>
+	</table>
+</schema>
