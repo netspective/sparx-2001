@@ -11,8 +11,8 @@ package com.xaf.form;
 
 public class DialogFieldConditionalData extends DialogFieldConditionalAction
 {
-    public DialogFieldConditionalData(DialogField sourceField, String partnerFieldName)
-    {
-		super(sourceField, partnerFieldName);
-    }
+    public DialogFieldConditionalData()
+	{
+        super();
+	}
 }

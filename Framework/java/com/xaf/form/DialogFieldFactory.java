@@ -16,6 +16,7 @@ import com.xaf.form.field.*;
 public class DialogFieldFactory
 {
 	static Map fieldClasses = new Hashtable();
+    static Map conditionalsClasses = new Hashtable();
 	static boolean defaultsAvailable = false;
 
 	public static Map getFieldClasses() { return fieldClasses; }
@@ -29,6 +30,17 @@ public class DialogFieldFactory
 	{
 		Class fieldClass = Class.forName(className);
 		addFieldType(tagName, fieldClass);
+	}
+
+    public static void addConditionalType(String actionName, Class cls)
+	{
+		conditionalsClasses.put(actionName, cls);
+	}
+
+    public static void addConditionalType(String actionName, String className) throws ClassNotFoundException
+	{
+		Class fieldClass = Class.forName(className);
+		addConditionalType(actionName, fieldClass);
 	}
 
 	public static void setupDefaults()
@@ -54,6 +66,13 @@ public class DialogFieldFactory
         fieldClasses.put("field.report", ReportField.class);
         fieldClasses.put("field.zip", ZipField.class);
         fieldClasses.put("field.email", EmailField.class);
+
+        conditionalsClasses.put("display", DialogFieldConditionalDisplay.class); // legacy
+        conditionalsClasses.put("display-on-js-expr", DialogFieldConditionalDisplay.class);
+        conditionalsClasses.put("data", DialogFieldConditionalData.class); // legacy
+        conditionalsClasses.put("display-when-partner-not-null", DialogFieldConditionalData.class);
+        conditionalsClasses.put("invisible-when-data-cmd", DialogFieldConditionalInvisible.class);
+
 		defaultsAvailable = true;
 	}
 
@@ -75,6 +94,20 @@ public class DialogFieldFactory
 			childElem.setAttribute("class", ((Class) entry.getValue()).getName());
 			factoryElem.appendChild(childElem);
 		}
+
+        factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Dialog Field Conditionals");
+		factoryElem.setAttribute("class", DialogFieldFactory.class.getName());
+		for(Iterator i = conditionalsClasses.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("dialog-field-conditional");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((Class) entry.getValue()).getName());
+			factoryElem.appendChild(childElem);
+		}
 	}
 
 	public static DialogField createField(String fieldType)
@@ -88,6 +121,24 @@ public class DialogFieldFactory
 		try
 		{
 			return (DialogField) fieldClass.newInstance();
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+	}
+
+    public static DialogFieldConditionalAction createConditional(String action)
+	{
+		if(! defaultsAvailable) setupDefaults();
+
+		Class condClass = (Class) conditionalsClasses.get(action);
+		if(condClass == null)
+			return null;
+
+		try
+		{
+			return (DialogFieldConditionalAction) condClass.newInstance();
 		}
 		catch(Exception e)
 		{

@@ -1,5 +1,7 @@
 package com.xaf.form;
 
+import org.w3c.dom.Element;
+
 /**
  * Title:        The Extensible Application Platform
  * Description:
@@ -19,10 +21,38 @@ public abstract class DialogFieldConditionalAction
 	{
 	}
 
-    public DialogFieldConditionalAction(DialogField sourceField, String partnerFieldName)
+    public DialogFieldConditionalAction(DialogField sourceField)
     {
-		this.sourceField = sourceField;
-		this.partnerFieldName = partnerFieldName;
+        setSourceField(sourceField);
+    }
+
+    public DialogFieldConditionalAction(DialogField sourceField, String partnerName)
+    {
+        setSourceField(sourceField);
+        setPartnerFieldName(partnerName);
+    }
+
+    public boolean isPartnerRequired()
+    {
+        return true;
+    }
+
+    public boolean importFromXml(DialogField sourceField, Element elem, int conditionalItem)
+    {
+        this.sourceField = sourceField;
+
+		if(isPartnerRequired())
+        {
+            partnerFieldName = elem.getAttribute("partner");
+            if(partnerFieldName == null || partnerFieldName.length() == 0)
+            {
+                sourceField.addErrorMessage("Conditional " + conditionalItem + " has no associated 'partner' (field).");
+                partnerFieldName = null;
+                return false;
+            }
+        }
+
+        return true;
     }
 
 	public final DialogField getSourceField() { return sourceField; }

@@ -171,50 +171,24 @@ public class DialogField
 
 	public void importConditionalFromXml(Element elem)
 	{
-		String action = elem.getAttribute("action");
-		String partner = elem.getAttribute("partner");
-		String javaScriptExpression = elem.getAttribute("js-expr");
-		boolean actionTypeDisplay = false;
+        String action = elem.getAttribute("action");
+        if(action == null || action.length() == 0)
+        {
+            addErrorMessage("No 'action' specified for conditional.");
+            return;
+        }
 
-		int errorsCount = 0;
-		int conditionalItem = (conditionalActions == null ? 0 : conditionalActions.size()) + 1;
-		if(action.length() == 0 || ( ! action.equals("display") && ! action.equals("data")))
-		{
-			addErrorMessage("Conditional " + conditionalItem + " has no associated 'action' (display, etc).");
-			errorsCount++;
-		}
-		else if(action.equals("display"))
-			actionTypeDisplay = true;
-
-		if(partner.length() == 0)
-		{
-			addErrorMessage("Conditional " + conditionalItem + " has no associated 'partner' (field).");
-			errorsCount++;
-		}
-
-		if(actionTypeDisplay && javaScriptExpression.length() == 0)
-		{
-			addErrorMessage("Conditional " + conditionalItem + " has no associated 'js-expr' (JavaScript Expression).");
-			errorsCount++;
-		}
-
-		if(errorsCount == 0)
-		{
-			/*
-			 * at this time, we're saving just the partner name, later in finalizeContents we'll get the real field
-			 * in case it hasn't been read in/created yet (late binding)
-			 */
-			DialogFieldConditionalAction actionInst = null;
-			if(actionTypeDisplay)
-				actionInst = new DialogFieldConditionalDisplay(this, partner, javaScriptExpression);
-			else
-				actionInst = new DialogFieldConditionalData(this, partner);
-
-			if(actionInst != null)
-				addConditionalAction(actionInst);
-			else
-				addErrorMessage("Problem in DialogField.importConditionalFromXml() -- actionInst is null");
-		}
+        DialogFieldConditionalAction actionInst = DialogFieldFactory.createConditional(action);
+        if(actionInst != null)
+        {
+            int conditionalItem = (conditionalActions == null ? 0 : conditionalActions.size()) + 1;
+            if(actionInst.importFromXml(this, elem, conditionalItem))
+                addConditionalAction(actionInst);
+        }
+        else
+        {
+            addErrorMessage("Conditional action '"+ action +"' unknown.");
+        }
 	}
 
 	public void importPopupFromXml(Element elem)
@@ -344,7 +318,7 @@ public class DialogField
 	{
 		if(conditionalActions == null) conditionalActions = new ArrayList();
 
-		if(action instanceof DialogFieldConditionalData)
+		if(action instanceof DialogFieldConditionalData || action instanceof DialogFieldConditionalInvisible)
 			setFlag(FLDFLAG_HAS_CONDITIONAL_DATA);
 
 		conditionalActions.add(action);
@@ -492,6 +466,11 @@ public class DialogField
 							return false;
 					}
 				}
+                else if(action instanceof DialogFieldConditionalInvisible)
+                {
+                    if(! ((DialogFieldConditionalInvisible) action).isVisible(dc))
+                        return false;
+                }
 			}
 		}
         String qName = getQualifiedName();
@@ -581,6 +560,7 @@ public class DialogField
 				DialogFieldConditionalAction action = (DialogFieldConditionalAction) i.next();
 				if(action instanceof DialogFieldConditionalData)
 				{
+                    // if the partner field doesn't have data, then this field is "invalid"
 					if(isRequired(dc) && dc.getValue(action.getPartnerField()) == null)
 						return false;
 				}

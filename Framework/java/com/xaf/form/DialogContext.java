@@ -167,18 +167,7 @@ public class DialogContext extends ServletValueContext
 			dataCmdStr = aRequest.getParameter(dialog.getDataCmdParamName());
 		}
 
-		if(dataCmdStr != null)
-		{
-			if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_ADD))
-				dataCmd = DATA_CMD_ADD;
-			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_EDIT))
-				dataCmd = DATA_CMD_EDIT;
-			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_DELETE))
-				dataCmd = DATA_CMD_DELETE;
-			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_CONFIRM))
-				dataCmd = DATA_CMD_CONFIRM;
-		}
-
+        dataCmd = getDataCmdIdForCmdText(dataCmdStr);
 		createStateFields(dialog.getFields());
 
 		DialogDirector director = dialog.getDirector();
@@ -191,6 +180,22 @@ public class DialogContext extends ServletValueContext
 
 		LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
 	}
+
+    static public int getDataCmdIdForCmdText(String dataCmdStr)
+    {
+        if(dataCmdStr != null)
+		{
+			if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_ADD))
+				return DATA_CMD_ADD;
+			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_EDIT))
+				return DATA_CMD_EDIT;
+			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_DELETE))
+				return DATA_CMD_DELETE;
+			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_CONFIRM))
+				return DATA_CMD_CONFIRM;
+		}
+        return DATA_CMD_NONE;
+    }
 
 	/**
 	 * Returns a string useful for displaying a unique Id for this DialogContext
