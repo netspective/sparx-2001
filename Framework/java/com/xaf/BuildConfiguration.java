@@ -8,7 +8,7 @@ public class BuildConfiguration
 	public static final int releaseNumber = 1;
 	public static final int versionMajor = 2;
 	public static final int versionMinor = 8;
-	public static final int buildNumber = 20;
+	public static final int buildNumber = 21;
 
 	static public final int getReleaseNumber() { return releaseNumber; }
 	static public final int getVersionMajor() { return versionMajor; }
