@@ -7,8 +7,8 @@ set SAVEANTHOME=%ANT_HOME%
 set SAVEJAVAHOME=%JAVA_HOME%
 set SAVERESINHOME=%RESIN_HOME%
 
-set JAVA_HOME=C:\utils\JDK1.3
-set ANT_HOME=C:\utils\jakarta-ant-1.3
+set JAVA_HOME=C:\utils\java\JDK1.3
+set ANT_HOME=C:\utils\java\jakarta-ant-1.3
 set RESIN_HOME=C:\utils\resin-1.2.5
 
 REM === This automatically adds system classes to CLASSPATH ===
