@@ -18,6 +18,7 @@ public class TaskFactory
         addTask("exec-statement", com.xaf.task.sql.StatementTask.class);
         addTask("exec-dml", com.xaf.task.sql.DmlTask.class);
         addTask("exec-redirect", com.xaf.task.navigate.RedirectTask.class);
+        addTask("exec-transaction", com.xaf.task.sql.TransactionTask.class);
         defaultsAvailable = true;
     }
 
