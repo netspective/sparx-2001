@@ -1,6 +1,6 @@
 @echo off
 
-REM $Id: build.bat,v 1.2 2002-08-09 15:58:53 shahid.shah Exp $
+REM $Id: build.bat,v 1.3 2002-08-18 21:34:30 shahid.shah Exp $
 
 REM **************************************************************************
 REM ** This script should be be run from the APP_ROOT\WEB-INF directory.    **
@@ -44,6 +44,7 @@ REM **************************************************************************
 
 set SPARX_JAR=%APP_LIB%\sparx.jar
 set ANT_JAR=%APP_LIB%\ant.jar
+set XMLAPIS_JAR=%APP_LIB%\xml-apis.jar
 set XERCES_JAR=%APP_LIB%\xerces.jar
 set XALAN_JAR=%APP_LIB%\xalan.jar
 set OROMATCHER_JAR=%APP_LIB%\oro.jar
@@ -57,7 +58,7 @@ set JDBC2X_JAR=%SPARX_REDIST_HOME%\jdbc.jar
 if exist "%JAVA_HOME%/lib/tools.jar" set JAVACP=%JAVA_HOME%/lib/tools.jar
 if exist "%JAVA_HOME%/lib/classes.zip" set JAVACP=%CLASSPATH%;%JAVA_HOME%/lib/classes.zip
 
-set USE_CLASS_PATH=%APP_CLASSES%;%XERCES_JAR%;%SPARX_JAR%;%OROMATCHER_JAR%;%LOG4J_JAR%;%SERVLETAPI_JAR%;%JDBC2X_JAR%;%XALAN_JAR%;%JAVACP%;%ANT_JAR%;%BSF_JAR%;%BSF_JS_JAR%
+set USE_CLASS_PATH=%APP_CLASSES%;%XMLAPIS_JAR%;%XERCES_JAR%;%SPARX_JAR%;%OROMATCHER_JAR%;%LOG4J_JAR%;%SERVLETAPI_JAR%;%JDBC2X_JAR%;%XALAN_JAR%;%JAVACP%;%ANT_JAR%;%BSF_JAR%;%BSF_JS_JAR%
 
 REM **************************************************************************
 REM ** Now that all the variables are set, execute Ant                      **

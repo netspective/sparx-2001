@@ -24,5 +24,10 @@
 				</td>
 			</tr>
 		</table>
+		<p>&nbsp;<p>
+		<center>
+			<a href="http://www.netspective.com"><img src="sparx/resources/images/powered-by-sparx.gif" border=0></a><br>
+			<font size=1><%= com.netspective.sparx.BuildConfiguration.getVersionAndBuildShort() %></font>
+		</center>
 	</body>
 </html>
