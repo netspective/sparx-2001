@@ -17,7 +17,7 @@ import com.xaf.skin.*;
 import com.xaf.task.*;
 import com.xaf.value.*;
 
-public class StatementTask extends AbstractTask
+public class StatementTask extends BasicTask
 {
     static public final String DEFAULT_REPORTSKINID = "report";
 
@@ -150,6 +150,8 @@ public class StatementTask extends AbstractTask
 
     public void execute(TaskContext tc) throws TaskExecuteException
     {
+        tc.registerTaskExecutionBegin(this);
+
 		if(storeValueName != null && storeValueSource == null)
 		{
 			storeValueSource = ValueSourceFactory.getStoreValueSource(storeValueName);
@@ -284,5 +286,7 @@ public class StatementTask extends AbstractTask
 			tc.addResultMessage(reportDest.getUserMessage());
 		else
 			tc.addResultMessage(out.toString());
+
+        tc.registerTaskExecutionEnd(this);
     }
 }

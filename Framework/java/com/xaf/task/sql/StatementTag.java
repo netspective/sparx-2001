@@ -28,6 +28,7 @@ public class StatementTag extends TagSupport
 	}
 
 	public void setDebug(String value) { if(value.equals("yes")) task.setFlag(Task.TASKFLAG_DEBUG); }
+    public void setDataCmd(String value) { task.setDataCmdCondition(value); }
 	public void setName(String value) {	task.setStmtName(value); }
 	public void setStmtSource(String value) { task.setStmtSource(value); }
 	public void setDataSource(String value) { task.setDataSource(value); }

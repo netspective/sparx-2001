@@ -9,7 +9,7 @@
  */
 package com.xaf.task.sql;
 
-import com.xaf.task.AbstractTask;
+import com.xaf.task.BasicTask;
 import com.xaf.task.TaskInitializeException;
 import com.xaf.task.TaskContext;
 import com.xaf.task.TaskExecuteException;
@@ -24,7 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import java.sql.Connection;
 
-public class TransactionTask extends AbstractTask
+public class TransactionTask extends BasicTask
 {
     static public final int COMMAND_UNKNOWN = 0;
     static public final int COMMAND_BEGIN = 1;
@@ -87,6 +87,8 @@ public class TransactionTask extends AbstractTask
      */
     public void execute(TaskContext tc) throws TaskExecuteException
     {
+        tc.registerTaskExecutionBegin(this);
+
         try
         {
             ServletContext context = tc.getServletContext();
@@ -123,5 +125,6 @@ public class TransactionTask extends AbstractTask
             throw new TaskExecuteException(e);
         }
 
+        tc.registerTaskExecutionEnd(this);
     }
 }

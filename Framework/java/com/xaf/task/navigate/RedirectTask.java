@@ -8,7 +8,7 @@ import org.w3c.dom.*;
 import com.xaf.task.*;
 import com.xaf.value.*;
 
-public class RedirectTask extends AbstractTask
+public class RedirectTask extends BasicTask
 {
 	private SingleValueSource url;
 
@@ -30,6 +30,7 @@ public class RedirectTask extends AbstractTask
 
     public void execute(TaskContext tc) throws TaskExecuteException
     {
+        tc.registerTaskExecutionBegin(this);
 		try
 		{
 			((HttpServletResponse) tc.getResponse()).sendRedirect(url.getValue(tc));
@@ -39,5 +40,9 @@ public class RedirectTask extends AbstractTask
 		{
 			throw new TaskExecuteException(e);
 		}
+        finally
+        {
+            tc.registerTaskExecutionEnd(this);
+        }
     }
 }

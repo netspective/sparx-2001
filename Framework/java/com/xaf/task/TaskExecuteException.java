@@ -17,6 +17,12 @@ public class TaskExecuteException extends Exception
 		rootCause = root;
 	}
 
+    public TaskExecuteException(Throwable root, String prependMessage)
+	{
+		this(prependMessage + "\n\n" + root.getMessage());
+		rootCause = root;
+	}
+
 	public Throwable getRootCause() { return rootCause; }
 
 	public String getDetailedMessage()

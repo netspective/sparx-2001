@@ -17,7 +17,7 @@ public class TaskContext extends ServletValueContext
 
 	private static long taskContextNum = 0;
 	private Object canvas;
-	private Task task;
+	private int countOfTasksExecuted;
 	private String transactionId;
 	private DialogContext dialogContext;
 	private long resultCode;
@@ -83,4 +83,15 @@ public class TaskContext extends ServletValueContext
 
 	public long getResultCode() { return resultCode; }
 	public void setResultCode(long value) { resultCode = value; }
+
+    public int getCountOfTasksExecuted() { return countOfTasksExecuted; }
+
+    public void registerTaskExecutionBegin(Task task)
+    {
+       countOfTasksExecuted++;
+    }
+
+    public void registerTaskExecutionEnd(Task task)
+    {
+    }
 }
