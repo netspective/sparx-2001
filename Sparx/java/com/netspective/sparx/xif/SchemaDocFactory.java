@@ -51,21 +51,22 @@
  */
  
 /**
- * $Id: SchemaDocFactory.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: SchemaDocFactory.java,v 1.2 2002-12-15 18:03:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.netspective.sparx.util.factory.Factory;
+import com.netspective.sparx.util.factory.FactoryListener;
+import com.netspective.sparx.util.factory.FactoryEvent;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xif.db.DatabaseContext;
@@ -77,6 +78,29 @@ public class SchemaDocFactory implements Factory
 {
     static final String ATTRNAME_SCHEMADOC = com.netspective.sparx.Globals.DEFAULT_CONFIGITEM_PREFIX + "schema-doc";
     static Map docs = new HashMap();
+    static List listeners;
+
+    public static void addListener(FactoryListener listener)
+    {
+        if(listeners == null)
+            listeners = new ArrayList();
+
+        if(!listeners.contains(listener))
+            listeners.add(listener);
+    }
+
+    public static void contentsChanged(SchemaDocument instance)
+    {
+        if(listeners == null)
+            return;
+
+        FactoryEvent event = new FactoryEvent(SchemaDocFactory.class, instance);
+        for(Iterator i = listeners.iterator(); i.hasNext();)
+        {
+            FactoryListener listener = (FactoryListener) i.next();
+            listener.factoryContentsChanged(event);
+        }
+    }
 
     public static SchemaDocument getDoc(String file)
     {

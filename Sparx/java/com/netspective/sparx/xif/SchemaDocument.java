@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.17 2002-12-11 21:46:33 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.18 2002-12-15 18:03:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -92,6 +92,7 @@ import org.w3c.dom.Text;
 import com.netspective.sparx.util.xml.XmlSource;
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
+import com.netspective.sparx.xaf.form.DialogField;
 
 /**
  * Provides the ability to fully describe an entire database
@@ -152,6 +153,7 @@ public class SchemaDocument extends XmlSource
     private static Set javaReservedWords = new HashSet();
     private static Set javaReservedTerms = new HashSet();
     private static Set refColumnExcludeElementsFromInherit = new HashSet();
+    private static Set dialogFieldExcludeColElemsFromInherit = new HashSet();
 
     private Map dataTypeNodes = new HashMap();
     private Map tableTypeNodes = new HashMap();
@@ -160,6 +162,9 @@ public class SchemaDocument extends XmlSource
     private List columnTableNodes = new ArrayList();
     private Map tableParams = new HashMap(); // key is table name, value is hash-table of key/value pairs
     private Map enumTableDataChoices = new HashMap(); // key is an enum data table name, value is SelectChoicesList
+    private Map tableDialogDefns = new HashMap(); // key is uppercase TABLE_NAME, value is DialogDefinition instance
+    private Map dialogFieldDefns = new HashMap(); // key is uppercase TABLE_NAME.COLUMN_NAME, value is a DialogFieldDefinition instance
+    private Map columnsWithFieldDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a string list with names of columns with field defns
 
     /**
      * Class which holds information about a JDBC type and its associated JavaClass and primitive type
@@ -327,6 +332,7 @@ public class SchemaDocument extends XmlSource
             javaReservedTerms.add(JAVA_RESERVED_TERMS[i]);
 
         refColumnExcludeElementsFromInherit.add(ELEMNAME_GENERATE_ID);
+        dialogFieldExcludeColElemsFromInherit.add("size");
     }
 
     public SchemaDocument()
@@ -341,6 +347,201 @@ public class SchemaDocument extends XmlSource
     public SchemaDocument(Connection conn, String catalog, String schemaPattern) throws ParserConfigurationException, SQLException
     {
         loadDocument(conn, catalog, schemaPattern);
+    }
+
+    public boolean loadDocument(File file)
+    {
+        boolean status = super.loadDocument(file);
+        SchemaDocFactory.contentsChanged(this);
+        return status;
+    }
+
+    /**
+     * Given a text string that defines a SQL table name or column name or other SQL identifier,
+     * return a string that would be suitable for that string to be used as a caption or plain text.
+     */
+    public static String sqlIdentifierToText(String original, boolean uppercaseEachWord)
+    {
+        if(original == null || original.length() == 0)
+            return original;
+
+        StringBuffer text = new StringBuffer();
+        text.append(Character.toUpperCase(original.charAt(0)));
+        boolean wordBreak = false;
+        for(int i = 1; i < original.length(); i++)
+        {
+            char ch = original.charAt(i);
+            if(ch == '_')
+            {
+                text.append(' ');
+                wordBreak = true;
+            }
+            else if(wordBreak)
+            {
+                text.append(uppercaseEachWord ? Character.toUpperCase(ch) : Character.toLowerCase(ch));
+                wordBreak = false;
+            }
+            else
+                text.append(Character.toLowerCase(ch));
+        }
+        return text.toString();
+    }
+
+    public void overrideOrInheritAttribute(Element src, Element dest, String attribName, String defaultValue)
+    {
+        String overrideValue = src.getAttribute(attribName);
+        if(overrideValue.length() > 0)
+            dest.setAttribute(attribName, overrideValue);
+        else
+        {
+            String originalValue = dest.getAttribute(attribName);
+            if(originalValue.length() == 0)
+                dest.setAttribute(attribName, defaultValue);
+        }
+    }
+
+    public void overrideAttributes(Element srcElement, Element destElem)
+    {
+        NamedNodeMap inhAttrs = srcElement.getAttributes();
+        for(int i = 0; i < inhAttrs.getLength(); i++)
+        {
+            Node attrNode = inhAttrs.item(i);
+            destElem.setAttribute(attrNode.getNodeName(), attrNode.getNodeValue());
+        }
+    }
+
+    public class TableDialogDefinition
+    {
+        protected Element table;
+        protected Element dialogDefn;
+
+        public TableDialogDefinition(Element table, Element dialogDefn)
+        {
+            this.table = table;
+
+            String tableName = table.getAttribute("name");
+            if(dialogDefn.getAttribute("name").length() == 0)
+                dialogDefn.setAttribute("name", tableName);
+            if(dialogDefn.getAttribute("heading").length() == 0)
+                dialogDefn.setAttribute("heading", "create-data-cmd-heading:" + sqlIdentifierToText(tableName, true));
+
+            this.dialogDefn = (Element) dialogDefn.cloneNode(true);
+        }
+
+        public Element getDialogFieldDefn()
+        {
+            return dialogDefn;
+        }
+
+        public Element getTable()
+        {
+            return table;
+        }
+
+        public String getMapKey()
+        {
+            return table.getAttribute("name").toUpperCase();
+        }
+        public Element createDialogElement(Element parent, Element tableDialogRefPlaceholder)
+        {
+            // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
+            overrideAttributes(tableDialogRefPlaceholder, dialogDefn);
+            Element cloned = (Element) parent.getOwnerDocument().importNode(dialogDefn, true);
+            cloned.setAttribute("_original-tag", tableDialogRefPlaceholder.getNodeName());
+            parent.insertBefore(cloned, tableDialogRefPlaceholder);
+            return cloned;
+        }
+    }
+
+    public class DialogFieldDefinition
+    {
+        protected Element table;
+        protected Element column;
+        protected Element dialogFieldDefn;
+
+        public DialogFieldDefinition(Element table, Element column, Element dialogFieldDefn)
+        {
+            this.table = table;
+            this.column = column;
+
+            // setup some useful defaults if they're not already defined
+            final String columnName = column.getAttribute("name");
+            if(dialogFieldDefn.getAttribute("name").length() == 0)
+                dialogFieldDefn.setAttribute("name", columnName);
+            if(dialogFieldDefn.getAttribute("caption").length() == 0)
+                dialogFieldDefn.setAttribute("caption", sqlIdentifierToText(columnName, false));
+
+            this.dialogFieldDefn = (Element) dialogFieldDefn.cloneNode(true);
+
+            // now just inherit all the information that comes from the <column> tag so that attributes like "required", "primarykey", etc are brought in
+            // but attributes like "size" are not inherited since they have different meanings (see below)
+            inheritElement(column, this.dialogFieldDefn, dialogFieldExcludeColElemsFromInherit, null);
+
+            // in a <column> tag the "size" really means "maximum length" so do the translation
+            String size = findElementOrAttrValue(column, "size");
+            if(size != null)
+                this.dialogFieldDefn.setAttribute("max-length", size);
+
+            String description = findElementOrAttrValue(column, "descr");
+            if(description != null && this.dialogFieldDefn.getAttribute("hint").length() == 0)
+                this.dialogFieldDefn.setAttribute("hint", description);
+
+            // if we have a select field and no choices are specified, check to see if the <column> tag is a reference
+            // to an enumeration table; if it is, then we probably want to make the enum's data choices for this field
+            Reference refInfo = getColumnRefInfo(table, column);
+            if (refInfo != null)
+            {
+                Element refTable = (Element) tableNodes.get(refInfo.tableName.toUpperCase());
+                if(refTable.getAttribute("is-enum").equals("yes") && this.dialogFieldDefn.getAttribute("choices").length() == 0)
+                    this.dialogFieldDefn.setAttribute("choices", "schema-enum:" + refInfo.tableName);
+            }
+        }
+
+        public Element getColumn()
+        {
+            return column;
+        }
+
+        public Element getDialogFieldDefn()
+        {
+            return dialogFieldDefn;
+        }
+
+        public Element getTable()
+        {
+            return table;
+        }
+
+        public String getMapKey()
+        {
+            return (table.getAttribute("name") + "." + column.getAttribute("name")).toUpperCase();
+        }
+
+        public void resolveDialogField(Element dialogElem, Element tableColumnRefFieldPlaceholder)
+        {
+            // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
+            overrideAttributes(tableColumnRefFieldPlaceholder, dialogFieldDefn);
+            Element cloned = (Element) dialogElem.getOwnerDocument().importNode(dialogFieldDefn, true);
+            cloned.setAttribute("_original-tag", tableColumnRefFieldPlaceholder.getNodeName());
+            dialogElem.insertBefore(cloned, tableColumnRefFieldPlaceholder);
+        }
+    }
+
+    public TableDialogDefinition getTableDialogDefn(String tableName)
+    {
+        reload();
+        return (TableDialogDefinition) tableDialogDefns.get(tableName.toUpperCase());
+    }
+
+    /**
+     * Given a <field.table-column> element inside a <dialog> element in a DialogManager, return a suitable
+     * field.xxx element that will take the place of the <field.table-column> tag. The suitable element is
+     * extracted from a <column> element but could be inherited from a <datatype>.
+     */
+    public DialogFieldDefinition getDialogFieldDefn(String tableName, String columnName)
+    {
+        reload();
+        return (DialogFieldDefinition) dialogFieldDefns.get((tableName + "." + columnName).toUpperCase());
     }
 
     public void setUrl(String url)
@@ -366,6 +567,20 @@ public class SchemaDocument extends XmlSource
     public Map getTables()
     {
         return tableNodes;
+    }
+
+    public List getNamesOfTablesWithDialogsDefns()
+    {
+        reload();
+        List result = new ArrayList();
+        result.addAll(tableDialogDefns.keySet());
+        return result;
+    }
+
+    public List getNamesOfColumnsInTableWithFieldDefns(String tableName)
+    {
+        reload();
+        return (List) columnsWithFieldDefns.get(tableName.toUpperCase());
     }
 
     public String[] getTableNames(boolean includeAudit)
@@ -466,6 +681,7 @@ public class SchemaDocument extends XmlSource
 
         NodeList colInfo = column.getChildNodes();
         ArrayList sqlDefnElems = new ArrayList();
+        Element dialogFieldDefn = null;
         String size = null;
         String decimals = null;
         String generateId = null;
@@ -496,6 +712,8 @@ public class SchemaDocument extends XmlSource
                 decimals = childNode.getFirstChild().getNodeValue();
             else if (generateId == null && nodeName.equals(ELEMNAME_GENERATE_ID))
                 generateId = childNode.getFirstChild().getNodeValue();
+            else if (nodeName.startsWith(DialogField.FIELDTAGPREFIX))
+                dialogFieldDefn = (Element) childNode;
         }
 
         if (size != null && sqlDefnElems.size() > 0)
@@ -524,6 +742,21 @@ public class SchemaDocument extends XmlSource
         if("guid".equals(column.getAttribute("type")) || column.getAttribute("guid").equals("yes") || "guid".equals(generateId) ||
                 "guid32".equals(column.getAttribute("type")) || column.getAttribute("guid32").equals("yes") || "guid32".equals(generateId))
             column.setAttribute("_gen-create-id", "guid32");
+
+        if(dialogFieldDefn != null)
+        {
+            DialogFieldDefinition defn = new DialogFieldDefinition(table, column, dialogFieldDefn);
+            dialogFieldDefns.put(defn.getMapKey(), defn);
+
+            String tableName = table.getAttribute("name").toUpperCase();
+            List tableColNames = (List) columnsWithFieldDefns.get(tableName);
+            if(tableColNames == null)
+            {
+                tableColNames = new ArrayList();
+                columnsWithFieldDefns.put(tableName, tableColNames);
+            }
+            tableColNames.add(column.getAttribute("name"));
+        }
     }
 
     public String getPrimaryKey(Element table)
@@ -892,6 +1125,11 @@ public class SchemaDocument extends XmlSource
                     }
                 }
             }
+            else if (nodeName.equals("dialog"))
+            {
+                TableDialogDefinition tableDialogDefinition = new TableDialogDefinition(table, (Element) node);
+                tableDialogDefns.put(tableDialogDefinition.getMapKey(), tableDialogDefinition);
+            }
         }
 
         if (lastColumnSeen != null) lastColumnSeen.setAttribute("is-last", "yes");
@@ -1183,6 +1421,9 @@ public class SchemaDocument extends XmlSource
         tableNodes.clear();
         columnTableNodes.clear();
         tableParams.clear();
+        tableDialogDefns.clear();
+        dialogFieldDefns.clear();
+        columnsWithFieldDefns.clear();
 
         if (xmlDoc == null)
             return;

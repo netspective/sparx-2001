@@ -51,35 +51,16 @@
  */
  
 /**
- * $Id: DialogTag.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: DialogTag.java,v 1.2 2002-12-15 18:03:18 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
-
-import java.io.IOException;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
-
-import com.netspective.sparx.xaf.form.Dialog;
-import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.DialogManager;
-import com.netspective.sparx.xaf.form.DialogManagerFactory;
-import com.netspective.sparx.xaf.form.DialogSkin;
-import com.netspective.sparx.xaf.skin.SkinFactory;
 
 public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
 {
     private String name;
     private String source;
     private String skinName;
-    private com.netspective.sparx.xaf.form.Dialog dialog;
 
     public void release()
     {
@@ -87,7 +68,6 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
         name = null;
         source = null;
         skinName = null;
-        dialog = null;
     }
 
     public String getName()
@@ -146,7 +126,7 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
                 }
             }
 
-            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(name);
+            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(pageContext.getServletContext(), name);
             if(dialog == null)
             {
                 out.write("Dialog '" + name + "' not found in manager '" + manager + "'.");
@@ -161,7 +141,6 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
             }
 
             com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(context, (javax.servlet.Servlet) pageContext.getPage(), (javax.servlet.http.HttpServletRequest) pageContext.getRequest(), (javax.servlet.http.HttpServletResponse) pageContext.getResponse(), skin);
-            javax.servlet.ServletRequest req = pageContext.getRequest();
             dialog.prepareContext(dc);
 
             // if the dialog class has not been overridden (base class) and

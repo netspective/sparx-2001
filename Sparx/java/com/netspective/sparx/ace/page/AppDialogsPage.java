@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.3 2002-09-18 17:49:38 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.4 2002-12-15 18:03:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -65,8 +65,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
-import com.netspective.sparx.ace.AppComponentsExplorerServlet;
-import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogManager;
 import com.netspective.sparx.xaf.form.DialogManagerFactory;
@@ -154,7 +152,9 @@ public class AppDialogsPage extends AceServletPage
             if(unmatchedItems != null && unmatchedItems[0].equals("generate-dc"))
                 handleBeanGenerator(pc);
             else
-                transform(pc, manager.getDocument(), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
+            {
+                transform(pc, manager.getDocument(context), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "ui-browser-xsl");
+            }
         }
     }
 }

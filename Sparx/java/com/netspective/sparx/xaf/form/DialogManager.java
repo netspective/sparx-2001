@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogManager.java,v 1.4 2002-09-28 04:19:57 shahid.shah Exp $
+ * $Id: DialogManager.java,v 1.5 2002-12-15 18:03:17 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -59,20 +59,21 @@ package com.netspective.sparx.xaf.form;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Hashtable;
-import java.util.Map;
-import java.net.URL;
+import java.util.*;
 
-import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import com.netspective.sparx.util.metric.Metric;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.skin.StandardDialogSkin;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.xif.SchemaDocument;
+import com.netspective.sparx.xif.SchemaDocFactory;
 
 /**
  * The dialog manager is a dialog pool from which dialogs are retreived. When the <code>DialogManager</code> object is
@@ -81,15 +82,25 @@ import com.netspective.sparx.util.xml.XmlSource;
  */
 public class DialogManager extends XmlSource
 {
-    public static class DialogInfo
+    public class DialogInfo
     {
-        public Element defnElement;
-        public String pkgName;
-        public String lookupName;
-        public Dialog dialog;
-        public Class dialogClass;
-        public Class dialogContextClass;
-        public Class directorClass;
+        private boolean finalized;
+        private Element defnElement;
+        private String pkgName;
+        private String lookupName;
+        private Dialog dialog;
+        private Class dialogClass;
+        private Class dialogContextClass;
+        private Class directorClass;
+        private String tableDialogTableName;
+
+        public DialogInfo(String pkgName, Element elem, String tableDialogTableName)
+        {
+            this(pkgName, elem);
+            if(defnElement.getAttribute("table").length() == 0)
+                defnElement.setAttribute("table", tableDialogTableName);
+            this.tableDialogTableName = tableDialogTableName;
+        }
 
         public DialogInfo(String pkgName, Element elem)
         {
@@ -141,6 +152,84 @@ public class DialogManager extends XmlSource
             }
             else
                 directorClass = DialogDirector.class;
+
+            if(hasTableColumnElements())
+            {
+                if(finalizeDialogsWithTableColFields == null)
+                    finalizeDialogsWithTableColFields = new HashSet();
+                finalizeDialogsWithTableColFields.add(this);
+            }
+        }
+
+        private void finalizeDefinition(ServletContext context)
+        {
+            // resolve all the table-column fields using the default schema
+            NodeList tableColumnElements = defnElement.getElementsByTagName(Dialog.FIELDNAME_SCHEMA_TABLECOL);
+
+            // since we're modifying the nodelist (adding/subtracting nodes) we can't do a simple "for loop"
+            while(tableColumnElements.getLength() > 0)
+            {
+                Element tableColumnPlaceholderElem = (Element) tableColumnElements.item(0);
+                resolveTableColumnField(context, tableColumnPlaceholderElem);
+                tableColumnElements = defnElement.getElementsByTagName(Dialog.FIELDNAME_SCHEMA_TABLECOL);
+            }
+
+            finalized = true;
+        }
+
+        public Element createErrorField(Element tableColumnPlaceholderElem, String message, String columnName)
+        {
+            Element result = tableColumnPlaceholderElem.getOwnerDocument().createElement("field.text");
+            result.setAttribute("name", "error");
+            result.setAttribute("caption", "Error");
+            result.setAttribute("default", message + "\\: table '"+ tableColumnPlaceholderElem.getAttribute("table") +"' column '"+ columnName + "' in &lt;" + Dialog.FIELDNAME_SCHEMA_TABLECOL + "&gt;");
+            result.setAttribute("read-only", "yes");
+            return result;
+        }
+
+        private void resolveTableColumnField(ServletContext context, Element tableColumnPlaceholderElem)
+        {
+            final String schemaFileName = tableColumnPlaceholderElem.getAttribute("schema");
+
+            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? SchemaDocFactory.getDoc(context) : SchemaDocFactory.getDoc(schemaFileName);
+            if(schemaDoc == null)
+                defnElement.replaceChild(createErrorField(tableColumnPlaceholderElem, "Schema '"+ schemaFileName +"' not found", tableColumnPlaceholderElem.getAttribute("column")), tableColumnPlaceholderElem);
+            else
+            {
+                if(dependentSchemaDocs == null)
+                    dependentSchemaDocs = new HashSet();
+                dependentSchemaDocs.add(schemaDoc);
+
+                if(tableDialogTableName != null && tableColumnPlaceholderElem.getAttribute("table").length() == 0)
+                    tableColumnPlaceholderElem.setAttribute("table", tableDialogTableName);
+
+                String tableName = tableColumnPlaceholderElem.getAttribute("table");
+                String columnNamesPattern = tableColumnPlaceholderElem.getAttribute("column");
+                if(columnNamesPattern.length() == 0) columnNamesPattern = tableColumnPlaceholderElem.getAttribute("columns");
+
+                List columnNames = schemaDoc.getNamesOfColumnsInTableWithFieldDefns(tableName);
+                if(columnNames != null)
+                {
+                    StringListMatcher matcher = new StringListMatcher(columnNames, columnNamesPattern);
+                    List matchedColumnNames = matcher.getMatchedItems();
+                    for(int i = 0; i < matchedColumnNames.size(); i++)
+                    {
+                        String matchedColumnName = (String) matchedColumnNames.get(i);
+                        SchemaDocument.DialogFieldDefinition dfDefn = schemaDoc.getDialogFieldDefn(tableName, matchedColumnName);
+                        if(dfDefn == null)
+                            defnElement.insertBefore(createErrorField(tableColumnPlaceholderElem, "Field definition not found in schema", matchedColumnName), tableColumnPlaceholderElem);
+                        else
+                            dfDefn.resolveDialogField(defnElement, tableColumnPlaceholderElem);
+
+                    }
+                }
+                defnElement.removeChild(tableColumnPlaceholderElem);
+            }
+        }
+
+        public boolean hasTableColumnElements()
+        {
+            return defnElement.getElementsByTagName(Dialog.FIELDNAME_SCHEMA_TABLECOL).getLength() > 0;
         }
 
         public Element getDefnElem()
@@ -192,8 +281,11 @@ public class DialogManager extends XmlSource
          *
          * @return Dialog
          */
-        public Dialog getDialog()
+        public Dialog getDialog(ServletContext context)
         {
+            if(! finalized)
+                finalizeDefinition(context);
+
             if(dialog == null)
             {
                 try
@@ -234,12 +326,112 @@ public class DialogManager extends XmlSource
         }
     }
 
+    public class TableDialogReference
+    {
+        private Element pkgElem;
+        private Element defnElem;
+
+        public TableDialogReference(Element pkgElem, Element defnElem)
+        {
+            this.pkgElem = pkgElem;
+            this.defnElem = defnElem;
+        }
+
+        public void resolveTableDialog(ServletContext context)
+        {
+            final String schemaFileName = defnElem.getAttribute("schema");
+
+            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? SchemaDocFactory.getDoc(context) : SchemaDocFactory.getDoc(schemaFileName);
+            if(schemaDoc == null)
+                addError("Schema '"+ schemaFileName +"' not found");
+            else
+            {
+                if(dependentSchemaDocs == null)
+                    dependentSchemaDocs = new HashSet();
+                dependentSchemaDocs.add(schemaDoc);
+
+                String tableNamePattern = defnElem.getAttribute("table");
+                if(tableNamePattern.length() == 0) tableNamePattern = defnElem.getAttribute("tables");
+
+                List namesOfTablesWithDialogs = schemaDoc.getNamesOfTablesWithDialogsDefns();
+                if(namesOfTablesWithDialogs != null)
+                {
+                    StringListMatcher matcher = new StringListMatcher(namesOfTablesWithDialogs, tableNamePattern);
+                    List matchedTableNames = matcher.getMatchedItems();
+                    for(int i = 0; i < matchedTableNames.size(); i++)
+                    {
+                        String matchedTableName = (String) matchedTableNames.get(i);
+                        SchemaDocument.TableDialogDefinition tableDialogDefinition = schemaDoc.getTableDialogDefn(matchedTableName);
+                        if(tableDialogDefinition != null)
+                        {
+                            Element actualDialog = tableDialogDefinition.createDialogElement(pkgElem, defnElem);
+                            DialogInfo dialogInfo = new DialogInfo(pkgElem.getAttribute("package"), actualDialog, matchedTableName);
+                            dialogs.put(dialogInfo.getLookupName(), dialogInfo);
+                        }
+                        else
+                            addError("Table dialog for table '"+ matchedTableName +"' not found in schema '"+ schemaFileName +"'");
+                    }
+                }
+            }
+        }
+    }
+
     static final String REQPARAMNAME_DIALOG = "dlg";
-    private Map dialogs = new Hashtable();
+    private Map dialogs = new HashMap();  // all dialogs
+    private Set finalizeTableDialogs;
+    private Set finalizeDialogsWithTableColFields;
+    private Set dependentSchemaDocs;
 
     public DialogManager(File file)
     {
         loadDocument(file);
+    }
+
+    public boolean sourceChanged()
+    {
+        if(super.sourceChanged())
+            return true;
+
+        if(dependentSchemaDocs == null)
+            return false;
+
+        Iterator i = dependentSchemaDocs.iterator();
+        while (i.hasNext())
+        {
+            SchemaDocument schemaDocument = (SchemaDocument) i.next();
+            if(schemaDocument.sourceChanged())
+                return true;
+        }
+
+        return false;
+    }
+
+    public Document getDocument(ServletContext context)
+    {
+        Document result = getDocument();
+        if(finalizeTableDialogs != null)
+        {
+            Iterator i = finalizeTableDialogs.iterator();
+            while (i.hasNext())
+            {
+                TableDialogReference tableDialogReference = (TableDialogReference) i.next();
+                tableDialogReference.resolveTableDialog(context);
+            }
+            finalizeTableDialogs = null;
+            addMetaInformation();
+        }
+        if(finalizeDialogsWithTableColFields != null)
+        {
+            Iterator i = finalizeDialogsWithTableColFields.iterator();
+            while (i.hasNext())
+            {
+                DialogInfo dialogInfo = (DialogInfo) i.next();
+                if(! dialogInfo.finalized) dialogInfo.finalizeDefinition(context);
+            }
+            finalizeDialogsWithTableColFields = null;
+            addMetaInformation();
+        }
+        return result;
     }
 
     public Map getDialogs()
@@ -248,7 +440,7 @@ public class DialogManager extends XmlSource
         return dialogs;
     }
 
-    public Dialog getDialog(String name)
+    public Dialog getDialog(ServletContext context, String name)
     {
         reload();
 
@@ -256,27 +448,7 @@ public class DialogManager extends XmlSource
         if(info == null)
             return null;
 
-        return info.getDialog();
-    }
-
-    public Dialog getDialog(ServletRequest request)
-    {
-        String dialogName = request.getParameter(REQPARAMNAME_DIALOG);
-        if(dialogName == null)
-            dialogName = request.getParameter(Dialog.PARAMNAME_DIALOGQNAME);
-
-        if(dialogName == null)
-            return null;
-        else
-        {
-            Dialog result = getDialog(dialogName);
-            if(result == null)
-            {
-                result = new Dialog();
-                result.setHeading("Dialog '" + dialogName + "' not found!");
-            }
-            return result;
-        }
+        return info.getDialog(context);
     }
 
     public String[] getCatalogedNodeIdentifiers()
@@ -287,6 +459,9 @@ public class DialogManager extends XmlSource
     public void catalogNodes()
     {
         dialogs.clear();
+        finalizeTableDialogs = null;
+        finalizeDialogsWithTableColFields = null;
+        dependentSchemaDocs = null;
 
         if(xmlDoc == null)
             return;
@@ -302,7 +477,7 @@ public class DialogManager extends XmlSource
             if(nodeName.equals("dialogs"))
             {
                 Element dialogsElem = (Element) node;
-                String stmtPkg = dialogsElem.getAttribute("package");
+                String dialogsPkg = dialogsElem.getAttribute("package");
                 String idClassName = dialogsElem.getAttribute("id-class");
                 if(idClassName.length() > 0)
                     catalogedNodeIdentifiersClassName = idClassName;
@@ -319,8 +494,14 @@ public class DialogManager extends XmlSource
                     {
                         Element dialogElem = (Element) dialogsChild;
                         processTemplates(dialogElem);
-                        DialogInfo di = new DialogInfo(stmtPkg, dialogElem);
+                        DialogInfo di = new DialogInfo(dialogsPkg, dialogElem);
                         dialogs.put(di.getLookupName(), di);
+                    }
+                    else if(scName.equals("table-dialog") || scName.equals("table-dialogs"))
+                    {
+                        if(finalizeTableDialogs == null)
+                            finalizeTableDialogs = new HashSet();
+                        finalizeTableDialogs.add(new TableDialogReference(dialogsElem, (Element) dialogsChild));
                     }
                     else if(scName.equals("register-field"))
                     {
