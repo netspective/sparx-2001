@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportFrame.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: ReportFrame.java,v 1.2 2002-08-24 05:35:46 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -106,6 +106,7 @@ public class ReportFrame
     }
 
     private SingleValueSource heading;
+    private SingleValueSource headingExtra;
     private SingleValueSource footing;
     private ArrayList items;
 
@@ -128,6 +129,21 @@ public class ReportFrame
     public void setHeading(SingleValueSource vs)
     {
         heading = vs;
+    }
+
+    public SingleValueSource getHeadingExtra()
+    {
+        return headingExtra;
+    }
+
+    public void setHeadingExtra(String value)
+    {
+        headingExtra = value != null && value.length() > 0 ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
+
+    public void setHeadingExtra(SingleValueSource headingExtra)
+    {
+        this.headingExtra = headingExtra;
     }
 
     public SingleValueSource getFooting()
@@ -159,6 +175,7 @@ public class ReportFrame
     public void importFromXml(Element elem)
     {
         setHeading(elem.getAttribute("heading"));
+        setHeadingExtra(elem.getAttribute("heading-extra"));
         setFooting(elem.getAttribute("footing"));
     }
 }
