@@ -408,7 +408,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		if (databasePolicy.retainGUIDColInDml()) {
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:text>		</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-<xsl:text>		</xsl:text>value = databasePolicy.handleGUIDPreDmlExecute(cc.getConnection(), <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName(), <xsl:value-of select="@_gen-member-name"/>Col.getName());
+<xsl:text>		</xsl:text>value = databasePolicy.handleGUIDPreDmlExecute(cc.getConnection(), table.getName(), <xsl:value-of select="@_gen-member-name"/>Col.getName());
 <xsl:text>		</xsl:text>dml.updateValue(COLAI_<xsl:value-of select="@_gen-constant-name"/>, value);
 <xsl:text>		</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 		} else {
@@ -462,12 +462,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:for-each select="column[@type = 'guid32']">
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:text>	</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
-		if (databasePolicy.retainGUIDColInDml()) {
-				seqOrTableName = <xsl:value-of select="@_gen-member-name"/>Col.getSequenceName();
-		} else {
-				seqOrTableName = table.getName();
-		}
-<xsl:text>	</xsl:text>value = databasePolicy.handleGUIDPostDmlExecute(cc.getConnection(), seqOrTableName, <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());
+<xsl:text>	</xsl:text>value = databasePolicy.handleGUIDPostDmlExecute(cc.getConnection(), table.getName(), <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());
 <xsl:text>	</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 </xsl:for-each>
 

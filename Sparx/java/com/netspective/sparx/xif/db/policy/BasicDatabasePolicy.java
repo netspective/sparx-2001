@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BasicDatabasePolicy.java,v 1.3 2002-04-16 22:27:18 eoliphan Exp $
+ * $Id: BasicDatabasePolicy.java,v 1.4 2002-10-20 15:58:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
@@ -59,6 +59,8 @@ package com.netspective.sparx.xif.db.policy;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.net.UnknownHostException;
 
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.guid.RandomGUID;
@@ -66,16 +68,6 @@ import com.netspective.sparx.xif.db.DatabasePolicy;
 
 public class BasicDatabasePolicy implements DatabasePolicy
 {
-    String curGUID=null;
-    private synchronized void setCurGUID(String curGUID)
-    {
-        this.curGUID = curGUID;
-    }
-    private String getCurGUID()
-    {
-        return curGUID;
-    }
-
     public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
         return null;
@@ -106,36 +98,51 @@ public class BasicDatabasePolicy implements DatabasePolicy
         return true;
     }
 
-    public Object handleGUIDPreDmlExecute(Connection conn, String seqOrTableName, String GUIDColumnName) throws SQLException
+    public Object handleGUIDPreDmlExecute(Connection conn, String tableName, String GUIDColumnName) throws SQLException
     {
-        String guid = new RandomGUID().toString();
-        setCurGUID(guid);
-        return guid;
+        try
+        {
+            return RandomGUID.getRandomGUID(false);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            throw new SQLException(e.toString());
+        }
+        catch (UnknownHostException e)
+        {
+            throw new SQLException(e.toString());
+        }
     }
 
-    public Object handleGUIDPostDmlExecute(Connection conn, String seqOrTableName, String GUIDColumnName, Object GUIDColumnValue) throws SQLException
+    public Object handleGUIDPostDmlExecute(Connection conn, String tableName, String GUIDColumnName, Object GUIDColumnValue) throws SQLException
     {
-        return getCurGUID();
+        return GUIDColumnValue;
     }
 
-    public Object handleGUIDPreDmlExecute(Connection conn, ValueContext vc, String seqOrTableName,
+    public Object handleGUIDPreDmlExecute(Connection conn, ValueContext vc, String tableName,
                                           String GUIDColumnName, List columnNames, List columnValues) throws SQLException
     {
-        String guid = new RandomGUID().toString();
-        setCurGUID(guid);
-        return getCurGUID();
+        try
+        {
+            String guid = RandomGUID.getRandomGUID(false);
+            columnNames.add(GUIDColumnName);
+            columnValues.add(guid);
+            return guid;
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            throw new SQLException(e.toString());
+        }
+        catch (UnknownHostException e)
+        {
+            throw new SQLException(e.toString());
+        }
     }
 
-    public Object handleGUIDPostDmlExecute(Connection conn, ValueContext vc, String seqOrTableName,
+    public Object handleGUIDPostDmlExecute(Connection conn, ValueContext vc, String tableName,
                                            String GUIDColumnName, Object GUIDColumnValue) throws SQLException
     {
-        return getCurGUID();
-    }
-
-    public Object getGUIDCurrentValue(Connection conn, ValueContext vc, String seqOrTableName,
-                                      String GUIDColumnName) throws SQLException
-    {
-        return getCurGUID();
+        return GUIDColumnValue;
     }
 
     public boolean retainGUIDColInDml()
