@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectStmtGenerator.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: SelectStmtGenerator.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -311,7 +311,7 @@ public class SelectStmtGenerator
             for(int ob = 0; ob < orderBysCount; ob++)
             {
                 QuerySortFieldRef sortRef = (QuerySortFieldRef) orderBys.get(ob);
-                QueryField[] fields = sortRef.getFields(vc);
+                QueryDefinition.QueryFieldSortInfo[] fields = sortRef.getFields(vc);
                 if(fields == null)
                 {
                     return "Order by field '" + sortRef.getFieldName().getId() + "' did not evaluate to an appropriate QueryField.\n";
@@ -321,12 +321,12 @@ public class SelectStmtGenerator
                     int lastField = fields.length - 1;
                     for(int i = 0; i < fields.length; i++)
                     {
-                        QueryField field = fields[i];
-                        if(field == null)
+                        QueryDefinition.QueryFieldSortInfo fieldSortInfo = fields[i];
+                        if(fieldSortInfo == null)
                             return "Order by field [" + i + "] in '" + sortRef.getFieldName().getId() + "' did not evaluate to an appropriate QueryField.\n";
 
-                        sql.append("  " + field.getOrderByClauseExpr());
-                        if(sortRef.isDescending())
+                        sql.append("  " + fieldSortInfo.getField().getOrderByClauseExpr());
+                        if(fieldSortInfo.isDescending())
                             sql.append(" desc");
 
                         if(i != lastField)

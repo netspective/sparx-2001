@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QuerySelectScrollState.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -63,6 +63,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.naming.NamingException;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xaf.form.DialogContext;
@@ -84,11 +87,25 @@ public class QuerySelectScrollState extends ResultSetScrollState
     private QuerySelect select;
     private Report reportDefn;
     private ReportSkin skin;
+    private String dialogData;
     private boolean resultSetValid;
+
+    private QueryDefinition.QueryFieldSortInfo sortFieldInfo;
+    private int primaryOrderByColIndex = -1;
 
     public QuerySelectScrollState(DatabaseContext dc, ValueContext vc, QuerySelect select, int rowsPerPage) throws NamingException, SQLException
     {
         super(select.execute(dc, vc), rowsPerPage);
+
+        try
+        {
+            if(vc instanceof DialogContext)
+                this.dialogData = ((DialogContext) vc).getAsXml();
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e.toString());
+        }
 
         this.valueContext = vc;
         this.dbContext = dc;
@@ -113,11 +130,24 @@ public class QuerySelectScrollState extends ResultSetScrollState
 
             ReportColumnsList rcl = this.reportDefn.getColumns();
             List selectFields = select.getReportFields();
+
+            List orderByFieldsList = select.getOrderBy();
+            if(orderByFieldsList != null && orderByFieldsList.size() == 1)
+            {
+                QuerySortFieldRef sortRef = (QuerySortFieldRef) orderByFieldsList.get(0);
+                QueryDefinition.QueryFieldSortInfo[] orderByFields = sortRef.getFields(vc);
+                if(orderByFields != null && orderByFields.length == 1)
+                    sortFieldInfo = orderByFields[0];
+            }
+
             for(int i = 0; i < rcl.size(); i++)
             {
-                ReportColumn rc = ((QueryField) selectFields.get(i)).getReportColumn();
+                QueryField field = (QueryField) selectFields.get(i);
+                ReportColumn rc = field.getReportColumn();
                 if(rc != null)
                     rcl.getColumn(i).importFromColumn(rc);
+                if(sortFieldInfo != null && field == sortFieldInfo.getField())
+                    primaryOrderByColIndex = i;
             }
 
             this.skin = SkinFactory.getReportSkin("report");
@@ -125,6 +155,16 @@ public class QuerySelectScrollState extends ResultSetScrollState
         }
         else
             throw new SQLException("Unable to execute SQL: " + select.getErrorSql());
+    }
+
+    public QueryDefinition.QueryFieldSortInfo getSortFieldInfo()
+    {
+        return sortFieldInfo;
+    }
+
+    public int getPrimaryOrderByColIndex()
+    {
+        return primaryOrderByColIndex;
     }
 
     public QuerySelect getSelect()
@@ -152,6 +192,19 @@ public class QuerySelectScrollState extends ResultSetScrollState
         return skin;
     }
 
+    public void populateData(DialogContext dc) throws ParserConfigurationException
+    {
+        try
+        {
+            if(dialogData != null)
+                 dc.setFromXml(dialogData);
+         }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
     public void produceReport(Writer writer, DialogContext dc) throws SQLException, NamingException, IOException
     {
         if(!isScrollable())
@@ -159,9 +212,11 @@ public class QuerySelectScrollState extends ResultSetScrollState
         else
             scrollToActivePage();
 
-        ReportContext rc = new ReportContext(dc, reportDefn, skin);
-        //rc.setResultsScrolling(0, getRowsPerPage());
+        ReportContext rc = new ReportContext(select, dc, reportDefn, skin);
         rc.setResultsScrolling(this);
+
+        if(primaryOrderByColIndex != -1)
+            rc.getState(primaryOrderByColIndex).setFlag(sortFieldInfo.isDescending() ? ReportColumn.COLFLAG_SORTED_DESCENDING : ReportColumn.COLFLAG_SORTED_ASCENDING);
 
         skin.produceReport(writer, rc, getResultSet());
     }

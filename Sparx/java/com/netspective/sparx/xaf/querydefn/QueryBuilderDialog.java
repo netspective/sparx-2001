@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.2 2002-02-07 01:09:10 snshah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.3 2002-02-10 16:31:23 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -103,6 +103,7 @@ public class QueryBuilderDialog extends Dialog
 
     static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
     static public final String QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME = "active-query-select-scroll-state";
+    static public final String QBDIALOG_RESORT_PARAMNAME = "_qbd_resort";
 
     static public final int MAX_ROWS_IN_SINGLE_BROWSER_PAGE = 9999;
 
@@ -381,6 +382,26 @@ public class QueryBuilderDialog extends Dialog
         return select;
     }
 
+    public void handleSortOrderChange(DialogContext dc, QuerySelectScrollState activeState, String resortBy)
+    {
+        try
+        {
+            activeState.populateData(dc);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e.toString());
+        }
+
+        QueryDefinition.QueryFieldSortInfo activeSortFieldInfo = activeState.getSortFieldInfo();
+        String activeSortFieldName = activeSortFieldInfo != null ? activeSortFieldInfo.getField().getName() : null;
+        if(activeSortFieldInfo != null && resortBy.equals(activeSortFieldName))
+            resortBy = activeSortFieldInfo.isDescending() ? resortBy : ("-" + resortBy);
+
+        dc.setValue("sort_order", resortBy);
+    }
+
+
     public void executeHtml(Writer writer, DialogContext dc, int destination) throws IOException
     {
         String transactionId = dc.getTransactionId();
@@ -407,6 +428,11 @@ public class QueryBuilderDialog extends Dialog
                 // means that we need to get close the previous one and remove the attribute so that the connection can be
                 // closed and returned to the pool
                 QuerySelectScrollState activeState = (QuerySelectScrollState) session.getAttribute(QBDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+
+                String resortBy = dc.getRequest().getParameter(QBDIALOG_RESORT_PARAMNAME);
+                if(activeState != null && resortBy != null)
+                    handleSortOrderChange(dc, activeState, resortBy);
+
                 if(activeState != null && !flagIsSet(QBDLGFLAG_ALLOW_MULTIPLE_QSSS))
                 {
                     activeState.close();

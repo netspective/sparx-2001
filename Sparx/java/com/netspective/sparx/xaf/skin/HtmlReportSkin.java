@@ -3,55 +3,55 @@
  *
  * Netspective Corporation permits redistribution, modification and use
  * of this file in source and binary form ("The Software") under the
- * Netspective Source License ("NSL" or "The License"). The following 
- * conditions are provided as a summary of the NSL but the NSL remains the 
+ * Netspective Source License ("NSL" or "The License"). The following
+ * conditions are provided as a summary of the NSL but the NSL remains the
  * canonical license and must be accepted before using The Software. Any use of
- * The Software indicates agreement with the NSL. 
+ * The Software indicates agreement with the NSL.
  *
  * 1. Each copy or derived work of The Software must preserve the copyright
  *    notice and this notice unmodified.
  *
- * 2. Redistribution of The Software is allowed in object code form only 
- *    (as Java .class files or a .jar file containing the .class files) and only 
- *    as part of an application that uses The Software as part of its primary 
- *    functionality. No distribution of the package is allowed as part of a software 
- *    development kit, other library, or development tool without written consent of 
- *    Netspective Corporation. Any modified form of The Software is bound by 
+ * 2. Redistribution of The Software is allowed in object code form only
+ *    (as Java .class files or a .jar file containing the .class files) and only
+ *    as part of an application that uses The Software as part of its primary
+ *    functionality. No distribution of the package is allowed as part of a software
+ *    development kit, other library, or development tool without written consent of
+ *    Netspective Corporation. Any modified form of The Software is bound by
  *    these same restrictions.
- * 
- * 3. Redistributions of The Software in any form must include an unmodified copy of 
+ *
+ * 3. Redistributions of The Software in any form must include an unmodified copy of
  *    The License, normally in a plain ASCII text file unless otherwise agreed to,
  *    in writing, by Netspective Corporation.
  *
- * 4. The names "Sparx" and "Netspective" are trademarks of Netspective 
- *    Corporation and may not be used to endorse products derived from The 
- *    Software without without written consent of Netspective Corporation. "Sparx" 
- *    and "Netspective" may not appear in the names of products derived from The 
+ * 4. The names "Sparx" and "Netspective" are trademarks of Netspective
+ *    Corporation and may not be used to endorse products derived from The
+ *    Software without without written consent of Netspective Corporation. "Sparx"
+ *    and "Netspective" may not appear in the names of products derived from The
  *    Software without written consent of Netspective Corporation.
  *
- * 5. Please attribute functionality to Sparx where possible. We suggest using the 
+ * 5. Please attribute functionality to Sparx where possible. We suggest using the
  *    "powered by Sparx" button or creating a "powered by Sparx(tm)" link to
  *    http://www.netspective.com for each application using Sparx.
  *
- * The Software is provided "AS IS," without a warranty of any kind. 
+ * The Software is provided "AS IS," without a warranty of any kind.
  * ALL EXPRESS OR IMPLIED REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
  * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
  * OR NON-INFRINGEMENT, ARE HEREBY DISCLAIMED.
  *
  * NETSPECTIVE CORPORATION AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING 
+ * SUFFERED BY LICENSEE OR ANY THIRD PARTY AS A RESULT OF USING OR DISTRIBUTING
  * THE SOFTWARE. IN NO EVENT WILL NETSPECTIVE OR ITS LICENSORS BE LIABLE
  * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
  * CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
  * REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
  * INABILITY TO USE THE SOFTWARE, EVEN IF HE HAS BEEN ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGES.      
+ * OF SUCH DAMAGES.
  *
  * @author Shahid N. Shah
  */
- 
+
 /**
- * $Id: HtmlReportSkin.java,v 1.2 2002-02-09 15:05:00 snshah Exp $
+ * $Id: HtmlReportSkin.java,v 1.3 2002-02-10 16:31:24 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -72,6 +72,8 @@ import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.config.Configuration;
 
 public class HtmlReportSkin implements ReportSkin
 {
@@ -96,6 +98,8 @@ public class HtmlReportSkin implements ReportSkin
     protected String dataFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;'";
     protected String dataFtFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
     protected String rowSepImgSrc = "/shared/resources/images/design/bar.gif";
+    protected String sortAscImgSrc = "/shared/resources/images/navigate/triangle-up-blue.gif";
+    protected String sortDescImgSrc = "/shared/resources/images/navigate/triangle-down-lblue.gif";
 
     public HtmlReportSkin()
     {
@@ -237,16 +241,31 @@ public class HtmlReportSkin implements ReportSkin
         int dataColsCount = columns.size();
         int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
 
+        Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
+        String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
+        String sortAscImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-ascending-img-src", getSortAscImgSrc()) + "\" border=0>";
+        String sortDescImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
+
         writer.write("<tr bgcolor=" + frameHdTableRowBgcolorAttrs + "><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         if(headings == null)
         {
             for(int i = 0; i < dataColsCount; i++)
             {
                 ReportColumn rcd = columns.getColumn(i);
+                ReportContext.ColumnState rcs = rc.getState(i);
                 if(states[i].isHidden())
                     continue;
 
-                writer.write("<td><font " + dataHdFontAttrs + "><b>" + rcd.getHeading().getValue(rc) + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                String colHeading = rcd.getHeading().getValue(rc);
+                SingleValueSource headingAnchorAttrs = rcd.getHeadingAnchorAttrs();
+                if(headingAnchorAttrs != null)
+                    colHeading = "<a " + headingAnchorAttrs.getValue(rc) + ">" + colHeading + "</a>";
+                if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_ASCENDING))
+                    colHeading += sortAscImgTag;
+                if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_DESCENDING))
+                    colHeading += sortDescImgTag;
+
+                writer.write("<td><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
             }
         }
         else
@@ -254,12 +273,24 @@ public class HtmlReportSkin implements ReportSkin
             for(int i = 0; i < dataColsCount; i++)
             {
                 ReportColumn rcd = columns.getColumn(i);
+                ReportContext.ColumnState rcs = rc.getState(i);
                 if(states[i].isHidden())
                     continue;
 
                 Object heading = headings[rcd.getColIndexInArray()];
                 if(heading != null)
-                    writer.write("<td><font " + dataHdFontAttrs + "><b>" + heading.toString() + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                {
+                    String colHeading = heading.toString();
+                    SingleValueSource headingAnchorAttrs = rcd.getHeadingAnchorAttrs();
+                    if(headingAnchorAttrs != null)
+                        colHeading = "<a " + headingAnchorAttrs.getValue(rc) + ">" + colHeading + "</a>";
+                    if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_ASCENDING))
+                        colHeading += sortAscImgTag;
+                    if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_DESCENDING))
+                        colHeading += sortDescImgTag;
+
+                    writer.write("<td><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+                }
                 else
                     writer.write("<td><font " + dataHdFontAttrs + "></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
             }
@@ -277,16 +308,33 @@ public class HtmlReportSkin implements ReportSkin
 
         if(!rs.next()) return;
 
+        Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
+        String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
+        String sortAscImgTag = "<img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-ascending-img-src", getSortAscImgSrc()) + "\" border=0>";
+        String sortDescImgTag = "<img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
+
         writer.write("<tr bgcolor=" + frameHdTableRowBgcolorAttrs + "><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         for(int i = 0; i < dataColsCount; i++)
         {
             ReportColumn rcd = columns.getColumn(i);
+            ReportContext.ColumnState rcs = rc.getState(i);
             if(states[i].isHidden())
                 continue;
 
             Object heading = rs.getString(rcd.getColIndexInResultSet());
             if(heading != null)
-                writer.write("<td><font " + dataHdFontAttrs + "><b>" + heading.toString() + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+            {
+                String colHeading = heading.toString();
+                SingleValueSource headingAnchorAttrs = rcd.getHeadingAnchorAttrs();
+                if(headingAnchorAttrs != null)
+                    colHeading = "<a " + headingAnchorAttrs.getValue(rc) + ">" + colHeading + "</a>";
+                if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_ASCENDING))
+                    colHeading += sortAscImgTag;
+                if(rcs.flagIsSet(ReportColumn.COLFLAG_SORTED_DESCENDING))
+                    colHeading += sortDescImgTag;
+
+                writer.write("<td><font " + dataHdFontAttrs + "><b>" + colHeading + "</b></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+            }
             else
                 writer.write("<td><font " + dataHdFontAttrs + "></font></td><td><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
@@ -302,6 +350,9 @@ public class HtmlReportSkin implements ReportSkin
 
     public void produceDataRows(Writer writer, ReportContext rc, ResultSet rs) throws SQLException, IOException
     {
+        Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
+        String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
+
         Report defn = rc.getReport();
         ReportColumnsList columns = rc.getColumns();
         ReportContext.ColumnState[] states = rc.getStates();
@@ -389,6 +440,9 @@ public class HtmlReportSkin implements ReportSkin
 
     public void produceDataRows(Writer writer, ReportContext rc, Object[][] data, int startDataRow) throws IOException
     {
+        Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
+        String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
+
         Report defn = rc.getReport();
         ReportColumnsList columns = rc.getColumns();
         ReportContext.ColumnState[] states = rc.getStates();
@@ -612,5 +666,25 @@ public class HtmlReportSkin implements ReportSkin
     public void setRowSepImgSrc(String rowSepImgSrc)
     {
         this.rowSepImgSrc = rowSepImgSrc;
+    }
+
+    public String getSortAscImgSrc()
+    {
+        return sortAscImgSrc;
+    }
+
+    public void setSortAscImgSrc(String sortAscImgSrc)
+    {
+        this.sortAscImgSrc = sortAscImgSrc;
+    }
+
+    public String getSortDescImgSrc()
+    {
+        return sortDescImgSrc;
+    }
+
+    public void setSortDescImgSrc(String sortDescImgSrc)
+    {
+        this.sortDescImgSrc = sortDescImgSrc;
     }
 }

@@ -15,7 +15,7 @@
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="HIDE_WARNINGS" value="false" />
     <excludeFromCompile>
-      <directory path="C:/Utils/java/jdk1.3.1" includeSubdirectories="true" />
+      <directory path="C:/utils/java/jdk1.3.1" includeSubdirectories="true" />
     </excludeFromCompile>
   </component>
   <component class="com.intellij.compiler.JavacSettings">
@@ -37,6 +37,12 @@
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
   <component class="com.intellij.cvsSupport.CvsConfiguration">
+    <cvs_root>
+      <option name="METHOD" value="pserver" />
+      <option name="USER_NAME" value="snshah" />
+      <option name="SERVER_NAME" value="192.168.0.196" />
+      <option name="REPOSITORY_PATH" value="/home/netspective/cvs/Sparx" />
+    </cvs_root>
     <Checkout>
       <option name="DATE_TAG" value="" />
       <option name="REVISION_TAG" value="" />
@@ -100,7 +106,7 @@
       <option name="NON_RECURSIVE" value="false" />
       <option name="FORCE_RECURSIVE" value="false" />
     </Editors>
-    <option name="CLIENT_PATH" value="C:/Program Files/WinCvs 1.2/cvs.exe" />
+    <option name="CLIENT_PATH" value="C:/Program Files/GNU/WinCvs 1.2/cvs.exe" />
     <option name="EXTERNAL_DIFF_PATH" value="" />
     <option name="CVS_ENABLED" value="true" />
     <option name="USE_EXTERNAL_DIFF" value="false" />
@@ -115,7 +121,7 @@
     <option name="SHOW_DIFF_OPTIONS" value="true" />
     <option name="SHOW_ADD_OPTIONS" value="true" />
     <option name="SHOW_STATUS_OPTIONS" value="true" />
-    <option name="SHOW_EDIT_OPTIONS" value="true" />
+    <option name="SHOW_EDIT_OPTIONS" value="false" />
     <option name="SHOW_UNEDIT_OPTIONS" value="true" />
     <option name="SHOW_REMOVE_OPTIONS" value="true" />
     <option name="SHOW_LOG_OPTIONS" value="true" />
@@ -125,10 +131,26 @@
     <option name="HIDE_UP_TO_DATE_FILES" value="false" />
   </component>
   <component class="com.intellij.cvsSupport.CvsManager">
-    <expanded_paths />
+    <expanded_paths>
+      <path value="C:/Projects/Sparx/java" />
+    </expanded_paths>
   </component>
   <component class="com.intellij.debugger.Debugger">
-    <line_breakpoints />
+    <line_breakpoints>
+      <breakpoint url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/form/conditional/DialogFieldConditionalApplyFlag.java" line="237">
+        <option name="ENABLED" value="true" />
+        <option name="SUSPEND_VM" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CONDITION" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="LOG_MESSAGE" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INVERSE_CLASS_FILLTERS" value="false" />
+      </breakpoint>
+    </line_breakpoints>
     <exception_breakpoints>
       <breakpoint_any>
         <option name="ENABLED" value="false" />
@@ -197,7 +219,9 @@
       <option name="ENABLED" value="true" />
     </filter>
   </component>
-  <component class="com.intellij.debugger.ui.DebuggerUI" />
+  <component class="com.intellij.debugger.ui.DebuggerUI">
+    <watch_expression value="fieldStates" />
+  </component>
   <component class="com.intellij.execution.RunManager">
     <option name="SHOW_SETTINGS_BEFORE_RUNNING" value="true" />
     <option name="COMPILE_BEFORE_RUNNING" value="true" />
@@ -223,15 +247,24 @@
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_RUNNER" />
     </configuration>
-    <configuration name="&lt;template&gt;" type="Remote" default="true" selected="true">
+    <configuration name="&lt;template&gt;" type="Remote" default="true" selected="false">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5000" />
     </configuration>
+    <configuration name="Resin" type="Application" default="false" selected="true">
+      <option name="MAIN_CLASS_NAME" value="com.caucho.server.http.HttpServer" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" value="-conf c:\utils\java\app-servers\resin-2.0.5\conf\resin.conf" />
+      <option name="WORKING_DIRECTORY" value="c:/utils/java/app-servers/resin-2.0.5/bin" />
+    </configuration>
   </component>
   <component class="com.intellij.ide.SelectInManager" />
-  <component class="com.intellij.ide.bookmarks.BookmarkManager" />
+  <component class="com.intellij.ide.bookmarks.BookmarkManager">
+    <editor_bookmark url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySelectScrollState.java" line="218" />
+    <editor_bookmark url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/skin/HtmlReportSkin.java" line="244" />
+  </component>
   <component class="com.intellij.ide.commander.Commander">
     <leftPanel view="Project" active="false" />
     <rightPanel view="Project" active="true" />
@@ -239,13 +272,34 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/ant/GenerateValueSourcesDocumentation.java" column="43" line="106" />
-      <file_info url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/value/ValueSourceFactory.java" column="51" line="142" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/report/Report.java" column="25" line="97" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/report/StandardReport.java" column="16" line="174" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/sql/StatementManager.java" column="94" line="705" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/report/ReportContext.java" column="86" line="92" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/report/ReportColumn.java" column="50" line="146" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QueryField.java" column="0" line="68" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QueryDefinition.java" column="57" line="245" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySelect.java" column="68" line="324" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySortFieldRef.java" column="27" line="106" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/SelectStmtGenerator.java" column="40" line="323" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QueryBuilderDialog.java" column="95" line="395" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySelectScrollState.java" column="140" line="189" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/BuildConfiguration.java" column="44" line="71" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/skin/HtmlReportSkin.java" column="114" line="245" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/Globals.java" column="31" line="62" />
     </recent_files>
     <open_files>
-      <file_info url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/value/ValueSourceFactory.java" column="51" line="142" />
-      <active_file url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/value/ValueSourceFactory.java" />
-      <file_info url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/ant/GenerateValueSourcesDocumentation.java" column="43" line="106" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QueryBuilderDialog.java" column="95" line="395" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySortFieldRef.java" column="27" line="106" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySelect.java" column="68" line="324" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QueryDefinition.java" column="57" line="245" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QuerySelectScrollState.java" column="140" line="189" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/BuildConfiguration.java" column="44" line="71" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/SelectStmtGenerator.java" column="40" line="323" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn/QueryField.java" column="0" line="68" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/skin/HtmlReportSkin.java" column="114" line="245" />
+      <file_info url="file://C:/Projects/Sparx/java/com/netspective/sparx/Globals.java" column="31" line="62" />
+      <active_file url="file://C:/Projects/Sparx/java/com/netspective/sparx/Globals.java" />
     </open_files>
   </component>
   <component class="com.intellij.ide.hierarchy.HierarchyBrowserManager">
@@ -257,13 +311,18 @@
   <component class="com.intellij.ide.navigator.impl.ProjectNavigatorSettings">
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java" />
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java/com/netspective" />
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/value" />
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java/com/netspective/sparx/util/ant" />
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java/com/netspective/sparx" />
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java/com" />
-      <expanded_node type="directory" url="file://H:/Projects/Sparx/java/com/netspective/sparx/util" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/skin" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/sql" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/report" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/util" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/querydefn" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/xaf/report/column" />
+      <expanded_node type="directory" url="file://C:/Projects/Sparx/java/com/netspective/sparx/util/xml" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false" />
   </component>
@@ -294,35 +353,56 @@
     <option name="OPEN_IN_BROWSER" value="false" />
   </component>
   <component class="com.intellij.projectRoots.ProjectRootContainer">
-    <jdk name="java version &quot;1.3.1&quot;" />
-    <root file="jar://C:/Utils/java/xerces-1_4_1/xerces.jar!/">
+    <jdk name="java version &quot;1.3.1_02&quot;" />
+    <root file="jar://S:/utils/java/lib/sparx-redist/ant.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/java/xalan-j_2_1_0/bin/xalan.jar!/">
+    <root file="jar://S:/utils/java/lib/sparx-redist/bsf.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/java/jakarta-oro-2.0.3/jakarta-oro-2.0.3.jar!/">
+    <root file="jar://S:/utils/java/lib/sparx-redist/jdbc.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/java/jakarta-log4j-1.1.2/dist/lib/log4j.jar!/">
+    <root file="jar://S:/utils/java/lib/sparx-redist/js.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/java/jakarta-ant-1.3/lib/ant.jar!/">
+    <root file="jar://S:/utils/java/lib/sparx-redist/log4j.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/app-servers/resin-2.0.4/lib/jdbc2_0-stdext.jar!/">
+    <root file="jar://S:/utils/java/lib/sparx-redist/oro.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
-    <root file="jar://C:/Utils/app-servers/resin-2.0.4/lib/jsdk23.jar!/">
+    <root file="jar://S:/utils/java/lib/sparx-redist/servlet.jar!/">
+      <property name="type" value="classPathEntry" />
+    </root>
+    <root file="jar://S:/utils/java/lib/sparx-redist/xalan.jar!/">
+      <property name="type" value="classPathEntry" />
+    </root>
+    <root file="jar://S:/utils/java/lib/sparx-redist/xerces.jar!/">
       <property name="type" value="classPathEntry" />
     </root>
     <root file="file://$PROJECT_DIR$/classes">
       <property name="type" value="outputPath" />
     </root>
-    <root file="file://H:/Projects/Sparx/java">
+    <root file="jar://C:/utils/java/app-servers/resin-2.0.5/lib/resin.jar!/">
+      <property name="type" value="classPathEntry" />
+    </root>
+    <root file="jar://C:/utils/java/app-servers/resin-2.0.5/lib/jta-spec1_0_1.jar!/">
+      <property name="type" value="classPathEntry" />
+    </root>
+    <root file="jar://C:/utils/java/app-servers/resin-2.0.5/lib/jndi.jar!/">
+      <property name="type" value="classPathEntry" />
+    </root>
+    <root file="jar://C:/utils/java/app-servers/resin-2.0.5/lib/webutil.jar!/">
+      <property name="type" value="classPathEntry" />
+    </root>
+    <root file="file://C:/Projects/Sparx/java">
       <property name="type" value="projectFiles" />
     </root>
-    <root file="file://H:/Projects/Sparx/java">
+    <root file="file://C:/Projects/Sparx/java">
+      <property name="type" value="sourcePathEntry" />
+    </root>
+    <root file="file://C:/Projects/web-cura/Site/WEB-INF/classes">
       <property name="type" value="sourcePathEntry" />
     </root>
     <root file="file://C:/Utils/java/jdk1.3/docs/api">

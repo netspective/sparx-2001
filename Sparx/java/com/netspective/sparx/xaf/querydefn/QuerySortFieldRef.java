@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySortFieldRef.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QuerySortFieldRef.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -68,8 +68,7 @@ public class QuerySortFieldRef
     private QueryDefinition queryDefn;
     private SingleValueSource fieldNameSrc;
     private boolean isStatic;
-    private QueryField[] fields;
-    private boolean descending;
+    private QueryDefinition.QueryFieldSortInfo[] fields;
 
     public QuerySortFieldRef(QueryDefinition queryDefn, String fieldName)
     {
@@ -105,36 +104,14 @@ public class QuerySortFieldRef
         return fieldNameSrc;
     }
 
-    public QueryField[] getFields(ValueContext vc)
+    public QueryDefinition.QueryFieldSortInfo[] getFields(ValueContext vc)
     {
         if(isStatic) return fields;
 
         String fieldName = fieldNameSrc.getValue(vc);
         if(fieldName != null)
-        {
             return queryDefn.getFieldsFromDelimitedNames(fieldName, MULTIFIELD_SORT_DELIM);
-        }
         else
             return null;
-    }
-
-    public boolean isAscending()
-    {
-        return !descending;
-    }
-
-    public boolean isDescending()
-    {
-        return descending;
-    }
-
-    public void setAscending()
-    {
-        descending = false;
-    }
-
-    public void setDescending()
-    {
-        descending = true;
     }
 }

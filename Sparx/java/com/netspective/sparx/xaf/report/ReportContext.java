@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportContext.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: ReportContext.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -71,6 +71,8 @@ import javax.servlet.ServletResponse;
 
 import com.netspective.sparx.xaf.report.column.DialogFieldColumn;
 import com.netspective.sparx.xaf.sql.ResultSetScrollState;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.querydefn.QuerySelect;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -280,6 +282,17 @@ public class ReportContext extends ServletValueContext
         }
     }
 
+    public ReportContext(ValueContext vc, Report reportDefn, ReportSkin skin)
+    {
+        this(vc.getServletContext(), vc.getServlet(), vc.getRequest(), vc.getResponse(), reportDefn, skin);
+    }
+
+    public ReportContext(QuerySelect select, DialogContext dc, Report reportDefn, ReportSkin skin)
+    {
+        this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse(), reportDefn, skin);
+
+    }
+
     /**
      * Returns a string useful for displaying a unique Id for this DialogContext
      * in a log or monitor file.
@@ -290,11 +303,6 @@ public class ReportContext extends ServletValueContext
         if(result == null)
             return Integer.toString(reportDefn.getColumns().size());
         return result;
-    }
-
-    public ReportContext(ValueContext vc, Report reportDefn, ReportSkin skin)
-    {
-        this(vc.getServletContext(), vc.getServlet(), vc.getRequest(), vc.getResponse(), reportDefn, skin);
     }
 
     public List getListeners()

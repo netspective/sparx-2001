@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryDefinition.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QueryDefinition.java,v 1.2 2002-02-10 16:31:23 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -73,6 +73,38 @@ import com.netspective.sparx.util.xml.XmlSource;
 
 public class QueryDefinition
 {
+    static public class QueryFieldSortInfo
+    {
+        private QueryField field;
+        private boolean isDescending;
+
+        public QueryFieldSortInfo(QueryField field, boolean descending)
+        {
+            this.field = field;
+            isDescending = descending;
+        }
+
+        public QueryField getField()
+        {
+            return field;
+        }
+
+        public void setField(QueryField field)
+        {
+            this.field = field;
+        }
+
+        public boolean isDescending()
+        {
+            return isDescending;
+        }
+
+        public void setDescending(boolean descending)
+        {
+            isDescending = descending;
+        }
+    }
+
     private String name;
     private SingleValueSource dataSourceValueSource;
     private List fieldsList = new ArrayList();
@@ -196,15 +228,22 @@ public class QueryDefinition
         errors.add(group + ": " + message);
     }
 
-    public QueryField[] getFieldsFromDelimitedNames(String names, String delim)
+    public QueryFieldSortInfo[] getFieldsFromDelimitedNames(String names, String delim)
     {
         List result = new ArrayList();
         StringTokenizer st = new StringTokenizer(names, delim);
         while(st.hasMoreTokens())
         {
-            result.add((QueryField) fieldsMap.get(st.nextToken()));
+            String fieldName = st.nextToken();
+            boolean isDescending = false;
+            if(fieldName.startsWith("-"))
+            {
+                fieldName = fieldName.substring(1);
+                isDescending = true;
+            }
+            result.add(new QueryFieldSortInfo((QueryField) fieldsMap.get(fieldName), isDescending));
         }
-        return (QueryField[]) result.toArray(new QueryField[result.size()]);
+        return (QueryFieldSortInfo[]) result.toArray(new QueryFieldSortInfo[result.size()]);
     }
 
     public void importFromXml(XmlSource xs, Element elem)

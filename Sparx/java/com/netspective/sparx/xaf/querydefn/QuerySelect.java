@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.2 2002-02-07 01:09:10 snshah Exp $
+ * $Id: QuerySelect.java,v 1.3 2002-02-10 16:31:24 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -313,18 +313,16 @@ public class QuerySelect
             alwaysDirty = true;
     }
 
-    public void addOrderBy(String fieldName, boolean descending)
+    public void addOrderBy(String fieldName)
     {
         QuerySortFieldRef sortRef = new QuerySortFieldRef(queryDefn, fieldName);
-        if(descending)
-            sortRef.setDescending();
 
         if(sortRef.isStatic())
         {
-            QueryField[] fields = sortRef.getFields(null);
+            QueryDefinition.QueryFieldSortInfo[] fields = sortRef.getFields(null);
             for(int i = 0; i < fields.length; i++)
             {
-                if(fields[i] == null)
+                if(fields[i] == null || fields[i].getField() == null)
                 {
                     addError("query-select-addOrderBy", "field '" + fieldName + "' not found");
                     break;
@@ -338,7 +336,7 @@ public class QuerySelect
     public void addOrderBy(String[] fieldNames)
     {
         for(int i = 0; i < fieldNames.length; i++)
-            addOrderBy(fieldNames[i], false);
+            addOrderBy(fieldNames[i]);
     }
 
     public void addCondition(QueryCondition condition)
@@ -516,7 +514,8 @@ public class QuerySelect
             else if(childName.equals("order-by"))
             {
                 Element obElem = (Element) node;
-                addOrderBy(obElem.getAttribute("field"), obElem.getAttribute("descending").equals("yes") ? true : false);
+                String fieldName = obElem.getAttribute("field");
+                addOrderBy(obElem.getAttribute("descending").equals("yes") ? ("-" + fieldName) : fieldName);
             }
             else if(childName.equals("group-by"))
             {

@@ -1221,6 +1221,11 @@
 				<xsd:documentation>Specifies whether or not a word wrapping should be allowed inside this column; the actual behavior of this attribute is dependent upon which skin is being used but in most cases (like HTML) a simple NOBR is added.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
+		<xsd:attribute name="allow-sort" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not a the column is allowed to be sorted when the heading is clicked (used by query definitions).</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
 		<xsd:attribute name="col-break" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>Specifies whether or not a column break should be added; the actual behavior of this attribute is dependent upon which skin is being used.</xsd:documentation>
