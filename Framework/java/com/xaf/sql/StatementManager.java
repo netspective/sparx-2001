@@ -28,6 +28,7 @@ public class StatementManager extends XmlSource
 {
     static public final Object[] SQL_TYPES_ARRAY =
     {
+		"strings", new Integer(Types.ARRAY),
         "integer", new Integer(Types.INTEGER),
         "double", new Integer(Types.DOUBLE),
         "text", new Integer(Types.VARCHAR),
@@ -35,7 +36,7 @@ public class StatementManager extends XmlSource
     };
     static public final Map SQL_TYPES_MAP = new HashMap();
 
-    static public String getTypeNameForId(int sqlType)
+    static public final String getTypeNameForId(int sqlType)
     {
         for(int i = 0; i < SQL_TYPES_ARRAY.length; i+=2)
         {
@@ -44,148 +45,6 @@ public class StatementManager extends XmlSource
         }
         return null;
     }
-
-	static public class StatementInfo
-	{
-		protected String pkgName;
-		protected String stmtName;
-		protected String dataSourceId;
-		protected Element stmtElem;
-		protected String sql;
-		protected SingleValueSource[] paramValueSources;
-        protected int[] paramTypes;
-		protected List reportElems;
-
-		public StatementInfo()
-		{
-		}
-
-        public final String getId() { return pkgName != null ? (pkgName + "." + stmtName) : stmtName; }
-        public final String getSql() { return sql; }
-        public final SingleValueSource[] getParams() { return paramValueSources; }
-        public final int[] getParamTypes() { return paramTypes; }
-
-		public void applyParams(DatabaseContext dc, ValueContext vc, PreparedStatement stmt) throws SQLException
-		{
-            if(paramValueSources == null)
-                return;
-
-			int paramsCount = paramValueSources.length;
-			for(int i = 0; i < paramsCount; i++)
-			{
-				SingleValueSource vs = (SingleValueSource) paramValueSources[i];
-                if(paramTypes[i] == Types.VARCHAR)
-    				stmt.setObject(i+1, vs.getValue(vc));
-                else
-                {
-                    switch(paramTypes[i])
-                    {
-                        case Types.INTEGER:
-                            stmt.setInt(i+1, vs.getIntValue(vc));
-                            break;
-
-                        case Types.DOUBLE:
-                            stmt.setDouble(i+1, vs.getDoubleValue(vc));
-                            break;
-                    }
-                }
-			}
-		}
-
-		public void importFromXml(Element stmtElem, String pkgName, String pkgDataSourceId)
-		{
-			this.pkgName = pkgName;
-			this.stmtElem = stmtElem;
-			stmtName = stmtElem.getAttribute("name");
-		    sql = stmtElem.getFirstChild().getNodeValue();
-            ArrayList paramElems = new ArrayList();
-
-			dataSourceId = stmtElem.getAttribute("data-source");
-			if(dataSourceId.length() == 0)
-			{
-				dataSourceId = null;
-				if(pkgDataSourceId != null)
-					dataSourceId = pkgDataSourceId;
-			}
-
-			NodeList stmtChildren = stmtElem.getChildNodes();
-			for(int ch = 0; ch < stmtChildren.getLength(); ch++)
-			{
-				Node stmtChild = stmtChildren.item(ch);
-				if(stmtChild.getNodeType() != Node.ELEMENT_NODE)
-					continue;
-                String childName = stmtChild.getNodeName();
-				if(childName.equals("report"))
-				{
-					if(reportElems == null) reportElems = new ArrayList();
-					reportElems.add(stmtChild);
-				}
-				else if(childName.equals("params"))
-				{
-					NodeList paramsChildren = stmtChild.getChildNodes();
-					for(int p = 0; p < paramsChildren.getLength(); p++)
-					{
-						Node paramsChild = paramsChildren.item(p);
-						if(paramsChild.getNodeType() != Node.ELEMENT_NODE)
-							continue;
-
-						Element paramElem = (Element) paramsChild;
-                        paramElems.add(paramElem);
-					}
-				}
-			}
-
-            if(paramElems.size() > 0)
-            {
-                int paramElemsCount = paramElems.size();
-                paramValueSources = new SingleValueSource[paramElemsCount];
-                paramTypes = new int[paramElemsCount];
-
-                for(int p = 0; p < paramElemsCount; p++)
-                {
-                    Element paramElem = (Element) paramElems.get(p);
-                    paramValueSources[p] = ValueSourceFactory.getSingleOrStaticValueSource(paramElem.getAttribute("value"));
-                    String paramTypeName = paramElem.getAttribute("type");
-                    if(paramTypeName.length() > 0)
-                    {
-                        Integer typeNum = (Integer) SQL_TYPES_MAP.get(paramTypeName);
-                        if(typeNum == null)
-                            throw new RuntimeException("param type '"+paramTypeName+"' is invalid for statement '"+pkgName+stmtName+"'");
-                        paramTypes[p] = typeNum.intValue();
-                    }
-                    else
-                    {
-                        paramTypes[p] = Types.VARCHAR;
-                    }
-                }
-            }
-		}
-
-		public String getDebugHtml(ValueContext vc)
-		{
-			StringBuffer html = new StringBuffer();
-			html.append("<pre>");
-			html.append(getSql());
-			html.append("</pre>");
-			if(paramValueSources != null)
-			{
-				html.append("<p>Bind Parameters:<ol>");
-				int paramsCount = paramValueSources.length;
-				for(int i = 0; i < paramsCount; i++)
-				{
-					SingleValueSource vs = (SingleValueSource) paramValueSources[i];
-					html.append("<li><code><b>");
-					html.append(vs.getId());
-					html.append("</b> = ");
-					html.append(vs.getValue(vc));
-					html.append("</code> (");
-                    html.append(getTypeNameForId(paramTypes[i]));
-					html.append(")</li>");
-				}
-			}
-			return html.toString();
-		}
-	}
 
 	static public class ResultInfo
 	{
@@ -199,8 +58,8 @@ public class StatementManager extends XmlSource
 		}
 
 		public ResultSet getResultSet() { return rs; }
-		public String getSQL() { return si.sql; }
-		public Element getStmtElement() { return si.stmtElem; }
+		public String getSQL(ValueContext vc) { return si.getSql(vc); }
+		public Element getStmtElement() { return si.getStatementElement(); }
 	}
 
 	private String defaultStyleSheet = null;
@@ -296,9 +155,9 @@ public class StatementManager extends XmlSource
 						statements.put(statementId, si);
 						stmtElem.setAttribute("qualified-name", si.getId());
 						stmtElem.setAttribute("package", stmtPkg);
-						if(si.reportElems != null)
+						if(si.getReportElems() != null)
 						{
-							for(Iterator i = si.reportElems.iterator(); i.hasNext(); )
+							for(Iterator i = si.getReportElems().iterator(); i.hasNext(); )
 							{
 								Element reportElem = (Element) i.next();
 								String reportName = reportElem.getAttribute("name");
@@ -351,19 +210,19 @@ public class StatementManager extends XmlSource
 	static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params) throws NamingException, SQLException
 	{
 		if(dataSourceId == null)
-			dataSourceId = si.dataSourceId;
+			dataSourceId = si.getDataSourceId();
 
 		Connection conn = dataSourceId == null ? dc.getConnection() : dc.getConnection(dataSourceId);
         if (conn == null)
             throw new RuntimeException("Your mama!" + dataSourceId);
-        PreparedStatement stmt = conn.prepareStatement(si.sql);
+        PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
 
         if(params != null)
         {
             for(int i = 0; i < params.length; i++)
                 stmt.setObject(i, params[i]);
         }
-        else if(si.paramValueSources != null)
+        else
             si.applyParams(dc, vc, stmt);
 
         if(stmt.execute())
@@ -637,7 +496,7 @@ public class StatementManager extends XmlSource
 		vs.setValue(vc, rs.getMetaData(), data, storeType);
 
         Report rd = new StandardReport();
-        String statementId = ri.si.pkgName + ri.si.stmtName;
+        String statementId = ri.si.getPkgName() + ri.si.getStmtName();
 		Element reportElem = (Element) reports.get(reportId == null ? statementId : (statementId + "." + reportId));
 		if(reportElem == null && reportId != null)
 		{

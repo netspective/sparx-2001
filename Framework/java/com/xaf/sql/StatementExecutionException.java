@@ -10,26 +10,27 @@ package com.xaf.sql;
  */
 
 import java.util.*;
+import com.xaf.value.*;
 
 public class StatementExecutionException extends Exception
 {
 	private StatementManager stmtManager;
-	private StatementManager.StatementInfo stmtInfo;
+	private StatementInfo stmtInfo;
 	private String errorMsg;
 
-	StatementExecutionException(StatementManager manager, StatementManager.StatementInfo si, String parentExcpMsg)
+	StatementExecutionException(StatementManager manager, StatementInfo si, String parentExcpMsg)
 	{
 		stmtManager = manager;
 		stmtInfo = si;
 		errorMsg = parentExcpMsg;
 	}
 
-	public final String getStmtId() { return stmtInfo.pkgName + "." + stmtInfo.stmtName; }
-	public final String getSQL() { return stmtInfo.sql; }
+	public final String getStmtId() { return stmtInfo.getId(); }
+	public final StatementInfo getStmtInfo() { return stmtInfo; }
 	public final StatementManager getManager() { return stmtManager; }
 
-	public String getMessage()
+	public String getMessage(ValueContext vc)
 	{
-		return "Statement ID '"+ getStmtId() + "' executed improperly.\nError: " + errorMsg + "\nSQL: " + getSQL();
+		return "Statement ID '"+ getStmtId() + "' executed improperly.\nError: " + errorMsg + "\nSQL: " + stmtInfo.getSql(vc);
 	}
 }
