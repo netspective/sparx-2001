@@ -45,12 +45,12 @@
 		<!ATTLIST include ifnotdefined CDATA #IMPLIED>
 
 	<!ELEMENT indextype (description?)>
-		<!ATTLIST tabletype name CDATA #REQUIRED>
-		<!ATTLIST tabletype descr CDATA #REQUIRED>
-		<!ATTLIST tabletype unique %DATATYPE.BOOLEAN; "no">
-		<!ATTLIST tabletype columns CDATA #IMPLIED>
+		<!ATTLIST indextype name CDATA #REQUIRED>
+		<!ATTLIST indextype descr CDATA #REQUIRED>
+		<!ATTLIST indextype unique %DATATYPE.BOOLEAN; "no">
+		<!ATTLIST indextype columns CDATA #IMPLIED>
 	
-	<!ELEMENT tabletype (description?, parent?, param*, column*, data?, enum*)>
+	<!ELEMENT tabletype (description?, parent?, param*, column*, index*, data?, enum*)>
 		<!ATTLIST tabletype name CDATA #REQUIRED>
 		<!ATTLIST tabletype abbrev CDATA #IMPLIED>
 		<!ATTLIST tabletype type CDATA #IMPLIED>
@@ -59,7 +59,7 @@
 		<!ELEMENT param %DATATYPE.TEXT;>
 			<!ATTLIST param name CDATA #REQUIRED>
 
-	<!ELEMENT table (description?, parent?, param*, column*, data?, enum*)>
+	<!ELEMENT table (description?, parent?, param*, column*, index*, data?, enum*)>
 		<!ATTLIST table name CDATA #REQUIRED>
 		<!ATTLIST table abbrev CDATA #IMPLIED>
 		<!ATTLIST table type CDATA #IMPLIED>
@@ -85,11 +85,11 @@
 		<!ATTLIST column textsearch CDATA #IMPLIED> <!-- NEEDS TO BE IMPLEMENTED -->
 
 	<!ELEMENT index (description?)>
-		<!ATTLIST tabletype name CDATA #REQUIRED>
-		<!ATTLIST tabletype type CDATA #IMPLIED>
-		<!ATTLIST tabletype descr CDATA #IMPLIED>
-		<!ATTLIST tabletype unique %DATATYPE.BOOLEAN; "no">
-		<!ATTLIST tabletype columns CDATA #IMPLIED>
+		<!ATTLIST index name CDATA #REQUIRED>
+		<!ATTLIST index type CDATA #IMPLIED>
+		<!ATTLIST index descr CDATA #IMPLIED>
+		<!ATTLIST index unique %DATATYPE.BOOLEAN; "no">
+		<!ATTLIST index columns CDATA #IMPLIED>
 	
 	<!ELEMENT description %DATATYPE.TEXT;>
 
