@@ -76,7 +76,7 @@ Build targets:
 	    <property name="web-shared.dir" value="../web-shared"/>
 	    <property name="web-shared.dirname" value="web-shared"/>
 	    <property name="web-shared.versioned.dirname" value="web-shared-${build.libitem.path.prefix}"/>
-	    <property name="doc.dir" value="${web-shared.dir}/docs"/>
+	    <property name="doc.dir" value="../documentation"/>
 	    <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
 
 	    <property name="jar.prefix" value="${build.libitem.file.prefix}"/>
