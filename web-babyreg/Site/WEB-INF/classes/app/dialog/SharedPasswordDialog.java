@@ -79,6 +79,12 @@ public class SharedPasswordDialog extends Dialog
 		writer.write("		Type the first name of the Dad or the Mom of the new baby.");
 		writer.write("		<p>");
         renderHtml(writer, dc, true);
+
+		if ("developer.netspective.com".equals(dc.getRequest().getServerName()))
+		{
+			writer.write("		<br>You can use mickey or minnie as the password.");
+		}          
+
 		writer.write("	</center>");
 		writer.write("</body>");
 	}

@@ -84,6 +84,12 @@ public class AppLoginDialog extends LoginDialog
 		writer.write("		<p>");
         renderHtml(writer, dc, true);
         writer.write("		<br>Click <a href='NewUserRegistration.jsp?data_cmd=add'>here</a> to register as a new user.");
+
+		if ("developer.netspective.com".equals(dc.getRequest().getServerName()))
+		{
+			writer.write("		<br>You can login as Mickey Mouse or Winnie Pooh");
+		}        
+
 		writer.write("	</center>");
 		writer.write("</body>");
 	}
