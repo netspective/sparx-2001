@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.3 2002-09-18 17:49:38 shahid.shah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.4 2002-12-23 04:27:22 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -75,11 +75,10 @@ import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xif.SchemaDocument;
 import com.netspective.sparx.xif.dal.Schema;
 import com.netspective.sparx.xif.dal.Table;
+import com.netspective.sparx.util.ClassPath;
 
 public class DatabaseSchemaDocPage extends AceServletPage
 {
-    private static Map schemaClasses = new HashMap();
-
     public final String getName()
     {
         return "schema-doc";
@@ -112,53 +111,35 @@ public class DatabaseSchemaDocPage extends AceServletPage
 
     public void handleTableQueryDefn(PageContext pc, String[] params) throws IOException
     {
+        SchemaDocument schemaDoc = SchemaDocFactory.getDoc(pc.getServletContext());
+
         Writer out = pc.getResponse().getWriter();
-        if(params.length < 3)
+        if(params.length < 2)
         {
-            out.write("<p> DAL class and table name parameters is required.");
+            out.write("<p>Table name parameters is required.");
             return;
         }
 
-        String className = params[1];
-        String tableName = params[2];
+        String tableName = params[1];
 
-        Schema schema = (Schema) schemaClasses.get(className);
+        Schema schema = schemaDoc.getSchema();
         if(schema == null)
         {
-            try
-            {
-                Class schemaClass = Class.forName(className);
-                schema = (Schema) schemaClass.newInstance();
-                schemaClasses.put(className, schema);
-            }
-            catch(ClassNotFoundException cnfe)
-            {
-                out.write("<p>Schema class '"+ className +"' not found.");
-                return;
-            }
-            catch(InstantiationException ie)
-            {
-                out.write("<p>Schema class '"+ className +"' could not be instantiated: "+ ie.getMessage());
-                return;
-            }
-            catch(IllegalAccessException iae)
-            {
-                out.write("<p>Schema class '"+ className +"' could not be instantiated: "+ iae.getMessage());
-                return;
-            }
+            out.write("<p>Schema class '"+ schemaDoc.getDALProperties().getSchemaQualifiedClassName() +"' not found.");
+            return;
         }
 
         Table table = schema.getTable(tableName);
         if(table == null)
         {
-            out.write("<p>Table '"+ tableName +"' not found in schema class "+ className);
+            out.write("<p>Table '"+ tableName +"' not found in schema class "+ schema.getClass().getName() +" in "+ ClassPath.getClassFileName(schema.getClass().getName()));
             return;
         }
 
         QueryDefinition queryDefn = table.getQueryDefinition();
         if(queryDefn == null)
         {
-            out.write("Default QueryDefinition not found in table '"+ tableName +"' of schema '"+ className +"'.");
+            out.write("Default QueryDefinition not found in table '"+ tableName +"' of schema '"+ schemaDoc.getDALProperties().getSchemaQualifiedClassName() +"'.");
             return;
         }
 
