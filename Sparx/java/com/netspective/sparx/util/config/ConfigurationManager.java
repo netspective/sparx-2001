@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ConfigurationManager.java,v 1.2 2002-09-28 04:19:56 shahid.shah Exp $
+ * $Id: ConfigurationManager.java,v 1.3 2002-11-30 16:37:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.config;
@@ -70,6 +70,7 @@ import org.w3c.dom.NodeList;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
 
 public class ConfigurationManager extends XmlSource
 {
@@ -181,7 +182,8 @@ public class ConfigurationManager extends XmlSource
                     newConfig = (Configuration) configurations.get(name);
                     if(newConfig == null)
                     {
-                        newConfig = new Configuration();
+                        ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(configElem.getAttribute("class"), Configuration.class, true);
+                        newConfig = (Configuration) instanceGen.getInstance();
                         newConfig.importFromXml(configElem, this);
                         configurations.put(name, newConfig);
                     }
