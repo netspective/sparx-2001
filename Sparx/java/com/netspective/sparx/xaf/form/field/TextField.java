@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.15 2003-04-12 00:26:25 aye.thu Exp $
+ * $Id: TextField.java,v 1.16 2003-04-14 15:23:53 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -356,7 +356,7 @@ public class TextField extends DialogField
             }
         }
         // if valid values were defined for this field, check the current value
-        if (validValues != null)
+        if (validValues != null && value != null && value.length() > 0)
         {
             String[] validList = validValues.getValues(dc);
             if (validList != null && validList.length > 0)
