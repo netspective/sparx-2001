@@ -88,7 +88,6 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
             //String userName = user.getUserName();
             String relationship = (String) user.getAttribute("relationship");
             String user_id = (String) user.getAttribute("person-id");
-
 			String resourcesUrl = req.getContextPath() + "/resources";
             out.print("<html>");
 			out.print("<head>");
@@ -105,19 +104,26 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
                         out.print("</tr>");
                         out.print("<tr>");
                         out.print("<td width='21%' height='419' valign='top' align='left'><font face='Tahoma' size='2'></font>");
-                        if ("0".equals(relationship) || "1".equals(relationship)){
+                        if ( "yes".equals(user.getAttribute("isPersonAdmin")) ){
+                        //if ("0".equals(relationship) || "1".equals(relationship)){
+                           out.print("<font face='Tahoma' size='2'><b>Admin Users</b></font><br><br>");
                             out.print("<ul>");
-                            out.print("<font face='Tahoma' size='2'><b><a href='AdminGiftDetail.jsp?data_cmd=add'>Add a new Item</a></b></font><br><br>");
-                            out.print("<font face='Tahoma' size='2'><b><a href='AdminGiftList.jsp'>List All Items</a></b></font><br><br>");
+                           out.print("<font face='Tahoma' size='2'><b><a href='AdminEditUser.jsp?data_cmd=add'>Add New User</a></b></font><br><br>");
                             out.print("<font face='Tahoma' size='2'><b><a href='AdminUserList.jsp'>List Users</a></b></font><br><br>");
-                            out.print("<font face='Tahoma' size='2'><b><a href='AdminEditUser.jsp?data_cmd=add'>Add New User</a></b></font><br><br>");
+                           out.print("</ul>");
+                            out.print("<font face='Tahoma' size='2'><b>Admin Gifts</b></font><br><br>");
+                           out.print("<ul>");
+                            out.print("<font face='Tahoma' size='2'><b><a href='AdminGiftDetail.jsp?data_cmd=add'>Add New Gift</a></b></font><br><br>");
+                            out.print("<font face='Tahoma' size='2'><b><a href='AdminGiftList.jsp'>List Gifts</a></b></font><br><br>");
+
                             out.print("</ul>");
+                           out.print("<font face='Tahoma' size='2'><b>User Links</b></font><br><br>");
                         }
 						out.print("<ul>");
-						out.print("<font face='Tahoma' size='2'><b><a href='GiftsPicked.jsp'>See what I got</a></b></font><br><br>");
+						out.print("<font face='Tahoma' size='2'><b><a href='GiftsPicked.jsp'>See what I already have</a></b></font><br><br>");
 						out.print("<font face='Tahoma' size='2'><b><a href='GiftsToBePicked.jsp'>Pick a Gift</a></b></font><br><br>");
                         out.print("<font face='Tahoma' size='2'><b><a href='YourGiftList.jsp?'>View your Gift List</a></b></font><br><br>");
-                        out.print("<font face='Tahoma' size='2'><b><a href='NewGift.jsp'>Tell me what you got</a></b></font><br><br>");
+                        out.print("<font face='Tahoma' size='2'><b><a href='NewGift.jsp'>Tell me what you got already</a></b></font><br><br>");
                         out.print("<font face='Tahoma' size='2'><b><a href='Suggestion.jsp'>Make a suggestion</a></b></font><br><br>");
                         out.print("<font face='Tahoma' size='2'><b><a href='?_logout=1'>Logout</a></b><br><br>");
 						out.print("</ul>");
