@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<query-defn id="Project">
+        <field id="project_code" caption="Project Code" join="project" column="project_code">
+            <report heading="Code" />
+        </field>
+        <field id="project_id" caption="Project ID" join="project" column="project_id">
+            <report heading="ID" url="create-app-url:/project/home.jsp?project_id=${.}" align="right"/>
+        </field>
+        <field id="project_name" caption="Project Name" join="project" column="project_name">
+            <report heading="Name" />
+        </field>
+        <field id="project_descr" caption="Project Description" join="project" column="project_descr">
+            <report heading="Description" />
+        </field>
+        <field id="project_status" caption="Status" join="project" column="record_status_id">
+            <report heading="Status ID"/>
+        </field>
+        <field id="person_last_name" caption="Contact Last Name" join="person" column="name_last">
+            <report heading="Last Name"/>
+        </field>
+        <field id="organization_id" caption="Organization" join="org" column="org_id">
+            <report heading="Organization"/>
+        </field>
+
+
+        <join id="project" table="project" auto-include="yes"/>
+        <join id="person" table="person" condition="person.person_id = project_relation.rel_person_id"/>
+        <join id="org" table="org" condition="org.org_id = project_relation.rel_org_id"/>
+
+		<select-dialog name="project_search" allow-debug="yes" show-output-dests="yes" hide-readonly-hints="yes" heading="Search Project(s)">
+			<field.text query-field="project_id"/>
+			<field.text query-field="project_name"/>
+			<field.text query-field="person_last_name"/>
+			<field.select query-field="organization_id" choices="query:person.active-org-memberships-name-id"  prepend-blank="yes"/>
+			<field.select name="sort_order"
+					caption="Sort By"
+					style="combo"
+					choices="Project Name=project_name;Project ID=project_id"/>
+			<select heading="Project Search Results">
+				<display field="project_id"/>
+                <display field="project_name"/>
+				<display field="project_status"/>
+				<display field="project_descr"/>
+				<order-by field="form:sort_order"/>
+
+				<condition field="person_last_name" allow-null="no" comparison="starts-with" value="form:person_last_name" connector="and" />
+				<condition field="project_name" allow-null="no" comparison="starts-with" value="form:project_name" connector="and" bind-expr="upper(?)"/>
+				<condition field="organization_id" allow-null="no" comparison="equals" value="form:organization_id" connector="and" />
+			</select>
+			<director cancel-url="index.jsp" submit-caption="Search"/>
+		</select-dialog>
+    </query-defn>
+</xaf>

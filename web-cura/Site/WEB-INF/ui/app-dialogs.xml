@@ -3,4 +3,5 @@
 <xaf>
     <include file="app-person-dialogs.xml"/>
     <include file="app-org-dialogs.xml"/>
+    <include file="app-project-dialogs.xml"/>
 </xaf>

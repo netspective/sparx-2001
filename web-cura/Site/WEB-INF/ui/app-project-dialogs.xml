@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <dialogs package="project">
+        <dialog name="registration" heading="create-data-cmd-heading:Project" retain-params="*" class="app.form.ProjectDialog">
+            <field.text name="project_name" caption="Project Name"     max-length="255" required="yes"/>
+            <field.text name="project_code" caption="Code"       max-length="64"/>
+            <field.memo name="project_descr" caption="Description" required="yes"/>
+            <field.select name="project_type" caption="Type" choices="Main Project=1;Subproject=2" required="yes">
+                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+            </field.select>
+            <field.select name="main_project" caption="Parent Project" choices="" >
+                <conditional action="display" partner="project_type" js-expr="control.selectedIndex == 1"/>
+                <!-- conditional action="apply-flag" flag="required" js-expr="control.selectedIndex == 1"/ -->
+            </field.select>
+
+            <field.select name="organization" caption="Organization" choices="query:person.active-org-memberships-name-id" required="yes">
+                <conditional action="apply-flag" flag="read-only" data-cmd="edit,delete"/>
+            </field.select>
+
+            <field.email name="notify_email" caption="Notify Email" />
+            <!--execute-tasks data-cmd="add">
+				<exec-redirect url="config-expr:${create-app-url:/project/home.jsp}?project_id=${request-attr:project_id}"/>
+			</execute-tasks -->
+        </dialog>
+    </dialogs>
+</xaf>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<sql-statements package="project">
+        <statement name="information">
+            select
+                project_id,
+                project_name,
+                project_descr
+            from
+                project
+            where
+                project_id = ?
+            <report heading="Overview">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;org_id=${request:project_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;org_id=${request:project_id}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Name" align="left"/>
+                <column heading="Description" align="left"/>
+            </report>
+            <params>
+                <param value="request:project_id"/>
+            </params>
+        </statement>
+        <statement name="member-persons">
+            select
+                rel_person_id,
+                name_last,
+                name_first,
+                rel_descr
+            from
+                person, project_relation
+            where
+                parent_id = ? and
+                person.person_id = project_relation.rel_person_id
+            <params>
+                <param value="request:project_id"/>
+            </params>
+            <report heading="Overview">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,project.registration,edit&amp;org_id=${request:project_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,project.registration,delete&amp;org_id=${request:project_id}"/>
+                </banner>
+                <column heading="ID" align="left"/>
+                <column heading="Last Name" align="left"/>
+                <column heading="First Name" align="left"/>
+                <column heading="Relationship" align="left"/>
+            </report>
+        </statement>
+    </sql-statements>
+</xaf>
