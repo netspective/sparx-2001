@@ -38,6 +38,7 @@ public class SqlComparisonFactory
 		addComparison(new StartsWithComparison(), null);
 		addComparison(new ContainsComparison(), null);
 		addComparison(new EndsWithComparison(), null);
+   		addComparison(new InComparison(), null);
 		addComparison(new IsDefinedComparison(), null);
 		addComparison(new BinaryOpComparison("greater-than", "greater than", "general", ">"), new String[] { "gt", ">" });
 		addComparison(new BinaryOpComparison("greater-than-equal", "greater than or equal to", "general", ">="), new String[] { "gte", ">=" });
