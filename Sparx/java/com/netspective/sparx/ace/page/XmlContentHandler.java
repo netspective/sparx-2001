@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: XmlContentHandler.java,v 1.1 2002-07-04 19:07:26 shahid.shah Exp $
+ * $Id: XmlContentHandler.java,v 1.2 2002-07-05 03:11:28 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -64,16 +64,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.netspective.sparx.xaf.page.PageContext;
-import com.netspective.sparx.util.java2html.Xml2Html;
 import com.netspective.sparx.util.java2html.HtmlHighlighter;
 
 public class XmlContentHandler implements DocumentContentHandler
 {
-    private Xml2Html x2h;
 
     public XmlContentHandler()
     {
-        x2h = new Xml2Html();
     }
 
     public boolean canGenerateHtml(PageContext pc)
