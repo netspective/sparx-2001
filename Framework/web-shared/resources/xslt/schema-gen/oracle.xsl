@@ -4,7 +4,7 @@
 <xsl:import href="ansi.xsl"/>
 
 <xsl:variable name="dbms-id">oracle</xsl:variable>
-<xsl:variable name="generate-constraints">no</xsl:variable>
-<xsl:variable name="generate-seq">no</xsl:variable>
+<xsl:variable name="generate-constraints">yes</xsl:variable>
+<xsl:variable name="generate-seq">yes</xsl:variable>
 
 </xsl:stylesheet>

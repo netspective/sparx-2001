@@ -11,6 +11,8 @@
 <xsl:variable name="dbms-id">ansi</xsl:variable>
 <xsl:variable name="generate-constraints">yes</xsl:variable>
 <xsl:variable name="generate-seq">yes</xsl:variable>
+<xsl:variable name="statement-terminator">;
+</xsl:variable>
 
 <xsl:template match="schema">
 	<xsl:for-each select="table">
@@ -60,7 +62,7 @@
 	<xsl:param name="table"/>
 
 <xsl:if test="$generate-drop-table">
-drop table <xsl:value-of select="$table/@name"/>;
+drop table <xsl:value-of select="$table/@name"/><xsl:value-of select="$statement-terminator"/>
 </xsl:if>
 <xsl:if test="$generate-seq">
 <xsl:for-each select="$table/column[@type = 'autoinc']">
@@ -84,7 +86,7 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="."/>
 	</xsl:call-template>
-</xsl:for-each>);
+</xsl:for-each>)<xsl:value-of select="$statement-terminator"/>
 <xsl:for-each select="$table/index">
 	<xsl:call-template name="index-definition">
 		<xsl:with-param name="table" select="$table"/>
@@ -101,20 +103,20 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="column"/>
 
 	<xsl:if test="$generate-drop-seq">
-	<xsl:text>drop sequence </xsl:text>
-	<xsl:value-of select="$table/@abbrev"/>
-	<xsl:text>_</xsl:text>
-	<xsl:value-of select="$column/@name"/>
-	<xsl:text>_SEQ;
-</xsl:text>
+		<xsl:text>drop sequence </xsl:text>
+		<xsl:value-of select="$table/@abbrev"/>
+		<xsl:text>_</xsl:text>
+		<xsl:value-of select="$column/@name"/>
+		<xsl:text>_SEQ</xsl:text>
+		<xsl:value-of select="$statement-terminator"/>
 	</xsl:if>
 
 	<xsl:text>create sequence </xsl:text>
 	<xsl:value-of select="$table/@abbrev"/>
 	<xsl:text>_</xsl:text>
 	<xsl:value-of select="$column/@name"/>
-	<xsl:text>_SEQ increment by 1 start with 1 nomaxvalue nocache nocycle;
-</xsl:text>
+	<xsl:text>_SEQ increment by 1 start with 1 nomaxvalue nocache nocycle</xsl:text>
+	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 
 <xsl:template name="column-definition">
@@ -152,8 +154,11 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 		<xsl:when test="$column/sqldefn[@dbms = $dbms-id]">
 			<xsl:value-of select="$column/sqldefn[@dbms = $dbms-id]"/>
 		</xsl:when>
-		<xsl:otherwise>
+		<xsl:when test="$column/sqldefn[@dbms = 'ansi']">
 			<xsl:value-of select="$column/sqldefn[@dbms = 'ansi']"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$column/sqldefn"/>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
@@ -195,8 +200,8 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:text>(</xsl:text>
 	<xsl:value-of select="$index/@columns"/>
 	<!-- line break -->
-	<xsl:text>);
-</xsl:text>
+	<xsl:text>)</xsl:text>
+	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 
 <xsl:template name="pkey-ref">
@@ -210,8 +215,8 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:text>_PK PRIMARY KEY (</xsl:text>
 	<xsl:value-of select="$column/@name"/>
 	<!-- line break -->
-	<xsl:text>));
-</xsl:text>
+	<xsl:text>))</xsl:text>
+	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 
 <xsl:template name="required">
@@ -228,8 +233,8 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:value-of select="$column/@name"/>
 	<xsl:text>_REQ NOT NULL</xsl:text>
 	<!-- line break -->
-	<xsl:text>);
-</xsl:text>
+	<xsl:text>)</xsl:text>
+	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 
 <xsl:template name="fkey-ref">
@@ -249,8 +254,8 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:text>(</xsl:text>
 	<xsl:value-of select="$column/@refcol"/>
 	<!-- line break -->
-	<xsl:text>));
-</xsl:text>
+	<xsl:text>))</xsl:text>
+	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 
 <xsl:template name="enum-data">
@@ -271,8 +276,8 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 			<xsl:value-of select="."/><xsl:text>'</xsl:text>
 		</xsl:if>
 	<!-- line break -->
-	<xsl:text>);
-</xsl:text>
+	<xsl:text>)</xsl:text>
+	<xsl:value-of select="$statement-terminator"/>
 	</xsl:for-each>
 </xsl:template>
 
