@@ -316,6 +316,7 @@ public class AppComponentExplorerServlet extends HttpServlet
     {
         response.setContentType(CONTENT_TYPE);
         PrintWriter out = response.getWriter();
+		ServletContext context = getServletContext();
 
 		String area = null, command = null, commandParam = null, commandSubParam = null;
 		String styleSheet = aceStyleSheet;
@@ -395,9 +396,9 @@ public class AppComponentExplorerServlet extends HttpServlet
 		{
 			out.write(Transform.nodeToString(styleSheet, appComponents, styleSheetParams));
 			if("javadoc".equals(area))
-				response.sendRedirect("/shared/xaf/javadoc/index.html");
+				response.sendRedirect(context.getInitParameter("ace.javadoc-url"));
 			else if("tagdoc".equals(area))
-				response.sendRedirect("/shared/xaf/tagdoc/xaf.html");
+				response.sendRedirect(context.getInitParameter("ace.tagdoc-url"));
 			else if("schema".equals(area))
 				doSchema(request, response);
 			else if("ddl".equals(area))
