@@ -1,0 +1,104 @@
+<chapter>
+	<title>Using the Applications Components Explorer (ACE)</title>
+
+	<section>
+		<title>Overview</title>
+		<para>
+			ACE is an integral component of the Sparx XAF that allows for
+			web-based application components discovery, documentation, and interactive
+			testing. ACE is a servlet that is run inside the ServletContext
+			of the owner application (as opposed to a separate ServletContext).
+			So, ACE is always resident inside all Sparx applications
+			unless it is removed for security or performance considerations.
+			ACE is almost always available as <literal>http://server/appid/ace</literal>.
+			For example, in the sample application <literal>web-cura</literal> it
+			is reached by going to <literal>http://server/cura/ace</literal>.
+		</para>
+		<para>
+			The default username/password for ACE is <literal>ace/ace</literal>. The username
+			and password are stored cleartext at this time in
+			<filename class="conf">WEB-INF/configuration.xml</filename> (see the
+			<literal>framework.ace.login.user-name</literal> and
+			<literal>framework.ace.login.user-password</literal>).
+		</para>
+	</section>
+
+	<section>
+		<title>ACE Pages</title>
+		<itemizedlist>
+			<listitem>
+				The <literal>Home</literal> page shows
+				<itemizedlist>
+					<listitem><emphasis>Execution Environment</emphasis> (Development, Testing, or Production)</listitem>
+					<listitem>Sparx version</listitem>
+					<listitem>Operating system Sparx is running on</listitem>
+					<listitem>Java JDK version and vendor</listitem>
+					<listitem>Java VM version and vendor</listitem>
+				</itemizedlist>
+			</listitem>
+			<listitem>
+				The <literal>Application</literal> menu contains
+				<itemizedlist>
+					<listitem>Dialogs</listitem>
+					<listitem>Configuration</listitem>
+					<listitem>Servlet Context</listitem>
+					<listitem>Access Control</listitem>
+					<listitem>System Properties</listitem>
+					<listitem>Metrics</listitem>
+					<listitem>Factories</listitem>
+					<listitem>Logs</listitem>
+				</itemizedlist>
+			</listitem>
+			<listitem>
+				The <literal>Database</literal> menu contains
+				<itemizedlist>
+					<listitem>SQL Statements</listitem>
+					<listitem>SQL Query Definitions</listitem>
+					<listitem>Schema (XML)</listitem>
+					<listitem>DB Meta Data</listitem>
+					<listitem>Generate DDL</listitem>
+					<listitem>Data Sources</listitem>
+				</itemizedlist>
+			</listitem>
+			<listitem>
+				The <literal>Documents</literal> menu contains
+				<itemizedlist>
+					<listitem>Tag Documentation</listitem>
+					<listitem>Java Documentation</listitem>
+					<listitem>Project Documentation</listitem>
+					<listitem>Framework Documentation</listitem>
+				</itemizedlist>
+			</listitem>
+		</itemizedlist>
+	</section>
+
+
+	<section>
+		<title>Application Dialogs Page</title>
+		<para>
+			...
+		</para>
+	</section>
+
+	<section>
+		<title>Application Configuration Page</title>
+		<para>
+			...
+		</para>
+	</section>
+
+	<section>
+		<title>Application Servlet Context Page</title>
+		<para>
+			...
+		</para>
+	</section>
+
+	<section>
+		<title>Application Access Control Page</title>
+		<para>
+			...
+		</para>
+	</section>
+
+</chapter>
