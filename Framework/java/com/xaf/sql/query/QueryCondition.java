@@ -25,6 +25,7 @@ public class QueryCondition
 	private SingleValueSource value;
 	private int connector = CONNECT_AND;
     private boolean removeIfValueNull;
+    private String bindExpression=null;
 
     public QueryCondition()
     {
@@ -44,6 +45,7 @@ public class QueryCondition
 			connector = CONNECT_OR;
     }
 
+    public String getBindExpression() { return bindExpression; }
 	public QueryField getField() { return field; }
 	public SqlComparison getComparison() { return comparison; }
 	public SingleValueSource getValue() { return value; }
@@ -52,6 +54,7 @@ public class QueryCondition
 
 	public String getWhereCondExpr(SelectStmtGenerator stmt)
 	{
+        System.out.println("getWhereCondExpr(): " + this);
 		return comparison.getWhereCondExpr(stmt, this);
 	}
 
@@ -79,5 +82,10 @@ public class QueryCondition
 
         if(elem.getAttribute("allow-null").equals("no"))
             removeIfValueNull = true;
+
+        /* check if user explicitly stated what the bind expression should be */
+        String bindExpr = elem.getAttribute("bind-expr");
+        if (bindExpr != null && bindExpr.length() > 0)
+            this.bindExpression = bindExpr;
 	}
 }
