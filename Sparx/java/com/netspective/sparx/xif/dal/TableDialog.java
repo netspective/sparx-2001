@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TableDialog.java,v 1.2 2002-12-26 21:26:28 shahbaz.javeed Exp $
+ * $Id: TableDialog.java,v 1.3 2003-02-03 00:51:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -181,9 +181,11 @@ public class TableDialog extends Dialog
                     }
                 }
 
+                ConnectionContext cc = null;
                 try
                 {
-                    Row row = table.getRecordByPrimaryKey(dc.getConnectionContext(), pkValue, null);
+                    cc = dc.getConnectionContextAuto();
+                    Row row = table.getRecordByPrimaryKey(cc, pkValue, null);
                     if(row != null)
                         row.setData(dc);
                     else
@@ -196,6 +198,17 @@ public class TableDialog extends Dialog
                 catch (SQLException e)
                 {
                     LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
+                }
+                finally
+                {
+                    try
+                    {
+                        if(cc != null) cc.returnConnection();
+                    }
+                    catch (SQLException e)
+                    {
+                        LogManager.recordException(this.getClass(), "populateValues", "primary key = '"+ pkValue +"'", e);
+                    }
                 }
             }
         }
@@ -241,7 +254,7 @@ public class TableDialog extends Dialog
                     break;
             }
 
-            cc.commitActiveTransaction();
+            cc.commitTransaction();
             handlePostExecute(writer, dc);
         }
         catch (Exception e)
