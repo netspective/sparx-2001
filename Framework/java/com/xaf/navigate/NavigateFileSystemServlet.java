@@ -75,6 +75,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 		excludeEntryNames.add(skinJspPageName);
 		excludeEntryNames.add("WEB-INF");
 		excludeEntryNames.add("resources");
+		excludeEntryNames.add("temp");
 		excludeEntryNames.add("index.jsp");
 
 		//fileTypeIcons.put("*", "");
