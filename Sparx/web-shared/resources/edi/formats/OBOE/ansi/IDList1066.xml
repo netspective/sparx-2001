@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>U.S. Citizen</idValue>
+    <idCode>2</idCode>
+        <idValue>Non-Resident Alien</idValue>
+    <idCode>3</idCode>
+        <idValue>Resident Alien</idValue>
+    <idCode>4</idCode>
+        <idValue>Illegal Alien</idValue>
+    <idCode>5</idCode>
+        <idValue>Alien</idValue>
+    <idCode>6</idCode>
+        <idValue>U.S. Citizen - Non-Resident</idValue>
+    <idCode>7</idCode>
+        <idValue>U.S. Citizen - Resident</idValue>
+    <idCode>8</idCode>
+        <idValue>Citizen</idValue>
+    <idCode>9</idCode>
+        <idValue>Non-citizen with Student Authorization</idValue>
+    <idCode>A</idCode>
+        <idValue>Non-permanent Resident Alien</idValue>
+    <idCode>B</idCode>
+        <idValue>Permanent Visa</idValue>
+    <idCode>C</idCode>
+        <idValue>Temporary Visa</idValue>
+    <idCode>D</idCode>
+        <idValue>Work Permit</idValue>
+    <idCode>E</idCode>
+        <idValue>Nordic Citizen</idValue>
+    <idCode>F</idCode>
+        <idValue>Non-Nordic Citizen</idValue>
+</idList>

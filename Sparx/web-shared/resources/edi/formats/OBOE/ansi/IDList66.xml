@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>D-U-N-S Number, Dun &amp; Bradstreet</idValue>
+    <idCode>2</idCode>
+        <idValue>Standard Carrier Alpha Code (SCAC)</idValue>
+    <idCode>3</idCode>
+        <idValue>Federal Maritime Commission (Ocean) (FMC)</idValue>
+    <idCode>4</idCode>
+        <idValue>International Air Transport Association (IATA)</idValue>
+    <idCode>5</idCode>
+        <idValue>SIRET</idValue>
+    <idCode>6</idCode>
+        <idValue>Plant Code</idValue>
+    <idCode>7</idCode>
+        <idValue>Loading Dock</idValue>
+    <idCode>8</idCode>
+        <idValue>UCC/EAN Global Product Identification Prefix</idValue>
+    <idCode>9</idCode>
+        <idValue>D-U-N-S+4, D-U-N-S Number with Four Character Suffix</idValue>
+    <idCode>10</idCode>
+        <idValue>Department of Defense Activity Address Code (DODAAC)</idValue>
+    <idCode>11</idCode>
+        <idValue>Drug Enforcement Administration (DEA)</idValue>
+    <idCode>12</idCode>
+        <idValue>Telephone Number (Phone)</idValue>
+    <idCode>13</idCode>
+        <idValue>Federal Reserve Routing Code (FRRC)</idValue>
+    <idCode>14</idCode>
+        <idValue>UCC/EAN Location Code Prefix</idValue>
+    <idCode>15</idCode>
+        <idValue>Standard Address Number (SAN)</idValue>
+    <idCode>16</idCode>
+        <idValue>ZIP Code</idValue>
+    <idCode>17</idCode>
+        <idValue>Automated Broker Interface (ABI) Routing Code</idValue>
+    <idCode>18</idCode>
+        <idValue>Automotive Industry Action Group (AIAG)</idValue>
+    <idCode>19</idCode>
+        <idValue>FIPS-55 (Named Populated Places)</idValue>
+    <idCode>20</idCode>
+        <idValue>Standard Point Location Code (SPLC)</idValue>
+    <idCode>21</idCode>
+        <idValue>Health Industry Number (HIN)</idValue>
+    <idCode>22</idCode>
+        <idValue>Council of Petroleum Accounting Societies code (COPAS)</idValue>
+    <idCode>23</idCode>
+        <idValue>Journal of Commerce (JOC)</idValue>
+    <idCode>24</idCode>
+        <idValue>Employer&apos;s Identification Number</idValue>
+    <idCode>25</idCode>
+        <idValue>Carrier&apos;s Customer Code</idValue>
+    <idCode>26</idCode>
+        <idValue>Petroleum Accountants Society of Canada Company Code</idValue>
+    <idCode>27</idCode>
+        <idValue>Government Bill Of Lading Office Code (GBLOC)</idValue>
+    <idCode>28</idCode>
+        <idValue>American Paper Institute</idValue>
+    <idCode>29</idCode>
+        <idValue>Grid Location and Facility Code</idValue>
+    <idCode>30</idCode>
+        <idValue>American Petroleum Institute Location Code</idValue>
+    <idCode>31</idCode>
+        <idValue>Bank Identification Code</idValue>
+    <idCode>32</idCode>
+        <idValue>Assigned by Property Operator</idValue>
+    <idCode>33</idCode>
+        <idValue>Commercial and Government Entity (CAGE)</idValue>
+    <idCode>34</idCode>
+        <idValue>Social Security Number</idValue>
+    <idCode>35</idCode>
+        <idValue>Electronic Mail Internal System Address Code</idValue>
+    <idCode>36</idCode>
+        <idValue>Customs House Broker License Number</idValue>
+    <idCode>37</idCode>
+        <idValue>United Nations Vendor Code</idValue>
+    <idCode>38</idCode>
+        <idValue>Country Code</idValue>
+    <idCode>39</idCode>
+        <idValue>Local Union Number</idValue>
+    <idCode>40</idCode>
+        <idValue>Electronic Mail User Code</idValue>
+    <idCode>41</idCode>
+        <idValue>Telecommunications Carrier Identification Code</idValue>
+    <idCode>42</idCode>
+        <idValue>Telecommunications Pseudo Carrier Identification Code</idValue>
+    <idCode>43</idCode>
+        <idValue>Alternate Social Security Number</idValue>
+    <idCode>44</idCode>
+        <idValue>Return Sequence Number</idValue>
+    <idCode>45</idCode>
+        <idValue>Declaration Control Number</idValue>
+    <idCode>46</idCode>
+        <idValue>Electronic Transmitter Identification Number (ETIN)</idValue>
+    <idCode>47</idCode>
+        <idValue>Tax Authority Identification</idValue>
+    <idCode>48</idCode>
+        <idValue>Electronic Filer Identification Number (EFIN)</idValue>
+    <idCode>49</idCode>
+        <idValue>State Identification Number</idValue>
+    <idCode>50</idCode>
+        <idValue>Business License Number</idValue>
+    <idCode>53</idCode>
+        <idValue>Building</idValue>
+    <idCode>54</idCode>
+        <idValue>Warehouse</idValue>
+    <idCode>55</idCode>
+        <idValue>Post Office Box</idValue>
+    <idCode>56</idCode>
+        <idValue>Division</idValue>
+    <idCode>57</idCode>
+        <idValue>Department</idValue>
+    <idCode>58</idCode>
+        <idValue>Originating Company Number</idValue>
+    <idCode>59</idCode>
+        <idValue>Receiving Company Number</idValue>
+    <idCode>61</idCode>
+        <idValue>Holding Mortgagee Number</idValue>
+    <idCode>62</idCode>
+        <idValue>Servicing Mortgagee Number</idValue>
+    <idCode>63</idCode>
+        <idValue>Servicer-holder Mortgagee Number</idValue>
+    <idCode>64</idCode>
+        <idValue>One Call Agency</idValue>
+    <idCode>71</idCode>
+        <idValue>Integrated Postsecondary Education Data System (IPEDS) set of codes maintained by the U.S. Department of Education&apos;s National Center of Education Statistics, Washington, D.C.</idValue>
+    <idCode>72</idCode>
+        <idValue>The College Board&apos;s Admission Testing Program (ATP), administered by the Educational Testing Service (ETS), 4-digit list of postsecondary educational institutions.</idValue>
+    <idCode>73</idCode>
+        <idValue>Federal Interagency Commission on Education (FICE) number. Available from the United States Department of Education, National Center for Education Statistics.</idValue>
+    <idCode>74</idCode>
+        <idValue>American College Testing (ACT) list of postsecondary educational institutions.</idValue>
+    <idCode>75</idCode>
+        <idValue>State or Province Assigned Number</idValue>
+    <idCode>76</idCode>
+        <idValue>Local School District or Jurisdiction Number</idValue>
+    <idCode>77</idCode>
+        <idValue>National Center for Education Statistics (NCES) Common Core of Data (CCD) number for PreK - 12 institutions</idValue>
+    <idCode>78</idCode>
+        <idValue>The College Board and ACT 6 digit code list of secondary educational institutions</idValue>
+    <idCode>81</idCode>
+        <idValue>Classification of Instructional Programs (CIP) coding structure maintained by the U.S. Department of Education&apos;s National Center for Education Statistics</idValue>
+    <idCode>82</idCode>
+        <idValue>Higher Education General Information Survey (HEGIS) maintained by the U.S. Department of Education&apos;s National Center for Education Statistics</idValue>
+    <idCode>90</idCode>
+        <idValue>California Ethnic Subgroups Code Table</idValue>
+    <idCode>91</idCode>
+        <idValue>Assigned by Seller or Seller&apos;s Agent</idValue>
+    <idCode>92</idCode>
+        <idValue>Assigned by Buyer or Buyer&apos;s Agent</idValue>
+    <idCode>93</idCode>
+        <idValue>Code assigned by the organization originating the transaction set</idValue>
+    <idCode>94</idCode>
+        <idValue>Code assigned by the organization that is the ultimate destination of the transaction set</idValue>
+    <idCode>95</idCode>
+        <idValue>Assigned By Transporter</idValue>
+    <idCode>96</idCode>
+        <idValue>Assigned By Pipeline Operator</idValue>
+    <idCode>97</idCode>
+        <idValue>Receiver&apos;s Code</idValue>
+    <idCode>98</idCode>
+        <idValue>Purchasing Office</idValue>
+    <idCode>99</idCode>
+        <idValue>Office of Workers Compensation Programs (OWCP) Agency Code</idValue>
+    <idCode>A</idCode>
+        <idValue>U.S. Customs Carrier Identification</idValue>
+    <idCode>A1</idCode>
+        <idValue>Approver ID</idValue>
+    <idCode>A2</idCode>
+        <idValue>Military Assistance Program Address Code (MAPAC)</idValue>
+    <idCode>A3</idCode>
+        <idValue>Assigned by Third Party</idValue>
+    <idCode>A4</idCode>
+        <idValue>Assigned by Clearinghouse</idValue>
+    <idCode>A5</idCode>
+        <idValue>Committee for Uniform Security Identification Procedures (CUSIP) Number</idValue>
+    <idCode>A6</idCode>
+        <idValue>Financial Identification Numbering System (FINS) Number</idValue>
+    <idCode>AA</idCode>
+        <idValue>Postal Service Code</idValue>
+    <idCode>AB</idCode>
+        <idValue>US Environmental Protection Agency (EPA) Identification Number</idValue>
+    <idCode>AC</idCode>
+        <idValue>Attachment Control Number</idValue>
+    <idCode>AD</idCode>
+        <idValue>Blue Cross Blue Shield Association Plan Code</idValue>
+    <idCode>AE</idCode>
+        <idValue>Alberta Energy Resources Conservation Board</idValue>
+    <idCode>AL</idCode>
+        <idValue>Anesthesia License Number</idValue>
+    <idCode>AP</idCode>
+        <idValue>Alberta Petroleum Marketing Commission</idValue>
+    <idCode>BC</idCode>
+        <idValue>British Columbia Ministry of Energy Mines and Petroleum Resources</idValue>
+    <idCode>BD</idCode>
+        <idValue>Blue Cross Provider Number</idValue>
+    <idCode>BE</idCode>
+        <idValue>Common Language Location Identification (CLLI)</idValue>
+    <idCode>BG</idCode>
+        <idValue>Badge Number</idValue>
+    <idCode>BP</idCode>
+        <idValue>Benefit Plan</idValue>
+    <idCode>BS</idCode>
+        <idValue>Blue Shield Provider Number</idValue>
+    <idCode>C</idCode>
+        <idValue>Insured&apos;s Changed Unique Identification Number</idValue>
+    <idCode>C1</idCode>
+        <idValue>Insured or Subscriber</idValue>
+    <idCode>C2</idCode>
+        <idValue>Health Maintenance Organization (HMO) Provider Number</idValue>
+    <idCode>C5</idCode>
+        <idValue>Customer Identification File</idValue>
+    <idCode>CA</idCode>
+        <idValue>Statistics Canada Canadian College Student Information System Course Codes</idValue>
+    <idCode>CB</idCode>
+        <idValue>Statistics Canada Canadian College Student Information System Institution Codes</idValue>
+    <idCode>CC</idCode>
+        <idValue>Statistics Canada University Student Information System Curriculum Codes</idValue>
+    <idCode>CD</idCode>
+        <idValue>Contract Division</idValue>
+    <idCode>CE</idCode>
+        <idValue>Bureau of the Census Filer Identification Code</idValue>
+    <idCode>CF</idCode>
+        <idValue>Canadian Financial Institution Routing Number</idValue>
+    <idCode>CI</idCode>
+        <idValue>CHAMPUS (Civilian Health and Medical Program of the Uniformed Services) Identification Number</idValue>
+    <idCode>CL</idCode>
+        <idValue>Corrected Loan Number</idValue>
+    <idCode>CM</idCode>
+        <idValue>U.S. Customs Service (USCS) Manufacturer Identifier (MID)</idValue>
+    <idCode>CP</idCode>
+        <idValue>Canadian Petroleum Association</idValue>
+    <idCode>CR</idCode>
+        <idValue>Credit Repository</idValue>
+    <idCode>CS</idCode>
+        <idValue>Statistics Canada University Student Information System University Codes</idValue>
+    <idCode>CT</idCode>
+        <idValue>Court Identification Code</idValue>
+    <idCode>D</idCode>
+        <idValue>Census Schedule D</idValue>
+    <idCode>DG</idCode>
+        <idValue>United States Department of Education Guarantor Identification Code</idValue>
+    <idCode>DL</idCode>
+        <idValue>United States Department of Education Lender Identification Code</idValue>
+    <idCode>DN</idCode>
+        <idValue>Dentist License Number</idValue>
+    <idCode>DP</idCode>
+        <idValue>Data Processing Point</idValue>
+    <idCode>DS</idCode>
+        <idValue>United States Department of Education School Identification Code</idValue>
+    <idCode>E</idCode>
+        <idValue>Hazard Insurance Policy Number</idValue>
+    <idCode>EC</idCode>
+        <idValue>ARI Electronic Commerce Location ID Code</idValue>
+    <idCode>EH</idCode>
+        <idValue>Theatre Number</idValue>
+    <idCode>EI</idCode>
+        <idValue>Employee Identification Number</idValue>
+    <idCode>EP</idCode>
+        <idValue>U.S. Environmental Protection Agency (EPA)</idValue>
+    <idCode>EQ</idCode>
+        <idValue>Insurance Company Assigned Identification Number</idValue>
+    <idCode>ER</idCode>
+        <idValue>Mortgagee Assigned Identification Number</idValue>
+    <idCode>ES</idCode>
+        <idValue>Automated Export System (AES) Filer Identification Code</idValue>
+    <idCode>F</idCode>
+        <idValue>Document Custodian Identification Number</idValue>
+    <idCode>FA</idCode>
+        <idValue>Facility Identification</idValue>
+    <idCode>FB</idCode>
+        <idValue>Field Code</idValue>
+    <idCode>FC</idCode>
+        <idValue>Federal Court Jurisdiction Identifier</idValue>
+    <idCode>FD</idCode>
+        <idValue>Federal Court Divisional Office Number</idValue>
+    <idCode>FI</idCode>
+        <idValue>Federal Taxpayer&apos;s Identification Number</idValue>
+    <idCode>FJ</idCode>
+        <idValue>Federal Jurisdiction</idValue>
+    <idCode>FN</idCode>
+        <idValue>U.S. Environmental Protection Agency (EPA) Laboratory Certification Identification</idValue>
+    <idCode>G</idCode>
+        <idValue>Payee Identification Number</idValue>
+    <idCode>GA</idCode>
+        <idValue>Primary Agent Identification</idValue>
+    <idCode>GC</idCode>
+        <idValue>GAS*CODE</idValue>
+    <idCode>HC</idCode>
+        <idValue>Health Care Financing Administration</idValue>
+    <idCode>HN</idCode>
+        <idValue>Health Insurance Claim (HIC) Number</idValue>
+    <idCode>I</idCode>
+        <idValue>Secondary Marketing Investor Assigned Number</idValue>
+    <idCode>J</idCode>
+        <idValue>Mortgage Electronic Registration System Organization Identifier</idValue>
+    <idCode>K</idCode>
+        <idValue>Census Schedule K</idValue>
+    <idCode>L</idCode>
+        <idValue>Investor Assigned Identification Number</idValue>
+    <idCode>LC</idCode>
+        <idValue>Agency Location Code (U.S. Government)</idValue>
+    <idCode>LD</idCode>
+        <idValue>NISO Z39.53 Language Codes</idValue>
+    <idCode>LE</idCode>
+        <idValue>ISO 639 Language Codes</idValue>
+    <idCode>LI</idCode>
+        <idValue>Labeler Identification Code (LIC)</idValue>
+    <idCode>LN</idCode>
+        <idValue>Loan Number</idValue>
+    <idCode>M3</idCode>
+        <idValue>Disbursing Station</idValue>
+    <idCode>M4</idCode>
+        <idValue>Department of Defense Routing Identifier Code (RIC)</idValue>
+    <idCode>M5</idCode>
+        <idValue>Jurisdiction Code</idValue>
+    <idCode>M6</idCode>
+        <idValue>Division Office Code</idValue>
+    <idCode>MA</idCode>
+        <idValue>Mail Stop</idValue>
+    <idCode>MB</idCode>
+        <idValue>Medical Information Bureau</idValue>
+    <idCode>MC</idCode>
+        <idValue>Medicaid Provider Number</idValue>
+    <idCode>MD</idCode>
+        <idValue>Manitoba Department of Mines and Resources</idValue>
+    <idCode>MI</idCode>
+        <idValue>Member Identification Number</idValue>
+    <idCode>MK</idCode>
+        <idValue>Market</idValue>
+    <idCode>ML</idCode>
+        <idValue>Multiple Listing Service Vendor - Multiple Listing Service Identification</idValue>
+    <idCode>MN</idCode>
+        <idValue>Mortgage Identification Number</idValue>
+    <idCode>MP</idCode>
+        <idValue>Medicare Provider Number</idValue>
+    <idCode>MR</idCode>
+        <idValue>Medicaid Recipient Identification Number</idValue>
+    <idCode>N</idCode>
+        <idValue>Insured&apos;s Unique Identification Number</idValue>
+    <idCode>NA</idCode>
+        <idValue>National Association of Realtors - Multiple Listing Service Identification</idValue>
+    <idCode>ND</idCode>
+        <idValue>Mode Designator</idValue>
+    <idCode>NI</idCode>
+        <idValue>National Association of Insurance Commissioners (NAIC) Identification</idValue>
+    <idCode>NO</idCode>
+        <idValue>National Criminal Information Center Originating Agency</idValue>
+    <idCode>OC</idCode>
+        <idValue>Occupation Code</idValue>
+    <idCode>OP</idCode>
+        <idValue>On-line Payment and Collection</idValue>
+    <idCode>PA</idCode>
+        <idValue>Secondary Agent Identification</idValue>
+    <idCode>PB</idCode>
+        <idValue>Public Identification</idValue>
+    <idCode>PC</idCode>
+        <idValue>Provider Commercial Number</idValue>
+    <idCode>PI</idCode>
+        <idValue>Payor Identification</idValue>
+    <idCode>PP</idCode>
+        <idValue>Pharmacy Processor Number</idValue>
+    <idCode>PR</idCode>
+        <idValue>Pier</idValue>
+    <idCode>RA</idCode>
+        <idValue>Regulatory Agency Number</idValue>
+    <idCode>RB</idCode>
+        <idValue>Real Estate Agent</idValue>
+    <idCode>RC</idCode>
+        <idValue>Real Estate Company</idValue>
+    <idCode>RD</idCode>
+        <idValue>Real Estate Broker Identification</idValue>
+    <idCode>RE</idCode>
+        <idValue>Real Estate License Number</idValue>
+    <idCode>RT</idCode>
+        <idValue>Railroad Track</idValue>
+    <idCode>S</idCode>
+        <idValue>Title Insurance Policy Number</idValue>
+    <idCode>SA</idCode>
+        <idValue>Tertiary Agent Identification</idValue>
+    <idCode>SB</idCode>
+        <idValue>Social Insurance Number</idValue>
+    <idCode>SD</idCode>
+        <idValue>Saskatchewan Department of Energy Mines and Resources</idValue>
+    <idCode>SF</idCode>
+        <idValue>Suffix Code</idValue>
+    <idCode>SI</idCode>
+        <idValue>Standard Industry Code (SIC)</idValue>
+    <idCode>SJ</idCode>
+        <idValue>State Jurisdiction</idValue>
+    <idCode>SL</idCode>
+        <idValue>State License Number</idValue>
+    <idCode>SP</idCode>
+        <idValue>Specialty License Number</idValue>
+    <idCode>ST</idCode>
+        <idValue>State/Province License Tag</idValue>
+    <idCode>SV</idCode>
+        <idValue>Service Provider Number</idValue>
+    <idCode>SW</idCode>
+        <idValue>Society for Worldwide Interbank Financial Telecommunications (SWIFT) Address</idValue>
+    <idCode>TA</idCode>
+        <idValue>Taxpayer ID Number</idValue>
+    <idCode>TC</idCode>
+        <idValue>Internal Revenue Service Terminal Code</idValue>
+    <idCode>TZ</idCode>
+        <idValue>Department Code</idValue>
+    <idCode>UC</idCode>
+        <idValue>Consumer Credit Identification Number</idValue>
+    <idCode>UL</idCode>
+        <idValue>UCC/EAN Location Code</idValue>
+    <idCode>UM</idCode>
+        <idValue>UCC/EAN Location Code Suffix</idValue>
+    <idCode>UP</idCode>
+        <idValue>Unique Physician Identification Number (UPIN)</idValue>
+    <idCode>UR</idCode>
+        <idValue>Uniform Resource Locator (URL)</idValue>
+    <idCode>US</idCode>
+        <idValue>Unique Supplier Identification Number (USIN)</idValue>
+    <idCode>WR</idCode>
+        <idValue>Wine Region Code</idValue>
+    <idCode>XV</idCode>
+        <idValue>Health Care Financing Administration National Payer Identification Number (PAYERID)</idValue>
+    <idCode>XX</idCode>
+        <idValue>Health Care Financing Administration National Provider Identifier</idValue>
+    <idCode>ZC</idCode>
+        <idValue>Contractor Establishment Code</idValue>
+    <idCode>ZN</idCode>
+        <idValue>Zone</idValue>
+    <idCode>ZY</idCode>
+        <idValue>Temporary Identification Number</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

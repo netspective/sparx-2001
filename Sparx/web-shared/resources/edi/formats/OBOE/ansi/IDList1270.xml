@@ -1,0 +1,1121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>0</idCode>
+        <idValue>Document Identification Code</idValue>
+    <idCode>1</idCode>
+        <idValue>Free On Board Site Code</idValue>
+    <idCode>2</idCode>
+        <idValue>Type of Business Code</idValue>
+    <idCode>3</idCode>
+        <idValue>Kind of Contract Code</idValue>
+    <idCode>4</idCode>
+        <idValue>Type of Contract Code</idValue>
+    <idCode>5</idCode>
+        <idValue>Criticality Designator Code</idValue>
+    <idCode>6</idCode>
+        <idValue>Special Contract Provision Code</idValue>
+    <idCode>7</idCode>
+        <idValue>Quality Assurance Site Code</idValue>
+    <idCode>8</idCode>
+        <idValue>Acceptance Site Code</idValue>
+    <idCode>9</idCode>
+        <idValue>Indicator Code</idValue>
+    <idCode>10</idCode>
+        <idValue>Transaction Status Indicator Code</idValue>
+    <idCode>11</idCode>
+        <idValue>Contract Delivery Date Revision Agent Code</idValue>
+    <idCode>12</idCode>
+        <idValue>Reason for Contract Delivery Date Revision Code</idValue>
+    <idCode>13</idCode>
+        <idValue>Recommendations Regarding Delayed Deliveries Code</idValue>
+    <idCode>14</idCode>
+        <idValue>Contract Shipment Advice Code</idValue>
+    <idCode>16</idCode>
+        <idValue>Cash Discount Stipulation Code</idValue>
+    <idCode>17</idCode>
+        <idValue>Shipment Acceptance Discrepancy Explanation Code</idValue>
+    <idCode>19</idCode>
+        <idValue>Contract Close-out Group Code</idValue>
+    <idCode>20</idCode>
+        <idValue>Payment Type Code</idValue>
+    <idCode>21</idCode>
+        <idValue>Contract Fund Reporting Transaction Code</idValue>
+    <idCode>22</idCode>
+        <idValue>Contract Payment Deduction or Collection Code</idValue>
+    <idCode>23</idCode>
+        <idValue>Obligation Variance Code</idValue>
+    <idCode>24</idCode>
+        <idValue>Plus or Minus Indicator Code</idValue>
+    <idCode>25</idCode>
+        <idValue>Reason for Delayed Closing of Contract File Code</idValue>
+    <idCode>26</idCode>
+        <idValue>Contract Payment Line Item Status Code</idValue>
+    <idCode>27</idCode>
+        <idValue>Special Reimbursable Provisions Code</idValue>
+    <idCode>28</idCode>
+        <idValue>Kind of Modification Code</idValue>
+    <idCode>29</idCode>
+        <idValue>Purchasing Contract Officer (PCO) Instructions Code</idValue>
+    <idCode>30</idCode>
+        <idValue>Type of Delay Code</idValue>
+    <idCode>32</idCode>
+        <idValue>Container and Roll-on/Roll-off Number Code</idValue>
+    <idCode>33</idCode>
+        <idValue>Air Commodity and Special Handling Code</idValue>
+    <idCode>34</idCode>
+        <idValue>Water Commodity and Special Handling Code</idValue>
+    <idCode>35</idCode>
+        <idValue>Air Dimension Code</idValue>
+    <idCode>36</idCode>
+        <idValue>Air Terminal Identifier Code</idValue>
+    <idCode>37</idCode>
+        <idValue>Water Terminal Identifier Code</idValue>
+    <idCode>38</idCode>
+        <idValue>Consolidation and Containerization Point Code</idValue>
+    <idCode>39</idCode>
+        <idValue>Transportation Mode or Method Code</idValue>
+    <idCode>40</idCode>
+        <idValue>Type Pack Code</idValue>
+    <idCode>41</idCode>
+        <idValue>Date Shipped or Received Code</idValue>
+    <idCode>42</idCode>
+        <idValue>Estimated Time of Arrival Code</idValue>
+    <idCode>43</idCode>
+        <idValue>Military and Civilian Grade Code</idValue>
+    <idCode>44</idCode>
+        <idValue>Seavan Ownership Code</idValue>
+    <idCode>45</idCode>
+        <idValue>Ocean Carrier Code</idValue>
+    <idCode>46</idCode>
+        <idValue>Voyage Document Number Code</idValue>
+    <idCode>47</idCode>
+        <idValue>Voyage Manifest Reference Code</idValue>
+    <idCode>48</idCode>
+        <idValue>Vessel Status and Terms of Carriage Code</idValue>
+    <idCode>49</idCode>
+        <idValue>Vessel Sustaining Code</idValue>
+    <idCode>52</idCode>
+        <idValue>Billing Advice Code</idValue>
+    <idCode>53</idCode>
+        <idValue>Billing Status Code</idValue>
+    <idCode>54</idCode>
+        <idValue>Type of Bill Code</idValue>
+    <idCode>55</idCode>
+        <idValue>Recipient of Billing Status Code</idValue>
+    <idCode>56</idCode>
+        <idValue>Sales Price Condition Code</idValue>
+    <idCode>57</idCode>
+        <idValue>Delivery Source Code</idValue>
+    <idCode>58</idCode>
+        <idValue>Transportation Bill Code</idValue>
+    <idCode>59</idCode>
+        <idValue>Stock Fund or Non-stock Fund Code</idValue>
+    <idCode>60</idCode>
+        <idValue>General Services Administration (GSA) Customer Supply Center Number Code</idValue>
+    <idCode>61</idCode>
+        <idValue>Information Indicator Code</idValue>
+    <idCode>62</idCode>
+        <idValue>Communications Routing Identifier Code</idValue>
+    <idCode>63</idCode>
+        <idValue>Content Indicator Code</idValue>
+    <idCode>66</idCode>
+        <idValue>Suffix or Limit Code</idValue>
+    <idCode>67</idCode>
+        <idValue>Type of Assistance Code</idValue>
+    <idCode>69</idCode>
+        <idValue>Foreign Military Sales Country Code</idValue>
+    <idCode>71</idCode>
+        <idValue>Service and Agency Code</idValue>
+    <idCode>74</idCode>
+        <idValue>Demand Code</idValue>
+    <idCode>75</idCode>
+        <idValue>Suffix Code</idValue>
+    <idCode>78</idCode>
+        <idValue>Project Code</idValue>
+    <idCode>79</idCode>
+        <idValue>Priority Designator Code</idValue>
+    <idCode>80</idCode>
+        <idValue>Advice Code</idValue>
+    <idCode>81</idCode>
+        <idValue>Status Code</idValue>
+    <idCode>82</idCode>
+        <idValue>Shipment Hold Code</idValue>
+    <idCode>83</idCode>
+        <idValue>Supply Condition Code</idValue>
+    <idCode>84</idCode>
+        <idValue>Management Code</idValue>
+    <idCode>85</idCode>
+        <idValue>Country and Activity Code</idValue>
+    <idCode>87</idCode>
+        <idValue>Subsistence Type of Pack Code</idValue>
+    <idCode>88</idCode>
+        <idValue>Disposal Authority Code</idValue>
+    <idCode>89</idCode>
+        <idValue>Cooperative Logistics Program Support Code</idValue>
+    <idCode>90</idCode>
+        <idValue>Precious Metals Indicator Code</idValue>
+    <idCode>91</idCode>
+        <idValue>Automated Data Processing Equipment Identification Code</idValue>
+    <idCode>92</idCode>
+        <idValue>Reason for Disposal Code</idValue>
+    <idCode>93</idCode>
+        <idValue>Type of Storage Code</idValue>
+    <idCode>94</idCode>
+        <idValue>Identification Code</idValue>
+    <idCode>95</idCode>
+        <idValue>Offer and Release Option Code</idValue>
+    <idCode>96</idCode>
+        <idValue>Shipment Release Code</idValue>
+    <idCode>97</idCode>
+        <idValue>Ultimate Recipient Code</idValue>
+    <idCode>98</idCode>
+        <idValue>Reason for Requisitioning Code</idValue>
+    <idCode>99</idCode>
+        <idValue>Purpose Code</idValue>
+    <idCode>100</idCode>
+        <idValue>Freddie Mac (Federal Home Loan Mortgage Corporation) Special Character Code</idValue>
+    <idCode>101</idCode>
+        <idValue>Fannie Mae (Federal National Mortgage Association) Special Feature Code</idValue>
+    <idCode>102</idCode>
+        <idValue>Mortgage Index Source Code</idValue>
+    <idCode>103</idCode>
+        <idValue>Fannie Mae (Federal National Mortgage Association) Remittance Programs</idValue>
+    <idCode>104</idCode>
+        <idValue>Freddie Mac (Federal Home Loan Mortgage Corporation) Remittance Programs</idValue>
+    <idCode>105</idCode>
+        <idValue>Freddie Mac (Federal Home Loan Mortgage Corporation) Mortgage Insurance Code</idValue>
+    <idCode>106</idCode>
+        <idValue>Fannie Mae (Federal National Mortgage Association) Pool Feature Code</idValue>
+    <idCode>107</idCode>
+        <idValue>Fannie Mae (Federal National Mortgage Association) Mortgage Insurance Code</idValue>
+    <idCode>108</idCode>
+        <idValue>Testing Statistical Category Code List</idValue>
+    <idCode>109</idCode>
+        <idValue>Testing Demographic Category Code List</idValue>
+    <idCode>A</idCode>
+        <idValue>American Society for Testing and Materials (ASTM)</idValue>
+    <idCode>A1</idCode>
+        <idValue>Ownership Code</idValue>
+    <idCode>A2</idCode>
+        <idValue>Customer Within Country Code</idValue>
+    <idCode>A3</idCode>
+        <idValue>Delivery Term Code</idValue>
+    <idCode>A4</idCode>
+        <idValue>Case Designator Number</idValue>
+    <idCode>A5</idCode>
+        <idValue>Subcase Number</idValue>
+    <idCode>A6</idCode>
+        <idValue>Freight Forwarder Number</idValue>
+    <idCode>A7</idCode>
+        <idValue>Record Control Number</idValue>
+    <idCode>A8</idCode>
+        <idValue>Program Year Code</idValue>
+    <idCode>A9</idCode>
+        <idValue>Supplemental Data</idValue>
+    <idCode>AA</idCode>
+        <idValue>Country Code (Finance and Acquisition)</idValue>
+    <idCode>AAA</idCode>
+        <idValue>Systematized Nomenclature of Human and Veterinary Medicine (SNOMED)</idValue>
+    <idCode>AB</idCode>
+        <idValue>Defense Priorities and Allocations System Code</idValue>
+    <idCode>ABR</idCode>
+        <idValue>Assigned by Receiver</idValue>
+    <idCode>ABS</idCode>
+        <idValue>Assigned by Sender</idValue>
+    <idCode>AC</idCode>
+        <idValue>Account Characteristics Code</idValue>
+    <idCode>AD</idCode>
+        <idValue>Acquisition Advice Code</idValue>
+    <idCode>AE</idCode>
+        <idValue>Beneficiary Type</idValue>
+    <idCode>AF</idCode>
+        <idValue>Class of Pitch</idValue>
+    <idCode>AG</idCode>
+        <idValue>Grade of Difficulty</idValue>
+    <idCode>AH</idCode>
+        <idValue>Acquisition Method Suffix Code</idValue>
+    <idCode>AI</idCode>
+        <idValue>Acquisition Method Code</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Utilization Code</idValue>
+    <idCode>AK</idCode>
+        <idValue>Distribution Code</idValue>
+    <idCode>AL</idCode>
+        <idValue>Special Requirements Code</idValue>
+    <idCode>ALP</idCode>
+        <idValue>Alteration Lookup</idValue>
+    <idCode>AM</idCode>
+        <idValue>Locale of Activity</idValue>
+    <idCode>AN</idCode>
+        <idValue>Nature of Event Code</idValue>
+    <idCode>AO</idCode>
+        <idValue>Settlement/Payout Options</idValue>
+    <idCode>AP</idCode>
+        <idValue>American Psychiatric Association Diagnostic Statistical Manual of Mental Disorders (DSM IIIR)</idValue>
+    <idCode>APE</idCode>
+        <idValue>Activite Principale Exercee (APE) Code</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Application Question Identifier</idValue>
+    <idCode>AR</idCode>
+        <idValue>Arrest Reason</idValue>
+    <idCode>AS</idCode>
+        <idValue>Form Type Code</idValue>
+    <idCode>AT</idCode>
+        <idValue>Allegation Type Code</idValue>
+    <idCode>AU</idCode>
+        <idValue>All Patient Refined Diagnosis Related Groups (APR-DRG)</idValue>
+    <idCode>AW</idCode>
+        <idValue>All Patient Diagnosis Related Groups (AP-DRG)</idValue>
+    <idCode>AX</idCode>
+        <idValue>Ambulatory Patient Groups (APG)</idValue>
+    <idCode>B</idCode>
+        <idValue>Bank Administration Institute (BAI)</idValue>
+    <idCode>BA</idCode>
+        <idValue>Vessel Stowage Location Code</idValue>
+    <idCode>BB</idCode>
+        <idValue>Business Type</idValue>
+    <idCode>BC</idCode>
+        <idValue>Transportation Holding Delay Code</idValue>
+    <idCode>BCC</idCode>
+        <idValue>Business Change Code</idValue>
+    <idCode>BCR</idCode>
+        <idValue>Business Credit Rating</idValue>
+    <idCode>BD</idCode>
+        <idValue>Transportation Priority Code</idValue>
+    <idCode>BE</idCode>
+        <idValue>Value</idValue>
+    <idCode>BF</idCode>
+        <idValue>Diagnosis</idValue>
+    <idCode>BG</idCode>
+        <idValue>Condition</idValue>
+    <idCode>BH</idCode>
+        <idValue>Occurrence</idValue>
+    <idCode>BI</idCode>
+        <idValue>Occurrence Span</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Admitting Diagnosis</idValue>
+    <idCode>BK</idCode>
+        <idValue>Principal Diagnosis</idValue>
+    <idCode>BL</idCode>
+        <idValue>Routine Foot Care Class Findings</idValue>
+    <idCode>BM</idCode>
+        <idValue>Systemic Condition for Routine Foot Care</idValue>
+    <idCode>BN</idCode>
+        <idValue>United States Department of Health and Human Services, Office of Vital Statistics E-code</idValue>
+    <idCode>BO</idCode>
+        <idValue>Health Care Financing Administration Common Procedural Coding System</idValue>
+    <idCode>BP</idCode>
+        <idValue>Health Care Financing Administration Common Procedural Coding System Principal Procedure</idValue>
+    <idCode>BPL</idCode>
+        <idValue>Board of Inspection and Survey Part Lookup</idValue>
+    <idCode>BQ</idCode>
+        <idValue>International Classification of Diseases Clinical Modification (ICD-9-CM) Procedure</idValue>
+    <idCode>BR</idCode>
+        <idValue>International Classification of Diseases Clinical Modification (ICD-9-CM) Principal Procedure</idValue>
+    <idCode>BRL</idCode>
+        <idValue>Board of Inspection and Survey Responsibility Lookup</idValue>
+    <idCode>BS</idCode>
+        <idValue>Current Procedural Terminology (CPT) Codes</idValue>
+    <idCode>BSL</idCode>
+        <idValue>Board of Inspection and Survey Ship Lookup</idValue>
+    <idCode>BU</idCode>
+        <idValue>Part of Body Affected</idValue>
+    <idCode>BV</idCode>
+        <idValue>Education Institution Type Code</idValue>
+    <idCode>BY</idCode>
+        <idValue>Share Type Code</idValue>
+    <idCode>BZ</idCode>
+        <idValue>Business Size Code</idValue>
+    <idCode>C</idCode>
+        <idValue>Canadian Inter*EDI</idValue>
+    <idCode>C1</idCode>
+        <idValue>Eye Color Code</idValue>
+    <idCode>C2</idCode>
+        <idValue>Hair Color Code</idValue>
+    <idCode>C3</idCode>
+        <idValue>Skin Tone Code</idValue>
+    <idCode>CA</idCode>
+        <idValue>Type of Inquiry Code</idValue>
+    <idCode>CB</idCode>
+        <idValue>Billed Office Indicator Code</idValue>
+    <idCode>CC</idCode>
+        <idValue>Treasury Symbol Code</idValue>
+    <idCode>CD</idCode>
+        <idValue>Supplementary Accounting Classification Code</idValue>
+    <idCode>CE</idCode>
+        <idValue>Reference and Station Code</idValue>
+    <idCode>CF</idCode>
+        <idValue>Major Force Program Code</idValue>
+    <idCode>CG</idCode>
+        <idValue>Aircraft Mission Design Series Code</idValue>
+    <idCode>CH</idCode>
+        <idValue>Type of Issue Code</idValue>
+    <idCode>CI</idCode>
+        <idValue>Criminal Charge</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Criminal Charge Grade</idValue>
+    <idCode>CK</idCode>
+        <idValue>Coupon Adjustment Reason Code</idValue>
+    <idCode>CL</idCode>
+        <idValue>County Designator Code</idValue>
+    <idCode>CLP</idCode>
+        <idValue>Cause Lookup</idValue>
+    <idCode>CM</idCode>
+        <idValue>Financial Management Service Cash-Link Code</idValue>
+    <idCode>CML</idCode>
+        <idValue>Customer Maintenance Level Lookup</idValue>
+    <idCode>CN</idCode>
+        <idValue>Cause of Injury Code</idValue>
+    <idCode>CO</idCode>
+        <idValue>Customized Notice Type Code</idValue>
+    <idCode>COG</idCode>
+        <idValue>Cognizance Symbol</idValue>
+    <idCode>CPS</idCode>
+        <idValue>Court Party Status</idValue>
+    <idCode>CRC</idCode>
+        <idValue>Complaint Request Code</idValue>
+    <idCode>CS</idCode>
+        <idValue>Clause Status Type</idValue>
+    <idCode>CSF</idCode>
+        <idValue>Corporate Statement Filing Code</idValue>
+    <idCode>CT</idCode>
+        <idValue>Compensation Type Codes</idValue>
+    <idCode>CU</idCode>
+        <idValue>Cuisine Type Code</idValue>
+    <idCode>CV</idCode>
+        <idValue>Coverage Code List</idValue>
+    <idCode>CW</idCode>
+        <idValue>Controvert Code</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Conviction Offense Type</idValue>
+    <idCode>D</idCode>
+        <idValue>Court Document Type Code</idValue>
+    <idCode>D1</idCode>
+        <idValue>Driver&apos;s License Withdrawal Type</idValue>
+    <idCode>D2</idCode>
+        <idValue>Driver&apos;s License Withdrawal Extent</idValue>
+    <idCode>D3</idCode>
+        <idValue>Driver&apos;s License Withdrawal Basis</idValue>
+    <idCode>D4</idCode>
+        <idValue>Driver&apos;s License Withdrawal Due Process Status</idValue>
+    <idCode>D5</idCode>
+        <idValue>Driver&apos;s License Withdrawal Reason</idValue>
+    <idCode>DA</idCode>
+        <idValue>Device Availability Code</idValue>
+    <idCode>DB</idCode>
+        <idValue>Debtor Business Type Code</idValue>
+    <idCode>DBS</idCode>
+        <idValue>DUN&apos;s Standard Industrial Classification (SIC) 2+2, Dun and Bradstreet</idValue>
+    <idCode>DC</idCode>
+        <idValue>Report Distribution Code</idValue>
+    <idCode>DD</idCode>
+        <idValue>Primary Diagnosis</idValue>
+    <idCode>DE</idCode>
+        <idValue>Signal Code</idValue>
+    <idCode>DF</idCode>
+        <idValue>Media and Status Code</idValue>
+    <idCode>DG</idCode>
+        <idValue>Fund Code</idValue>
+    <idCode>DGO</idCode>
+        <idValue>Dynamic Generator Set Code</idValue>
+    <idCode>DH</idCode>
+        <idValue>Drug Detail Code</idValue>
+    <idCode>DI</idCode>
+        <idValue>Single Use Label Code</idValue>
+    <idCode>DJ</idCode>
+        <idValue>Remedial Action Code</idValue>
+    <idCode>DK</idCode>
+        <idValue>Program Originator Code</idValue>
+    <idCode>DL</idCode>
+        <idValue>Service Contract Act Operation Code</idValue>
+    <idCode>DLO</idCode>
+        <idValue>Dynamic Locomotive Tag Code</idValue>
+    <idCode>DLP</idCode>
+        <idValue>Deferral Lookup</idValue>
+    <idCode>DM</idCode>
+        <idValue>Agent Status Code</idValue>
+    <idCode>DN</idCode>
+        <idValue>Nature of Debt Code</idValue>
+    <idCode>DO</idCode>
+        <idValue>Device Operator Type Code</idValue>
+    <idCode>DPE</idCode>
+        <idValue>Association of American Railroads Deprescription Exception List</idValue>
+    <idCode>DPL</idCode>
+        <idValue>Association of American Railroads Deprescription Distribution List</idValue>
+    <idCode>DQ</idCode>
+        <idValue>Device Status Code</idValue>
+    <idCode>DR</idCode>
+        <idValue>Diagnosis Related Group (DRG)</idValue>
+    <idCode>DS</idCode>
+        <idValue>Related Device Applicability Code</idValue>
+    <idCode>DT</idCode>
+        <idValue>Debtor Type Code</idValue>
+    <idCode>DU</idCode>
+        <idValue>Device Usage Code</idValue>
+    <idCode>DW</idCode>
+        <idValue>Estimating Method Status Code</idValue>
+    <idCode>DX</idCode>
+        <idValue>Contact Status Code</idValue>
+    <idCode>DY</idCode>
+        <idValue>Type of Firm Code</idValue>
+    <idCode>DZ</idCode>
+        <idValue>Reportable Event Status Code</idValue>
+    <idCode>E</idCode>
+        <idValue>Diagnostic and Statistical Manual of Mental Disorders (DSM)</idValue>
+    <idCode>EA</idCode>
+        <idValue>Asset Status or Transaction Reporting Code</idValue>
+    <idCode>EB</idCode>
+        <idValue>Asset Transfer Status Code</idValue>
+    <idCode>EC</idCode>
+        <idValue>Certification Requirements Code</idValue>
+    <idCode>ED</idCode>
+        <idValue>Coast Designation Code</idValue>
+    <idCode>EE</idCode>
+        <idValue>Competitive Characteristics Code</idValue>
+    <idCode>EF</idCode>
+        <idValue>Correction or Change for Storage Item Records Code</idValue>
+    <idCode>EG</idCode>
+        <idValue>Excavation Information Code List</idValue>
+    <idCode>EH</idCode>
+        <idValue>Type Due-In Indicator</idValue>
+    <idCode>EI</idCode>
+        <idValue>Discrepancy Indicator Code</idValue>
+    <idCode>EJ</idCode>
+        <idValue>Disposal Condition Code</idValue>
+    <idCode>EK</idCode>
+        <idValue>Event or Exposure Code</idValue>
+    <idCode>EL</idCode>
+        <idValue>Error Classification Code</idValue>
+    <idCode>EM</idCode>
+        <idValue>Inventory Category Code</idValue>
+    <idCode>EN</idCode>
+        <idValue>Local Source Code</idValue>
+    <idCode>EO</idCode>
+        <idValue>Adverse Event Outcome Code</idValue>
+    <idCode>EQ</idCode>
+        <idValue>Controlled Inventory Item Code</idValue>
+    <idCode>ER</idCode>
+        <idValue>Department of Defense Identification Code</idValue>
+    <idCode>ES</idCode>
+        <idValue>Extension Reason</idValue>
+    <idCode>ESL</idCode>
+        <idValue>Equipment Status Lookup</idValue>
+    <idCode>ET</idCode>
+        <idValue>Reject Advice Code</idValue>
+    <idCode>ETL</idCode>
+        <idValue>Estimate Type Lookup</idValue>
+    <idCode>EU</idCode>
+        <idValue>Request Code</idValue>
+    <idCode>EV</idCode>
+        <idValue>Review Period Indicator Code</idValue>
+    <idCode>EW</idCode>
+        <idValue>Small Arms Error Transaction Reject Code</idValue>
+    <idCode>EWC</idCode>
+        <idValue>Evaluate Work Candidate Lookup</idValue>
+    <idCode>EWR</idCode>
+        <idValue>Evaluate Work Candidate Reason Lookup</idValue>
+    <idCode>EX</idCode>
+        <idValue>Small Arms Transaction Code</idValue>
+    <idCode>EY</idCode>
+        <idValue>Special Program Requirement Status Code</idValue>
+    <idCode>EZ</idCode>
+        <idValue>Type Inspection Code</idValue>
+    <idCode>F</idCode>
+        <idValue>Financial Rating</idValue>
+    <idCode>FA</idCode>
+        <idValue>Type of Contractor Code</idValue>
+    <idCode>FB</idCode>
+        <idValue>Type of Media Code</idValue>
+    <idCode>FC</idCode>
+        <idValue>Type Physical Inventory or Transaction History Code</idValue>
+    <idCode>FD</idCode>
+        <idValue>Demilitarization Code</idValue>
+    <idCode>FE</idCode>
+        <idValue>Shelf Life Code</idValue>
+    <idCode>FF</idCode>
+        <idValue>Essentiality Code</idValue>
+    <idCode>FG</idCode>
+        <idValue>Source Maintenance and Recoverability Code</idValue>
+    <idCode>FH</idCode>
+        <idValue>Type of Location Reconciliation Request</idValue>
+    <idCode>FI</idCode>
+        <idValue>Applicant Type</idValue>
+    <idCode>FJ</idCode>
+        <idValue>Antenna Structure Type</idValue>
+    <idCode>FK</idCode>
+        <idValue>Station Classification</idValue>
+    <idCode>FL</idCode>
+        <idValue>Radio Frequency Type</idValue>
+    <idCode>FM</idCode>
+        <idValue>Station Classification Type</idValue>
+    <idCode>FN</idCode>
+        <idValue>Class of Operation</idValue>
+    <idCode>FO</idCode>
+        <idValue>Antenna Polarization</idValue>
+    <idCode>FP</idCode>
+        <idValue>Fund Purpose</idValue>
+    <idCode>FQ</idCode>
+        <idValue>Radio System Type</idValue>
+    <idCode>FR</idCode>
+        <idValue>Frequency Band</idValue>
+    <idCode>FS</idCode>
+        <idValue>Area of Operation</idValue>
+    <idCode>FT</idCode>
+        <idValue>Application Type</idValue>
+    <idCode>FU</idCode>
+        <idValue>Authorization Type</idValue>
+    <idCode>FV</idCode>
+        <idValue>Radio Service Type</idValue>
+    <idCode>FW</idCode>
+        <idValue>Applicant Classification Type</idValue>
+    <idCode>FX</idCode>
+        <idValue>Frequency</idValue>
+    <idCode>FZ</idCode>
+        <idValue>Edit Error Code</idValue>
+    <idCode>G</idCode>
+        <idValue>Risk Class</idValue>
+    <idCode>G1</idCode>
+        <idValue>Uniform Residential Appraisal Attributes Code</idValue>
+    <idCode>GA</idCode>
+        <idValue>Action Code</idValue>
+    <idCode>GB</idCode>
+        <idValue>Medium of Transmission Code</idValue>
+    <idCode>GC</idCode>
+        <idValue>Management Indicator Code (Petroleum)</idValue>
+    <idCode>GD</idCode>
+        <idValue>Gain or Loss Indicator Code</idValue>
+    <idCode>GE</idCode>
+        <idValue>Type Adjustment Code</idValue>
+    <idCode>GF</idCode>
+        <idValue>Type Identity Change Code</idValue>
+    <idCode>GG</idCode>
+        <idValue>Transportation Mode Reason Code</idValue>
+    <idCode>GI</idCode>
+        <idValue>Notification Indicator Code</idValue>
+    <idCode>GJ</idCode>
+        <idValue>Reject Indicator Code</idValue>
+    <idCode>GK</idCode>
+        <idValue>Investigation Status Code</idValue>
+    <idCode>GQ</idCode>
+        <idValue>Group Qualifier Code</idValue>
+    <idCode>GR</idCode>
+        <idValue>National Council on Compensation Insurance (NCCI) Nature of Injury Code</idValue>
+    <idCode>GS</idCode>
+        <idValue>Occupational Safety and Health Administration (OSHA) Nature of Injury Code</idValue>
+    <idCode>GT</idCode>
+        <idValue>National Council on Compensation Insurance (NCCI) Part of Body Code</idValue>
+    <idCode>GU</idCode>
+        <idValue>Occupational Safety and Health Administration (OSHA) Part of Body Code</idValue>
+    <idCode>GV</idCode>
+        <idValue>National Council on Compensation Insurance (NCCI) Source of Injury Code</idValue>
+    <idCode>GW</idCode>
+        <idValue>Occupational Safety and Health Administration (OSHA) Source of Injury Code</idValue>
+    <idCode>H</idCode>
+        <idValue>Life/Annuity Status Codes</idValue>
+    <idCode>HA</idCode>
+        <idValue>Discrepancy Code</idValue>
+    <idCode>HB</idCode>
+        <idValue>Discrepancy Advice Code</idValue>
+    <idCode>HD</idCode>
+        <idValue>Discrepancy Status or Disposition Code</idValue>
+    <idCode>HE</idCode>
+        <idValue>Claim Payment Remark Codes</idValue>
+    <idCode>HI</idCode>
+        <idValue>Health Industry Number</idValue>
+    <idCode>HRC</idCode>
+        <idValue>Hazardous Response Codes</idValue>
+    <idCode>HS</idCode>
+        <idValue>Service Contract Act Occupation Category Code</idValue>
+    <idCode>HZR</idCode>
+        <idValue>Association of American Railroads Standard Transportation Commodity Code Description Qualifier</idValue>
+    <idCode>I</idCode>
+        <idValue>Identifying Characteristics</idValue>
+    <idCode>IC</idCode>
+        <idValue>Collision Industry Electronic Commerce Association (CIECA) - Inspection</idValue>
+    <idCode>ID</idCode>
+        <idValue>Identity Disclosure Code</idValue>
+    <idCode>IF</idCode>
+        <idValue>Investment Fund Type</idValue>
+    <idCode>IMC</idCode>
+        <idValue>Item Management Code</idValue>
+    <idCode>IMP</idCode>
+        <idValue>Impact Recorder Code</idValue>
+    <idCode>IPA</idCode>
+        <idValue>Impact Axis or Analog Port Code</idValue>
+    <idCode>IQ</idCode>
+        <idValue>IRS Qualification Code</idValue>
+    <idCode>IT</idCode>
+        <idValue>Initial Treatment Code</idValue>
+    <idCode>J</idCode>
+        <idValue>Trade Code</idValue>
+    <idCode>J0</idCode>
+        <idValue>Summons Type Code</idValue>
+    <idCode>J1</idCode>
+        <idValue>Judicial Hearing Type Code</idValue>
+    <idCode>J2</idCode>
+        <idValue>Judicial Order Type Code</idValue>
+    <idCode>J3</idCode>
+        <idValue>Judicial Sentence Type Code</idValue>
+    <idCode>J4</idCode>
+        <idValue>Court Disposition Code</idValue>
+    <idCode>J5</idCode>
+        <idValue>Court Appearance Type Code</idValue>
+    <idCode>J6</idCode>
+        <idValue>Court Pleading Type Code</idValue>
+    <idCode>J7</idCode>
+        <idValue>Defendant Plea Type Code</idValue>
+    <idCode>J8</idCode>
+        <idValue>Trial Type Code</idValue>
+    <idCode>J9</idCode>
+        <idValue>Court Case Status Code</idValue>
+    <idCode>JA</idCode>
+        <idValue>Physical Characteristics Code</idValue>
+    <idCode>JB</idCode>
+        <idValue>Weight or Fragility Code</idValue>
+    <idCode>JC</idCode>
+        <idValue>Preservation Material Code</idValue>
+    <idCode>JCL</idCode>
+        <idValue>Job Characteristics Lookup</idValue>
+    <idCode>JD</idCode>
+        <idValue>Quantity per Unit Pack Code</idValue>
+    <idCode>JE</idCode>
+        <idValue>Preservation Data Code</idValue>
+    <idCode>JF</idCode>
+        <idValue>Packing Requirement Level A Code</idValue>
+    <idCode>JG</idCode>
+        <idValue>Packing Requirement Level B Code</idValue>
+    <idCode>JH</idCode>
+        <idValue>Packing Requirement Level C Code</idValue>
+    <idCode>JI</idCode>
+        <idValue>Intermediate Container Code</idValue>
+    <idCode>JK</idCode>
+        <idValue>Intermediate Container Quantity Code</idValue>
+    <idCode>JL</idCode>
+        <idValue>Special Marking Code</idValue>
+    <idCode>JM</idCode>
+        <idValue>Type and Cause Code</idValue>
+    <idCode>JN</idCode>
+        <idValue>Mission Impact Statement Code</idValue>
+    <idCode>JO</idCode>
+        <idValue>International Standard Designation System for Teeth and Areas of the Oral Cavity</idValue>
+    <idCode>JOL</idCode>
+        <idValue>Job Originator Lookup</idValue>
+    <idCode>JP</idCode>
+        <idValue>National Standard Tooth Numbering System</idValue>
+    <idCode>K</idCode>
+        <idValue>Property Underwriting Condition Code</idValue>
+    <idCode>KA</idCode>
+        <idValue>Deficiency Cause</idValue>
+    <idCode>KB</idCode>
+        <idValue>Discrepancy</idValue>
+    <idCode>KC</idCode>
+        <idValue>Preventive Measure</idValue>
+    <idCode>KD</idCode>
+        <idValue>Contactor Alert List Reason</idValue>
+    <idCode>KE</idCode>
+        <idValue>Quality Alert List Reason</idValue>
+    <idCode>KF</idCode>
+        <idValue>Contractor Alert List Status</idValue>
+    <idCode>KG</idCode>
+        <idValue>Nature of Buy</idValue>
+    <idCode>KH</idCode>
+        <idValue>Type of Procurement</idValue>
+    <idCode>KI</idCode>
+        <idValue>Representative Buy Indicator</idValue>
+    <idCode>KJ</idCode>
+        <idValue>Assured Delivery Indicator</idValue>
+    <idCode>KK</idCode>
+        <idValue>Award Source</idValue>
+    <idCode>KL</idCode>
+        <idValue>Termination</idValue>
+    <idCode>KM</idCode>
+        <idValue>Patient Event Problem Code</idValue>
+    <idCode>KO</idCode>
+        <idValue>Method Evaluation Code</idValue>
+    <idCode>KP</idCode>
+        <idValue>Result Evaluation Code</idValue>
+    <idCode>KQ</idCode>
+        <idValue>Conclusion Evaluation Code</idValue>
+    <idCode>KS</idCode>
+        <idValue>Device Event Problem Code</idValue>
+    <idCode>KT</idCode>
+        <idValue>Dose Form Code</idValue>
+    <idCode>KU</idCode>
+        <idValue>Route Code</idValue>
+    <idCode>KW</idCode>
+        <idValue>Report Source Code</idValue>
+    <idCode>KYL</idCode>
+        <idValue>Key Event Lookup</idValue>
+    <idCode>KZ</idCode>
+        <idValue>Adverse Event Code</idValue>
+    <idCode>L</idCode>
+        <idValue>Line Item Condition Code</idValue>
+    <idCode>LA</idCode>
+        <idValue>Contract</idValue>
+    <idCode>LB</idCode>
+        <idValue>Contractor Review List Status</idValue>
+    <idCode>LC</idCode>
+        <idValue>Laboratory Test Condition Code</idValue>
+    <idCode>LD</idCode>
+        <idValue>Collision Industry Electronic Commerce Association (CIECA) - Loss Category</idValue>
+    <idCode>LE</idCode>
+        <idValue>Life/Annuity Service Features</idValue>
+    <idCode>LF</idCode>
+        <idValue>Life/Annuity Product Code</idValue>
+    <idCode>LG</idCode>
+        <idValue>Location Code</idValue>
+    <idCode>LH</idCode>
+        <idValue>Basis of Jurisdiction Code</idValue>
+    <idCode>LIN</idCode>
+        <idValue>Line of Authority</idValue>
+    <idCode>LJ</idCode>
+        <idValue>Principal Party Citizenship Code</idValue>
+    <idCode>LK</idCode>
+        <idValue>Nature of Suit Code</idValue>
+    <idCode>LM</idCode>
+        <idValue>Case Origin Code</idValue>
+    <idCode>LN</idCode>
+        <idValue>Line of business code</idValue>
+    <idCode>LO</idCode>
+        <idValue>Letter of Recommendation Rating Category</idValue>
+    <idCode>LOI</idCode>
+        <idValue>Logical Observation Identifier Names and Codes (LOINC) Codes</idValue>
+    <idCode>LP</idCode>
+        <idValue>Deficiency Indicator</idValue>
+    <idCode>LQ</idCode>
+        <idValue>Delinquency Indicator</idValue>
+    <idCode>LR</idCode>
+        <idValue>Test Results Code</idValue>
+    <idCode>LS</idCode>
+        <idValue>Loss Severity Code</idValue>
+    <idCode>LSC</idCode>
+        <idValue>Legal Structure Code</idValue>
+    <idCode>LT</idCode>
+        <idValue>Laboratory Results Identification Code</idValue>
+    <idCode>LZ</idCode>
+        <idValue>War Reserve Material Requirement Code</idValue>
+    <idCode>M</idCode>
+        <idValue>Policy Type Code</idValue>
+    <idCode>MB</idCode>
+        <idValue>Service Contract Act Occupation Classification Code</idValue>
+    <idCode>MC</idCode>
+        <idValue>Manual Class Code</idValue>
+    <idCode>MCC</idCode>
+        <idValue>Material Control Code</idValue>
+    <idCode>MCD</idCode>
+        <idValue>Generator Set Mounting Code</idValue>
+    <idCode>ME</idCode>
+        <idValue>Device Evaluation Code</idValue>
+    <idCode>MI</idCode>
+        <idValue>Minority Indicator</idValue>
+    <idCode>MJ</idCode>
+        <idValue>Drug Status Code</idValue>
+    <idCode>MK</idCode>
+        <idValue>Drug Status Adverse Event Code</idValue>
+    <idCode>ML</idCode>
+        <idValue>Lot Type Code</idValue>
+    <idCode>MN</idCode>
+        <idValue>Post Market Study Status Code</idValue>
+    <idCode>MOC</idCode>
+        <idValue>Mechanization of Contract Administration Services (MOCAS) System Error Code</idValue>
+    <idCode>N</idCode>
+        <idValue>Valuation Type Code</idValue>
+    <idCode>NA</idCode>
+        <idValue>Plant Clearance Office Code</idValue>
+    <idCode>NAC</idCode>
+        <idValue>Nomenclature Activity Classification Economy (NACE) Code</idValue>
+    <idCode>NAF</idCode>
+        <idValue>Norme Activite Francaise (NAF) Code</idValue>
+    <idCode>NAS</idCode>
+        <idValue>Nature of Suit</idValue>
+    <idCode>NB</idCode>
+        <idValue>Inventory Type Code</idValue>
+    <idCode>NC</idCode>
+        <idValue>Property Record Status Code</idValue>
+    <idCode>ND</idCode>
+        <idValue>Control Unit Design Code</idValue>
+    <idCode>NDC</idCode>
+        <idValue>National Drug Code (NDC)</idValue>
+    <idCode>NE</idCode>
+        <idValue>Direct Numerical Control System Code</idValue>
+    <idCode>NF</idCode>
+        <idValue>Type Numerical Control System Code</idValue>
+    <idCode>NH</idCode>
+        <idValue>Property Source Code</idValue>
+    <idCode>NI</idCode>
+        <idValue>Nature of Injury Code</idValue>
+    <idCode>NJ</idCode>
+        <idValue>Uniform Freight Classification (UFC) Code</idValue>
+    <idCode>NK</idCode>
+        <idValue>National Motor Freight Classification (NMFC) Code</idValue>
+    <idCode>NL</idCode>
+        <idValue>No Longer Considered for Award Reason</idValue>
+    <idCode>NP</idCode>
+        <idValue>Special Category Code</idValue>
+    <idCode>NR</idCode>
+        <idValue>Excess Material Disposition Code</idValue>
+    <idCode>NS</idCode>
+        <idValue>Hazardous Material Code</idValue>
+    <idCode>NT</idCode>
+        <idValue>Type of Cargo Code</idValue>
+    <idCode>O</idCode>
+        <idValue>Source of Loss Code</idValue>
+    <idCode>O1</idCode>
+        <idValue>Office of Worker&apos;s Compensation Programs (OWCP) Source of Injury Code</idValue>
+    <idCode>O2</idCode>
+        <idValue>Office of Worker&apos;s Compensation Programs (OWCP) Nature of Injury Code</idValue>
+    <idCode>O3</idCode>
+        <idValue>Office of Worker&apos;s Compensation Programs (OWCP) Part of Body Code</idValue>
+    <idCode>O4</idCode>
+        <idValue>Office of Worker&apos;s Compensation Programs (OWCP) Occupation Code</idValue>
+    <idCode>OC</idCode>
+        <idValue>Occupation Code</idValue>
+    <idCode>P</idCode>
+        <idValue>Ceiling Type Code</idValue>
+    <idCode>PB</idCode>
+        <idValue>Part of Body Code</idValue>
+    <idCode>PC</idCode>
+        <idValue>Collision Industry Electronic Commerce Association (CIECA) - Profile</idValue>
+    <idCode>PD</idCode>
+        <idValue>Professional Designation</idValue>
+    <idCode>PGS</idCode>
+        <idValue>Petroleum United States Geological Survey (USGS) Formation Code</idValue>
+    <idCode>PI</idCode>
+        <idValue>Collision Industry Electronic Commerce Association (CIECA) - Points of Impact</idValue>
+    <idCode>PIT</idCode>
+        <idValue>Petroleum Bill Type</idValue>
+    <idCode>PL</idCode>
+        <idValue>Priority Lookup</idValue>
+    <idCode>PLC</idCode>
+        <idValue>Petroleum Land Category</idValue>
+    <idCode>PLS</idCode>
+        <idValue>Petroleum Lease Status</idValue>
+    <idCode>PPD</idCode>
+        <idValue>Petroleum Product Disposition</idValue>
+    <idCode>PPP</idCode>
+        <idValue>Petroleum Product Point-of-Sale</idValue>
+    <idCode>PPS</idCode>
+        <idValue>Petroleum Product Selling Arrangement</idValue>
+    <idCode>PPV</idCode>
+        <idValue>Petroleum Product Value Adjustment</idValue>
+    <idCode>PRA</idCode>
+        <idValue>Petroleum Royalty Adjustment</idValue>
+    <idCode>PRC</idCode>
+        <idValue>Petroleum Royalty Calculation Method</idValue>
+    <idCode>PRR</idCode>
+        <idValue>Petroleum Regulatory Report</idValue>
+    <idCode>PRT</idCode>
+        <idValue>Petroleum Royalty Transaction</idValue>
+    <idCode>PS</idCode>
+        <idValue>Professional Status Code</idValue>
+    <idCode>PWA</idCode>
+        <idValue>Petroleum Well Action</idValue>
+    <idCode>PWI</idCode>
+        <idValue>Petroleum Well Information</idValue>
+    <idCode>PWR</idCode>
+        <idValue>Petroleum Well Shut-In Reason</idValue>
+    <idCode>PWS</idCode>
+        <idValue>Petroleum Well Classification Status</idValue>
+    <idCode>PWT</idCode>
+        <idValue>Petroleum Well Test Information</idValue>
+    <idCode>Q</idCode>
+        <idValue>Surface Descriptor Code</idValue>
+    <idCode>QA</idCode>
+        <idValue>Response Status Code</idValue>
+    <idCode>QB</idCode>
+        <idValue>Business Entity Filing Report Type Code</idValue>
+    <idCode>QC</idCode>
+        <idValue>Business Entity Filing Detail Code</idValue>
+    <idCode>QE</idCode>
+        <idValue>Domestic Line of Business Code</idValue>
+    <idCode>QF</idCode>
+        <idValue>Foreign Line of Business Code</idValue>
+    <idCode>QG</idCode>
+        <idValue>Business Entity Filing Status Code</idValue>
+    <idCode>QH</idCode>
+        <idValue>Business Entity Filing Securities Information Code</idValue>
+    <idCode>QI</idCode>
+        <idValue>Business Entity Financial Information Code</idValue>
+    <idCode>QJ</idCode>
+        <idValue>Business Entity Status Code</idValue>
+    <idCode>QK</idCode>
+        <idValue>Business Entity Filing Location Code</idValue>
+    <idCode>QS</idCode>
+        <idValue>Query Status</idValue>
+    <idCode>R</idCode>
+        <idValue>Coverage Modifier</idValue>
+    <idCode>RA</idCode>
+        <idValue>Religious Affiliation Code</idValue>
+    <idCode>RC</idCode>
+        <idValue>Requirement Code</idValue>
+    <idCode>RCA</idCode>
+        <idValue>Registered Contractor Activity Code</idValue>
+    <idCode>RD</idCode>
+        <idValue>Property Ownership Type Code</idValue>
+    <idCode>RE</idCode>
+        <idValue>Property Type Code</idValue>
+    <idCode>REN</idCode>
+        <idValue>Association of American Railroads Rate EDI Network Error Code</idValue>
+    <idCode>RF</idCode>
+        <idValue>Failure to Award Reason</idValue>
+    <idCode>RI</idCode>
+        <idValue>Residency Indicator</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Testing Service Question Code List</idValue>
+    <idCode>RR</idCode>
+        <idValue>Bid Rejection Reason</idValue>
+    <idCode>RT</idCode>
+        <idValue>Request Type</idValue>
+    <idCode>RTC</idCode>
+        <idValue>Registration Type Code</idValue>
+    <idCode>RUM</idCode>
+        <idValue>Refrigeration Unit Operating Mode Code</idValue>
+    <idCode>RX</idCode>
+        <idValue>National Council for Prescription Drug Programs Reject/Payment Codes</idValue>
+    <idCode>S</idCode>
+        <idValue>Society for Worldwide Interbank Financial Telecommunications (SWIFT)</idValue>
+    <idCode>SA</idCode>
+        <idValue>Student Activity Type Code</idValue>
+    <idCode>SB</idCode>
+        <idValue>Student Award Code</idValue>
+    <idCode>SBA</idCode>
+        <idValue>Statistic Bundes Amt (SBA) Code</idValue>
+    <idCode>SC</idCode>
+        <idValue>Source</idValue>
+    <idCode>SD</idCode>
+        <idValue>Secondary diagnosis</idValue>
+    <idCode>SE</idCode>
+        <idValue>Sound Code</idValue>
+    <idCode>SEC</idCode>
+        <idValue>Stock Exchange Code</idValue>
+    <idCode>SF</idCode>
+        <idValue>Run Type</idValue>
+    <idCode>SG</idCode>
+        <idValue>Source of Deposit Code</idValue>
+    <idCode>SH</idCode>
+        <idValue>Source of Lead Code</idValue>
+    <idCode>SHL</idCode>
+        <idValue>Safety Hazard Lookup</idValue>
+    <idCode>SI</idCode>
+        <idValue>SIC (Standard Industrial Classification)</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Source of Injury Code</idValue>
+    <idCode>SL</idCode>
+        <idValue>Secondary Source of Injury</idValue>
+    <idCode>SM</idCode>
+        <idValue>Solicitation Method</idValue>
+    <idCode>SMI</idCode>
+        <idValue>Special Material Identification Code</idValue>
+    <idCode>SO</idCode>
+        <idValue>Solicitation Cancellation Reason</idValue>
+    <idCode>SP</idCode>
+        <idValue>Standard Occupation Classification Code</idValue>
+    <idCode>SPE</idCode>
+        <idValue>Special Dating</idValue>
+    <idCode>SR</idCode>
+        <idValue>Statistical Administrative Information Code</idValue>
+    <idCode>SRL</idCode>
+        <idValue>Special Requirement Lookup</idValue>
+    <idCode>SS</idCode>
+        <idValue>System Status</idValue>
+    <idCode>ST</idCode>
+        <idValue>Special Marketing Type Code</idValue>
+    <idCode>STC</idCode>
+        <idValue>Association of American Railroads Standard Transportation Commodity Code Master Description Information</idValue>
+    <idCode>T</idCode>
+        <idValue>Personal Property and Contents Code</idValue>
+    <idCode>T00</idCode>
+        <idValue>Credentials Codes</idValue>
+    <idCode>T01</idCode>
+        <idValue>Data Categories</idValue>
+    <idCode>T02</idCode>
+        <idValue>Event Codes</idValue>
+    <idCode>T03</idCode>
+        <idValue>Operation Type</idValue>
+    <idCode>T04</idCode>
+        <idValue>Accident Parameters</idValue>
+    <idCode>T05</idCode>
+        <idValue>Inspection Parameters</idValue>
+    <idCode>T06</idCode>
+        <idValue>Driver Parameters</idValue>
+    <idCode>T07</idCode>
+        <idValue>View Parameters</idValue>
+    <idCode>T08</idCode>
+        <idValue>Vehicle Parameters</idValue>
+    <idCode>T09</idCode>
+        <idValue>Fleet Parameters</idValue>
+    <idCode>T10</idCode>
+        <idValue>Query Options</idValue>
+    <idCode>T11</idCode>
+        <idValue>Jurisdiction Type</idValue>
+    <idCode>T12</idCode>
+        <idValue>Single State Registration System and Operating Authority Credential</idValue>
+    <idCode>T13</idCode>
+        <idValue>Commercial Vehicle Operations Insurance</idValue>
+    <idCode>T14</idCode>
+        <idValue>Commercial Vehicle Registration</idValue>
+    <idCode>T15</idCode>
+        <idValue>Hazardous Materials Credential</idValue>
+    <idCode>T16</idCode>
+        <idValue>Oversize/Overweight Credential</idValue>
+    <idCode>T17</idCode>
+        <idValue>Commercial Vehicle Tax</idValue>
+    <idCode>T18</idCode>
+        <idValue>Commercial Vehicle Title</idValue>
+    <idCode>T19</idCode>
+        <idValue>Commercial Driver&apos;s License</idValue>
+    <idCode>T20</idCode>
+        <idValue>Commercial Vehicle Type</idValue>
+    <idCode>T21</idCode>
+        <idValue>Credential Status Code</idValue>
+    <idCode>TB</idCode>
+        <idValue>Treasury Management Association Service Code and Bank Service Code</idValue>
+    <idCode>TC</idCode>
+        <idValue>Treatment Codes</idValue>
+    <idCode>TCL</idCode>
+        <idValue>Template Characteristic Lookup</idValue>
+    <idCode>TD</idCode>
+        <idValue>Tertiary diagnosis</idValue>
+    <idCode>TE</idCode>
+        <idValue>Treasury Management Association Service Code</idValue>
+    <idCode>TF</idCode>
+        <idValue>Title Exception and Requirement Code List</idValue>
+    <idCode>TG</idCode>
+        <idValue>Title Document Code List</idValue>
+    <idCode>TOL</idCode>
+        <idValue>Template Owner Lookup</idValue>
+    <idCode>TR</idCode>
+        <idValue>Report Code</idValue>
+    <idCode>TTL</idCode>
+        <idValue>Template Type Lookup</idValue>
+    <idCode>TX</idCode>
+        <idValue>Follow-up Code</idValue>
+    <idCode>TY</idCode>
+        <idValue>Reportable Event Code</idValue>
+    <idCode>U</idCode>
+        <idValue>Residential and Commercial Room Code</idValue>
+    <idCode>UP</idCode>
+        <idValue>Unsolicited Proposal Rejection Reason</idValue>
+    <idCode>UR</idCode>
+        <idValue>Event Reappearance Code</idValue>
+    <idCode>US</idCode>
+        <idValue>Event Abatement Code</idValue>
+    <idCode>UU</idCode>
+        <idValue>Unit Code</idValue>
+    <idCode>V</idCode>
+        <idValue>Violation Type Code List</idValue>
+    <idCode>W</idCode>
+        <idValue>Court Issued Warrant Type Code</idValue>
+    <idCode>WDL</idCode>
+        <idValue>When Discovered Lookup</idValue>
+    <idCode>X</idCode>
+        <idValue>Vehicle Class</idValue>
+    <idCode>Y</idCode>
+        <idValue>Rental Charge</idValue>
+    <idCode>Z</idCode>
+        <idValue>Cancellation Reason</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

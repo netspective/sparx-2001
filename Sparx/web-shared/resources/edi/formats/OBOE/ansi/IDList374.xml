@@ -1,0 +1,2229 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>001</idCode>
+        <idValue>Cancel After</idValue>
+    <idCode>002</idCode>
+        <idValue>Delivery Requested</idValue>
+    <idCode>003</idCode>
+        <idValue>Invoice</idValue>
+    <idCode>004</idCode>
+        <idValue>Purchase Order</idValue>
+    <idCode>005</idCode>
+        <idValue>Sailing</idValue>
+    <idCode>006</idCode>
+        <idValue>Sold</idValue>
+    <idCode>007</idCode>
+        <idValue>Effective</idValue>
+    <idCode>008</idCode>
+        <idValue>Purchase Order Received</idValue>
+    <idCode>009</idCode>
+        <idValue>Process</idValue>
+    <idCode>010</idCode>
+        <idValue>Requested Ship</idValue>
+    <idCode>011</idCode>
+        <idValue>Shipped</idValue>
+    <idCode>012</idCode>
+        <idValue>Terms Discount Due</idValue>
+    <idCode>013</idCode>
+        <idValue>Terms Net Due</idValue>
+    <idCode>014</idCode>
+        <idValue>Deferred Payment</idValue>
+    <idCode>015</idCode>
+        <idValue>Promotion Start</idValue>
+    <idCode>016</idCode>
+        <idValue>Promotion End</idValue>
+    <idCode>017</idCode>
+        <idValue>Estimated Delivery</idValue>
+    <idCode>018</idCode>
+        <idValue>Available</idValue>
+    <idCode>019</idCode>
+        <idValue>Unloaded</idValue>
+    <idCode>020</idCode>
+        <idValue>Check</idValue>
+    <idCode>021</idCode>
+        <idValue>Charge Back</idValue>
+    <idCode>022</idCode>
+        <idValue>Freight Bill</idValue>
+    <idCode>023</idCode>
+        <idValue>Promotion Order - Start</idValue>
+    <idCode>024</idCode>
+        <idValue>Promotion Order - End</idValue>
+    <idCode>025</idCode>
+        <idValue>Promotion Ship - Start</idValue>
+    <idCode>026</idCode>
+        <idValue>Promotion Ship - End</idValue>
+    <idCode>027</idCode>
+        <idValue>Promotion Requested Delivery - Start</idValue>
+    <idCode>028</idCode>
+        <idValue>Promotion Requested Delivery - End</idValue>
+    <idCode>029</idCode>
+        <idValue>Promotion Performance - Start</idValue>
+    <idCode>030</idCode>
+        <idValue>Promotion Performance - End</idValue>
+    <idCode>031</idCode>
+        <idValue>Promotion Invoice Performance - Start</idValue>
+    <idCode>032</idCode>
+        <idValue>Promotion Invoice Performance - End</idValue>
+    <idCode>033</idCode>
+        <idValue>Promotion Floor Stock Protect - Start</idValue>
+    <idCode>034</idCode>
+        <idValue>Promotion Floor Stock Protect - End</idValue>
+    <idCode>035</idCode>
+        <idValue>Delivered</idValue>
+    <idCode>036</idCode>
+        <idValue>Expiration</idValue>
+    <idCode>037</idCode>
+        <idValue>Ship Not Before</idValue>
+    <idCode>038</idCode>
+        <idValue>Ship No Later</idValue>
+    <idCode>039</idCode>
+        <idValue>Ship Week of</idValue>
+    <idCode>040</idCode>
+        <idValue>Status (After and Including)</idValue>
+    <idCode>041</idCode>
+        <idValue>Status (Prior and Including)</idValue>
+    <idCode>042</idCode>
+        <idValue>Superseded</idValue>
+    <idCode>043</idCode>
+        <idValue>Publication</idValue>
+    <idCode>044</idCode>
+        <idValue>Settlement Date as Specified by the Originator</idValue>
+    <idCode>045</idCode>
+        <idValue>Endorsement Date</idValue>
+    <idCode>046</idCode>
+        <idValue>Field Failure</idValue>
+    <idCode>047</idCode>
+        <idValue>Functional Test</idValue>
+    <idCode>048</idCode>
+        <idValue>System Test</idValue>
+    <idCode>049</idCode>
+        <idValue>Prototype Test</idValue>
+    <idCode>050</idCode>
+        <idValue>Received</idValue>
+    <idCode>051</idCode>
+        <idValue>Cumulative Quantity Start</idValue>
+    <idCode>052</idCode>
+        <idValue>Cumulative Quantity End</idValue>
+    <idCode>053</idCode>
+        <idValue>Buyers Local</idValue>
+    <idCode>054</idCode>
+        <idValue>Sellers Local</idValue>
+    <idCode>055</idCode>
+        <idValue>Confirmed</idValue>
+    <idCode>056</idCode>
+        <idValue>Estimated Port of Entry</idValue>
+    <idCode>057</idCode>
+        <idValue>Actual Port of Entry</idValue>
+    <idCode>058</idCode>
+        <idValue>Customs Clearance</idValue>
+    <idCode>059</idCode>
+        <idValue>Inland Ship</idValue>
+    <idCode>060</idCode>
+        <idValue>Engineering Change Level</idValue>
+    <idCode>061</idCode>
+        <idValue>Cancel if Not Delivered by</idValue>
+    <idCode>062</idCode>
+        <idValue>Blueprint</idValue>
+    <idCode>063</idCode>
+        <idValue>Do Not Deliver After</idValue>
+    <idCode>064</idCode>
+        <idValue>Do Not Deliver Before</idValue>
+    <idCode>065</idCode>
+        <idValue>1st Schedule Delivery</idValue>
+    <idCode>066</idCode>
+        <idValue>1st Schedule Ship</idValue>
+    <idCode>067</idCode>
+        <idValue>Current Schedule Delivery</idValue>
+    <idCode>068</idCode>
+        <idValue>Current Schedule Ship</idValue>
+    <idCode>069</idCode>
+        <idValue>Promised for Delivery</idValue>
+    <idCode>070</idCode>
+        <idValue>Scheduled for Delivery (After and Including)</idValue>
+    <idCode>071</idCode>
+        <idValue>Requested for Delivery (After and Including)</idValue>
+    <idCode>072</idCode>
+        <idValue>Promised for Delivery (After and Including)</idValue>
+    <idCode>073</idCode>
+        <idValue>Scheduled for Delivery (Prior to and Including)</idValue>
+    <idCode>074</idCode>
+        <idValue>Requested for Delivery (Prior to and Including)</idValue>
+    <idCode>075</idCode>
+        <idValue>Promised for Delivery (Prior to and Including)</idValue>
+    <idCode>076</idCode>
+        <idValue>Scheduled for Delivery (Week of)</idValue>
+    <idCode>077</idCode>
+        <idValue>Requested for Delivery (Week of)</idValue>
+    <idCode>078</idCode>
+        <idValue>Promised for Delivery (Week of)</idValue>
+    <idCode>079</idCode>
+        <idValue>Promised for Shipment</idValue>
+    <idCode>080</idCode>
+        <idValue>Scheduled for Shipment (After and Including)</idValue>
+    <idCode>081</idCode>
+        <idValue>Requested for Shipment (After and Including)</idValue>
+    <idCode>082</idCode>
+        <idValue>Promised for Shipment (After and Including)</idValue>
+    <idCode>083</idCode>
+        <idValue>Scheduled for Shipment (Prior to and Including)</idValue>
+    <idCode>084</idCode>
+        <idValue>Requested for Shipment (Prior to and Including)</idValue>
+    <idCode>085</idCode>
+        <idValue>Promised for Shipment (Prior to and Including)</idValue>
+    <idCode>086</idCode>
+        <idValue>Scheduled for Shipment (Week of)</idValue>
+    <idCode>087</idCode>
+        <idValue>Requested for Shipment (Week of)</idValue>
+    <idCode>088</idCode>
+        <idValue>Promised for Shipment (Week of)</idValue>
+    <idCode>089</idCode>
+        <idValue>Inquiry</idValue>
+    <idCode>090</idCode>
+        <idValue>Report Start</idValue>
+    <idCode>091</idCode>
+        <idValue>Report End</idValue>
+    <idCode>092</idCode>
+        <idValue>Contract Effective</idValue>
+    <idCode>093</idCode>
+        <idValue>Contract Expiration</idValue>
+    <idCode>094</idCode>
+        <idValue>Manufacture</idValue>
+    <idCode>095</idCode>
+        <idValue>Bill of Lading</idValue>
+    <idCode>096</idCode>
+        <idValue>Discharge</idValue>
+    <idCode>097</idCode>
+        <idValue>Transaction Creation</idValue>
+    <idCode>098</idCode>
+        <idValue>Bid (Effective)</idValue>
+    <idCode>099</idCode>
+        <idValue>Bid Open (Date Bids Will Be Opened)</idValue>
+    <idCode>100</idCode>
+        <idValue>No Shipping Schedule Established as of</idValue>
+    <idCode>101</idCode>
+        <idValue>No Production Schedule Established as of</idValue>
+    <idCode>102</idCode>
+        <idValue>Issue</idValue>
+    <idCode>103</idCode>
+        <idValue>Award</idValue>
+    <idCode>104</idCode>
+        <idValue>System Survey</idValue>
+    <idCode>105</idCode>
+        <idValue>Quality Rating</idValue>
+    <idCode>106</idCode>
+        <idValue>Required By</idValue>
+    <idCode>107</idCode>
+        <idValue>Deposit</idValue>
+    <idCode>108</idCode>
+        <idValue>Postmark</idValue>
+    <idCode>109</idCode>
+        <idValue>Received at Lockbox</idValue>
+    <idCode>110</idCode>
+        <idValue>Originally Scheduled Ship</idValue>
+    <idCode>111</idCode>
+        <idValue>Manifest/Ship Notice</idValue>
+    <idCode>112</idCode>
+        <idValue>Buyers Dock</idValue>
+    <idCode>113</idCode>
+        <idValue>Sample Required</idValue>
+    <idCode>114</idCode>
+        <idValue>Tooling Required</idValue>
+    <idCode>115</idCode>
+        <idValue>Sample Available</idValue>
+    <idCode>116</idCode>
+        <idValue>Scheduled Interchange Delivery</idValue>
+    <idCode>118</idCode>
+        <idValue>Requested Pick-up</idValue>
+    <idCode>119</idCode>
+        <idValue>Test Performed</idValue>
+    <idCode>120</idCode>
+        <idValue>Control Plan</idValue>
+    <idCode>121</idCode>
+        <idValue>Feasibility Sign Off</idValue>
+    <idCode>122</idCode>
+        <idValue>Failure Mode Effective</idValue>
+    <idCode>124</idCode>
+        <idValue>Group Contract Effective</idValue>
+    <idCode>125</idCode>
+        <idValue>Group Contract Expiration</idValue>
+    <idCode>126</idCode>
+        <idValue>Wholesale Contract Effective</idValue>
+    <idCode>127</idCode>
+        <idValue>Wholesale Contract Expiration</idValue>
+    <idCode>128</idCode>
+        <idValue>Replacement Effective</idValue>
+    <idCode>129</idCode>
+        <idValue>Customer Contract Effective</idValue>
+    <idCode>130</idCode>
+        <idValue>Customer Contract Expiration</idValue>
+    <idCode>131</idCode>
+        <idValue>Item Contract Effective</idValue>
+    <idCode>132</idCode>
+        <idValue>Item Contract Expiration</idValue>
+    <idCode>133</idCode>
+        <idValue>Accounts Receivable - Statement Date</idValue>
+    <idCode>134</idCode>
+        <idValue>Ready for Inspection</idValue>
+    <idCode>135</idCode>
+        <idValue>Booking</idValue>
+    <idCode>136</idCode>
+        <idValue>Technical Rating</idValue>
+    <idCode>137</idCode>
+        <idValue>Delivery Rating</idValue>
+    <idCode>138</idCode>
+        <idValue>Commercial Rating</idValue>
+    <idCode>139</idCode>
+        <idValue>Estimated</idValue>
+    <idCode>140</idCode>
+        <idValue>Actual</idValue>
+    <idCode>141</idCode>
+        <idValue>Assigned</idValue>
+    <idCode>142</idCode>
+        <idValue>Loss</idValue>
+    <idCode>143</idCode>
+        <idValue>Due Date of First Payment to Principal and Interest</idValue>
+    <idCode>144</idCode>
+        <idValue>Estimated Acceptance</idValue>
+    <idCode>145</idCode>
+        <idValue>Opening Date</idValue>
+    <idCode>146</idCode>
+        <idValue>Closing Date</idValue>
+    <idCode>147</idCode>
+        <idValue>Due Date Last Complete Installment Paid</idValue>
+    <idCode>148</idCode>
+        <idValue>Date of Local Office Approval of Conveyance of Damaged Real Estate Property</idValue>
+    <idCode>149</idCode>
+        <idValue>Date Deed Filed for Record</idValue>
+    <idCode>150</idCode>
+        <idValue>Service Period Start</idValue>
+    <idCode>151</idCode>
+        <idValue>Service Period End</idValue>
+    <idCode>152</idCode>
+        <idValue>Effective Date of Change</idValue>
+    <idCode>153</idCode>
+        <idValue>Service Interruption</idValue>
+    <idCode>154</idCode>
+        <idValue>Adjustment Period Start</idValue>
+    <idCode>155</idCode>
+        <idValue>Adjustment Period End</idValue>
+    <idCode>156</idCode>
+        <idValue>Allotment Period Start</idValue>
+    <idCode>157</idCode>
+        <idValue>Test Period Start</idValue>
+    <idCode>158</idCode>
+        <idValue>Test Period Ending</idValue>
+    <idCode>159</idCode>
+        <idValue>Bid Price Exception</idValue>
+    <idCode>160</idCode>
+        <idValue>Samples to be Returned By</idValue>
+    <idCode>161</idCode>
+        <idValue>Loaded on Vessel</idValue>
+    <idCode>162</idCode>
+        <idValue>Pending Archive</idValue>
+    <idCode>163</idCode>
+        <idValue>Actual Archive</idValue>
+    <idCode>164</idCode>
+        <idValue>First Issue</idValue>
+    <idCode>165</idCode>
+        <idValue>Final Issue</idValue>
+    <idCode>166</idCode>
+        <idValue>Message</idValue>
+    <idCode>167</idCode>
+        <idValue>Most Recent Revision (or Initial Version)</idValue>
+    <idCode>168</idCode>
+        <idValue>Release</idValue>
+    <idCode>169</idCode>
+        <idValue>Product Availability Date</idValue>
+    <idCode>170</idCode>
+        <idValue>Supplemental Issue</idValue>
+    <idCode>171</idCode>
+        <idValue>Revision</idValue>
+    <idCode>172</idCode>
+        <idValue>Correction</idValue>
+    <idCode>173</idCode>
+        <idValue>Week Ending</idValue>
+    <idCode>174</idCode>
+        <idValue>Month Ending</idValue>
+    <idCode>175</idCode>
+        <idValue>Cancel if not shipped by</idValue>
+    <idCode>176</idCode>
+        <idValue>Expedited on</idValue>
+    <idCode>177</idCode>
+        <idValue>Cancellation</idValue>
+    <idCode>178</idCode>
+        <idValue>Hold (as of)</idValue>
+    <idCode>179</idCode>
+        <idValue>Hold as Stock (as of)</idValue>
+    <idCode>180</idCode>
+        <idValue>No Promise (as of)</idValue>
+    <idCode>181</idCode>
+        <idValue>Stop Work (as of)</idValue>
+    <idCode>182</idCode>
+        <idValue>Will Advise (as of)</idValue>
+    <idCode>183</idCode>
+        <idValue>Connection</idValue>
+    <idCode>184</idCode>
+        <idValue>Inventory</idValue>
+    <idCode>185</idCode>
+        <idValue>Vessel Registry</idValue>
+    <idCode>186</idCode>
+        <idValue>Invoice Period Start</idValue>
+    <idCode>187</idCode>
+        <idValue>Invoice Period End</idValue>
+    <idCode>188</idCode>
+        <idValue>Credit Advice</idValue>
+    <idCode>189</idCode>
+        <idValue>Debit Advice</idValue>
+    <idCode>190</idCode>
+        <idValue>Released to Vessel</idValue>
+    <idCode>191</idCode>
+        <idValue>Material Specification</idValue>
+    <idCode>192</idCode>
+        <idValue>Delivery Ticket</idValue>
+    <idCode>193</idCode>
+        <idValue>Period Start</idValue>
+    <idCode>194</idCode>
+        <idValue>Period End</idValue>
+    <idCode>195</idCode>
+        <idValue>Contract Re-Open</idValue>
+    <idCode>196</idCode>
+        <idValue>Start</idValue>
+    <idCode>197</idCode>
+        <idValue>End</idValue>
+    <idCode>198</idCode>
+        <idValue>Completion</idValue>
+    <idCode>199</idCode>
+        <idValue>Seal</idValue>
+    <idCode>200</idCode>
+        <idValue>Assembly Start</idValue>
+    <idCode>201</idCode>
+        <idValue>Acceptance</idValue>
+    <idCode>202</idCode>
+        <idValue>Master Lease Agreement</idValue>
+    <idCode>203</idCode>
+        <idValue>First Produced</idValue>
+    <idCode>204</idCode>
+        <idValue>Official Rail Car Interchange (Either Actual or Agreed Upon)</idValue>
+    <idCode>205</idCode>
+        <idValue>Transmitted</idValue>
+    <idCode>206</idCode>
+        <idValue>Status (Outside Processor)</idValue>
+    <idCode>207</idCode>
+        <idValue>Status (Commercial)</idValue>
+    <idCode>208</idCode>
+        <idValue>Lot Number Expiration</idValue>
+    <idCode>209</idCode>
+        <idValue>Contract Performance Start</idValue>
+    <idCode>210</idCode>
+        <idValue>Contract Performance Delivery</idValue>
+    <idCode>211</idCode>
+        <idValue>Service Requested</idValue>
+    <idCode>212</idCode>
+        <idValue>Returned to Customer</idValue>
+    <idCode>213</idCode>
+        <idValue>Adjustment to Bill Dated</idValue>
+    <idCode>214</idCode>
+        <idValue>Date of Repair/Service</idValue>
+    <idCode>215</idCode>
+        <idValue>Interruption Start</idValue>
+    <idCode>216</idCode>
+        <idValue>Interruption End</idValue>
+    <idCode>217</idCode>
+        <idValue>Spud</idValue>
+    <idCode>218</idCode>
+        <idValue>Initial Completion</idValue>
+    <idCode>219</idCode>
+        <idValue>Plugged and Abandoned</idValue>
+    <idCode>220</idCode>
+        <idValue>Penalty</idValue>
+    <idCode>221</idCode>
+        <idValue>Penalty Begin</idValue>
+    <idCode>222</idCode>
+        <idValue>Birth</idValue>
+    <idCode>223</idCode>
+        <idValue>Birth Certificate</idValue>
+    <idCode>224</idCode>
+        <idValue>Adoption</idValue>
+    <idCode>225</idCode>
+        <idValue>Christening</idValue>
+    <idCode>226</idCode>
+        <idValue>Lease Commencement</idValue>
+    <idCode>227</idCode>
+        <idValue>Lease Term Start</idValue>
+    <idCode>228</idCode>
+        <idValue>Lease Term End</idValue>
+    <idCode>229</idCode>
+        <idValue>Rent Start</idValue>
+    <idCode>230</idCode>
+        <idValue>Installation</idValue>
+    <idCode>231</idCode>
+        <idValue>Progress Payment</idValue>
+    <idCode>232</idCode>
+        <idValue>Claim Statement Period Start</idValue>
+    <idCode>233</idCode>
+        <idValue>Claim Statement Period End</idValue>
+    <idCode>234</idCode>
+        <idValue>Settlement Date</idValue>
+    <idCode>235</idCode>
+        <idValue>Delayed Billing (Not Delayed Payment)</idValue>
+    <idCode>236</idCode>
+        <idValue>Lender Credit Check</idValue>
+    <idCode>237</idCode>
+        <idValue>Student Signed</idValue>
+    <idCode>238</idCode>
+        <idValue>Schedule Release</idValue>
+    <idCode>239</idCode>
+        <idValue>Baseline</idValue>
+    <idCode>240</idCode>
+        <idValue>Baseline Start</idValue>
+    <idCode>241</idCode>
+        <idValue>Baseline Complete</idValue>
+    <idCode>242</idCode>
+        <idValue>Actual Start</idValue>
+    <idCode>243</idCode>
+        <idValue>Actual Complete</idValue>
+    <idCode>244</idCode>
+        <idValue>Estimated Start</idValue>
+    <idCode>245</idCode>
+        <idValue>Estimated Completion</idValue>
+    <idCode>246</idCode>
+        <idValue>Start no earlier than</idValue>
+    <idCode>247</idCode>
+        <idValue>Start no later than</idValue>
+    <idCode>248</idCode>
+        <idValue>Finish no later than</idValue>
+    <idCode>249</idCode>
+        <idValue>Finish no earlier than</idValue>
+    <idCode>250</idCode>
+        <idValue>Mandatory (or Target) Start</idValue>
+    <idCode>251</idCode>
+        <idValue>Mandatory (or Target) Finish</idValue>
+    <idCode>252</idCode>
+        <idValue>Early Start</idValue>
+    <idCode>253</idCode>
+        <idValue>Early Finish</idValue>
+    <idCode>254</idCode>
+        <idValue>Late Start</idValue>
+    <idCode>255</idCode>
+        <idValue>Late Finish</idValue>
+    <idCode>256</idCode>
+        <idValue>Scheduled Start</idValue>
+    <idCode>257</idCode>
+        <idValue>Scheduled Finish</idValue>
+    <idCode>258</idCode>
+        <idValue>Original Early Start</idValue>
+    <idCode>259</idCode>
+        <idValue>Original Early Finish</idValue>
+    <idCode>260</idCode>
+        <idValue>Rest Day</idValue>
+    <idCode>261</idCode>
+        <idValue>Rest Start</idValue>
+    <idCode>262</idCode>
+        <idValue>Rest Finish</idValue>
+    <idCode>263</idCode>
+        <idValue>Holiday</idValue>
+    <idCode>264</idCode>
+        <idValue>Holiday Start</idValue>
+    <idCode>265</idCode>
+        <idValue>Holiday Finish</idValue>
+    <idCode>266</idCode>
+        <idValue>Base</idValue>
+    <idCode>267</idCode>
+        <idValue>Timenow</idValue>
+    <idCode>268</idCode>
+        <idValue>End Date of Support</idValue>
+    <idCode>269</idCode>
+        <idValue>Date Account Matures</idValue>
+    <idCode>270</idCode>
+        <idValue>Date Filed</idValue>
+    <idCode>271</idCode>
+        <idValue>Penalty End</idValue>
+    <idCode>272</idCode>
+        <idValue>Exit Plant Date</idValue>
+    <idCode>273</idCode>
+        <idValue>Latest On Board Carrier Date</idValue>
+    <idCode>274</idCode>
+        <idValue>Requested Departure Date</idValue>
+    <idCode>275</idCode>
+        <idValue>Approved</idValue>
+    <idCode>276</idCode>
+        <idValue>Contract Start</idValue>
+    <idCode>277</idCode>
+        <idValue>Contract Definition</idValue>
+    <idCode>278</idCode>
+        <idValue>Last Item Delivery</idValue>
+    <idCode>279</idCode>
+        <idValue>Contract Completion</idValue>
+    <idCode>280</idCode>
+        <idValue>Date Course of Orthodontics Treatment Began or is Expected to Begin</idValue>
+    <idCode>281</idCode>
+        <idValue>Over Target Baseline Month</idValue>
+    <idCode>282</idCode>
+        <idValue>Previous Report</idValue>
+    <idCode>283</idCode>
+        <idValue>Funds Appropriation - Start</idValue>
+    <idCode>284</idCode>
+        <idValue>Funds Appropriation - End</idValue>
+    <idCode>285</idCode>
+        <idValue>Employment or Hire</idValue>
+    <idCode>286</idCode>
+        <idValue>Retirement</idValue>
+    <idCode>287</idCode>
+        <idValue>Medicare</idValue>
+    <idCode>288</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA)</idValue>
+    <idCode>289</idCode>
+        <idValue>Premium Paid to Date</idValue>
+    <idCode>290</idCode>
+        <idValue>Coordination of Benefits</idValue>
+    <idCode>291</idCode>
+        <idValue>Plan</idValue>
+    <idCode>292</idCode>
+        <idValue>Benefit</idValue>
+    <idCode>293</idCode>
+        <idValue>Education</idValue>
+    <idCode>294</idCode>
+        <idValue>Earnings Effective Date</idValue>
+    <idCode>295</idCode>
+        <idValue>Primary Care Provider</idValue>
+    <idCode>296</idCode>
+        <idValue>Return to Work</idValue>
+    <idCode>297</idCode>
+        <idValue>Date Last Worked</idValue>
+    <idCode>298</idCode>
+        <idValue>Latest Absence</idValue>
+    <idCode>299</idCode>
+        <idValue>Illness</idValue>
+    <idCode>300</idCode>
+        <idValue>Enrollment Signature Date</idValue>
+    <idCode>301</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA) Qualifying Event</idValue>
+    <idCode>302</idCode>
+        <idValue>Maintenance</idValue>
+    <idCode>303</idCode>
+        <idValue>Maintenance Effective</idValue>
+    <idCode>304</idCode>
+        <idValue>Latest Visit or Consultation</idValue>
+    <idCode>305</idCode>
+        <idValue>Net Credit Service Date</idValue>
+    <idCode>306</idCode>
+        <idValue>Adjustment Effective Date</idValue>
+    <idCode>307</idCode>
+        <idValue>Eligibility</idValue>
+    <idCode>308</idCode>
+        <idValue>Pre-Award Survey</idValue>
+    <idCode>309</idCode>
+        <idValue>Plan Termination</idValue>
+    <idCode>310</idCode>
+        <idValue>Date of Closing</idValue>
+    <idCode>311</idCode>
+        <idValue>Latest Receiving Date/Cutoff Date</idValue>
+    <idCode>312</idCode>
+        <idValue>Salary Deferral</idValue>
+    <idCode>313</idCode>
+        <idValue>Cycle</idValue>
+    <idCode>314</idCode>
+        <idValue>Disability</idValue>
+    <idCode>315</idCode>
+        <idValue>Offset</idValue>
+    <idCode>316</idCode>
+        <idValue>Prior Incorrect Date of Birth</idValue>
+    <idCode>317</idCode>
+        <idValue>Corrected Date of Birth</idValue>
+    <idCode>318</idCode>
+        <idValue>Added</idValue>
+    <idCode>319</idCode>
+        <idValue>Failed</idValue>
+    <idCode>320</idCode>
+        <idValue>Date Foreclosure Proceedings Instituted</idValue>
+    <idCode>321</idCode>
+        <idValue>Purchased</idValue>
+    <idCode>322</idCode>
+        <idValue>Put into Service</idValue>
+    <idCode>323</idCode>
+        <idValue>Replaced</idValue>
+    <idCode>324</idCode>
+        <idValue>Returned</idValue>
+    <idCode>325</idCode>
+        <idValue>Disbursement Date</idValue>
+    <idCode>326</idCode>
+        <idValue>Guarantee Date</idValue>
+    <idCode>327</idCode>
+        <idValue>Quarter Ending</idValue>
+    <idCode>328</idCode>
+        <idValue>Changed</idValue>
+    <idCode>329</idCode>
+        <idValue>Terminated</idValue>
+    <idCode>330</idCode>
+        <idValue>Referral Date</idValue>
+    <idCode>331</idCode>
+        <idValue>Evaluation Date</idValue>
+    <idCode>332</idCode>
+        <idValue>Placement Date</idValue>
+    <idCode>333</idCode>
+        <idValue>Individual Education Plan (IEP)</idValue>
+    <idCode>334</idCode>
+        <idValue>Re-evaluation Date</idValue>
+    <idCode>335</idCode>
+        <idValue>Dismissal Date</idValue>
+    <idCode>336</idCode>
+        <idValue>Employment Begin</idValue>
+    <idCode>337</idCode>
+        <idValue>Employment End</idValue>
+    <idCode>338</idCode>
+        <idValue>Medicare Begin</idValue>
+    <idCode>339</idCode>
+        <idValue>Medicare End</idValue>
+    <idCode>340</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA) Begin</idValue>
+    <idCode>341</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA) End</idValue>
+    <idCode>342</idCode>
+        <idValue>Premium Paid to Date Begin</idValue>
+    <idCode>343</idCode>
+        <idValue>Premium Paid to Date End</idValue>
+    <idCode>344</idCode>
+        <idValue>Coordination of Benefits Begin</idValue>
+    <idCode>345</idCode>
+        <idValue>Coordination of Benefits End</idValue>
+    <idCode>346</idCode>
+        <idValue>Plan Begin</idValue>
+    <idCode>347</idCode>
+        <idValue>Plan End</idValue>
+    <idCode>348</idCode>
+        <idValue>Benefit Begin</idValue>
+    <idCode>349</idCode>
+        <idValue>Benefit End</idValue>
+    <idCode>350</idCode>
+        <idValue>Education Begin</idValue>
+    <idCode>351</idCode>
+        <idValue>Education End</idValue>
+    <idCode>352</idCode>
+        <idValue>Primary Care Provider Begin</idValue>
+    <idCode>353</idCode>
+        <idValue>Primary Care Provider End</idValue>
+    <idCode>354</idCode>
+        <idValue>Illness Begin</idValue>
+    <idCode>355</idCode>
+        <idValue>Illness End</idValue>
+    <idCode>356</idCode>
+        <idValue>Eligibility Begin</idValue>
+    <idCode>357</idCode>
+        <idValue>Eligibility End</idValue>
+    <idCode>358</idCode>
+        <idValue>Cycle Begin</idValue>
+    <idCode>359</idCode>
+        <idValue>Cycle End</idValue>
+    <idCode>360</idCode>
+        <idValue>Disability Begin</idValue>
+    <idCode>361</idCode>
+        <idValue>Disability End</idValue>
+    <idCode>362</idCode>
+        <idValue>Offset Begin</idValue>
+    <idCode>363</idCode>
+        <idValue>Offset End</idValue>
+    <idCode>364</idCode>
+        <idValue>Plan Period Election Begin</idValue>
+    <idCode>365</idCode>
+        <idValue>Plan Period Election End</idValue>
+    <idCode>366</idCode>
+        <idValue>Plan Period Election</idValue>
+    <idCode>367</idCode>
+        <idValue>Due to Customer</idValue>
+    <idCode>368</idCode>
+        <idValue>Submittal</idValue>
+    <idCode>369</idCode>
+        <idValue>Estimated Departure Date</idValue>
+    <idCode>370</idCode>
+        <idValue>Actual Departure Date</idValue>
+    <idCode>371</idCode>
+        <idValue>Estimated Arrival Date</idValue>
+    <idCode>372</idCode>
+        <idValue>Actual Arrival Date</idValue>
+    <idCode>373</idCode>
+        <idValue>Order Start</idValue>
+    <idCode>374</idCode>
+        <idValue>Order End</idValue>
+    <idCode>375</idCode>
+        <idValue>Delivery Start</idValue>
+    <idCode>376</idCode>
+        <idValue>Delivery End</idValue>
+    <idCode>377</idCode>
+        <idValue>Contract Costs Through</idValue>
+    <idCode>378</idCode>
+        <idValue>Financial Information Submission</idValue>
+    <idCode>379</idCode>
+        <idValue>Business Termination</idValue>
+    <idCode>380</idCode>
+        <idValue>Applicant Signed</idValue>
+    <idCode>381</idCode>
+        <idValue>Cosigner Signed</idValue>
+    <idCode>382</idCode>
+        <idValue>Enrollment</idValue>
+    <idCode>383</idCode>
+        <idValue>Adjusted Hire</idValue>
+    <idCode>384</idCode>
+        <idValue>Credited Service</idValue>
+    <idCode>385</idCode>
+        <idValue>Credited Service Begin</idValue>
+    <idCode>386</idCode>
+        <idValue>Credited Service End</idValue>
+    <idCode>387</idCode>
+        <idValue>Deferred Distribution</idValue>
+    <idCode>388</idCode>
+        <idValue>Payment Commencement</idValue>
+    <idCode>389</idCode>
+        <idValue>Payroll Period</idValue>
+    <idCode>390</idCode>
+        <idValue>Payroll Period Begin</idValue>
+    <idCode>391</idCode>
+        <idValue>Payroll Period End</idValue>
+    <idCode>392</idCode>
+        <idValue>Plan Entry</idValue>
+    <idCode>393</idCode>
+        <idValue>Plan Participation Suspension</idValue>
+    <idCode>394</idCode>
+        <idValue>Rehire</idValue>
+    <idCode>395</idCode>
+        <idValue>Retermination</idValue>
+    <idCode>396</idCode>
+        <idValue>Termination</idValue>
+    <idCode>397</idCode>
+        <idValue>Valuation</idValue>
+    <idCode>398</idCode>
+        <idValue>Vesting Service</idValue>
+    <idCode>399</idCode>
+        <idValue>Vesting Service Begin</idValue>
+    <idCode>400</idCode>
+        <idValue>Vesting Service End</idValue>
+    <idCode>401</idCode>
+        <idValue>Duplicate Bill</idValue>
+    <idCode>402</idCode>
+        <idValue>Adjustment Promised</idValue>
+    <idCode>403</idCode>
+        <idValue>Adjustment Processed</idValue>
+    <idCode>404</idCode>
+        <idValue>Year Ending</idValue>
+    <idCode>405</idCode>
+        <idValue>Production</idValue>
+    <idCode>406</idCode>
+        <idValue>Material Classification</idValue>
+    <idCode>408</idCode>
+        <idValue>Weighed</idValue>
+    <idCode>409</idCode>
+        <idValue>Date of Deed in Lieu</idValue>
+    <idCode>410</idCode>
+        <idValue>Date of Firm Commitment</idValue>
+    <idCode>411</idCode>
+        <idValue>Expiration Date of Extension to Foreclose</idValue>
+    <idCode>412</idCode>
+        <idValue>Date of Notice to Convey</idValue>
+    <idCode>413</idCode>
+        <idValue>Date of Release of Bankruptcy</idValue>
+    <idCode>414</idCode>
+        <idValue>Optimistic Early Start</idValue>
+    <idCode>415</idCode>
+        <idValue>Optimistic Early Finish</idValue>
+    <idCode>416</idCode>
+        <idValue>Optimistic Late Start</idValue>
+    <idCode>417</idCode>
+        <idValue>Optimistic Late Finish</idValue>
+    <idCode>418</idCode>
+        <idValue>Most Likely Early Start</idValue>
+    <idCode>419</idCode>
+        <idValue>Most Likely Early Finish</idValue>
+    <idCode>420</idCode>
+        <idValue>Most Likely Late Start</idValue>
+    <idCode>421</idCode>
+        <idValue>Most Likely Late Finish</idValue>
+    <idCode>422</idCode>
+        <idValue>Pessimistic Early Start</idValue>
+    <idCode>423</idCode>
+        <idValue>Pessimistic Early Finish</idValue>
+    <idCode>424</idCode>
+        <idValue>Pessimistic Late Start</idValue>
+    <idCode>425</idCode>
+        <idValue>Pessimistic Late Finish</idValue>
+    <idCode>426</idCode>
+        <idValue>First Payment Due</idValue>
+    <idCode>427</idCode>
+        <idValue>First Interest Payment Due</idValue>
+    <idCode>428</idCode>
+        <idValue>Subsequent Interest Payment Due</idValue>
+    <idCode>429</idCode>
+        <idValue>Irregular Interest Payment Due</idValue>
+    <idCode>430</idCode>
+        <idValue>Guarantor Received</idValue>
+    <idCode>431</idCode>
+        <idValue>Onset of Current Symptoms or Illness</idValue>
+    <idCode>432</idCode>
+        <idValue>Submission</idValue>
+    <idCode>433</idCode>
+        <idValue>Removed</idValue>
+    <idCode>434</idCode>
+        <idValue>Statement</idValue>
+    <idCode>435</idCode>
+        <idValue>Admission</idValue>
+    <idCode>436</idCode>
+        <idValue>Insurance Card</idValue>
+    <idCode>437</idCode>
+        <idValue>Spouse Retirement</idValue>
+    <idCode>438</idCode>
+        <idValue>Onset of Similar Symptoms or Illness</idValue>
+    <idCode>439</idCode>
+        <idValue>Accident</idValue>
+    <idCode>440</idCode>
+        <idValue>Release of Information</idValue>
+    <idCode>441</idCode>
+        <idValue>Prior Placement</idValue>
+    <idCode>442</idCode>
+        <idValue>Date of Death</idValue>
+    <idCode>443</idCode>
+        <idValue>Peer Review Organization (PRO) Approved Stay</idValue>
+    <idCode>444</idCode>
+        <idValue>First Visit or Consultation</idValue>
+    <idCode>445</idCode>
+        <idValue>Initial Placement</idValue>
+    <idCode>446</idCode>
+        <idValue>Replacement</idValue>
+    <idCode>447</idCode>
+        <idValue>Occurrence</idValue>
+    <idCode>448</idCode>
+        <idValue>Occurrence Span</idValue>
+    <idCode>449</idCode>
+        <idValue>Occurrence Span From</idValue>
+    <idCode>450</idCode>
+        <idValue>Occurrence Span To</idValue>
+    <idCode>451</idCode>
+        <idValue>Initial Fee Due</idValue>
+    <idCode>452</idCode>
+        <idValue>Appliance Placement</idValue>
+    <idCode>453</idCode>
+        <idValue>Acute Manifestation of a Chronic Condition</idValue>
+    <idCode>454</idCode>
+        <idValue>Initial Treatment</idValue>
+    <idCode>455</idCode>
+        <idValue>Last X-Ray</idValue>
+    <idCode>456</idCode>
+        <idValue>Surgery</idValue>
+    <idCode>457</idCode>
+        <idValue>Continuous Passive Motion (CPM)</idValue>
+    <idCode>458</idCode>
+        <idValue>Certification</idValue>
+    <idCode>459</idCode>
+        <idValue>Nursing Home From</idValue>
+    <idCode>460</idCode>
+        <idValue>Nursing Home To</idValue>
+    <idCode>461</idCode>
+        <idValue>Last Certification</idValue>
+    <idCode>462</idCode>
+        <idValue>Date of Local Office Approval of Conveyance of Occupied Real Estate Property</idValue>
+    <idCode>463</idCode>
+        <idValue>Begin Therapy</idValue>
+    <idCode>464</idCode>
+        <idValue>Oxygen Therapy From</idValue>
+    <idCode>465</idCode>
+        <idValue>Oxygen Therapy To</idValue>
+    <idCode>466</idCode>
+        <idValue>Oxygen Therapy</idValue>
+    <idCode>467</idCode>
+        <idValue>Signature</idValue>
+    <idCode>468</idCode>
+        <idValue>Prescription Fill</idValue>
+    <idCode>469</idCode>
+        <idValue>Provider Signature</idValue>
+    <idCode>470</idCode>
+        <idValue>Date of Local Office Certification of Conveyance of Damaged Real Estate Property</idValue>
+    <idCode>471</idCode>
+        <idValue>Prescription</idValue>
+    <idCode>472</idCode>
+        <idValue>Service</idValue>
+    <idCode>473</idCode>
+        <idValue>Medicaid Begin</idValue>
+    <idCode>474</idCode>
+        <idValue>Medicaid End</idValue>
+    <idCode>475</idCode>
+        <idValue>Medicaid</idValue>
+    <idCode>476</idCode>
+        <idValue>Peer Review Organization (PRO) Approved Stay From</idValue>
+    <idCode>477</idCode>
+        <idValue>Peer Review Organization (PRO) Approved Stay To</idValue>
+    <idCode>478</idCode>
+        <idValue>Prescription From</idValue>
+    <idCode>479</idCode>
+        <idValue>Prescription To</idValue>
+    <idCode>480</idCode>
+        <idValue>Arterial Blood Gas Test</idValue>
+    <idCode>481</idCode>
+        <idValue>Oxygen Saturation Test</idValue>
+    <idCode>482</idCode>
+        <idValue>Pregnancy Begin</idValue>
+    <idCode>483</idCode>
+        <idValue>Pregnancy End</idValue>
+    <idCode>484</idCode>
+        <idValue>Last Menstrual Period</idValue>
+    <idCode>485</idCode>
+        <idValue>Injury Begin</idValue>
+    <idCode>486</idCode>
+        <idValue>Injury End</idValue>
+    <idCode>487</idCode>
+        <idValue>Nursing Home</idValue>
+    <idCode>488</idCode>
+        <idValue>Collateral Dependent</idValue>
+    <idCode>489</idCode>
+        <idValue>Collateral Dependent Begin</idValue>
+    <idCode>490</idCode>
+        <idValue>Collateral Dependent End</idValue>
+    <idCode>491</idCode>
+        <idValue>Sponsored Dependent</idValue>
+    <idCode>492</idCode>
+        <idValue>Sponsored Dependent Begin</idValue>
+    <idCode>493</idCode>
+        <idValue>Sponsored Dependent End</idValue>
+    <idCode>494</idCode>
+        <idValue>Deductible</idValue>
+    <idCode>495</idCode>
+        <idValue>Out-of-Pocket</idValue>
+    <idCode>496</idCode>
+        <idValue>Contract Audit Date</idValue>
+    <idCode>497</idCode>
+        <idValue>Latest Delivery Date at Pier</idValue>
+    <idCode>498</idCode>
+        <idValue>Mortgagee Reported Curtailment Date</idValue>
+    <idCode>499</idCode>
+        <idValue>Mortgagee Official Signature Date</idValue>
+    <idCode>500</idCode>
+        <idValue>Resubmission</idValue>
+    <idCode>501</idCode>
+        <idValue>Expected Reply</idValue>
+    <idCode>502</idCode>
+        <idValue>Dropped to Less than Half Time</idValue>
+    <idCode>503</idCode>
+        <idValue>Repayment Begin</idValue>
+    <idCode>504</idCode>
+        <idValue>Loan Servicing Transfer</idValue>
+    <idCode>505</idCode>
+        <idValue>Loan Purchase</idValue>
+    <idCode>506</idCode>
+        <idValue>Last Notification</idValue>
+    <idCode>507</idCode>
+        <idValue>Extract</idValue>
+    <idCode>508</idCode>
+        <idValue>Extended</idValue>
+    <idCode>509</idCode>
+        <idValue>Servicer Signature Date</idValue>
+    <idCode>510</idCode>
+        <idValue>Date Packed</idValue>
+    <idCode>511</idCode>
+        <idValue>Shelf Life Expiration</idValue>
+    <idCode>512</idCode>
+        <idValue>Warranty Expiration</idValue>
+    <idCode>513</idCode>
+        <idValue>Overhauled</idValue>
+    <idCode>514</idCode>
+        <idValue>Transferred</idValue>
+    <idCode>515</idCode>
+        <idValue>Notified</idValue>
+    <idCode>516</idCode>
+        <idValue>Discovered</idValue>
+    <idCode>517</idCode>
+        <idValue>Inspected</idValue>
+    <idCode>518</idCode>
+        <idValue>Voucher (Date of)</idValue>
+    <idCode>519</idCode>
+        <idValue>Date Bankruptcy Filed</idValue>
+    <idCode>520</idCode>
+        <idValue>Date of Damage</idValue>
+    <idCode>521</idCode>
+        <idValue>Date Hazard Insurance Policy Cancelled</idValue>
+    <idCode>522</idCode>
+        <idValue>Expiration Date to Submit Title Evidence</idValue>
+    <idCode>523</idCode>
+        <idValue>Date of Claim</idValue>
+    <idCode>524</idCode>
+        <idValue>Date of Notice of Referral for Assignment</idValue>
+    <idCode>525</idCode>
+        <idValue>Date of Notice of Probable Ineligibility for Assignment</idValue>
+    <idCode>526</idCode>
+        <idValue>Date of Foreclosure Notice</idValue>
+    <idCode>527</idCode>
+        <idValue>Expiration of Foreclosure Timeframe</idValue>
+    <idCode>528</idCode>
+        <idValue>Date Possessory Action Initiated</idValue>
+    <idCode>529</idCode>
+        <idValue>Date of Possession</idValue>
+    <idCode>530</idCode>
+        <idValue>Date of Last Installment Received</idValue>
+    <idCode>531</idCode>
+        <idValue>Date of Acquisition of Title</idValue>
+    <idCode>532</idCode>
+        <idValue>Expiration of Extension to Convey</idValue>
+    <idCode>533</idCode>
+        <idValue>Date of Assignment Approval</idValue>
+    <idCode>534</idCode>
+        <idValue>Date of Assignment Rejection</idValue>
+    <idCode>535</idCode>
+        <idValue>Curtailment Date from Advice of Payment</idValue>
+    <idCode>536</idCode>
+        <idValue>Expiration of Extension to Submit Fiscal Data</idValue>
+    <idCode>537</idCode>
+        <idValue>Date Documentation, or Paperwork, or Both Was Sent</idValue>
+    <idCode>538</idCode>
+        <idValue>Makegood Commercial Date</idValue>
+    <idCode>539</idCode>
+        <idValue>Policy Effective</idValue>
+    <idCode>540</idCode>
+        <idValue>Policy Expiration</idValue>
+    <idCode>541</idCode>
+        <idValue>Employee Effective Date of Coverage</idValue>
+    <idCode>542</idCode>
+        <idValue>Date of Representation</idValue>
+    <idCode>543</idCode>
+        <idValue>Last Premium Paid Date</idValue>
+    <idCode>544</idCode>
+        <idValue>Date Reported to Employer</idValue>
+    <idCode>545</idCode>
+        <idValue>Date Reported to Claim Administrator</idValue>
+    <idCode>546</idCode>
+        <idValue>Date of Maximum Medical Improvement</idValue>
+    <idCode>547</idCode>
+        <idValue>Date of Loan</idValue>
+    <idCode>548</idCode>
+        <idValue>Date of Advance</idValue>
+    <idCode>549</idCode>
+        <idValue>Beginning Lay Date</idValue>
+    <idCode>550</idCode>
+        <idValue>Certificate Effective</idValue>
+    <idCode>551</idCode>
+        <idValue>Benefit Application Date</idValue>
+    <idCode>552</idCode>
+        <idValue>Actual Return to Work</idValue>
+    <idCode>553</idCode>
+        <idValue>Released Return to Work</idValue>
+    <idCode>554</idCode>
+        <idValue>Ending Lay Date</idValue>
+    <idCode>555</idCode>
+        <idValue>Employee Wages Ceased</idValue>
+    <idCode>556</idCode>
+        <idValue>Last Salary Increase</idValue>
+    <idCode>557</idCode>
+        <idValue>Employee Laid Off</idValue>
+    <idCode>558</idCode>
+        <idValue>Injury or Illness</idValue>
+    <idCode>559</idCode>
+        <idValue>Oldest Unpaid Installment</idValue>
+    <idCode>560</idCode>
+        <idValue>Preforeclosure Acceptance Date</idValue>
+    <idCode>561</idCode>
+        <idValue>Preforeclosure Sale Closing Date</idValue>
+    <idCode>562</idCode>
+        <idValue>Date of First Uncured Default</idValue>
+    <idCode>563</idCode>
+        <idValue>Date Default Was Cured</idValue>
+    <idCode>564</idCode>
+        <idValue>Date of First Mortgage Payment</idValue>
+    <idCode>565</idCode>
+        <idValue>Date of Property Inspection</idValue>
+    <idCode>566</idCode>
+        <idValue>Date Total Amount of Delinquency Reported</idValue>
+    <idCode>567</idCode>
+        <idValue>Date Outstanding Loan Balance Reported</idValue>
+    <idCode>568</idCode>
+        <idValue>Date Foreclosure Sale Scheduled</idValue>
+    <idCode>569</idCode>
+        <idValue>Date Foreclosure Held</idValue>
+    <idCode>570</idCode>
+        <idValue>Date Redemption Period Ends</idValue>
+    <idCode>571</idCode>
+        <idValue>Date Voluntary Conveyance Accepted</idValue>
+    <idCode>572</idCode>
+        <idValue>Date Property Sold</idValue>
+    <idCode>573</idCode>
+        <idValue>Date Claim Paid</idValue>
+    <idCode>574</idCode>
+        <idValue>Action Begin Date</idValue>
+    <idCode>575</idCode>
+        <idValue>Projected Action End Date</idValue>
+    <idCode>576</idCode>
+        <idValue>Action End Date</idValue>
+    <idCode>577</idCode>
+        <idValue>Original Maturity Date</idValue>
+    <idCode>578</idCode>
+        <idValue>Date Referred to Attorney for Foreclosure</idValue>
+    <idCode>579</idCode>
+        <idValue>Planned Release</idValue>
+    <idCode>580</idCode>
+        <idValue>Actual Release</idValue>
+    <idCode>581</idCode>
+        <idValue>Contract Period</idValue>
+    <idCode>582</idCode>
+        <idValue>Report Period</idValue>
+    <idCode>583</idCode>
+        <idValue>Suspension</idValue>
+    <idCode>584</idCode>
+        <idValue>Reinstatement</idValue>
+    <idCode>585</idCode>
+        <idValue>Report</idValue>
+    <idCode>586</idCode>
+        <idValue>First Contact</idValue>
+    <idCode>587</idCode>
+        <idValue>Projected Foreclosure Sale Date</idValue>
+    <idCode>589</idCode>
+        <idValue>Date Assignment Filed for Record</idValue>
+    <idCode>590</idCode>
+        <idValue>Date of Appraisal</idValue>
+    <idCode>591</idCode>
+        <idValue>Expiration Date of Extension to Assign</idValue>
+    <idCode>592</idCode>
+        <idValue>Date of Extension to Convey</idValue>
+    <idCode>593</idCode>
+        <idValue>Date Hazard Insurance Policy Refused</idValue>
+    <idCode>594</idCode>
+        <idValue>High Fabrication Release Authorization</idValue>
+    <idCode>595</idCode>
+        <idValue>High Raw Material Authorization</idValue>
+    <idCode>596</idCode>
+        <idValue>Material Change Notice</idValue>
+    <idCode>597</idCode>
+        <idValue>Latest Delivery Date at Rail Ramp</idValue>
+    <idCode>598</idCode>
+        <idValue>Rejected</idValue>
+    <idCode>599</idCode>
+        <idValue>Repayment Schedule Sent</idValue>
+    <idCode>600</idCode>
+        <idValue>As Of</idValue>
+    <idCode>601</idCode>
+        <idValue>First Submission</idValue>
+    <idCode>602</idCode>
+        <idValue>Subsequent Submission</idValue>
+    <idCode>603</idCode>
+        <idValue>Renewal</idValue>
+    <idCode>604</idCode>
+        <idValue>Withdrawn</idValue>
+    <idCode>606</idCode>
+        <idValue>Certification Period Start</idValue>
+    <idCode>607</idCode>
+        <idValue>Certification Revision</idValue>
+    <idCode>608</idCode>
+        <idValue>Continuous Coverage Date(s)</idValue>
+    <idCode>609</idCode>
+        <idValue>Prearranged Deal Match</idValue>
+    <idCode>610</idCode>
+        <idValue>Contingency End</idValue>
+    <idCode>611</idCode>
+        <idValue>Oxygen Therapy Evaluation</idValue>
+    <idCode>612</idCode>
+        <idValue>Shut In</idValue>
+    <idCode>613</idCode>
+        <idValue>Allowable Effective</idValue>
+    <idCode>614</idCode>
+        <idValue>First Sales</idValue>
+    <idCode>615</idCode>
+        <idValue>Date Acquired</idValue>
+    <idCode>616</idCode>
+        <idValue>Interviewer Signed</idValue>
+    <idCode>617</idCode>
+        <idValue>Application Logged Date</idValue>
+    <idCode>618</idCode>
+        <idValue>Review Date</idValue>
+    <idCode>619</idCode>
+        <idValue>Decision Date</idValue>
+    <idCode>620</idCode>
+        <idValue>Previously Resided</idValue>
+    <idCode>621</idCode>
+        <idValue>Reported</idValue>
+    <idCode>622</idCode>
+        <idValue>Checked</idValue>
+    <idCode>623</idCode>
+        <idValue>Settled</idValue>
+    <idCode>624</idCode>
+        <idValue>Presently Residing</idValue>
+    <idCode>625</idCode>
+        <idValue>Employed in this Position</idValue>
+    <idCode>626</idCode>
+        <idValue>Verified</idValue>
+    <idCode>627</idCode>
+        <idValue>Second Admission Date</idValue>
+    <idCode>629</idCode>
+        <idValue>Account Opened</idValue>
+    <idCode>630</idCode>
+        <idValue>Account Closed</idValue>
+    <idCode>631</idCode>
+        <idValue>Property Acquired</idValue>
+    <idCode>632</idCode>
+        <idValue>Property Built</idValue>
+    <idCode>633</idCode>
+        <idValue>Employed in this Profession</idValue>
+    <idCode>634</idCode>
+        <idValue>Next Review Date</idValue>
+    <idCode>635</idCode>
+        <idValue>Initial Contact Date</idValue>
+    <idCode>636</idCode>
+        <idValue>Date of Last Update</idValue>
+    <idCode>637</idCode>
+        <idValue>Second Discharge Date</idValue>
+    <idCode>638</idCode>
+        <idValue>Date of Last Draw</idValue>
+    <idCode>640</idCode>
+        <idValue>Complaint</idValue>
+    <idCode>641</idCode>
+        <idValue>Option</idValue>
+    <idCode>642</idCode>
+        <idValue>Solicitation</idValue>
+    <idCode>643</idCode>
+        <idValue>Clause</idValue>
+    <idCode>644</idCode>
+        <idValue>Meeting</idValue>
+    <idCode>646</idCode>
+        <idValue>Rental Period</idValue>
+    <idCode>647</idCode>
+        <idValue>Next Pay Increase</idValue>
+    <idCode>648</idCode>
+        <idValue>Period Covered by Source Documents</idValue>
+    <idCode>649</idCode>
+        <idValue>Document Due</idValue>
+    <idCode>650</idCode>
+        <idValue>Court Notice</idValue>
+    <idCode>651</idCode>
+        <idValue>Expected Funding Date</idValue>
+    <idCode>652</idCode>
+        <idValue>Assignment Recorded</idValue>
+    <idCode>653</idCode>
+        <idValue>Case Reopened</idValue>
+    <idCode>655</idCode>
+        <idValue>Previous Court Event</idValue>
+    <idCode>656</idCode>
+        <idValue>Last Date to Object</idValue>
+    <idCode>657</idCode>
+        <idValue>Court Event</idValue>
+    <idCode>658</idCode>
+        <idValue>Last Date to File a Claim</idValue>
+    <idCode>659</idCode>
+        <idValue>Case Converted</idValue>
+    <idCode>660</idCode>
+        <idValue>Debt Incurred</idValue>
+    <idCode>661</idCode>
+        <idValue>Judgment</idValue>
+    <idCode>662</idCode>
+        <idValue>Wages Start</idValue>
+    <idCode>663</idCode>
+        <idValue>Wages End</idValue>
+    <idCode>664</idCode>
+        <idValue>Date Through Which Property Taxes Have Been Paid</idValue>
+    <idCode>665</idCode>
+        <idValue>Paid Through Date</idValue>
+    <idCode>666</idCode>
+        <idValue>Date Paid</idValue>
+    <idCode>667</idCode>
+        <idValue>Anesthesia Administration</idValue>
+    <idCode>668</idCode>
+        <idValue>Price Protection</idValue>
+    <idCode>669</idCode>
+        <idValue>Claim Incurred</idValue>
+    <idCode>670</idCode>
+        <idValue>Book Entry Delivery</idValue>
+    <idCode>671</idCode>
+        <idValue>Rate Adjustment</idValue>
+    <idCode>672</idCode>
+        <idValue>Next Installment Due Date</idValue>
+    <idCode>673</idCode>
+        <idValue>Daylight Overdraft Time</idValue>
+    <idCode>674</idCode>
+        <idValue>Presentment Date</idValue>
+    <idCode>675</idCode>
+        <idValue>Negotiated Extension Date</idValue>
+    <idCode>681</idCode>
+        <idValue>Remittance</idValue>
+    <idCode>682</idCode>
+        <idValue>Security Rate Adjustment</idValue>
+    <idCode>683</idCode>
+        <idValue>Filing Period</idValue>
+    <idCode>684</idCode>
+        <idValue>Review Period End</idValue>
+    <idCode>685</idCode>
+        <idValue>Requested Settlement</idValue>
+    <idCode>686</idCode>
+        <idValue>Last Screening</idValue>
+    <idCode>687</idCode>
+        <idValue>Confinement</idValue>
+    <idCode>688</idCode>
+        <idValue>Arrested</idValue>
+    <idCode>689</idCode>
+        <idValue>Convicted</idValue>
+    <idCode>690</idCode>
+        <idValue>Interviewed</idValue>
+    <idCode>691</idCode>
+        <idValue>Last Visit</idValue>
+    <idCode>692</idCode>
+        <idValue>Recovery</idValue>
+    <idCode>693</idCode>
+        <idValue>Time in U.S.</idValue>
+    <idCode>694</idCode>
+        <idValue>Future Period</idValue>
+    <idCode>695</idCode>
+        <idValue>Previous Period</idValue>
+    <idCode>696</idCode>
+        <idValue>Interest Paid To</idValue>
+    <idCode>697</idCode>
+        <idValue>Date of Seizure</idValue>
+    <idCode>699</idCode>
+        <idValue>Setoff</idValue>
+    <idCode>700</idCode>
+        <idValue>Override Date for Settlement</idValue>
+    <idCode>701</idCode>
+        <idValue>Settlement Date (From Interline Settlement System (ISS) only)</idValue>
+    <idCode>702</idCode>
+        <idValue>Sending Road Time Stamp</idValue>
+    <idCode>703</idCode>
+        <idValue>Retransmission Time Stamp</idValue>
+    <idCode>704</idCode>
+        <idValue>Delivery Appointment Date and Time</idValue>
+    <idCode>705</idCode>
+        <idValue>Interest Paid Through</idValue>
+    <idCode>706</idCode>
+        <idValue>Date Material Usage Suspended</idValue>
+    <idCode>707</idCode>
+        <idValue>Last Payment Made</idValue>
+    <idCode>708</idCode>
+        <idValue>Past Due</idValue>
+    <idCode>709</idCode>
+        <idValue>Analysis Month Ending</idValue>
+    <idCode>710</idCode>
+        <idValue>Date of Specification</idValue>
+    <idCode>711</idCode>
+        <idValue>Date of Standard</idValue>
+    <idCode>712</idCode>
+        <idValue>Return to Work Part Time</idValue>
+    <idCode>713</idCode>
+        <idValue>Paid-through Date for Salary Continuation</idValue>
+    <idCode>714</idCode>
+        <idValue>Paid-through Date for Vacation Pay</idValue>
+    <idCode>715</idCode>
+        <idValue>Paid-through Date for Accrued Sick Pay</idValue>
+    <idCode>716</idCode>
+        <idValue>Appraisal Ordered</idValue>
+    <idCode>717</idCode>
+        <idValue>Date of Operation</idValue>
+    <idCode>718</idCode>
+        <idValue>Best Time to Call</idValue>
+    <idCode>719</idCode>
+        <idValue>Verbal Report Needed</idValue>
+    <idCode>720</idCode>
+        <idValue>Estimated Escrow Closing</idValue>
+    <idCode>721</idCode>
+        <idValue>Permit Year</idValue>
+    <idCode>722</idCode>
+        <idValue>Remodeling Completed</idValue>
+    <idCode>723</idCode>
+        <idValue>Current Month Ending</idValue>
+    <idCode>724</idCode>
+        <idValue>Previous Month Ending</idValue>
+    <idCode>725</idCode>
+        <idValue>Cycle to Date</idValue>
+    <idCode>726</idCode>
+        <idValue>Year to Date</idValue>
+    <idCode>727</idCode>
+        <idValue>On Hold</idValue>
+    <idCode>728</idCode>
+        <idValue>Off Hold</idValue>
+    <idCode>729</idCode>
+        <idValue>Facsimile Due By</idValue>
+    <idCode>730</idCode>
+        <idValue>Reporting Cycle Date</idValue>
+    <idCode>731</idCode>
+        <idValue>Last Paid Installment Date</idValue>
+    <idCode>732</idCode>
+        <idValue>Claims Made</idValue>
+    <idCode>733</idCode>
+        <idValue>Date of Last Payment Received</idValue>
+    <idCode>734</idCode>
+        <idValue>Curtailment Date</idValue>
+    <idCode>736</idCode>
+        <idValue>Pool Settlement</idValue>
+    <idCode>737</idCode>
+        <idValue>Next Interest Change Date</idValue>
+    <idCode>738</idCode>
+        <idValue>Most Recent Hemoglobin or Hematocrit or Both</idValue>
+    <idCode>739</idCode>
+        <idValue>Most Recent Serum Creatine</idValue>
+    <idCode>740</idCode>
+        <idValue>Closed</idValue>
+    <idCode>741</idCode>
+        <idValue>Therapy</idValue>
+    <idCode>742</idCode>
+        <idValue>Implantation</idValue>
+    <idCode>743</idCode>
+        <idValue>Explantation</idValue>
+    <idCode>744</idCode>
+        <idValue>Date Became Aware</idValue>
+    <idCode>745</idCode>
+        <idValue>First Marketed</idValue>
+    <idCode>746</idCode>
+        <idValue>Last Marketed</idValue>
+    <idCode>750</idCode>
+        <idValue>Expected Problem Resolution</idValue>
+    <idCode>751</idCode>
+        <idValue>Alternate Problem Resolution</idValue>
+    <idCode>752</idCode>
+        <idValue>Fee Capitalization</idValue>
+    <idCode>753</idCode>
+        <idValue>Interest Capitalization</idValue>
+    <idCode>754</idCode>
+        <idValue>Next Payment Due</idValue>
+    <idCode>755</idCode>
+        <idValue>Conversion to Repayment</idValue>
+    <idCode>756</idCode>
+        <idValue>End of Grace</idValue>
+    <idCode>757</idCode>
+        <idValue>School Refund</idValue>
+    <idCode>758</idCode>
+        <idValue>Simple Interest Due</idValue>
+    <idCode>760</idCode>
+        <idValue>Printed</idValue>
+    <idCode>770</idCode>
+        <idValue>Back on Market</idValue>
+    <idCode>771</idCode>
+        <idValue>Status</idValue>
+    <idCode>773</idCode>
+        <idValue>Off-Market</idValue>
+    <idCode>774</idCode>
+        <idValue>Tour</idValue>
+    <idCode>776</idCode>
+        <idValue>Listing Received</idValue>
+    <idCode>778</idCode>
+        <idValue>Anticipated Closing</idValue>
+    <idCode>779</idCode>
+        <idValue>Last Publication</idValue>
+    <idCode>780</idCode>
+        <idValue>Sold Book Publication</idValue>
+    <idCode>781</idCode>
+        <idValue>Occupancy</idValue>
+    <idCode>782</idCode>
+        <idValue>Contingency</idValue>
+    <idCode>783</idCode>
+        <idValue>Percolation Test</idValue>
+    <idCode>784</idCode>
+        <idValue>Septic Approval</idValue>
+    <idCode>785</idCode>
+        <idValue>Title Transfer</idValue>
+    <idCode>786</idCode>
+        <idValue>Open House</idValue>
+    <idCode>789</idCode>
+        <idValue>Homestead</idValue>
+    <idCode>800</idCode>
+        <idValue>Midpoint of Performance</idValue>
+    <idCode>801</idCode>
+        <idValue>Acquisition Date</idValue>
+    <idCode>802</idCode>
+        <idValue>Date of Action</idValue>
+    <idCode>803</idCode>
+        <idValue>Paid in Full</idValue>
+    <idCode>804</idCode>
+        <idValue>Refinance</idValue>
+    <idCode>805</idCode>
+        <idValue>Voluntary Termination</idValue>
+    <idCode>806</idCode>
+        <idValue>Customer Order</idValue>
+    <idCode>807</idCode>
+        <idValue>Stored</idValue>
+    <idCode>808</idCode>
+        <idValue>Selected</idValue>
+    <idCode>809</idCode>
+        <idValue>Posted</idValue>
+    <idCode>810</idCode>
+        <idValue>Document Received</idValue>
+    <idCode>811</idCode>
+        <idValue>Rebuilt</idValue>
+    <idCode>812</idCode>
+        <idValue>Marriage</idValue>
+    <idCode>813</idCode>
+        <idValue>Customs Entry Date</idValue>
+    <idCode>814</idCode>
+        <idValue>Payment Due Date</idValue>
+    <idCode>815</idCode>
+        <idValue>Maturity Date</idValue>
+    <idCode>816</idCode>
+        <idValue>Trade Date</idValue>
+    <idCode>817</idCode>
+        <idValue>Gallons Per Minute (GPM) Test Performed</idValue>
+    <idCode>818</idCode>
+        <idValue>British Thermal Unit (BTU) Test Performed</idValue>
+    <idCode>820</idCode>
+        <idValue>Real Estate Tax Year</idValue>
+    <idCode>821</idCode>
+        <idValue>Final Reconciliation Value Estimate as of</idValue>
+    <idCode>822</idCode>
+        <idValue>Map</idValue>
+    <idCode>823</idCode>
+        <idValue>Opinion</idValue>
+    <idCode>824</idCode>
+        <idValue>Version</idValue>
+    <idCode>825</idCode>
+        <idValue>Original Due Date</idValue>
+    <idCode>826</idCode>
+        <idValue>Incumbency Period</idValue>
+    <idCode>827</idCode>
+        <idValue>Audience Deficiency Period</idValue>
+    <idCode>828</idCode>
+        <idValue>Aired Date</idValue>
+    <idCode>830</idCode>
+        <idValue>Schedule</idValue>
+    <idCode>831</idCode>
+        <idValue>Paid Through Date for Minimum Payment</idValue>
+    <idCode>832</idCode>
+        <idValue>Paid Through Date for Total Payment</idValue>
+    <idCode>840</idCode>
+        <idValue>Election</idValue>
+    <idCode>841</idCode>
+        <idValue>Engineering Data List</idValue>
+    <idCode>842</idCode>
+        <idValue>Last Production</idValue>
+    <idCode>843</idCode>
+        <idValue>Not Before</idValue>
+    <idCode>844</idCode>
+        <idValue>Not After</idValue>
+    <idCode>845</idCode>
+        <idValue>Initial Claim</idValue>
+    <idCode>846</idCode>
+        <idValue>Benefits Paid</idValue>
+    <idCode>847</idCode>
+        <idValue>Wages Earned</idValue>
+    <idCode>848</idCode>
+        <idValue>Adjusted Start</idValue>
+    <idCode>849</idCode>
+        <idValue>Adjusted End</idValue>
+    <idCode>850</idCode>
+        <idValue>Revised Adjusted Start</idValue>
+    <idCode>851</idCode>
+        <idValue>Revised Adjusted End</idValue>
+    <idCode>853</idCode>
+        <idValue>Field Test</idValue>
+    <idCode>854</idCode>
+        <idValue>Mortgage Note Date</idValue>
+    <idCode>855</idCode>
+        <idValue>Alternative Due Date</idValue>
+    <idCode>856</idCode>
+        <idValue>First Payment Change</idValue>
+    <idCode>857</idCode>
+        <idValue>First Rate Adjustment</idValue>
+    <idCode>858</idCode>
+        <idValue>Alternate Base Period</idValue>
+    <idCode>859</idCode>
+        <idValue>Prior Notice</idValue>
+    <idCode>860</idCode>
+        <idValue>Appointment Effective</idValue>
+    <idCode>861</idCode>
+        <idValue>Appointment Expiration</idValue>
+    <idCode>862</idCode>
+        <idValue>Company Termination</idValue>
+    <idCode>863</idCode>
+        <idValue>Continuing Education Requirement</idValue>
+    <idCode>864</idCode>
+        <idValue>Distributor Effective</idValue>
+    <idCode>865</idCode>
+        <idValue>Distributor Termination</idValue>
+    <idCode>866</idCode>
+        <idValue>Examination</idValue>
+    <idCode>867</idCode>
+        <idValue>Incorporation Dissolution</idValue>
+    <idCode>868</idCode>
+        <idValue>Last Follow-up</idValue>
+    <idCode>869</idCode>
+        <idValue>License Effective</idValue>
+    <idCode>870</idCode>
+        <idValue>License Expiration</idValue>
+    <idCode>871</idCode>
+        <idValue>License Renewal</idValue>
+    <idCode>872</idCode>
+        <idValue>License Requested</idValue>
+    <idCode>873</idCode>
+        <idValue>Mailed</idValue>
+    <idCode>874</idCode>
+        <idValue>Paperwork Mailed</idValue>
+    <idCode>875</idCode>
+        <idValue>Previous Employment</idValue>
+    <idCode>876</idCode>
+        <idValue>Previous Employment End</idValue>
+    <idCode>877</idCode>
+        <idValue>Previous Employment Start</idValue>
+    <idCode>878</idCode>
+        <idValue>Previous Residence</idValue>
+    <idCode>879</idCode>
+        <idValue>Previous Residence End</idValue>
+    <idCode>880</idCode>
+        <idValue>Previous Residence Start</idValue>
+    <idCode>881</idCode>
+        <idValue>Request</idValue>
+    <idCode>882</idCode>
+        <idValue>Resident License Effective</idValue>
+    <idCode>883</idCode>
+        <idValue>Resident License Expiration</idValue>
+    <idCode>884</idCode>
+        <idValue>State Termination</idValue>
+    <idCode>885</idCode>
+        <idValue>Texas Line Termination</idValue>
+    <idCode>900</idCode>
+        <idValue>Acceleration</idValue>
+    <idCode>901</idCode>
+        <idValue>Adjusted Contestability</idValue>
+    <idCode>903</idCode>
+        <idValue>Application Entry</idValue>
+    <idCode>904</idCode>
+        <idValue>Approval/Offer</idValue>
+    <idCode>905</idCode>
+        <idValue>Automatic Premium Loan</idValue>
+    <idCode>906</idCode>
+        <idValue>Collection</idValue>
+    <idCode>907</idCode>
+        <idValue>Confinement End</idValue>
+    <idCode>908</idCode>
+        <idValue>Confinement Start</idValue>
+    <idCode>909</idCode>
+        <idValue>Contestability</idValue>
+    <idCode>910</idCode>
+        <idValue>Flat Extra End</idValue>
+    <idCode>911</idCode>
+        <idValue>Last Activity</idValue>
+    <idCode>912</idCode>
+        <idValue>Last Change</idValue>
+    <idCode>913</idCode>
+        <idValue>Last Episode</idValue>
+    <idCode>914</idCode>
+        <idValue>Last Meal</idValue>
+    <idCode>915</idCode>
+        <idValue>Loan</idValue>
+    <idCode>916</idCode>
+        <idValue>Application Status</idValue>
+    <idCode>917</idCode>
+        <idValue>Maturity</idValue>
+    <idCode>918</idCode>
+        <idValue>Medical Information Signature</idValue>
+    <idCode>919</idCode>
+        <idValue>Medical Information System</idValue>
+    <idCode>920</idCode>
+        <idValue>Note</idValue>
+    <idCode>921</idCode>
+        <idValue>Offer Expiration</idValue>
+    <idCode>922</idCode>
+        <idValue>Original Receipt</idValue>
+    <idCode>923</idCode>
+        <idValue>Placement</idValue>
+    <idCode>924</idCode>
+        <idValue>Placement Period Expiration</idValue>
+    <idCode>925</idCode>
+        <idValue>Processing</idValue>
+    <idCode>926</idCode>
+        <idValue>Recapture</idValue>
+    <idCode>927</idCode>
+        <idValue>Re-entry</idValue>
+    <idCode>928</idCode>
+        <idValue>Reissue</idValue>
+    <idCode>929</idCode>
+        <idValue>Reinstatement</idValue>
+    <idCode>930</idCode>
+        <idValue>Requalification</idValue>
+    <idCode>931</idCode>
+        <idValue>Reinsurance Effective</idValue>
+    <idCode>932</idCode>
+        <idValue>Reservation of Facility</idValue>
+    <idCode>933</idCode>
+        <idValue>Settlement Status</idValue>
+    <idCode>934</idCode>
+        <idValue>Table Rating End</idValue>
+    <idCode>935</idCode>
+        <idValue>Termination of Facility</idValue>
+    <idCode>936</idCode>
+        <idValue>Treatment</idValue>
+    <idCode>937</idCode>
+        <idValue>Department of Labor Wage Determination Date</idValue>
+    <idCode>938</idCode>
+        <idValue>Order</idValue>
+    <idCode>939</idCode>
+        <idValue>Resolved</idValue>
+    <idCode>940</idCode>
+        <idValue>Execution Date</idValue>
+    <idCode>941</idCode>
+        <idValue>Capitation Period Start</idValue>
+    <idCode>942</idCode>
+        <idValue>Capitation Period End</idValue>
+    <idCode>943</idCode>
+        <idValue>Last Date for a Government Agency to File a Claim</idValue>
+    <idCode>944</idCode>
+        <idValue>Adjustment Period</idValue>
+    <idCode>945</idCode>
+        <idValue>Activity</idValue>
+    <idCode>946</idCode>
+        <idValue>Mail By</idValue>
+    <idCode>947</idCode>
+        <idValue>Preparation</idValue>
+    <idCode>948</idCode>
+        <idValue>Payment Initiated</idValue>
+    <idCode>949</idCode>
+        <idValue>Payment Effective</idValue>
+    <idCode>950</idCode>
+        <idValue>Application</idValue>
+    <idCode>951</idCode>
+        <idValue>Reclassification</idValue>
+    <idCode>952</idCode>
+        <idValue>Reclassification (Exit Date)</idValue>
+    <idCode>953</idCode>
+        <idValue>Post-Reclassification</idValue>
+    <idCode>954</idCode>
+        <idValue>Post-Reclassification (First Report Card)</idValue>
+    <idCode>955</idCode>
+        <idValue>Post-Reclassification (First Semi-annual)</idValue>
+    <idCode>956</idCode>
+        <idValue>Post-Reclassification (Second Semi-annual)</idValue>
+    <idCode>957</idCode>
+        <idValue>Post-Reclassification (End of Second Year)</idValue>
+    <idCode>960</idCode>
+        <idValue>Adjusted Death Benefit</idValue>
+    <idCode>961</idCode>
+        <idValue>Anniversary</idValue>
+    <idCode>962</idCode>
+        <idValue>Annuitization</idValue>
+    <idCode>963</idCode>
+        <idValue>Annuity Commencement Date</idValue>
+    <idCode>964</idCode>
+        <idValue>Bill</idValue>
+    <idCode>965</idCode>
+        <idValue>Calendar Anniversary</idValue>
+    <idCode>966</idCode>
+        <idValue>Contract Mailed</idValue>
+    <idCode>967</idCode>
+        <idValue>Early Withdrawal</idValue>
+    <idCode>968</idCode>
+        <idValue>Fiscal Anniversary</idValue>
+    <idCode>969</idCode>
+        <idValue>Income</idValue>
+    <idCode>970</idCode>
+        <idValue>Initial Premium</idValue>
+    <idCode>971</idCode>
+        <idValue>Initial Premium Effective</idValue>
+    <idCode>972</idCode>
+        <idValue>Last Premium Effective</idValue>
+    <idCode>973</idCode>
+        <idValue>Minimum Required Distribution</idValue>
+    <idCode>974</idCode>
+        <idValue>Next Anniversary</idValue>
+    <idCode>975</idCode>
+        <idValue>Notice</idValue>
+    <idCode>976</idCode>
+        <idValue>Notification of Death</idValue>
+    <idCode>977</idCode>
+        <idValue>Partial Annuitization</idValue>
+    <idCode>978</idCode>
+        <idValue>Plan Anniversary</idValue>
+    <idCode>979</idCode>
+        <idValue>Policy Surrender</idValue>
+    <idCode>980</idCode>
+        <idValue>Prior Contract Anniversary</idValue>
+    <idCode>981</idCode>
+        <idValue>Prior Contract Issue</idValue>
+    <idCode>982</idCode>
+        <idValue>Signature Received</idValue>
+    <idCode>983</idCode>
+        <idValue>Tax</idValue>
+    <idCode>984</idCode>
+        <idValue>Benefit Period</idValue>
+    <idCode>985</idCode>
+        <idValue>Month to Date</idValue>
+    <idCode>986</idCode>
+        <idValue>Semiannual Ending</idValue>
+    <idCode>987</idCode>
+        <idValue>Surrender</idValue>
+    <idCode>988</idCode>
+        <idValue>Plan of Treatment Period</idValue>
+    <idCode>989</idCode>
+        <idValue>Prior Hospitalization Date(s) Related to Current Service(s)</idValue>
+    <idCode>992</idCode>
+        <idValue>Date Requested</idValue>
+    <idCode>993</idCode>
+        <idValue>Request for Quotation</idValue>
+    <idCode>994</idCode>
+        <idValue>Quote</idValue>
+    <idCode>995</idCode>
+        <idValue>Recorded Date</idValue>
+    <idCode>996</idCode>
+        <idValue>Required Delivery</idValue>
+    <idCode>997</idCode>
+        <idValue>Quote to be Received By</idValue>
+    <idCode>998</idCode>
+        <idValue>Continuation of Pay Start Date</idValue>
+    <idCode>999</idCode>
+        <idValue>Document Date</idValue>
+    <idCode>AA1</idCode>
+        <idValue>Estimated Point of Arrival</idValue>
+    <idCode>AA2</idCode>
+        <idValue>Estimated Point of Discharge</idValue>
+    <idCode>AA3</idCode>
+        <idValue>Cancel After, Ex Country</idValue>
+    <idCode>AA4</idCode>
+        <idValue>Cancel After, Ex Factory</idValue>
+    <idCode>AA5</idCode>
+        <idValue>Do Not Ship Before, Ex Country</idValue>
+    <idCode>AA6</idCode>
+        <idValue>Do Not Ship Before, Ex Factory</idValue>
+    <idCode>AA7</idCode>
+        <idValue>Final Scheduled Payment</idValue>
+    <idCode>AA8</idCode>
+        <idValue>Actual Discharge</idValue>
+    <idCode>AA9</idCode>
+        <idValue>Address Period</idValue>
+    <idCode>AAA</idCode>
+        <idValue>Arrival in Country</idValue>
+    <idCode>AAB</idCode>
+        <idValue>Citation</idValue>
+    <idCode>AAD</idCode>
+        <idValue>Crime</idValue>
+    <idCode>AAE</idCode>
+        <idValue>Discharge - Planned</idValue>
+    <idCode>AAF</idCode>
+        <idValue>Draft</idValue>
+    <idCode>AAG</idCode>
+        <idValue>Due Date</idValue>
+    <idCode>AAH</idCode>
+        <idValue>Event</idValue>
+    <idCode>AAI</idCode>
+        <idValue>First Involvement</idValue>
+    <idCode>AAJ</idCode>
+        <idValue>Guarantee Period</idValue>
+    <idCode>AAK</idCode>
+        <idValue>Income Increase Period</idValue>
+    <idCode>AAL</idCode>
+        <idValue>Installment Date</idValue>
+    <idCode>AAM</idCode>
+        <idValue>Last Civilian Flight</idValue>
+    <idCode>AAN</idCode>
+        <idValue>Last Flight</idValue>
+    <idCode>AAO</idCode>
+        <idValue>Last Insurance Medical</idValue>
+    <idCode>AAP</idCode>
+        <idValue>Last Military Flight</idValue>
+    <idCode>AAQ</idCode>
+        <idValue>Last Physical</idValue>
+    <idCode>AAR</idCode>
+        <idValue>License</idValue>
+    <idCode>AAS</idCode>
+        <idValue>Medical Certificate</idValue>
+    <idCode>AAT</idCode>
+        <idValue>Medication</idValue>
+    <idCode>AAU</idCode>
+        <idValue>Net Worth Date</idValue>
+    <idCode>AAV</idCode>
+        <idValue>Next Activity</idValue>
+    <idCode>AAW</idCode>
+        <idValue>Ownership Change</idValue>
+    <idCode>AAX</idCode>
+        <idValue>Ownership Period</idValue>
+    <idCode>AAY</idCode>
+        <idValue>Rate Date</idValue>
+    <idCode>AAZ</idCode>
+        <idValue>Requested Contract</idValue>
+    <idCode>AB1</idCode>
+        <idValue>Requested Offer</idValue>
+    <idCode>AB2</idCode>
+        <idValue>Sales Period</idValue>
+    <idCode>AB3</idCode>
+        <idValue>Tax Year</idValue>
+    <idCode>AB4</idCode>
+        <idValue>Time Period</idValue>
+    <idCode>AB5</idCode>
+        <idValue>Travel</idValue>
+    <idCode>AB6</idCode>
+        <idValue>Treatment End</idValue>
+    <idCode>AB7</idCode>
+        <idValue>Treatment Start</idValue>
+    <idCode>AB8</idCode>
+        <idValue>Trust</idValue>
+    <idCode>AB9</idCode>
+        <idValue>Worst Time to Call</idValue>
+    <idCode>ABA</idCode>
+        <idValue>Registration</idValue>
+    <idCode>ABB</idCode>
+        <idValue>Revoked</idValue>
+    <idCode>ABC</idCode>
+        <idValue>Estimated Date of Birth</idValue>
+    <idCode>ABD</idCode>
+        <idValue>Last Annual Report</idValue>
+    <idCode>ABE</idCode>
+        <idValue>Legal Action Started</idValue>
+    <idCode>ABG</idCode>
+        <idValue>Payment Period</idValue>
+    <idCode>ABH</idCode>
+        <idValue>Profit Period</idValue>
+    <idCode>ABI</idCode>
+        <idValue>Registered</idValue>
+    <idCode>ABK</idCode>
+        <idValue>Consolidated</idValue>
+    <idCode>ABL</idCode>
+        <idValue>Board of Directors Not Authorized As Of</idValue>
+    <idCode>ABM</idCode>
+        <idValue>Board of Directors Incomplete As Of</idValue>
+    <idCode>ABN</idCode>
+        <idValue>Manager Not Registered As Of</idValue>
+    <idCode>ABO</idCode>
+        <idValue>Citizenship Change</idValue>
+    <idCode>ABP</idCode>
+        <idValue>Participation</idValue>
+    <idCode>ABQ</idCode>
+        <idValue>Capitalization</idValue>
+    <idCode>ABR</idCode>
+        <idValue>Registration of Board of Directors</idValue>
+    <idCode>ABS</idCode>
+        <idValue>Ceased Operations</idValue>
+    <idCode>ABT</idCode>
+        <idValue>Satisfied</idValue>
+    <idCode>ABU</idCode>
+        <idValue>Terms Met</idValue>
+    <idCode>ABV</idCode>
+        <idValue>Asset Documentation Expiration</idValue>
+    <idCode>ABW</idCode>
+        <idValue>Credit Documentation Expiration</idValue>
+    <idCode>ABX</idCode>
+        <idValue>Income Documentation Expiration</idValue>
+    <idCode>ABY</idCode>
+        <idValue>Product Held Until</idValue>
+    <idCode>ACA</idCode>
+        <idValue>Immigration Date</idValue>
+    <idCode>ACB</idCode>
+        <idValue>Estimated Immigration Date</idValue>
+    <idCode>ACK</idCode>
+        <idValue>Acknowledgment</idValue>
+    <idCode>ADB</idCode>
+        <idValue>Business Control Change</idValue>
+    <idCode>ADC</idCode>
+        <idValue>Court Registration</idValue>
+    <idCode>ADD</idCode>
+        <idValue>Annual Report Due</idValue>
+    <idCode>ADL</idCode>
+        <idValue>Asset and Liability Schedule</idValue>
+    <idCode>ADM</idCode>
+        <idValue>Annual Report Mailed</idValue>
+    <idCode>ADR</idCode>
+        <idValue>Annual Report Filed</idValue>
+    <idCode>ARD</idCode>
+        <idValue>Annual Report Delinquency</idValue>
+    <idCode>CAD</idCode>
+        <idValue>Changed Accounting Date</idValue>
+    <idCode>CCR</idCode>
+        <idValue>Customs Cargo Release</idValue>
+    <idCode>CDT</idCode>
+        <idValue>Maintenance Comment</idValue>
+    <idCode>CEA</idCode>
+        <idValue>Formation</idValue>
+    <idCode>CEB</idCode>
+        <idValue>Continuance</idValue>
+    <idCode>CEC</idCode>
+        <idValue>Merger</idValue>
+    <idCode>CED</idCode>
+        <idValue>Year Due</idValue>
+    <idCode>CEE</idCode>
+        <idValue>Next Annual Meeting</idValue>
+    <idCode>CEF</idCode>
+        <idValue>End of Last Fiscal Year</idValue>
+    <idCode>CEH</idCode>
+        <idValue>Year Beginning</idValue>
+    <idCode>CEJ</idCode>
+        <idValue>Started Doing Business</idValue>
+    <idCode>CEK</idCode>
+        <idValue>Sworn and Subscribed</idValue>
+    <idCode>CEL</idCode>
+        <idValue>Calendar Year</idValue>
+    <idCode>CEM</idCode>
+        <idValue>Asset</idValue>
+    <idCode>CEN</idCode>
+        <idValue>Inactivity</idValue>
+    <idCode>CEO</idCode>
+        <idValue>High Capital Year</idValue>
+    <idCode>CLO</idCode>
+        <idValue>Closing Date of First Balance Sheet</idValue>
+    <idCode>CLU</idCode>
+        <idValue>Closed Until</idValue>
+    <idCode>COM</idCode>
+        <idValue>Compliance</idValue>
+    <idCode>CON</idCode>
+        <idValue>Converted into Holding Company</idValue>
+    <idCode>CUR</idCode>
+        <idValue>Current List</idValue>
+    <idCode>DDO</idCode>
+        <idValue>Declaration</idValue>
+    <idCode>DEE</idCode>
+        <idValue>Deed Not Available</idValue>
+    <idCode>DET</idCode>
+        <idValue>Detrimental Information Received</idValue>
+    <idCode>DFF</idCode>
+        <idValue>Deferral</idValue>
+    <idCode>DFS</idCode>
+        <idValue>Departure From Specification</idValue>
+    <idCode>DIS</idCode>
+        <idValue>Disposition</idValue>
+    <idCode>DOI</idCode>
+        <idValue>Delivery Order Issued</idValue>
+    <idCode>DSP</idCode>
+        <idValue>Disposal</idValue>
+    <idCode>ECD</idCode>
+        <idValue>Estimated Construction Date</idValue>
+    <idCode>ECF</idCode>
+        <idValue>Estimated Completion - First Prior Month</idValue>
+    <idCode>ECS</idCode>
+        <idValue>Estimated Completion - Second Prior Month</idValue>
+    <idCode>ECT</idCode>
+        <idValue>Estimated Completion - Third Prior Month</idValue>
+    <idCode>EPP</idCode>
+        <idValue>Estimate Preparation</idValue>
+    <idCode>ESC</idCode>
+        <idValue>Estimate Comment</idValue>
+    <idCode>ESF</idCode>
+        <idValue>Estimated Start - First Prior Month</idValue>
+    <idCode>ESS</idCode>
+        <idValue>Estimated Start - Second Prior Month</idValue>
+    <idCode>EST</idCode>
+        <idValue>Estimated Start - Third Prior Month</idValue>
+    <idCode>ETP</idCode>
+        <idValue>Earliest Filing Period</idValue>
+    <idCode>EXO</idCode>
+        <idValue>Exposure</idValue>
+    <idCode>EXP</idCode>
+        <idValue>Export</idValue>
+    <idCode>FFI</idCode>
+        <idValue>Financial Information</idValue>
+    <idCode>GRD</idCode>
+        <idValue>Graduated</idValue>
+    <idCode>ICF</idCode>
+        <idValue>Converted to Electronic Date</idValue>
+    <idCode>IDG</idCode>
+        <idValue>Insolvency Discharge Granted</idValue>
+    <idCode>III</idCode>
+        <idValue>Incorporation</idValue>
+    <idCode>IMP</idCode>
+        <idValue>Import</idValue>
+    <idCode>INC</idCode>
+        <idValue>Incident</idValue>
+    <idCode>INT</idCode>
+        <idValue>Inactive Until</idValue>
+    <idCode>KEV</idCode>
+        <idValue>Key Event Fiscal Year</idValue>
+    <idCode>KEW</idCode>
+        <idValue>Key Event Calendar Year</idValue>
+    <idCode>LAS</idCode>
+        <idValue>Last Check for Balance Sheet Update</idValue>
+    <idCode>LCC</idCode>
+        <idValue>Last Capital Change</idValue>
+    <idCode>LEA</idCode>
+        <idValue>Letter of Agreement</idValue>
+    <idCode>LEL</idCode>
+        <idValue>Letter of Liability</idValue>
+    <idCode>LIQ</idCode>
+        <idValue>Liquidation</idValue>
+    <idCode>LLP</idCode>
+        <idValue>Low Period</idValue>
+    <idCode>LOG</idCode>
+        <idValue>Equipment Log Entry</idValue>
+    <idCode>LPC</idCode>
+        <idValue>List Price Change</idValue>
+    <idCode>LSC</idCode>
+        <idValue>Legal Structure Change</idValue>
+    <idCode>LTP</idCode>
+        <idValue>Latest Filing Period</idValue>
+    <idCode>MRR</idCode>
+        <idValue>Meter Reading</idValue>
+    <idCode>MSD</idCode>
+        <idValue>Latest Material Safety Data Sheet Date</idValue>
+    <idCode>NAM</idCode>
+        <idValue>Present Name</idValue>
+    <idCode>NFD</idCode>
+        <idValue>Negotiated Finish</idValue>
+    <idCode>NRG</idCode>
+        <idValue>Not Registered</idValue>
+    <idCode>NSD</idCode>
+        <idValue>Negotiated Start</idValue>
+    <idCode>ORG</idCode>
+        <idValue>Original List</idValue>
+    <idCode>PBC</idCode>
+        <idValue>Present Control</idValue>
+    <idCode>PDV</idCode>
+        <idValue>Privilege Details Verification</idValue>
+    <idCode>PLS</idCode>
+        <idValue>Present Legal Structure</idValue>
+    <idCode>PPP</idCode>
+        <idValue>Peak Period</idValue>
+    <idCode>PRD</idCode>
+        <idValue>Previously Reported Date of Birth</idValue>
+    <idCode>PRR</idCode>
+        <idValue>Presented to Receivers</idValue>
+    <idCode>PTD</idCode>
+        <idValue>Paid To Date</idValue>
+    <idCode>RAP</idCode>
+        <idValue>Receiver Appointed</idValue>
+    <idCode>RES</idCode>
+        <idValue>Resigned</idValue>
+    <idCode>RFD</idCode>
+        <idValue>Requested Finish</idValue>
+    <idCode>RFF</idCode>
+        <idValue>Recovery Finish</idValue>
+    <idCode>RFO</idCode>
+        <idValue>Referred From</idValue>
+    <idCode>RNT</idCode>
+        <idValue>Rent Survey</idValue>
+    <idCode>RRM</idCode>
+        <idValue>Received in the Mail</idValue>
+    <idCode>RRT</idCode>
+        <idValue>Revocation</idValue>
+    <idCode>RSD</idCode>
+        <idValue>Requested Start</idValue>
+    <idCode>RSS</idCode>
+        <idValue>Recovery Start</idValue>
+    <idCode>RTO</idCode>
+        <idValue>Referred To</idValue>
+    <idCode>SCV</idCode>
+        <idValue>Social Security Claims Verification</idValue>
+    <idCode>SDD</idCode>
+        <idValue>Sole Directorship Date</idValue>
+    <idCode>STN</idCode>
+        <idValue>Transition</idValue>
+    <idCode>TSR</idCode>
+        <idValue>Trade Style Registered</idValue>
+    <idCode>TSS</idCode>
+        <idValue>Trial Started</idValue>
+    <idCode>TST</idCode>
+        <idValue>Trial Set</idValue>
+    <idCode>VAT</idCode>
+        <idValue>Value Added Tax (VAT) Claims Verification</idValue>
+    <idCode>VLU</idCode>
+        <idValue>Valid Until</idValue>
+    <idCode>W01</idCode>
+        <idValue>Sample Collected</idValue>
+    <idCode>W02</idCode>
+        <idValue>Status Change</idValue>
+    <idCode>W03</idCode>
+        <idValue>Construction Start</idValue>
+    <idCode>W05</idCode>
+        <idValue>Recompletion</idValue>
+    <idCode>W06</idCode>
+        <idValue>Last Logged</idValue>
+    <idCode>W07</idCode>
+        <idValue>Well Log Run</idValue>
+    <idCode>W08</idCode>
+        <idValue>Surface Casing Authority Approval</idValue>
+    <idCode>W09</idCode>
+        <idValue>Reached Total Depth</idValue>
+    <idCode>W10</idCode>
+        <idValue>Spacing Order Unit Assigned</idValue>
+    <idCode>W11</idCode>
+        <idValue>Rig Arrival</idValue>
+    <idCode>W12</idCode>
+        <idValue>Location Exception Order Number Assigned</idValue>
+    <idCode>W13</idCode>
+        <idValue>Sidetracked Wellbore</idValue>
+    <idCode>WAY</idCode>
+        <idValue>Waybill</idValue>
+    <idCode>YXX</idCode>
+        <idValue>Programmed Fiscal Year</idValue>
+    <idCode>YXY</idCode>
+        <idValue>Programmed Calendar Year</idValue>
+    <idCode>ZZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

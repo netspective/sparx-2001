@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Vacant</idValue>
+    <idCode>02</idCode>
+        <idValue>Occupied</idValue>
+    <idCode>03</idCode>
+        <idValue>Borrower Occupied</idValue>
+    <idCode>04</idCode>
+        <idValue>Tenant Occupied</idValue>
+    <idCode>05</idCode>
+        <idValue>Adverse Occupied</idValue>
+    <idCode>06</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>07</idCode>
+        <idValue>Original Veteran Occupied</idValue>
+    <idCode>08</idCode>
+        <idValue>Transferee Occupied</idValue>
+    <idCode>09</idCode>
+        <idValue>Unoccupied</idValue>
+    <idCode>10</idCode>
+        <idValue>Abandoned</idValue>
+    <idCode>11</idCode>
+        <idValue>Condemned</idValue>
+    <idCode>12</idCode>
+        <idValue>Under Construction</idValue>
+    <idCode>13</idCode>
+        <idValue>Temporary Residence</idValue>
+    <idCode>14</idCode>
+        <idValue>Partially Occupied</idValue>
+    <idCode>15</idCode>
+        <idValue>Owner Occupied, Primary Residence</idValue>
+    <idCode>16</idCode>
+        <idValue>Owner Occupied, Secondary Residence</idValue>
+    <idCode>17</idCode>
+        <idValue>Owner Occupied</idValue>
+</idList>

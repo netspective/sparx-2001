@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>O</idCode>
+        <idValue>Other Restrictions</idValue>
+    <idCode>R</idCode>
+        <idValue>Restricted Access</idValue>
+    <idCode>U</idCode>
+        <idValue>Unrestricted Access</idValue>
+</idList>

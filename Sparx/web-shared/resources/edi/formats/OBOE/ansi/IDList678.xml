@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>1st Week of the Month</idValue>
+    <idCode>2</idCode>
+        <idValue>2nd Week of the Month</idValue>
+    <idCode>3</idCode>
+        <idValue>3rd Week of the Month</idValue>
+    <idCode>4</idCode>
+        <idValue>4th Week of the Month</idValue>
+    <idCode>5</idCode>
+        <idValue>5th Week of the Month</idValue>
+    <idCode>6</idCode>
+        <idValue>1st &amp; 3rd Weeks of the Month</idValue>
+    <idCode>7</idCode>
+        <idValue>2nd &amp; 4th Weeks of the Month</idValue>
+    <idCode>8</idCode>
+        <idValue>1st Working Day of Period</idValue>
+    <idCode>9</idCode>
+        <idValue>Last Working Day of Period</idValue>
+    <idCode>A</idCode>
+        <idValue>Monday through Friday</idValue>
+    <idCode>B</idCode>
+        <idValue>Monday through Saturday</idValue>
+    <idCode>C</idCode>
+        <idValue>Monday through Sunday</idValue>
+    <idCode>D</idCode>
+        <idValue>Monday</idValue>
+    <idCode>E</idCode>
+        <idValue>Tuesday</idValue>
+    <idCode>F</idCode>
+        <idValue>Wednesday</idValue>
+    <idCode>G</idCode>
+        <idValue>Thursday</idValue>
+    <idCode>H</idCode>
+        <idValue>Friday</idValue>
+    <idCode>J</idCode>
+        <idValue>Saturday</idValue>
+    <idCode>K</idCode>
+        <idValue>Sunday</idValue>
+    <idCode>L</idCode>
+        <idValue>Monday through Thursday</idValue>
+    <idCode>M</idCode>
+        <idValue>Immediately</idValue>
+    <idCode>N</idCode>
+        <idValue>As Directed</idValue>
+    <idCode>O</idCode>
+        <idValue>Daily Mon. through Fri.</idValue>
+    <idCode>P</idCode>
+        <idValue>1/2 Mon. &amp; 1/2 Thurs.</idValue>
+    <idCode>Q</idCode>
+        <idValue>1/2 Tues. &amp; 1/2 Thurs.</idValue>
+    <idCode>R</idCode>
+        <idValue>1/2 Wed. &amp; 1/2 Fri.</idValue>
+    <idCode>S</idCode>
+        <idValue>Once Anytime Mon. through Fri.</idValue>
+    <idCode>SA</idCode>
+        <idValue>Sunday, Monday, Thursday, Friday, Saturday</idValue>
+    <idCode>SB</idCode>
+        <idValue>Tuesday through Saturday</idValue>
+    <idCode>SC</idCode>
+        <idValue>Sunday, Wednesday, Thursday, Friday, Saturday</idValue>
+    <idCode>SD</idCode>
+        <idValue>Monday, Wednesday, Thursday, Friday, Saturday</idValue>
+    <idCode>SG</idCode>
+        <idValue>Tuesday through Friday</idValue>
+    <idCode>SL</idCode>
+        <idValue>Monday, Tuesday and Thursday</idValue>
+    <idCode>SP</idCode>
+        <idValue>Monday, Tuesday and Friday</idValue>
+    <idCode>SX</idCode>
+        <idValue>Wednesday and Thursday</idValue>
+    <idCode>SY</idCode>
+        <idValue>Monday, Wednesday and Thursday</idValue>
+    <idCode>SZ</idCode>
+        <idValue>Tuesday, Thursday and Friday</idValue>
+    <idCode>T</idCode>
+        <idValue>1/2 Tue. &amp; 1/2 Fri.</idValue>
+    <idCode>U</idCode>
+        <idValue>1/2 Mon. &amp; 1/2 Wed.</idValue>
+    <idCode>V</idCode>
+        <idValue>1/3 Mon., 1/3 Wed., 1/3 Fri.</idValue>
+    <idCode>W</idCode>
+        <idValue>Whenever Necessary</idValue>
+    <idCode>X</idCode>
+        <idValue>1/2 By Wed., Bal. By Fri.</idValue>
+    <idCode>Y</idCode>
+        <idValue>None (Also Used to Cancel or Override a Previous Pattern)</idValue>
+    <idCode>Z</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

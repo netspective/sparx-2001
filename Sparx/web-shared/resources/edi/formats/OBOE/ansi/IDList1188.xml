@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Vehicle</idValue>
+    <idCode>02</idCode>
+        <idValue>Furniture</idValue>
+    <idCode>03</idCode>
+        <idValue>Boat</idValue>
+    <idCode>04</idCode>
+        <idValue>Trailer</idValue>
+    <idCode>05</idCode>
+        <idValue>Investment Art</idValue>
+    <idCode>06</idCode>
+        <idValue>Collection of Objects</idValue>
+    <idCode>07</idCode>
+        <idValue>Airplane</idValue>
+    <idCode>08</idCode>
+        <idValue>Jewelery</idValue>
+    <idCode>09</idCode>
+        <idValue>Antiques</idValue>
+    <idCode>10</idCode>
+        <idValue>Other Property</idValue>
+    <idCode>11</idCode>
+        <idValue>Livestock</idValue>
+    <idCode>12</idCode>
+        <idValue>Camera Equipment</idValue>
+    <idCode>13</idCode>
+        <idValue>Business Equipment</idValue>
+    <idCode>14</idCode>
+        <idValue>Computer Equipment</idValue>
+    <idCode>15</idCode>
+        <idValue>Currency (Cash)</idValue>
+    <idCode>16</idCode>
+        <idValue>Silverware</idValue>
+    <idCode>17</idCode>
+        <idValue>Clothing</idValue>
+    <idCode>18</idCode>
+        <idValue>Furs</idValue>
+    <idCode>19</idCode>
+        <idValue>Sports Equipment</idValue>
+    <idCode>20</idCode>
+        <idValue>Guns</idValue>
+    <idCode>21</idCode>
+        <idValue>Tools</idValue>
+    <idCode>22</idCode>
+        <idValue>Electronics</idValue>
+    <idCode>23</idCode>
+        <idValue>Appliance</idValue>
+    <idCode>24</idCode>
+        <idValue>Liquor</idValue>
+    <idCode>25</idCode>
+        <idValue>All Contents</idValue>
+    <idCode>26</idCode>
+        <idValue>Service Truck</idValue>
+    <idCode>27</idCode>
+        <idValue>Tanker</idValue>
+    <idCode>28</idCode>
+        <idValue>Tractor</idValue>
+    <idCode>29</idCode>
+        <idValue>Truck</idValue>
+    <idCode>30</idCode>
+        <idValue>Accounts</idValue>
+    <idCode>31</idCode>
+        <idValue>Accounts Receivable</idValue>
+    <idCode>32</idCode>
+        <idValue>All Assets</idValue>
+    <idCode>33</idCode>
+        <idValue>Aqua Culture Stock</idValue>
+    <idCode>34</idCode>
+        <idValue>Building Materials</idValue>
+    <idCode>35</idCode>
+        <idValue>Building(s)</idValue>
+    <idCode>36</idCode>
+        <idValue>Capital Stock</idValue>
+    <idCode>37</idCode>
+        <idValue>Chattel Paper</idValue>
+    <idCode>38</idCode>
+        <idValue>Communications Equipment</idValue>
+    <idCode>39</idCode>
+        <idValue>Consigned Merchandise</idValue>
+    <idCode>40</idCode>
+        <idValue>Construction Equipment or Machinery or Both</idValue>
+    <idCode>41</idCode>
+        <idValue>Contract Rights</idValue>
+    <idCode>42</idCode>
+        <idValue>Endorsements</idValue>
+    <idCode>43</idCode>
+        <idValue>Equipment</idValue>
+    <idCode>44</idCode>
+        <idValue>Farm Products or Crops or Both</idValue>
+    <idCode>45</idCode>
+        <idValue>Fixtures</idValue>
+    <idCode>46</idCode>
+        <idValue>General Intangible(s)</idValue>
+    <idCode>47</idCode>
+        <idValue>Guarantor</idValue>
+    <idCode>48</idCode>
+        <idValue>Industrial Machinery or Equipment or both</idValue>
+    <idCode>49</idCode>
+        <idValue>Inventory</idValue>
+    <idCode>50</idCode>
+        <idValue>Lease</idValue>
+    <idCode>51</idCode>
+        <idValue>Life Insurance</idValue>
+    <idCode>52</idCode>
+        <idValue>Livestock Products or Crops or Both</idValue>
+    <idCode>53</idCode>
+        <idValue>Machinery</idValue>
+    <idCode>54</idCode>
+        <idValue>Mobile Homes</idValue>
+    <idCode>55</idCode>
+        <idValue>Negotiable Instruments</idValue>
+    <idCode>56</idCode>
+        <idValue>Notes Receivable</idValue>
+    <idCode>57</idCode>
+        <idValue>Oil, Gas and Minerals</idValue>
+    <idCode>58</idCode>
+        <idValue>Partnership Interest</idValue>
+    <idCode>59</idCode>
+        <idValue>Proceeds</idValue>
+    <idCode>60</idCode>
+        <idValue>Products</idValue>
+    <idCode>61</idCode>
+        <idValue>Products and Proceeds</idValue>
+    <idCode>62</idCode>
+        <idValue>Real Estate</idValue>
+    <idCode>63</idCode>
+        <idValue>Real Property</idValue>
+    <idCode>64</idCode>
+        <idValue>Savings</idValue>
+    <idCode>65</idCode>
+        <idValue>Specified Assets</idValue>
+    <idCode>66</idCode>
+        <idValue>Textile Goods</idValue>
+    <idCode>67</idCode>
+        <idValue>Timber</idValue>
+    <idCode>68</idCode>
+        <idValue>Transportation Equipment</idValue>
+    <idCode>69</idCode>
+        <idValue>Unspecified Assets</idValue>
+    <idCode>70</idCode>
+        <idValue>Agricultural Machinery or Equipment or both</idValue>
+    <idCode>71</idCode>
+        <idValue>Debentures</idValue>
+    <idCode>72</idCode>
+        <idValue>Guarantee from Affiliated Company</idValue>
+    <idCode>73</idCode>
+        <idValue>Guarantee from Parent</idValue>
+    <idCode>74</idCode>
+        <idValue>Personal Guarantees</idValue>
+    <idCode>75</idCode>
+        <idValue>Pumps</idValue>
+    <idCode>76</idCode>
+        <idValue>Security Agreement</idValue>
+    <idCode>77</idCode>
+        <idValue>Service Bays</idValue>
+    <idCode>78</idCode>
+        <idValue>Fixed Assets</idValue>
+    <idCode>79</idCode>
+        <idValue>Land</idValue>
+    <idCode>80</idCode>
+        <idValue>Agricultural Land</idValue>
+    <idCode>81</idCode>
+        <idValue>Ambulance</idValue>
+    <idCode>82</idCode>
+        <idValue>Automobile</idValue>
+    <idCode>83</idCode>
+        <idValue>Barge</idValue>
+    <idCode>84</idCode>
+        <idValue>Bus</idValue>
+    <idCode>85</idCode>
+        <idValue>Business Assets</idValue>
+    <idCode>86</idCode>
+        <idValue>Cement Truck</idValue>
+    <idCode>87</idCode>
+        <idValue>Common Stock</idValue>
+    <idCode>88</idCode>
+        <idValue>Delivery Vehicle</idValue>
+    <idCode>89</idCode>
+        <idValue>Double Wheel Truck</idValue>
+    <idCode>90</idCode>
+        <idValue>Freight Container</idValue>
+    <idCode>91</idCode>
+        <idValue>Freight Train Car</idValue>
+    <idCode>92</idCode>
+        <idValue>Industrial Vehicle</idValue>
+    <idCode>93</idCode>
+        <idValue>Intangible Assets</idValue>
+    <idCode>94</idCode>
+        <idValue>Lorry</idValue>
+    <idCode>95</idCode>
+        <idValue>Motorcycle</idValue>
+    <idCode>96</idCode>
+        <idValue>Passenger Vehicle</idValue>
+    <idCode>97</idCode>
+        <idValue>Personal Assets</idValue>
+    <idCode>98</idCode>
+        <idValue>Pick up Truck</idValue>
+    <idCode>99</idCode>
+        <idValue>Preferred Stock</idValue>
+    <idCode>AA</idCode>
+        <idValue>Tractor Trailer Truck</idValue>
+    <idCode>AB</idCode>
+        <idValue>Van</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

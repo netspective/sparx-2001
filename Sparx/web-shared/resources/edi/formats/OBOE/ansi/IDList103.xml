@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>AMM</idCode>
+        <idValue>Ammo Pack</idValue>
+    <idCode>AMP</idCode>
+        <idValue>Ampoule</idValue>
+    <idCode>ATH</idCode>
+        <idValue>Attachment</idValue>
+    <idCode>BAG</idCode>
+        <idValue>Bag</idValue>
+    <idCode>BAL</idCode>
+        <idValue>Bale</idValue>
+    <idCode>BBL</idCode>
+        <idValue>Barrel</idValue>
+    <idCode>BDG</idCode>
+        <idValue>Banding</idValue>
+    <idCode>BDL</idCode>
+        <idValue>Bundle</idValue>
+    <idCode>BEM</idCode>
+        <idValue>Beam</idValue>
+    <idCode>BIC</idCode>
+        <idValue>Bing Chest</idValue>
+    <idCode>BIN</idCode>
+        <idValue>Bin</idValue>
+    <idCode>BLK</idCode>
+        <idValue>Bulk</idValue>
+    <idCode>BLT</idCode>
+        <idValue>Belting</idValue>
+    <idCode>BOB</idCode>
+        <idValue>Bobbin</idValue>
+    <idCode>BOT</idCode>
+        <idValue>Bottle</idValue>
+    <idCode>BOX</idCode>
+        <idValue>Box</idValue>
+    <idCode>BRC</idCode>
+        <idValue>Bracing</idValue>
+    <idCode>BRG</idCode>
+        <idValue>Barge</idValue>
+    <idCode>BSK</idCode>
+        <idValue>Basket or hamper</idValue>
+    <idCode>BXI</idCode>
+        <idValue>Box, with inner container</idValue>
+    <idCode>BXT</idCode>
+        <idValue>Bucket</idValue>
+    <idCode>CAB</idCode>
+        <idValue>Cabinet</idValue>
+    <idCode>CAG</idCode>
+        <idValue>Cage</idValue>
+    <idCode>CAN</idCode>
+        <idValue>Can</idValue>
+    <idCode>CAR</idCode>
+        <idValue>Carrier</idValue>
+    <idCode>CAS</idCode>
+        <idValue>Case</idValue>
+    <idCode>CBC</idCode>
+        <idValue>Containers of Bulk Cargo</idValue>
+    <idCode>CBY</idCode>
+        <idValue>Carboy</idValue>
+    <idCode>CCS</idCode>
+        <idValue>Can Case</idValue>
+    <idCode>CHE</idCode>
+        <idValue>Cheeses</idValue>
+    <idCode>CHS</idCode>
+        <idValue>Chest</idValue>
+    <idCode>CLD</idCode>
+        <idValue>Car Load, Rail</idValue>
+    <idCode>CNA</idCode>
+        <idValue>Household Goods Container, Wood</idValue>
+    <idCode>CNB</idCode>
+        <idValue>Container, MAC-ISO, LT. WGT. 8x8x20 Foot Air</idValue>
+    <idCode>CNC</idCode>
+        <idValue>Container, Navy Cargo Transporter</idValue>
+    <idCode>CND</idCode>
+        <idValue>Container, Commercial Highway Lift</idValue>
+    <idCode>CNE</idCode>
+        <idValue>Container, Engine</idValue>
+    <idCode>CNF</idCode>
+        <idValue>Container, Multi-walled, Secured to Warehouse Pallet</idValue>
+    <idCode>CNT</idCode>
+        <idValue>Container</idValue>
+    <idCode>COL</idCode>
+        <idValue>Coil</idValue>
+    <idCode>CON</idCode>
+        <idValue>Cones</idValue>
+    <idCode>COR</idCode>
+        <idValue>Core</idValue>
+    <idCode>CRD</idCode>
+        <idValue>Cradle</idValue>
+    <idCode>CRF</idCode>
+        <idValue>Corner Reinforcement</idValue>
+    <idCode>CRT</idCode>
+        <idValue>Crate</idValue>
+    <idCode>CSK</idCode>
+        <idValue>Cask</idValue>
+    <idCode>CTN</idCode>
+        <idValue>Carton</idValue>
+    <idCode>CX2</idCode>
+        <idValue>CONEX</idValue>
+    <idCode>CYL</idCode>
+        <idValue>Cylinder</idValue>
+    <idCode>DBK</idCode>
+        <idValue>Dry Bulk</idValue>
+    <idCode>DRK</idCode>
+        <idValue>Double-length Rack</idValue>
+    <idCode>DRM</idCode>
+        <idValue>Drum</idValue>
+    <idCode>DSK</idCode>
+        <idValue>Double-length Skid</idValue>
+    <idCode>DTB</idCode>
+        <idValue>Double-length Tote Bin</idValue>
+    <idCode>DUF</idCode>
+        <idValue>Duffelbag</idValue>
+    <idCode>EGG</idCode>
+        <idValue>Egg Crating</idValue>
+    <idCode>ENV</idCode>
+        <idValue>Envelope</idValue>
+    <idCode>EPR</idCode>
+        <idValue>Edge Protection</idValue>
+    <idCode>FIR</idCode>
+        <idValue>Firkin</idValue>
+    <idCode>FLO</idCode>
+        <idValue>Flo-bin</idValue>
+    <idCode>FRM</idCode>
+        <idValue>Frame</idValue>
+    <idCode>FSK</idCode>
+        <idValue>Flask</idValue>
+    <idCode>FWR</idCode>
+        <idValue>Forward Reel</idValue>
+    <idCode>HED</idCode>
+        <idValue>Heads of Beef</idValue>
+    <idCode>HGH</idCode>
+        <idValue>Hogshead</idValue>
+    <idCode>HPR</idCode>
+        <idValue>Hamper</idValue>
+    <idCode>HPT</idCode>
+        <idValue>Hopper Truck</idValue>
+    <idCode>HRB</idCode>
+        <idValue>On Hanger or Rack in Boxes</idValue>
+    <idCode>HRK</idCode>
+        <idValue>Half-Standard Rack</idValue>
+    <idCode>HTB</idCode>
+        <idValue>Half-Standard Tote Bin</idValue>
+    <idCode>INT</idCode>
+        <idValue>Intermediate Container</idValue>
+    <idCode>JAR</idCode>
+        <idValue>Jar</idValue>
+    <idCode>KEG</idCode>
+        <idValue>Keg</idValue>
+    <idCode>KIT</idCode>
+        <idValue>Kit</idValue>
+    <idCode>KRK</idCode>
+        <idValue>Knockdown Rack</idValue>
+    <idCode>KTB</idCode>
+        <idValue>Knockdown Tote Bin</idValue>
+    <idCode>LBK</idCode>
+        <idValue>Liquid Bulk</idValue>
+    <idCode>LID</idCode>
+        <idValue>Lip/Top</idValue>
+    <idCode>LIF</idCode>
+        <idValue>Lifts</idValue>
+    <idCode>LNR</idCode>
+        <idValue>Liners</idValue>
+    <idCode>LOG</idCode>
+        <idValue>Log</idValue>
+    <idCode>LSE</idCode>
+        <idValue>Loose</idValue>
+    <idCode>LUG</idCode>
+        <idValue>Lug</idValue>
+    <idCode>LVN</idCode>
+        <idValue>Lift Van</idValue>
+    <idCode>MIX</idCode>
+        <idValue>Mixed Container Types</idValue>
+    <idCode>ML2</idCode>
+        <idValue>MILVAN</idValue>
+    <idCode>MRP</idCode>
+        <idValue>Multi-Roll Pack</idValue>
+    <idCode>MS2</idCode>
+        <idValue>MSCVAN</idValue>
+    <idCode>MXD</idCode>
+        <idValue>Mixed</idValue>
+    <idCode>NOL</idCode>
+        <idValue>Noil</idValue>
+    <idCode>PAF</idCode>
+        <idValue>Pallet - 4 Way</idValue>
+    <idCode>PAL</idCode>
+        <idValue>Pail</idValue>
+    <idCode>PAT</idCode>
+        <idValue>Pallet - 2 Way</idValue>
+    <idCode>PCK</idCode>
+        <idValue>Packed - not otherwise specified</idValue>
+    <idCode>PCS</idCode>
+        <idValue>Pieces</idValue>
+    <idCode>PIR</idCode>
+        <idValue>Pirns</idValue>
+    <idCode>PKG</idCode>
+        <idValue>Package</idValue>
+    <idCode>PLC</idCode>
+        <idValue>Primary Lift Container</idValue>
+    <idCode>PLF</idCode>
+        <idValue>Platform</idValue>
+    <idCode>PLN</idCode>
+        <idValue>Pipeline</idValue>
+    <idCode>PLT</idCode>
+        <idValue>Pallet</idValue>
+    <idCode>POV</idCode>
+        <idValue>Private Vehicle</idValue>
+    <idCode>PRK</idCode>
+        <idValue>Pipe Rack</idValue>
+    <idCode>PRT</idCode>
+        <idValue>Partitioning</idValue>
+    <idCode>PWT</idCode>
+        <idValue>Plastic-Wrapped Tray</idValue>
+    <idCode>QTR</idCode>
+        <idValue>Quarter of Beef</idValue>
+    <idCode>RAL</idCode>
+        <idValue>Rail (Semiconductor)</idValue>
+    <idCode>RCK</idCode>
+        <idValue>Rack</idValue>
+    <idCode>REL</idCode>
+        <idValue>Reel</idValue>
+    <idCode>RFT</idCode>
+        <idValue>Reinforcement</idValue>
+    <idCode>ROL</idCode>
+        <idValue>Roll</idValue>
+    <idCode>RVR</idCode>
+        <idValue>Reverse Reel</idValue>
+    <idCode>SAK</idCode>
+        <idValue>Sack</idValue>
+    <idCode>SCS</idCode>
+        <idValue>Suitcase</idValue>
+    <idCode>SHK</idCode>
+        <idValue>Shook</idValue>
+    <idCode>SHT</idCode>
+        <idValue>Sheet</idValue>
+    <idCode>SID</idCode>
+        <idValue>Side of Beef</idValue>
+    <idCode>SKD</idCode>
+        <idValue>Skid</idValue>
+    <idCode>SKE</idCode>
+        <idValue>Skid, elevating or lift truck</idValue>
+    <idCode>SLP</idCode>
+        <idValue>Slip Sheet</idValue>
+    <idCode>SLV</idCode>
+        <idValue>Sleeve</idValue>
+    <idCode>SPI</idCode>
+        <idValue>Spin Cylinders</idValue>
+    <idCode>SPL</idCode>
+        <idValue>Spool</idValue>
+    <idCode>SPR</idCode>
+        <idValue>Separator/Divider</idValue>
+    <idCode>SRW</idCode>
+        <idValue>Shrink Wrap</idValue>
+    <idCode>STW</idCode>
+        <idValue>Stretch Wrap</idValue>
+    <idCode>SV2</idCode>
+        <idValue>SEAVAN</idValue>
+    <idCode>TBE</idCode>
+        <idValue>Tube</idValue>
+    <idCode>TBN</idCode>
+        <idValue>Tote Bin</idValue>
+    <idCode>TKR</idCode>
+        <idValue>Tank Car</idValue>
+    <idCode>TKT</idCode>
+        <idValue>Tank Truck</idValue>
+    <idCode>TLD</idCode>
+        <idValue>Intermodal Trailer/Container Load (Rail)</idValue>
+    <idCode>TNK</idCode>
+        <idValue>Tank</idValue>
+    <idCode>TRC</idCode>
+        <idValue>Tierce</idValue>
+    <idCode>TRK</idCode>
+        <idValue>Trunk and Chest</idValue>
+    <idCode>TRU</idCode>
+        <idValue>Truck</idValue>
+    <idCode>TRY</idCode>
+        <idValue>Tray</idValue>
+    <idCode>TSS</idCode>
+        <idValue>Trunk, Salesmen Sample</idValue>
+    <idCode>TUB</idCode>
+        <idValue>Tub</idValue>
+    <idCode>UNP</idCode>
+        <idValue>Unpacked</idValue>
+    <idCode>UNT</idCode>
+        <idValue>Unit</idValue>
+    <idCode>VEH</idCode>
+        <idValue>Vehicles</idValue>
+    <idCode>VIL</idCode>
+        <idValue>Vial</idValue>
+    <idCode>VOC</idCode>
+        <idValue>Vehicle in Operating Condition</idValue>
+    <idCode>VPK</idCode>
+        <idValue>Van Pack</idValue>
+    <idCode>WHE</idCode>
+        <idValue>On Own Wheel</idValue>
+    <idCode>WLC</idCode>
+        <idValue>Wheeled Carrier</idValue>
+    <idCode>WRP</idCode>
+        <idValue>Wrapped</idValue>
+    <idCode>01</idCode>
+        <idValue>Aluminum</idValue>
+    <idCode>04</idCode>
+        <idValue>As Specified by the DOT</idValue>
+    <idCode>07</idCode>
+        <idValue>Burlap</idValue>
+    <idCode>10</idCode>
+        <idValue>Chemically Hardened Fibre</idValue>
+    <idCode>13</idCode>
+        <idValue>Cloth</idValue>
+    <idCode>16</idCode>
+        <idValue>Cloth Top</idValue>
+    <idCode>19</idCode>
+        <idValue>Cloth or Fabric</idValue>
+    <idCode>22</idCode>
+        <idValue>Compressed</idValue>
+    <idCode>25</idCode>
+        <idValue>Corrugated or Solid</idValue>
+    <idCode>28</idCode>
+        <idValue>Double-wall Paper</idValue>
+    <idCode>31</idCode>
+        <idValue>Fibre</idValue>
+    <idCode>34</idCode>
+        <idValue>Fibre (Paperboard)</idValue>
+    <idCode>37</idCode>
+        <idValue>Fiberboard</idValue>
+    <idCode>40</idCode>
+        <idValue>Fiberboard Metal</idValue>
+    <idCode>43</idCode>
+        <idValue>Glass</idValue>
+    <idCode>46</idCode>
+        <idValue>In Inner Containers</idValue>
+    <idCode>48</idCode>
+        <idValue>Wire/Cord</idValue>
+    <idCode>49</idCode>
+        <idValue>Insulated</idValue>
+    <idCode>50</idCode>
+        <idValue>Steel - Vinyl Coated</idValue>
+    <idCode>51</idCode>
+        <idValue>Wire Mesh</idValue>
+    <idCode>52</idCode>
+        <idValue>Iron or Steel</idValue>
+    <idCode>53</idCode>
+        <idValue>Jumbo</idValue>
+    <idCode>54</idCode>
+        <idValue>Special Jumbo</idValue>
+    <idCode>55</idCode>
+        <idValue>Lead</idValue>
+    <idCode>58</idCode>
+        <idValue>Metal</idValue>
+    <idCode>59</idCode>
+        <idValue>Metal Cans</idValue>
+    <idCode>61</idCode>
+        <idValue>Moisture Resistant</idValue>
+    <idCode>64</idCode>
+        <idValue>Molded Plastic</idValue>
+    <idCode>67</idCode>
+        <idValue>Multiple-wall Paper (2 or more walls)</idValue>
+    <idCode>70</idCode>
+        <idValue>Multiple-wall Paper (3 or more walls)</idValue>
+    <idCode>71</idCode>
+        <idValue>Not Otherwise Specified</idValue>
+    <idCode>72</idCode>
+        <idValue>Paper - VCI</idValue>
+    <idCode>73</idCode>
+        <idValue>Other than Glass</idValue>
+    <idCode>74</idCode>
+        <idValue>Other than Metal or Plastic Tubes, or Glass</idValue>
+    <idCode>75</idCode>
+        <idValue>Plastic - Vacuum Formed</idValue>
+    <idCode>76</idCode>
+        <idValue>Paper</idValue>
+    <idCode>77</idCode>
+        <idValue>Plastic - Structural Foam</idValue>
+    <idCode>78</idCode>
+        <idValue>Plastic - Injection Molded</idValue>
+    <idCode>79</idCode>
+        <idValue>Plastic</idValue>
+    <idCode>80</idCode>
+        <idValue>Polyethylene Lined</idValue>
+    <idCode>81</idCode>
+        <idValue>Plastic - Virgin</idValue>
+    <idCode>82</idCode>
+        <idValue>Pulpboard</idValue>
+    <idCode>83</idCode>
+        <idValue>Plastic - Regrind</idValue>
+    <idCode>84</idCode>
+        <idValue>Polystyrene</idValue>
+    <idCode>85</idCode>
+        <idValue>Rubber</idValue>
+    <idCode>86</idCode>
+        <idValue>Foam</idValue>
+    <idCode>88</idCode>
+        <idValue>Rubber and Fabric</idValue>
+    <idCode>89</idCode>
+        <idValue>Special</idValue>
+    <idCode>90</idCode>
+        <idValue>Standard</idValue>
+    <idCode>91</idCode>
+        <idValue>Stainless Steel</idValue>
+    <idCode>92</idCode>
+        <idValue>Tubes, Metal or Plastic</idValue>
+    <idCode>94</idCode>
+        <idValue>Wood</idValue>
+    <idCode>95</idCode>
+        <idValue>Single Wall Corrugated Board</idValue>
+    <idCode>96</idCode>
+        <idValue>Double Wall Corrugated Board</idValue>
+    <idCode>97</idCode>
+        <idValue>Triple Wall Corrugated Board</idValue>
+</idList>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>7</idCode>
+        <idValue>Not Provided</idValue>
+    <idCode>8</idCode>
+        <idValue>Not Applicable</idValue>
+    <idCode>A</idCode>
+        <idValue>Asian or Pacific Islander</idValue>
+    <idCode>B</idCode>
+        <idValue>Black</idValue>
+    <idCode>C</idCode>
+        <idValue>Caucasian</idValue>
+    <idCode>D</idCode>
+        <idValue>Subcontinent Asian American</idValue>
+    <idCode>E</idCode>
+        <idValue>Other Race or Ethnicity</idValue>
+    <idCode>F</idCode>
+        <idValue>Asian Pacific American</idValue>
+    <idCode>G</idCode>
+        <idValue>Native American</idValue>
+    <idCode>H</idCode>
+        <idValue>Hispanic</idValue>
+    <idCode>I</idCode>
+        <idValue>American Indian or Alaskan Native</idValue>
+    <idCode>J</idCode>
+        <idValue>Native Hawaiian</idValue>
+    <idCode>N</idCode>
+        <idValue>Black (Non-Hispanic)</idValue>
+    <idCode>O</idCode>
+        <idValue>White (Non-Hispanic)</idValue>
+    <idCode>P</idCode>
+        <idValue>Pacific Islander</idValue>
+    <idCode>Z</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>A</idCode>
+        <idValue>Medicare Part A</idValue>
+    <idCode>B</idCode>
+        <idValue>Medicare Part B</idValue>
+    <idCode>C</idCode>
+        <idValue>Medicare Part A and B</idValue>
+    <idCode>D</idCode>
+        <idValue>Medicare</idValue>
+    <idCode>E</idCode>
+        <idValue>No Medicare</idValue>
+</idList>

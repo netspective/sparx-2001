@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>001</idCode>
+        <idValue>Change</idValue>
+    <idCode>002</idCode>
+        <idValue>Delete</idValue>
+    <idCode>003</idCode>
+        <idValue>Add Full Item Detail</idValue>
+    <idCode>004</idCode>
+        <idValue>Withdraw Item (Temporary)</idValue>
+    <idCode>005</idCode>
+        <idValue>Restore Item</idValue>
+    <idCode>006</idCode>
+        <idValue>Membership Type</idValue>
+    <idCode>007</idCode>
+        <idValue>Purchase Eligibility</idValue>
+    <idCode>008</idCode>
+        <idValue>Verified</idValue>
+    <idCode>009</idCode>
+        <idValue>Not Verified</idValue>
+    <idCode>010</idCode>
+        <idValue>Periodic Report</idValue>
+    <idCode>012</idCode>
+        <idValue>Medical Noncompliance</idValue>
+    <idCode>013</idCode>
+        <idValue>Administrative Noncompliance</idValue>
+    <idCode>014</idCode>
+        <idValue>Suspended Pending Settlement Approval</idValue>
+    <idCode>015</idCode>
+        <idValue>Suspended Pending Appeal or Judicial Review</idValue>
+    <idCode>016</idCode>
+        <idValue>Injury Report Creation</idValue>
+    <idCode>017</idCode>
+        <idValue>Illness Report Creation</idValue>
+    <idCode>018</idCode>
+        <idValue>Transfer of Beneficial Rights</idValue>
+    <idCode>019</idCode>
+        <idValue>Record Security Instrument</idValue>
+    <idCode>020</idCode>
+        <idValue>Assignment</idValue>
+    <idCode>021</idCode>
+        <idValue>Addition</idValue>
+    <idCode>022</idCode>
+        <idValue>Change in Status</idValue>
+    <idCode>023</idCode>
+        <idValue>Change in Rate Factors</idValue>
+    <idCode>024</idCode>
+        <idValue>Cancellation or Termination</idValue>
+    <idCode>025</idCode>
+        <idValue>Reinstatement</idValue>
+    <idCode>026</idCode>
+        <idValue>Correction</idValue>
+    <idCode>028</idCode>
+        <idValue>Policy Adjustment</idValue>
+    <idCode>029</idCode>
+        <idValue>Inquiry</idValue>
+    <idCode>030</idCode>
+        <idValue>Audit or Compare</idValue>
+    <idCode>031</idCode>
+        <idValue>Medical Examination Authorization</idValue>
+    <idCode>032</idCode>
+        <idValue>Employee Information Not Applicable</idValue>
+    <idCode>033</idCode>
+        <idValue>Release of Interim Funding Interest</idValue>
+    <idCode>050</idCode>
+        <idValue>Original</idValue>
+    <idCode>051</idCode>
+        <idValue>Denial</idValue>
+    <idCode>052</idCode>
+        <idValue>Initial Payment</idValue>
+    <idCode>053</idCode>
+        <idValue>Change in Benefit Amount</idValue>
+    <idCode>054</idCode>
+        <idValue>Change in Benefit Type</idValue>
+    <idCode>055</idCode>
+        <idValue>Reinstatement of Benefit</idValue>
+    <idCode>056</idCode>
+        <idValue>Reduced Earnings</idValue>
+    <idCode>057</idCode>
+        <idValue>Final</idValue>
+    <idCode>058</idCode>
+        <idValue>Full Salary</idValue>
+    <idCode>059</idCode>
+        <idValue>Suspension Medically Determined or Qualified to Return to Work</idValue>
+    <idCode>060</idCode>
+        <idValue>Non-compliance of Medical Requirements</idValue>
+    <idCode>061</idCode>
+        <idValue>Non-compliance of Administrative Requirements</idValue>
+    <idCode>062</idCode>
+        <idValue>Compensable Death</idValue>
+    <idCode>063</idCode>
+        <idValue>Incarceration</idValue>
+    <idCode>064</idCode>
+        <idValue>Claimant&apos;s Whereabouts Unknown</idValue>
+    <idCode>065</idCode>
+        <idValue>Volunteer</idValue>
+    <idCode>066</idCode>
+        <idValue>Status Request</idValue>
+    <idCode>067</idCode>
+        <idValue>Benefits Exhausted</idValue>
+    <idCode>068</idCode>
+        <idValue>Jurisdictional Change</idValue>
+    <idCode>069</idCode>
+        <idValue>Payment Notification</idValue>
+    <idCode>070</idCode>
+        <idValue>Status Request Response</idValue>
+    <idCode>071</idCode>
+        <idValue>Re-issue Identification Card(s)</idValue>
+    <idCode>072</idCode>
+        <idValue>Suspension Due to Claimant Death</idValue>
+    <idCode>073</idCode>
+        <idValue>Partial Denial</idValue>
+    <idCode>074</idCode>
+        <idValue>Partial Suspension, Returned to Work, or Medically Determined or Qualified to Return to Work</idValue>
+    <idCode>075</idCode>
+        <idValue>Partial Suspension, Medical Non-compliance</idValue>
+    <idCode>076</idCode>
+        <idValue>Partial Suspension, Administrative Non-compliance</idValue>
+    <idCode>077</idCode>
+        <idValue>Partial Suspension, Claimant Death</idValue>
+    <idCode>078</idCode>
+        <idValue>Partial Suspension, Incarceration</idValue>
+    <idCode>079</idCode>
+        <idValue>Partial Suspension, Claimant&apos;s whereabouts Unknown</idValue>
+    <idCode>080</idCode>
+        <idValue>Partial Suspension, Benefits Exhausted</idValue>
+    <idCode>081</idCode>
+        <idValue>Partial Suspension, Jurisdiction Change</idValue>
+    <idCode>082</idCode>
+        <idValue>Partially Suspended, Benefits Pending Settlement Approval</idValue>
+    <idCode>083</idCode>
+        <idValue>Partially Suspended, Pending Appeal or Judicial Review</idValue>
+    <idCode>100</idCode>
+        <idValue>Sale of Mortgage Change</idValue>
+    <idCode>101</idCode>
+        <idValue>Servicer Change</idValue>
+    <idCode>102</idCode>
+        <idValue>Mortgagor Change</idValue>
+    <idCode>104</idCode>
+        <idValue>Prepayment Termination</idValue>
+    <idCode>105</idCode>
+        <idValue>Non-conveyance Termination</idValue>
+    <idCode>106</idCode>
+        <idValue>Voluntary Action Termination</idValue>
+    <idCode>107</idCode>
+        <idValue>Loan Refinanced Termination</idValue>
+    <idCode>108</idCode>
+        <idValue>Transfer Due to Interest and Servicing Sold</idValue>
+    <idCode>109</idCode>
+        <idValue>Retain Servicing</idValue>
+    <idCode>110</idCode>
+        <idValue>Transfer Servicing</idValue>
+    <idCode>111</idCode>
+        <idValue>Assign Servicing</idValue>
+    <idCode>112</idCode>
+        <idValue>Servicer Loan Number Change</idValue>
+    <idCode>113</idCode>
+        <idValue>Merger</idValue>
+    <idCode>114</idCode>
+        <idValue>Acquisition</idValue>
+    <idCode>115</idCode>
+        <idValue>Receivership</idValue>
+    <idCode>116</idCode>
+        <idValue>Loan Maturity Maintenance</idValue>
+    <idCode>117</idCode>
+        <idValue>Binder</idValue>
+    <idCode>118</idCode>
+        <idValue>New Policy</idValue>
+    <idCode>119</idCode>
+        <idValue>Renewal Policy</idValue>
+    <idCode>123</idCode>
+        <idValue>Canceled by Administrator</idValue>
+    <idCode>124</idCode>
+        <idValue>Canceled by Insured</idValue>
+    <idCode>125</idCode>
+        <idValue>Re-Write</idValue>
+    <idCode>126</idCode>
+        <idValue>Non-renewal</idValue>
+    <idCode>127</idCode>
+        <idValue>Termination of All Endorsements</idValue>
+    <idCode>128</idCode>
+        <idValue>Termination of Lessor Interest</idValue>
+    <idCode>129</idCode>
+        <idValue>Termination of Additional Insured Interest</idValue>
+    <idCode>130</idCode>
+        <idValue>Termination of Lienholder or Loss Payee</idValue>
+    <idCode>131</idCode>
+        <idValue>Addition of Lessor Endorsement</idValue>
+    <idCode>132</idCode>
+        <idValue>Addition of Lienholder Endorsement</idValue>
+    <idCode>133</idCode>
+        <idValue>Addition of Additional Insured Endorsement</idValue>
+    <idCode>134</idCode>
+        <idValue>Change of Lessor Endorsement</idValue>
+    <idCode>135</idCode>
+        <idValue>Change of Lienholder Endorsement</idValue>
+    <idCode>136</idCode>
+        <idValue>Change of Additional Insured Endorsement</idValue>
+    <idCode>137</idCode>
+        <idValue>Acquired Unallocated</idValue>
+    <idCode>138</idCode>
+        <idValue>Acquired Payment</idValue>
+    <idCode>CEP</idCode>
+        <idValue>Change Excluding Price</idValue>
+    <idCode>PRI</idCode>
+        <idValue>Price Change Only</idValue>
+    <idCode>ZZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

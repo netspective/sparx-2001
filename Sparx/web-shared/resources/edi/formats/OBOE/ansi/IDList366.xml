@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1A</idCode>
+        <idValue>Review/Repricing Contact</idValue>
+    <idCode>1B</idCode>
+        <idValue>Preferred Provider Organization (PPO) Contact</idValue>
+    <idCode>1C</idCode>
+        <idValue>Health Maintenance Organization (HMO) Contact</idValue>
+    <idCode>1D</idCode>
+        <idValue>Third-party Administrator (TPA) Contact</idValue>
+    <idCode>1E</idCode>
+        <idValue>New Business Processing</idValue>
+    <idCode>1F</idCode>
+        <idValue>Physician</idValue>
+    <idCode>1G</idCode>
+        <idValue>Service Team</idValue>
+    <idCode>1H</idCode>
+        <idValue>Underwriter</idValue>
+    <idCode>3A</idCode>
+        <idValue>Automated Clearinghouse (ACH) Contact</idValue>
+    <idCode>A1</idCode>
+        <idValue>Claim Approver</idValue>
+    <idCode>A2</idCode>
+        <idValue>Applicant</idValue>
+    <idCode>A3</idCode>
+        <idValue>Interviewer</idValue>
+    <idCode>A4</idCode>
+        <idValue>Owner Representative</idValue>
+    <idCode>A5</idCode>
+        <idValue>Appointment Scheduler</idValue>
+    <idCode>AA</idCode>
+        <idValue>Authorized Representative</idValue>
+    <idCode>AB</idCode>
+        <idValue>Appraiser</idValue>
+    <idCode>AC</idCode>
+        <idValue>Administrative Contracting Officer</idValue>
+    <idCode>AD</idCode>
+        <idValue>Accounting Department</idValue>
+    <idCode>AE</idCode>
+        <idValue>Corporate Purchasing Agent</idValue>
+    <idCode>AF</idCode>
+        <idValue>Authorized Financial Contact</idValue>
+    <idCode>AG</idCode>
+        <idValue>Agent</idValue>
+    <idCode>AH</idCode>
+        <idValue>After-Hours Contact</idValue>
+    <idCode>AI</idCode>
+        <idValue>Additional Insurance Information Contact</idValue>
+    <idCode>AL</idCode>
+        <idValue>Alternate Contact</idValue>
+    <idCode>AM</idCode>
+        <idValue>Administrator</idValue>
+    <idCode>AN</idCode>
+        <idValue>Attention-to Party</idValue>
+    <idCode>AP</idCode>
+        <idValue>Accounts Payable Department</idValue>
+    <idCode>AR</idCode>
+        <idValue>Accounts Receivable Department</idValue>
+    <idCode>AS</idCode>
+        <idValue>Authorized Signature</idValue>
+    <idCode>AT</idCode>
+        <idValue>Material Safety Data Sheet Contact</idValue>
+    <idCode>AU</idCode>
+        <idValue>Report Authorizer</idValue>
+    <idCode>AV</idCode>
+        <idValue>Advisor</idValue>
+    <idCode>BA</idCode>
+        <idValue>Broker</idValue>
+    <idCode>BB</idCode>
+        <idValue>Local Purchasing Agent</idValue>
+    <idCode>BC</idCode>
+        <idValue>Broker Contact</idValue>
+    <idCode>BD</idCode>
+        <idValue>Buyer Name or Department</idValue>
+    <idCode>BI</idCode>
+        <idValue>Bill Inquiry Contact</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Operations</idValue>
+    <idCode>BK</idCode>
+        <idValue>Marketing Department</idValue>
+    <idCode>BL</idCode>
+        <idValue>Technical Department</idValue>
+    <idCode>BM</idCode>
+        <idValue>Work Broker Maintenance Manager</idValue>
+    <idCode>BP</idCode>
+        <idValue>School Principal</idValue>
+    <idCode>BS</idCode>
+        <idValue>Board Staff</idValue>
+    <idCode>BU</idCode>
+        <idValue>Business Unit Manager</idValue>
+    <idCode>C2</idCode>
+        <idValue>Co-borrower</idValue>
+    <idCode>CA</idCode>
+        <idValue>Customer Contact Granting Appointment</idValue>
+    <idCode>CB</idCode>
+        <idValue>Changed By</idValue>
+    <idCode>CC</idCode>
+        <idValue>Computer Systems Contact</idValue>
+    <idCode>CD</idCode>
+        <idValue>Contract Contact</idValue>
+    <idCode>CE</idCode>
+        <idValue>Certifier</idValue>
+    <idCode>CF</idCode>
+        <idValue>Customer Engineer</idValue>
+    <idCode>CG</idCode>
+        <idValue>Chief Executive Officer</idValue>
+    <idCode>CH</idCode>
+        <idValue>Change Order Approver</idValue>
+    <idCode>CI</idCode>
+        <idValue>Chief Financial Officer</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Chief Information Officer</idValue>
+    <idCode>CK</idCode>
+        <idValue>Chairman of the Board</idValue>
+    <idCode>CL</idCode>
+        <idValue>Chief Operating Officer</idValue>
+    <idCode>CM</idCode>
+        <idValue>Container Manager</idValue>
+    <idCode>CN</idCode>
+        <idValue>General Contact</idValue>
+    <idCode>CO</idCode>
+        <idValue>Component Engineer</idValue>
+    <idCode>CP</idCode>
+        <idValue>Cost and Schedule Coordinator</idValue>
+    <idCode>CR</idCode>
+        <idValue>Customer Relations</idValue>
+    <idCode>CS</idCode>
+        <idValue>CAD/CAM Specialist</idValue>
+    <idCode>CT</idCode>
+        <idValue>Claimant</idValue>
+    <idCode>CU</idCode>
+        <idValue>Auditing Contact</idValue>
+    <idCode>CV</idCode>
+        <idValue>Clearinghouse Contact</idValue>
+    <idCode>CW</idCode>
+        <idValue>Confirmed With</idValue>
+    <idCode>CX</idCode>
+        <idValue>Payers Claim Office</idValue>
+    <idCode>CY</idCode>
+        <idValue>Case Manager</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Claim Recipient</idValue>
+    <idCode>DA</idCode>
+        <idValue>Directory Advertising Contact</idValue>
+    <idCode>DC</idCode>
+        <idValue>Delivery Contact</idValue>
+    <idCode>DD</idCode>
+        <idValue>Division Director</idValue>
+    <idCode>DE</idCode>
+        <idValue>Design Engineer</idValue>
+    <idCode>DF</idCode>
+        <idValue>Director</idValue>
+    <idCode>DI</idCode>
+        <idValue>Delivery Instructions Contact</idValue>
+    <idCode>DM</idCode>
+        <idValue>Division Manager</idValue>
+    <idCode>DN</idCode>
+        <idValue>Dental School Admissions Office</idValue>
+    <idCode>DV</idCode>
+        <idValue>Development</idValue>
+    <idCode>E1</idCode>
+        <idValue>Estimator</idValue>
+    <idCode>E2</idCode>
+        <idValue>Evening Programs Office</idValue>
+    <idCode>EA</idCode>
+        <idValue>EDI Coordinator</idValue>
+    <idCode>EB</idCode>
+        <idValue>Entered By</idValue>
+    <idCode>EC</idCode>
+        <idValue>Emergency Contact-Shipper</idValue>
+    <idCode>ED</idCode>
+        <idValue>Emergency Contact-Consignee</idValue>
+    <idCode>EF</idCode>
+        <idValue>Emergency Contact-Military Traffic Management Command (MTMC)</idValue>
+    <idCode>EG</idCode>
+        <idValue>Engineering</idValue>
+    <idCode>EM</idCode>
+        <idValue>Emergency Contact</idValue>
+    <idCode>EN</idCode>
+        <idValue>Engineer</idValue>
+    <idCode>EO</idCode>
+        <idValue>Executive Officer</idValue>
+    <idCode>EP</idCode>
+        <idValue>Employer Contact</idValue>
+    <idCode>ES</idCode>
+        <idValue>Electronic Submission Recipient</idValue>
+    <idCode>EV</idCode>
+        <idValue>Executive Vice-President</idValue>
+    <idCode>EX</idCode>
+        <idValue>Expeditor</idValue>
+    <idCode>FA</idCode>
+        <idValue>Financial Aid Office</idValue>
+    <idCode>FB</idCode>
+        <idValue>Coordinator</idValue>
+    <idCode>FC</idCode>
+        <idValue>Forwarder Contact</idValue>
+    <idCode>FD</idCode>
+        <idValue>Primary Control Point</idValue>
+    <idCode>FF</idCode>
+        <idValue>Licensee</idValue>
+    <idCode>FL</idCode>
+        <idValue>Foreclosing Lender Administrative Contact</idValue>
+    <idCode>FM</idCode>
+        <idValue>Functional Manager</idValue>
+    <idCode>FN</idCode>
+        <idValue>Joint Work Agent</idValue>
+    <idCode>FO</idCode>
+        <idValue>Office Manager</idValue>
+    <idCode>FP</idCode>
+        <idValue>Marketing Director</idValue>
+    <idCode>FQ</idCode>
+        <idValue>Staff</idValue>
+    <idCode>FR</idCode>
+        <idValue>Compliance Officer</idValue>
+    <idCode>GA</idCode>
+        <idValue>Graduate Fine Arts Office</idValue>
+    <idCode>GB</idCode>
+        <idValue>Graduate Business Office</idValue>
+    <idCode>GC</idCode>
+        <idValue>Guidance Counselor</idValue>
+    <idCode>GE</idCode>
+        <idValue>Graduate Engineering Office</idValue>
+    <idCode>GR</idCode>
+        <idValue>Graduate Admissions Office</idValue>
+    <idCode>HM</idCode>
+        <idValue>Hazardous Material Contact</idValue>
+    <idCode>HR</idCode>
+        <idValue>Human Resources</idValue>
+    <idCode>IC</idCode>
+        <idValue>Information Contact</idValue>
+    <idCode>IO</idCode>
+        <idValue>Issuing Officer</idValue>
+    <idCode>IP</idCode>
+        <idValue>Insured Party</idValue>
+    <idCode>IS</idCode>
+        <idValue>Law Firm</idValue>
+    <idCode>KA</idCode>
+        <idValue>Authorized Negotiator</idValue>
+    <idCode>KB</idCode>
+        <idValue>Preaward Survey Manager</idValue>
+    <idCode>KC</idCode>
+        <idValue>Accepting Official</idValue>
+    <idCode>KP</idCode>
+        <idValue>Attorney</idValue>
+    <idCode>KT</idCode>
+        <idValue>Clerk of Court</idValue>
+    <idCode>LD</idCode>
+        <idValue>Law School Admissions Office</idValue>
+    <idCode>MA</idCode>
+        <idValue>Maintenance Contact</idValue>
+    <idCode>MB</idCode>
+        <idValue>Mayor</idValue>
+    <idCode>MC</idCode>
+        <idValue>Medical Contact</idValue>
+    <idCode>MD</idCode>
+        <idValue>Medical Admissions Office</idValue>
+    <idCode>ME</idCode>
+        <idValue>Manufacturing</idValue>
+    <idCode>MG</idCode>
+        <idValue>Manager</idValue>
+    <idCode>MK</idCode>
+        <idValue>Multiple Listing Service Staff</idValue>
+    <idCode>ML</idCode>
+        <idValue>Multiple Listing Service Vendor</idValue>
+    <idCode>MM</idCode>
+        <idValue>Customer Maintenance Manager</idValue>
+    <idCode>NA</idCode>
+        <idValue>National Agent</idValue>
+    <idCode>NC</idCode>
+        <idValue>Numerical Control Engineer</idValue>
+    <idCode>NP</idCode>
+        <idValue>Notary Public</idValue>
+    <idCode>NT</idCode>
+        <idValue>Notification Contact</idValue>
+    <idCode>OA</idCode>
+        <idValue>Other Adult</idValue>
+    <idCode>OC</idCode>
+        <idValue>Order Contact</idValue>
+    <idCode>OD</idCode>
+        <idValue>Order Department</idValue>
+    <idCode>OS</idCode>
+        <idValue>Office Staff</idValue>
+    <idCode>OW</idCode>
+        <idValue>Owner</idValue>
+    <idCode>PA</idCode>
+        <idValue>President</idValue>
+    <idCode>PB</idCode>
+        <idValue>Plant Manager</idValue>
+    <idCode>PC</idCode>
+        <idValue>Purchasing Contracting Officer (PCO)</idValue>
+    <idCode>PD</idCode>
+        <idValue>Project Director</idValue>
+    <idCode>PE</idCode>
+        <idValue>Process Engineer</idValue>
+    <idCode>PF</idCode>
+        <idValue>Price Administration</idValue>
+    <idCode>PG</idCode>
+        <idValue>Program Director</idValue>
+    <idCode>PH</idCode>
+        <idValue>Provider</idValue>
+    <idCode>PI</idCode>
+        <idValue>Preparer</idValue>
+    <idCode>PJ</idCode>
+        <idValue>Project Manager</idValue>
+    <idCode>PK</idCode>
+        <idValue>Performance Evaluation Committee</idValue>
+    <idCode>PL</idCode>
+        <idValue>Manufacturing Plant Contact</idValue>
+    <idCode>PM</idCode>
+        <idValue>Product Manager</idValue>
+    <idCode>PN</idCode>
+        <idValue>Probation or Legal Officer</idValue>
+    <idCode>PO</idCode>
+        <idValue>Production Representative</idValue>
+    <idCode>PP</idCode>
+        <idValue>Program Manager</idValue>
+    <idCode>PQ</idCode>
+        <idValue>Parent or Guardian</idValue>
+    <idCode>PR</idCode>
+        <idValue>Prototype Coordinator</idValue>
+    <idCode>PS</idCode>
+        <idValue>Personnel Department</idValue>
+    <idCode>PT</idCode>
+        <idValue>Partner</idValue>
+    <idCode>PU</idCode>
+        <idValue>Report Preparer</idValue>
+    <idCode>PV</idCode>
+        <idValue>Participating Laboratory Contact</idValue>
+    <idCode>PW</idCode>
+        <idValue>Principal Study Contact or Author</idValue>
+    <idCode>PX</idCode>
+        <idValue>Purchase Service Provider</idValue>
+    <idCode>PY</idCode>
+        <idValue>Packager</idValue>
+    <idCode>PZ</idCode>
+        <idValue>Patient</idValue>
+    <idCode>QA</idCode>
+        <idValue>Quality Assurance Contact</idValue>
+    <idCode>QC</idCode>
+        <idValue>Quality Coordinator</idValue>
+    <idCode>QI</idCode>
+        <idValue>Quality Inspector</idValue>
+    <idCode>QM</idCode>
+        <idValue>Quality Manager</idValue>
+    <idCode>QP</idCode>
+        <idValue>Quoting Party</idValue>
+    <idCode>QR</idCode>
+        <idValue>Ordering Officer</idValue>
+    <idCode>QY</idCode>
+        <idValue>Port Engineer</idValue>
+    <idCode>RA</idCode>
+        <idValue>Rental Company Administrative Contact</idValue>
+    <idCode>RB</idCode>
+        <idValue>Real Estate Property Occupant</idValue>
+    <idCode>RC</idCode>
+        <idValue>Rebate/Chargeback Contact</idValue>
+    <idCode>RD</idCode>
+        <idValue>Receiving Dock</idValue>
+    <idCode>RE</idCode>
+        <idValue>Receiving Contact</idValue>
+    <idCode>RF</idCode>
+        <idValue>Real Estate Property Key Holder</idValue>
+    <idCode>RG</idCode>
+        <idValue>Registrar</idValue>
+    <idCode>RP</idCode>
+        <idValue>Responsible Person</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Requestor</idValue>
+    <idCode>RS</idCode>
+        <idValue>Rate Supervisor or Clerk</idValue>
+    <idCode>RZ</idCode>
+        <idValue>Respondant</idValue>
+    <idCode>SA</idCode>
+        <idValue>Sales Administration</idValue>
+    <idCode>SB</idCode>
+        <idValue>Student</idValue>
+    <idCode>SC</idCode>
+        <idValue>Schedule Contact</idValue>
+    <idCode>SD</idCode>
+        <idValue>Shipping Department</idValue>
+    <idCode>SE</idCode>
+        <idValue>Service Organization</idValue>
+    <idCode>SF</idCode>
+        <idValue>Student in Absentia</idValue>
+    <idCode>SG</idCode>
+        <idValue>Secretary</idValue>
+    <idCode>SH</idCode>
+        <idValue>Shipper Contact</idValue>
+    <idCode>SI</idCode>
+        <idValue>Investigator</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Spouse</idValue>
+    <idCode>SK</idCode>
+        <idValue>School Clerk</idValue>
+    <idCode>SL</idCode>
+        <idValue>Collector</idValue>
+    <idCode>SM</idCode>
+        <idValue>Submitting Contact</idValue>
+    <idCode>SN</idCode>
+        <idValue>Study Submitter Contact</idValue>
+    <idCode>SO</idCode>
+        <idValue>Service Order Writer</idValue>
+    <idCode>SP</idCode>
+        <idValue>Special Program Contact</idValue>
+    <idCode>SQ</idCode>
+        <idValue>Systems Administrator</idValue>
+    <idCode>SR</idCode>
+        <idValue>Sales Representative or Department</idValue>
+    <idCode>SS</idCode>
+        <idValue>Supervisor</idValue>
+    <idCode>ST</idCode>
+        <idValue>Service Technician</idValue>
+    <idCode>SU</idCode>
+        <idValue>Supplier Contact</idValue>
+    <idCode>SV</idCode>
+        <idValue>Service Manager</idValue>
+    <idCode>SW</idCode>
+        <idValue>Social Services Worker</idValue>
+    <idCode>SY</idCode>
+        <idValue>Secondary Taxpayer</idValue>
+    <idCode>TA</idCode>
+        <idValue>Traffic Administrator</idValue>
+    <idCode>TB</idCode>
+        <idValue>Telephone Answering Service Contact</idValue>
+    <idCode>TC</idCode>
+        <idValue>College of Education Admissions Office</idValue>
+    <idCode>TD</idCode>
+        <idValue>Tender Developer</idValue>
+    <idCode>TE</idCode>
+        <idValue>Treasurer</idValue>
+    <idCode>TH</idCode>
+        <idValue>School of Theology Admissions Office</idValue>
+    <idCode>TM</idCode>
+        <idValue>Transmitter</idValue>
+    <idCode>TN</idCode>
+        <idValue>Tenant</idValue>
+    <idCode>TP</idCode>
+        <idValue>Primary Taxpayer</idValue>
+    <idCode>TR</idCode>
+        <idValue>Technical Marketing Representative</idValue>
+    <idCode>TY</idCode>
+        <idValue>Platform Maintenance Manager</idValue>
+    <idCode>UG</idCode>
+        <idValue>Undergraduate Admissions Office</idValue>
+    <idCode>UP</idCode>
+        <idValue>Union President</idValue>
+    <idCode>UQ</idCode>
+        <idValue>Processor</idValue>
+    <idCode>UR</idCode>
+        <idValue>Ultimate Receiver</idValue>
+    <idCode>VM</idCode>
+        <idValue>School of Veterinary Medicine Admissions Office</idValue>
+    <idCode>VP</idCode>
+        <idValue>Vice President</idValue>
+    <idCode>WH</idCode>
+        <idValue>Warehouse</idValue>
+    <idCode>WI</idCode>
+        <idValue>Witness</idValue>
+    <idCode>WR</idCode>
+        <idValue>Technical Writer</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

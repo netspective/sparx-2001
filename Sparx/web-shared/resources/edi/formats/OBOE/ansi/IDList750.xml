@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Limiting Operation</idValue>
+    <idCode>02</idCode>
+        <idValue>General Product Form</idValue>
+    <idCode>08</idCode>
+        <idValue>Product</idValue>
+    <idCode>09</idCode>
+        <idValue>Sub-product</idValue>
+    <idCode>10</idCode>
+        <idValue>Major Grade</idValue>
+    <idCode>11</idCode>
+        <idValue>Society, Government, Customer Specifications</idValue>
+    <idCode>12</idCode>
+        <idValue>Type and/or Process</idValue>
+    <idCode>13</idCode>
+        <idValue>Quality (Quality Level)</idValue>
+    <idCode>14</idCode>
+        <idValue>Finish or Surface Roughness</idValue>
+    <idCode>15</idCode>
+        <idValue>Heat Treat/Anneal</idValue>
+    <idCode>16</idCode>
+        <idValue>Temper</idValue>
+    <idCode>17</idCode>
+        <idValue>Coating</idValue>
+    <idCode>18</idCode>
+        <idValue>Surface Treatment, Chemical</idValue>
+    <idCode>19</idCode>
+        <idValue>Surface Treatment, Mechanical</idValue>
+    <idCode>20</idCode>
+        <idValue>Ends: Slitting, Splitting, Cutting</idValue>
+    <idCode>21</idCode>
+        <idValue>Forming</idValue>
+    <idCode>22</idCode>
+        <idValue>Edge Treatment</idValue>
+    <idCode>23</idCode>
+        <idValue>Welds/Splices</idValue>
+    <idCode>25</idCode>
+        <idValue>End Treatment</idValue>
+    <idCode>28</idCode>
+        <idValue>Test Sample Frequency</idValue>
+    <idCode>29</idCode>
+        <idValue>Test Sample Location</idValue>
+    <idCode>30</idCode>
+        <idValue>Test Sample Direction</idValue>
+    <idCode>32</idCode>
+        <idValue>Type of Test/Inspection</idValue>
+    <idCode>33</idCode>
+        <idValue>Testing and Inspection Agencies</idValue>
+    <idCode>34</idCode>
+        <idValue>Filament</idValue>
+    <idCode>35</idCode>
+        <idValue>Color</idValue>
+    <idCode>36</idCode>
+        <idValue>Denier</idValue>
+    <idCode>37</idCode>
+        <idValue>Fiber</idValue>
+    <idCode>38</idCode>
+        <idValue>Grade</idValue>
+    <idCode>39</idCode>
+        <idValue>Luster</idValue>
+    <idCode>40</idCode>
+        <idValue>Shade</idValue>
+    <idCode>41</idCode>
+        <idValue>Tint</idValue>
+    <idCode>42</idCode>
+        <idValue>Tow</idValue>
+    <idCode>43</idCode>
+        <idValue>Twist</idValue>
+    <idCode>54</idCode>
+        <idValue>Section Profile</idValue>
+    <idCode>55</idCode>
+        <idValue>Alloy</idValue>
+    <idCode>56</idCode>
+        <idValue>Special Processing</idValue>
+    <idCode>58</idCode>
+        <idValue>Winding Instructions</idValue>
+    <idCode>59</idCode>
+        <idValue>Surface Protection</idValue>
+    <idCode>60</idCode>
+        <idValue>Machine Run</idValue>
+    <idCode>61</idCode>
+        <idValue>End Use Application</idValue>
+    <idCode>62</idCode>
+        <idValue>Corrosion Resistance</idValue>
+    <idCode>63</idCode>
+        <idValue>Product Life Cycle</idValue>
+    <idCode>64</idCode>
+        <idValue>Package Integrity</idValue>
+    <idCode>65</idCode>
+        <idValue>Visual</idValue>
+    <idCode>66</idCode>
+        <idValue>Electrical</idValue>
+    <idCode>67</idCode>
+        <idValue>Functional Performance</idValue>
+    <idCode>68</idCode>
+        <idValue>Chemistry</idValue>
+    <idCode>69</idCode>
+        <idValue>Physical</idValue>
+    <idCode>70</idCode>
+        <idValue>Magnetic</idValue>
+    <idCode>71</idCode>
+        <idValue>Mechanical</idValue>
+    <idCode>72</idCode>
+        <idValue>Metallography</idValue>
+    <idCode>73</idCode>
+        <idValue>Vendor color description</idValue>
+    <idCode>74</idCode>
+        <idValue>Vendor size description</idValue>
+    <idCode>75</idCode>
+        <idValue>Buyer&apos;s Color Description</idValue>
+    <idCode>76</idCode>
+        <idValue>Dye Lot Description</idValue>
+    <idCode>77</idCode>
+        <idValue>Finish Description</idValue>
+    <idCode>78</idCode>
+        <idValue>Pattern Description</idValue>
+    <idCode>79</idCode>
+        <idValue>Put-up Description</idValue>
+    <idCode>80</idCode>
+        <idValue>MILSPEC (Military Specification)</idValue>
+    <idCode>81</idCode>
+        <idValue>FEDSPEC (Federal Specification)</idValue>
+    <idCode>82</idCode>
+        <idValue>FED-STD (Federal Standard)</idValue>
+    <idCode>83</idCode>
+        <idValue>CID (Commercial Item Description)</idValue>
+    <idCode>84</idCode>
+        <idValue>Special Specification</idValue>
+    <idCode>85</idCode>
+        <idValue>Appearance</idValue>
+    <idCode>86</idCode>
+        <idValue>Dispersion</idValue>
+    <idCode>87</idCode>
+        <idValue>Fluid</idValue>
+    <idCode>88</idCode>
+        <idValue>Flow</idValue>
+    <idCode>89</idCode>
+        <idValue>Moisture</idValue>
+    <idCode>90</idCode>
+        <idValue>Density</idValue>
+    <idCode>91</idCode>
+        <idValue>Buyer&apos;s Item Size Description</idValue>
+    <idCode>92</idCode>
+        <idValue>Fabric Description</idValue>
+    <idCode>93</idCode>
+        <idValue>Shipping Unit Component</idValue>
+    <idCode>94</idCode>
+        <idValue>Type Spinning</idValue>
+    <idCode>95</idCode>
+        <idValue>Wax Code</idValue>
+    <idCode>96</idCode>
+        <idValue>Electronically Cleaned</idValue>
+    <idCode>97</idCode>
+        <idValue>Conditioned Code</idValue>
+    <idCode>99</idCode>
+        <idValue>Precautionary Instructions</idValue>
+    <idCode>9A</idCode>
+        <idValue>Manufacturing Method</idValue>
+    <idCode>9B</idCode>
+        <idValue>Product Application</idValue>
+    <idCode>9C</idCode>
+        <idValue>Engine</idValue>
+    <idCode>9D</idCode>
+        <idValue>Transmission</idValue>
+    <idCode>AF</idCode>
+        <idValue>Editor</idValue>
+    <idCode>AG</idCode>
+        <idValue>Translator</idValue>
+    <idCode>AGE</idCode>
+        <idValue>Age</idValue>
+    <idCode>AT</idCode>
+        <idValue>Process Action Taken</idValue>
+    <idCode>B8</idCode>
+        <idValue>Bureau of Alcohol, Tobacco and Firearms Class Code</idValue>
+    <idCode>BC</idCode>
+        <idValue>Behind-the-Counter Drugs</idValue>
+    <idCode>BCC</idCode>
+        <idValue>Beverage Contents Characteristics, (e.g., Kosher, No Sulfites, etc. (Industry List)</idValue>
+    <idCode>BES</idCode>
+        <idValue>Beverage Segment</idValue>
+    <idCode>BEV</idCode>
+        <idValue>Beverage Category</idValue>
+    <idCode>BLM</idCode>
+        <idValue>Bottomhole Location Method Code</idValue>
+    <idCode>BND</idCode>
+        <idValue>Brand Group</idValue>
+    <idCode>BPI</idCode>
+        <idValue>Bottomhole Pressure Method Indicator Code</idValue>
+    <idCode>BRG</idCode>
+        <idValue>Brand Group: A grouping of similar brands, (e.g., Johnnie Walker)</idValue>
+    <idCode>BW</idCode>
+        <idValue>Basis Weight Size</idValue>
+    <idCode>C2</idCode>
+        <idValue>Controlled Substance - Class 2</idValue>
+    <idCode>C3</idCode>
+        <idValue>Controlled Substance-Class 3 (Narcotic)</idValue>
+    <idCode>C4</idCode>
+        <idValue>Controlled Substance - Class 4</idValue>
+    <idCode>C5</idCode>
+        <idValue>Controlled Substance - Class 5</idValue>
+    <idCode>C6</idCode>
+        <idValue>Controlled Substance-Class 3N (Non-narcotic)</idValue>
+    <idCode>CCN</idCode>
+        <idValue>Common Chemical Name</idValue>
+    <idCode>CD</idCode>
+        <idValue>Collateral Description</idValue>
+    <idCode>CFC</idCode>
+        <idValue>Company Field Code</idValue>
+    <idCode>CH</idCode>
+        <idValue>Chassis</idValue>
+    <idCode>CHF</idCode>
+        <idValue>Chemical Family</idValue>
+    <idCode>CL</idCode>
+        <idValue>Color - Lower Body</idValue>
+    <idCode>CLT</idCode>
+        <idValue>Casing/Liner/Tubing Type</idValue>
+    <idCode>CM</idCode>
+        <idValue>Compliance Method</idValue>
+    <idCode>CMS</idCode>
+        <idValue>Commercial Status</idValue>
+    <idCode>CO</idCode>
+        <idValue>Collection Method Code</idValue>
+    <idCode>CP</idCode>
+        <idValue>Coupling</idValue>
+    <idCode>CS</idCode>
+        <idValue>Coating or Paint System Code</idValue>
+    <idCode>CU</idCode>
+        <idValue>Color - Upper Body</idValue>
+    <idCode>CW</idCode>
+        <idValue>Coating or Paint System Name</idValue>
+    <idCode>DAC</idCode>
+        <idValue>Damage Code</idValue>
+    <idCode>DAF</idCode>
+        <idValue>Damage Fault</idValue>
+    <idCode>DE</idCode>
+        <idValue>Drug Efficacy Study Implementation</idValue>
+    <idCode>DF</idCode>
+        <idValue>Dosage Form</idValue>
+    <idCode>DIR</idCode>
+        <idValue>Directional Indicator</idValue>
+    <idCode>DM</idCode>
+        <idValue>Dimensional</idValue>
+    <idCode>EC</idCode>
+        <idValue>Escrow Code</idValue>
+    <idCode>EN</idCode>
+        <idValue>Engine with Transmission</idValue>
+    <idCode>FA</idCode>
+        <idValue>Failure Analysis Process</idValue>
+    <idCode>FC</idCode>
+        <idValue>Fold Configurations</idValue>
+    <idCode>FCD</idCode>
+        <idValue>Field Code (EIA/DOD)</idValue>
+    <idCode>FDD</idCode>
+        <idValue>Forecast Deviation</idValue>
+    <idCode>FL</idCode>
+        <idValue>Fuel</idValue>
+    <idCode>FLV</idCode>
+        <idValue>Flavor</idValue>
+    <idCode>FMR</idCode>
+        <idValue>Formula</idValue>
+    <idCode>FQ</idCode>
+        <idValue>Quality</idValue>
+    <idCode>GD</idCode>
+        <idValue>Grain Direction</idValue>
+    <idCode>GEN</idCode>
+        <idValue>General Description</idValue>
+    <idCode>GM</idCode>
+        <idValue>General Merchandise</idValue>
+    <idCode>GS</idCode>
+        <idValue>Goods</idValue>
+    <idCode>HB</idCode>
+        <idValue>Health and Beauty Aids</idValue>
+    <idCode>HY</idCode>
+        <idValue>Hydraulics</idValue>
+    <idCode>HZ</idCode>
+        <idValue>Hazardous Material</idValue>
+    <idCode>HZR</idCode>
+        <idValue>Hazard Rating System</idValue>
+    <idCode>ING</idCode>
+        <idValue>Ingredient</idValue>
+    <idCode>INJ</idCode>
+        <idValue>Injectables</idValue>
+    <idCode>KI</idCode>
+        <idValue>Kit</idValue>
+    <idCode>LC</idCode>
+        <idValue>Lead/Copper Sample Type</idValue>
+    <idCode>LO</idCode>
+        <idValue>Coordinate Description Code</idValue>
+    <idCode>MA</idCode>
+        <idValue>Material Status, Outside Processor</idValue>
+    <idCode>MAC</idCode>
+        <idValue>Material Classification</idValue>
+    <idCode>MB</idCode>
+        <idValue>Marking</idValue>
+    <idCode>MBU</idCode>
+        <idValue>Minerals Management Service/Bureau of Land Management (Indian Land) Property/Unit Number</idValue>
+    <idCode>MS</idCode>
+        <idValue>Medical Supplies</idValue>
+    <idCode>MSG</idCode>
+        <idValue>Market Segment</idValue>
+    <idCode>NH</idCode>
+        <idValue>Non-Hazardous Material</idValue>
+    <idCode>OC</idCode>
+        <idValue>Options</idValue>
+    <idCode>OD</idCode>
+        <idValue>Odorized</idValue>
+    <idCode>ODR</idCode>
+        <idValue>Odor</idValue>
+    <idCode>OR</idCode>
+        <idValue>Orientation</idValue>
+    <idCode>OT</idCode>
+        <idValue>Over-the-Counter Drug</idValue>
+    <idCode>P6</idCode>
+        <idValue>Percentage of Alcohol</idValue>
+    <idCode>PD</idCode>
+        <idValue>Physical Form: As Diluted</idValue>
+    <idCode>PF</idCode>
+        <idValue>Physical Form: Concentrate</idValue>
+    <idCode>PFA</idCode>
+        <idValue>Physical Form</idValue>
+    <idCode>PFC</idCode>
+        <idValue>Perforation Continuity Indicator</idValue>
+    <idCode>PFG</idCode>
+        <idValue>Physical Form: Gas</idValue>
+    <idCode>PFI</idCode>
+        <idValue>Perforation Interval(s)</idValue>
+    <idCode>PFK</idCode>
+        <idValue>Physical Form: Aerosol</idValue>
+    <idCode>PFL</idCode>
+        <idValue>Physical Form: Liquid</idValue>
+    <idCode>PFM</idCode>
+        <idValue>Physical Form: Emulsion</idValue>
+    <idCode>PFN</idCode>
+        <idValue>Physical Form: Semisolid</idValue>
+    <idCode>PFP</idCode>
+        <idValue>Physical Form: Powder</idValue>
+    <idCode>PFS</idCode>
+        <idValue>Physical Form: Solid</idValue>
+    <idCode>PFT</idCode>
+        <idValue>Perforation Type</idValue>
+    <idCode>PG</idCode>
+        <idValue>Program</idValue>
+    <idCode>PP</idCode>
+        <idValue>Process/Production Unit</idValue>
+    <idCode>PR</idCode>
+        <idValue>Manufacturing Process</idValue>
+    <idCode>PRI</idCode>
+        <idValue>Grape Variety</idValue>
+    <idCode>PRO</idCode>
+        <idValue>Proprietary</idValue>
+    <idCode>PSC</idCode>
+        <idValue>Pipeline Stream</idValue>
+    <idCode>PUB</idCode>
+        <idValue>Public Information</idValue>
+    <idCode>PUR</idCode>
+        <idValue>Pure Form</idValue>
+    <idCode>QAS</idCode>
+        <idValue>Quality Assurance Status</idValue>
+    <idCode>R3</idCode>
+        <idValue>Proof</idValue>
+    <idCode>RA</idCode>
+        <idValue>Route of Administration</idValue>
+    <idCode>RCC</idCode>
+        <idValue>Reservoir Code (Company)</idValue>
+    <idCode>RM</idCode>
+        <idValue>Results Method Code</idValue>
+    <idCode>RR</idCode>
+        <idValue>Rejection Reason</idValue>
+    <idCode>RSD</idCode>
+        <idValue>Regulatory (State) District</idValue>
+    <idCode>RSE</idCode>
+        <idValue>Regulatory (State) Entity Code</idValue>
+    <idCode>RX</idCode>
+        <idValue>Prescription Drug</idValue>
+    <idCode>SC</idCode>
+        <idValue>Source</idValue>
+    <idCode>SE</idCode>
+        <idValue>Services</idValue>
+    <idCode>SEC</idCode>
+        <idValue>Secret or Confidential Information</idValue>
+    <idCode>SF</idCode>
+        <idValue>Service Feature</idValue>
+    <idCode>SIZ</idCode>
+        <idValue>Sizing</idValue>
+    <idCode>SLM</idCode>
+        <idValue>Surface Location Method Code</idValue>
+    <idCode>SOL</idCode>
+        <idValue>Solubility</idValue>
+    <idCode>ST</idCode>
+        <idValue>Sample Type</idValue>
+    <idCode>STL</idCode>
+        <idValue>State Controlled</idValue>
+    <idCode>SYN</idCode>
+        <idValue>Synonym</idValue>
+    <idCode>TC</idCode>
+        <idValue>Therapeutic Class</idValue>
+    <idCode>TE</idCode>
+        <idValue>Therapeutic Equivalency Evaluation</idValue>
+    <idCode>TF</idCode>
+        <idValue>Filtering</idValue>
+    <idCode>THR</idCode>
+        <idValue>Threshold</idValue>
+    <idCode>TIF</idCode>
+        <idValue>Title Insurance Form</idValue>
+    <idCode>TIR</idCode>
+        <idValue>Tire</idValue>
+    <idCode>TP</idCode>
+        <idValue>Typeface</idValue>
+    <idCode>TR</idCode>
+        <idValue>Trimming</idValue>
+    <idCode>TRN</idCode>
+        <idValue>Trade Name</idValue>
+    <idCode>TWF</idCode>
+        <idValue>Theoretical Weight Formula</idValue>
+    <idCode>TZ</idCode>
+        <idValue>Bureau of Alcohol, Tobacco and Firearms Type Code</idValue>
+    <idCode>VA</idCode>
+        <idValue>Vehicle</idValue>
+    <idCode>VC</idCode>
+        <idValue>Volatile Organic Compound Control</idValue>
+    <idCode>VI</idCode>
+        <idValue>Vintage</idValue>
+    <idCode>WD</idCode>
+        <idValue>Warranty Description</idValue>
+    <idCode>WF</idCode>
+        <idValue>Wine Fruit</idValue>
+    <idCode>WLC</idCode>
+        <idValue>Well Classification</idValue>
+    <idCode>WT</idCode>
+        <idValue>Waste</idValue>
+    <idCode>WTT</idCode>
+        <idValue>Well Test Type</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

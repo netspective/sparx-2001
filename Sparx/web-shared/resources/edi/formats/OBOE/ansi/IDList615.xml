@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Chargeable Periods</idValue>
+    <idCode>2</idCode>
+        <idValue>Periods Held</idValue>
+    <idCode>3</idCode>
+        <idValue>Free Periods</idValue>
+    <idCode>4</idCode>
+        <idValue>Saturdays, Sundays and Holidays</idValue>
+    <idCode>5</idCode>
+        <idValue>Other Allowance Periods</idValue>
+    <idCode>6</idCode>
+        <idValue>Hour</idValue>
+    <idCode>7</idCode>
+        <idValue>Day</idValue>
+    <idCode>8</idCode>
+        <idValue>Not Applicable</idValue>
+    <idCode>10</idCode>
+        <idValue>Six Hours</idValue>
+    <idCode>11</idCode>
+        <idValue>12 Hours</idValue>
+    <idCode>12</idCode>
+        <idValue>18 Hours</idValue>
+    <idCode>13</idCode>
+        <idValue>24 Hours</idValue>
+    <idCode>14</idCode>
+        <idValue>Debit Days</idValue>
+    <idCode>15</idCode>
+        <idValue>Credit Days</idValue>
+    <idCode>16</idCode>
+        <idValue>Excess Days</idValue>
+    <idCode>17</idCode>
+        <idValue>Hazardous Days</idValue>
+    <idCode>18</idCode>
+        <idValue>Holidays</idValue>
+    <idCode>19</idCode>
+        <idValue>Saturdays and Sundays</idValue>
+    <idCode>20</idCode>
+        <idValue>Sundays and Holidays</idValue>
+    <idCode>21</idCode>
+        <idValue>Years</idValue>
+    <idCode>22</idCode>
+        <idValue>Service Year</idValue>
+    <idCode>23</idCode>
+        <idValue>Calendar Year</idValue>
+    <idCode>24</idCode>
+        <idValue>Year to Date</idValue>
+    <idCode>25</idCode>
+        <idValue>Contract</idValue>
+    <idCode>26</idCode>
+        <idValue>Episode</idValue>
+    <idCode>27</idCode>
+        <idValue>Visit</idValue>
+    <idCode>28</idCode>
+        <idValue>Outlier</idValue>
+    <idCode>29</idCode>
+        <idValue>Remaining</idValue>
+    <idCode>30</idCode>
+        <idValue>Exceeded</idValue>
+    <idCode>31</idCode>
+        <idValue>Not Exceeded</idValue>
+    <idCode>32</idCode>
+        <idValue>Lifetime</idValue>
+    <idCode>33</idCode>
+        <idValue>Lifetime Remaining</idValue>
+    <idCode>34</idCode>
+        <idValue>Month</idValue>
+    <idCode>35</idCode>
+        <idValue>Week</idValue>
+    <idCode>36</idCode>
+        <idValue>Admission</idValue>
+    <idCode>Z</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>0</idCode>
+        <idValue>No Subordinate HL Segment in This Hierarchical Structure.</idValue>
+    <idCode>1</idCode>
+        <idValue>Additional Subordinate HL Data Segment in This Hierarchical Structure.</idValue>
+</idList>

@@ -1,0 +1,1593 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Actual Pounds</idValue>
+    <idCode>02</idCode>
+        <idValue>Statute Mile</idValue>
+    <idCode>03</idCode>
+        <idValue>Seconds</idValue>
+    <idCode>04</idCode>
+        <idValue>Small Spray</idValue>
+    <idCode>05</idCode>
+        <idValue>Lifts</idValue>
+    <idCode>06</idCode>
+        <idValue>Digits</idValue>
+    <idCode>07</idCode>
+        <idValue>Strand</idValue>
+    <idCode>08</idCode>
+        <idValue>Heat Lots</idValue>
+    <idCode>09</idCode>
+        <idValue>Tire</idValue>
+    <idCode>10</idCode>
+        <idValue>Group</idValue>
+    <idCode>11</idCode>
+        <idValue>Outfit</idValue>
+    <idCode>12</idCode>
+        <idValue>Packet</idValue>
+    <idCode>13</idCode>
+        <idValue>Ration</idValue>
+    <idCode>14</idCode>
+        <idValue>Shot</idValue>
+    <idCode>15</idCode>
+        <idValue>Stick</idValue>
+    <idCode>16</idCode>
+        <idValue>115 Kilogram Drum</idValue>
+    <idCode>17</idCode>
+        <idValue>100 Pound Drum</idValue>
+    <idCode>18</idCode>
+        <idValue>55 Gallon Drum</idValue>
+    <idCode>19</idCode>
+        <idValue>Tank Truck</idValue>
+    <idCode>1A</idCode>
+        <idValue>Car Mile</idValue>
+    <idCode>1B</idCode>
+        <idValue>Car Count</idValue>
+    <idCode>1C</idCode>
+        <idValue>Locomotive Count</idValue>
+    <idCode>1D</idCode>
+        <idValue>Caboose Count</idValue>
+    <idCode>1E</idCode>
+        <idValue>Empty Car</idValue>
+    <idCode>1F</idCode>
+        <idValue>Train Mile</idValue>
+    <idCode>1G</idCode>
+        <idValue>Fuel Usage (Gallons)</idValue>
+    <idCode>1H</idCode>
+        <idValue>Caboose Mile</idValue>
+    <idCode>1I</idCode>
+        <idValue>Fixed Rate</idValue>
+    <idCode>1J</idCode>
+        <idValue>Ton Miles</idValue>
+    <idCode>1K</idCode>
+        <idValue>Locomotive Mile</idValue>
+    <idCode>1L</idCode>
+        <idValue>Total Car Count</idValue>
+    <idCode>1M</idCode>
+        <idValue>Total Car Mile</idValue>
+    <idCode>1N</idCode>
+        <idValue>Count</idValue>
+    <idCode>1O</idCode>
+        <idValue>Season</idValue>
+    <idCode>1P</idCode>
+        <idValue>Tank Car</idValue>
+    <idCode>1Q</idCode>
+        <idValue>Frames</idValue>
+    <idCode>1R</idCode>
+        <idValue>Transactions</idValue>
+    <idCode>1X</idCode>
+        <idValue>Quarter Mile</idValue>
+    <idCode>20</idCode>
+        <idValue>20 Foot Container</idValue>
+    <idCode>21</idCode>
+        <idValue>40 Foot Container</idValue>
+    <idCode>22</idCode>
+        <idValue>Deciliter per Gram</idValue>
+    <idCode>23</idCode>
+        <idValue>Grams per Cubic Centimeter</idValue>
+    <idCode>24</idCode>
+        <idValue>Theoretical Pounds</idValue>
+    <idCode>25</idCode>
+        <idValue>Grams per Square Centimeter</idValue>
+    <idCode>26</idCode>
+        <idValue>Actual Tons</idValue>
+    <idCode>27</idCode>
+        <idValue>Theoretical Tons</idValue>
+    <idCode>28</idCode>
+        <idValue>Kilograms per Square Meter</idValue>
+    <idCode>29</idCode>
+        <idValue>Pounds per 1000 Square Feet</idValue>
+    <idCode>2A</idCode>
+        <idValue>Radians Per Second</idValue>
+    <idCode>2B</idCode>
+        <idValue>Radians Per Second Squared</idValue>
+    <idCode>2C</idCode>
+        <idValue>Roentgen</idValue>
+    <idCode>2F</idCode>
+        <idValue>Volts Per Meter</idValue>
+    <idCode>2G</idCode>
+        <idValue>Volts (Alternating Current)</idValue>
+    <idCode>2H</idCode>
+        <idValue>Volts (Direct Current)</idValue>
+    <idCode>2I</idCode>
+        <idValue>British Thermal Units (BTUs) Per Hour</idValue>
+    <idCode>2J</idCode>
+        <idValue>Cubic Centimeters Per Second</idValue>
+    <idCode>2K</idCode>
+        <idValue>Cubic Feet Per Hour</idValue>
+    <idCode>2L</idCode>
+        <idValue>Cubic Feet Per Minute</idValue>
+    <idCode>2M</idCode>
+        <idValue>Centimeters Per Second</idValue>
+    <idCode>2N</idCode>
+        <idValue>Decibels</idValue>
+    <idCode>2P</idCode>
+        <idValue>Kilobyte</idValue>
+    <idCode>2Q</idCode>
+        <idValue>Kilobecquerel</idValue>
+    <idCode>2R</idCode>
+        <idValue>Kilocurie</idValue>
+    <idCode>2U</idCode>
+        <idValue>Megagram</idValue>
+    <idCode>2V</idCode>
+        <idValue>Megagrams Per Hour</idValue>
+    <idCode>2W</idCode>
+        <idValue>Bin</idValue>
+    <idCode>2X</idCode>
+        <idValue>Meters Per Minute</idValue>
+    <idCode>2Y</idCode>
+        <idValue>Milliroentgen</idValue>
+    <idCode>2Z</idCode>
+        <idValue>Millivolts</idValue>
+    <idCode>30</idCode>
+        <idValue>Horsepower Days per Air Dry Metric Tons</idValue>
+    <idCode>31</idCode>
+        <idValue>Catchweight</idValue>
+    <idCode>32</idCode>
+        <idValue>Kilograms per Air Dry Metric Tons</idValue>
+    <idCode>33</idCode>
+        <idValue>Kilopascal Square Meters per Gram</idValue>
+    <idCode>34</idCode>
+        <idValue>Kilopascals per Millimeter</idValue>
+    <idCode>35</idCode>
+        <idValue>Milliliters per Square Centimeter Second</idValue>
+    <idCode>36</idCode>
+        <idValue>Cubic Feet per Minute per Square Foot</idValue>
+    <idCode>37</idCode>
+        <idValue>Ounces per Square Foot</idValue>
+    <idCode>38</idCode>
+        <idValue>Ounces per Square Foot per 0.01 Inch</idValue>
+    <idCode>39</idCode>
+        <idValue>Basis Points</idValue>
+    <idCode>3B</idCode>
+        <idValue>Megajoule</idValue>
+    <idCode>3C</idCode>
+        <idValue>Manmonth</idValue>
+    <idCode>3E</idCode>
+        <idValue>Pounds Per Pound of Product</idValue>
+    <idCode>3F</idCode>
+        <idValue>Kilograms Per Liter of Product</idValue>
+    <idCode>3G</idCode>
+        <idValue>Pounds Per Piece of Product</idValue>
+    <idCode>3H</idCode>
+        <idValue>Kilograms Per Kilogram of Product</idValue>
+    <idCode>3I</idCode>
+        <idValue>Kilograms Per Piece of Product</idValue>
+    <idCode>40</idCode>
+        <idValue>Milliliter per Second</idValue>
+    <idCode>41</idCode>
+        <idValue>Milliliter per Minute</idValue>
+    <idCode>43</idCode>
+        <idValue>Super Bulk Bag</idValue>
+    <idCode>44</idCode>
+        <idValue>500 Kilogram Bulk Bag</idValue>
+    <idCode>45</idCode>
+        <idValue>300 Kilogram Bulk Bag</idValue>
+    <idCode>46</idCode>
+        <idValue>25 Kilogram Bulk Bag</idValue>
+    <idCode>47</idCode>
+        <idValue>50 Pound Bag</idValue>
+    <idCode>48</idCode>
+        <idValue>Bulk Car Load</idValue>
+    <idCode>4A</idCode>
+        <idValue>Bobbin</idValue>
+    <idCode>4B</idCode>
+        <idValue>Cap</idValue>
+    <idCode>4C</idCode>
+        <idValue>Centistokes</idValue>
+    <idCode>4D</idCode>
+        <idValue>Curie</idValue>
+    <idCode>4E</idCode>
+        <idValue>20-Pack</idValue>
+    <idCode>4F</idCode>
+        <idValue>100-Pack</idValue>
+    <idCode>4G</idCode>
+        <idValue>Microliter</idValue>
+    <idCode>4H</idCode>
+        <idValue>Micrometer</idValue>
+    <idCode>4I</idCode>
+        <idValue>Meters Per Second</idValue>
+    <idCode>4J</idCode>
+        <idValue>Meters Per Second Per Second</idValue>
+    <idCode>4K</idCode>
+        <idValue>Milliamperes</idValue>
+    <idCode>4L</idCode>
+        <idValue>Megabyte</idValue>
+    <idCode>4M</idCode>
+        <idValue>Milligrams Per Hour</idValue>
+    <idCode>4N</idCode>
+        <idValue>Megabecquerel</idValue>
+    <idCode>4O</idCode>
+        <idValue>Microfarad</idValue>
+    <idCode>4P</idCode>
+        <idValue>Newtons Per Meter</idValue>
+    <idCode>4Q</idCode>
+        <idValue>Ounce Inch</idValue>
+    <idCode>4R</idCode>
+        <idValue>Ounce Foot</idValue>
+    <idCode>4S</idCode>
+        <idValue>Pascal</idValue>
+    <idCode>4T</idCode>
+        <idValue>Picofarad</idValue>
+    <idCode>4U</idCode>
+        <idValue>Pounds Per Hour</idValue>
+    <idCode>4V</idCode>
+        <idValue>Cubic Meter Per Hour</idValue>
+    <idCode>4W</idCode>
+        <idValue>Ton Per Hour</idValue>
+    <idCode>4X</idCode>
+        <idValue>Kiloliter Per Hour</idValue>
+    <idCode>50</idCode>
+        <idValue>Actual Kilograms</idValue>
+    <idCode>51</idCode>
+        <idValue>Actual Tonnes</idValue>
+    <idCode>52</idCode>
+        <idValue>Credits</idValue>
+    <idCode>53</idCode>
+        <idValue>Theoretical Kilograms</idValue>
+    <idCode>54</idCode>
+        <idValue>Theoretical Tonnes</idValue>
+    <idCode>56</idCode>
+        <idValue>Sitas</idValue>
+    <idCode>57</idCode>
+        <idValue>Mesh</idValue>
+    <idCode>58</idCode>
+        <idValue>Net Kilograms</idValue>
+    <idCode>59</idCode>
+        <idValue>Parts Per Million</idValue>
+    <idCode>5A</idCode>
+        <idValue>Barrels per Minute</idValue>
+    <idCode>5B</idCode>
+        <idValue>Batch</idValue>
+    <idCode>5C</idCode>
+        <idValue>Gallons per Thousand</idValue>
+    <idCode>5E</idCode>
+        <idValue>MMSCF/Day</idValue>
+    <idCode>5F</idCode>
+        <idValue>Pounds per Thousand</idValue>
+    <idCode>5G</idCode>
+        <idValue>Pump</idValue>
+    <idCode>5H</idCode>
+        <idValue>Stage</idValue>
+    <idCode>5I</idCode>
+        <idValue>Standard Cubic Foot</idValue>
+    <idCode>5J</idCode>
+        <idValue>Hydraulic Horse Power</idValue>
+    <idCode>5K</idCode>
+        <idValue>Count per Minute</idValue>
+    <idCode>5P</idCode>
+        <idValue>Seismic Level</idValue>
+    <idCode>5Q</idCode>
+        <idValue>Seismic Line</idValue>
+    <idCode>60</idCode>
+        <idValue>Percent Weight</idValue>
+    <idCode>61</idCode>
+        <idValue>Parts Per Billion</idValue>
+    <idCode>62</idCode>
+        <idValue>Percent Per 1000 Hours</idValue>
+    <idCode>63</idCode>
+        <idValue>Failure Rate In Time</idValue>
+    <idCode>64</idCode>
+        <idValue>Pounds Per Square Inch Gauge</idValue>
+    <idCode>65</idCode>
+        <idValue>Coulomb</idValue>
+    <idCode>66</idCode>
+        <idValue>Oersteds</idValue>
+    <idCode>67</idCode>
+        <idValue>Siemens</idValue>
+    <idCode>68</idCode>
+        <idValue>Ampere</idValue>
+    <idCode>69</idCode>
+        <idValue>Test Specific Scale</idValue>
+    <idCode>70</idCode>
+        <idValue>Volt</idValue>
+    <idCode>71</idCode>
+        <idValue>Volt-Ampere Per Pound</idValue>
+    <idCode>72</idCode>
+        <idValue>Watts Per Pound</idValue>
+    <idCode>73</idCode>
+        <idValue>Ampere Turn Per Centimeter</idValue>
+    <idCode>74</idCode>
+        <idValue>Milli Pascals</idValue>
+    <idCode>76</idCode>
+        <idValue>Gauss</idValue>
+    <idCode>77</idCode>
+        <idValue>Mil</idValue>
+    <idCode>78</idCode>
+        <idValue>Kilogauss</idValue>
+    <idCode>79</idCode>
+        <idValue>Electron Volt</idValue>
+    <idCode>80</idCode>
+        <idValue>Pounds Per Square Inch Absolute</idValue>
+    <idCode>81</idCode>
+        <idValue>Henry</idValue>
+    <idCode>82</idCode>
+        <idValue>Ohm</idValue>
+    <idCode>83</idCode>
+        <idValue>Farad</idValue>
+    <idCode>84</idCode>
+        <idValue>Kilo Pounds Per Square Inch (KSI)</idValue>
+    <idCode>85</idCode>
+        <idValue>Foot Pounds</idValue>
+    <idCode>86</idCode>
+        <idValue>Joules</idValue>
+    <idCode>87</idCode>
+        <idValue>Pounds per Cubic Foot</idValue>
+    <idCode>89</idCode>
+        <idValue>Poise</idValue>
+    <idCode>8C</idCode>
+        <idValue>Cord</idValue>
+    <idCode>8D</idCode>
+        <idValue>Duty</idValue>
+    <idCode>8P</idCode>
+        <idValue>Project</idValue>
+    <idCode>8R</idCode>
+        <idValue>Program</idValue>
+    <idCode>8S</idCode>
+        <idValue>Session</idValue>
+    <idCode>8U</idCode>
+        <idValue>Square Kilometer</idValue>
+    <idCode>90</idCode>
+        <idValue>Saybold Universal Second</idValue>
+    <idCode>91</idCode>
+        <idValue>Stokes</idValue>
+    <idCode>92</idCode>
+        <idValue>Calories per Cubic Centimeter</idValue>
+    <idCode>93</idCode>
+        <idValue>Calories per Gram</idValue>
+    <idCode>94</idCode>
+        <idValue>Curl Units</idValue>
+    <idCode>95</idCode>
+        <idValue>20,000 Gallon Tankcar</idValue>
+    <idCode>96</idCode>
+        <idValue>10,000 Gallon Tankcar</idValue>
+    <idCode>97</idCode>
+        <idValue>10 Kilogram Drum</idValue>
+    <idCode>98</idCode>
+        <idValue>15 Kilogram Drum</idValue>
+    <idCode>99</idCode>
+        <idValue>Watt</idValue>
+    <idCode>A8</idCode>
+        <idValue>Dollars per Hours</idValue>
+    <idCode>AA</idCode>
+        <idValue>Ball</idValue>
+    <idCode>AB</idCode>
+        <idValue>Bulk Pack</idValue>
+    <idCode>AC</idCode>
+        <idValue>Acre</idValue>
+    <idCode>AD</idCode>
+        <idValue>Bytes</idValue>
+    <idCode>AE</idCode>
+        <idValue>Amperes per Meter</idValue>
+    <idCode>AF</idCode>
+        <idValue>Centigram</idValue>
+    <idCode>AG</idCode>
+        <idValue>Angstrom</idValue>
+    <idCode>AH</idCode>
+        <idValue>Additional Minutes</idValue>
+    <idCode>AI</idCode>
+        <idValue>Average Minutes Per Call</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Cop</idValue>
+    <idCode>AK</idCode>
+        <idValue>Fathom</idValue>
+    <idCode>AL</idCode>
+        <idValue>Access Lines</idValue>
+    <idCode>AM</idCode>
+        <idValue>Ampoule</idValue>
+    <idCode>AN</idCode>
+        <idValue>Minutes or Messages</idValue>
+    <idCode>AO</idCode>
+        <idValue>Ampere-turn</idValue>
+    <idCode>AP</idCode>
+        <idValue>Aluminum Pounds Only</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Anti-hemophilic Factor (AHF) Units</idValue>
+    <idCode>AR</idCode>
+        <idValue>Suppository</idValue>
+    <idCode>AS</idCode>
+        <idValue>Assortment</idValue>
+    <idCode>AT</idCode>
+        <idValue>Atmosphere</idValue>
+    <idCode>AU</idCode>
+        <idValue>Ocular Insert System</idValue>
+    <idCode>AV</idCode>
+        <idValue>Capsule</idValue>
+    <idCode>AW</idCode>
+        <idValue>Powder-Filled Vials</idValue>
+    <idCode>AX</idCode>
+        <idValue>Twenty</idValue>
+    <idCode>AY</idCode>
+        <idValue>Assembly</idValue>
+    <idCode>AZ</idCode>
+        <idValue>British Thermal Units (BTUs) per Pound</idValue>
+    <idCode>B0</idCode>
+        <idValue>British Thermal Units (BTUs) per Cubic Foot</idValue>
+    <idCode>B1</idCode>
+        <idValue>Barrels per Day</idValue>
+    <idCode>B2</idCode>
+        <idValue>Bunks</idValue>
+    <idCode>B3</idCode>
+        <idValue>Batting Pound</idValue>
+    <idCode>B4</idCode>
+        <idValue>Barrel, Imperial</idValue>
+    <idCode>B5</idCode>
+        <idValue>Billet</idValue>
+    <idCode>B6</idCode>
+        <idValue>Bun</idValue>
+    <idCode>B7</idCode>
+        <idValue>Cycles</idValue>
+    <idCode>B8</idCode>
+        <idValue>Board</idValue>
+    <idCode>B9</idCode>
+        <idValue>Batt</idValue>
+    <idCode>BA</idCode>
+        <idValue>Bale</idValue>
+    <idCode>BB</idCode>
+        <idValue>Base Box</idValue>
+    <idCode>BC</idCode>
+        <idValue>Bucket</idValue>
+    <idCode>BD</idCode>
+        <idValue>Bundle</idValue>
+    <idCode>BE</idCode>
+        <idValue>Beam</idValue>
+    <idCode>BF</idCode>
+        <idValue>Board Feet</idValue>
+    <idCode>BG</idCode>
+        <idValue>Bag</idValue>
+    <idCode>BH</idCode>
+        <idValue>Brush</idValue>
+    <idCode>BI</idCode>
+        <idValue>Bar</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Band</idValue>
+    <idCode>BK</idCode>
+        <idValue>Book</idValue>
+    <idCode>BL</idCode>
+        <idValue>Block</idValue>
+    <idCode>BM</idCode>
+        <idValue>Bolt</idValue>
+    <idCode>BN</idCode>
+        <idValue>Bulk</idValue>
+    <idCode>BO</idCode>
+        <idValue>Bottle</idValue>
+    <idCode>BP</idCode>
+        <idValue>100 Board Feet</idValue>
+    <idCode>BQ</idCode>
+        <idValue>Brake horse power</idValue>
+    <idCode>BR</idCode>
+        <idValue>Barrel</idValue>
+    <idCode>BS</idCode>
+        <idValue>Basket</idValue>
+    <idCode>BT</idCode>
+        <idValue>Belt</idValue>
+    <idCode>BU</idCode>
+        <idValue>Bushel</idValue>
+    <idCode>BV</idCode>
+        <idValue>Bushel, Dry Imperial</idValue>
+    <idCode>BW</idCode>
+        <idValue>Base Weight</idValue>
+    <idCode>BX</idCode>
+        <idValue>Box</idValue>
+    <idCode>BY</idCode>
+        <idValue>British Thermal Unit (BTU)</idValue>
+    <idCode>BZ</idCode>
+        <idValue>Million BTU&apos;s</idValue>
+    <idCode>C0</idCode>
+        <idValue>Calls</idValue>
+    <idCode>C1</idCode>
+        <idValue>Composite Product Pounds (Total Weight)</idValue>
+    <idCode>C2</idCode>
+        <idValue>Carset</idValue>
+    <idCode>C3</idCode>
+        <idValue>Centiliter</idValue>
+    <idCode>C4</idCode>
+        <idValue>Carload</idValue>
+    <idCode>C5</idCode>
+        <idValue>Cost</idValue>
+    <idCode>C6</idCode>
+        <idValue>Cell</idValue>
+    <idCode>C7</idCode>
+        <idValue>Centipoise (CPS)</idValue>
+    <idCode>C8</idCode>
+        <idValue>Cubic Decimeter</idValue>
+    <idCode>C9</idCode>
+        <idValue>Coil Group</idValue>
+    <idCode>CA</idCode>
+        <idValue>Case</idValue>
+    <idCode>CB</idCode>
+        <idValue>Carboy</idValue>
+    <idCode>CC</idCode>
+        <idValue>Cubic Centimeter</idValue>
+    <idCode>CD</idCode>
+        <idValue>Carat</idValue>
+    <idCode>CE</idCode>
+        <idValue>Centigrade, Celsius</idValue>
+    <idCode>CF</idCode>
+        <idValue>Cubic Feet</idValue>
+    <idCode>CG</idCode>
+        <idValue>Card</idValue>
+    <idCode>CH</idCode>
+        <idValue>Container</idValue>
+    <idCode>CI</idCode>
+        <idValue>Cubic Inches</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Cone</idValue>
+    <idCode>CK</idCode>
+        <idValue>Connector</idValue>
+    <idCode>CL</idCode>
+        <idValue>Cylinder</idValue>
+    <idCode>CM</idCode>
+        <idValue>Centimeter</idValue>
+    <idCode>CN</idCode>
+        <idValue>Can</idValue>
+    <idCode>CO</idCode>
+        <idValue>Cubic Meters (Net)</idValue>
+    <idCode>CP</idCode>
+        <idValue>Crate</idValue>
+    <idCode>CQ</idCode>
+        <idValue>Cartridge</idValue>
+    <idCode>CR</idCode>
+        <idValue>Cubic Meter</idValue>
+    <idCode>CS</idCode>
+        <idValue>Cassette</idValue>
+    <idCode>CT</idCode>
+        <idValue>Carton</idValue>
+    <idCode>CU</idCode>
+        <idValue>Cup</idValue>
+    <idCode>CV</idCode>
+        <idValue>Cover</idValue>
+    <idCode>CW</idCode>
+        <idValue>Hundred Pounds (CWT)</idValue>
+    <idCode>CX</idCode>
+        <idValue>Coil</idValue>
+    <idCode>CY</idCode>
+        <idValue>Cubic Yard</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Combo</idValue>
+    <idCode>D2</idCode>
+        <idValue>Shares</idValue>
+    <idCode>D3</idCode>
+        <idValue>Square Decimeter</idValue>
+    <idCode>D5</idCode>
+        <idValue>Kilogram Per Square Centimeter</idValue>
+    <idCode>D8</idCode>
+        <idValue>Draize Score</idValue>
+    <idCode>D9</idCode>
+        <idValue>Dyne per Square Centimeter</idValue>
+    <idCode>DA</idCode>
+        <idValue>Days</idValue>
+    <idCode>DB</idCode>
+        <idValue>Dry Pounds</idValue>
+    <idCode>DC</idCode>
+        <idValue>Disk (Disc)</idValue>
+    <idCode>DD</idCode>
+        <idValue>Degree</idValue>
+    <idCode>DE</idCode>
+        <idValue>Deal</idValue>
+    <idCode>DF</idCode>
+        <idValue>Dram</idValue>
+    <idCode>DG</idCode>
+        <idValue>Decigram</idValue>
+    <idCode>DH</idCode>
+        <idValue>Miles</idValue>
+    <idCode>DI</idCode>
+        <idValue>Dispenser</idValue>
+    <idCode>DJ</idCode>
+        <idValue>Decagram</idValue>
+    <idCode>DK</idCode>
+        <idValue>Kilometers</idValue>
+    <idCode>DL</idCode>
+        <idValue>Deciliter</idValue>
+    <idCode>DM</idCode>
+        <idValue>Decimeter</idValue>
+    <idCode>DN</idCode>
+        <idValue>Deci Newton-Meter</idValue>
+    <idCode>DO</idCode>
+        <idValue>Dollars, U.S.</idValue>
+    <idCode>DP</idCode>
+        <idValue>Dozen Pair</idValue>
+    <idCode>DQ</idCode>
+        <idValue>Data Records</idValue>
+    <idCode>DR</idCode>
+        <idValue>Drum</idValue>
+    <idCode>DS</idCode>
+        <idValue>Display</idValue>
+    <idCode>DT</idCode>
+        <idValue>Dry Ton</idValue>
+    <idCode>DU</idCode>
+        <idValue>Dyne</idValue>
+    <idCode>DW</idCode>
+        <idValue>Calendar Days</idValue>
+    <idCode>DX</idCode>
+        <idValue>Dynes per Centimeter</idValue>
+    <idCode>DY</idCode>
+        <idValue>Directory Books</idValue>
+    <idCode>DZ</idCode>
+        <idValue>Dozen</idValue>
+    <idCode>E1</idCode>
+        <idValue>Hectometer</idValue>
+    <idCode>E3</idCode>
+        <idValue>Inches, Fraction--Average</idValue>
+    <idCode>E4</idCode>
+        <idValue>Inches, Fraction--Minimum</idValue>
+    <idCode>E5</idCode>
+        <idValue>Inches, Fraction--Actual</idValue>
+    <idCode>E7</idCode>
+        <idValue>Inches, Decimal--Average</idValue>
+    <idCode>E8</idCode>
+        <idValue>Inches, Decimal--Actual</idValue>
+    <idCode>E9</idCode>
+        <idValue>English, (Feet, Inches)</idValue>
+    <idCode>EA</idCode>
+        <idValue>Each</idValue>
+    <idCode>EB</idCode>
+        <idValue>Electronic Mail Boxes</idValue>
+    <idCode>EC</idCode>
+        <idValue>Each per Month</idValue>
+    <idCode>ED</idCode>
+        <idValue>Inches, Decimal--Nominal</idValue>
+    <idCode>EE</idCode>
+        <idValue>Employees</idValue>
+    <idCode>EF</idCode>
+        <idValue>Inches, Fraction-Nominal</idValue>
+    <idCode>EG</idCode>
+        <idValue>Double-time Hours</idValue>
+    <idCode>EH</idCode>
+        <idValue>Knots</idValue>
+    <idCode>EJ</idCode>
+        <idValue>Locations</idValue>
+    <idCode>EM</idCode>
+        <idValue>Inches, Decimal-Minimum</idValue>
+    <idCode>EP</idCode>
+        <idValue>Eleven pack</idValue>
+    <idCode>EQ</idCode>
+        <idValue>Equivalent Gallons</idValue>
+    <idCode>EV</idCode>
+        <idValue>Envelope</idValue>
+    <idCode>EX</idCode>
+        <idValue>Feet, Inches and Fraction</idValue>
+    <idCode>EY</idCode>
+        <idValue>Feet, Inches and Decimal</idValue>
+    <idCode>EZ</idCode>
+        <idValue>Feet and Decimal</idValue>
+    <idCode>F1</idCode>
+        <idValue>Thousand Cubic Feet Per Day</idValue>
+    <idCode>F2</idCode>
+        <idValue>International Unit</idValue>
+    <idCode>F3</idCode>
+        <idValue>Equivalent</idValue>
+    <idCode>F4</idCode>
+        <idValue>Minim</idValue>
+    <idCode>F5</idCode>
+        <idValue>MOL</idValue>
+    <idCode>F6</idCode>
+        <idValue>Price Per Share</idValue>
+    <idCode>F9</idCode>
+        <idValue>Fibers per Cubic Centimeter of Air</idValue>
+    <idCode>FA</idCode>
+        <idValue>Fahrenheit</idValue>
+    <idCode>FB</idCode>
+        <idValue>Fields</idValue>
+    <idCode>FC</idCode>
+        <idValue>1000 Cubic Feet</idValue>
+    <idCode>FD</idCode>
+        <idValue>Million Particles per Cubic Foot</idValue>
+    <idCode>FE</idCode>
+        <idValue>Track Foot</idValue>
+    <idCode>FF</idCode>
+        <idValue>Hundred Cubic Meters</idValue>
+    <idCode>FG</idCode>
+        <idValue>Transdermal Patch</idValue>
+    <idCode>FH</idCode>
+        <idValue>Micromolar</idValue>
+    <idCode>FJ</idCode>
+        <idValue>Sizing Factor</idValue>
+    <idCode>FK</idCode>
+        <idValue>Fibers</idValue>
+    <idCode>FL</idCode>
+        <idValue>Flake Ton</idValue>
+    <idCode>FM</idCode>
+        <idValue>Million Cubic Feet</idValue>
+    <idCode>FO</idCode>
+        <idValue>Fluid Ounce</idValue>
+    <idCode>FP</idCode>
+        <idValue>Pounds per Sq. Ft.</idValue>
+    <idCode>FR</idCode>
+        <idValue>Feet Per Minute</idValue>
+    <idCode>FS</idCode>
+        <idValue>Feet Per Second</idValue>
+    <idCode>FT</idCode>
+        <idValue>Foot</idValue>
+    <idCode>FZ</idCode>
+        <idValue>Fluid Ounce (Imperial)</idValue>
+    <idCode>G2</idCode>
+        <idValue>U.S. Gallons Per Minute</idValue>
+    <idCode>G3</idCode>
+        <idValue>Imperial Gallons Per Minute</idValue>
+    <idCode>G4</idCode>
+        <idValue>Gigabecquerel</idValue>
+    <idCode>G5</idCode>
+        <idValue>Gill (Imperial)</idValue>
+    <idCode>G7</idCode>
+        <idValue>Microfiche Sheet</idValue>
+    <idCode>GA</idCode>
+        <idValue>Gallon</idValue>
+    <idCode>GB</idCode>
+        <idValue>Gallons/Day</idValue>
+    <idCode>GC</idCode>
+        <idValue>Grams per 100 Grams</idValue>
+    <idCode>GD</idCode>
+        <idValue>Gross Barrels</idValue>
+    <idCode>GE</idCode>
+        <idValue>Pounds per Gallon</idValue>
+    <idCode>GF</idCode>
+        <idValue>Grams per 100 Centimeters</idValue>
+    <idCode>GG</idCode>
+        <idValue>Great Gross (Dozen Gross)</idValue>
+    <idCode>GH</idCode>
+        <idValue>Half Gallon</idValue>
+    <idCode>GI</idCode>
+        <idValue>Imperial Gallons</idValue>
+    <idCode>GJ</idCode>
+        <idValue>Grams per Milliliter</idValue>
+    <idCode>GK</idCode>
+        <idValue>Grams per Kilogram</idValue>
+    <idCode>GL</idCode>
+        <idValue>Grams per Liter</idValue>
+    <idCode>GM</idCode>
+        <idValue>Grams per Sq. Meter</idValue>
+    <idCode>GN</idCode>
+        <idValue>Gross Gallons</idValue>
+    <idCode>GO</idCode>
+        <idValue>Milligrams per Square Meter</idValue>
+    <idCode>GP</idCode>
+        <idValue>Milligrams per Cubic Meter</idValue>
+    <idCode>GQ</idCode>
+        <idValue>Micrograms per Cubic Meter</idValue>
+    <idCode>GR</idCode>
+        <idValue>Gram</idValue>
+    <idCode>GS</idCode>
+        <idValue>Gross</idValue>
+    <idCode>GT</idCode>
+        <idValue>Gross Kilogram</idValue>
+    <idCode>GU</idCode>
+        <idValue>Gauss per Oersteds</idValue>
+    <idCode>GV</idCode>
+        <idValue>Gigajoules</idValue>
+    <idCode>GW</idCode>
+        <idValue>Gallons Per Thousand Cubic Feet</idValue>
+    <idCode>GX</idCode>
+        <idValue>Grain</idValue>
+    <idCode>GY</idCode>
+        <idValue>Gross Yard</idValue>
+    <idCode>GZ</idCode>
+        <idValue>Gage Systems</idValue>
+    <idCode>H1</idCode>
+        <idValue>Half Pages - Electronic</idValue>
+    <idCode>H2</idCode>
+        <idValue>Half Liter</idValue>
+    <idCode>H4</idCode>
+        <idValue>Hectoliter</idValue>
+    <idCode>HA</idCode>
+        <idValue>Hank</idValue>
+    <idCode>HB</idCode>
+        <idValue>Hundred Boxes</idValue>
+    <idCode>HC</idCode>
+        <idValue>Hundred Count</idValue>
+    <idCode>HD</idCode>
+        <idValue>Half Dozen</idValue>
+    <idCode>HE</idCode>
+        <idValue>Hundredth of a Carat</idValue>
+    <idCode>HF</idCode>
+        <idValue>Hundred Feet</idValue>
+    <idCode>HG</idCode>
+        <idValue>Hectogram</idValue>
+    <idCode>HH</idCode>
+        <idValue>Hundred Cubic Feet</idValue>
+    <idCode>HI</idCode>
+        <idValue>Hundred Sheets</idValue>
+    <idCode>HJ</idCode>
+        <idValue>Horsepower</idValue>
+    <idCode>HK</idCode>
+        <idValue>Hundred Kilograms</idValue>
+    <idCode>HL</idCode>
+        <idValue>Hundred Feet - Linear</idValue>
+    <idCode>HM</idCode>
+        <idValue>Miles Per Hour</idValue>
+    <idCode>HN</idCode>
+        <idValue>Millimeters of Mercury</idValue>
+    <idCode>HO</idCode>
+        <idValue>Hundred Troy Ounces</idValue>
+    <idCode>HP</idCode>
+        <idValue>Millimeter H20</idValue>
+    <idCode>HQ</idCode>
+        <idValue>Hectare</idValue>
+    <idCode>HR</idCode>
+        <idValue>Hours</idValue>
+    <idCode>HS</idCode>
+        <idValue>Hundred Square Feet</idValue>
+    <idCode>HT</idCode>
+        <idValue>Half Hour</idValue>
+    <idCode>HU</idCode>
+        <idValue>Hundred</idValue>
+    <idCode>HV</idCode>
+        <idValue>Hundred Weight (Short)</idValue>
+    <idCode>HW</idCode>
+        <idValue>Hundred Weight (Long)</idValue>
+    <idCode>HY</idCode>
+        <idValue>Hundred Yards</idValue>
+    <idCode>HZ</idCode>
+        <idValue>Hertz</idValue>
+    <idCode>IA</idCode>
+        <idValue>Inch Pound</idValue>
+    <idCode>IB</idCode>
+        <idValue>Inches Per Second (Vibration Velocity)</idValue>
+    <idCode>IC</idCode>
+        <idValue>Counts per Inch</idValue>
+    <idCode>IE</idCode>
+        <idValue>Person</idValue>
+    <idCode>IF</idCode>
+        <idValue>Inches of Water</idValue>
+    <idCode>IH</idCode>
+        <idValue>Inhaler</idValue>
+    <idCode>II</idCode>
+        <idValue>Column-Inches</idValue>
+    <idCode>IK</idCode>
+        <idValue>Peaks per Inch (PPI)</idValue>
+    <idCode>IL</idCode>
+        <idValue>Inches per Minute</idValue>
+    <idCode>IM</idCode>
+        <idValue>Impressions</idValue>
+    <idCode>IN</idCode>
+        <idValue>Inch</idValue>
+    <idCode>IP</idCode>
+        <idValue>Insurance Policy</idValue>
+    <idCode>IT</idCode>
+        <idValue>Counts per Centimeter</idValue>
+    <idCode>IU</idCode>
+        <idValue>Inches Per Second (Linear Speed)</idValue>
+    <idCode>IV</idCode>
+        <idValue>Inches Per Second Per Second (Acceleration)</idValue>
+    <idCode>IW</idCode>
+        <idValue>Inches Per Second Per Second (Vibration Acceleration)</idValue>
+    <idCode>J2</idCode>
+        <idValue>Joule Per Kilogram</idValue>
+    <idCode>JA</idCode>
+        <idValue>Job</idValue>
+    <idCode>JB</idCode>
+        <idValue>Jumbo</idValue>
+    <idCode>JE</idCode>
+        <idValue>Joule Per Kelvin</idValue>
+    <idCode>JG</idCode>
+        <idValue>Joule per Gram</idValue>
+    <idCode>JK</idCode>
+        <idValue>Mega Joule per Kilogram</idValue>
+    <idCode>JM</idCode>
+        <idValue>Megajoule/Cubic Meter</idValue>
+    <idCode>JO</idCode>
+        <idValue>Joint</idValue>
+    <idCode>JR</idCode>
+        <idValue>Jar</idValue>
+    <idCode>JU</idCode>
+        <idValue>Jug</idValue>
+    <idCode>K1</idCode>
+        <idValue>Kilowatt Demand</idValue>
+    <idCode>K2</idCode>
+        <idValue>Kilovolt Amperes Reactive Demand</idValue>
+    <idCode>K3</idCode>
+        <idValue>Kilovolt Amperes Reactive Hour</idValue>
+    <idCode>K4</idCode>
+        <idValue>Kilovolt Amperes</idValue>
+    <idCode>K5</idCode>
+        <idValue>Kilovolt Amperes Reactive</idValue>
+    <idCode>K6</idCode>
+        <idValue>Kiloliter</idValue>
+    <idCode>K7</idCode>
+        <idValue>Kilowatt</idValue>
+    <idCode>K9</idCode>
+        <idValue>Kilograms per Millimeter Squared (KG/MM2)</idValue>
+    <idCode>KA</idCode>
+        <idValue>Cake</idValue>
+    <idCode>KB</idCode>
+        <idValue>Kilocharacters</idValue>
+    <idCode>KC</idCode>
+        <idValue>Kilograms per Cubic Meter</idValue>
+    <idCode>KD</idCode>
+        <idValue>Kilograms Decimal</idValue>
+    <idCode>KE</idCode>
+        <idValue>Keg</idValue>
+    <idCode>KF</idCode>
+        <idValue>Kilopackets</idValue>
+    <idCode>KG</idCode>
+        <idValue>Kilogram</idValue>
+    <idCode>KH</idCode>
+        <idValue>Kilowatt Hour</idValue>
+    <idCode>KI</idCode>
+        <idValue>Kilograms/Millimeter Width</idValue>
+    <idCode>KJ</idCode>
+        <idValue>Kilosegments</idValue>
+    <idCode>KK</idCode>
+        <idValue>100 Kilograms</idValue>
+    <idCode>KL</idCode>
+        <idValue>Kilograms/Meter</idValue>
+    <idCode>KM</idCode>
+        <idValue>Kilograms per Square Meter, Kilograms, Decimal</idValue>
+    <idCode>KO</idCode>
+        <idValue>Millequivalence Caustic Potash per Gram of Product</idValue>
+    <idCode>KP</idCode>
+        <idValue>Kilometers Per Hour</idValue>
+    <idCode>KQ</idCode>
+        <idValue>Kilopascal</idValue>
+    <idCode>KR</idCode>
+        <idValue>Kiloroentgen</idValue>
+    <idCode>KS</idCode>
+        <idValue>1000 Pounds per Square Inch</idValue>
+    <idCode>KT</idCode>
+        <idValue>Kit</idValue>
+    <idCode>KU</idCode>
+        <idValue>Task</idValue>
+    <idCode>KV</idCode>
+        <idValue>Kelvin</idValue>
+    <idCode>KW</idCode>
+        <idValue>Kilograms per Millimeter</idValue>
+    <idCode>KX</idCode>
+        <idValue>Milliliters per Kilogram</idValue>
+    <idCode>L2</idCode>
+        <idValue>Liters Per Minute</idValue>
+    <idCode>LA</idCode>
+        <idValue>Pounds Per Cubic Inch</idValue>
+    <idCode>LB</idCode>
+        <idValue>Pound</idValue>
+    <idCode>LC</idCode>
+        <idValue>Linear Centimeter</idValue>
+    <idCode>LE</idCode>
+        <idValue>Lite</idValue>
+    <idCode>LF</idCode>
+        <idValue>Linear Foot</idValue>
+    <idCode>LG</idCode>
+        <idValue>Long Ton</idValue>
+    <idCode>LH</idCode>
+        <idValue>Labor Hours</idValue>
+    <idCode>LI</idCode>
+        <idValue>Linear Inch</idValue>
+    <idCode>LJ</idCode>
+        <idValue>Large Spray</idValue>
+    <idCode>LK</idCode>
+        <idValue>Link</idValue>
+    <idCode>LL</idCode>
+        <idValue>Lifetime</idValue>
+    <idCode>LM</idCode>
+        <idValue>Linear Meter</idValue>
+    <idCode>LN</idCode>
+        <idValue>Length</idValue>
+    <idCode>LO</idCode>
+        <idValue>Lot</idValue>
+    <idCode>LP</idCode>
+        <idValue>Liquid Pounds</idValue>
+    <idCode>LQ</idCode>
+        <idValue>Liters Per Day</idValue>
+    <idCode>LR</idCode>
+        <idValue>Layer(s)</idValue>
+    <idCode>LS</idCode>
+        <idValue>Lump Sum</idValue>
+    <idCode>LT</idCode>
+        <idValue>Liter</idValue>
+    <idCode>LX</idCode>
+        <idValue>Linear Yards Per Pound</idValue>
+    <idCode>LY</idCode>
+        <idValue>Linear Yard</idValue>
+    <idCode>M0</idCode>
+        <idValue>Magnetic Tapes</idValue>
+    <idCode>M1</idCode>
+        <idValue>Milligrams per Liter</idValue>
+    <idCode>M2</idCode>
+        <idValue>Millimeter-Actual</idValue>
+    <idCode>M3</idCode>
+        <idValue>Mat</idValue>
+    <idCode>M4</idCode>
+        <idValue>Monetary Value</idValue>
+    <idCode>M5</idCode>
+        <idValue>Microcurie</idValue>
+    <idCode>M6</idCode>
+        <idValue>Millibar</idValue>
+    <idCode>M7</idCode>
+        <idValue>Micro Inch</idValue>
+    <idCode>M8</idCode>
+        <idValue>Mega Pascals</idValue>
+    <idCode>M9</idCode>
+        <idValue>Million British Thermal Units per One Thousand Cubic Feet</idValue>
+    <idCode>MA</idCode>
+        <idValue>Machine/Unit</idValue>
+    <idCode>MB</idCode>
+        <idValue>Millimeter-Nominal</idValue>
+    <idCode>MC</idCode>
+        <idValue>Microgram</idValue>
+    <idCode>MD</idCode>
+        <idValue>Air Dry Metric Ton</idValue>
+    <idCode>ME</idCode>
+        <idValue>Milligram</idValue>
+    <idCode>MF</idCode>
+        <idValue>Milligram per Sq. Ft. per Side</idValue>
+    <idCode>MG</idCode>
+        <idValue>Metric Gross Ton</idValue>
+    <idCode>MH</idCode>
+        <idValue>Microns (Micrometers)</idValue>
+    <idCode>MI</idCode>
+        <idValue>Metric</idValue>
+    <idCode>MJ</idCode>
+        <idValue>Minutes</idValue>
+    <idCode>MK</idCode>
+        <idValue>Milligrams Per Square Inch</idValue>
+    <idCode>ML</idCode>
+        <idValue>Milliliter</idValue>
+    <idCode>MM</idCode>
+        <idValue>Millimeter</idValue>
+    <idCode>MN</idCode>
+        <idValue>Metric Net Ton</idValue>
+    <idCode>MO</idCode>
+        <idValue>Months</idValue>
+    <idCode>MP</idCode>
+        <idValue>Metric Ton</idValue>
+    <idCode>MQ</idCode>
+        <idValue>1000 Meters</idValue>
+    <idCode>MR</idCode>
+        <idValue>Meter</idValue>
+    <idCode>MS</idCode>
+        <idValue>Square Millimeter</idValue>
+    <idCode>MT</idCode>
+        <idValue>Metric Long Ton</idValue>
+    <idCode>MU</idCode>
+        <idValue>Millicurie</idValue>
+    <idCode>MV</idCode>
+        <idValue>Number of Mults</idValue>
+    <idCode>MW</idCode>
+        <idValue>Metric Ton Kilograms</idValue>
+    <idCode>MX</idCode>
+        <idValue>Mixed</idValue>
+    <idCode>MY</idCode>
+        <idValue>Millimeter-Average</idValue>
+    <idCode>MZ</idCode>
+        <idValue>Millimeter-minimum</idValue>
+    <idCode>N1</idCode>
+        <idValue>Pen Calories</idValue>
+    <idCode>N2</idCode>
+        <idValue>Number of Lines</idValue>
+    <idCode>N3</idCode>
+        <idValue>Print Point</idValue>
+    <idCode>N4</idCode>
+        <idValue>Pen Grams (Protein)</idValue>
+    <idCode>N6</idCode>
+        <idValue>Megahertz</idValue>
+    <idCode>N7</idCode>
+        <idValue>Parts</idValue>
+    <idCode>N9</idCode>
+        <idValue>Cartridge Needle</idValue>
+    <idCode>NA</idCode>
+        <idValue>Milligrams per Kilogram</idValue>
+    <idCode>NB</idCode>
+        <idValue>Barge</idValue>
+    <idCode>NC</idCode>
+        <idValue>Car</idValue>
+    <idCode>ND</idCode>
+        <idValue>Net Barrels</idValue>
+    <idCode>NE</idCode>
+        <idValue>Net Liters</idValue>
+    <idCode>NF</idCode>
+        <idValue>Messages</idValue>
+    <idCode>NG</idCode>
+        <idValue>Net Gallons</idValue>
+    <idCode>NH</idCode>
+        <idValue>Message Hours</idValue>
+    <idCode>NI</idCode>
+        <idValue>Net Imperial Gallons</idValue>
+    <idCode>NJ</idCode>
+        <idValue>Number of Screens</idValue>
+    <idCode>NL</idCode>
+        <idValue>Load</idValue>
+    <idCode>NM</idCode>
+        <idValue>Nautical Mile</idValue>
+    <idCode>NN</idCode>
+        <idValue>Train</idValue>
+    <idCode>NQ</idCode>
+        <idValue>Mho</idValue>
+    <idCode>NR</idCode>
+        <idValue>Micro Mho</idValue>
+    <idCode>NS</idCode>
+        <idValue>Short Ton</idValue>
+    <idCode>NT</idCode>
+        <idValue>Trailer</idValue>
+    <idCode>NU</idCode>
+        <idValue>Newton-Meter</idValue>
+    <idCode>NV</idCode>
+        <idValue>Vehicle</idValue>
+    <idCode>NW</idCode>
+        <idValue>Newton</idValue>
+    <idCode>NX</idCode>
+        <idValue>Parts Per Thousand</idValue>
+    <idCode>NY</idCode>
+        <idValue>Pounds Per Air-Dry Metric Ton</idValue>
+    <idCode>OA</idCode>
+        <idValue>Panel</idValue>
+    <idCode>OC</idCode>
+        <idValue>Billboard</idValue>
+    <idCode>ON</idCode>
+        <idValue>Ounces per Square Yard</idValue>
+    <idCode>OP</idCode>
+        <idValue>Two pack</idValue>
+    <idCode>OT</idCode>
+        <idValue>Overtime Hours</idValue>
+    <idCode>OZ</idCode>
+        <idValue>Ounce - Av</idValue>
+    <idCode>P0</idCode>
+        <idValue>Pages - Electronic</idValue>
+    <idCode>P1</idCode>
+        <idValue>Percent</idValue>
+    <idCode>P2</idCode>
+        <idValue>Pounds per Foot</idValue>
+    <idCode>P3</idCode>
+        <idValue>Three pack</idValue>
+    <idCode>P4</idCode>
+        <idValue>Four-pack</idValue>
+    <idCode>P5</idCode>
+        <idValue>Five-pack</idValue>
+    <idCode>P6</idCode>
+        <idValue>Six pack</idValue>
+    <idCode>P7</idCode>
+        <idValue>Seven pack</idValue>
+    <idCode>P8</idCode>
+        <idValue>Eight-pack</idValue>
+    <idCode>P9</idCode>
+        <idValue>Nine pack</idValue>
+    <idCode>PA</idCode>
+        <idValue>Pail</idValue>
+    <idCode>PB</idCode>
+        <idValue>Pair Inches</idValue>
+    <idCode>PC</idCode>
+        <idValue>Piece</idValue>
+    <idCode>PD</idCode>
+        <idValue>Pad</idValue>
+    <idCode>PE</idCode>
+        <idValue>Pounds Equivalent</idValue>
+    <idCode>PF</idCode>
+        <idValue>Pallet (Lift)</idValue>
+    <idCode>PG</idCode>
+        <idValue>Pounds Gross</idValue>
+    <idCode>PH</idCode>
+        <idValue>Pack (PAK)</idValue>
+    <idCode>PI</idCode>
+        <idValue>Pitch</idValue>
+    <idCode>PJ</idCode>
+        <idValue>Pounds, Decimal - Pounds per Square Foot - Pound Gage</idValue>
+    <idCode>PK</idCode>
+        <idValue>Package</idValue>
+    <idCode>PL</idCode>
+        <idValue>Pallet/Unit Load</idValue>
+    <idCode>PM</idCode>
+        <idValue>Pounds-Percentage</idValue>
+    <idCode>PN</idCode>
+        <idValue>Pounds Net</idValue>
+    <idCode>PO</idCode>
+        <idValue>Pounds per Inch of Length</idValue>
+    <idCode>PP</idCode>
+        <idValue>Plate</idValue>
+    <idCode>PQ</idCode>
+        <idValue>Pages per Inch</idValue>
+    <idCode>PR</idCode>
+        <idValue>Pair</idValue>
+    <idCode>PS</idCode>
+        <idValue>Pounds per Sq. Inch</idValue>
+    <idCode>PT</idCode>
+        <idValue>Pint</idValue>
+    <idCode>PU</idCode>
+        <idValue>Mass Pounds</idValue>
+    <idCode>PV</idCode>
+        <idValue>Half Pint</idValue>
+    <idCode>PW</idCode>
+        <idValue>Pounds per Inch of Width</idValue>
+    <idCode>PX</idCode>
+        <idValue>Pint, Imperial</idValue>
+    <idCode>PY</idCode>
+        <idValue>Peck, Dry U.S.</idValue>
+    <idCode>PZ</idCode>
+        <idValue>Peck, Dry Imperial</idValue>
+    <idCode>Q1</idCode>
+        <idValue>Quarter (Time)</idValue>
+    <idCode>Q2</idCode>
+        <idValue>Pint U.S. Dry</idValue>
+    <idCode>Q3</idCode>
+        <idValue>Meal</idValue>
+    <idCode>Q4</idCode>
+        <idValue>Fifty</idValue>
+    <idCode>Q5</idCode>
+        <idValue>Twenty-Five</idValue>
+    <idCode>Q6</idCode>
+        <idValue>Thirty-Six</idValue>
+    <idCode>Q7</idCode>
+        <idValue>Twenty-Four</idValue>
+    <idCode>QA</idCode>
+        <idValue>Pages - Facsimile</idValue>
+    <idCode>QB</idCode>
+        <idValue>Pages - Hardcopy</idValue>
+    <idCode>QC</idCode>
+        <idValue>Channel</idValue>
+    <idCode>QD</idCode>
+        <idValue>Quarter Dozen</idValue>
+    <idCode>QE</idCode>
+        <idValue>Photographs</idValue>
+    <idCode>QH</idCode>
+        <idValue>Quarter Hours</idValue>
+    <idCode>QK</idCode>
+        <idValue>Quarter Kilogram</idValue>
+    <idCode>QR</idCode>
+        <idValue>Quire</idValue>
+    <idCode>QS</idCode>
+        <idValue>Quart, Dry U.S.</idValue>
+    <idCode>QT</idCode>
+        <idValue>Quart</idValue>
+    <idCode>QU</idCode>
+        <idValue>Quart, Imperial</idValue>
+    <idCode>R1</idCode>
+        <idValue>Pica</idValue>
+    <idCode>R2</idCode>
+        <idValue>Becquerel</idValue>
+    <idCode>R3</idCode>
+        <idValue>Revolutions Per Minute</idValue>
+    <idCode>R4</idCode>
+        <idValue>Calorie</idValue>
+    <idCode>R5</idCode>
+        <idValue>Thousands of Dollars</idValue>
+    <idCode>R6</idCode>
+        <idValue>Millions of Dollars</idValue>
+    <idCode>R7</idCode>
+        <idValue>Billions of Dollars</idValue>
+    <idCode>R8</idCode>
+        <idValue>Roentgen Equivalent in Man (REM)</idValue>
+    <idCode>R9</idCode>
+        <idValue>Thousand Cubic Meters</idValue>
+    <idCode>RA</idCode>
+        <idValue>Rack</idValue>
+    <idCode>RB</idCode>
+        <idValue>Radian</idValue>
+    <idCode>RC</idCode>
+        <idValue>Rod (area) - 16.25 Square Yards</idValue>
+    <idCode>RD</idCode>
+        <idValue>Rod (length) - 5.5 Yards</idValue>
+    <idCode>RE</idCode>
+        <idValue>Reel</idValue>
+    <idCode>RG</idCode>
+        <idValue>Ring</idValue>
+    <idCode>RH</idCode>
+        <idValue>Running or Operating Hours</idValue>
+    <idCode>RK</idCode>
+        <idValue>Roll-Metric Measure</idValue>
+    <idCode>RL</idCode>
+        <idValue>Roll</idValue>
+    <idCode>RM</idCode>
+        <idValue>Ream</idValue>
+    <idCode>RN</idCode>
+        <idValue>Ream-Metric Measure</idValue>
+    <idCode>RO</idCode>
+        <idValue>Round</idValue>
+    <idCode>RP</idCode>
+        <idValue>Pounds per Ream</idValue>
+    <idCode>RS</idCode>
+        <idValue>Resets</idValue>
+    <idCode>RT</idCode>
+        <idValue>Revenue Ton Miles</idValue>
+    <idCode>RU</idCode>
+        <idValue>Run</idValue>
+    <idCode>S1</idCode>
+        <idValue>Semester</idValue>
+    <idCode>S2</idCode>
+        <idValue>Trimester</idValue>
+    <idCode>S3</idCode>
+        <idValue>Square Feet per Second</idValue>
+    <idCode>S4</idCode>
+        <idValue>Square Meters per Second</idValue>
+    <idCode>S5</idCode>
+        <idValue>Sixty-fourths of an Inch</idValue>
+    <idCode>S6</idCode>
+        <idValue>Sessions</idValue>
+    <idCode>S7</idCode>
+        <idValue>Storage Units</idValue>
+    <idCode>S8</idCode>
+        <idValue>Standard Advertising Units (SAUs)</idValue>
+    <idCode>S9</idCode>
+        <idValue>Slip Sheet</idValue>
+    <idCode>SA</idCode>
+        <idValue>Sandwich</idValue>
+    <idCode>SB</idCode>
+        <idValue>Square Mile</idValue>
+    <idCode>SC</idCode>
+        <idValue>Square Centimeter</idValue>
+    <idCode>SD</idCode>
+        <idValue>Solid Pounds</idValue>
+    <idCode>SE</idCode>
+        <idValue>Section</idValue>
+    <idCode>SF</idCode>
+        <idValue>Square Foot</idValue>
+    <idCode>SG</idCode>
+        <idValue>Segment</idValue>
+    <idCode>SH</idCode>
+        <idValue>Sheet</idValue>
+    <idCode>SI</idCode>
+        <idValue>Square Inch</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Sack</idValue>
+    <idCode>SK</idCode>
+        <idValue>Split Tanktruck</idValue>
+    <idCode>SL</idCode>
+        <idValue>Sleeve</idValue>
+    <idCode>SM</idCode>
+        <idValue>Square Meter</idValue>
+    <idCode>SN</idCode>
+        <idValue>Square Rod</idValue>
+    <idCode>SO</idCode>
+        <idValue>Spool</idValue>
+    <idCode>SP</idCode>
+        <idValue>Shelf Package</idValue>
+    <idCode>SQ</idCode>
+        <idValue>Square</idValue>
+    <idCode>SR</idCode>
+        <idValue>Strip</idValue>
+    <idCode>SS</idCode>
+        <idValue>Sheet-Metric Measure</idValue>
+    <idCode>ST</idCode>
+        <idValue>Set</idValue>
+    <idCode>SV</idCode>
+        <idValue>Skid</idValue>
+    <idCode>SW</idCode>
+        <idValue>Skein</idValue>
+    <idCode>SX</idCode>
+        <idValue>Shipment</idValue>
+    <idCode>SY</idCode>
+        <idValue>Square Yard</idValue>
+    <idCode>SZ</idCode>
+        <idValue>Syringe</idValue>
+    <idCode>T0</idCode>
+        <idValue>Telecommunications Lines in Service</idValue>
+    <idCode>T1</idCode>
+        <idValue>Thousand pounds gross</idValue>
+    <idCode>T2</idCode>
+        <idValue>Thousandths of an Inch</idValue>
+    <idCode>T3</idCode>
+        <idValue>Thousand Pieces</idValue>
+    <idCode>T4</idCode>
+        <idValue>Thousand Bags</idValue>
+    <idCode>T5</idCode>
+        <idValue>Thousand Casings</idValue>
+    <idCode>T6</idCode>
+        <idValue>Thousand Gallons</idValue>
+    <idCode>T7</idCode>
+        <idValue>Thousand Impressions</idValue>
+    <idCode>T8</idCode>
+        <idValue>Thousand Linear Inches</idValue>
+    <idCode>T9</idCode>
+        <idValue>Thousand Kilowatt Hours</idValue>
+    <idCode>TA</idCode>
+        <idValue>Tenth Cubic Foot</idValue>
+    <idCode>TB</idCode>
+        <idValue>Tube</idValue>
+    <idCode>TC</idCode>
+        <idValue>Truckload</idValue>
+    <idCode>TD</idCode>
+        <idValue>Therms</idValue>
+    <idCode>TE</idCode>
+        <idValue>Tote</idValue>
+    <idCode>TF</idCode>
+        <idValue>Ten Square Yards</idValue>
+    <idCode>TG</idCode>
+        <idValue>Gross Ton</idValue>
+    <idCode>TH</idCode>
+        <idValue>Thousand</idValue>
+    <idCode>TI</idCode>
+        <idValue>Thousand Square Inches</idValue>
+    <idCode>TJ</idCode>
+        <idValue>Thousand Sq. Centimeters</idValue>
+    <idCode>TK</idCode>
+        <idValue>Tank</idValue>
+    <idCode>TL</idCode>
+        <idValue>Thousand Feet (Linear)</idValue>
+    <idCode>TM</idCode>
+        <idValue>Thousand Feet (Board)</idValue>
+    <idCode>TN</idCode>
+        <idValue>Net Ton (2,000 LB).</idValue>
+    <idCode>TO</idCode>
+        <idValue>Troy Ounce</idValue>
+    <idCode>TP</idCode>
+        <idValue>Ten-pack</idValue>
+    <idCode>TQ</idCode>
+        <idValue>Thousand Feet</idValue>
+    <idCode>TR</idCode>
+        <idValue>Ten Square Feet</idValue>
+    <idCode>TS</idCode>
+        <idValue>Thousand Square Feet</idValue>
+    <idCode>TT</idCode>
+        <idValue>Thousand Linear Meters</idValue>
+    <idCode>TU</idCode>
+        <idValue>Thousand Linear Yards</idValue>
+    <idCode>TV</idCode>
+        <idValue>Thousand Kilograms</idValue>
+    <idCode>TW</idCode>
+        <idValue>Thousand Sheets</idValue>
+    <idCode>TX</idCode>
+        <idValue>Troy Pound</idValue>
+    <idCode>TY</idCode>
+        <idValue>Tray</idValue>
+    <idCode>TZ</idCode>
+        <idValue>Thousand Cubic Feet</idValue>
+    <idCode>U1</idCode>
+        <idValue>Treatments</idValue>
+    <idCode>U2</idCode>
+        <idValue>Tablet</idValue>
+    <idCode>U3</idCode>
+        <idValue>Ten</idValue>
+    <idCode>U5</idCode>
+        <idValue>Two Hundred Fifty</idValue>
+    <idCode>UA</idCode>
+        <idValue>Torr</idValue>
+    <idCode>UB</idCode>
+        <idValue>Telecommunications Lines in Service - Average</idValue>
+    <idCode>UC</idCode>
+        <idValue>Telecommunications Ports</idValue>
+    <idCode>UD</idCode>
+        <idValue>Tenth Minutes</idValue>
+    <idCode>UE</idCode>
+        <idValue>Tenth Hours</idValue>
+    <idCode>UF</idCode>
+        <idValue>Usage per Telecommunications Line - Average</idValue>
+    <idCode>UH</idCode>
+        <idValue>Ten Thousand Yards</idValue>
+    <idCode>UL</idCode>
+        <idValue>Unitless</idValue>
+    <idCode>UM</idCode>
+        <idValue>Million Units</idValue>
+    <idCode>UN</idCode>
+        <idValue>Unit</idValue>
+    <idCode>UP</idCode>
+        <idValue>Troche</idValue>
+    <idCode>UQ</idCode>
+        <idValue>Wafer</idValue>
+    <idCode>UR</idCode>
+        <idValue>Application</idValue>
+    <idCode>US</idCode>
+        <idValue>Dosage Form</idValue>
+    <idCode>UT</idCode>
+        <idValue>Inhalation</idValue>
+    <idCode>UU</idCode>
+        <idValue>Lozenge</idValue>
+    <idCode>UV</idCode>
+        <idValue>Percent Topical Only</idValue>
+    <idCode>UW</idCode>
+        <idValue>Milliequivalent</idValue>
+    <idCode>UX</idCode>
+        <idValue>Dram (Minim)</idValue>
+    <idCode>UY</idCode>
+        <idValue>Fifty Square Feet</idValue>
+    <idCode>UZ</idCode>
+        <idValue>Fifty Count</idValue>
+    <idCode>V1</idCode>
+        <idValue>Flat</idValue>
+    <idCode>V2</idCode>
+        <idValue>Pouch</idValue>
+    <idCode>VA</idCode>
+        <idValue>Volt-ampere per Kilogram</idValue>
+    <idCode>VC</idCode>
+        <idValue>Five Hundred</idValue>
+    <idCode>VI</idCode>
+        <idValue>Vial</idValue>
+    <idCode>VP</idCode>
+        <idValue>Percent Volume</idValue>
+    <idCode>VR</idCode>
+        <idValue>Volt-ampere-reactive</idValue>
+    <idCode>VS</idCode>
+        <idValue>Visit</idValue>
+    <idCode>W2</idCode>
+        <idValue>Wet Kilo</idValue>
+    <idCode>WA</idCode>
+        <idValue>Watts per Kilogram</idValue>
+    <idCode>WB</idCode>
+        <idValue>Wet Pound</idValue>
+    <idCode>WD</idCode>
+        <idValue>Work Days</idValue>
+    <idCode>WE</idCode>
+        <idValue>Wet Ton</idValue>
+    <idCode>WG</idCode>
+        <idValue>Wine Gallon</idValue>
+    <idCode>WH</idCode>
+        <idValue>Wheel</idValue>
+    <idCode>WI</idCode>
+        <idValue>Weight per Square Inch</idValue>
+    <idCode>WK</idCode>
+        <idValue>Week</idValue>
+    <idCode>WM</idCode>
+        <idValue>Working Months</idValue>
+    <idCode>WP</idCode>
+        <idValue>Pennyweight</idValue>
+    <idCode>WR</idCode>
+        <idValue>Wrap</idValue>
+    <idCode>WW</idCode>
+        <idValue>Milliliters of Water</idValue>
+    <idCode>X1</idCode>
+        <idValue>Chains (Land Survey)</idValue>
+    <idCode>X2</idCode>
+        <idValue>Bunch</idValue>
+    <idCode>X3</idCode>
+        <idValue>Clove</idValue>
+    <idCode>X4</idCode>
+        <idValue>Drop</idValue>
+    <idCode>X5</idCode>
+        <idValue>Head</idValue>
+    <idCode>X6</idCode>
+        <idValue>Heart</idValue>
+    <idCode>X7</idCode>
+        <idValue>Leaf</idValue>
+    <idCode>X8</idCode>
+        <idValue>Loaf</idValue>
+    <idCode>X9</idCode>
+        <idValue>Portion</idValue>
+    <idCode>XP</idCode>
+        <idValue>Base Box per Pound</idValue>
+    <idCode>Y1</idCode>
+        <idValue>Slice</idValue>
+    <idCode>Y2</idCode>
+        <idValue>Tablespoon</idValue>
+    <idCode>Y3</idCode>
+        <idValue>Teaspoon</idValue>
+    <idCode>Y4</idCode>
+        <idValue>Tub</idValue>
+    <idCode>YD</idCode>
+        <idValue>Yard</idValue>
+    <idCode>YL</idCode>
+        <idValue>100 Lineal Yards</idValue>
+    <idCode>YR</idCode>
+        <idValue>Years</idValue>
+    <idCode>YT</idCode>
+        <idValue>Ten Yards</idValue>
+    <idCode>Z1</idCode>
+        <idValue>Lift Van</idValue>
+    <idCode>Z2</idCode>
+        <idValue>Chest</idValue>
+    <idCode>Z3</idCode>
+        <idValue>Cask</idValue>
+    <idCode>Z4</idCode>
+        <idValue>Hogshead</idValue>
+    <idCode>Z5</idCode>
+        <idValue>Lug</idValue>
+    <idCode>Z6</idCode>
+        <idValue>Conference Points</idValue>
+    <idCode>Z8</idCode>
+        <idValue>Newspaper Agate Line</idValue>
+    <idCode>ZA</idCode>
+        <idValue>Bimonthly</idValue>
+    <idCode>ZB</idCode>
+        <idValue>Biweekly</idValue>
+    <idCode>ZC</idCode>
+        <idValue>Semiannual</idValue>
+    <idCode>ZP</idCode>
+        <idValue>Page</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Medical Care</idValue>
+    <idCode>2</idCode>
+        <idValue>Surgical</idValue>
+    <idCode>3</idCode>
+        <idValue>Consultation</idValue>
+    <idCode>4</idCode>
+        <idValue>Diagnostic X-Ray</idValue>
+    <idCode>5</idCode>
+        <idValue>Diagnostic Lab</idValue>
+    <idCode>6</idCode>
+        <idValue>Radiation Therapy</idValue>
+    <idCode>7</idCode>
+        <idValue>Anesthesia</idValue>
+    <idCode>8</idCode>
+        <idValue>Surgical Assistance</idValue>
+    <idCode>9</idCode>
+        <idValue>Other Medical</idValue>
+    <idCode>10</idCode>
+        <idValue>Blood Charges</idValue>
+    <idCode>11</idCode>
+        <idValue>Used Durable Medical Equipment</idValue>
+    <idCode>12</idCode>
+        <idValue>Durable Medical Equipment Purchase</idValue>
+    <idCode>13</idCode>
+        <idValue>Ambulatory Service Center Facility</idValue>
+    <idCode>14</idCode>
+        <idValue>Renal Supplies in the Home</idValue>
+    <idCode>15</idCode>
+        <idValue>Alternate Method Dialysis</idValue>
+    <idCode>16</idCode>
+        <idValue>Chronic Renal Disease (CRD) Equipment</idValue>
+    <idCode>17</idCode>
+        <idValue>Pre-Admission Testing</idValue>
+    <idCode>18</idCode>
+        <idValue>Durable Medical Equipment Rental</idValue>
+    <idCode>19</idCode>
+        <idValue>Pneumonia Vaccine</idValue>
+    <idCode>20</idCode>
+        <idValue>Second Surgical Opinion</idValue>
+    <idCode>21</idCode>
+        <idValue>Third Surgical Opinion</idValue>
+    <idCode>22</idCode>
+        <idValue>Social Work</idValue>
+    <idCode>23</idCode>
+        <idValue>Diagnostic Dental</idValue>
+    <idCode>24</idCode>
+        <idValue>Periodontics</idValue>
+    <idCode>25</idCode>
+        <idValue>Restorative</idValue>
+    <idCode>26</idCode>
+        <idValue>Endodontics</idValue>
+    <idCode>27</idCode>
+        <idValue>Maxillofacial Prosthetics</idValue>
+    <idCode>28</idCode>
+        <idValue>Adjunctive Dental Services</idValue>
+    <idCode>30</idCode>
+        <idValue>Health Benefit Plan Coverage</idValue>
+    <idCode>31</idCode>
+        <idValue>Benefit Disclaimer</idValue>
+    <idCode>32</idCode>
+        <idValue>Plan Waiting Period</idValue>
+    <idCode>33</idCode>
+        <idValue>Chiropractic</idValue>
+    <idCode>34</idCode>
+        <idValue>Chiropractic Office Visits</idValue>
+    <idCode>35</idCode>
+        <idValue>Dental Care</idValue>
+    <idCode>36</idCode>
+        <idValue>Dental Crowns</idValue>
+    <idCode>37</idCode>
+        <idValue>Dental Accident</idValue>
+    <idCode>38</idCode>
+        <idValue>Orthodontics</idValue>
+    <idCode>39</idCode>
+        <idValue>Prosthodontics</idValue>
+    <idCode>40</idCode>
+        <idValue>Oral Surgery</idValue>
+    <idCode>41</idCode>
+        <idValue>Routine (Preventive) Dental</idValue>
+    <idCode>42</idCode>
+        <idValue>Home Health Care</idValue>
+    <idCode>43</idCode>
+        <idValue>Home Health Prescriptions</idValue>
+    <idCode>44</idCode>
+        <idValue>Home Health Visits</idValue>
+    <idCode>45</idCode>
+        <idValue>Hospice</idValue>
+    <idCode>46</idCode>
+        <idValue>Respite Care</idValue>
+    <idCode>47</idCode>
+        <idValue>Hospital</idValue>
+    <idCode>48</idCode>
+        <idValue>Hospital - Inpatient</idValue>
+    <idCode>49</idCode>
+        <idValue>Hospital - Room and Board</idValue>
+    <idCode>50</idCode>
+        <idValue>Hospital - Outpatient</idValue>
+    <idCode>51</idCode>
+        <idValue>Hospital - Emergency Accident</idValue>
+    <idCode>52</idCode>
+        <idValue>Hospital - Emergency Medical</idValue>
+    <idCode>53</idCode>
+        <idValue>Hospital - Ambulatory Surgical</idValue>
+    <idCode>54</idCode>
+        <idValue>Long Term Care</idValue>
+    <idCode>55</idCode>
+        <idValue>Major Medical</idValue>
+    <idCode>56</idCode>
+        <idValue>Medically Related Transportation</idValue>
+    <idCode>57</idCode>
+        <idValue>Air Transportation</idValue>
+    <idCode>58</idCode>
+        <idValue>Cabulance</idValue>
+    <idCode>59</idCode>
+        <idValue>Licensed Ambulance</idValue>
+    <idCode>60</idCode>
+        <idValue>General Benefits</idValue>
+    <idCode>61</idCode>
+        <idValue>In-vitro Fertilization</idValue>
+    <idCode>62</idCode>
+        <idValue>MRI/CAT Scan</idValue>
+    <idCode>63</idCode>
+        <idValue>Donor Procedures</idValue>
+    <idCode>64</idCode>
+        <idValue>Acupuncture</idValue>
+    <idCode>65</idCode>
+        <idValue>Newborn Care</idValue>
+    <idCode>66</idCode>
+        <idValue>Pathology</idValue>
+    <idCode>67</idCode>
+        <idValue>Smoking Cessation</idValue>
+    <idCode>68</idCode>
+        <idValue>Well Baby Care</idValue>
+    <idCode>69</idCode>
+        <idValue>Maternity</idValue>
+    <idCode>70</idCode>
+        <idValue>Transplants</idValue>
+    <idCode>71</idCode>
+        <idValue>Audiology Exam</idValue>
+    <idCode>72</idCode>
+        <idValue>Inhalation Therapy</idValue>
+    <idCode>73</idCode>
+        <idValue>Diagnostic Medical</idValue>
+    <idCode>74</idCode>
+        <idValue>Private Duty Nursing</idValue>
+    <idCode>75</idCode>
+        <idValue>Prosthetic Device</idValue>
+    <idCode>76</idCode>
+        <idValue>Dialysis</idValue>
+    <idCode>77</idCode>
+        <idValue>Otological Exam</idValue>
+    <idCode>78</idCode>
+        <idValue>Chemotherapy</idValue>
+    <idCode>79</idCode>
+        <idValue>Allergy Testing</idValue>
+    <idCode>80</idCode>
+        <idValue>Immunizations</idValue>
+    <idCode>81</idCode>
+        <idValue>Routine Physical</idValue>
+    <idCode>82</idCode>
+        <idValue>Family Planning</idValue>
+    <idCode>83</idCode>
+        <idValue>Infertility</idValue>
+    <idCode>84</idCode>
+        <idValue>Abortion</idValue>
+    <idCode>85</idCode>
+        <idValue>AIDS</idValue>
+    <idCode>86</idCode>
+        <idValue>Emergency Services</idValue>
+    <idCode>87</idCode>
+        <idValue>Cancer</idValue>
+    <idCode>88</idCode>
+        <idValue>Pharmacy</idValue>
+    <idCode>89</idCode>
+        <idValue>Free Standing Prescription Drug</idValue>
+    <idCode>90</idCode>
+        <idValue>Mail Order Prescription Drug</idValue>
+    <idCode>91</idCode>
+        <idValue>Brand Name Prescription Drug</idValue>
+    <idCode>92</idCode>
+        <idValue>Generic Prescription Drug</idValue>
+    <idCode>93</idCode>
+        <idValue>Podiatry</idValue>
+    <idCode>94</idCode>
+        <idValue>Podiatry - Office Visits</idValue>
+    <idCode>95</idCode>
+        <idValue>Podiatry - Nursing Home Visits</idValue>
+    <idCode>96</idCode>
+        <idValue>Professional (Physician)</idValue>
+    <idCode>97</idCode>
+        <idValue>Anesthesiologist</idValue>
+    <idCode>98</idCode>
+        <idValue>Professional (Physician) Visit - Office</idValue>
+    <idCode>99</idCode>
+        <idValue>Professional (Physician) Visit - Inpatient</idValue>
+    <idCode>A0</idCode>
+        <idValue>Professional (Physician) Visit - Outpatient</idValue>
+    <idCode>A1</idCode>
+        <idValue>Professional (Physician) Visit - Nursing Home</idValue>
+    <idCode>A2</idCode>
+        <idValue>Professional (Physician) Visit - Skilled Nursing Facility</idValue>
+    <idCode>A3</idCode>
+        <idValue>Professional (Physician) Visit - Home</idValue>
+    <idCode>A4</idCode>
+        <idValue>Psychiatric</idValue>
+    <idCode>A5</idCode>
+        <idValue>Psychiatric - Room and Board</idValue>
+    <idCode>A6</idCode>
+        <idValue>Psychotherapy</idValue>
+    <idCode>A7</idCode>
+        <idValue>Psychiatric - Inpatient</idValue>
+    <idCode>A8</idCode>
+        <idValue>Psychiatric - Outpatient</idValue>
+    <idCode>A9</idCode>
+        <idValue>Rehabilitation</idValue>
+    <idCode>AA</idCode>
+        <idValue>Rehabilitation - Room and Board</idValue>
+    <idCode>AB</idCode>
+        <idValue>Rehabilitation - Inpatient</idValue>
+    <idCode>AC</idCode>
+        <idValue>Rehabilitation - Outpatient</idValue>
+    <idCode>AD</idCode>
+        <idValue>Occupational Therapy</idValue>
+    <idCode>AE</idCode>
+        <idValue>Physical Medicine</idValue>
+    <idCode>AF</idCode>
+        <idValue>Speech Therapy</idValue>
+    <idCode>AG</idCode>
+        <idValue>Skilled Nursing Care</idValue>
+    <idCode>AH</idCode>
+        <idValue>Skilled Nursing Care - Room and Board</idValue>
+    <idCode>AI</idCode>
+        <idValue>Substance Abuse</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Alcoholism</idValue>
+    <idCode>AK</idCode>
+        <idValue>Drug Addiction</idValue>
+    <idCode>AL</idCode>
+        <idValue>Vision (Optometry)</idValue>
+    <idCode>AM</idCode>
+        <idValue>Frames</idValue>
+    <idCode>AN</idCode>
+        <idValue>Routine Exam</idValue>
+    <idCode>AO</idCode>
+        <idValue>Lenses</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Nonmedically Necessary Physical</idValue>
+    <idCode>AR</idCode>
+        <idValue>Experimental Drug Therapy</idValue>
+    <idCode>BA</idCode>
+        <idValue>Independent Medical Evaluation</idValue>
+    <idCode>BB</idCode>
+        <idValue>Partial Hospitalization (Psychiatric)</idValue>
+    <idCode>BC</idCode>
+        <idValue>Day Care (Psychiatric)</idValue>
+    <idCode>BD</idCode>
+        <idValue>Cognitive Therapy</idValue>
+    <idCode>BE</idCode>
+        <idValue>Massage Therapy</idValue>
+    <idCode>BF</idCode>
+        <idValue>Pulmonary Rehabilitation</idValue>
+    <idCode>BG</idCode>
+        <idValue>Cardiac Rehabilitation</idValue>
+    <idCode>BH</idCode>
+        <idValue>Pediatric</idValue>
+    <idCode>BI</idCode>
+        <idValue>Nursery</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Skin</idValue>
+    <idCode>BK</idCode>
+        <idValue>Orthopedic</idValue>
+    <idCode>BL</idCode>
+        <idValue>Cardiac</idValue>
+    <idCode>BM</idCode>
+        <idValue>Lymphatic</idValue>
+    <idCode>BN</idCode>
+        <idValue>Gastrointestinal</idValue>
+    <idCode>BP</idCode>
+        <idValue>Endocrine</idValue>
+    <idCode>BQ</idCode>
+        <idValue>Neurology</idValue>
+    <idCode>BR</idCode>
+        <idValue>Eye</idValue>
+    <idCode>BS</idCode>
+        <idValue>Invasive Procedures</idValue>
+</idList>

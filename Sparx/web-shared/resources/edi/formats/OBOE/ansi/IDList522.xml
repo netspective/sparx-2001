@@ -1,0 +1,2951 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Line Item Total</idValue>
+    <idCode>2</idCode>
+        <idValue>Batch Total</idValue>
+    <idCode>3</idCode>
+        <idValue>Deposit Total</idValue>
+    <idCode>4</idCode>
+        <idValue>Lock Box Total</idValue>
+    <idCode>5</idCode>
+        <idValue>Total Invoice Amount</idValue>
+    <idCode>6</idCode>
+        <idValue>Amount Subject to Total Monetary Discount</idValue>
+    <idCode>7</idCode>
+        <idValue>Discount Amount Due</idValue>
+    <idCode>8</idCode>
+        <idValue>Total Monetary Discount Amount</idValue>
+    <idCode>9</idCode>
+        <idValue>Total Operational Statement Amount</idValue>
+    <idCode>01</idCode>
+        <idValue>Fixed Installment Control Accounting Error</idValue>
+    <idCode>02</idCode>
+        <idValue>Graduated Payment Mortgage Adjustment</idValue>
+    <idCode>03</idCode>
+        <idValue>Growing Equity Mortgage Adjustment</idValue>
+    <idCode>04</idCode>
+        <idValue>Adjustable Rate Mortgage Change</idValue>
+    <idCode>05</idCode>
+        <idValue>Fixed Installment Control Substitution Adjustment</idValue>
+    <idCode>06</idCode>
+        <idValue>Interest Adjustment</idValue>
+    <idCode>07</idCode>
+        <idValue>Deferred Graduated Payment Mortgage Interest Paid</idValue>
+    <idCode>08</idCode>
+        <idValue>Interest Accounting Error</idValue>
+    <idCode>09</idCode>
+        <idValue>Principal Accounting Error</idValue>
+    <idCode>0A</idCode>
+        <idValue>Interest Substitution Adjustment</idValue>
+    <idCode>0B</idCode>
+        <idValue>Principal Substitution Adjustment</idValue>
+    <idCode>0C</idCode>
+        <idValue>Prepaid Interest</idValue>
+    <idCode>0D</idCode>
+        <idValue>Prepaid Principal</idValue>
+    <idCode>0E</idCode>
+        <idValue>Delinquent Interest</idValue>
+    <idCode>0F</idCode>
+        <idValue>Delinquent Principal</idValue>
+    <idCode>0G</idCode>
+        <idValue>Curtailment Adjustment</idValue>
+    <idCode>0H</idCode>
+        <idValue>Serial Note Principal Available for Distribution</idValue>
+    <idCode>0I</idCode>
+        <idValue>Servicing Fee</idValue>
+    <idCode>0J</idCode>
+        <idValue>Guarantee Fee Adjustment</idValue>
+    <idCode>0K</idCode>
+        <idValue>Amount Under-collateralized</idValue>
+    <idCode>0L</idCode>
+        <idValue>Amount Over-collateralized</idValue>
+    <idCode>0M</idCode>
+        <idValue>Trial Balance Adjustment</idValue>
+    <idCode>0N</idCode>
+        <idValue>Custodial Bank Account Adjustment</idValue>
+    <idCode>0P</idCode>
+        <idValue>Item</idValue>
+    <idCode>0Q</idCode>
+        <idValue>Schedule</idValue>
+    <idCode>0R</idCode>
+        <idValue>Regular Plan</idValue>
+    <idCode>0S</idCode>
+        <idValue>Previously Billed</idValue>
+    <idCode>0T</idCode>
+        <idValue>Currently Due</idValue>
+    <idCode>0U</idCode>
+        <idValue>Coverage Premium</idValue>
+    <idCode>10</idCode>
+        <idValue>Shipment Value in U.S. Dollars</idValue>
+    <idCode>11</idCode>
+        <idValue>Liabilities at Bankruptcy</idValue>
+    <idCode>12</idCode>
+        <idValue>Account Average Balance Account</idValue>
+    <idCode>13</idCode>
+        <idValue>Outstanding Balance at Foreclosure</idValue>
+    <idCode>14</idCode>
+        <idValue>Legal Obligation Debt Amount</idValue>
+    <idCode>15</idCode>
+        <idValue>Estimated Closing Cost Amount</idValue>
+    <idCode>16</idCode>
+        <idValue>Discount Fees Paid by Borrower Amount</idValue>
+    <idCode>17</idCode>
+        <idValue>Closing Costs or Concessions Paid by Seller</idValue>
+    <idCode>18</idCode>
+        <idValue>Prepaid Items Amount</idValue>
+    <idCode>19</idCode>
+        <idValue>Federal Housing Administration, Mortgage Insurance Premium Funding Fee Financed Amount</idValue>
+    <idCode>1A</idCode>
+        <idValue>Variance</idValue>
+    <idCode>1B</idCode>
+        <idValue>Variance Adjustment Cost</idValue>
+    <idCode>1C</idCode>
+        <idValue>Variance Adjustment Schedule</idValue>
+    <idCode>1D</idCode>
+        <idValue>Escalation</idValue>
+    <idCode>1E</idCode>
+        <idValue>Fixed Price</idValue>
+    <idCode>1F</idCode>
+        <idValue>Lodging</idValue>
+    <idCode>1G</idCode>
+        <idValue>Meals</idValue>
+    <idCode>1H</idCode>
+        <idValue>Travel Expense</idValue>
+    <idCode>1J</idCode>
+        <idValue>Insurance Expense</idValue>
+    <idCode>1K</idCode>
+        <idValue>Union Dues</idValue>
+    <idCode>1L</idCode>
+        <idValue>Regular Income</idValue>
+    <idCode>1M</idCode>
+        <idValue>Income on Real Property</idValue>
+    <idCode>1N</idCode>
+        <idValue>Income from Social Security and/or other Government Assistance</idValue>
+    <idCode>1P</idCode>
+        <idValue>Total Monthly Income</idValue>
+    <idCode>1Q</idCode>
+        <idValue>Electric and/or Fuel Payment</idValue>
+    <idCode>1R</idCode>
+        <idValue>Water and/or Sewer Payment</idValue>
+    <idCode>1S</idCode>
+        <idValue>Telephone Payment</idValue>
+    <idCode>1T</idCode>
+        <idValue>Maintenance Expense</idValue>
+    <idCode>1U</idCode>
+        <idValue>Food Expense</idValue>
+    <idCode>1V</idCode>
+        <idValue>Clothing Expense</idValue>
+    <idCode>1W</idCode>
+        <idValue>Laundry Expense</idValue>
+    <idCode>1X</idCode>
+        <idValue>Medical and/or Dental Expense</idValue>
+    <idCode>1Y</idCode>
+        <idValue>Recreation Expenses</idValue>
+    <idCode>1Z</idCode>
+        <idValue>Charitable Contributions</idValue>
+    <idCode>20</idCode>
+        <idValue>Federal Housing Administration, Mortgage Insurance Premium or Veteran&apos;s Administration Funding Fee Amount</idValue>
+    <idCode>21</idCode>
+        <idValue>Original Cost of Property Amount</idValue>
+    <idCode>22</idCode>
+        <idValue>Owner&apos;s Estimate of Value Amount</idValue>
+    <idCode>23</idCode>
+        <idValue>Appraised Value Amount</idValue>
+    <idCode>24</idCode>
+        <idValue>Gross Monthly Income Amount</idValue>
+    <idCode>25</idCode>
+        <idValue>Assets at Bankruptcy</idValue>
+    <idCode>26</idCode>
+        <idValue>Negotiated Cost</idValue>
+    <idCode>27</idCode>
+        <idValue>Authorized Unpriced Work</idValue>
+    <idCode>28</idCode>
+        <idValue>Target Price</idValue>
+    <idCode>29</idCode>
+        <idValue>Estimated Price</idValue>
+    <idCode>2A</idCode>
+        <idValue>Home Insurance Expense</idValue>
+    <idCode>2B</idCode>
+        <idValue>Life Insurance Expense</idValue>
+    <idCode>2C</idCode>
+        <idValue>Health Insurance Expense</idValue>
+    <idCode>2D</idCode>
+        <idValue>Automobile Insurance Expense</idValue>
+    <idCode>2E</idCode>
+        <idValue>Value of Property Claimed as Exempt</idValue>
+    <idCode>2F</idCode>
+        <idValue>Automobile Payment</idValue>
+    <idCode>2G</idCode>
+        <idValue>Other Type of Installment Payment</idValue>
+    <idCode>2H</idCode>
+        <idValue>Operating Expenses</idValue>
+    <idCode>2I</idCode>
+        <idValue>Total Projected Monthly Income</idValue>
+    <idCode>2J</idCode>
+        <idValue>Total Projected Monthly Expenses</idValue>
+    <idCode>2K</idCode>
+        <idValue>Excess Income</idValue>
+    <idCode>2L</idCode>
+        <idValue>Value of Personal Property</idValue>
+    <idCode>2M</idCode>
+        <idValue>Monthly Overtime</idValue>
+    <idCode>2N</idCode>
+        <idValue>Total All Repairs</idValue>
+    <idCode>2P</idCode>
+        <idValue>Total Recommended Repairs</idValue>
+    <idCode>2Q</idCode>
+        <idValue>State Quarterly Total Gross Wages</idValue>
+    <idCode>2R</idCode>
+        <idValue>State Quarterly Unemployment Insurance (UI) Total Wages</idValue>
+    <idCode>2S</idCode>
+        <idValue>State Quarterly Unemployment Insurance (UI) Excess Wages</idValue>
+    <idCode>2T</idCode>
+        <idValue>State Quarterly Unemployment Insurance (UI) Taxable Wages</idValue>
+    <idCode>2U</idCode>
+        <idValue>State Quarterly Disability Insurance Taxable Wages</idValue>
+    <idCode>2V</idCode>
+        <idValue>State Quarterly Tip Wages</idValue>
+    <idCode>2W</idCode>
+        <idValue>Asset-Long Term</idValue>
+    <idCode>2X</idCode>
+        <idValue>Asset-Short Term</idValue>
+    <idCode>2Y</idCode>
+        <idValue>Base Coverage</idValue>
+    <idCode>2Z</idCode>
+        <idValue>Commission Retained</idValue>
+    <idCode>30</idCode>
+        <idValue>Contract Ceiling</idValue>
+    <idCode>31</idCode>
+        <idValue>Estimated Contract Ceiling</idValue>
+    <idCode>32</idCode>
+        <idValue>Target Fee or Profit Amount</idValue>
+    <idCode>33</idCode>
+        <idValue>Original Contract Target Cost</idValue>
+    <idCode>34</idCode>
+        <idValue>Negotiated Contract Changes</idValue>
+    <idCode>35</idCode>
+        <idValue>Current Target Cost</idValue>
+    <idCode>36</idCode>
+        <idValue>Contract Budget Base (CBB)</idValue>
+    <idCode>37</idCode>
+        <idValue>Current Budgeted Cost for Work Scheduled (BCWS)</idValue>
+    <idCode>38</idCode>
+        <idValue>Current Budgeted Cost for Work Performed (BCWP)</idValue>
+    <idCode>39</idCode>
+        <idValue>Current Actual Cost of Work Performed (ACWP)</idValue>
+    <idCode>3A</idCode>
+        <idValue>Accounting</idValue>
+    <idCode>3B</idCode>
+        <idValue>Accounts Payable</idValue>
+    <idCode>3C</idCode>
+        <idValue>Accounts Receivable</idValue>
+    <idCode>3D</idCode>
+        <idValue>Advanced Dividends</idValue>
+    <idCode>3E</idCode>
+        <idValue>Advertising Expenses</idValue>
+    <idCode>3F</idCode>
+        <idValue>Amortization</idValue>
+    <idCode>3G</idCode>
+        <idValue>Amortization Costs</idValue>
+    <idCode>3H</idCode>
+        <idValue>Amount of Decree</idValue>
+    <idCode>3I</idCode>
+        <idValue>Asset Investment</idValue>
+    <idCode>3J</idCode>
+        <idValue>Authorized Capital</idValue>
+    <idCode>3K</idCode>
+        <idValue>Available Reserves</idValue>
+    <idCode>3L</idCode>
+        <idValue>Bad Debt Allowance</idValue>
+    <idCode>3M</idCode>
+        <idValue>Bad Debts</idValue>
+    <idCode>3N</idCode>
+        <idValue>Bank Account(s)</idValue>
+    <idCode>3O</idCode>
+        <idValue>Long Term Assets</idValue>
+    <idCode>3P</idCode>
+        <idValue>Long Term Liabilities</idValue>
+    <idCode>3Q</idCode>
+        <idValue>Long Term Tangible Assets</idValue>
+    <idCode>3R</idCode>
+        <idValue>Losses on Capital</idValue>
+    <idCode>3S</idCode>
+        <idValue>Machines and Tools</idValue>
+    <idCode>3T</idCode>
+        <idValue>Member Risk Capital</idValue>
+    <idCode>3U</idCode>
+        <idValue>Miscellaneous After Tax Exempt</idValue>
+    <idCode>3V</idCode>
+        <idValue>Mortgage</idValue>
+    <idCode>3W</idCode>
+        <idValue>Nominal Capital</idValue>
+    <idCode>3X</idCode>
+        <idValue>Nominal Damages</idValue>
+    <idCode>3Y</idCode>
+        <idValue>Non-operational Fixed Assets</idValue>
+    <idCode>3Z</idCode>
+        <idValue>Excess Amount Requested</idValue>
+    <idCode>40</idCode>
+        <idValue>Current Schedule Variance (SV)</idValue>
+    <idCode>41</idCode>
+        <idValue>Current Cost Variance (CV)</idValue>
+    <idCode>42</idCode>
+        <idValue>Cumulative Budgeted Cost for Work Scheduled (BCWS)</idValue>
+    <idCode>43</idCode>
+        <idValue>Cumulative Budgeted Cost for Work Performed (BCWP)</idValue>
+    <idCode>44</idCode>
+        <idValue>Cumulative Actual Cost of Work Performed (ACWP)</idValue>
+    <idCode>45</idCode>
+        <idValue>Cumulative Schedule Variance (SV)</idValue>
+    <idCode>46</idCode>
+        <idValue>Cumulative Cost Variance (CV)</idValue>
+    <idCode>47</idCode>
+        <idValue>Reprogram Cost Variance</idValue>
+    <idCode>48</idCode>
+        <idValue>Reprogram Budget</idValue>
+    <idCode>49</idCode>
+        <idValue>At Complete Budget (BAC)</idValue>
+    <idCode>4A</idCode>
+        <idValue>Nonissued Capital</idValue>
+    <idCode>4B</idCode>
+        <idValue>Notes Payable</idValue>
+    <idCode>4C</idCode>
+        <idValue>Notes Receivable</idValue>
+    <idCode>4D</idCode>
+        <idValue>Bank Debentures</idValue>
+    <idCode>4E</idCode>
+        <idValue>Bank Obligations</idValue>
+    <idCode>4F</idCode>
+        <idValue>Buildings</idValue>
+    <idCode>4G</idCode>
+        <idValue>Buildings Under Construction</idValue>
+    <idCode>4H</idCode>
+        <idValue>Capital</idValue>
+    <idCode>4I</idCode>
+        <idValue>Capital Associated with Principal</idValue>
+    <idCode>4J</idCode>
+        <idValue>Capital of Other Subsidiaries</idValue>
+    <idCode>4K</idCode>
+        <idValue>Capital Stock</idValue>
+    <idCode>4L</idCode>
+        <idValue>Cash</idValue>
+    <idCode>4M</idCode>
+        <idValue>Capital Subsidies Received</idValue>
+    <idCode>4N</idCode>
+        <idValue>Commercial Debt</idValue>
+    <idCode>4O</idCode>
+        <idValue>Commercial Expenses</idValue>
+    <idCode>4P</idCode>
+        <idValue>Common Stock</idValue>
+    <idCode>4Q</idCode>
+        <idValue>Consequential Damages</idValue>
+    <idCode>4R</idCode>
+        <idValue>Compensatory Damages</idValue>
+    <idCode>4S</idCode>
+        <idValue>Convertible Debentures</idValue>
+    <idCode>4T</idCode>
+        <idValue>Cost of Goods Sold</idValue>
+    <idCode>4U</idCode>
+        <idValue>Cost of Sales</idValue>
+    <idCode>4V</idCode>
+        <idValue>Cost(s)</idValue>
+    <idCode>4W</idCode>
+        <idValue>Current Assets</idValue>
+    <idCode>4X</idCode>
+        <idValue>Current Liabilities</idValue>
+    <idCode>4Y</idCode>
+        <idValue>Damages</idValue>
+    <idCode>4Z</idCode>
+        <idValue>Deferred Cost</idValue>
+    <idCode>50</idCode>
+        <idValue>At Complete Latest Revised Estimate (LRE)</idValue>
+    <idCode>51</idCode>
+        <idValue>At Complete Variance</idValue>
+    <idCode>52</idCode>
+        <idValue>Total Allocated Budget</idValue>
+    <idCode>53</idCode>
+        <idValue>Difference (Contract Budget Base - Total Allocated Budget)</idValue>
+    <idCode>54</idCode>
+        <idValue>Forecast</idValue>
+    <idCode>55</idCode>
+        <idValue>At Complete Forecast</idValue>
+    <idCode>56</idCode>
+        <idValue>Current Cost Performance Index (CPIe) - Efficiency (BCWP/ACWP)</idValue>
+    <idCode>57</idCode>
+        <idValue>Current Cost Performance Index (CPIp) - Planned (ACWP/BCWP)</idValue>
+    <idCode>58</idCode>
+        <idValue>Current Schedule Performance Index (SPI)</idValue>
+    <idCode>59</idCode>
+        <idValue>Cumulative Cost Performance Index (CPIe) - Efficiency (BCWP/ACWP)</idValue>
+    <idCode>5A</idCode>
+        <idValue>Deferred Credit or Income</idValue>
+    <idCode>5B</idCode>
+        <idValue>Deferred Taxation</idValue>
+    <idCode>5C</idCode>
+        <idValue>Deposits</idValue>
+    <idCode>5D</idCode>
+        <idValue>Depreciation</idValue>
+    <idCode>5E</idCode>
+        <idValue>Depreciation of Fixed Assets</idValue>
+    <idCode>5F</idCode>
+        <idValue>Depreciation of Revaluation of Fixed Assets</idValue>
+    <idCode>5G</idCode>
+        <idValue>Director&apos;s Remuneration</idValue>
+    <idCode>5H</idCode>
+        <idValue>Dividends</idValue>
+    <idCode>5I</idCode>
+        <idValue>Doubtful Receivables</idValue>
+    <idCode>5J</idCode>
+        <idValue>Equipment</idValue>
+    <idCode>5K</idCode>
+        <idValue>Equipment Subsidies</idValue>
+    <idCode>5L</idCode>
+        <idValue>Equities, Stocks</idValue>
+    <idCode>5M</idCode>
+        <idValue>Equity</idValue>
+    <idCode>5N</idCode>
+        <idValue>Exceptional Item</idValue>
+    <idCode>5O</idCode>
+        <idValue>Exports</idValue>
+    <idCode>5P</idCode>
+        <idValue>External Charge</idValue>
+    <idCode>5Q</idCode>
+        <idValue>Extraordinary Charge</idValue>
+    <idCode>5R</idCode>
+        <idValue>Extraordinary Current Asset Write Downs</idValue>
+    <idCode>5S</idCode>
+        <idValue>Extraordinary Result</idValue>
+    <idCode>5T</idCode>
+        <idValue>Financial Assets</idValue>
+    <idCode>5U</idCode>
+        <idValue>Financial Charges</idValue>
+    <idCode>5V</idCode>
+        <idValue>Financial Debt</idValue>
+    <idCode>5W</idCode>
+        <idValue>Financial Expenses</idValue>
+    <idCode>5X</idCode>
+        <idValue>Financial Income</idValue>
+    <idCode>5Y</idCode>
+        <idValue>Finished Goods</idValue>
+    <idCode>5Z</idCode>
+        <idValue>Fixed Asset Debts</idValue>
+    <idCode>60</idCode>
+        <idValue>Cumulative Cost Performance Index (CPIp) - Planned (ACWP/BCWP)</idValue>
+    <idCode>61</idCode>
+        <idValue>Cumulative Schedule Performance Index (SPI)</idValue>
+    <idCode>62</idCode>
+        <idValue>To Complete Performance Index (TCPI) for Budget at Complete (BAC)</idValue>
+    <idCode>63</idCode>
+        <idValue>To Complete Performance Index (TCPI) for Estimate At Complete (EAC)</idValue>
+    <idCode>64</idCode>
+        <idValue>Initial Contract Price Target</idValue>
+    <idCode>65</idCode>
+        <idValue>Initial Contract Price Ceiling</idValue>
+    <idCode>66</idCode>
+        <idValue>Adjusted Contract Price Target</idValue>
+    <idCode>67</idCode>
+        <idValue>Adjusted Contract Price Ceiling</idValue>
+    <idCode>68</idCode>
+        <idValue>Funds Authorized to Date</idValue>
+    <idCode>69</idCode>
+        <idValue>Accrued Expenditures</idValue>
+    <idCode>6A</idCode>
+        <idValue>Fixed Assets</idValue>
+    <idCode>6B</idCode>
+        <idValue>Fixed Assets for Sale</idValue>
+    <idCode>6C</idCode>
+        <idValue>Fixtures</idValue>
+    <idCode>6D</idCode>
+        <idValue>Fixtures and Equipment</idValue>
+    <idCode>6E</idCode>
+        <idValue>Franchise</idValue>
+    <idCode>6F</idCode>
+        <idValue>Franchise Tax Balance</idValue>
+    <idCode>6G</idCode>
+        <idValue>Franchise Tax Paid</idValue>
+    <idCode>6H</idCode>
+        <idValue>Free Reserves</idValue>
+    <idCode>6I</idCode>
+        <idValue>Furniture</idValue>
+    <idCode>6J</idCode>
+        <idValue>Future Loan</idValue>
+    <idCode>6K</idCode>
+        <idValue>General Accounts</idValue>
+    <idCode>6L</idCode>
+        <idValue>General Expenses</idValue>
+    <idCode>6M</idCode>
+        <idValue>Goodwill</idValue>
+    <idCode>6N</idCode>
+        <idValue>Grants for Operating Costs</idValue>
+    <idCode>6O</idCode>
+        <idValue>Group Related Financial Income</idValue>
+    <idCode>6P</idCode>
+        <idValue>Income Stated in Advance</idValue>
+    <idCode>6Q</idCode>
+        <idValue>Income Tax</idValue>
+    <idCode>6R</idCode>
+        <idValue>Income Tax, Corporate</idValue>
+    <idCode>6S</idCode>
+        <idValue>Income Tax, Noncorporate</idValue>
+    <idCode>6T</idCode>
+        <idValue>Injunction</idValue>
+    <idCode>6U</idCode>
+        <idValue>Intangible Depreciation</idValue>
+    <idCode>6V</idCode>
+        <idValue>Intangibles</idValue>
+    <idCode>6W</idCode>
+        <idValue>Interest of Third Party</idValue>
+    <idCode>6X</idCode>
+        <idValue>Interest on Loans</idValue>
+    <idCode>6Y</idCode>
+        <idValue>Operating Income (Loss)</idValue>
+    <idCode>6Z</idCode>
+        <idValue>Optional Reserves</idValue>
+    <idCode>70</idCode>
+        <idValue>Open Commitments</idValue>
+    <idCode>71</idCode>
+        <idValue>Forecast of Billings</idValue>
+    <idCode>72</idCode>
+        <idValue>Estimated Termination Costs</idValue>
+    <idCode>73</idCode>
+        <idValue>Accrued Expenditures plus Open Commitments</idValue>
+    <idCode>74</idCode>
+        <idValue>Contract Work Authorized - Definitized</idValue>
+    <idCode>75</idCode>
+        <idValue>Contract Work Authorized - Not Definitized</idValue>
+    <idCode>76</idCode>
+        <idValue>Contract Work Authorized - Total</idValue>
+    <idCode>77</idCode>
+        <idValue>Forecast of Work - Not Yet Authorized</idValue>
+    <idCode>78</idCode>
+        <idValue>Forecast of Work - All Other</idValue>
+    <idCode>79</idCode>
+        <idValue>Forecast of Work - Total</idValue>
+    <idCode>7A</idCode>
+        <idValue>Organizational Expenses</idValue>
+    <idCode>7B</idCode>
+        <idValue>Outside Share in Profit or Loss</idValue>
+    <idCode>7C</idCode>
+        <idValue>Outstanding Debts against Board of Directors/Managers</idValue>
+    <idCode>7D</idCode>
+        <idValue>Owing</idValue>
+    <idCode>7E</idCode>
+        <idValue>Owing from Affiliates</idValue>
+    <idCode>7F</idCode>
+        <idValue>Owing from Participants</idValue>
+    <idCode>7G</idCode>
+        <idValue>Owing to Affiliates</idValue>
+    <idCode>7H</idCode>
+        <idValue>Owing to Fiscal Office</idValue>
+    <idCode>7I</idCode>
+        <idValue>Owing to National Social Security Office</idValue>
+    <idCode>7J</idCode>
+        <idValue>Owing to Participants</idValue>
+    <idCode>7K</idCode>
+        <idValue>Own Work Capitalized</idValue>
+    <idCode>7L</idCode>
+        <idValue>Paid in Capital</idValue>
+    <idCode>7M</idCode>
+        <idValue>Par Value</idValue>
+    <idCode>7N</idCode>
+        <idValue>Participating Interest</idValue>
+    <idCode>7O</idCode>
+        <idValue>Patents</idValue>
+    <idCode>7P</idCode>
+        <idValue>Pension Debts</idValue>
+    <idCode>7Q</idCode>
+        <idValue>Pensions Provision</idValue>
+    <idCode>7R</idCode>
+        <idValue>Preferred Stock</idValue>
+    <idCode>7S</idCode>
+        <idValue>Prepaid Orders in Progress</idValue>
+    <idCode>7T</idCode>
+        <idValue>Prior Results Carried Forward</idValue>
+    <idCode>7U</idCode>
+        <idValue>Profit or Loss</idValue>
+    <idCode>7V</idCode>
+        <idValue>Profit or Loss after Taxes</idValue>
+    <idCode>7W</idCode>
+        <idValue>Profit or Loss before Taxes</idValue>
+    <idCode>7X</idCode>
+        <idValue>Profit or Loss on Ordinary Activities after Tax</idValue>
+    <idCode>7Y</idCode>
+        <idValue>Progress Payments</idValue>
+    <idCode>7Z</idCode>
+        <idValue>Proposed Dividend</idValue>
+    <idCode>80</idCode>
+        <idValue>Funding - Total Requirements</idValue>
+    <idCode>81</idCode>
+        <idValue>Funds Carryover</idValue>
+    <idCode>82</idCode>
+        <idValue>Net Funds Required</idValue>
+    <idCode>83</idCode>
+        <idValue>Contract Work Authorized (with fee/profit) Actual or Projected</idValue>
+    <idCode>84</idCode>
+        <idValue>Contract Work Authorized (with fee/profit) Actual or Projected - At Complete</idValue>
+    <idCode>85</idCode>
+        <idValue>Best Case Estimate</idValue>
+    <idCode>86</idCode>
+        <idValue>Worst Case Estimate</idValue>
+    <idCode>87</idCode>
+        <idValue>Most Likely Estimate</idValue>
+    <idCode>88</idCode>
+        <idValue>&quot;As Is&quot; Appraisal Amount</idValue>
+    <idCode>89</idCode>
+        <idValue>&quot;Subject To&quot; Appraisal Amount</idValue>
+    <idCode>8A</idCode>
+        <idValue>Provision for Depreciation of Stock or Inventory</idValue>
+    <idCode>8B</idCode>
+        <idValue>Provision for Future Purchases</idValue>
+    <idCode>8C</idCode>
+        <idValue>Provision for Risks</idValue>
+    <idCode>8D</idCode>
+        <idValue>Punitive Damages</idValue>
+    <idCode>8E</idCode>
+        <idValue>Purchase Price</idValue>
+    <idCode>8F</idCode>
+        <idValue>Purchases</idValue>
+    <idCode>8G</idCode>
+        <idValue>Raw Materials</idValue>
+    <idCode>8H</idCode>
+        <idValue>Real Estate</idValue>
+    <idCode>8I</idCode>
+        <idValue>Receivables</idValue>
+    <idCode>8J</idCode>
+        <idValue>Regularization Account</idValue>
+    <idCode>8K</idCode>
+        <idValue>Research and Development</idValue>
+    <idCode>8L</idCode>
+        <idValue>Restructuring Costs</idValue>
+    <idCode>8M</idCode>
+        <idValue>Result</idValue>
+    <idCode>8N</idCode>
+        <idValue>Retained Earnings</idValue>
+    <idCode>8O</idCode>
+        <idValue>Revenues</idValue>
+    <idCode>8P</idCode>
+        <idValue>Sales</idValue>
+    <idCode>8Q</idCode>
+        <idValue>Sales and Use Tax</idValue>
+    <idCode>8R</idCode>
+        <idValue>Savings</idValue>
+    <idCode>8S</idCode>
+        <idValue>Secured Liability</idValue>
+    <idCode>8T</idCode>
+        <idValue>Secured Loans</idValue>
+    <idCode>8U</idCode>
+        <idValue>Selling Expenses</idValue>
+    <idCode>8V</idCode>
+        <idValue>Services</idValue>
+    <idCode>8W</idCode>
+        <idValue>Share Capital</idValue>
+    <idCode>8X</idCode>
+        <idValue>Share in Profit or Loss of Minority Interest</idValue>
+    <idCode>8Y</idCode>
+        <idValue>Share Premium Capital</idValue>
+    <idCode>8Z</idCode>
+        <idValue>Shares in Affiliated Companies</idValue>
+    <idCode>90</idCode>
+        <idValue>&quot;Completion Per Plans&quot; Appraisal Amount</idValue>
+    <idCode>91</idCode>
+        <idValue>Site Value Amount</idValue>
+    <idCode>92</idCode>
+        <idValue>Compensation</idValue>
+    <idCode>93</idCode>
+        <idValue>Contribution</idValue>
+    <idCode>94</idCode>
+        <idValue>Death Benefit</idValue>
+    <idCode>95</idCode>
+        <idValue>Death Benefit Decrement</idValue>
+    <idCode>96</idCode>
+        <idValue>Employee Account Balance</idValue>
+    <idCode>97</idCode>
+        <idValue>Loan Repayment</idValue>
+    <idCode>98</idCode>
+        <idValue>Prior W2</idValue>
+    <idCode>99</idCode>
+        <idValue>Single Premium</idValue>
+    <idCode>9A</idCode>
+        <idValue>Social Charges</idValue>
+    <idCode>9B</idCode>
+        <idValue>Social Security (FICA)</idValue>
+    <idCode>9C</idCode>
+        <idValue>Special Reserves</idValue>
+    <idCode>9D</idCode>
+        <idValue>Specially Secured Creditors</idValue>
+    <idCode>9E</idCode>
+        <idValue>Specific Performance</idValue>
+    <idCode>9F</idCode>
+        <idValue>Starting Capital</idValue>
+    <idCode>9G</idCode>
+        <idValue>Statutory Reserves</idValue>
+    <idCode>9H</idCode>
+        <idValue>Subscribed Capital</idValue>
+    <idCode>9I</idCode>
+        <idValue>Suit Amount</idValue>
+    <idCode>9J</idCode>
+        <idValue>Supplies</idValue>
+    <idCode>9K</idCode>
+        <idValue>Surplus of Revaluation</idValue>
+    <idCode>9L</idCode>
+        <idValue>Tangible Net Worth</idValue>
+    <idCode>9M</idCode>
+        <idValue>Tax Adjustments</idValue>
+    <idCode>9N</idCode>
+        <idValue>Tax Balance</idValue>
+    <idCode>9O</idCode>
+        <idValue>Tax Capital Amount</idValue>
+    <idCode>9P</idCode>
+        <idValue>Tax on Extraordinary Items</idValue>
+    <idCode>9Q</idCode>
+        <idValue>Tax Recoverable</idValue>
+    <idCode>9R</idCode>
+        <idValue>Taxed Reserves</idValue>
+    <idCode>9S</idCode>
+        <idValue>Trade Creditors</idValue>
+    <idCode>9T</idCode>
+        <idValue>Inventory (Stock)</idValue>
+    <idCode>9U</idCode>
+        <idValue>Inventory (Stock) Depreciation</idValue>
+    <idCode>9V</idCode>
+        <idValue>Inventory (Stock) Purchases</idValue>
+    <idCode>9W</idCode>
+        <idValue>Investment in Own Shares</idValue>
+    <idCode>9X</idCode>
+        <idValue>Investments</idValue>
+    <idCode>9Y</idCode>
+        <idValue>Issued Capital</idValue>
+    <idCode>9Z</idCode>
+        <idValue>Labor Costs</idValue>
+    <idCode>A</idCode>
+        <idValue>Adjusted Chargeback Claim Amount</idValue>
+    <idCode>A0</idCode>
+        <idValue>Assistantship from Admitting Educational Institution</idValue>
+    <idCode>A1</idCode>
+        <idValue>Average Negative Ledger Balance</idValue>
+    <idCode>A2</idCode>
+        <idValue>Average Positive Collected Balance</idValue>
+    <idCode>A3</idCode>
+        <idValue>Average Negative Collected Balance</idValue>
+    <idCode>A4</idCode>
+        <idValue>Average Positive Ledger Balance</idValue>
+    <idCode>A5</idCode>
+        <idValue>Disallowed - Estimated</idValue>
+    <idCode>A6</idCode>
+        <idValue>Disallowed - Actual</idValue>
+    <idCode>A7</idCode>
+        <idValue>Noncovered Charges - Estimated</idValue>
+    <idCode>A8</idCode>
+        <idValue>Noncovered Charges - Actual</idValue>
+    <idCode>A9</idCode>
+        <idValue>Allowed - Estimated</idValue>
+    <idCode>AA</idCode>
+        <idValue>Allocated</idValue>
+    <idCode>AAA</idCode>
+        <idValue>Temporary Term Coverage</idValue>
+    <idCode>AAB</idCode>
+        <idValue>Conditional Receipt Coverage</idValue>
+    <idCode>AAC</idCode>
+        <idValue>Binding Interim Coverage</idValue>
+    <idCode>AAD</idCode>
+        <idValue>Application Amount</idValue>
+    <idCode>AAE</idCode>
+        <idValue>Approved Amount</idValue>
+    <idCode>AAF</idCode>
+        <idValue>Ultimate Face Amount</idValue>
+    <idCode>AAG</idCode>
+        <idValue>Requested Amount from All Reinsurers</idValue>
+    <idCode>AAH</idCode>
+        <idValue>Replacement Amount</idValue>
+    <idCode>AAI</idCode>
+        <idValue>Scheduled Contribution</idValue>
+    <idCode>AAJ</idCode>
+        <idValue>Scheduled Disbursement</idValue>
+    <idCode>AAK</idCode>
+        <idValue>Short Term Investment</idValue>
+    <idCode>AAL</idCode>
+        <idValue>Subsequent Contribution</idValue>
+    <idCode>AAM</idCode>
+        <idValue>Subsequent Distribution</idValue>
+    <idCode>AAN</idCode>
+        <idValue>Tax-Federal</idValue>
+    <idCode>AAO</idCode>
+        <idValue>Tax-Local</idValue>
+    <idCode>AAP</idCode>
+        <idValue>Tax-State</idValue>
+    <idCode>AAQ</idCode>
+        <idValue>Trust Fund</idValue>
+    <idCode>AAR</idCode>
+        <idValue>Capital Leases</idValue>
+    <idCode>AAS</idCode>
+        <idValue>Surplus</idValue>
+    <idCode>AAT</idCode>
+        <idValue>Restated Assets</idValue>
+    <idCode>AAU</idCode>
+        <idValue>Owing to Clients</idValue>
+    <idCode>AAV</idCode>
+        <idValue>Shareholder Loans</idValue>
+    <idCode>AAW</idCode>
+        <idValue>Accumulated Deficit</idValue>
+    <idCode>AAX</idCode>
+        <idValue>Loan from Parent Company</idValue>
+    <idCode>AAY</idCode>
+        <idValue>Contribution Not Subject to Repayment</idValue>
+    <idCode>AAZ</idCode>
+        <idValue>Income Before Depreciation</idValue>
+    <idCode>AB</idCode>
+        <idValue>Adjusted Collected Balance</idValue>
+    <idCode>ABA</idCode>
+        <idValue>Income After Depreciation</idValue>
+    <idCode>ABB</idCode>
+        <idValue>Profit (Loss) Before Financial Items</idValue>
+    <idCode>ABC</idCode>
+        <idValue>Interest Expenses</idValue>
+    <idCode>ABD</idCode>
+        <idValue>Profit (Loss) Before Extraordinary Items</idValue>
+    <idCode>ABE</idCode>
+        <idValue>Profit (Loss) After Financial Items</idValue>
+    <idCode>ABF</idCode>
+        <idValue>Income Before Allocations</idValue>
+    <idCode>ABG</idCode>
+        <idValue>Income from Sale of Fixed Assets</idValue>
+    <idCode>ABH</idCode>
+        <idValue>Contribution to Group</idValue>
+    <idCode>ABI</idCode>
+        <idValue>Deferred Tax Assets</idValue>
+    <idCode>ABJ</idCode>
+        <idValue>Blocked Accounts</idValue>
+    <idCode>ABK</idCode>
+        <idValue>Non-taxed Reserves</idValue>
+    <idCode>ABL</idCode>
+        <idValue>Pledged Assets</idValue>
+    <idCode>ABM</idCode>
+        <idValue>Restricted Equity</idValue>
+    <idCode>ABN</idCode>
+        <idValue>Non-restricted Equity</idValue>
+    <idCode>ABO</idCode>
+        <idValue>Depreciable Assets</idValue>
+    <idCode>ABP</idCode>
+        <idValue>Taxable Assets</idValue>
+    <idCode>ABQ</idCode>
+        <idValue>Income from Business</idValue>
+    <idCode>ABR</idCode>
+        <idValue>Income Subject to Taxes</idValue>
+    <idCode>ABS</idCode>
+        <idValue>Taxable Amount of Real Estate</idValue>
+    <idCode>ABT</idCode>
+        <idValue>Ending Principal Balance</idValue>
+    <idCode>ABU</idCode>
+        <idValue>Average Daily Principal Balance</idValue>
+    <idCode>ABV</idCode>
+        <idValue>Interest Amount</idValue>
+    <idCode>ABW</idCode>
+        <idValue>Adjustments for Difference in Average Daily Principal Balance</idValue>
+    <idCode>ABX</idCode>
+        <idValue>Beginning Principal Balance</idValue>
+    <idCode>ABY</idCode>
+        <idValue>Loan Principal Disbursements</idValue>
+    <idCode>ABZ</idCode>
+        <idValue>Principal Increases</idValue>
+    <idCode>AC</idCode>
+        <idValue>Average Collected Balance</idValue>
+    <idCode>ACA</idCode>
+        <idValue>Principal of Loans Purchased</idValue>
+    <idCode>ACB</idCode>
+        <idValue>Principal Cured</idValue>
+    <idCode>ACC</idCode>
+        <idValue>Principal Sold</idValue>
+    <idCode>ACD</idCode>
+        <idValue>Principal Insurance Claims</idValue>
+    <idCode>ACE</idCode>
+        <idValue>Principal Guarantee Voided</idValue>
+    <idCode>ACF</idCode>
+        <idValue>Principal Paid by Borrowers</idValue>
+    <idCode>ACG</idCode>
+        <idValue>Loans in School and Grace</idValue>
+    <idCode>ACH</idCode>
+        <idValue>Loans in Authorized Deferment</idValue>
+    <idCode>ACI</idCode>
+        <idValue>Loans Repay or Forebearance - Current or Less than 31 Days</idValue>
+    <idCode>ACJ</idCode>
+        <idValue>Loans Repay or Forebearance - 31 to 60 Days Past Due</idValue>
+    <idCode>ACK</idCode>
+        <idValue>Loans Repay or Forebearance - 61 to 90 Days Past Due</idValue>
+    <idCode>ACL</idCode>
+        <idValue>Loans Repay or Forebearance - 91 to 120 Days Past Due</idValue>
+    <idCode>ACM</idCode>
+        <idValue>Loans Repay or Forebearance - 121 to 180 Days Past Due</idValue>
+    <idCode>ACN</idCode>
+        <idValue>Loans Repay or Forebearance - 181 to 270 Days Past Due</idValue>
+    <idCode>ACO</idCode>
+        <idValue>Loans Repay or Forebearance - 271 or More Days Past Due</idValue>
+    <idCode>ACP</idCode>
+        <idValue>Loans Repay or Forebearance - Claims Filed, Not Yet Paid</idValue>
+    <idCode>ACQ</idCode>
+        <idValue>Agent Sales</idValue>
+    <idCode>ACR</idCode>
+        <idValue>Amount Involved</idValue>
+    <idCode>ACS</idCode>
+        <idValue>Assigned Capital</idValue>
+    <idCode>ACT</idCode>
+        <idValue>Credit Line Utilized</idValue>
+    <idCode>ACU</idCode>
+        <idValue>Direct Sales</idValue>
+    <idCode>ACV</idCode>
+        <idValue>Earnings per Share</idValue>
+    <idCode>ACW</idCode>
+        <idValue>Inheritance</idValue>
+    <idCode>ACX</idCode>
+        <idValue>Inverted Capital</idValue>
+    <idCode>ACY</idCode>
+        <idValue>Loan from Family Members</idValue>
+    <idCode>ACZ</idCode>
+        <idValue>Non Depreciable Assets</idValue>
+    <idCode>AD</idCode>
+        <idValue>Adjusted Total</idValue>
+    <idCode>ADA</idCode>
+        <idValue>Partially Paid Amount per Share</idValue>
+    <idCode>ADB</idCode>
+        <idValue>Pending Orders</idValue>
+    <idCode>ADC</idCode>
+        <idValue>Personal Loan</idValue>
+    <idCode>ADD</idCode>
+        <idValue>Plant and Machinery</idValue>
+    <idCode>ADE</idCode>
+        <idValue>Pre-Tax Loss</idValue>
+    <idCode>ADF</idCode>
+        <idValue>Pre-Tax Profit</idValue>
+    <idCode>ADG</idCode>
+        <idValue>Registered Capital</idValue>
+    <idCode>ADH</idCode>
+        <idValue>Revaluation Reserves</idValue>
+    <idCode>ADI</idCode>
+        <idValue>Social Capital</idValue>
+    <idCode>ADJ</idCode>
+        <idValue>Statutory Profit</idValue>
+    <idCode>ADK</idCode>
+        <idValue>Training Pay</idValue>
+    <idCode>ADL</idCode>
+        <idValue>Retroactive Pay</idValue>
+    <idCode>ADM</idCode>
+        <idValue>Expected Reimbursement Amount</idValue>
+    <idCode>ADN</idCode>
+        <idValue>Permit Cost</idValue>
+    <idCode>ADO</idCode>
+        <idValue>Minimum</idValue>
+    <idCode>ADP</idCode>
+        <idValue>Additional Amount to Meet Minimum</idValue>
+    <idCode>ADQ</idCode>
+        <idValue>Labor Per Hour</idValue>
+    <idCode>ADR</idCode>
+        <idValue>Non-recoverable Depreciation</idValue>
+    <idCode>ADS</idCode>
+        <idValue>Recoverable Depreciation</idValue>
+    <idCode>ADT</idCode>
+        <idValue>Overhead</idValue>
+    <idCode>ADW</idCode>
+        <idValue>Replacement Cost of Repairs</idValue>
+    <idCode>ADX</idCode>
+        <idValue>Actual Cash Value of Repairs</idValue>
+    <idCode>ADY</idCode>
+        <idValue>Recoverable Depreciation of Repairs</idValue>
+    <idCode>ADZ</idCode>
+        <idValue>Non-recoverable Depreciation of Repairs</idValue>
+    <idCode>AE</idCode>
+        <idValue>Arrearage</idValue>
+    <idCode>AEB</idCode>
+        <idValue>Actual Cash Value of Building</idValue>
+    <idCode>AEC</idCode>
+        <idValue>Government Share</idValue>
+    <idCode>AED</idCode>
+        <idValue>Contractor Share</idValue>
+    <idCode>AEE</idCode>
+        <idValue>Award Fee</idValue>
+    <idCode>AEF</idCode>
+        <idValue>Base Fee</idValue>
+    <idCode>AEG</idCode>
+        <idValue>Target Profit Floor</idValue>
+    <idCode>AEH</idCode>
+        <idValue>Target Profit Ceiling</idValue>
+    <idCode>AEI</idCode>
+        <idValue>Labor Per Day</idValue>
+    <idCode>AEJ</idCode>
+        <idValue>Difference in Interest Due</idValue>
+    <idCode>AEK</idCode>
+        <idValue>Difference in Prepayment Penalty</idValue>
+    <idCode>AEL</idCode>
+        <idValue>Difference in Principal Due</idValue>
+    <idCode>AF</idCode>
+        <idValue>Average Float</idValue>
+    <idCode>AG</idCode>
+        <idValue>Adjusted Gross Income</idValue>
+    <idCode>AH</idCode>
+        <idValue>Loan Balance Difference</idValue>
+    <idCode>AI</idCode>
+        <idValue>Sale Amount</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Funds Held by Mortgagee</idValue>
+    <idCode>AK</idCode>
+        <idValue>Attorney Fees</idValue>
+    <idCode>AL</idCode>
+        <idValue>Average Ledger Balance</idValue>
+    <idCode>AM</idCode>
+        <idValue>Amount Financed</idValue>
+    <idCode>AN</idCode>
+        <idValue>Bankruptcy Fee</idValue>
+    <idCode>AO</idCode>
+        <idValue>Amount Override</idValue>
+    <idCode>AP</idCode>
+        <idValue>Amount Prior to Fractionalization</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Average Price Per Call</idValue>
+    <idCode>AR</idCode>
+        <idValue>Fees to Public Officials for Foreclosure</idValue>
+    <idCode>AS</idCode>
+        <idValue>Average Price Per Minute</idValue>
+    <idCode>AT</idCode>
+        <idValue>Total Received</idValue>
+    <idCode>AU</idCode>
+        <idValue>Coverage Amount</idValue>
+    <idCode>AV</idCode>
+        <idValue>Actual Cash Value</idValue>
+    <idCode>AVE</idCode>
+        <idValue>Average</idValue>
+    <idCode>AW</idCode>
+        <idValue>Replacement Cost</idValue>
+    <idCode>AX</idCode>
+        <idValue>Previous Price</idValue>
+    <idCode>AY</idCode>
+        <idValue>Title Cost</idValue>
+    <idCode>AZ</idCode>
+        <idValue>Other Foreclosure and Acquisition Expenses</idValue>
+    <idCode>B</idCode>
+        <idValue>Estimated</idValue>
+    <idCode>B0</idCode>
+        <idValue>Bond</idValue>
+    <idCode>B1</idCode>
+        <idValue>Benefit Amount</idValue>
+    <idCode>B2</idCode>
+        <idValue>Bonuses and Commissions Divided Over 12 Months</idValue>
+    <idCode>B3</idCode>
+        <idValue>Bonuses Divided Over 12 Months</idValue>
+    <idCode>B4</idCode>
+        <idValue>Bonuses and Commissions</idValue>
+    <idCode>B5</idCode>
+        <idValue>Budgeted</idValue>
+    <idCode>B6</idCode>
+        <idValue>Allowed - Actual</idValue>
+    <idCode>B7</idCode>
+        <idValue>Deductible - Estimated</idValue>
+    <idCode>B8</idCode>
+        <idValue>Co-insurance - Estimated</idValue>
+    <idCode>B9</idCode>
+        <idValue>Co-insurance - Actual</idValue>
+    <idCode>BA</idCode>
+        <idValue>Bargain</idValue>
+    <idCode>BAA</idCode>
+        <idValue>Net Taxable Income</idValue>
+    <idCode>BAB</idCode>
+        <idValue>Original Amount of Instrument</idValue>
+    <idCode>BAC</idCode>
+        <idValue>Addition to Tax</idValue>
+    <idCode>BAD</idCode>
+        <idValue>Reinstatement Fee</idValue>
+    <idCode>BAE</idCode>
+        <idValue>Permit Fee Due</idValue>
+    <idCode>BAF</idCode>
+        <idValue>Permit Fee with Extension</idValue>
+    <idCode>BAG</idCode>
+        <idValue>Net Annual Permit Fee Due</idValue>
+    <idCode>BAH</idCode>
+        <idValue>Permit Fee Penalty Due</idValue>
+    <idCode>BAI</idCode>
+        <idValue>Permit Fee Interest Due</idValue>
+    <idCode>BAJ</idCode>
+        <idValue>Total Permit Fee Due</idValue>
+    <idCode>BAK</idCode>
+        <idValue>Franchise Tax</idValue>
+    <idCode>BAL</idCode>
+        <idValue>Unclaimed Franchise Tax Credit</idValue>
+    <idCode>BAM</idCode>
+        <idValue>Net Franchise Tax Due</idValue>
+    <idCode>BAN</idCode>
+        <idValue>Franchise Tax Penalty Due</idValue>
+    <idCode>BAO</idCode>
+        <idValue>Total Franchise Tax Due</idValue>
+    <idCode>BAP</idCode>
+        <idValue>Total Amount Due</idValue>
+    <idCode>BAQ</idCode>
+        <idValue>Overpayment</idValue>
+    <idCode>BAR</idCode>
+        <idValue>Amount to be Refunded</idValue>
+    <idCode>BAS</idCode>
+        <idValue>Gross In-State Receipts</idValue>
+    <idCode>BAT</idCode>
+        <idValue>Gross Receipts</idValue>
+    <idCode>BAU</idCode>
+        <idValue>Occupation Fee</idValue>
+    <idCode>BAV</idCode>
+        <idValue>Total Assessed Value</idValue>
+    <idCode>BAW</idCode>
+        <idValue>Total Value of All Property</idValue>
+    <idCode>BAX</idCode>
+        <idValue>Value of In-State Property</idValue>
+    <idCode>BAY</idCode>
+        <idValue>Total Value of Out-of-State Property</idValue>
+    <idCode>BAZ</idCode>
+        <idValue>Total Par Value</idValue>
+    <idCode>BB</idCode>
+        <idValue>Mortgage Insurance Premiums</idValue>
+    <idCode>BBA</idCode>
+        <idValue>Total Assessable Capital Stock</idValue>
+    <idCode>BBB</idCode>
+        <idValue>Apportioned Value</idValue>
+    <idCode>BBC</idCode>
+        <idValue>Estimated In-State Real Property Value</idValue>
+    <idCode>BBD</idCode>
+        <idValue>Par Value of In-State Assets</idValue>
+    <idCode>BBE</idCode>
+        <idValue>In-State Business Revenue</idValue>
+    <idCode>BBF</idCode>
+        <idValue>Subscription Price</idValue>
+    <idCode>BBG</idCode>
+        <idValue>Value of Authorized Shares</idValue>
+    <idCode>BC</idCode>
+        <idValue>Billing Cycle Net Fee Position (Excess/Deficit)</idValue>
+    <idCode>BD</idCode>
+        <idValue>Balance Due</idValue>
+    <idCode>BE</idCode>
+        <idValue>Disbursements for Authorized Repair</idValue>
+    <idCode>BF</idCode>
+        <idValue>Hazard Insurance Premium</idValue>
+    <idCode>BG</idCode>
+        <idValue>Eviction Attorney Fees</idValue>
+    <idCode>BH</idCode>
+        <idValue>Eviction Expenses</idValue>
+    <idCode>BI</idCode>
+        <idValue>Property Taxes</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Disbursements Not Shown Elsewhere</idValue>
+    <idCode>BK</idCode>
+        <idValue>Disbursements for Protection and Preservation</idValue>
+    <idCode>BL</idCode>
+        <idValue>Disbursements for Inspections and Boarding</idValue>
+    <idCode>BM</idCode>
+        <idValue>Adjustments</idValue>
+    <idCode>BN</idCode>
+        <idValue>Rental Income</idValue>
+    <idCode>BO</idCode>
+        <idValue>Rental Expense</idValue>
+    <idCode>BP</idCode>
+        <idValue>Average Net Collected Balance</idValue>
+    <idCode>BQ</idCode>
+        <idValue>Bail</idValue>
+    <idCode>BR</idCode>
+        <idValue>Adjusted Insured Loss Amount</idValue>
+    <idCode>BS</idCode>
+        <idValue>Mortgage Note Interest</idValue>
+    <idCode>BT</idCode>
+        <idValue>Bank Reject Total</idValue>
+    <idCode>BU</idCode>
+        <idValue>Overhead Costs</idValue>
+    <idCode>BV</idCode>
+        <idValue>Uncollected Interest</idValue>
+    <idCode>BW</idCode>
+        <idValue>Amount Due from Buyer at Closing</idValue>
+    <idCode>BX</idCode>
+        <idValue>Amount Owed to Buyer at Closing</idValue>
+    <idCode>BY</idCode>
+        <idValue>Additional Closing Expenses</idValue>
+    <idCode>BZ</idCode>
+        <idValue>Deficiency Judgment Expenses</idValue>
+    <idCode>C</idCode>
+        <idValue>City</idValue>
+    <idCode>C0</idCode>
+        <idValue>Current Expenditures</idValue>
+    <idCode>C1</idCode>
+        <idValue>Co-Payment Amount</idValue>
+    <idCode>C2</idCode>
+        <idValue>Child Rider Coverage</idValue>
+    <idCode>C3</idCode>
+        <idValue>Prior Payment - Estimated</idValue>
+    <idCode>C4</idCode>
+        <idValue>Prior Payment - Actual</idValue>
+    <idCode>C5</idCode>
+        <idValue>Claim Amount Due - Estimated</idValue>
+    <idCode>C6</idCode>
+        <idValue>Claim Amount Due - Actual</idValue>
+    <idCode>C7</idCode>
+        <idValue>Payor Responsibility - Estimated</idValue>
+    <idCode>C8</idCode>
+        <idValue>Payor Responsibility - Actual</idValue>
+    <idCode>C9</idCode>
+        <idValue>Disallowed Cost Containment - Actual</idValue>
+    <idCode>CA</idCode>
+        <idValue>Contractor Cumulative to Date</idValue>
+    <idCode>CB</idCode>
+        <idValue>Collected Balance Required</idValue>
+    <idCode>CC</idCode>
+        <idValue>Chargeback Claim Amount</idValue>
+    <idCode>CD</idCode>
+        <idValue>Overpaid Section 235 Subsidy</idValue>
+    <idCode>CE</idCode>
+        <idValue>Summary Amount</idValue>
+    <idCode>CF</idCode>
+        <idValue>Appraisal Fees</idValue>
+    <idCode>CG</idCode>
+        <idValue>Commission Fees Deducted</idValue>
+    <idCode>CH</idCode>
+        <idValue>Change Amount</idValue>
+    <idCode>CI</idCode>
+        <idValue>Funds Held for Insured</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Other Deductions</idValue>
+    <idCode>CK</idCode>
+        <idValue>Back End Load</idValue>
+    <idCode>CL</idCode>
+        <idValue>Outstanding Balance Current Lender</idValue>
+    <idCode>CM</idCode>
+        <idValue>Claimant Requested Total</idValue>
+    <idCode>CN</idCode>
+        <idValue>Special Assessments</idValue>
+    <idCode>CO</idCode>
+        <idValue>Taxes on Deed</idValue>
+    <idCode>CP</idCode>
+        <idValue>Statutory Disbursements</idValue>
+    <idCode>CQ</idCode>
+        <idValue>Net Claim Amount</idValue>
+    <idCode>CR</idCode>
+        <idValue>Contractor at Complete</idValue>
+    <idCode>CS</idCode>
+        <idValue>Commission Sales</idValue>
+    <idCode>CT</idCode>
+        <idValue>Contract</idValue>
+    <idCode>CU</idCode>
+        <idValue>Subcontractor Cumulative to Date</idValue>
+    <idCode>CV</idCode>
+        <idValue>Subcontractor at Complete</idValue>
+    <idCode>CW</idCode>
+        <idValue>Earned Value</idValue>
+    <idCode>CX</idCode>
+        <idValue>Actual</idValue>
+    <idCode>CY</idCode>
+        <idValue>Cumulative Budget</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Cumulative Earned Value</idValue>
+    <idCode>D</idCode>
+        <idValue>Payor Amount Paid</idValue>
+    <idCode>D0</idCode>
+        <idValue>Administration and Management Costs</idValue>
+    <idCode>D1</idCode>
+        <idValue>Deferred Compensation Commissions</idValue>
+    <idCode>D2</idCode>
+        <idValue>Deductible Amount</idValue>
+    <idCode>D3</idCode>
+        <idValue>Deferred Compensation Commissions and Bonuses</idValue>
+    <idCode>D4</idCode>
+        <idValue>Deferred Compensation</idValue>
+    <idCode>D5</idCode>
+        <idValue>Dependent Care Contribution</idValue>
+    <idCode>D6</idCode>
+        <idValue>Disallowed Cost Containment - Estimated</idValue>
+    <idCode>D7</idCode>
+        <idValue>Dispensing Fee</idValue>
+    <idCode>D8</idCode>
+        <idValue>Discount Amount</idValue>
+    <idCode>D9</idCode>
+        <idValue>Cumulative Actual</idValue>
+    <idCode>DA</idCode>
+        <idValue>Original Mortgage</idValue>
+    <idCode>DB</idCode>
+        <idValue>Unapplied Section 235 Funds</idValue>
+    <idCode>DC</idCode>
+        <idValue>Unapplied Buydown Fund</idValue>
+    <idCode>DD</idCode>
+        <idValue>Direct Deposit</idValue>
+    <idCode>DE</idCode>
+        <idValue>Estimate of Damage</idValue>
+    <idCode>DF</idCode>
+        <idValue>Authorized Bid</idValue>
+    <idCode>DG</idCode>
+        <idValue>Escrow Balance</idValue>
+    <idCode>DH</idCode>
+        <idValue>Total Disbursements</idValue>
+    <idCode>DI</idCode>
+        <idValue>Charge Off</idValue>
+    <idCode>DJ</idCode>
+        <idValue>Liens Amount Original</idValue>
+    <idCode>DK</idCode>
+        <idValue>Release of Lien</idValue>
+    <idCode>DL</idCode>
+        <idValue>Debit</idValue>
+    <idCode>DM</idCode>
+        <idValue>Asset</idValue>
+    <idCode>DN</idCode>
+        <idValue>Liability</idValue>
+    <idCode>DO</idCode>
+        <idValue>Satisfaction</idValue>
+    <idCode>DP</idCode>
+        <idValue>Exemption</idValue>
+    <idCode>DQ</idCode>
+        <idValue>Settlement</idValue>
+    <idCode>DR</idCode>
+        <idValue>Alimony Expense</idValue>
+    <idCode>DS</idCode>
+        <idValue>Alimony Income</idValue>
+    <idCode>DT</idCode>
+        <idValue>Child Support Expense</idValue>
+    <idCode>DU</idCode>
+        <idValue>Child Support Income</idValue>
+    <idCode>DV</idCode>
+        <idValue>Separate Maintenance Expense</idValue>
+    <idCode>DW</idCode>
+        <idValue>Separate Maintenance Income</idValue>
+    <idCode>DX</idCode>
+        <idValue>Deductible Waived</idValue>
+    <idCode>DY</idCode>
+        <idValue>Per Day Limit</idValue>
+    <idCode>DZ</idCode>
+        <idValue>Job-related Expense</idValue>
+    <idCode>E</idCode>
+        <idValue>Estimated Credit</idValue>
+    <idCode>E0</idCode>
+        <idValue>Administration and Management Indemnity Charge</idValue>
+    <idCode>E1</idCode>
+        <idValue>Employer Year to Date Contribution</idValue>
+    <idCode>E2</idCode>
+        <idValue>Employee Annual Pledge Amount</idValue>
+    <idCode>E3</idCode>
+        <idValue>Employee Current Contribution</idValue>
+    <idCode>E4</idCode>
+        <idValue>Employer Pledge Amount</idValue>
+    <idCode>E5</idCode>
+        <idValue>Employer Current Contribution</idValue>
+    <idCode>E6</idCode>
+        <idValue>Eligible Wage Amount</idValue>
+    <idCode>E7</idCode>
+        <idValue>Employee Year to Date Contribution</idValue>
+    <idCode>E8</idCode>
+        <idValue>Education Contribution</idValue>
+    <idCode>E9</idCode>
+        <idValue>Initial Fee</idValue>
+    <idCode>EA</idCode>
+        <idValue>Earnings Allowance</idValue>
+    <idCode>EB</idCode>
+        <idValue>Collected Balance (Excess/Deficit)</idValue>
+    <idCode>EC</idCode>
+        <idValue>Allowance (Excess/Deficit)</idValue>
+    <idCode>ED</idCode>
+        <idValue>Estimated Cost of Attendance</idValue>
+    <idCode>EE</idCode>
+        <idValue>Other Expense</idValue>
+    <idCode>EF</idCode>
+        <idValue>Estimated Financial Aid</idValue>
+    <idCode>EG</idCode>
+        <idValue>Other Income</idValue>
+    <idCode>EH</idCode>
+        <idValue>Amount of Mortgages and Liens</idValue>
+    <idCode>EI</idCode>
+        <idValue>Mortgage Payment(s)</idValue>
+    <idCode>EJ</idCode>
+        <idValue>Insurance, Maintenance, Taxes and Miscellaneous</idValue>
+    <idCode>EK</idCode>
+        <idValue>Net Rental Income</idValue>
+    <idCode>EL</idCode>
+        <idValue>Present Market Value</idValue>
+    <idCode>EM</idCode>
+        <idValue>Gross Rental Income</idValue>
+    <idCode>EN</idCode>
+        <idValue>Cancellation Fee</idValue>
+    <idCode>EO</idCode>
+        <idValue>Capital Reserves</idValue>
+    <idCode>EP</idCode>
+        <idValue>Employer Annual Pledge Amount</idValue>
+    <idCode>EQ</idCode>
+        <idValue>Condominium Association Fees</idValue>
+    <idCode>ER</idCode>
+        <idValue>Homeowner Association Fees</idValue>
+    <idCode>ES</idCode>
+        <idValue>Mortgage Insurance Proceeds</idValue>
+    <idCode>ET</idCode>
+        <idValue>Net Proceeds from Sale of Real Estate Property</idValue>
+    <idCode>EU</idCode>
+        <idValue>Insurance Proceeds (Primary Settlement)</idValue>
+    <idCode>EV</idCode>
+        <idValue>Presale Proceeds</idValue>
+    <idCode>EW</idCode>
+        <idValue>Pledged Savings</idValue>
+    <idCode>EX</idCode>
+        <idValue>As Is Broker&apos;s Opinion</idValue>
+    <idCode>EY</idCode>
+        <idValue>Subject To Broker&apos;s Opinion</idValue>
+    <idCode>EZ</idCode>
+        <idValue>Uniform Commercial Code Filing Office Fee</idValue>
+    <idCode>F</idCode>
+        <idValue>Annual Limit</idValue>
+    <idCode>F0</idCode>
+        <idValue>Commercial Staff Labor Costs</idValue>
+    <idCode>F1</idCode>
+        <idValue>Maximum Allowable Cost (MAC) Penalty Copay</idValue>
+    <idCode>F2</idCode>
+        <idValue>Patient Responsibility - Actual</idValue>
+    <idCode>F3</idCode>
+        <idValue>Patient Responsibility - Estimated</idValue>
+    <idCode>F4</idCode>
+        <idValue>Postage Claimed</idValue>
+    <idCode>F5</idCode>
+        <idValue>Patient Amount Paid</idValue>
+    <idCode>F6</idCode>
+        <idValue>Provider Reserves</idValue>
+    <idCode>F7</idCode>
+        <idValue>Sales Tax</idValue>
+    <idCode>F8</idCode>
+        <idValue>Usual and Customary Charge - Estimated</idValue>
+    <idCode>F9</idCode>
+        <idValue>Usual and Customary - Actual</idValue>
+    <idCode>FA</idCode>
+        <idValue>Coordination Fee</idValue>
+    <idCode>FB</idCode>
+        <idValue>Calculation Fee</idValue>
+    <idCode>FBA</idCode>
+        <idValue>Final Balance</idValue>
+    <idCode>FC</idCode>
+        <idValue>Expected Family Contribution</idValue>
+    <idCode>FD</idCode>
+        <idValue>Direct Deposit Flipped to Check</idValue>
+    <idCode>FE</idCode>
+        <idValue>Fee</idValue>
+    <idCode>FF</idCode>
+        <idValue>Application Fee</idValue>
+    <idCode>FG</idCode>
+        <idValue>Licensing Fee</idValue>
+    <idCode>FH</idCode>
+        <idValue>Regulatory Fee</idValue>
+    <idCode>FI</idCode>
+        <idValue>First Interest Payment Amount</idValue>
+    <idCode>FJ</idCode>
+        <idValue>Waiver Fee</idValue>
+    <idCode>FK</idCode>
+        <idValue>Other Unlisted Amount</idValue>
+    <idCode>FL</idCode>
+        <idValue>Float</idValue>
+    <idCode>FM</idCode>
+        <idValue>Fair Market Value</idValue>
+    <idCode>FN</idCode>
+        <idValue>Fine</idValue>
+    <idCode>FO</idCode>
+        <idValue>Fees Paid</idValue>
+    <idCode>FP</idCode>
+        <idValue>Fees Paid Year to Date</idValue>
+    <idCode>FQ</idCode>
+        <idValue>Firm Contractor Share</idValue>
+    <idCode>FR</idCode>
+        <idValue>Estimated Government Share</idValue>
+    <idCode>FS</idCode>
+        <idValue>Expense</idValue>
+    <idCode>FT</idCode>
+        <idValue>Endorsement Premium Amount</idValue>
+    <idCode>FU</idCode>
+        <idValue>Commercial Staff Indemnity Charge</idValue>
+    <idCode>FV</idCode>
+        <idValue>Flat Fee Paid to Date</idValue>
+    <idCode>FW</idCode>
+        <idValue>Flat Fee Paid Current Month</idValue>
+    <idCode>FX</idCode>
+        <idValue>Endorsement</idValue>
+    <idCode>FY</idCode>
+        <idValue>First Payment</idValue>
+    <idCode>FZ</idCode>
+        <idValue>Earned Income</idValue>
+    <idCode>G</idCode>
+        <idValue>Collateral</idValue>
+    <idCode>G0</idCode>
+        <idValue>Initial Adjustment Total</idValue>
+    <idCode>G1</idCode>
+        <idValue>Indicated Value by Sales Comparison Approach</idValue>
+    <idCode>G2</idCode>
+        <idValue>Indicated Value by Income Approach</idValue>
+    <idCode>G3</idCode>
+        <idValue>Price per Unit Area</idValue>
+    <idCode>G4</idCode>
+        <idValue>Reconciliation of Final Value Estimate</idValue>
+    <idCode>G5</idCode>
+        <idValue>Estimated Monthly Market Rent</idValue>
+    <idCode>G6</idCode>
+        <idValue>Adjusted Sales Price</idValue>
+    <idCode>G7</idCode>
+        <idValue>Sales or Financing Concessions</idValue>
+    <idCode>G8</idCode>
+        <idValue>Indicated Value by Cost Approach</idValue>
+    <idCode>G9</idCode>
+        <idValue>As-is Value of Site Improvements</idValue>
+    <idCode>GA</idCode>
+        <idValue>Depreciated Value of Improvements</idValue>
+    <idCode>GB</idCode>
+        <idValue>Price, High Value</idValue>
+    <idCode>GC</idCode>
+        <idValue>Price, Low Value</idValue>
+    <idCode>GD</idCode>
+        <idValue>Physical Depreciation</idValue>
+    <idCode>GE</idCode>
+        <idValue>Functional Depreciation</idValue>
+    <idCode>GF</idCode>
+        <idValue>External Depreciation</idValue>
+    <idCode>GG</idCode>
+        <idValue>Adjusted Sales Price of Comparable Sales</idValue>
+    <idCode>GH</idCode>
+        <idValue>Predominate Value</idValue>
+    <idCode>GI</idCode>
+        <idValue>Average Customer Income</idValue>
+    <idCode>GJ</idCode>
+        <idValue>Average Neighborhood Income</idValue>
+    <idCode>GK</idCode>
+        <idValue>Average Customer Purchase</idValue>
+    <idCode>GL</idCode>
+        <idValue>Weekly Dollar Sales</idValue>
+    <idCode>GM</idCode>
+        <idValue>Average Case Sales</idValue>
+    <idCode>GN</idCode>
+        <idValue>Buy-down</idValue>
+    <idCode>GO</idCode>
+        <idValue>Credit Line</idValue>
+    <idCode>GP</idCode>
+        <idValue>Appraisal Repair Amount</idValue>
+    <idCode>GQ</idCode>
+        <idValue>Brokers Opinion Repair Amount</idValue>
+    <idCode>GR</idCode>
+        <idValue>Credit Line Available</idValue>
+    <idCode>GS</idCode>
+        <idValue>Subsequent Adjustments Total</idValue>
+    <idCode>GT</idCode>
+        <idValue>Goods and Services Tax</idValue>
+    <idCode>GU</idCode>
+        <idValue>Taxes Paid</idValue>
+    <idCode>GV</idCode>
+        <idValue>Gross Value</idValue>
+    <idCode>GW</idCode>
+        <idValue>Total Charge</idValue>
+    <idCode>GX</idCode>
+        <idValue>Total Credit</idValue>
+    <idCode>GY</idCode>
+        <idValue>Total Debit</idValue>
+    <idCode>GZ</idCode>
+        <idValue>Total Finance Charge</idValue>
+    <idCode>H</idCode>
+        <idValue>Bid Amount</idValue>
+    <idCode>H0</idCode>
+        <idValue>Host Government (government of the institution) Financing for Education</idValue>
+    <idCode>H1</idCode>
+        <idValue>Legal Reserves</idValue>
+    <idCode>H2</idCode>
+        <idValue>Cancellation</idValue>
+    <idCode>H3</idCode>
+        <idValue>Deposit Inception to Date</idValue>
+    <idCode>H4</idCode>
+        <idValue>Deposit Year to Date</idValue>
+    <idCode>H5</idCode>
+        <idValue>Dump in Remittance</idValue>
+    <idCode>H6</idCode>
+        <idValue>Earnings</idValue>
+    <idCode>H7</idCode>
+        <idValue>Life Insurance Cash Value</idValue>
+    <idCode>H8</idCode>
+        <idValue>Structure Value</idValue>
+    <idCode>H9</idCode>
+        <idValue>Original List Price</idValue>
+    <idCode>HA</idCode>
+        <idValue>Coin</idValue>
+    <idCode>HB</idCode>
+        <idValue>Currency</idValue>
+    <idCode>HC</idCode>
+        <idValue>U.S. Treasury Checks</idValue>
+    <idCode>HD</idCode>
+        <idValue>Postal Money Orders</idValue>
+    <idCode>HE</idCode>
+        <idValue>City Checks</idValue>
+    <idCode>HF</idCode>
+        <idValue>Other Checks</idValue>
+    <idCode>HG</idCode>
+        <idValue>Home Government Financing for Education</idValue>
+    <idCode>HH</idCode>
+        <idValue>Annual Social Security Wages</idValue>
+    <idCode>HI</idCode>
+        <idValue>Annual Social Security Tips</idValue>
+    <idCode>HJ</idCode>
+        <idValue>Annual Wages, Tips, and Other Compensation</idValue>
+    <idCode>HK</idCode>
+        <idValue>Social Security Employee Tax Withheld</idValue>
+    <idCode>HL</idCode>
+        <idValue>Federal Income Tax Withheld</idValue>
+    <idCode>HM</idCode>
+        <idValue>Advance Earned Income Credit</idValue>
+    <idCode>HN</idCode>
+        <idValue>Commission</idValue>
+    <idCode>HO</idCode>
+        <idValue>Vacation Pay</idValue>
+    <idCode>HP</idCode>
+        <idValue>Gross Pay Submitted</idValue>
+    <idCode>HQ</idCode>
+        <idValue>Intersell Commission Sales</idValue>
+    <idCode>HR</idCode>
+        <idValue>Total Payroll Approved</idValue>
+    <idCode>HS</idCode>
+        <idValue>Holiday Pay</idValue>
+    <idCode>HT</idCode>
+        <idValue>Overtime Pay</idValue>
+    <idCode>HU</idCode>
+        <idValue>Regular Pay</idValue>
+    <idCode>HV</idCode>
+        <idValue>Sick Pay</idValue>
+    <idCode>HW</idCode>
+        <idValue>Special Pay</idValue>
+    <idCode>HX</idCode>
+        <idValue>Contract Price</idValue>
+    <idCode>HY</idCode>
+        <idValue>Commercial Space Income</idValue>
+    <idCode>HZ</idCode>
+        <idValue>Utilities Paid by Owner</idValue>
+    <idCode>I</idCode>
+        <idValue>Interest</idValue>
+    <idCode>I0</idCode>
+        <idValue>Life Insurance Coverage</idValue>
+    <idCode>I1</idCode>
+        <idValue>Investment Income</idValue>
+    <idCode>I2</idCode>
+        <idValue>Income</idValue>
+    <idCode>I3</idCode>
+        <idValue>Price, Gross Living Area</idValue>
+    <idCode>I4</idCode>
+        <idValue>Total Estimated Rent</idValue>
+    <idCode>I5</idCode>
+        <idValue>Gross Annual Income</idValue>
+    <idCode>I6</idCode>
+        <idValue>Custodian&apos;s Salary</idValue>
+    <idCode>I7</idCode>
+        <idValue>Engineer&apos;s Salary</idValue>
+    <idCode>I8</idCode>
+        <idValue>Elevator Operator&apos;s Salary</idValue>
+    <idCode>I9</idCode>
+        <idValue>Indicated Value by Market Approach Estimate of Market Value</idValue>
+    <idCode>IA</idCode>
+        <idValue>Adjusted Monthly Rent</idValue>
+    <idCode>IB</idCode>
+        <idValue>Investable Balance</idValue>
+    <idCode>IC</idCode>
+        <idValue>Accrued Unpaid Interest To Be Capitalized</idValue>
+    <idCode>ID</idCode>
+        <idValue>Import Duty Amount</idValue>
+    <idCode>IE</idCode>
+        <idValue>Excise Tax Amount</idValue>
+    <idCode>IF</idCode>
+        <idValue>Inspection Fee</idValue>
+    <idCode>IG</idCode>
+        <idValue>Adjustment for Gross Living Area</idValue>
+    <idCode>IH</idCode>
+        <idValue>Predominant Price High</idValue>
+    <idCode>II</idCode>
+        <idValue>Irregular Interest Payment Amount</idValue>
+    <idCode>IJ</idCode>
+        <idValue>Net Adjusted Monthly Rent</idValue>
+    <idCode>IK</idCode>
+        <idValue>Indicated Monthly Market Rent</idValue>
+    <idCode>IL</idCode>
+        <idValue>Predominant Price Low</idValue>
+    <idCode>IM</idCode>
+        <idValue>Adjustment for Rooms</idValue>
+    <idCode>IN</idCode>
+        <idValue>Installment</idValue>
+    <idCode>IO</idCode>
+        <idValue>Adjustment for Bedrooms</idValue>
+    <idCode>IP</idCode>
+        <idValue>Interest Payable During Repayment Period</idValue>
+    <idCode>IQ</idCode>
+        <idValue>Contingent Debt</idValue>
+    <idCode>IR</idCode>
+        <idValue>Insurance Recovery</idValue>
+    <idCode>IS</idCode>
+        <idValue>Independent Scholarship</idValue>
+    <idCode>IT</idCode>
+        <idValue>Incentive Fee</idValue>
+    <idCode>IU</idCode>
+        <idValue>Accrued Unpaid Interest Not To Be Capitalized</idValue>
+    <idCode>IV</idCode>
+        <idValue>Utilities Allowance</idValue>
+    <idCode>IW</idCode>
+        <idValue>Furniture Allowance</idValue>
+    <idCode>IX</idCode>
+        <idValue>Indicated Value by Cost Approach</idValue>
+    <idCode>IY</idCode>
+        <idValue>Debentures</idValue>
+    <idCode>IZ</idCode>
+        <idValue>Account High Balance</idValue>
+    <idCode>J</idCode>
+        <idValue>Trustee Fees</idValue>
+    <idCode>J0</idCode>
+        <idValue>Limited Partnership Capital</idValue>
+    <idCode>J1</idCode>
+        <idValue>Current Face Amount</idValue>
+    <idCode>J2</idCode>
+        <idValue>Original Face Amount</idValue>
+    <idCode>J3</idCode>
+        <idValue>Fixed Default Note Holder&apos;s Amount</idValue>
+    <idCode>J4</idCode>
+        <idValue>Initial Monthly Payment</idValue>
+    <idCode>J5</idCode>
+        <idValue>Original Principal and Interest Payment</idValue>
+    <idCode>J6</idCode>
+        <idValue>Final Principal and Interest Payment</idValue>
+    <idCode>J7</idCode>
+        <idValue>Conversion Fee</idValue>
+    <idCode>J8</idCode>
+        <idValue>Ending Balance</idValue>
+    <idCode>J9</idCode>
+        <idValue>Beginning Balance</idValue>
+    <idCode>JA</idCode>
+        <idValue>Assessment</idValue>
+    <idCode>JB</idCode>
+        <idValue>Equity Claimed as Exempt</idValue>
+    <idCode>JC</idCode>
+        <idValue>Counter Claim</idValue>
+    <idCode>JD</idCode>
+        <idValue>Weekly Benefit</idValue>
+    <idCode>JE</idCode>
+        <idValue>Lease</idValue>
+    <idCode>JF</idCode>
+        <idValue>Administrative Load</idValue>
+    <idCode>JG</idCode>
+        <idValue>Asset Cost Applicable to Entire Contract</idValue>
+    <idCode>JH</idCode>
+        <idValue>Asset Cost Applicable to Portion of Contract</idValue>
+    <idCode>JI</idCode>
+        <idValue>Annual Fee</idValue>
+    <idCode>JJ</idCode>
+        <idValue>Cost Basis</idValue>
+    <idCode>JK</idCode>
+        <idValue>Disability Premium</idValue>
+    <idCode>JL</idCode>
+        <idValue>Employee Additional Contribution</idValue>
+    <idCode>JM</idCode>
+        <idValue>Employee Match Contribution</idValue>
+    <idCode>JN</idCode>
+        <idValue>Employer Contribution</idValue>
+    <idCode>JO</idCode>
+        <idValue>Free Look Value</idValue>
+    <idCode>JP</idCode>
+        <idValue>Free Withdrawal Value</idValue>
+    <idCode>JQ</idCode>
+        <idValue>Front End Load</idValue>
+    <idCode>JR</idCode>
+        <idValue>Guaranteed Minimum Death Benefit</idValue>
+    <idCode>JS</idCode>
+        <idValue>Interim Value</idValue>
+    <idCode>JT</idCode>
+        <idValue>Monthly Rent</idValue>
+    <idCode>JU</idCode>
+        <idValue>Judgment</idValue>
+    <idCode>JV</idCode>
+        <idValue>Loan Value</idValue>
+    <idCode>JW</idCode>
+        <idValue>Market Value</idValue>
+    <idCode>JX</idCode>
+        <idValue>Market Value Adjusted Value</idValue>
+    <idCode>JY</idCode>
+        <idValue>Market Value Adjustment</idValue>
+    <idCode>JZ</idCode>
+        <idValue>Net Contract Value</idValue>
+    <idCode>K</idCode>
+        <idValue>Attorney and Trustee Fees</idValue>
+    <idCode>K0</idCode>
+        <idValue>Discounted Bills not Due</idValue>
+    <idCode>K1</idCode>
+        <idValue>Unpaid Security Balance</idValue>
+    <idCode>K2</idCode>
+        <idValue>Total Unpaid Security Balance</idValue>
+    <idCode>K3</idCode>
+        <idValue>Veterans Affairs Funding Fee</idValue>
+    <idCode>K4</idCode>
+        <idValue>Initial Target Fee</idValue>
+    <idCode>K5</idCode>
+        <idValue>Minimum Fee</idValue>
+    <idCode>K6</idCode>
+        <idValue>Maximum Fee</idValue>
+    <idCode>K7</idCode>
+        <idValue>Price</idValue>
+    <idCode>K8</idCode>
+        <idValue>Special Accounting Classification Reference Number (ACRN) Amount</idValue>
+    <idCode>K9</idCode>
+        <idValue>New Price</idValue>
+    <idCode>KA</idCode>
+        <idValue>Estimated Contract</idValue>
+    <idCode>KB</idCode>
+        <idValue>Estimated Net Adjustment</idValue>
+    <idCode>KC</idCode>
+        <idValue>Obligated</idValue>
+    <idCode>KD</idCode>
+        <idValue>Undefinitized</idValue>
+    <idCode>KE</idCode>
+        <idValue>Annual Revenue</idValue>
+    <idCode>KF</idCode>
+        <idValue>Net Paid Amount</idValue>
+    <idCode>KG</idCode>
+        <idValue>Net Collected Amount</idValue>
+    <idCode>KH</idCode>
+        <idValue>Deduction Amount</idValue>
+    <idCode>KI</idCode>
+        <idValue>Net Variance Amount</idValue>
+    <idCode>KJ</idCode>
+        <idValue>Minimum Contract Amount</idValue>
+    <idCode>KK</idCode>
+        <idValue>Item Gross Amount</idValue>
+    <idCode>KL</idCode>
+        <idValue>Collected Amount</idValue>
+    <idCode>KM</idCode>
+        <idValue>Disbursed Amount</idValue>
+    <idCode>KN</idCode>
+        <idValue>Gross Amount of Payment</idValue>
+    <idCode>KO</idCode>
+        <idValue>Committed Amount</idValue>
+    <idCode>KP</idCode>
+        <idValue>Principal and Interest</idValue>
+    <idCode>KQ</idCode>
+        <idValue>Incremental Order Amount</idValue>
+    <idCode>KR</idCode>
+        <idValue>Liability-Long Term</idValue>
+    <idCode>KS</idCode>
+        <idValue>Taxes and Insurance</idValue>
+    <idCode>KT</idCode>
+        <idValue>Default Principal</idValue>
+    <idCode>KU</idCode>
+        <idValue>Default Interest</idValue>
+    <idCode>KV</idCode>
+        <idValue>Liability-Short Term</idValue>
+    <idCode>KW</idCode>
+        <idValue>Default Taxes and Insurance</idValue>
+    <idCode>KX</idCode>
+        <idValue>Miscellaneous Fee Collections</idValue>
+    <idCode>KY</idCode>
+        <idValue>Not-To-Exceed Price</idValue>
+    <idCode>KZ</idCode>
+        <idValue>Mortgagor&apos;s Monthly Obligations</idValue>
+    <idCode>L</idCode>
+        <idValue>Local</idValue>
+    <idCode>L0</idCode>
+        <idValue>Liquid Assets</idValue>
+    <idCode>L1</idCode>
+        <idValue>Legal Contribution</idValue>
+    <idCode>L2</idCode>
+        <idValue>Leasehold Insurance Amount</idValue>
+    <idCode>L3</idCode>
+        <idValue>Total Unidentified Payments Rejected</idValue>
+    <idCode>L4</idCode>
+        <idValue>Total Credits Received</idValue>
+    <idCode>L5</idCode>
+        <idValue>Total Debits Received</idValue>
+    <idCode>L6</idCode>
+        <idValue>Total Pre-advices Received</idValue>
+    <idCode>L7</idCode>
+        <idValue>Total Prenotes Received</idValue>
+    <idCode>L8</idCode>
+        <idValue>Total Post-advices Received</idValue>
+    <idCode>L9</idCode>
+        <idValue>Total Debit for Settlement</idValue>
+    <idCode>LA</idCode>
+        <idValue>Definitized</idValue>
+    <idCode>LB</idCode>
+        <idValue>Definitized Total</idValue>
+    <idCode>LC</idCode>
+        <idValue>Lessor&apos;s Cost</idValue>
+    <idCode>LD</idCode>
+        <idValue>Incremental</idValue>
+    <idCode>LE</idCode>
+        <idValue>Loan Eligibility Amount</idValue>
+    <idCode>LF</idCode>
+        <idValue>Loan Remittance or Repayment</idValue>
+    <idCode>LG</idCode>
+        <idValue>Laundry Income</idValue>
+    <idCode>LH</idCode>
+        <idValue>Baseline</idValue>
+    <idCode>LI</idCode>
+        <idValue>Line Item Unit Price</idValue>
+    <idCode>LJ</idCode>
+        <idValue>Legal and Audit</idValue>
+    <idCode>LK</idCode>
+        <idValue>Loan Amount Requested</idValue>
+    <idCode>LL</idCode>
+        <idValue>Lump Sum</idValue>
+    <idCode>LM</idCode>
+        <idValue>Limit</idValue>
+    <idCode>LN</idCode>
+        <idValue>Lien Payoff</idValue>
+    <idCode>LO</idCode>
+        <idValue>Money Purchase</idValue>
+    <idCode>LOW</idCode>
+        <idValue>Lower Fund</idValue>
+    <idCode>LP</idCode>
+        <idValue>List Price</idValue>
+    <idCode>LQ</idCode>
+        <idValue>Maximum Potential Liability</idValue>
+    <idCode>LR</idCode>
+        <idValue>Total Credit for Settlement</idValue>
+    <idCode>LS</idCode>
+        <idValue>Net Settlement</idValue>
+    <idCode>LT</idCode>
+        <idValue>Total Award</idValue>
+    <idCode>LU</idCode>
+        <idValue>Option Amount</idValue>
+    <idCode>LV</idCode>
+        <idValue>Planned Periodic Payment</idValue>
+    <idCode>LW</idCode>
+        <idValue>Tax and Insurance Escrow Fund Balance</idValue>
+    <idCode>LX</idCode>
+        <idValue>Loan Expense</idValue>
+    <idCode>LY</idCode>
+        <idValue>Total Remaining Principal Balance for the Issuer</idValue>
+    <idCode>LZ</idCode>
+        <idValue>Delinquent Payment</idValue>
+    <idCode>M</idCode>
+        <idValue>Amount Due from Buyer at Appraisal Notice Date</idValue>
+    <idCode>M0</idCode>
+        <idValue>Loans from Officers</idValue>
+    <idCode>M1</idCode>
+        <idValue>Maximum Out of Pocket Amount</idValue>
+    <idCode>M2</idCode>
+        <idValue>Medical Contribution</idValue>
+    <idCode>M3</idCode>
+        <idValue>Tax rate expressed as a flat fee</idValue>
+    <idCode>M4</idCode>
+        <idValue>Minimum amount of tax to be paid</idValue>
+    <idCode>M5</idCode>
+        <idValue>Minimum amount to which tax rate is applied</idValue>
+    <idCode>M6</idCode>
+        <idValue>Maximum amount of tax to be paid</idValue>
+    <idCode>M7</idCode>
+        <idValue>Maximum amount to which tax rate is applied</idValue>
+    <idCode>M8</idCode>
+        <idValue>Markup Amount</idValue>
+    <idCode>M9</idCode>
+        <idValue>Net of Surrender Withdrawal</idValue>
+    <idCode>MA</idCode>
+        <idValue>Maximum Amount</idValue>
+    <idCode>MB</idCode>
+        <idValue>Undistributed Budget</idValue>
+    <idCode>MC</idCode>
+        <idValue>Cost of Money</idValue>
+    <idCode>MD</idCode>
+        <idValue>Minimum Due</idValue>
+    <idCode>ME</idCode>
+        <idValue>Minimum Default Note Holder&apos;s Cost</idValue>
+    <idCode>MF</idCode>
+        <idValue>Administrative Fees</idValue>
+    <idCode>MG</idCode>
+        <idValue>Maximum Late Charge</idValue>
+    <idCode>MH</idCode>
+        <idValue>Minimum Late Charge</idValue>
+    <idCode>MI</idCode>
+        <idValue>Minimum Incentive Fee</idValue>
+    <idCode>MJ</idCode>
+        <idValue>Maximum Default Note Holder&apos;s Cost</idValue>
+    <idCode>MK</idCode>
+        <idValue>Gross to Pay</idValue>
+    <idCode>ML</idCode>
+        <idValue>Prior Net Invoice Total</idValue>
+    <idCode>MM</idCode>
+        <idValue>Payout</idValue>
+    <idCode>MN</idCode>
+        <idValue>Monthly Limit</idValue>
+    <idCode>MO</idCode>
+        <idValue>Minimum Order Value</idValue>
+    <idCode>MP</idCode>
+        <idValue>Monthly Payment Amount</idValue>
+    <idCode>MQ</idCode>
+        <idValue>Post Tax Equity and Fiscal Responsibility Act (TEFRA) Cost Basis</idValue>
+    <idCode>MR</idCode>
+        <idValue>Management Reserve</idValue>
+    <idCode>MS</idCode>
+        <idValue>Past-Due Taxes and Assessment Remaining Unpaid</idValue>
+    <idCode>MT</idCode>
+        <idValue>Pre Tax Equity and Fiscal Responsibility Act (TEFRA) Cost Basis</idValue>
+    <idCode>MU</idCode>
+        <idValue>Premium Tax Paid on Surrender</idValue>
+    <idCode>MV</idCode>
+        <idValue>Premium Tax Paid up Front</idValue>
+    <idCode>MW</idCode>
+        <idValue>Sales Loads</idValue>
+    <idCode>MX</idCode>
+        <idValue>Maximum Incentive Fee</idValue>
+    <idCode>MY</idCode>
+        <idValue>Surrender Value</idValue>
+    <idCode>MZ</idCode>
+        <idValue>Valuation Price</idValue>
+    <idCode>N</idCode>
+        <idValue>Net</idValue>
+    <idCode>N0</idCode>
+        <idValue>Loans or Financial Borrowings</idValue>
+    <idCode>N1</idCode>
+        <idValue>Net Worth</idValue>
+    <idCode>N2</idCode>
+        <idValue>Individual Income Taxes and Other</idValue>
+    <idCode>N3</idCode>
+        <idValue>Corporate Income and Excess Profits Tax</idValue>
+    <idCode>N4</idCode>
+        <idValue>Excise Taxes</idValue>
+    <idCode>N5</idCode>
+        <idValue>Estate and Gift Taxes</idValue>
+    <idCode>N6</idCode>
+        <idValue>Carrier Tax Act Taxes</idValue>
+    <idCode>N7</idCode>
+        <idValue>Federal Unemployment Tax Act Taxes</idValue>
+    <idCode>N8</idCode>
+        <idValue>Miscellaneous Taxes</idValue>
+    <idCode>N9</idCode>
+        <idValue>Withheld and Federal Insurance Contribution Act (FICA) Taxes</idValue>
+    <idCode>NA</idCode>
+        <idValue>Net Adjustment</idValue>
+    <idCode>NB</idCode>
+        <idValue>Net Compensation Position</idValue>
+    <idCode>NC</idCode>
+        <idValue>Negative Collected Balance</idValue>
+    <idCode>ND</idCode>
+        <idValue>Per Person Monthly Limit</idValue>
+    <idCode>NE</idCode>
+        <idValue>Net Billed</idValue>
+    <idCode>NF</idCode>
+        <idValue>Monthly Net Fee Position (Excess/Deficit)</idValue>
+    <idCode>NG</idCode>
+        <idValue>Medicare Copayment</idValue>
+    <idCode>NH</idCode>
+        <idValue>Medicare Deductible</idValue>
+    <idCode>NI</idCode>
+        <idValue>Medicare Paid</idValue>
+    <idCode>NJ</idCode>
+        <idValue>Other Insurance Paid Amount</idValue>
+    <idCode>NK</idCode>
+        <idValue>Total in Force and Applied Coverage</idValue>
+    <idCode>NL</idCode>
+        <idValue>Negative Ledger Balance</idValue>
+    <idCode>NM</idCode>
+        <idValue>Non-collateralized Amount</idValue>
+    <idCode>NN</idCode>
+        <idValue>Transaction Fee</idValue>
+    <idCode>NO</idCode>
+        <idValue>Non Commission Sales</idValue>
+    <idCode>NP</idCode>
+        <idValue>Net to Pay Total</idValue>
+    <idCode>NQ</idCode>
+        <idValue>Adjusted Nonrecurring</idValue>
+    <idCode>NR</idCode>
+        <idValue>Nonrecurring</idValue>
+    <idCode>NS</idCode>
+        <idValue>Net Savings Amount</idValue>
+    <idCode>NT</idCode>
+        <idValue>Unit Value</idValue>
+    <idCode>NU</idCode>
+        <idValue>Reinsurance Amount</idValue>
+    <idCode>NV</idCode>
+        <idValue>Renewal Amount</idValue>
+    <idCode>NW</idCode>
+        <idValue>Retention Per Life</idValue>
+    <idCode>NX</idCode>
+        <idValue>Retention Per Policy</idValue>
+    <idCode>NY</idCode>
+        <idValue>Net Year to Date (Excess/Deficit)</idValue>
+    <idCode>NZ</idCode>
+        <idValue>Equalization Account</idValue>
+    <idCode>O</idCode>
+        <idValue>Court Cost</idValue>
+    <idCode>O0</idCode>
+        <idValue>Extraordinary Income</idValue>
+    <idCode>O1</idCode>
+        <idValue>Amount of First Mortgage Being Refinanced</idValue>
+    <idCode>O2</idCode>
+        <idValue>Other Family Financing for Education</idValue>
+    <idCode>O3</idCode>
+        <idValue>Intangible Assets Written Off</idValue>
+    <idCode>O4</idCode>
+        <idValue>Interest Payable</idValue>
+    <idCode>O5</idCode>
+        <idValue>Interest Receivable</idValue>
+    <idCode>O6</idCode>
+        <idValue>Joint Venture Results</idValue>
+    <idCode>O7</idCode>
+        <idValue>Long Term Debt</idValue>
+    <idCode>O8</idCode>
+        <idValue>Long Term Provisions</idValue>
+    <idCode>O9</idCode>
+        <idValue>Loss</idValue>
+    <idCode>OA</idCode>
+        <idValue>Principal Balance Amount</idValue>
+    <idCode>OB</idCode>
+        <idValue>Outstanding Loan Balance</idValue>
+    <idCode>OC</idCode>
+        <idValue>Opening Bank Charges</idValue>
+    <idCode>OD</idCode>
+        <idValue>Draft Amount</idValue>
+    <idCode>OE</idCode>
+        <idValue>Miscellaneous Charges</idValue>
+    <idCode>OF</idCode>
+        <idValue>Contractor&apos;s Offer</idValue>
+    <idCode>OG</idCode>
+        <idValue>Cable Charge</idValue>
+    <idCode>OH</idCode>
+        <idValue>Handling Charges</idValue>
+    <idCode>OI</idCode>
+        <idValue>Non-commission Charges</idValue>
+    <idCode>OJ</idCode>
+        <idValue>Merchandise</idValue>
+    <idCode>OK</idCode>
+        <idValue>Letter of Credit Amount</idValue>
+    <idCode>OL</idCode>
+        <idValue>Outstanding Balance Other Lender</idValue>
+    <idCode>OM</idCode>
+        <idValue>Other Monthly Income</idValue>
+    <idCode>ON</idCode>
+        <idValue>Negotiating Bank Charges</idValue>
+    <idCode>OO</idCode>
+        <idValue>Overdrafts</idValue>
+    <idCode>OP</idCode>
+        <idValue>Original Payment Total</idValue>
+    <idCode>OQ</idCode>
+        <idValue>Payroll Costs</idValue>
+    <idCode>OR</idCode>
+        <idValue>Letter of Credit Remaining Amount</idValue>
+    <idCode>OS</idCode>
+        <idValue>Other Salaries</idValue>
+    <idCode>OT</idCode>
+        <idValue>Commission Amendment Charges</idValue>
+    <idCode>OU</idCode>
+        <idValue>Profit</idValue>
+    <idCode>OV</idCode>
+        <idValue>Profit and Loss Deficit</idValue>
+    <idCode>OW</idCode>
+        <idValue>Profit after Extraordinary Items and before Tax</idValue>
+    <idCode>OX</idCode>
+        <idValue>Profit after Tax and Before Extraordinary Items</idValue>
+    <idCode>OY</idCode>
+        <idValue>Payment Commission</idValue>
+    <idCode>OZ</idCode>
+        <idValue>Profit Distributed to Employees</idValue>
+    <idCode>P</idCode>
+        <idValue>Penalty</idValue>
+    <idCode>P0</idCode>
+        <idValue>Parental Financing for Education</idValue>
+    <idCode>P1</idCode>
+        <idValue>Partner&apos;s Calendar Year Salary</idValue>
+    <idCode>P2</idCode>
+        <idValue>Prior Plan Year Gross Salary</idValue>
+    <idCode>P3</idCode>
+        <idValue>Premium Amount</idValue>
+    <idCode>P4</idCode>
+        <idValue>Prior Year&apos;s Wage</idValue>
+    <idCode>P5</idCode>
+        <idValue>Partner&apos;s Tax Year Salary</idValue>
+    <idCode>P6</idCode>
+        <idValue>Premium Due</idValue>
+    <idCode>P7</idCode>
+        <idValue>Partner&apos;s K1 Tax Year Amount</idValue>
+    <idCode>P8</idCode>
+        <idValue>Partner&apos;s K1 Calendar Year Amount</idValue>
+    <idCode>P9</idCode>
+        <idValue>Current Mortgage Principal Balance</idValue>
+    <idCode>PA</idCode>
+        <idValue>Payment Cancellation Total</idValue>
+    <idCode>PB</idCode>
+        <idValue>Billed Amount</idValue>
+    <idCode>PC</idCode>
+        <idValue>Positive Collected Balance</idValue>
+    <idCode>PCC</idCode>
+        <idValue>Prior Contract Cost Basis</idValue>
+    <idCode>PCS</idCode>
+        <idValue>Prior Contract Surrender Charge</idValue>
+    <idCode>PCV</idCode>
+        <idValue>Prior Contract Value</idValue>
+    <idCode>PD</idCode>
+        <idValue>Credit</idValue>
+    <idCode>PE</idCode>
+        <idValue>Plan Period Election</idValue>
+    <idCode>PF</idCode>
+        <idValue>Principal</idValue>
+    <idCode>PG</idCode>
+        <idValue>Payoff</idValue>
+    <idCode>PH</idCode>
+        <idValue>Per Occurrence Deductible</idValue>
+    <idCode>PI</idCode>
+        <idValue>Per Occurrence Monthly Limit</idValue>
+    <idCode>PJ</idCode>
+        <idValue>Past Due</idValue>
+    <idCode>PK</idCode>
+        <idValue>Photograph Fee</idValue>
+    <idCode>PL</idCode>
+        <idValue>Positive Ledger Balance</idValue>
+    <idCode>PM</idCode>
+        <idValue>Last Premium Amount</idValue>
+    <idCode>PN</idCode>
+        <idValue>Prior Gross Invoice Total</idValue>
+    <idCode>PO</idCode>
+        <idValue>Percent Override</idValue>
+    <idCode>PP</idCode>
+        <idValue>Payment Prior to Advance</idValue>
+    <idCode>PQ</idCode>
+        <idValue>Advance Amount</idValue>
+    <idCode>PR</idCode>
+        <idValue>Per Occurrence Limit</idValue>
+    <idCode>PS</idCode>
+        <idValue>Per Occurrence per Day Limit</idValue>
+    <idCode>PT</idCode>
+        <idValue>Per Occurrence Aggregate Limit</idValue>
+    <idCode>PU</idCode>
+        <idValue>Unsecured Priority Claim</idValue>
+    <idCode>PV</idCode>
+        <idValue>Prepetition Charges</idValue>
+    <idCode>PW</idCode>
+        <idValue>Per Occurrence Maximum per Week Limit</idValue>
+    <idCode>PX</idCode>
+        <idValue>Per Person Maximum per Week Limit</idValue>
+    <idCode>PY</idCode>
+        <idValue>Per Person per Day Limit</idValue>
+    <idCode>PZ</idCode>
+        <idValue>Original Principal Balance</idValue>
+    <idCode>Q</idCode>
+        <idValue>Amount Owed to Buyer at Appraisal Notice Date</idValue>
+    <idCode>Q0</idCode>
+        <idValue>Loans to Affiliated Companies</idValue>
+    <idCode>Q1</idCode>
+        <idValue>Proposed</idValue>
+    <idCode>Q2</idCode>
+        <idValue>1035 Exchange</idValue>
+    <idCode>Q3</idCode>
+        <idValue>401K Transfer</idValue>
+    <idCode>Q4</idCode>
+        <idValue>Total Prenotes Accepted</idValue>
+    <idCode>Q5</idCode>
+        <idValue>Total Prenotes Rejected</idValue>
+    <idCode>Q6</idCode>
+        <idValue>Automatic Premium Deduction</idValue>
+    <idCode>Q7</idCode>
+        <idValue>Total Post-advices Accepted</idValue>
+    <idCode>Q8</idCode>
+        <idValue>Total Post-advices Rejected</idValue>
+    <idCode>Q9</idCode>
+        <idValue>Cash With Application</idValue>
+    <idCode>QA</idCode>
+        <idValue>Combined</idValue>
+    <idCode>QB</idCode>
+        <idValue>Credit Card</idValue>
+    <idCode>QC</idCode>
+        <idValue>Deposit Fund</idValue>
+    <idCode>QD</idCode>
+        <idValue>Direct Billing</idValue>
+    <idCode>QE</idCode>
+        <idValue>Disc Premium</idValue>
+    <idCode>QF</idCode>
+        <idValue>Electronic Funds Transfer (EFT)</idValue>
+    <idCode>QG</idCode>
+        <idValue>Government Allotment</idValue>
+    <idCode>QH</idCode>
+        <idValue>Initial Premium</idValue>
+    <idCode>QI</idCode>
+        <idValue>Individual Retirement Account 60 Day Rollover</idValue>
+    <idCode>QJ</idCode>
+        <idValue>Individual Retirement Account Direct Transfer</idValue>
+    <idCode>QK</idCode>
+        <idValue>Individual Retirement Account Regular Contribution</idValue>
+    <idCode>QL</idCode>
+        <idValue>Keogh/HR 10</idValue>
+    <idCode>QM</idCode>
+        <idValue>Keogh/HR 10 Transfer</idValue>
+    <idCode>QN</idCode>
+        <idValue>Quarterly Net Fee Position (Excess/Deficit)</idValue>
+    <idCode>QO</idCode>
+        <idValue>List Billing</idValue>
+    <idCode>QP</idCode>
+        <idValue>Modal Premium</idValue>
+    <idCode>QQ</idCode>
+        <idValue>Payroll Taxes</idValue>
+    <idCode>QR</idCode>
+        <idValue>Parking Income</idValue>
+    <idCode>QS</idCode>
+        <idValue>Non-Qualified (1035 Exchange)</idValue>
+    <idCode>QT</idCode>
+        <idValue>PAC - Pre-Authorized Check</idValue>
+    <idCode>QU</idCode>
+        <idValue>Payroll Deduction</idValue>
+    <idCode>QV</idCode>
+        <idValue>Pension</idValue>
+    <idCode>QW</idCode>
+        <idValue>Premium Received With Application</idValue>
+    <idCode>QX</idCode>
+        <idValue>Profit Sharing Trust</idValue>
+    <idCode>QY</idCode>
+        <idValue>Qualified</idValue>
+    <idCode>QZ</idCode>
+        <idValue>Payment Amount</idValue>
+    <idCode>R</idCode>
+        <idValue>Spend Down</idValue>
+    <idCode>R0</idCode>
+        <idValue>Loans to Participants</idValue>
+    <idCode>R1</idCode>
+        <idValue>Fixed, Liquidated Secured Debt</idValue>
+    <idCode>R2</idCode>
+        <idValue>Contingent Secured Debt</idValue>
+    <idCode>R3</idCode>
+        <idValue>Disputed Secured Debt</idValue>
+    <idCode>R4</idCode>
+        <idValue>Unliquidated Secured Debt</idValue>
+    <idCode>R5</idCode>
+        <idValue>Fixed, Liquidated Unsecured Debt</idValue>
+    <idCode>R6</idCode>
+        <idValue>Contingent Unsecured Debt</idValue>
+    <idCode>R7</idCode>
+        <idValue>Disputed Unsecured Debt</idValue>
+    <idCode>R8</idCode>
+        <idValue>Unliquidated Unsecured Debt</idValue>
+    <idCode>R9</idCode>
+        <idValue>At Time of Filing</idValue>
+    <idCode>RA</idCode>
+        <idValue>Accelerated Royalty</idValue>
+    <idCode>RB</idCode>
+        <idValue>Per Person Deductible</idValue>
+    <idCode>RC</idCode>
+        <idValue>Refund Check</idValue>
+    <idCode>RD</idCode>
+        <idValue>Per Person Limit</idValue>
+    <idCode>RE</idCode>
+        <idValue>Royalty Due</idValue>
+    <idCode>RF</idCode>
+        <idValue>Restitution</idValue>
+    <idCode>RG</idCode>
+        <idValue>Budgeted Redemption</idValue>
+    <idCode>RH</idCode>
+        <idValue>Per Person Aggregate Limit</idValue>
+    <idCode>RI</idCode>
+        <idValue>Residual Value</idValue>
+    <idCode>RJ</idCode>
+        <idValue>Rate Amount</idValue>
+    <idCode>RK</idCode>
+        <idValue>Provision for Long Term Depreciation</idValue>
+    <idCode>RL</idCode>
+        <idValue>Regular Remittance</idValue>
+    <idCode>RM</idCode>
+        <idValue>Remittance Refund</idValue>
+    <idCode>RN</idCode>
+        <idValue>Resident Manager&apos;s Salary</idValue>
+    <idCode>RO</idCode>
+        <idValue>Provisions</idValue>
+    <idCode>RP</idCode>
+        <idValue>Repair</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Recommended Amount</idValue>
+    <idCode>RR</idCode>
+        <idValue>Reserve Requirement Amount</idValue>
+    <idCode>RS</idCode>
+        <idValue>Reserves</idValue>
+    <idCode>RT</idCode>
+        <idValue>Last Payment</idValue>
+    <idCode>RU</idCode>
+        <idValue>Total Debits Rejected</idValue>
+    <idCode>RV</idCode>
+        <idValue>Total Payments Rejected</idValue>
+    <idCode>RW</idCode>
+        <idValue>Total Delinquency</idValue>
+    <idCode>RX</idCode>
+        <idValue>Total Pre-advices Accepted</idValue>
+    <idCode>RY</idCode>
+        <idValue>Total Pre-advices Rejected</idValue>
+    <idCode>RZ</idCode>
+        <idValue>Lender&apos;s Total Delinquency</idValue>
+    <idCode>S</idCode>
+        <idValue>Submitted Chargeback Claim Amount</idValue>
+    <idCode>S0</idCode>
+        <idValue>Self-Financing for Education</idValue>
+    <idCode>S1</idCode>
+        <idValue>Salary Amount</idValue>
+    <idCode>S2</idCode>
+        <idValue>Salary with Bonuses</idValue>
+    <idCode>S3</idCode>
+        <idValue>Salary with Commissions</idValue>
+    <idCode>S4</idCode>
+        <idValue>Salary with Subchapter S Corporation Income</idValue>
+    <idCode>S5</idCode>
+        <idValue>Salary with Partner&apos;s Bonuses</idValue>
+    <idCode>S6</idCode>
+        <idValue>Subchapter S Corporation</idValue>
+    <idCode>S7</idCode>
+        <idValue>Sole Proprietorship</idValue>
+    <idCode>S8</idCode>
+        <idValue>Period Rental</idValue>
+    <idCode>S9</idCode>
+        <idValue>Secured Claim Allowed</idValue>
+    <idCode>SA</idCode>
+        <idValue>Campaign Summary Amount</idValue>
+    <idCode>SB</idCode>
+        <idValue>Stated Amount</idValue>
+    <idCode>SC</idCode>
+        <idValue>Total Service Charge</idValue>
+    <idCode>SD</idCode>
+        <idValue>Sales Charge</idValue>
+    <idCode>SE</idCode>
+        <idValue>Service Charges Which Cannot Be Compensated by Balances</idValue>
+    <idCode>SF</idCode>
+        <idValue>Scholarship from Admitting Educational Institution</idValue>
+    <idCode>SG</idCode>
+        <idValue>Sponsor-Financing for Education</idValue>
+    <idCode>SH</idCode>
+        <idValue>Surrender Charge</idValue>
+    <idCode>SI</idCode>
+        <idValue>Subsequent Interest Payment Amount</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Surrender Full</idValue>
+    <idCode>SK</idCode>
+        <idValue>Surrender Partial</idValue>
+    <idCode>SL</idCode>
+        <idValue>Security Personnel&apos;s Salary</idValue>
+    <idCode>SM</idCode>
+        <idValue>Supplemental</idValue>
+    <idCode>SN</idCode>
+        <idValue>Sales Administration Expense</idValue>
+    <idCode>SO</idCode>
+        <idValue>Special Creditors Amount</idValue>
+    <idCode>SOF</idCode>
+        <idValue>Setoff</idValue>
+    <idCode>SP</idCode>
+        <idValue>Sales Price</idValue>
+    <idCode>SQ</idCode>
+        <idValue>Special Debtors Amount</idValue>
+    <idCode>SR</idCode>
+        <idValue>Secured Claim</idValue>
+    <idCode>SS</idCode>
+        <idValue>Campaign Summary Amount to be Shared</idValue>
+    <idCode>ST</idCode>
+        <idValue>State</idValue>
+    <idCode>SU</idCode>
+        <idValue>Surcharge</idValue>
+    <idCode>SV</idCode>
+        <idValue>Fixed Monthly Principal Payment</idValue>
+    <idCode>SW</idCode>
+        <idValue>Base Award Fee</idValue>
+    <idCode>SX</idCode>
+        <idValue>Severance Tax</idValue>
+    <idCode>SY</idCode>
+        <idValue>Initial Buydown Balance</idValue>
+    <idCode>SZ</idCode>
+        <idValue>Certification Fee</idValue>
+    <idCode>T</idCode>
+        <idValue>Tax</idValue>
+    <idCode>T0</idCode>
+        <idValue>Third-Party Government-Financing for Education</idValue>
+    <idCode>T1</idCode>
+        <idValue>Teacher</idValue>
+    <idCode>T2</idCode>
+        <idValue>Total Claim Before Taxes</idValue>
+    <idCode>T3</idCode>
+        <idValue>Total Submitted Charges</idValue>
+    <idCode>T4</idCode>
+        <idValue>Total Current Balance</idValue>
+    <idCode>T5</idCode>
+        <idValue>Total Claims</idValue>
+    <idCode>T6</idCode>
+        <idValue>Claim</idValue>
+    <idCode>T7</idCode>
+        <idValue>Total Credits Accepted</idValue>
+    <idCode>T8</idCode>
+        <idValue>Total Credits Rejected</idValue>
+    <idCode>T9</idCode>
+        <idValue>Total Debits Accepted</idValue>
+    <idCode>TA</idCode>
+        <idValue>Total Annual Sales</idValue>
+    <idCode>TB</idCode>
+        <idValue>Total Annual Sales to Customer</idValue>
+    <idCode>TC</idCode>
+        <idValue>Proposed Cost</idValue>
+    <idCode>TD</idCode>
+        <idValue>Proposed Profit</idValue>
+    <idCode>TE</idCode>
+        <idValue>Proposed Fee</idValue>
+    <idCode>TF</idCode>
+        <idValue>Total Proposed Price</idValue>
+    <idCode>TG</idCode>
+        <idValue>Alternate Proposed Price</idValue>
+    <idCode>TH</idCode>
+        <idValue>Total Claim Allowed</idValue>
+    <idCode>TI</idCode>
+        <idValue>Title Insurance Amount on Loan</idValue>
+    <idCode>TJ</idCode>
+        <idValue>Time and Expense Paid to Date</idValue>
+    <idCode>TK</idCode>
+        <idValue>Total Amount of Contract</idValue>
+    <idCode>TL</idCode>
+        <idValue>Total Prior Loan Amount Owed</idValue>
+    <idCode>TM</idCode>
+        <idValue>Time and Expense Paid Current Month</idValue>
+    <idCode>TN</idCode>
+        <idValue>Tax Sheltered Annuity (403B Transfer)</idValue>
+    <idCode>TO</idCode>
+        <idValue>Telephone Operator&apos;s Salary</idValue>
+    <idCode>TP</idCode>
+        <idValue>Total payment amount</idValue>
+    <idCode>TQ</idCode>
+        <idValue>Subsidies for Operating Costs</idValue>
+    <idCode>TR</idCode>
+        <idValue>Target Cost</idValue>
+    <idCode>TS</idCode>
+        <idValue>Total Sales</idValue>
+    <idCode>TT</idCode>
+        <idValue>Total Transaction Amount</idValue>
+    <idCode>TU</idCode>
+        <idValue>Transportation Cost per Unit of Measure</idValue>
+    <idCode>TW</idCode>
+        <idValue>Technicians Indemnity Provision</idValue>
+    <idCode>TX</idCode>
+        <idValue>Total to Date</idValue>
+    <idCode>TY</idCode>
+        <idValue>Total at Complete</idValue>
+    <idCode>TZ</idCode>
+        <idValue>Transportation Cost Total</idValue>
+    <idCode>U</idCode>
+        <idValue>Underpayment</idValue>
+    <idCode>U0</idCode>
+        <idValue>U.S. Government-Financing for Education</idValue>
+    <idCode>U1</idCode>
+        <idValue>Unsecured, Priority Claim Allowed</idValue>
+    <idCode>U2</idCode>
+        <idValue>Ingredient Cost Claimed</idValue>
+    <idCode>U3</idCode>
+        <idValue>Miscellaneous Expenses</idValue>
+    <idCode>U4</idCode>
+        <idValue>Present Value of Lot</idValue>
+    <idCode>U5</idCode>
+        <idValue>Cost of Improvements</idValue>
+    <idCode>U6</idCode>
+        <idValue>Alterations, Improvements, Repairs</idValue>
+    <idCode>U7</idCode>
+        <idValue>Land</idValue>
+    <idCode>U8</idCode>
+        <idValue>Refinance</idValue>
+    <idCode>U9</idCode>
+        <idValue>Estimated Prepaid Items</idValue>
+    <idCode>UA</idCode>
+        <idValue>Unliquidated Amount</idValue>
+    <idCode>UB</idCode>
+        <idValue>Unpaid Principal Balance</idValue>
+    <idCode>UC</idCode>
+        <idValue>Unspecified Aggregate Limit</idValue>
+    <idCode>UD</idCode>
+        <idValue>Unsecured, Nonpriority Claim Allowed</idValue>
+    <idCode>UE</idCode>
+        <idValue>Mortgage Insurance</idValue>
+    <idCode>UF</idCode>
+        <idValue>Discount (If Borrower Paid)</idValue>
+    <idCode>UG</idCode>
+        <idValue>Total Unpaid Principal Balance for Stafford Loans</idValue>
+    <idCode>UH</idCode>
+        <idValue>Subordinate Financing</idValue>
+    <idCode>UI</idCode>
+        <idValue>Total Costs</idValue>
+    <idCode>UJ</idCode>
+        <idValue>Other Credits</idValue>
+    <idCode>UK</idCode>
+        <idValue>Base Loan Amount (w/o financed Mortgage Insurance)</idValue>
+    <idCode>UL</idCode>
+        <idValue>Mortgage Insurance Financed</idValue>
+    <idCode>UM</idCode>
+        <idValue>Total Loan Amount</idValue>
+    <idCode>UN</idCode>
+        <idValue>Unsecured, Nonpriority Claim</idValue>
+    <idCode>UO</idCode>
+        <idValue>Cash from or to Borrower</idValue>
+    <idCode>UP</idCode>
+        <idValue>Total Unpaid Principal Balance for Parental Loans for Students</idValue>
+    <idCode>UPF</idCode>
+        <idValue>Upper Fund</idValue>
+    <idCode>UQ</idCode>
+        <idValue>Monthly Income</idValue>
+    <idCode>UR</idCode>
+        <idValue>Unearned Income</idValue>
+    <idCode>US</idCode>
+        <idValue>Total Unpaid Principal Balance for Supplemental Loans for Students</idValue>
+    <idCode>UT</idCode>
+        <idValue>Value Added Sales</idValue>
+    <idCode>UU</idCode>
+        <idValue>Clearing House Settlement</idValue>
+    <idCode>UV</idCode>
+        <idValue>Drawback</idValue>
+    <idCode>UW</idCode>
+        <idValue>Total Monthly Liabilities</idValue>
+    <idCode>UX</idCode>
+        <idValue>Utilities, Furniture, and Amenities Included in Rent</idValue>
+    <idCode>UY</idCode>
+        <idValue>Total Assets</idValue>
+    <idCode>UZ</idCode>
+        <idValue>Total Liquid Assets</idValue>
+    <idCode>V</idCode>
+        <idValue>Cost of Deficiency</idValue>
+    <idCode>V0</idCode>
+        <idValue>Value Added</idValue>
+    <idCode>V1</idCode>
+        <idValue>Tax and Insurance Escrow Fund</idValue>
+    <idCode>V2</idCode>
+        <idValue>Interest Due to Investor</idValue>
+    <idCode>V3</idCode>
+        <idValue>Total Principal Due to the Investor</idValue>
+    <idCode>V4</idCode>
+        <idValue>Total Interest Due to the Investor</idValue>
+    <idCode>V5</idCode>
+        <idValue>Total Curtailment Due to the Investor</idValue>
+    <idCode>V6</idCode>
+        <idValue>Total Principal Payoff and Repurchase Due to the Investor</idValue>
+    <idCode>V7</idCode>
+        <idValue>Total Interest Payoff and Repurchase Due to the Investor</idValue>
+    <idCode>V8</idCode>
+        <idValue>Actual Outstanding Principal Balance</idValue>
+    <idCode>V9</idCode>
+        <idValue>Face Amount</idValue>
+    <idCode>VA</idCode>
+        <idValue>Total Current Rent or Mortgage Payment (Issue)</idValue>
+    <idCode>VB</idCode>
+        <idValue>Total Non-liquid Assets</idValue>
+    <idCode>VC</idCode>
+        <idValue>Authorized</idValue>
+    <idCode>VD</idCode>
+        <idValue>Actual Person Day Rate</idValue>
+    <idCode>VE</idCode>
+        <idValue>Estimated Person Day Rate</idValue>
+    <idCode>VES</idCode>
+        <idValue>Vested/Earned Upper Fund</idValue>
+    <idCode>VF</idCode>
+        <idValue>Total Monthly Expenses</idValue>
+    <idCode>VG</idCode>
+        <idValue>Current Monthly Principal and Interest</idValue>
+    <idCode>VH</idCode>
+        <idValue>Levy Amount</idValue>
+    <idCode>VI</idCode>
+        <idValue>Current Support</idValue>
+    <idCode>VJ</idCode>
+        <idValue>Past Due Support</idValue>
+    <idCode>VK</idCode>
+        <idValue>Medical Support</idValue>
+    <idCode>VL</idCode>
+        <idValue>Net Negative Amortization Amount</idValue>
+    <idCode>VM</idCode>
+        <idValue>Withhold From Wages</idValue>
+    <idCode>VN</idCode>
+        <idValue>Commission Basis</idValue>
+    <idCode>VO</idCode>
+        <idValue>Commission Earned</idValue>
+    <idCode>VP</idCode>
+        <idValue>Current Monthly Payment</idValue>
+    <idCode>VQ</idCode>
+        <idValue>Commission Netted</idValue>
+    <idCode>VR</idCode>
+        <idValue>Total Monthly Debt</idValue>
+    <idCode>VS</idCode>
+        <idValue>Other Financing Payment</idValue>
+    <idCode>VT</idCode>
+        <idValue>Current Value</idValue>
+    <idCode>VU</idCode>
+        <idValue>Closing Cost</idValue>
+    <idCode>VV</idCode>
+        <idValue>Capitalized Mortgage Amount</idValue>
+    <idCode>VW</idCode>
+        <idValue>First Mortgage Monthly Principal and Interest</idValue>
+    <idCode>VX</idCode>
+        <idValue>Interest Amount Paid to Date</idValue>
+    <idCode>VY</idCode>
+        <idValue>Minimum Transfer</idValue>
+    <idCode>VZ</idCode>
+        <idValue>Maximum Transfer</idValue>
+    <idCode>W</idCode>
+        <idValue>Deficiency Judgment Fees</idValue>
+    <idCode>W0</idCode>
+        <idValue>Trade Debtors</idValue>
+    <idCode>W1</idCode>
+        <idValue>W-2</idValue>
+    <idCode>W2</idCode>
+        <idValue>W-2 with Bonuses</idValue>
+    <idCode>W3</idCode>
+        <idValue>W-2 with Deferred Compensation</idValue>
+    <idCode>W4</idCode>
+        <idValue>W-2 without Bonuses</idValue>
+    <idCode>W5</idCode>
+        <idValue>Deposit Sub Total</idValue>
+    <idCode>W6</idCode>
+        <idValue>Direct Rollover</idValue>
+    <idCode>W7</idCode>
+        <idValue>Direct Transfer</idValue>
+    <idCode>W8</idCode>
+        <idValue>Discounted</idValue>
+    <idCode>W9</idCode>
+        <idValue>Secondary Finance</idValue>
+    <idCode>WA</idCode>
+        <idValue>Minimum Deposit</idValue>
+    <idCode>WB</idCode>
+        <idValue>Sub-Agency Compensation</idValue>
+    <idCode>WC</idCode>
+        <idValue>Buyers Agency Compensation</idValue>
+    <idCode>WD</idCode>
+        <idValue>Variable Rate Compensation</idValue>
+    <idCode>WE</idCode>
+        <idValue>Compensation Bonus on Sale of Property</idValue>
+    <idCode>WF</idCode>
+        <idValue>Veterans Affairs Loan Guarantee</idValue>
+    <idCode>WG</idCode>
+        <idValue>Security Trade Amount</idValue>
+    <idCode>WH</idCode>
+        <idValue>Balance Owing All Other Liens, Subject Property</idValue>
+    <idCode>WI</idCode>
+        <idValue>Other Financing</idValue>
+    <idCode>WJ</idCode>
+        <idValue>Dual Agency Compensation</idValue>
+    <idCode>WK</idCode>
+        <idValue>Per Week Limit</idValue>
+    <idCode>WL</idCode>
+        <idValue>Lender&apos;s Opinion of Value</idValue>
+    <idCode>WM</idCode>
+        <idValue>Total Original Principal Balance</idValue>
+    <idCode>WN</idCode>
+        <idValue>Other Agent Compensation</idValue>
+    <idCode>WO</idCode>
+        <idValue>Dock Usage Fee</idValue>
+    <idCode>WP</idCode>
+        <idValue>Pool Usage Fee</idValue>
+    <idCode>WQ</idCode>
+        <idValue>Clubhouse Fee</idValue>
+    <idCode>WR</idCode>
+        <idValue>Optional Service Fee</idValue>
+    <idCode>WS</idCode>
+        <idValue>Other Association Fees</idValue>
+    <idCode>WT</idCode>
+        <idValue>Principal, Interest, Taxes</idValue>
+    <idCode>WU</idCode>
+        <idValue>Principal, Interest, Taxes and Insurance</idValue>
+    <idCode>WV</idCode>
+        <idValue>Total Points Paid at Closing</idValue>
+    <idCode>WW</idCode>
+        <idValue>Amount that Would Have Been Paid in the Absence of Capitation</idValue>
+    <idCode>WX</idCode>
+        <idValue>Points Paid by Seller</idValue>
+    <idCode>WY</idCode>
+        <idValue>Loan Withdrawal</idValue>
+    <idCode>WZ</idCode>
+        <idValue>Severance Pay</idValue>
+    <idCode>X</idCode>
+        <idValue>Deficiency Judgment Expenses and Fees</idValue>
+    <idCode>X0</idCode>
+        <idValue>Treble Damages</idValue>
+    <idCode>X1</idCode>
+        <idValue>Transfer to Untaxed Reserves</idValue>
+    <idCode>X2</idCode>
+        <idValue>Reissued</idValue>
+    <idCode>X3</idCode>
+        <idValue>Rollover Amount</idValue>
+    <idCode>X4</idCode>
+        <idValue>Annual Rental</idValue>
+    <idCode>X5</idCode>
+        <idValue>Gross Monthly Rent</idValue>
+    <idCode>X6</idCode>
+        <idValue>SEP - Self Employee Pension</idValue>
+    <idCode>X7</idCode>
+        <idValue>Single Premium</idValue>
+    <idCode>X8</idCode>
+        <idValue>Funding Amount</idValue>
+    <idCode>X9</idCode>
+        <idValue>Tax Sheltered Annuity (403B Transfer)</idValue>
+    <idCode>XA</idCode>
+        <idValue>Maximum Award Fee</idValue>
+    <idCode>XB</idCode>
+        <idValue>Maturity Value</idValue>
+    <idCode>XC</idCode>
+        <idValue>Earned Wages</idValue>
+    <idCode>XD</idCode>
+        <idValue>Base Period Wage</idValue>
+    <idCode>XE</idCode>
+        <idValue>Withdrawal</idValue>
+    <idCode>XF</idCode>
+        <idValue>Withdrawal Inception to Date</idValue>
+    <idCode>XG</idCode>
+        <idValue>Withdrawal Less Market Value Adjustment</idValue>
+    <idCode>XH</idCode>
+        <idValue>Withdrawal Less Surrender</idValue>
+    <idCode>XI</idCode>
+        <idValue>Withdrawal Less Taxes</idValue>
+    <idCode>XJ</idCode>
+        <idValue>Withdrawal Year to Date</idValue>
+    <idCode>XK</idCode>
+        <idValue>Unavailable Reserves</idValue>
+    <idCode>XL</idCode>
+        <idValue>Uncalled Capital</idValue>
+    <idCode>XM</idCode>
+        <idValue>Unemployment Contribution</idValue>
+    <idCode>XN</idCode>
+        <idValue>Unlimited Capital, Minimum Fixed</idValue>
+    <idCode>XO</idCode>
+        <idValue>Unpaid Capital</idValue>
+    <idCode>XP</idCode>
+        <idValue>Unsecured Liabilities</idValue>
+    <idCode>XQ</idCode>
+        <idValue>Value Added Tax</idValue>
+    <idCode>XR</idCode>
+        <idValue>Value of Shares</idValue>
+    <idCode>XS</idCode>
+        <idValue>Vehicles</idValue>
+    <idCode>XT</idCode>
+        <idValue>Voluntary Reserves</idValue>
+    <idCode>XU</idCode>
+        <idValue>Wages</idValue>
+    <idCode>XV</idCode>
+        <idValue>Withholding</idValue>
+    <idCode>XW</idCode>
+        <idValue>Original Value</idValue>
+    <idCode>XX</idCode>
+        <idValue>Working Capital</idValue>
+    <idCode>XY</idCode>
+        <idValue>Sales Price Per Dwelling Unit</idValue>
+    <idCode>XZ</idCode>
+        <idValue>Sales Price Per Room</idValue>
+    <idCode>Y</idCode>
+        <idValue>Current List Price</idValue>
+    <idCode>Y1</idCode>
+        <idValue>Year to Date Eligible Salary</idValue>
+    <idCode>Y2</idCode>
+        <idValue>Total Real Estate Owned</idValue>
+    <idCode>Y3</idCode>
+        <idValue>Total Liabilities</idValue>
+    <idCode>Y4</idCode>
+        <idValue>Total Liability Monthly Payments</idValue>
+    <idCode>Y5</idCode>
+        <idValue>Total Real Estate Owned Market Value</idValue>
+    <idCode>Y6</idCode>
+        <idValue>Total Real Estate Owned Gross Rental Income</idValue>
+    <idCode>Y7</idCode>
+        <idValue>Total Real Estate Owned Mortgages and Liens</idValue>
+    <idCode>Y8</idCode>
+        <idValue>Total Real Estate Owned Mortgage Payments</idValue>
+    <idCode>Y9</idCode>
+        <idValue>Total Real Estate Owned Miscellaneous Expenses</idValue>
+    <idCode>YA</idCode>
+        <idValue>Total Real Estate Owned Net Rental Income</idValue>
+    <idCode>YB</idCode>
+        <idValue>Actual Unpaid Principal Balance</idValue>
+    <idCode>YC</idCode>
+        <idValue>Scheduled Unpaid Principal Balance</idValue>
+    <idCode>YD</idCode>
+        <idValue>Principal Due to Investor</idValue>
+    <idCode>YE</idCode>
+        <idValue>Constant Principal and Interest</idValue>
+    <idCode>YF</idCode>
+        <idValue>Other Fee Collection</idValue>
+    <idCode>YG</idCode>
+        <idValue>Beginning Scheduled Unpaid Principal Balance</idValue>
+    <idCode>YH</idCode>
+        <idValue>Tax and Insurance Principal Balance</idValue>
+    <idCode>YI</idCode>
+        <idValue>New Principal and Interest</idValue>
+    <idCode>YJ</idCode>
+        <idValue>Curtailment</idValue>
+    <idCode>YK</idCode>
+        <idValue>Prepayment Penalty</idValue>
+    <idCode>YL</idCode>
+        <idValue>Partial Annuitization</idValue>
+    <idCode>YM</idCode>
+        <idValue>Partial Withdrawal</idValue>
+    <idCode>YN</idCode>
+        <idValue>Post Tax Equity and Fiscal Responsibility Act (TEFRA) Gain</idValue>
+    <idCode>YO</idCode>
+        <idValue>Pre Tax Equity and Fiscal Responsibility Act (TEFRA) Gain</idValue>
+    <idCode>YQ</idCode>
+        <idValue>Payments in Advance</idValue>
+    <idCode>YR</idCode>
+        <idValue>Payments in Arrears</idValue>
+    <idCode>YS</idCode>
+        <idValue>Cancelled</idValue>
+    <idCode>YT</idCode>
+        <idValue>Denied</idValue>
+    <idCode>YU</idCode>
+        <idValue>In Process</idValue>
+    <idCode>YV</idCode>
+        <idValue>Requested</idValue>
+    <idCode>YW</idCode>
+        <idValue>Paid</idValue>
+    <idCode>YX</idCode>
+        <idValue>Paid for This Facility</idValue>
+    <idCode>YY</idCode>
+        <idValue>Returned</idValue>
+    <idCode>YZ</idCode>
+        <idValue>Total Aggregate Limit</idValue>
+    <idCode>Z</idCode>
+        <idValue>List Price When Sold</idValue>
+    <idCode>Z0</idCode>
+        <idValue>Insertion Cost</idValue>
+    <idCode>Z1</idCode>
+        <idValue>Repackaging Labor Cost</idValue>
+    <idCode>Z2</idCode>
+        <idValue>Repackaging Material Cost</idValue>
+    <idCode>Z3</idCode>
+        <idValue>Unit Cost of Discrepant Material</idValue>
+    <idCode>Z4</idCode>
+        <idValue>Liquidation Principal</idValue>
+    <idCode>Z5</idCode>
+        <idValue>Remaining Pool Balance</idValue>
+    <idCode>Z6</idCode>
+        <idValue>Remaining Security Balance</idValue>
+    <idCode>Z7</idCode>
+        <idValue>Program Cost</idValue>
+    <idCode>Z8</idCode>
+        <idValue>Override to Handling Fee</idValue>
+    <idCode>Z9</idCode>
+        <idValue>Production Cost</idValue>
+    <idCode>ZA</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 1</idValue>
+    <idCode>ZB</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 2</idValue>
+    <idCode>ZC</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 3</idValue>
+    <idCode>ZD</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 4</idValue>
+    <idCode>ZE</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 5</idValue>
+    <idCode>ZF</idCode>
+        <idValue>Federal Pension Mandate - Category 1</idValue>
+    <idCode>ZG</idCode>
+        <idValue>Federal Pension Mandate - Category 2</idValue>
+    <idCode>ZH</idCode>
+        <idValue>Federal Pension Mandate - Category 3</idValue>
+    <idCode>ZI</idCode>
+        <idValue>Federal Pension Mandate - Category 4</idValue>
+    <idCode>ZJ</idCode>
+        <idValue>Federal Pension Mandate - Category 5</idValue>
+    <idCode>ZK</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 1</idValue>
+    <idCode>ZL</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 2</idValue>
+    <idCode>ZM</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 3</idValue>
+    <idCode>ZN</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 4</idValue>
+    <idCode>ZO</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 5</idValue>
+    <idCode>ZP</idCode>
+        <idValue>Coupon Face Value</idValue>
+    <idCode>ZQ</idCode>
+        <idValue>Initial Target Cost</idValue>
+    <idCode>ZR</idCode>
+        <idValue>Increase</idValue>
+    <idCode>ZS</idCode>
+        <idValue>Decrease</idValue>
+    <idCode>ZT</idCode>
+        <idValue>Prorated Amount</idValue>
+    <idCode>ZU</idCode>
+        <idValue>Loan Charge</idValue>
+    <idCode>ZV</idCode>
+        <idValue>Mortgage Recording Fee</idValue>
+    <idCode>ZW</idCode>
+        <idValue>Deed Recording Fee</idValue>
+    <idCode>ZX</idCode>
+        <idValue>Release Recording Fee</idValue>
+    <idCode>ZY</idCode>
+        <idValue>Assumption</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

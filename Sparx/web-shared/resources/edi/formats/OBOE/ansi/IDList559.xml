@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>10</idCode>
+        <idValue>Alabama</idValue>
+    <idCode>11</idCode>
+        <idValue>Alaska</idValue>
+    <idCode>12</idCode>
+        <idValue>Arizona</idValue>
+    <idCode>13</idCode>
+        <idValue>Arkansas</idValue>
+    <idCode>14</idCode>
+        <idValue>California</idValue>
+    <idCode>15</idCode>
+        <idValue>Colorado</idValue>
+    <idCode>16</idCode>
+        <idValue>Connecticut</idValue>
+    <idCode>17</idCode>
+        <idValue>Delaware</idValue>
+    <idCode>18</idCode>
+        <idValue>District of Columbia</idValue>
+    <idCode>19</idCode>
+        <idValue>Florida</idValue>
+    <idCode>20</idCode>
+        <idValue>Georgia</idValue>
+    <idCode>21</idCode>
+        <idValue>Hawaii</idValue>
+    <idCode>22</idCode>
+        <idValue>Idaho</idValue>
+    <idCode>23</idCode>
+        <idValue>Illinois</idValue>
+    <idCode>24</idCode>
+        <idValue>Indiana</idValue>
+    <idCode>25</idCode>
+        <idValue>Iowa</idValue>
+    <idCode>26</idCode>
+        <idValue>Kansas</idValue>
+    <idCode>27</idCode>
+        <idValue>Louisiana</idValue>
+    <idCode>28</idCode>
+        <idValue>Kentucky</idValue>
+    <idCode>29</idCode>
+        <idValue>Maine</idValue>
+    <idCode>30</idCode>
+        <idValue>Maryland</idValue>
+    <idCode>31</idCode>
+        <idValue>Massachusetts</idValue>
+    <idCode>32</idCode>
+        <idValue>Michigan</idValue>
+    <idCode>33</idCode>
+        <idValue>Minnesota</idValue>
+    <idCode>34</idCode>
+        <idValue>Mississippi</idValue>
+    <idCode>35</idCode>
+        <idValue>Missouri</idValue>
+    <idCode>36</idCode>
+        <idValue>Montana</idValue>
+    <idCode>37</idCode>
+        <idValue>Nebraska</idValue>
+    <idCode>38</idCode>
+        <idValue>Nevada</idValue>
+    <idCode>39</idCode>
+        <idValue>New Hampshire</idValue>
+    <idCode>40</idCode>
+        <idValue>New Jersey</idValue>
+    <idCode>41</idCode>
+        <idValue>New Mexico</idValue>
+    <idCode>42</idCode>
+        <idValue>New York</idValue>
+    <idCode>43</idCode>
+        <idValue>North Carolina</idValue>
+    <idCode>44</idCode>
+        <idValue>North Dakota</idValue>
+    <idCode>45</idCode>
+        <idValue>Ohio</idValue>
+    <idCode>46</idCode>
+        <idValue>Oklahoma</idValue>
+    <idCode>47</idCode>
+        <idValue>Oregon</idValue>
+    <idCode>48</idCode>
+        <idValue>Pennsylvania</idValue>
+    <idCode>49</idCode>
+        <idValue>Rhode Island</idValue>
+    <idCode>50</idCode>
+        <idValue>South Carolina</idValue>
+    <idCode>51</idCode>
+        <idValue>South Dakota</idValue>
+    <idCode>52</idCode>
+        <idValue>Tennessee</idValue>
+    <idCode>53</idCode>
+        <idValue>Texas</idValue>
+    <idCode>54</idCode>
+        <idValue>Utah</idValue>
+    <idCode>55</idCode>
+        <idValue>Vermont</idValue>
+    <idCode>56</idCode>
+        <idValue>Virginia</idValue>
+    <idCode>57</idCode>
+        <idValue>Washington</idValue>
+    <idCode>58</idCode>
+        <idValue>West Virginia</idValue>
+    <idCode>59</idCode>
+        <idValue>Wisconsin</idValue>
+    <idCode>60</idCode>
+        <idValue>Wyoming</idValue>
+    <idCode>93</idCode>
+        <idValue>Dun &amp; Bradstreet</idValue>
+    <idCode>94</idCode>
+        <idValue>Code Assigned by the Organization that is the Ultimate Destination of the Transaction Set</idValue>
+    <idCode>A1</idCode>
+        <idValue>American Land Title Association</idValue>
+    <idCode>A2</idCode>
+        <idValue>California Land Title Association</idValue>
+    <idCode>A3</idCode>
+        <idValue>Texas Land Title Association</idValue>
+    <idCode>A4</idCode>
+        <idValue>Assigned by Carrier</idValue>
+    <idCode>AA</idCode>
+        <idValue>Aluminum Association</idValue>
+    <idCode>AB</idCode>
+        <idValue>Assigned by Buyer</idValue>
+    <idCode>AC</idCode>
+        <idValue>American Conference of Government Industrial Hygienists (ACGIH)</idValue>
+    <idCode>AD</idCode>
+        <idValue>Agency Company Organization for Research and Development (ACORD)</idValue>
+    <idCode>AE</idCode>
+        <idValue>Advertising Industry</idValue>
+    <idCode>AG</idCode>
+        <idValue>State Agency Assigned</idValue>
+    <idCode>AH</idCode>
+        <idValue>American Industrial Hygiene Association (AIHA)</idValue>
+    <idCode>AI</idCode>
+        <idValue>Automotive Industry Action Group</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Real Estate Information Industry</idValue>
+    <idCode>AL</idCode>
+        <idValue>National Alcohol Beverage Control Association</idValue>
+    <idCode>AM</idCode>
+        <idValue>American Medical Association</idValue>
+    <idCode>AP</idCode>
+        <idValue>American Petroleum Institute</idValue>
+    <idCode>AQ</idCode>
+        <idValue>American Public Works Association (APWA) One Call Systems International (OCSI)</idValue>
+    <idCode>AS</idCode>
+        <idValue>Assigned by Seller</idValue>
+    <idCode>AT</idCode>
+        <idValue>American Society for Testing and Materials (ASTM)</idValue>
+    <idCode>AW</idCode>
+        <idValue>American Welding Society (AWS)</idValue>
+    <idCode>AX</idCode>
+        <idValue>ANSI Accredited Standards Committee, X12</idValue>
+    <idCode>AY</idCode>
+        <idValue>American Yarn Spinners Association (AYSA)</idValue>
+    <idCode>BE</idCode>
+        <idValue>Bell Communications Research (Bellcore)</idValue>
+    <idCode>BF</idCode>
+        <idValue>National Business Forms Association</idValue>
+    <idCode>BI</idCode>
+        <idValue>Book Industry Systems Advisory Committee</idValue>
+    <idCode>CA</idCode>
+        <idValue>Chemical Abstract Services (CAS)</idValue>
+    <idCode>CB</idCode>
+        <idValue>Copper and Brass Fabricators Council, Inc.</idValue>
+    <idCode>CC</idCode>
+        <idValue>National Cotton Council of America</idValue>
+    <idCode>CE</idCode>
+        <idValue>Construction Specification Institute (CSI) Extended</idValue>
+    <idCode>CI</idCode>
+        <idValue>Chemical Industry Data Exchange (CIDX)</idValue>
+    <idCode>CL</idCode>
+        <idValue>Collision Industry Electronic Commerce Association (CIECA)</idValue>
+    <idCode>CM</idCode>
+        <idValue>Carbide Manufacturers</idValue>
+    <idCode>CO</idCode>
+        <idValue>County Designator Code</idValue>
+    <idCode>CR</idCode>
+        <idValue>Commander - Rome Air Development Center</idValue>
+    <idCode>CS</idCode>
+        <idValue>Construction Specification Institute (CSI)</idValue>
+    <idCode>CU</idCode>
+        <idValue>Committee for Uniform Security Identification Procedures (CUSIP)</idValue>
+    <idCode>CX</idCode>
+        <idValue>National Association of Corrosion Engineers (NACE)</idValue>
+    <idCode>DA</idCode>
+        <idValue>Food and Drug Administration (FDA)</idValue>
+    <idCode>DD</idCode>
+        <idValue>Department of Defense</idValue>
+    <idCode>DE</idCode>
+        <idValue>Drug Enforcement Administration</idValue>
+    <idCode>DF</idCode>
+        <idValue>Department of Defense (DoD)</idValue>
+    <idCode>DI</idCode>
+        <idValue>Deutsches Institut fur Normung (DIN)</idValue>
+    <idCode>DL</idCode>
+        <idValue>Defense Logistics Agency</idValue>
+    <idCode>DN</idCode>
+        <idValue>Department of the Navy</idValue>
+    <idCode>DO</idCode>
+        <idValue>United States Department of Transportation (DOT)</idValue>
+    <idCode>DR</idCode>
+        <idValue>National Wholesale Druggists Association</idValue>
+    <idCode>DS</idCode>
+        <idValue>Defense Finance and Accounting Service (DFAS)</idValue>
+    <idCode>DX</idCode>
+        <idValue>United States Marine Corps</idValue>
+    <idCode>DY</idCode>
+        <idValue>Department of Air Force</idValue>
+    <idCode>DZ</idCode>
+        <idValue>Department of Army</idValue>
+    <idCode>EI</idCode>
+        <idValue>Electronic Industries Association</idValue>
+    <idCode>EP</idCode>
+        <idValue>United States Environmental Protection Agency (EPA)</idValue>
+    <idCode>ES</idCode>
+        <idValue>Environment and Safety Data Exchange (ESDX)</idValue>
+    <idCode>ET</idCode>
+        <idValue>Temporary Help Industry</idValue>
+    <idCode>EU</idCode>
+        <idValue>Electric Utilities</idValue>
+    <idCode>EX</idCode>
+        <idValue>Electronics Industry Data Exchange (EIDX)</idValue>
+    <idCode>FA</idCode>
+        <idValue>Fabric and Supplier Linkage Council (FASLINC)</idValue>
+    <idCode>FC</idCode>
+        <idValue>Federal Communications Commission (FCC)</idValue>
+    <idCode>FD</idCode>
+        <idValue>Uniform Code Council (UCS)</idValue>
+    <idCode>FG</idCode>
+        <idValue>Federal Government</idValue>
+    <idCode>FH</idCode>
+        <idValue>Federal Highway Administration</idValue>
+    <idCode>FI</idCode>
+        <idValue>American Furniture Manufacturers Association</idValue>
+    <idCode>GC</idCode>
+        <idValue>Graphics Communications Association</idValue>
+    <idCode>GS</idCode>
+        <idValue>General Services Administration (GSA)</idValue>
+    <idCode>GU</idCode>
+        <idValue>Natural Gas Utilities</idValue>
+    <idCode>HC</idCode>
+        <idValue>Health Care Financing Administration</idValue>
+    <idCode>HI</idCode>
+        <idValue>Health Insurance Association of America</idValue>
+    <idCode>HS</idCode>
+        <idValue>Department of Health and Human Services</idValue>
+    <idCode>HU</idCode>
+        <idValue>Department of Housing and Urban Development</idValue>
+    <idCode>IA</idCode>
+        <idValue>International Agency for Research on Cancer (IARC)</idValue>
+    <idCode>IB</idCode>
+        <idValue>International Association of Industrial Accident Boards and Commissions</idValue>
+    <idCode>IC</idCode>
+        <idValue>International Air Transport Association (IATA)</idValue>
+    <idCode>IM</idCode>
+        <idValue>Iron and Steel Standards Committee ISM</idValue>
+    <idCode>IN</idCode>
+        <idValue>International Association of Corporation Administrators</idValue>
+    <idCode>IS</idCode>
+        <idValue>International Standards Organization</idValue>
+    <idCode>JA</idCode>
+        <idValue>Japanese Standards Association</idValue>
+    <idCode>LA</idCode>
+        <idValue>Life and Annuity Industry Committee</idValue>
+    <idCode>LB</idCode>
+        <idValue>Department of Labor</idValue>
+    <idCode>LI</idCode>
+        <idValue>Leasing Industry</idValue>
+    <idCode>MA</idCode>
+        <idValue>Mortgage Bankers Association of America</idValue>
+    <idCode>MB</idCode>
+        <idValue>Office of Management and Budget</idValue>
+    <idCode>MC</idCode>
+        <idValue>Manufacturing Company</idValue>
+    <idCode>ME</idCode>
+        <idValue>American Society of Mechanical Engineers (ASME)</idValue>
+    <idCode>MI</idCode>
+        <idValue>ABCD - The Microcomputer Industry Association</idValue>
+    <idCode>MP</idCode>
+        <idValue>Material Safety Data Sheet (MSDS) Provider</idValue>
+    <idCode>MS</idCode>
+        <idValue>Military Standard</idValue>
+    <idCode>MV</idCode>
+        <idValue>American Association of Motor Vehicle Administrators (AAMVA)</idValue>
+    <idCode>NA</idCode>
+        <idValue>National Insurance Crime Bureau (NICB)</idValue>
+    <idCode>NB</idCode>
+        <idValue>National Association of Business and Educational Radio</idValue>
+    <idCode>NC</idCode>
+        <idValue>National Council on Compensation Insurance</idValue>
+    <idCode>NE</idCode>
+        <idValue>National Electric Manufacturers Association (NEMA)</idValue>
+    <idCode>NF</idCode>
+        <idValue>National Fire Protection Agency (NFPA)</idValue>
+    <idCode>NG</idCode>
+        <idValue>National Auto Glass Specification (NAGS)</idValue>
+    <idCode>NI</idCode>
+        <idValue>National Institute of Occupational Safety and Health (NIOSH)</idValue>
+    <idCode>NR</idCode>
+        <idValue>National Retail Merchants Association</idValue>
+    <idCode>NS</idCode>
+        <idValue>National Center for State Courts</idValue>
+    <idCode>NT</idCode>
+        <idValue>National Toxicology Program (NTP)</idValue>
+    <idCode>NU</idCode>
+        <idValue>United States Nuclear Regulatory Commission</idValue>
+    <idCode>NW</idCode>
+        <idValue>Newspaper Association of America</idValue>
+    <idCode>OI</idCode>
+        <idValue>Optical Industry</idValue>
+    <idCode>OP</idCode>
+        <idValue>Office Products</idValue>
+    <idCode>OS</idCode>
+        <idValue>United States Occupational Safety and Health Administration (OSHA)</idValue>
+    <idCode>PA</idCode>
+        <idValue>American Paper Institute</idValue>
+    <idCode>PC</idCode>
+        <idValue>Pennsylvania Courts</idValue>
+    <idCode>SA</idCode>
+        <idValue>Society of Automotive Engineers, Inc. (SAE)</idValue>
+    <idCode>SE</idCode>
+        <idValue>Serials Industry Systems Advisory Committee (SISAC)</idValue>
+    <idCode>SL</idCode>
+        <idValue>Student Loan Guarantor</idValue>
+    <idCode>SP</idCode>
+        <idValue>American Society for Automation in Pharmacy</idValue>
+    <idCode>ST</idCode>
+        <idValue>American Iron &amp; Steel Institute</idValue>
+    <idCode>TA</idCode>
+        <idValue>Air Transport Association of America</idValue>
+    <idCode>TB</idCode>
+        <idValue>Textile Distributors Association, Inc.</idValue>
+    <idCode>TC</idCode>
+        <idValue>Textile Apparel Linkage Council (TALC)</idValue>
+    <idCode>TD</idCode>
+        <idValue>Transportation Data Coordinating Committee: Electronic Data Interchange Association (TDCC:EDIA)</idValue>
+    <idCode>TI</idCode>
+        <idValue>Telecommunications Industry</idValue>
+    <idCode>TM</idCode>
+        <idValue>American Textile Manufacturers Institute</idValue>
+    <idCode>TP</idCode>
+        <idValue>Canadian Freight Classification</idValue>
+    <idCode>TR</idCode>
+        <idValue>American Trucking Associations</idValue>
+    <idCode>TX</idCode>
+        <idValue>American Apparel Manufacturers Association</idValue>
+    <idCode>UC</idCode>
+        <idValue>United States Courts</idValue>
+    <idCode>UN</idCode>
+        <idValue>United Nations (UN)</idValue>
+    <idCode>VI</idCode>
+        <idValue>Voluntary Inter-Industry Commerce Standard (VICS) EDI</idValue>
+    <idCode>WH</idCode>
+        <idValue>Canadian Workplace Hazardous Materials Information System (WHMIS)</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

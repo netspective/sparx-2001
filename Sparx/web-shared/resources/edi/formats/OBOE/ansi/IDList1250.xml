@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>CC</idCode>
+        <idValue>First Two Digits of Year Expressed in Format CCYY</idValue>
+    <idCode>CD</idCode>
+        <idValue>Month and Year Expressed in Format MMMYYYY</idValue>
+    <idCode>CM</idCode>
+        <idValue>Date in Format CCYYMM</idValue>
+    <idCode>CQ</idCode>
+        <idValue>Date in Format CCYYQ</idValue>
+    <idCode>CY</idCode>
+        <idValue>Year Expressed in Format CCYY</idValue>
+    <idCode>D6</idCode>
+        <idValue>Date Expressed in Format YYMMDD</idValue>
+    <idCode>D8</idCode>
+        <idValue>Date Expressed in Format CCYYMMDD</idValue>
+    <idCode>DA</idCode>
+        <idValue>Range of Dates within a Single Month Expressed in Format DD-DD</idValue>
+    <idCode>DB</idCode>
+        <idValue>Date Expressed in Format MMDDCCYY</idValue>
+    <idCode>DD</idCode>
+        <idValue>Day of Month in Numeric Format</idValue>
+    <idCode>DT</idCode>
+        <idValue>Date and Time Expressed in Format CCYYMMDDHHMM</idValue>
+    <idCode>DTS</idCode>
+        <idValue>Range of Date and Time Expressed in Format CCYYMMDDHHMMSS-CCYYMMDDHHMMSS</idValue>
+    <idCode>EH</idCode>
+        <idValue>Last Digit of Year and Julian Date Expressed in Format YDDD</idValue>
+    <idCode>KA</idCode>
+        <idValue>Date Expressed in Format YYMMMDD</idValue>
+    <idCode>MD</idCode>
+        <idValue>Month of Year and Day of Month Expressed in Format MMDD</idValue>
+    <idCode>MM</idCode>
+        <idValue>Month of Year in Numeric Format</idValue>
+    <idCode>RD</idCode>
+        <idValue>Range of Dates Expressed in Format MMDDCCYY-MMDDCCYY</idValue>
+    <idCode>RD2</idCode>
+        <idValue>Range of Years Expressed in Format YY-YY</idValue>
+    <idCode>RD4</idCode>
+        <idValue>Range of Years Expressed in Format CCYY-CCYY</idValue>
+    <idCode>RD5</idCode>
+        <idValue>Range of Years and Months Expressed in Format CCYYMM-CCYYMM</idValue>
+    <idCode>RD6</idCode>
+        <idValue>Range of Dates Expressed in Format YYMMDD-YYMMDD</idValue>
+    <idCode>RD8</idCode>
+        <idValue>Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD</idValue>
+    <idCode>RDM</idCode>
+        <idValue>Range of Dates Expressed in Format YYMMDD-MMDD</idValue>
+    <idCode>RDT</idCode>
+        <idValue>Range of Date and Time, Expressed in Format CCYYMMDDHHMM-CCYYMMDDHHMM</idValue>
+    <idCode>RMD</idCode>
+        <idValue>Range of Months and Days Expressed in Format MMDD-MMDD</idValue>
+    <idCode>RMY</idCode>
+        <idValue>Range of Years and Months Expressed in Format YYMM-YYMM</idValue>
+    <idCode>RTM</idCode>
+        <idValue>Range of Time Expressed in Format HHMM-HHMM</idValue>
+    <idCode>RTS</idCode>
+        <idValue>Date and Time Expressed in Format CCYYMMDDHHMMSS</idValue>
+    <idCode>TC</idCode>
+        <idValue>Julian Date Expressed in Format DDD</idValue>
+    <idCode>TM</idCode>
+        <idValue>Time Expressed in Format HHMM</idValue>
+    <idCode>TQ</idCode>
+        <idValue>Date Expressed in Format MMYY</idValue>
+    <idCode>TR</idCode>
+        <idValue>Date and Time Expressed in Format DDMMYYHHMM</idValue>
+    <idCode>TS</idCode>
+        <idValue>Time Expressed in Format HHMMSS</idValue>
+    <idCode>TT</idCode>
+        <idValue>Date Expressed in Format MMDDYY</idValue>
+    <idCode>TU</idCode>
+        <idValue>Date Expressed in Format YYDDD</idValue>
+    <idCode>UN</idCode>
+        <idValue>Unstructured</idValue>
+    <idCode>YM</idCode>
+        <idValue>Year and Month Expressed in Format YYMM</idValue>
+    <idCode>YMM</idCode>
+        <idValue>Range of Year and Months, Expressed in CCYYMMM-MMM Format</idValue>
+    <idCode>YY</idCode>
+        <idValue>Last Two Digits of Year Expressed in Format CCYY</idValue>
+</idList>

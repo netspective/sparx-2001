@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>001</idCode>
+        <idValue>Single Practice</idValue>
+    <idCode>002</idCode>
+        <idValue>Partnership</idValue>
+    <idCode>003</idCode>
+        <idValue>Professional Association (PA)</idValue>
+    <idCode>004</idCode>
+        <idValue>Clinic</idValue>
+    <idCode>005</idCode>
+        <idValue>Single Entity Facility or Hospital</idValue>
+    <idCode>006</idCode>
+        <idValue>Distinct Part Facility or Hospital</idValue>
+    <idCode>007</idCode>
+        <idValue>Individual</idValue>
+    <idCode>008</idCode>
+        <idValue>Corporation</idValue>
+</idList>

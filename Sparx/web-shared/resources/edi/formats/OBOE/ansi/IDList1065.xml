@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Person</idValue>
+    <idCode>2</idCode>
+        <idValue>Non-Person Entity</idValue>
+    <idCode>3</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>4</idCode>
+        <idValue>Corporation</idValue>
+    <idCode>5</idCode>
+        <idValue>Trust</idValue>
+    <idCode>6</idCode>
+        <idValue>Organization</idValue>
+    <idCode>7</idCode>
+        <idValue>Limited Liability Corporation</idValue>
+    <idCode>8</idCode>
+        <idValue>Partnership</idValue>
+    <idCode>9</idCode>
+        <idValue>S Corporation</idValue>
+    <idCode>C</idCode>
+        <idValue>Custodial</idValue>
+    <idCode>D</idCode>
+        <idValue>Non-Profit Organization</idValue>
+    <idCode>E</idCode>
+        <idValue>Sole Proprietorship</idValue>
+    <idCode>G</idCode>
+        <idValue>Government</idValue>
+    <idCode>L</idCode>
+        <idValue>Limited Partnership</idValue>
+</idList>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1S</idCode>
+        <idValue>Side One</idValue>
+    <idCode>2S</idCode>
+        <idValue>Side Two</idValue>
+    <idCode>A1</idCode>
+        <idValue>Single</idValue>
+    <idCode>AL</idCode>
+        <idValue>All</idValue>
+    <idCode>AO</idCode>
+        <idValue>Single End Overhang</idValue>
+    <idCode>AS</idCode>
+        <idValue>Siding</idValue>
+    <idCode>B1</idCode>
+        <idValue>Bolster</idValue>
+    <idCode>BC</idCode>
+        <idValue>Back of Cab</idValue>
+    <idCode>BI</idCode>
+        <idValue>Bilateral</idValue>
+    <idCode>BK</idCode>
+        <idValue>Rear</idValue>
+    <idCode>BL</idCode>
+        <idValue>Block</idValue>
+    <idCode>BR</idCode>
+        <idValue>Brick</idValue>
+    <idCode>BS</idCode>
+        <idValue>Both Sides</idValue>
+    <idCode>BT</idCode>
+        <idValue>Bottom</idValue>
+    <idCode>CH</idCode>
+        <idValue>Casing Head Flange</idValue>
+    <idCode>CT</idCode>
+        <idValue>Center</idValue>
+    <idCode>DO</idCode>
+        <idValue>Double End Overhang</idValue>
+    <idCode>DT</idCode>
+        <idValue>Downstream Tap</idValue>
+    <idCode>DU</idCode>
+        <idValue>Dual Fuel Tank Position</idValue>
+    <idCode>EX</idCode>
+        <idValue>Exterior</idValue>
+    <idCode>FR</idCode>
+        <idValue>Front</idValue>
+    <idCode>FS</idCode>
+        <idValue>Front Spare</idValue>
+    <idCode>GF</idCode>
+        <idValue>Rig Floor</idValue>
+    <idCode>IN</idCode>
+        <idValue>Inside</idValue>
+    <idCode>IT</idCode>
+        <idValue>Interior</idValue>
+    <idCode>KB</idCode>
+        <idValue>Kelly Bushing</idValue>
+    <idCode>LC</idCode>
+        <idValue>Less Critical Surface</idValue>
+    <idCode>LO</idCode>
+        <idValue>Lower</idValue>
+    <idCode>LT</idCode>
+        <idValue>Left</idValue>
+    <idCode>M1</idCode>
+        <idValue>Multiple</idValue>
+    <idCode>MC</idCode>
+        <idValue>More Critical Surface</idValue>
+    <idCode>MD</idCode>
+        <idValue>Middle</idValue>
+    <idCode>NS</idCode>
+        <idValue>Not Specified</idValue>
+    <idCode>NT</idCode>
+        <idValue>Next Relative Position</idValue>
+    <idCode>OA</idCode>
+        <idValue>Overall</idValue>
+    <idCode>OS</idCode>
+        <idValue>One Side</idValue>
+    <idCode>OT</idCode>
+        <idValue>Outside</idValue>
+    <idCode>R0</idCode>
+        <idValue>Relative Position 10</idValue>
+    <idCode>R1</idCode>
+        <idValue>Relative Position 1</idValue>
+    <idCode>R2</idCode>
+        <idValue>Relative Position 2</idValue>
+    <idCode>R3</idCode>
+        <idValue>Relative Position 3</idValue>
+    <idCode>R4</idCode>
+        <idValue>Relative Position 4</idValue>
+    <idCode>R5</idCode>
+        <idValue>Relative Position 5</idValue>
+    <idCode>R6</idCode>
+        <idValue>Relative Position 6</idValue>
+    <idCode>R7</idCode>
+        <idValue>Relative Position 7</idValue>
+    <idCode>R8</idCode>
+        <idValue>Relative Position 8</idValue>
+    <idCode>R9</idCode>
+        <idValue>Relative Position 9</idValue>
+    <idCode>RA</idCode>
+        <idValue>Relative Position 11</idValue>
+    <idCode>RB</idCode>
+        <idValue>Relative Position 12</idValue>
+    <idCode>RC</idCode>
+        <idValue>Relative Position 13</idValue>
+    <idCode>RD</idCode>
+        <idValue>Relative Position 14</idValue>
+    <idCode>RE</idCode>
+        <idValue>Relative Position 15</idValue>
+    <idCode>RF</idCode>
+        <idValue>Relative Position 16</idValue>
+    <idCode>RG</idCode>
+        <idValue>Relative Position 17</idValue>
+    <idCode>RH</idCode>
+        <idValue>Relative Position 18</idValue>
+    <idCode>RI</idCode>
+        <idValue>Relative Position 19</idValue>
+    <idCode>RJ</idCode>
+        <idValue>Relative Position 20</idValue>
+    <idCode>RK</idCode>
+        <idValue>Relative Position 21</idValue>
+    <idCode>RL</idCode>
+        <idValue>Relative Position 22</idValue>
+    <idCode>RM</idCode>
+        <idValue>Relative Position 23</idValue>
+    <idCode>RN</idCode>
+        <idValue>Relative Position 24</idValue>
+    <idCode>RO</idCode>
+        <idValue>Relative Position 25</idValue>
+    <idCode>RP</idCode>
+        <idValue>Relative Position 26</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Relative Position 27</idValue>
+    <idCode>RR</idCode>
+        <idValue>Relative Position 28</idValue>
+    <idCode>RS</idCode>
+        <idValue>Relative Position 29</idValue>
+    <idCode>RT</idCode>
+        <idValue>Relative Position 30</idValue>
+    <idCode>RU</idCode>
+        <idValue>Relative Position 31</idValue>
+    <idCode>RV</idCode>
+        <idValue>Relative Position 32</idValue>
+    <idCode>RW</idCode>
+        <idValue>Relative Position 33</idValue>
+    <idCode>RX</idCode>
+        <idValue>Relative Position 34</idValue>
+    <idCode>RY</idCode>
+        <idValue>Relative Position 35</idValue>
+    <idCode>RZ</idCode>
+        <idValue>Relative Position 36</idValue>
+    <idCode>S1</idCode>
+        <idValue>Relative Position 37</idValue>
+    <idCode>S2</idCode>
+        <idValue>Relative Position 38</idValue>
+    <idCode>S3</idCode>
+        <idValue>Relative Position 39</idValue>
+    <idCode>S4</idCode>
+        <idValue>Relative Position 40</idValue>
+    <idCode>S5</idCode>
+        <idValue>Relative Position 41</idValue>
+    <idCode>S6</idCode>
+        <idValue>Relative Position 42</idValue>
+    <idCode>S7</idCode>
+        <idValue>Relative Position 43</idValue>
+    <idCode>S8</idCode>
+        <idValue>Relative Position 44</idValue>
+    <idCode>S9</idCode>
+        <idValue>Relative Position 45</idValue>
+    <idCode>SA</idCode>
+        <idValue>Relative Position 46</idValue>
+    <idCode>SB</idCode>
+        <idValue>Right</idValue>
+    <idCode>SC</idCode>
+        <idValue>Relative Position 47</idValue>
+    <idCode>SD</idCode>
+        <idValue>Relative Position 48</idValue>
+    <idCode>SE</idCode>
+        <idValue>Relative Position 49</idValue>
+    <idCode>SF</idCode>
+        <idValue>Relative Position 50</idValue>
+    <idCode>SN</idCode>
+        <idValue>Stone</idValue>
+    <idCode>SP</idCode>
+        <idValue>Spare Tire Position</idValue>
+    <idCode>SS</idCode>
+        <idValue>Rear Spare</idValue>
+    <idCode>ST</idCode>
+        <idValue>Stucco</idValue>
+    <idCode>SU</idCode>
+        <idValue>Sub-sea</idValue>
+    <idCode>TB</idCode>
+        <idValue>Tank Bottom</idValue>
+    <idCode>TP</idCode>
+        <idValue>Top</idValue>
+    <idCode>TS</idCode>
+        <idValue>Two Sides</idValue>
+    <idCode>UC</idCode>
+        <idValue>Under Cab</idValue>
+    <idCode>UN</idCode>
+        <idValue>Unilateral</idValue>
+    <idCode>UP</idCode>
+        <idValue>Upper</idValue>
+    <idCode>UT</idCode>
+        <idValue>Upstream Tap</idValue>
+    <idCode>WF</idCode>
+        <idValue>Wood</idValue>
+</idList>

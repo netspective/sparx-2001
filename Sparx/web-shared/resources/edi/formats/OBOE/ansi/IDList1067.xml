@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>A</idCode>
+        <idValue>Common Law</idValue>
+    <idCode>B</idCode>
+        <idValue>Registered Domestic Partner</idValue>
+    <idCode>C</idCode>
+        <idValue>Not Applicable</idValue>
+    <idCode>D</idCode>
+        <idValue>Divorced</idValue>
+    <idCode>I</idCode>
+        <idValue>Single</idValue>
+    <idCode>K</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>M</idCode>
+        <idValue>Married</idValue>
+    <idCode>R</idCode>
+        <idValue>Unreported</idValue>
+    <idCode>S</idCode>
+        <idValue>Separated</idValue>
+    <idCode>U</idCode>
+        <idValue>Unmarried (Single or Divorced or Widowed)</idValue>
+    <idCode>W</idCode>
+        <idValue>Widowed</idValue>
+    <idCode>X</idCode>
+        <idValue>Legally Separated</idValue>
+</idList>

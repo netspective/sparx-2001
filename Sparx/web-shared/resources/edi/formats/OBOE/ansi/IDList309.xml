@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>10</idCode>
+        <idValue>Nearest Cross Street</idValue>
+    <idCode>11</idCode>
+        <idValue>Secondary Cross Street</idValue>
+    <idCode>12</idCode>
+        <idValue>Range</idValue>
+    <idCode>13</idCode>
+        <idValue>Section</idValue>
+    <idCode>14</idCode>
+        <idValue>Quarter Section</idValue>
+    <idCode>18</idCode>
+        <idValue>Marker Identifier Location</idValue>
+    <idCode>19</idCode>
+        <idValue>Route</idValue>
+    <idCode>20</idCode>
+        <idValue>Route Subdivision</idValue>
+    <idCode>21</idCode>
+        <idValue>Grid Location</idValue>
+    <idCode>22</idCode>
+        <idValue>Page</idValue>
+    <idCode>27</idCode>
+        <idValue>Marker Type</idValue>
+    <idCode>28</idCode>
+        <idValue>Latitude-Longitude Source</idValue>
+    <idCode>29</idCode>
+        <idValue>Map Source</idValue>
+    <idCode>30</idCode>
+        <idValue>Map Reference</idValue>
+    <idCode>31</idCode>
+        <idValue>Grid Source</idValue>
+    <idCode>32</idCode>
+        <idValue>Aliquot</idValue>
+    <idCode>33</idCode>
+        <idValue>Block</idValue>
+    <idCode>34</idCode>
+        <idValue>District</idValue>
+    <idCode>35</idCode>
+        <idValue>Drainhole Number</idValue>
+    <idCode>36</idCode>
+        <idValue>City Block</idValue>
+    <idCode>38</idCode>
+        <idValue>Footage Call Direction</idValue>
+    <idCode>39</idCode>
+        <idValue>Location Direction</idValue>
+    <idCode>40</idCode>
+        <idValue>Outer Continental Lease Location</idValue>
+    <idCode>41</idCode>
+        <idValue>Lot</idValue>
+    <idCode>42</idCode>
+        <idValue>Map Quadrangle</idValue>
+    <idCode>43</idCode>
+        <idValue>Principal Meridian</idValue>
+    <idCode>44</idCode>
+        <idValue>Outer Continental Shelf Area</idValue>
+    <idCode>45</idCode>
+        <idValue>Outer Continental Shelf Block</idValue>
+    <idCode>46</idCode>
+        <idValue>Official Protraction Diagram</idValue>
+    <idCode>47</idCode>
+        <idValue>Quarter Quarter Quarter Section</idValue>
+    <idCode>48</idCode>
+        <idValue>Quarter Quarter Section</idValue>
+    <idCode>49</idCode>
+        <idValue>Section Type</idValue>
+    <idCode>50</idCode>
+        <idValue>Abstract</idValue>
+    <idCode>52</idCode>
+        <idValue>Labor</idValue>
+    <idCode>53</idCode>
+        <idValue>League</idValue>
+    <idCode>54</idCode>
+        <idValue>Survey</idValue>
+    <idCode>55</idCode>
+        <idValue>Tier</idValue>
+    <idCode>57</idCode>
+        <idValue>Tract</idValue>
+    <idCode>58</idCode>
+        <idValue>Universal Transverse Mercator Quadrant</idValue>
+    <idCode>59</idCode>
+        <idValue>Course Direction</idValue>
+    <idCode>60</idCode>
+        <idValue>Area</idValue>
+    <idCode>93</idCode>
+        <idValue>Sender&apos;s Location Code</idValue>
+    <idCode>94</idCode>
+        <idValue>Receiver&apos;s Location Code</idValue>
+    <idCode>A</idCode>
+        <idValue>Jurisdiction to Receive Credit for Uniform Commercial Code Filing</idValue>
+    <idCode>A1</idCode>
+        <idValue>Office</idValue>
+    <idCode>AA</idCode>
+        <idValue>Annual Statements Mailing Address</idValue>
+    <idCode>AC</idCode>
+        <idValue>City and State</idValue>
+    <idCode>AP</idCode>
+        <idValue>All Points</idValue>
+    <idCode>AR</idCode>
+        <idValue>Armed Services Location Designation</idValue>
+    <idCode>B</idCode>
+        <idValue>Transmitting Utility</idValue>
+    <idCode>B1</idCode>
+        <idValue>Branch</idValue>
+    <idCode>BE</idCode>
+        <idValue>Business Economic Area (BEA) Region Code</idValue>
+    <idCode>BL</idCode>
+        <idValue>Government Bill of Lading Office Code (GBLOC)</idValue>
+    <idCode>BS</idCode>
+        <idValue>Place of Business</idValue>
+    <idCode>C</idCode>
+        <idValue>Consignor</idValue>
+    <idCode>C2</idCode>
+        <idValue>Geopolitical Name Code</idValue>
+    <idCode>CA</idCode>
+        <idValue>Country of Origin</idValue>
+    <idCode>CB</idCode>
+        <idValue>Confirmation Mailing Address</idValue>
+    <idCode>CC</idCode>
+        <idValue>Country</idValue>
+    <idCode>CD</idCode>
+        <idValue>Canadian Customs Office Code</idValue>
+    <idCode>CE</idCode>
+        <idValue>Correspondence Mailing Address</idValue>
+    <idCode>CI</idCode>
+        <idValue>City</idValue>
+    <idCode>CL</idCode>
+        <idValue>National Rate Basis (NRB)</idValue>
+    <idCode>CO</idCode>
+        <idValue>County/Parish and State</idValue>
+    <idCode>CR</idCode>
+        <idValue>In Tank Car</idValue>
+    <idCode>CS</idCode>
+        <idValue>Canadian SPLC</idValue>
+    <idCode>CY</idCode>
+        <idValue>County/Parish</idValue>
+    <idCode>D</idCode>
+        <idValue>Census Schedule D</idValue>
+    <idCode>DC</idCode>
+        <idValue>Distribution Center Number</idValue>
+    <idCode>DE</idCode>
+        <idValue>Destination (Shipping)</idValue>
+    <idCode>DL</idCode>
+        <idValue>Delivery Location</idValue>
+    <idCode>DO</idCode>
+        <idValue>District Office</idValue>
+    <idCode>DP</idCode>
+        <idValue>Department</idValue>
+    <idCode>DR</idCode>
+        <idValue>District of Residence</idValue>
+    <idCode>DT</idCode>
+        <idValue>Domicile Type Code</idValue>
+    <idCode>E</idCode>
+        <idValue>Uniform Commercial Code Filing Office</idValue>
+    <idCode>EA</idCode>
+        <idValue>Event Location</idValue>
+    <idCode>EL</idCode>
+        <idValue>Employer Location</idValue>
+    <idCode>F</idCode>
+        <idValue>Current Address</idValue>
+    <idCode>FA</idCode>
+        <idValue>Factory</idValue>
+    <idCode>FE</idCode>
+        <idValue>Freight Equalization Point</idValue>
+    <idCode>FF</idCode>
+        <idValue>Foreign Freight Forwarder Location</idValue>
+    <idCode>FI</idCode>
+        <idValue>Federal Information Processing Standards (FIPS) 55 (Named Populated Places)</idValue>
+    <idCode>FR</idCode>
+        <idValue>U.S. Custom&apos;s Facilities Information and Resource Management Systems (FIRMS)</idValue>
+    <idCode>FS</idCode>
+        <idValue>Freight Station Accounting Code</idValue>
+    <idCode>FT</idCode>
+        <idValue>Foreign Trade Zone</idValue>
+    <idCode>FV</idCode>
+        <idValue>Free Alongside Vessel (Free On Board [F.O.B.] Point)</idValue>
+    <idCode>GL</idCode>
+        <idValue>Freight Station Geographic Location</idValue>
+    <idCode>H</idCode>
+        <idValue>Home Address</idValue>
+    <idCode>I</idCode>
+        <idValue>Home Base Address</idValue>
+    <idCode>IA</idCode>
+        <idValue>International Air Transport Association (IATA) Location Qualifier</idValue>
+    <idCode>IB</idCode>
+        <idValue>Issue Location</idValue>
+    <idCode>IM</idCode>
+        <idValue>Military Standard Movement Procedures (MILSTAMP)</idValue>
+    <idCode>IP</idCode>
+        <idValue>Postal</idValue>
+    <idCode>IS</idCode>
+        <idValue>In Store</idValue>
+    <idCode>IT</idCode>
+        <idValue>Intermediate FOB Point</idValue>
+    <idCode>K</idCode>
+        <idValue>Census Schedule K</idValue>
+    <idCode>KE</idCode>
+        <idValue>Port of Embarkation</idValue>
+    <idCode>KL</idCode>
+        <idValue>Port of Loading</idValue>
+    <idCode>KP</idCode>
+        <idValue>Government Furnished Property FOB Point</idValue>
+    <idCode>L</idCode>
+        <idValue>Local Address</idValue>
+    <idCode>LO</idCode>
+        <idValue>Local Office</idValue>
+    <idCode>M</idCode>
+        <idValue>Mailing Address</idValue>
+    <idCode>MI</idCode>
+        <idValue>Mill</idValue>
+    <idCode>MS</idCode>
+        <idValue>Metropolitan Sampling Area (MSA) Region Code</idValue>
+    <idCode>MZ</idCode>
+        <idValue>Mexican Postal Code</idValue>
+    <idCode>NS</idCode>
+        <idValue>City/State from Points</idValue>
+    <idCode>O</idCode>
+        <idValue>Office Address</idValue>
+    <idCode>OA</idCode>
+        <idValue>Origin (After Loading on Equipment)</idValue>
+    <idCode>OF</idCode>
+        <idValue>Other Unlisted Free On Board (FOB) Point</idValue>
+    <idCode>OL</idCode>
+        <idValue>Open and Prepay Station List Code(SCAC &amp; Number)</idValue>
+    <idCode>OP</idCode>
+        <idValue>Other Unlisted Acceptance Point</idValue>
+    <idCode>OR</idCode>
+        <idValue>Origin (Shipping Point)</idValue>
+    <idCode>OV</idCode>
+        <idValue>On Vessel (Free On Board [FOB] point)</idValue>
+    <idCode>P</idCode>
+        <idValue>Permanent Address</idValue>
+    <idCode>PA</idCode>
+        <idValue>Port of Arrival</idValue>
+    <idCode>PB</idCode>
+        <idValue>Port of Discharge</idValue>
+    <idCode>PC</idCode>
+        <idValue>Policy Mailing Address</idValue>
+    <idCode>PD</idCode>
+        <idValue>Place of Delivery</idValue>
+    <idCode>PE</idCode>
+        <idValue>Port of Entry</idValue>
+    <idCode>PF</idCode>
+        <idValue>Parents Address</idValue>
+    <idCode>PG</idCode>
+        <idValue>Primary</idValue>
+    <idCode>PH</idCode>
+        <idValue>Prior Business</idValue>
+    <idCode>PL</idCode>
+        <idValue>Plant</idValue>
+    <idCode>PO</idCode>
+        <idValue>Principal Servicing Office</idValue>
+    <idCode>PP</idCode>
+        <idValue>Pool Point</idValue>
+    <idCode>PQ</idCode>
+        <idValue>3 Digit U.S. ZIP</idValue>
+    <idCode>PR</idCode>
+        <idValue>4 Digit U.S. ZIP</idValue>
+    <idCode>PS</idCode>
+        <idValue>5 Digit U.S. ZIP</idValue>
+    <idCode>PT</idCode>
+        <idValue>3 Digit Canadian Postal Code</idValue>
+    <idCode>PU</idCode>
+        <idValue>6 Digit Canadian Postal Code</idValue>
+    <idCode>RA</idCode>
+        <idValue>Rate Area Code</idValue>
+    <idCode>RC</idCode>
+        <idValue>In Rail Car</idValue>
+    <idCode>RE</idCode>
+        <idValue>Regional Education Service Agency</idValue>
+    <idCode>RG</idCode>
+        <idValue>Region Code</idValue>
+    <idCode>RJ</idCode>
+        <idValue>Region</idValue>
+    <idCode>RL</idCode>
+        <idValue>Rural</idValue>
+    <idCode>RS</idCode>
+        <idValue>Standard Carrier Alpha Code</idValue>
+    <idCode>RT</idCode>
+        <idValue>Route Administrative Message To</idValue>
+    <idCode>SA</idCode>
+        <idValue>Secondary</idValue>
+    <idCode>SB</idCode>
+        <idValue>Suburban</idValue>
+    <idCode>SC</idCode>
+        <idValue>City/State and Points Within</idValue>
+    <idCode>SD</idCode>
+        <idValue>School District</idValue>
+    <idCode>SE</idCode>
+        <idValue>Summer</idValue>
+    <idCode>SG</idCode>
+        <idValue>Storage</idValue>
+    <idCode>SH</idCode>
+        <idValue>School Campus Code</idValue>
+    <idCode>SL</idCode>
+        <idValue>U.S. SPLC</idValue>
+    <idCode>SN</idCode>
+        <idValue>Store Number</idValue>
+    <idCode>SP</idCode>
+        <idValue>State/Province</idValue>
+    <idCode>SS</idCode>
+        <idValue>School</idValue>
+    <idCode>ST</idCode>
+        <idValue>In Storage Tank</idValue>
+    <idCode>SW</idCode>
+        <idValue>Switching District</idValue>
+    <idCode>TA</idCode>
+        <idValue>Tank</idValue>
+    <idCode>TC</idCode>
+        <idValue>Transcontinental Freight Bureau</idValue>
+    <idCode>TL</idCode>
+        <idValue>Terminal Cargo Location</idValue>
+    <idCode>TM</idCode>
+        <idValue>Terminal</idValue>
+    <idCode>TN</idCode>
+        <idValue>Township</idValue>
+    <idCode>TP</idCode>
+        <idValue>Temporary</idValue>
+    <idCode>TR</idCode>
+        <idValue>Rail Territory</idValue>
+    <idCode>TX</idCode>
+        <idValue>Taxing District</idValue>
+    <idCode>UN</idCode>
+        <idValue>United Nations Location Code (UNLOCODE)</idValue>
+    <idCode>UR</idCode>
+        <idValue>Urban</idValue>
+    <idCode>UT</idCode>
+        <idValue>Business Unit</idValue>
+    <idCode>VA</idCode>
+        <idValue>Vacation</idValue>
+    <idCode>VI</idCode>
+        <idValue>Village</idValue>
+    <idCode>VS</idCode>
+        <idValue>Vessel Stowage Location</idValue>
+    <idCode>W</idCode>
+        <idValue>Worldwide Geographic Location Code</idValue>
+    <idCode>WF</idCode>
+        <idValue>Wharf</idValue>
+    <idCode>WH</idCode>
+        <idValue>Warehouse</idValue>
+    <idCode>WI</idCode>
+        <idValue>Winter</idValue>
+    <idCode>ZN</idCode>
+        <idValue>Zone Code</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

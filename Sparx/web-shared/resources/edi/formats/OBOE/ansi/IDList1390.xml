@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Active Coverage</idValue>
+    <idCode>2</idCode>
+        <idValue>Active - Full Risk Capitation</idValue>
+    <idCode>3</idCode>
+        <idValue>Active - Services Capitated</idValue>
+    <idCode>4</idCode>
+        <idValue>Active - Services Capitated to Primary Care Physician</idValue>
+    <idCode>5</idCode>
+        <idValue>Active - Pending Investigation</idValue>
+    <idCode>6</idCode>
+        <idValue>Inactive</idValue>
+    <idCode>7</idCode>
+        <idValue>Inactive - Pending Eligibility Update</idValue>
+    <idCode>8</idCode>
+        <idValue>Inactive - Pending Investigation</idValue>
+    <idCode>A</idCode>
+        <idValue>Co-Insurance</idValue>
+    <idCode>B</idCode>
+        <idValue>Co-Payment</idValue>
+    <idCode>C</idCode>
+        <idValue>Deductible</idValue>
+    <idCode>CB</idCode>
+        <idValue>Coverage Basis</idValue>
+    <idCode>D</idCode>
+        <idValue>Benefit Description</idValue>
+    <idCode>E</idCode>
+        <idValue>Exclusions</idValue>
+    <idCode>F</idCode>
+        <idValue>Limitations</idValue>
+    <idCode>G</idCode>
+        <idValue>Out of Pocket (Stop Loss)</idValue>
+    <idCode>H</idCode>
+        <idValue>Unlimited</idValue>
+    <idCode>I</idCode>
+        <idValue>Non-Covered</idValue>
+    <idCode>J</idCode>
+        <idValue>Cost Containment</idValue>
+    <idCode>K</idCode>
+        <idValue>Reserve</idValue>
+    <idCode>L</idCode>
+        <idValue>Primary Care Provider</idValue>
+    <idCode>M</idCode>
+        <idValue>Pre-existing Condition</idValue>
+    <idCode>MC</idCode>
+        <idValue>Managed Care Coordinator</idValue>
+    <idCode>N</idCode>
+        <idValue>Services Restricted to Following Provider</idValue>
+    <idCode>O</idCode>
+        <idValue>Not Deemed a Medical Necessity</idValue>
+    <idCode>P</idCode>
+        <idValue>Benefit Disclaimer</idValue>
+    <idCode>Q</idCode>
+        <idValue>Second Surgical Opinion Required</idValue>
+    <idCode>R</idCode>
+        <idValue>Other or Additional Payor</idValue>
+    <idCode>S</idCode>
+        <idValue>Prior Year(s) History</idValue>
+    <idCode>T</idCode>
+        <idValue>Card(s) Reported Lost/Stolen</idValue>
+    <idCode>U</idCode>
+        <idValue>Contact Following Entity for Eligibility or Benefit Information</idValue>
+    <idCode>V</idCode>
+        <idValue>Cannot Process</idValue>
+    <idCode>W</idCode>
+        <idValue>Other Source of Data</idValue>
+    <idCode>X</idCode>
+        <idValue>Health Care Facility</idValue>
+    <idCode>Y</idCode>
+        <idValue>Spend Down</idValue>
+</idList>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>A</idCode>
+        <idValue>Not Provided</idValue>
+    <idCode>B</idCode>
+        <idValue>Not Applicable</idValue>
+    <idCode>F</idCode>
+        <idValue>Female</idValue>
+    <idCode>M</idCode>
+        <idValue>Male</idValue>
+    <idCode>N</idCode>
+        <idValue>Non-sexed</idValue>
+    <idCode>U</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>X</idCode>
+        <idValue>Unsexable</idValue>
+</idList>

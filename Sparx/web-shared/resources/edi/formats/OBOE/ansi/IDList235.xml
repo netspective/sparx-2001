@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>A1</idCode>
+        <idValue>Plant Equipment Number</idValue>
+    <idCode>A2</idCode>
+        <idValue>Department of Defense Identification Code (DoDIC)</idValue>
+    <idCode>A3</idCode>
+        <idValue>Locally Assigned Control Number</idValue>
+    <idCode>A4</idCode>
+        <idValue>Subsistence Identification Number</idValue>
+    <idCode>A5</idCode>
+        <idValue>Application State</idValue>
+    <idCode>A6</idCode>
+        <idValue>Document Identification Code</idValue>
+    <idCode>A7</idCode>
+        <idValue>Subline Item Number</idValue>
+    <idCode>A8</idCode>
+        <idValue>Exhibit Line Item Number</idValue>
+    <idCode>A9</idCode>
+        <idValue>Health Care Financing Administration National Standard Format Podiatry Codes</idValue>
+    <idCode>AA</idCode>
+        <idValue>American Trucking Associations Assembly</idValue>
+    <idCode>AB</idCode>
+        <idValue>Assembly</idValue>
+    <idCode>AC</idCode>
+        <idValue>Aggregation Code (Used to Consolidate Part Families)</idValue>
+    <idCode>AD</idCode>
+        <idValue>American Dental Association Codes</idValue>
+    <idCode>AE</idCode>
+        <idValue>Serial Item and Contribution Identifier (Defined in ANSI 239.56)</idValue>
+    <idCode>AF</idCode>
+        <idValue>Front Axle Serial Number</idValue>
+    <idCode>AG</idCode>
+        <idValue>Age</idValue>
+    <idCode>AH</idCode>
+        <idValue>Billboards Commercial</idValue>
+    <idCode>AI</idCode>
+        <idValue>Alternate ISBN</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Piggyback Commercial</idValue>
+    <idCode>AK</idCode>
+        <idValue>Refined Product Code</idValue>
+    <idCode>AL</idCode>
+        <idValue>Axle Serial Number</idValue>
+    <idCode>AM</idCode>
+        <idValue>Allocation Methodology Identification Code</idValue>
+    <idCode>AN</idCode>
+        <idValue>Asset Number</idValue>
+    <idCode>AO</idCode>
+        <idValue>GAS*FLOW Product or Service Charge Code</idValue>
+    <idCode>AP</idCode>
+        <idValue>American Trucking Associations Part</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Appraisal Product Type</idValue>
+    <idCode>AR</idCode>
+        <idValue>ARINC Part Number</idValue>
+    <idCode>AS</idCode>
+        <idValue>Rear Axle Serial Number</idValue>
+    <idCode>AT</idCode>
+        <idValue>Assortability Code</idValue>
+    <idCode>AU</idCode>
+        <idValue>Appraisal Service</idValue>
+    <idCode>AV</idCode>
+        <idValue>Additional Product Identification Assigned by the Manufacturer</idValue>
+    <idCode>AW</idCode>
+        <idValue>Well Number</idValue>
+    <idCode>AX</idCode>
+        <idValue>Assembly Lot Number</idValue>
+    <idCode>AY</idCode>
+        <idValue>American Trucking Associations System</idValue>
+    <idCode>AZ</idCode>
+        <idValue>Axle Ratio</idValue>
+    <idCode>B1</idCode>
+        <idValue>Volume Set</idValue>
+    <idCode>B2</idCode>
+        <idValue>Library of Congress Code</idValue>
+    <idCode>B3</idCode>
+        <idValue>Edition Code</idValue>
+    <idCode>B4</idCode>
+        <idValue>Binding Code</idValue>
+    <idCode>B5</idCode>
+        <idValue>Title Code</idValue>
+    <idCode>B6</idCode>
+        <idValue>Author Code</idValue>
+    <idCode>B7</idCode>
+        <idValue>Publisher Code</idValue>
+    <idCode>B8</idCode>
+        <idValue>Batch Number</idValue>
+    <idCode>B9</idCode>
+        <idValue>Front Axle Driven Serial Number</idValue>
+    <idCode>BA</idCode>
+        <idValue>Bale Number</idValue>
+    <idCode>BB</idCode>
+        <idValue>Print Color Standard Reference</idValue>
+    <idCode>BC</idCode>
+        <idValue>Supplier Brand Code</idValue>
+    <idCode>BD</idCode>
+        <idValue>Buyer Ground Shade Identifier</idValue>
+    <idCode>BE</idCode>
+        <idValue>Buyer&apos;s Engineering Change Level Number</idValue>
+    <idCode>BF</idCode>
+        <idValue>Vendor Ground Shade Identifier</idValue>
+    <idCode>BG</idCode>
+        <idValue>Ground Shade Standard Reference</idValue>
+    <idCode>BH</idCode>
+        <idValue>Finish/Hand Standard Reference</idValue>
+    <idCode>BI</idCode>
+        <idValue>Rear Axle Rear Non Driven Serial Number</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Application Completion Method</idValue>
+    <idCode>BK</idCode>
+        <idValue>Backing</idValue>
+    <idCode>BL</idCode>
+        <idValue>Brand/Label</idValue>
+    <idCode>BM</idCode>
+        <idValue>Beam Number</idValue>
+    <idCode>BN</idCode>
+        <idValue>Bar-Coded Serial Number</idValue>
+    <idCode>BO</idCode>
+        <idValue>Buyers Color</idValue>
+    <idCode>BP</idCode>
+        <idValue>Buyer&apos;s Part Number</idValue>
+    <idCode>BQ</idCode>
+        <idValue>Benefit ID</idValue>
+    <idCode>BR</idCode>
+        <idValue>Compensation Type Code</idValue>
+    <idCode>BS</idCode>
+        <idValue>Bill Subgroup Code</idValue>
+    <idCode>BT</idCode>
+        <idValue>Volume Type Identification Code</idValue>
+    <idCode>BU</idCode>
+        <idValue>Bus Body Serial Number</idValue>
+    <idCode>BV</idCode>
+        <idValue>Beverage Common Code</idValue>
+    <idCode>BW</idCode>
+        <idValue>Compensation Allocation Code</idValue>
+    <idCode>BX</idCode>
+        <idValue>Bill Credit Code</idValue>
+    <idCode>BY</idCode>
+        <idValue>Concept Code</idValue>
+    <idCode>BZ</idCode>
+        <idValue>Coverage Type</idValue>
+    <idCode>C1</idCode>
+        <idValue>Channel</idValue>
+    <idCode>C2</idCode>
+        <idValue>Connector Type</idValue>
+    <idCode>C3</idCode>
+        <idValue>Classification</idValue>
+    <idCode>C4</idCode>
+        <idValue>Configuration Item Identifier</idValue>
+    <idCode>C5</idCode>
+        <idValue>Insurance Plan Description Characteristics</idValue>
+    <idCode>C6</idCode>
+        <idValue>Asset Type</idValue>
+    <idCode>C7</idCode>
+        <idValue>Asset Category</idValue>
+    <idCode>C8</idCode>
+        <idValue>Fund Sub-Advisor</idValue>
+    <idCode>C9</idCode>
+        <idValue>Dun &amp; Bradstreet Standard Product and Service Code</idValue>
+    <idCode>CA</idCode>
+        <idValue>Case</idValue>
+    <idCode>CB</idCode>
+        <idValue>Buyer&apos;s Catalog Number</idValue>
+    <idCode>CC</idCode>
+        <idValue>Compatible Cut Number</idValue>
+    <idCode>CD</idCode>
+        <idValue>Motor Vehicle-Line Designator</idValue>
+    <idCode>CE</idCode>
+        <idValue>Class of Contract Code</idValue>
+    <idCode>CF</idCode>
+        <idValue>Chassis Serial Number</idValue>
+    <idCode>CG</idCode>
+        <idValue>Commodity Grouping</idValue>
+    <idCode>CH</idCode>
+        <idValue>Country of Origin Code</idValue>
+    <idCode>CI</idCode>
+        <idValue>Common Language Equipment Identifier (CLEI)</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Current Procedural Terminology (CPT) Codes</idValue>
+    <idCode>CK</idCode>
+        <idValue>Candidate Oil</idValue>
+    <idCode>CL</idCode>
+        <idValue>Color</idValue>
+    <idCode>CM</idCode>
+        <idValue>National Retail Merchants Association Color Code</idValue>
+    <idCode>CN</idCode>
+        <idValue>Commodity Name</idValue>
+    <idCode>CO</idCode>
+        <idValue>Chemical Abstract Service (CAS) Registry Number</idValue>
+    <idCode>CP</idCode>
+        <idValue>Carry-over Part Number</idValue>
+    <idCode>CQ</idCode>
+        <idValue>Equipment Code per COPAS standard</idValue>
+    <idCode>CR</idCode>
+        <idValue>Contract Number</idValue>
+    <idCode>CS</idCode>
+        <idValue>Service code per COPAS standard</idValue>
+    <idCode>CT</idCode>
+        <idValue>Continuation (ID Number Spans Multiple Product ID Data Elements)</idValue>
+    <idCode>CU</idCode>
+        <idValue>Cut Number</idValue>
+    <idCode>CV</idCode>
+        <idValue>Customer Provided Equipment</idValue>
+    <idCode>CW</idCode>
+        <idValue>Contract Activity Code</idValue>
+    <idCode>CX</idCode>
+        <idValue>Completion Number</idValue>
+    <idCode>CY</idCode>
+        <idValue>Customer Company Registry Number</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Country from which Procured</idValue>
+    <idCode>D1</idCode>
+        <idValue>Underwriting Method of Direct Writer</idValue>
+    <idCode>D2</idCode>
+        <idValue>Medical Information Bureau (MIB) Authorization</idValue>
+    <idCode>D3</idCode>
+        <idValue>Policy Form</idValue>
+    <idCode>D4</idCode>
+        <idValue>Plan Code</idValue>
+    <idCode>D5</idCode>
+        <idValue>Coverage Risk Type</idValue>
+    <idCode>DD</idCode>
+        <idValue>Distributor</idValue>
+    <idCode>DE</idCode>
+        <idValue>Design Number</idValue>
+    <idCode>DF</idCode>
+        <idValue>Device Family</idValue>
+    <idCode>DG</idCode>
+        <idValue>Discount Grouping</idValue>
+    <idCode>DI</idCode>
+        <idValue>Deposit Item Number</idValue>
+    <idCode>DL</idCode>
+        <idValue>Dye Lot Number</idValue>
+    <idCode>DM</idCode>
+        <idValue>Committee for Uniform Security Identification Procedure Number (CUSIP) Number</idValue>
+    <idCode>DN</idCode>
+        <idValue>Die Number</idValue>
+    <idCode>DO</idCode>
+        <idValue>Dividend Use</idValue>
+    <idCode>DP</idCode>
+        <idValue>Discontinued Part Number</idValue>
+    <idCode>DQ</idCode>
+        <idValue>Event Type</idValue>
+    <idCode>DR</idCode>
+        <idValue>Drawing Revision Number</idValue>
+    <idCode>DS</idCode>
+        <idValue>Group ID</idValue>
+    <idCode>DT</idCode>
+        <idValue>Device Type</idValue>
+    <idCode>DU</idCode>
+        <idValue>Joint Life Type</idValue>
+    <idCode>DV</idCode>
+        <idValue>Location Code</idValue>
+    <idCode>DW</idCode>
+        <idValue>Nonforfeiture Option</idValue>
+    <idCode>DX</idCode>
+        <idValue>International Classification of Diseases Clinical Modification (ICD-9-CM) - Diagnosis</idValue>
+    <idCode>DY</idCode>
+        <idValue>Premium Rate Type</idValue>
+    <idCode>DZ</idCode>
+        <idValue>Diagnosis Code Pointer</idValue>
+    <idCode>E1</idCode>
+        <idValue>Contract Change Authorization Type</idValue>
+    <idCode>E2</idCode>
+        <idValue>Fund Abbreviation</idValue>
+    <idCode>E3</idCode>
+        <idValue>Fund Type</idValue>
+    <idCode>E4</idCode>
+        <idValue>Related Policy Identification</idValue>
+    <idCode>E5</idCode>
+        <idValue>Tax Code</idValue>
+    <idCode>E6</idCode>
+        <idValue>Contract Transfer Reason Code</idValue>
+    <idCode>EA</idCode>
+        <idValue>EAN-99 In-store Coupon Code</idValue>
+    <idCode>EB</idCode>
+        <idValue>Fuel Tank Serial Number</idValue>
+    <idCode>EC</idCode>
+        <idValue>Engineering Change Level</idValue>
+    <idCode>ED</idCode>
+        <idValue>Engine Displacement Identification</idValue>
+    <idCode>EE</idCode>
+        <idValue>Premium Use</idValue>
+    <idCode>EF</idCode>
+        <idValue>Exhibit Identifier</idValue>
+    <idCode>EG</idCode>
+        <idValue>Purpose of Insurance</idValue>
+    <idCode>EH</idCode>
+        <idValue>Sales Presentation ID</idValue>
+    <idCode>EI</idCode>
+        <idValue>Expense Identifier</idValue>
+    <idCode>EJ</idCode>
+        <idValue>Service Feature ID</idValue>
+    <idCode>EK</idCode>
+        <idValue>Settlement/Payout Option</idValue>
+    <idCode>EL</idCode>
+        <idValue>Buyer&apos;s Subline Item Number</idValue>
+    <idCode>EM</idCode>
+        <idValue>Equipment Identification Number</idValue>
+    <idCode>EN</idCode>
+        <idValue>European Article Number (EAN) (2-5-5-1)</idValue>
+    <idCode>EP</idCode>
+        <idValue>Buyer&apos;s End Product Number</idValue>
+    <idCode>EQ</idCode>
+        <idValue>Equipment Type</idValue>
+    <idCode>ER</idCode>
+        <idValue>Jurisdiction Specific Procedure and Supply Codes</idValue>
+    <idCode>ES</idCode>
+        <idValue>Engine Serial Number</idValue>
+    <idCode>EU</idCode>
+        <idValue>Skill Code</idValue>
+    <idCode>EX</idCode>
+        <idValue>Exchanged Part, Assembly or Product</idValue>
+    <idCode>EZ</idCode>
+        <idValue>Shift Worked</idValue>
+    <idCode>F1</idCode>
+        <idValue>Catalog Number</idValue>
+    <idCode>F2</idCode>
+        <idValue>Technical Order Number</idValue>
+    <idCode>F3</idCode>
+        <idValue>Technical Manual Number</idValue>
+    <idCode>F4</idCode>
+        <idValue>Series Identifier</idValue>
+    <idCode>F5</idCode>
+        <idValue>Obligation Authority Number</idValue>
+    <idCode>F6</idCode>
+        <idValue>First Prior Identifier</idValue>
+    <idCode>F7</idCode>
+        <idValue>End-Item Description</idValue>
+    <idCode>F8</idCode>
+        <idValue>Next Higher Used Assembly</idValue>
+    <idCode>F9</idCode>
+        <idValue>Former Publisher</idValue>
+    <idCode>FA</idCode>
+        <idValue>Failed Subassembly Serial Number</idValue>
+    <idCode>FB</idCode>
+        <idValue>Form Number</idValue>
+    <idCode>FC</idCode>
+        <idValue>Coupon Family Code</idValue>
+    <idCode>FD</idCode>
+        <idValue>Fund</idValue>
+    <idCode>FE</idCode>
+        <idValue>Feature</idValue>
+    <idCode>FF</idCode>
+        <idValue>Fifth Wheel Serial Number</idValue>
+    <idCode>FG</idCode>
+        <idValue>Fund Manager</idValue>
+    <idCode>FI</idCode>
+        <idValue>Finish Number</idValue>
+    <idCode>FL</idCode>
+        <idValue>Finish Lot Number</idValue>
+    <idCode>FM</idCode>
+        <idValue>Failed Subassembly Model Number</idValue>
+    <idCode>FN</idCode>
+        <idValue>Final Test Lot Number</idValue>
+    <idCode>FP</idCode>
+        <idValue>Fabric Pieces Per Roll</idValue>
+    <idCode>FS</idCode>
+        <idValue>National Stock Number</idValue>
+    <idCode>FT</idCode>
+        <idValue>Federal Supply Classification</idValue>
+    <idCode>FW</idCode>
+        <idValue>New Microcode</idValue>
+    <idCode>GA</idCode>
+        <idValue>Gathering</idValue>
+    <idCode>GC</idCode>
+        <idValue>Grade Code</idValue>
+    <idCode>GD</idCode>
+        <idValue>Grain Direction</idValue>
+    <idCode>GE</idCode>
+        <idValue>Generic Name Description</idValue>
+    <idCode>GI</idCode>
+        <idValue>Graphics Industry Bar Code (GIBC)</idValue>
+    <idCode>GK</idCode>
+        <idValue>Glider Kit</idValue>
+    <idCode>GN</idCode>
+        <idValue>Grade Name</idValue>
+    <idCode>GQ</idCode>
+        <idValue>Group Qualifier Code</idValue>
+    <idCode>GR</idCode>
+        <idValue>Gear Ratio</idValue>
+    <idCode>GS</idCode>
+        <idValue>General Specification Number</idValue>
+    <idCode>GU</idCode>
+        <idValue>Volume Usage Identification Code</idValue>
+    <idCode>HC</idCode>
+        <idValue>Health Care Financing Administration Common Procedural Coding System (HCPCS) Codes</idValue>
+    <idCode>HD</idCode>
+        <idValue>International Harmonized Commodity Code</idValue>
+    <idCode>HI</idCode>
+        <idValue>HIBC (Health Care Industry Bar Code)</idValue>
+    <idCode>HN</idCode>
+        <idValue>Heat Number</idValue>
+    <idCode>IA</idCode>
+        <idValue>Information Media Type</idValue>
+    <idCode>IB</idCode>
+        <idValue>International Standard Book Number (ISBN)</idValue>
+    <idCode>IC</idCode>
+        <idValue>Interior Color Number</idValue>
+    <idCode>ID</idCode>
+        <idValue>International Classification of Diseases Clinical Modification (ICD-9-CM) - Procedure</idValue>
+    <idCode>IE</idCode>
+        <idValue>Insurer&apos;s Fund Code</idValue>
+    <idCode>IF</idCode>
+        <idValue>Investment Fund Type</idValue>
+    <idCode>IG</idCode>
+        <idValue>Ignition Key Number</idValue>
+    <idCode>IM</idCode>
+        <idValue>Imprint (Trademark Code of Subsidiary)</idValue>
+    <idCode>IN</idCode>
+        <idValue>Buyer&apos;s Item Number</idValue>
+    <idCode>IP</idCode>
+        <idValue>GAS*FLOW Invoice Posting Code</idValue>
+    <idCode>IQ</idCode>
+        <idValue>IRS Qualification Code</idValue>
+    <idCode>IR</idCode>
+        <idValue>Ingredient</idValue>
+    <idCode>IS</idCode>
+        <idValue>International Standard Serial Number (ISSN)</idValue>
+    <idCode>IT</idCode>
+        <idValue>Buyer&apos;s Style Number</idValue>
+    <idCode>IV</idCode>
+        <idValue>Home Infusion EDI Coalition (HIEC) Product/Service Code</idValue>
+    <idCode>IW</idCode>
+        <idValue>Interchangeability Code</idValue>
+    <idCode>IZ</idCode>
+        <idValue>Buyer&apos;s Size Code</idValue>
+    <idCode>JA</idCode>
+        <idValue>Anniversary</idValue>
+    <idCode>JB</idCode>
+        <idValue>Commission Identifier</idValue>
+    <idCode>JC</idCode>
+        <idValue>Commission Year</idValue>
+    <idCode>JD</idCode>
+        <idValue>Contribution Year</idValue>
+    <idCode>JN</idCode>
+        <idValue>Job Number</idValue>
+    <idCode>JP</idCode>
+        <idValue>Package Type Code</idValue>
+    <idCode>JS</idCode>
+        <idValue>Job Sequence Number</idValue>
+    <idCode>KA</idCode>
+        <idValue>Engineering Data List</idValue>
+    <idCode>KB</idCode>
+        <idValue>Data Category Code</idValue>
+    <idCode>KD</idCode>
+        <idValue>Replacement National Stock Number</idValue>
+    <idCode>KE</idCode>
+        <idValue>Military Standard</idValue>
+    <idCode>KF</idCode>
+        <idValue>Item Type Number</idValue>
+    <idCode>KG</idCode>
+        <idValue>Time Compliant Technical Order</idValue>
+    <idCode>KI</idCode>
+        <idValue>Cognizance Symbol</idValue>
+    <idCode>KJ</idCode>
+        <idValue>Material Control Code</idValue>
+    <idCode>KK</idCode>
+        <idValue>Special Material Identification Code</idValue>
+    <idCode>KL</idCode>
+        <idValue>Item Management Code</idValue>
+    <idCode>KM</idCode>
+        <idValue>Shelf-Life Code</idValue>
+    <idCode>KN</idCode>
+        <idValue>Shelf-Life Action Code</idValue>
+    <idCode>KP</idCode>
+        <idValue>Kanban Plan Number</idValue>
+    <idCode>L1</idCode>
+        <idValue>Program Level</idValue>
+    <idCode>L2</idCode>
+        <idValue>Topic Level</idValue>
+    <idCode>L3</idCode>
+        <idValue>Subtopic Level</idValue>
+    <idCode>L4</idCode>
+        <idValue>Life/Annuity Service Features</idValue>
+    <idCode>L5</idCode>
+        <idValue>Line of Authority</idValue>
+    <idCode>LA</idCode>
+        <idValue>Labor Group</idValue>
+    <idCode>LB</idCode>
+        <idValue>Logical Observation Identifier Names and Codes (LOINC) Codes</idValue>
+    <idCode>LC</idCode>
+        <idValue>Laboratory Test Condition Code</idValue>
+    <idCode>LD</idCode>
+        <idValue>Systematized Nomenclature of Human and Veterinary Medicine (SNOMED)</idValue>
+    <idCode>LG</idCode>
+        <idValue>Lift Gate Serial Number</idValue>
+    <idCode>LP</idCode>
+        <idValue>Life/Annuity Product Code</idValue>
+    <idCode>LR</idCode>
+        <idValue>Lease Number</idValue>
+    <idCode>LS</idCode>
+        <idValue>Load Sequence</idValue>
+    <idCode>LT</idCode>
+        <idValue>Lot Number</idValue>
+    <idCode>LU</idCode>
+        <idValue>Lot Pricing Unit Number</idValue>
+    <idCode>MA</idCode>
+        <idValue>Machine Number</idValue>
+    <idCode>MB</idCode>
+        <idValue>Measurement Type Code</idValue>
+    <idCode>MC</idCode>
+        <idValue>Mortgage Credit Data Order Type</idValue>
+    <idCode>MD</idCode>
+        <idValue>Method of Delivery Code</idValue>
+    <idCode>ME</idCode>
+        <idValue>Market Program Code</idValue>
+    <idCode>MF</idCode>
+        <idValue>Manufacturer</idValue>
+    <idCode>MG</idCode>
+        <idValue>Manufacturer&apos;s Part Number</idValue>
+    <idCode>MH</idCode>
+        <idValue>Medication Code</idValue>
+    <idCode>MI</idCode>
+        <idValue>Mortgage Insurance Product Code or Number</idValue>
+    <idCode>MJ</idCode>
+        <idValue>Manual Transmission Serial Number</idValue>
+    <idCode>MK</idCode>
+        <idValue>Front Axle Non Driven Serial Number</idValue>
+    <idCode>MM</idCode>
+        <idValue>Motor Equipment Manufacturing Association (MEMA) Product Type Code</idValue>
+    <idCode>MN</idCode>
+        <idValue>Model Number</idValue>
+    <idCode>MO</idCode>
+        <idValue>Movement Type Code</idValue>
+    <idCode>MP</idCode>
+        <idValue>Mortgage Product Code</idValue>
+    <idCode>MQ</idCode>
+        <idValue>Mortgage Underwriting Type</idValue>
+    <idCode>MR</idCode>
+        <idValue>Maintenance Index Page Reference Number</idValue>
+    <idCode>MS</idCode>
+        <idValue>Military Specification (MILSPEC) Number</idValue>
+    <idCode>MT</idCode>
+        <idValue>Major Product/Material/Machine Type</idValue>
+    <idCode>MU</idCode>
+        <idValue>Authorized Parts List Number</idValue>
+    <idCode>MV</idCode>
+        <idValue>Equipment Location</idValue>
+    <idCode>MW</idCode>
+        <idValue>Equipment Hierarchical Sequence Identifier</idValue>
+    <idCode>MX</idCode>
+        <idValue>Repair Induction Identifier</idValue>
+    <idCode>N1</idCode>
+        <idValue>National Drug Code in 4-4-2 Format</idValue>
+    <idCode>N2</idCode>
+        <idValue>National Drug Code in 5-3-2 Format</idValue>
+    <idCode>N3</idCode>
+        <idValue>National Drug Code in 5-4-1 Format</idValue>
+    <idCode>N4</idCode>
+        <idValue>National Drug Code in 5-4-2 Format</idValue>
+    <idCode>N5</idCode>
+        <idValue>National Health Related Item Code in 5-5 Format</idValue>
+    <idCode>N6</idCode>
+        <idValue>National Health Related Item Code in 4-6 Format</idValue>
+    <idCode>NC</idCode>
+        <idValue>Treasury Management Association</idValue>
+    <idCode>ND</idCode>
+        <idValue>National Drug Code (NDC)</idValue>
+    <idCode>NE</idCode>
+        <idValue>Yarn Count - English</idValue>
+    <idCode>NH</idCode>
+        <idValue>National Health Related Item Code</idValue>
+    <idCode>NM</idCode>
+        <idValue>Yarn Count - Metric</idValue>
+    <idCode>NR</idCode>
+        <idValue>Non-resaleable item (excluding deposit) number</idValue>
+    <idCode>NU</idCode>
+        <idValue>National Uniform Billing Committee (NUBC) UB92 Codes</idValue>
+    <idCode>NW</idCode>
+        <idValue>New Replacement Part or Assembly Defective</idValue>
+    <idCode>NZ</idCode>
+        <idValue>Combined NCCMA/Bank Service Code</idValue>
+    <idCode>OA</idCode>
+        <idValue>Old U.P.C./EAN Case Code</idValue>
+    <idCode>OB</idCode>
+        <idValue>Old U.P.C./EAN Multipack Code</idValue>
+    <idCode>OC</idCode>
+        <idValue>Old U.P.C./EAN Consumer Package Code</idValue>
+    <idCode>OD</idCode>
+        <idValue>Old U.P.C./EAN Module Code</idValue>
+    <idCode>OE</idCode>
+        <idValue>Original Equipment Number</idValue>
+    <idCode>OF</idCode>
+        <idValue>Old Common Language Equipment Identifier (CLEI) Code</idValue>
+    <idCode>OG</idCode>
+        <idValue>Old Microcode</idValue>
+    <idCode>OH</idCode>
+        <idValue>Opposite-Hand Part Number</idValue>
+    <idCode>OI</idCode>
+        <idValue>Optical Industry Product Code</idValue>
+    <idCode>OL</idCode>
+        <idValue>Optical Cable Code</idValue>
+    <idCode>ON</idCode>
+        <idValue>Customer Order Number</idValue>
+    <idCode>OO</idCode>
+        <idValue>Outside Production Operation Sheet Number</idValue>
+    <idCode>OP</idCode>
+        <idValue>Obsolete Part Number</idValue>
+    <idCode>OR</idCode>
+        <idValue>Offer Number</idValue>
+    <idCode>OT</idCode>
+        <idValue>Internal Number</idValue>
+    <idCode>P1</idCode>
+        <idValue>Petroleum Accountants Society of Canada Operating and Maintenance Code - Goods and Services Tax Not Applicable</idValue>
+    <idCode>P2</idCode>
+        <idValue>Petroleum Accountants Society of Canada Capital Expenditure Code - Goods and Services Tax Not Applicable</idValue>
+    <idCode>P3</idCode>
+        <idValue>Petroleum Accountants Society of Canada Tubular Code</idValue>
+    <idCode>P4</idCode>
+        <idValue>Petroleum Accountants Society of Canada Non-Tubular Code</idValue>
+    <idCode>P5</idCode>
+        <idValue>Material Discharge Number</idValue>
+    <idCode>P7</idCode>
+        <idValue>Previous Carrier</idValue>
+    <idCode>P8</idCode>
+        <idValue>Retail Price Look Up Number (PLU)</idValue>
+    <idCode>P9</idCode>
+        <idValue>Ply</idValue>
+    <idCode>PA</idCode>
+        <idValue>Pattern Number</idValue>
+    <idCode>PB</idCode>
+        <idValue>Petroleum Accountants Society of Canada Operating and Maintenance Code - Goods and Services Tax Forwarded</idValue>
+    <idCode>PC</idCode>
+        <idValue>Prime Contractor Part Number</idValue>
+    <idCode>PD</idCode>
+        <idValue>Part Number Description</idValue>
+    <idCode>PE</idCode>
+        <idValue>Pieces in Roll</idValue>
+    <idCode>PF</idCode>
+        <idValue>Petroleum Accountants Society of Canada Capital Expenditure Code - Goods and Services Tax Forwarded</idValue>
+    <idCode>PG</idCode>
+        <idValue>Packaging Specification Number</idValue>
+    <idCode>PH</idCode>
+        <idValue>Property and Casualty Service Code</idValue>
+    <idCode>PI</idCode>
+        <idValue>Purchaser&apos;s Item Code</idValue>
+    <idCode>PJ</idCode>
+        <idValue>Product Date Code (A code indicating the period during which a product was manufactured.)</idValue>
+    <idCode>PK</idCode>
+        <idValue>Packaging Drawing</idValue>
+    <idCode>PL</idCode>
+        <idValue>Purchaser&apos;s Order Line Number</idValue>
+    <idCode>PM</idCode>
+        <idValue>Number of Positions on Machine</idValue>
+    <idCode>PN</idCode>
+        <idValue>Company Part Number</idValue>
+    <idCode>PO</idCode>
+        <idValue>Purchase Order Number</idValue>
+    <idCode>PP</idCode>
+        <idValue>Air Transportation Association Proprietary Rights Code</idValue>
+    <idCode>PQ</idCode>
+        <idValue>Product ID Attribute Code</idValue>
+    <idCode>PR</idCode>
+        <idValue>Process Number</idValue>
+    <idCode>PS</idCode>
+        <idValue>Position</idValue>
+    <idCode>PT</idCode>
+        <idValue>Print or Drawing</idValue>
+    <idCode>PU</idCode>
+        <idValue>Part Reference Number</idValue>
+    <idCode>PV</idCode>
+        <idValue>Advertising Package Identification Code</idValue>
+    <idCode>PW</idCode>
+        <idValue>Part Drawing</idValue>
+    <idCode>PX</idCode>
+        <idValue>Secondary Ply</idValue>
+    <idCode>PY</idCode>
+        <idValue>Operator Assigned Property Identification</idValue>
+    <idCode>PZ</idCode>
+        <idValue>Product Change Notice Number</idValue>
+    <idCode>R1</idCode>
+        <idValue>Replacement Subassembly Model Number</idValue>
+    <idCode>R2</idCode>
+        <idValue>Replacement Subassembly Serial Number</idValue>
+    <idCode>RA</idCode>
+        <idValue>Return Code</idValue>
+    <idCode>RB</idCode>
+        <idValue>National Uniform Billing Committee (NUBC) UB82 Codes</idValue>
+    <idCode>RC</idCode>
+        <idValue>Returnable Container Number</idValue>
+    <idCode>RD</idCode>
+        <idValue>Reel Number</idValue>
+    <idCode>RE</idCode>
+        <idValue>Reefer Serial Number</idValue>
+    <idCode>RF</idCode>
+        <idValue>Repair From Product Code</idValue>
+    <idCode>RG</idCode>
+        <idValue>Reference Oil</idValue>
+    <idCode>RH</idCode>
+        <idValue>Radiator Serial Number</idValue>
+    <idCode>RI</idCode>
+        <idValue>Rear Axle Front Rear Driven Serial Number</idValue>
+    <idCode>RJ</idCode>
+        <idValue>Rear Axle Rear Driven Serial Number</idValue>
+    <idCode>RK</idCode>
+        <idValue>Rack Number</idValue>
+    <idCode>RL</idCode>
+        <idValue>Rate Detail Card</idValue>
+    <idCode>RM</idCode>
+        <idValue>Related Model Number</idValue>
+    <idCode>RN</idCode>
+        <idValue>Release Number</idValue>
+    <idCode>RO</idCode>
+        <idValue>Roll Number</idValue>
+    <idCode>RP</idCode>
+        <idValue>Replaced Part Number</idValue>
+    <idCode>RR</idCode>
+        <idValue>Replacement Product Number</idValue>
+    <idCode>RS</idCode>
+        <idValue>Set Number</idValue>
+    <idCode>RT</idCode>
+        <idValue>Reel Type</idValue>
+    <idCode>RU</idCode>
+        <idValue>Run Number</idValue>
+    <idCode>RV</idCode>
+        <idValue>Repair Tag Number</idValue>
+    <idCode>RW</idCode>
+        <idValue>Relative Value Units</idValue>
+    <idCode>RY</idCode>
+        <idValue>Record Keeping or Model Year</idValue>
+    <idCode>RZ</idCode>
+        <idValue>Related Model Type</idValue>
+    <idCode>S2</idCode>
+        <idValue>Second Prior Identifier</idValue>
+    <idCode>S3</idCode>
+        <idValue>Phase</idValue>
+    <idCode>S4</idCode>
+        <idValue>Laboratory Sample Identification</idValue>
+    <idCode>S5</idCode>
+        <idValue>State Sample Identification</idValue>
+    <idCode>S6</idCode>
+        <idValue>Previous Sample Identification</idValue>
+    <idCode>S7</idCode>
+        <idValue>Source of Deposit Code</idValue>
+    <idCode>S8</idCode>
+        <idValue>Source of Lead Code</idValue>
+    <idCode>SA</idCode>
+        <idValue>Schematic Diagram Reference Number</idValue>
+    <idCode>SB</idCode>
+        <idValue>Submission Number</idValue>
+    <idCode>SC</idCode>
+        <idValue>Seller&apos;s Date Code</idValue>
+    <idCode>SD</idCode>
+        <idValue>Supplier Company Registry Number</idValue>
+    <idCode>SE</idCode>
+        <idValue>Section Print Number</idValue>
+    <idCode>SF</idCode>
+        <idValue>Surface Finish</idValue>
+    <idCode>SG</idCode>
+        <idValue>Seat Serial Number</idValue>
+    <idCode>SH</idCode>
+        <idValue>Service Requested</idValue>
+    <idCode>SI</idCode>
+        <idValue>Standard Industrial Classification Code</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Religious Retail Non-book Item</idValue>
+    <idCode>SK</idCode>
+        <idValue>Stock Keeping Unit (SKU)</idValue>
+    <idCode>SL</idCode>
+        <idValue>Seller&apos;s Lot Number</idValue>
+    <idCode>SM</idCode>
+        <idValue>National Retail Merchants Association Size Code</idValue>
+    <idCode>SN</idCode>
+        <idValue>Serial Number</idValue>
+    <idCode>SO</idCode>
+        <idValue>System Identifier</idValue>
+    <idCode>SP</idCode>
+        <idValue>Superseded Purchase Order Number</idValue>
+    <idCode>SQ</idCode>
+        <idValue>Roll Sequence Number</idValue>
+    <idCode>SR</idCode>
+        <idValue>Substitute Product Number</idValue>
+    <idCode>SS</idCode>
+        <idValue>Superseded Part Number</idValue>
+    <idCode>ST</idCode>
+        <idValue>Style Number</idValue>
+    <idCode>SU</idCode>
+        <idValue>Side Up/Side Down</idValue>
+    <idCode>SV</idCode>
+        <idValue>Service Rendered</idValue>
+    <idCode>SW</idCode>
+        <idValue>Stock Number</idValue>
+    <idCode>SX</idCode>
+        <idValue>Sleeper Box Key Number</idValue>
+    <idCode>SY</idCode>
+        <idValue>Sleeper Box Serial Number</idValue>
+    <idCode>SZ</idCode>
+        <idValue>Vendor Alphanumeric Size Code (NRMA)</idValue>
+    <idCode>T2</idCode>
+        <idValue>Tex</idValue>
+    <idCode>T3</idCode>
+        <idValue>Third Prior Identifier</idValue>
+    <idCode>TA</idCode>
+        <idValue>Pipeline Transaction Code</idValue>
+    <idCode>TB</idCode>
+        <idValue>Treasury Management Association Service Code and Bank Service Code</idValue>
+    <idCode>TC</idCode>
+        <idValue>Telecommunications Circuit ID</idValue>
+    <idCode>TD</idCode>
+        <idValue>Treatment Codes</idValue>
+    <idCode>TE</idCode>
+        <idValue>Treasury Management Association Service Code</idValue>
+    <idCode>TF</idCode>
+        <idValue>The Air Cargo Tariff (TACT) Commodity Code</idValue>
+    <idCode>TG</idCode>
+        <idValue>Automatic Transmission Serial Number</idValue>
+    <idCode>TH</idCode>
+        <idValue>Transfer Case Serial Number</idValue>
+    <idCode>TI</idCode>
+        <idValue>Trade In Identifier</idValue>
+    <idCode>TJ</idCode>
+        <idValue>Auxiliary Transmission Serial Number</idValue>
+    <idCode>TM</idCode>
+        <idValue>Telephone Industry Manufacturer Code</idValue>
+    <idCode>TN</idCode>
+        <idValue>Railroad-Owned Unit Train Number</idValue>
+    <idCode>TP</idCode>
+        <idValue>Product Type Code</idValue>
+    <idCode>TR</idCode>
+        <idValue>Truck Body Serial Number</idValue>
+    <idCode>TS</idCode>
+        <idValue>Transmission Serial Number</idValue>
+    <idCode>TT</idCode>
+        <idValue>Type Selvage</idValue>
+    <idCode>TU</idCode>
+        <idValue>Tested Material Identification Number</idValue>
+    <idCode>TV</idCode>
+        <idValue>Line of Business</idValue>
+    <idCode>TW</idCode>
+        <idValue>Program Code</idValue>
+    <idCode>TX</idCode>
+        <idValue>Federal Aviation Administration (FAA) Service Bulletin Number</idValue>
+    <idCode>TY</idCode>
+        <idValue>Telecommunications Industry Service Code</idValue>
+    <idCode>TZ</idCode>
+        <idValue>Program Description Identifier</idValue>
+    <idCode>U2</idCode>
+        <idValue>U.P.C. Shipping Container Code (1-2-5-5)</idValue>
+    <idCode>U3</idCode>
+        <idValue>United Nations Common Coding System (UNCCS)</idValue>
+    <idCode>U5</idCode>
+        <idValue>Broker Price Opinion Service</idValue>
+    <idCode>U6</idCode>
+        <idValue>Real Estate Property Information Service</idValue>
+    <idCode>UA</idCode>
+        <idValue>U.P.C./EAN Case Code (2-5-5)</idValue>
+    <idCode>UB</idCode>
+        <idValue>U.P.C./EAN Multipack Code</idValue>
+    <idCode>UC</idCode>
+        <idValue>U.P.C. Suffix (Defines Packing Variations)</idValue>
+    <idCode>UD</idCode>
+        <idValue>U.P.C./EAN Consumer Package Code (2-5-5)</idValue>
+    <idCode>UE</idCode>
+        <idValue>U.P.C./EAN Module Code (2-5-5)</idValue>
+    <idCode>UF</idCode>
+        <idValue>User-Defined Shipping Container Identifier</idValue>
+    <idCode>UG</idCode>
+        <idValue>Drug U.P.C. Consumer Package Code (1-4-6-1)</idValue>
+    <idCode>UH</idCode>
+        <idValue>Drug U.P.C. Shipping Container Code (1-2-4-6-1)</idValue>
+    <idCode>UI</idCode>
+        <idValue>U.P.C. Consumer Package Code (1-5-5)</idValue>
+    <idCode>UJ</idCode>
+        <idValue>U.P.C./EAN Coupon Code (2-5-5)</idValue>
+    <idCode>UK</idCode>
+        <idValue>U.P.C./EAN Shipping Container Code (1-2-5-5-1)</idValue>
+    <idCode>UL</idCode>
+        <idValue>U.P.C. Coupon Code (1-5-5-1)</idValue>
+    <idCode>UM</idCode>
+        <idValue>Universal Vendor Marking, Short Code (UVM; U Line)</idValue>
+    <idCode>UN</idCode>
+        <idValue>U.P.C. Case Code Number (1-1-5-5)</idValue>
+    <idCode>UO</idCode>
+        <idValue>SSCC-18 and Application Identifier</idValue>
+    <idCode>UP</idCode>
+        <idValue>U.P.C. Consumer Package Code (1-5-5-1)</idValue>
+    <idCode>UQ</idCode>
+        <idValue>United Nations (UN) Number (Dangerous Goods)</idValue>
+    <idCode>UR</idCode>
+        <idValue>UCC/EAN-128 Coupon Extended Code</idValue>
+    <idCode>US</idCode>
+        <idValue>Uniform Stock Symbol System Code Number</idValue>
+    <idCode>UT</idCode>
+        <idValue>Company-Owned Unit Train Number</idValue>
+    <idCode>UV</idCode>
+        <idValue>Universal Vendor Marking, Long Code (UVM; R,P,M Lines)</idValue>
+    <idCode>UX</idCode>
+        <idValue>Universal Product Number</idValue>
+    <idCode>VA</idCode>
+        <idValue>Vendor&apos;s Style Number</idValue>
+    <idCode>VB</idCode>
+        <idValue>Vendor&apos;s Engineering Change Level Number</idValue>
+    <idCode>VC</idCode>
+        <idValue>Vendor&apos;s (Seller&apos;s) Catalog Number</idValue>
+    <idCode>VE</idCode>
+        <idValue>Vendor Color</idValue>
+    <idCode>VI</idCode>
+        <idValue>Vary Item Product Number</idValue>
+    <idCode>VM</idCode>
+        <idValue>Vehicle Maintenance Reporting Standards</idValue>
+    <idCode>VN</idCode>
+        <idValue>Vendor&apos;s (Seller&apos;s) Item Number</idValue>
+    <idCode>VO</idCode>
+        <idValue>Vendor&apos;s Order Number</idValue>
+    <idCode>VP</idCode>
+        <idValue>Vendor&apos;s (Seller&apos;s) Part Number</idValue>
+    <idCode>VS</idCode>
+        <idValue>Vendor&apos;s Supplemental Item Number</idValue>
+    <idCode>VT</idCode>
+        <idValue>Vintage</idValue>
+    <idCode>VU</idCode>
+        <idValue>Vendor&apos;s Basic Unit Number</idValue>
+    <idCode>VV</idCode>
+        <idValue>Motor Vehicle ID Number</idValue>
+    <idCode>VX</idCode>
+        <idValue>Vendor&apos;s Specification Number</idValue>
+    <idCode>W1</idCode>
+        <idValue>End Item Serial Number</idValue>
+    <idCode>W2</idCode>
+        <idValue>Work Unit Number</idValue>
+    <idCode>W5</idCode>
+        <idValue>Reclamation Process</idValue>
+    <idCode>W6</idCode>
+        <idValue>Woolen Run</idValue>
+    <idCode>W7</idCode>
+        <idValue>Woolen Cut</idValue>
+    <idCode>WA</idCode>
+        <idValue>Random Weight Aggregation Code</idValue>
+    <idCode>WC</idCode>
+        <idValue>World Code</idValue>
+    <idCode>WL</idCode>
+        <idValue>Wafer Lot Identifier</idValue>
+    <idCode>WR</idCode>
+        <idValue>Yarn Count Worsted</idValue>
+    <idCode>WS</idCode>
+        <idValue>Wheel Chair Lift Serial Number</idValue>
+    <idCode>XA</idCode>
+        <idValue>Preferred Part Number</idValue>
+    <idCode>XC</idCode>
+        <idValue>Expendable Container Identification</idValue>
+    <idCode>XP</idCode>
+        <idValue>Preferred National Stock Number</idValue>
+    <idCode>XQ</idCode>
+        <idValue>Preferred Manufacturer</idValue>
+    <idCode>XZ</idCode>
+        <idValue>Contractor Establishment Code</idValue>
+    <idCode>YP</idCode>
+        <idValue>Publication Number</idValue>
+    <idCode>ZB</idCode>
+        <idValue>Commercial and Government Entity (CAGE) Code</idValue>
+    <idCode>ZR</idCode>
+        <idValue>Service Control Identification</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Pre-existing Conditions</idValue>
+    <idCode>02</idCode>
+        <idValue>Diagnosis</idValue>
+    <idCode>03</idCode>
+        <idValue>Condition</idValue>
+    <idCode>04</idCode>
+        <idValue>Occurrence</idValue>
+    <idCode>05</idCode>
+        <idValue>Occurrence Span</idValue>
+    <idCode>06</idCode>
+        <idValue>Value</idValue>
+    <idCode>07</idCode>
+        <idValue>Ambulance Certification</idValue>
+    <idCode>08</idCode>
+        <idValue>Chiropractic Certification</idValue>
+    <idCode>09</idCode>
+        <idValue>Durable Medical Equipment Certification</idValue>
+    <idCode>10</idCode>
+        <idValue>Enteral or Parenteral Therapy Certification</idValue>
+    <idCode>11</idCode>
+        <idValue>Oxygen Therapy Certification</idValue>
+    <idCode>12</idCode>
+        <idValue>Admitting Diagnosis</idValue>
+    <idCode>13</idCode>
+        <idValue>Principal Diagnosis</idValue>
+    <idCode>14</idCode>
+        <idValue>Pre-Existing Physical Condition</idValue>
+    <idCode>15</idCode>
+        <idValue>Pre-Existing Mental Condition</idValue>
+    <idCode>16</idCode>
+        <idValue>Routine Foot Care Class Finding</idValue>
+    <idCode>17</idCode>
+        <idValue>Systemic Condition for Routine Foot Care</idValue>
+    <idCode>18</idCode>
+        <idValue>Co-op Advertising</idValue>
+    <idCode>19</idCode>
+        <idValue>Commercial Advertising</idValue>
+    <idCode>20</idCode>
+        <idValue>Specimen Kit Type Code</idValue>
+    <idCode>21</idCode>
+        <idValue>Laboratory Test Condition Code</idValue>
+    <idCode>22</idCode>
+        <idValue>Automobile Loss</idValue>
+    <idCode>23</idCode>
+        <idValue>Laboratory Results Identification Code</idValue>
+    <idCode>24</idCode>
+        <idValue>Line of Business Code</idValue>
+    <idCode>25</idCode>
+        <idValue>United States Department of Vital Statistics E-Code</idValue>
+    <idCode>26</idCode>
+        <idValue>Employment Status Information</idValue>
+    <idCode>27</idCode>
+        <idValue>Income</idValue>
+    <idCode>28</idCode>
+        <idValue>Loan Information</idValue>
+    <idCode>29</idCode>
+        <idValue>Injury or Illness</idValue>
+    <idCode>30</idCode>
+        <idValue>Benefit Adjustment</idValue>
+    <idCode>31</idCode>
+        <idValue>Claimant</idValue>
+    <idCode>32</idCode>
+        <idValue>Contractholder Branch</idValue>
+    <idCode>33</idCode>
+        <idValue>Contractholder</idValue>
+    <idCode>34</idCode>
+        <idValue>Secondary Claim Administrator</idValue>
+    <idCode>35</idCode>
+        <idValue>Primary Claim Administrator</idValue>
+    <idCode>36</idCode>
+        <idValue>Reporting Agency</idValue>
+    <idCode>37</idCode>
+        <idValue>Process</idValue>
+    <idCode>38</idCode>
+        <idValue>Hazardous Material</idValue>
+    <idCode>39</idCode>
+        <idValue>Activity</idValue>
+    <idCode>40</idCode>
+        <idValue>Accident</idValue>
+    <idCode>41</idCode>
+        <idValue>Initial Treatment</idValue>
+    <idCode>42</idCode>
+        <idValue>Cause of Injury</idValue>
+    <idCode>43</idCode>
+        <idValue>Part of Body</idValue>
+    <idCode>44</idCode>
+        <idValue>Nature of Injury</idValue>
+    <idCode>45</idCode>
+        <idValue>Source of Injury</idValue>
+    <idCode>46</idCode>
+        <idValue>Job</idValue>
+    <idCode>47</idCode>
+        <idValue>Loss Prevention</idValue>
+    <idCode>48</idCode>
+        <idValue>Managed Care</idValue>
+    <idCode>49</idCode>
+        <idValue>Risk Management</idValue>
+    <idCode>50</idCode>
+        <idValue>Claim Handling</idValue>
+    <idCode>51</idCode>
+        <idValue>Event or Exposure</idValue>
+    <idCode>52</idCode>
+        <idValue>Equipment or Materials or Chemicals</idValue>
+    <idCode>53</idCode>
+        <idValue>Coverage</idValue>
+    <idCode>54</idCode>
+        <idValue>Overbite</idValue>
+    <idCode>55</idCode>
+        <idValue>Overjet</idValue>
+    <idCode>56</idCode>
+        <idValue>Profile</idValue>
+    <idCode>57</idCode>
+        <idValue>Crossbite</idValue>
+    <idCode>58</idCode>
+        <idValue>Arch Asymmetry</idValue>
+    <idCode>59</idCode>
+        <idValue>Dentition Midline</idValue>
+    <idCode>60</idCode>
+        <idValue>Crowding</idValue>
+    <idCode>61</idCode>
+        <idValue>Molars</idValue>
+    <idCode>62</idCode>
+        <idValue>Cuspids</idValue>
+    <idCode>63</idCode>
+        <idValue>Interviewee</idValue>
+    <idCode>64</idCode>
+        <idValue>Verification of Deposit</idValue>
+    <idCode>65</idCode>
+        <idValue>Verification of Mortgage</idValue>
+    <idCode>66</idCode>
+        <idValue>Verification of Income or Employment or Both</idValue>
+    <idCode>67</idCode>
+        <idValue>Verification of Rent</idValue>
+    <idCode>68</idCode>
+        <idValue>Verification of Loan or Installment Debt or Both</idValue>
+    <idCode>69</idCode>
+        <idValue>Anti-fungal Therapy</idValue>
+    <idCode>70</idCode>
+        <idValue>Hospice</idValue>
+    <idCode>71</idCode>
+        <idValue>Primary Diagnosis</idValue>
+    <idCode>72</idCode>
+        <idValue>Secondary Diagnosis</idValue>
+    <idCode>73</idCode>
+        <idValue>Tertiary Diagnosis</idValue>
+    <idCode>74</idCode>
+        <idValue>Procedure Code</idValue>
+    <idCode>75</idCode>
+        <idValue>Functional Limitations</idValue>
+    <idCode>76</idCode>
+        <idValue>Activities Permitted</idValue>
+    <idCode>77</idCode>
+        <idValue>Mental Status</idValue>
+    <idCode>78</idCode>
+        <idValue>Manner Property Title Held</idValue>
+    <idCode>79</idCode>
+        <idValue>Property Improvements</idValue>
+    <idCode>80</idCode>
+        <idValue>Complete Appraisal</idValue>
+    <idCode>81</idCode>
+        <idValue>Limited Appraisal</idValue>
+    <idCode>82</idCode>
+        <idValue>Restricted Appraisal Report Limiting Conditions</idValue>
+    <idCode>83</idCode>
+        <idValue>Route of Administration</idValue>
+    <idCode>84</idCode>
+        <idValue>Borrower Information</idValue>
+    <idCode>85</idCode>
+        <idValue>Contract Information</idValue>
+    <idCode>86</idCode>
+        <idValue>Fannie Mae (Federal National Mortgage Association)</idValue>
+    <idCode>87</idCode>
+        <idValue>Freddie Mac (Federal Home Loan Mortgage Corporation)</idValue>
+    <idCode>88</idCode>
+        <idValue>Deductible</idValue>
+    <idCode>89</idCode>
+        <idValue>Advertising Copy</idValue>
+    <idCode>90</idCode>
+        <idValue>Private Remarks</idValue>
+    <idCode>91</idCode>
+        <idValue>Compensation Notes</idValue>
+    <idCode>92</idCode>
+        <idValue>Open House Notes</idValue>
+    <idCode>93</idCode>
+        <idValue>Tour Notes</idValue>
+    <idCode>94</idCode>
+        <idValue>Terms of Sale</idValue>
+    <idCode>95</idCode>
+        <idValue>Restrictions</idValue>
+    <idCode>96</idCode>
+        <idValue>Disclosures</idValue>
+    <idCode>97</idCode>
+        <idValue>Exceptions</idValue>
+    <idCode>98</idCode>
+        <idValue>Inclusions</idValue>
+    <idCode>99</idCode>
+        <idValue>Lease Type</idValue>
+    <idCode>A1</idCode>
+        <idValue>Mortgage Record Change</idValue>
+    <idCode>A2</idCode>
+        <idValue>Mortgage Insurance Termination</idValue>
+    <idCode>A3</idCode>
+        <idValue>Mortgage Insurance Cancellation</idValue>
+    <idCode>A4</idCode>
+        <idValue>Mortgage Servicing Transfer</idValue>
+    <idCode>A5</idCode>
+        <idValue>Appraisal</idValue>
+    <idCode>A7</idCode>
+        <idValue>Source of Data</idValue>
+    <idCode>A8</idCode>
+        <idValue>Endorsement</idValue>
+    <idCode>A9</idCode>
+        <idValue>Notification</idValue>
+    <idCode>AA</idCode>
+        <idValue>All</idValue>
+    <idCode>AB</idCode>
+        <idValue>Agent&apos;s Questions</idValue>
+    <idCode>AC</idCode>
+        <idValue>Agent&apos;s Share</idValue>
+    <idCode>AD</idCode>
+        <idValue>Benefits</idValue>
+    <idCode>AE</idCode>
+        <idValue>Contact or Reference Information</idValue>
+    <idCode>AF</idCode>
+        <idValue>Cost Basis</idValue>
+    <idCode>AG</idCode>
+        <idValue>Driving Infractions</idValue>
+    <idCode>AH</idCode>
+        <idValue>Excess Dividend Use</idValue>
+    <idCode>AI</idCode>
+        <idValue>Home Health Aide</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Existing Coverage Information</idValue>
+    <idCode>AK</idCode>
+        <idValue>Hospitalization</idValue>
+    <idCode>AL</idCode>
+        <idValue>Activity Limitations</idValue>
+    <idCode>AM</idCode>
+        <idValue>Juvenile Information</idValue>
+    <idCode>AN</idCode>
+        <idValue>Occupation Information</idValue>
+    <idCode>AO</idCode>
+        <idValue>Personal Finance and Business Information</idValue>
+    <idCode>AP</idCode>
+        <idValue>Appearance</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Rating Information</idValue>
+    <idCode>AR</idCode>
+        <idValue>Arrest</idValue>
+    <idCode>AS</idCode>
+        <idValue>Replaced Amount</idValue>
+    <idCode>AT</idCode>
+        <idValue>Authority</idValue>
+    <idCode>AU</idCode>
+        <idValue>Automated Underwriting Information</idValue>
+    <idCode>AV</idCode>
+        <idValue>Aviation</idValue>
+    <idCode>AW</idCode>
+        <idValue>Surgery</idValue>
+    <idCode>AX</idCode>
+        <idValue>Travel Information</idValue>
+    <idCode>AY</idCode>
+        <idValue>Age Remark</idValue>
+    <idCode>AZ</idCode>
+        <idValue>Property Remark</idValue>
+    <idCode>B1</idCode>
+        <idValue>Audit Data</idValue>
+    <idCode>B2</idCode>
+        <idValue>Declaration Sheet Indicator</idValue>
+    <idCode>B3</idCode>
+        <idValue>Servicing Data</idValue>
+    <idCode>B4</idCode>
+        <idValue>Single Family</idValue>
+    <idCode>B5</idCode>
+        <idValue>Multifamily</idValue>
+    <idCode>B6</idCode>
+        <idValue>Payment Handling</idValue>
+    <idCode>B7</idCode>
+        <idValue>Ginnie Mae 1</idValue>
+    <idCode>B8</idCode>
+        <idValue>Ginnie Mae 2</idValue>
+    <idCode>B9</idCode>
+        <idValue>Ginnie Mae 2 Custom</idValue>
+    <idCode>BA</idCode>
+        <idValue>Bankruptcy</idValue>
+    <idCode>BB</idCode>
+        <idValue>Business Beneficiary</idValue>
+    <idCode>BC</idCode>
+        <idValue>Building Condition</idValue>
+    <idCode>BD</idCode>
+        <idValue>Buydown</idValue>
+    <idCode>BE</idCode>
+        <idValue>Beneficiary</idValue>
+    <idCode>BF</idCode>
+        <idValue>Tax Agency Parcel Identifier</idValue>
+    <idCode>BG</idCode>
+        <idValue>Historical Performance</idValue>
+    <idCode>BH</idCode>
+        <idValue>Product Rules</idValue>
+    <idCode>BI</idCode>
+        <idValue>Commercial Property</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Unimproved Land</idValue>
+    <idCode>BK</idCode>
+        <idValue>Banking</idValue>
+    <idCode>BL</idCode>
+        <idValue>New Contract</idValue>
+    <idCode>BM</idCode>
+        <idValue>Original Contract</idValue>
+    <idCode>BN</idCode>
+        <idValue>Access</idValue>
+    <idCode>BP</idCode>
+        <idValue>Bankruptcy Petition</idValue>
+    <idCode>BQ</idCode>
+        <idValue>Agent Sales Trend</idValue>
+    <idCode>BR</idCode>
+        <idValue>Broker&apos;s Price Opinion</idValue>
+    <idCode>BS</idCode>
+        <idValue>Bankruptcy Statement of Financial Affairs</idValue>
+    <idCode>BT</idCode>
+        <idValue>Billings Trend</idValue>
+    <idCode>BU</idCode>
+        <idValue>Assets</idValue>
+    <idCode>BV</idCode>
+        <idValue>Cash Flow</idValue>
+    <idCode>BW</idCode>
+        <idValue>Competition</idValue>
+    <idCode>BX</idCode>
+        <idValue>Credit Line</idValue>
+    <idCode>BY</idCode>
+        <idValue>Creditors Arrangement</idValue>
+    <idCode>BZ</idCode>
+        <idValue>Creditors Meeting</idValue>
+    <idCode>CA</idCode>
+        <idValue>Citizenship</idValue>
+    <idCode>CB</idCode>
+        <idValue>Continuing Education</idValue>
+    <idCode>CC</idCode>
+        <idValue>Compensation Calculation</idValue>
+    <idCode>CD</idCode>
+        <idValue>Cause of Death</idValue>
+    <idCode>CE</idCode>
+        <idValue>Condominium</idValue>
+    <idCode>CF</idCode>
+        <idValue>Cooperative</idValue>
+    <idCode>CG</idCode>
+        <idValue>Conviction</idValue>
+    <idCode>CH</idCode>
+        <idValue>Direct Sales Trend</idValue>
+    <idCode>CI</idCode>
+        <idValue>Export Trend</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Financial Embarrassment</idValue>
+    <idCode>CK</idCode>
+        <idValue>Indebtedness</idValue>
+    <idCode>CL</idCode>
+        <idValue>Cancellation</idValue>
+    <idCode>CM</idCode>
+        <idValue>Claim Amounts</idValue>
+    <idCode>CN</idCode>
+        <idValue>Comparison</idValue>
+    <idCode>CO</idCode>
+        <idValue>County</idValue>
+    <idCode>CP</idCode>
+        <idValue>Complications</idValue>
+    <idCode>CQ</idCode>
+        <idValue>Initial Capital</idValue>
+    <idCode>CR</idCode>
+        <idValue>Current Ratio</idValue>
+    <idCode>CS</idCode>
+        <idValue>Common Stock</idValue>
+    <idCode>CT</idCode>
+        <idValue>Commission Trend</idValue>
+    <idCode>CU</idCode>
+        <idValue>Stockholders</idValue>
+    <idCode>CV</idCode>
+        <idValue>Damage</idValue>
+    <idCode>CW</idCode>
+        <idValue>Working Capital</idValue>
+    <idCode>CX</idCode>
+        <idValue>Compensation Allocation</idValue>
+    <idCode>CY</idCode>
+        <idValue>Dividend Use</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Excess Premium Use</idValue>
+    <idCode>DA</idCode>
+        <idValue>Drug Adjudication Information</idValue>
+    <idCode>DB</idCode>
+        <idValue>Liquidation Proceedings</idValue>
+    <idCode>DC</idCode>
+        <idValue>Location</idValue>
+    <idCode>DD</idCode>
+        <idValue>Discharge Diagnosis</idValue>
+    <idCode>DE</idCode>
+        <idValue>Departmental</idValue>
+    <idCode>DF</idCode>
+        <idValue>Profit Margin</idValue>
+    <idCode>DG</idCode>
+        <idValue>Proposal</idValue>
+    <idCode>DH</idCode>
+        <idValue>Receivership</idValue>
+    <idCode>DI</idCode>
+        <idValue>Driver Identification Information</idValue>
+    <idCode>DP</idCode>
+        <idValue>Directions to Property</idValue>
+    <idCode>DR</idCode>
+        <idValue>Driving</idValue>
+    <idCode>DV</idCode>
+        <idValue>Driver Record Information</idValue>
+    <idCode>E1</idCode>
+        <idValue>Spectacle Lenses</idValue>
+    <idCode>E2</idCode>
+        <idValue>Contact Lenses</idValue>
+    <idCode>E3</idCode>
+        <idValue>Spectacle Frames</idValue>
+    <idCode>E4</idCode>
+        <idValue>Employment</idValue>
+    <idCode>E5</idCode>
+        <idValue>Examiner&apos;s Comments</idValue>
+    <idCode>EB</idCode>
+        <idValue>Intercompany Relations</idValue>
+    <idCode>EC</idCode>
+        <idValue>Judgments</idValue>
+    <idCode>ED</idCode>
+        <idValue>Liens</idValue>
+    <idCode>EE</idCode>
+        <idValue>Operating Surplus Trend</idValue>
+    <idCode>EF</idCode>
+        <idValue>Participating Interest</idValue>
+    <idCode>EG</idCode>
+        <idValue>Protested Bills</idValue>
+    <idCode>EH</idCode>
+        <idValue>Subcontracting Details</idValue>
+    <idCode>EI</idCode>
+        <idValue>Suits</idValue>
+    <idCode>EJ</idCode>
+        <idValue>Uniform Commercial Code (UCC) Filings</idValue>
+    <idCode>FA</idCode>
+        <idValue>Financial</idValue>
+    <idCode>FC</idCode>
+        <idValue>Family Coverage</idValue>
+    <idCode>FH</idCode>
+        <idValue>Family History</idValue>
+    <idCode>FI</idCode>
+        <idValue>Financing</idValue>
+    <idCode>FP</idCode>
+        <idValue>Franchise Tax Payments</idValue>
+    <idCode>FR</idCode>
+        <idValue>Financial Remarks</idValue>
+    <idCode>FT</idCode>
+        <idValue>Foreign Travel</idValue>
+    <idCode>GD</idCode>
+        <idValue>Demonstrations</idValue>
+    <idCode>GS</idCode>
+        <idValue>Shelf Format</idValue>
+    <idCode>GU</idCode>
+        <idValue>Guarantees</idValue>
+    <idCode>HA</idCode>
+        <idValue>Fixed</idValue>
+    <idCode>HB</idCode>
+        <idValue>Adjustable</idValue>
+    <idCode>HC</idCode>
+        <idValue>Rate Adjustment</idValue>
+    <idCode>HD</idCode>
+        <idValue>Payment Adjustment</idValue>
+    <idCode>HE</idCode>
+        <idValue>Life of Loan</idValue>
+    <idCode>HF</idCode>
+        <idValue>Periodic Interest Rate</idValue>
+    <idCode>HG</idCode>
+        <idValue>Principal and Interest</idValue>
+    <idCode>HH</idCode>
+        <idValue>Health or Medical</idValue>
+    <idCode>HI</idCode>
+        <idValue>Late Charge</idValue>
+    <idCode>HJ</idCode>
+        <idValue>Default Note Holder&apos;s Cost</idValue>
+    <idCode>HK</idCode>
+        <idValue>Prepayment</idValue>
+    <idCode>HL</idCode>
+        <idValue>Limited Payment</idValue>
+    <idCode>HM</idCode>
+        <idValue>Rate Lookback</idValue>
+    <idCode>HN</idCode>
+        <idValue>Payment Lookback</idValue>
+    <idCode>HO</idCode>
+        <idValue>Index</idValue>
+    <idCode>HP</idCode>
+        <idValue>Mortgage Margin</idValue>
+    <idCode>HQ</idCode>
+        <idValue>Single Family 2-4 Units</idValue>
+    <idCode>HR</idCode>
+        <idValue>Amortization</idValue>
+    <idCode>HS</idCode>
+        <idValue>Rate Conversion</idValue>
+    <idCode>HT</idCode>
+        <idValue>Interest Only</idValue>
+    <idCode>HY</idCode>
+        <idValue>History</idValue>
+    <idCode>HZ</idCode>
+        <idValue>Hazardous Sports</idValue>
+    <idCode>IC</idCode>
+        <idValue>Issued Capital</idValue>
+    <idCode>ID</idCode>
+        <idValue>Identification</idValue>
+    <idCode>IH</idCode>
+        <idValue>Insurance History or Other Coverage</idValue>
+    <idCode>IM</idCode>
+        <idValue>Impairment</idValue>
+    <idCode>IN</idCode>
+        <idValue>Insurance</idValue>
+    <idCode>LA</idCode>
+        <idValue>License Revocation</idValue>
+    <idCode>LE</idCode>
+        <idValue>Level Remarks</idValue>
+    <idCode>LL</idCode>
+        <idValue>Local Language Description</idValue>
+    <idCode>LR</idCode>
+        <idValue>Listing Remarks</idValue>
+    <idCode>LS</idCode>
+        <idValue>Life Style</idValue>
+    <idCode>LT</idCode>
+        <idValue>Legal Type</idValue>
+    <idCode>LZ</idCode>
+        <idValue>Loss Trend</idValue>
+    <idCode>MA</idCode>
+        <idValue>Marital Status</idValue>
+    <idCode>MI</idCode>
+        <idValue>Miscellaneous</idValue>
+    <idCode>MN</idCode>
+        <idValue>Management</idValue>
+    <idCode>MO</idCode>
+        <idValue>Modification</idValue>
+    <idCode>MP</idCode>
+        <idValue>Medication or Prescription</idValue>
+    <idCode>MS</idCode>
+        <idValue>Medical Social Worker</idValue>
+    <idCode>MT</idCode>
+        <idValue>Military Status</idValue>
+    <idCode>NC</idCode>
+        <idValue>Nominal Capital</idValue>
+    <idCode>NS</idCode>
+        <idValue>Nature of Suit</idValue>
+    <idCode>NW</idCode>
+        <idValue>Not Work Related</idValue>
+    <idCode>OA</idCode>
+        <idValue>Owner Pays Notes</idValue>
+    <idCode>OC</idCode>
+        <idValue>Occupation Class</idValue>
+    <idCode>OF</idCode>
+        <idValue>Outside Financing</idValue>
+    <idCode>ON</idCode>
+        <idValue>Operations Trend</idValue>
+    <idCode>OP</idCode>
+        <idValue>Operations</idValue>
+    <idCode>OT</idCode>
+        <idValue>Occupational Therapy</idValue>
+    <idCode>OU</idCode>
+        <idValue>Operations Outlook</idValue>
+    <idCode>PA</idCode>
+        <idValue>Performance</idValue>
+    <idCode>PB</idCode>
+        <idValue>Profitability</idValue>
+    <idCode>PC</idCode>
+        <idValue>Paid in Capital</idValue>
+    <idCode>PD</idCode>
+        <idValue>Public Records</idValue>
+    <idCode>PE</idCode>
+        <idValue>Penalty</idValue>
+    <idCode>PF</idCode>
+        <idValue>Profit Trend</idValue>
+    <idCode>PG</idCode>
+        <idValue>Possession Notes</idValue>
+    <idCode>PI</idCode>
+        <idValue>Photo Instructions</idValue>
+    <idCode>PN</idCode>
+        <idValue>Parking Notes</idValue>
+    <idCode>PO</idCode>
+        <idValue>Profit Outlook</idValue>
+    <idCode>PR</idCode>
+        <idValue>Property</idValue>
+    <idCode>PS</idCode>
+        <idValue>Preferred Stock</idValue>
+    <idCode>PT</idCode>
+        <idValue>Physical Therapy</idValue>
+    <idCode>R1</idCode>
+        <idValue>Reason for Weight Loss</idValue>
+    <idCode>R2</idCode>
+        <idValue>Association of American Railroads Special Proper Shipping Name Flag</idValue>
+    <idCode>R3</idCode>
+        <idValue>Association of American Railroads Intermodal Indicator</idValue>
+    <idCode>R4</idCode>
+        <idValue>Association of American Railroads U.S. to Canada Flag</idValue>
+    <idCode>R5</idCode>
+        <idValue>Residential Status</idValue>
+    <idCode>RC</idCode>
+        <idValue>Revocation</idValue>
+    <idCode>RE</idCode>
+        <idValue>Recovery</idValue>
+    <idCode>RI</idCode>
+        <idValue>Real Estate Property Information</idValue>
+    <idCode>RL</idCode>
+        <idValue>Radio License Application</idValue>
+    <idCode>RM</idCode>
+        <idValue>Remedy</idValue>
+    <idCode>RN</idCode>
+        <idValue>Related Entities</idValue>
+    <idCode>RR</idCode>
+        <idValue>Reinstatement</idValue>
+    <idCode>RS</idCode>
+        <idValue>Reason Last Seen</idValue>
+    <idCode>RT</idCode>
+        <idValue>Registration Type</idValue>
+    <idCode>RU</idCode>
+        <idValue>Results</idValue>
+    <idCode>RV</idCode>
+        <idValue>Revenue Trend</idValue>
+    <idCode>SA</idCode>
+        <idValue>Source Fund</idValue>
+    <idCode>SD</idCode>
+        <idValue>Starting Details</idValue>
+    <idCode>SE</idCode>
+        <idValue>Summary and Evaluation</idValue>
+    <idCode>SI</idCode>
+        <idValue>Showing Instructions</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Suits, Judgments &amp; Liens</idValue>
+    <idCode>SL</idCode>
+        <idValue>Supplement Note or Line</idValue>
+    <idCode>SN</idCode>
+        <idValue>Skilled Nursing</idValue>
+    <idCode>SP</idCode>
+        <idValue>Statement Preparation</idValue>
+    <idCode>SR</idCode>
+        <idValue>Sales Trend</idValue>
+    <idCode>SS</idCode>
+        <idValue>Suspension</idValue>
+    <idCode>ST</idCode>
+        <idValue>Speech Therapy</idValue>
+    <idCode>SU</idCode>
+        <idValue>Substance Use</idValue>
+    <idCode>SW</idCode>
+        <idValue>Reported Statement of Witness</idValue>
+    <idCode>SZ</idCode>
+        <idValue>Size</idValue>
+    <idCode>TB</idCode>
+        <idValue>Tobacco</idValue>
+    <idCode>TE</idCode>
+        <idValue>Tests</idValue>
+    <idCode>TF</idCode>
+        <idValue>Target Fund</idValue>
+    <idCode>TH</idCode>
+        <idValue>Therapy</idValue>
+    <idCode>TI</idCode>
+        <idValue>Action</idValue>
+    <idCode>TM</idCode>
+        <idValue>Terms</idValue>
+    <idCode>TN</idCode>
+        <idValue>Trend</idValue>
+    <idCode>TP</idCode>
+        <idValue>Tenant Pays Notes</idValue>
+    <idCode>TR</idCode>
+        <idValue>Treatment</idValue>
+    <idCode>TW</idCode>
+        <idValue>Two to Four Units</idValue>
+    <idCode>UP</idCode>
+        <idValue>Update</idValue>
+    <idCode>VA</idCode>
+        <idValue>Voter Registration Application</idValue>
+    <idCode>VC</idCode>
+        <idValue>Conviction</idValue>
+    <idCode>VD</idCode>
+        <idValue>Voter Registration Application Disposition</idValue>
+    <idCode>VO</idCode>
+        <idValue>Violation</idValue>
+    <idCode>WA</idCode>
+        <idValue>Warning</idValue>
+    <idCode>WM</idCode>
+        <idValue>Willful Misconduct</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

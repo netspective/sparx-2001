@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>100</idCode>
+        <idValue>Insurance Plan Description</idValue>
+    <idCode>101</idCode>
+        <idValue>Name and Address Lists</idValue>
+    <idCode>104</idCode>
+        <idValue>Air Shipment Information</idValue>
+    <idCode>105</idCode>
+        <idValue>Business Entity Filings</idValue>
+    <idCode>106</idCode>
+        <idValue>Motor Carrier Rate Proposal</idValue>
+    <idCode>107</idCode>
+        <idValue>Request for Motor Carrier Rate Proposal</idValue>
+    <idCode>108</idCode>
+        <idValue>Response to a Motor Carrier Rate Proposal</idValue>
+    <idCode>109</idCode>
+        <idValue>Vessel Content Details</idValue>
+    <idCode>110</idCode>
+        <idValue>Air Freight Details and Invoice</idValue>
+    <idCode>112</idCode>
+        <idValue>Property Damage Report</idValue>
+    <idCode>120</idCode>
+        <idValue>Vehicle Shipping Order</idValue>
+    <idCode>121</idCode>
+        <idValue>Vehicle Service</idValue>
+    <idCode>124</idCode>
+        <idValue>Vehicle Damage</idValue>
+    <idCode>125</idCode>
+        <idValue>Multilevel Railcar Load Details</idValue>
+    <idCode>126</idCode>
+        <idValue>Vehicle Application Advice</idValue>
+    <idCode>127</idCode>
+        <idValue>Vehicle Baying Order</idValue>
+    <idCode>128</idCode>
+        <idValue>Dealer Information</idValue>
+    <idCode>129</idCode>
+        <idValue>Vehicle Carrier Rate Update</idValue>
+    <idCode>130</idCode>
+        <idValue>Student Educational Record (Transcript)</idValue>
+    <idCode>131</idCode>
+        <idValue>Student Educational Record (Transcript) Acknowledgment</idValue>
+    <idCode>135</idCode>
+        <idValue>Student Loan Application</idValue>
+    <idCode>138</idCode>
+        <idValue>Testing Results Request and Report</idValue>
+    <idCode>139</idCode>
+        <idValue>Student Loan Guarantee Result</idValue>
+    <idCode>140</idCode>
+        <idValue>Product Registration</idValue>
+    <idCode>141</idCode>
+        <idValue>Product Service Claim Response</idValue>
+    <idCode>142</idCode>
+        <idValue>Product Service Claim</idValue>
+    <idCode>143</idCode>
+        <idValue>Product Service Notification</idValue>
+    <idCode>144</idCode>
+        <idValue>Student Loan Transfer and Status Verification</idValue>
+    <idCode>146</idCode>
+        <idValue>Request for Student Educational Record (Transcript)</idValue>
+    <idCode>147</idCode>
+        <idValue>Response to Request for Student Educational Record (Transcript)</idValue>
+    <idCode>148</idCode>
+        <idValue>Report of Injury, Illness or Incident</idValue>
+    <idCode>149</idCode>
+        <idValue>Notice of Tax Adjustment or Assessment</idValue>
+    <idCode>150</idCode>
+        <idValue>Tax Rate Notification</idValue>
+    <idCode>151</idCode>
+        <idValue>Electronic Filing of Tax Return Data Acknowledgment</idValue>
+    <idCode>152</idCode>
+        <idValue>Statistical Government Information</idValue>
+    <idCode>153</idCode>
+        <idValue>Unemployment Insurance Tax Claim or Charge Information</idValue>
+    <idCode>154</idCode>
+        <idValue>Uniform Commercial Code Filing</idValue>
+    <idCode>155</idCode>
+        <idValue>Business Credit Report</idValue>
+    <idCode>157</idCode>
+        <idValue>Notice of Power of Attorney</idValue>
+    <idCode>159</idCode>
+        <idValue>Motion Picture Booking Confirmation</idValue>
+    <idCode>160</idCode>
+        <idValue>Transportation Automatic Equipment Identification</idValue>
+    <idCode>161</idCode>
+        <idValue>Train Sheet</idValue>
+    <idCode>163</idCode>
+        <idValue>Transportation Appointment Schedule Information</idValue>
+    <idCode>170</idCode>
+        <idValue>Revenue Receipts Statement</idValue>
+    <idCode>175</idCode>
+        <idValue>Court and Law Enforcement Notice</idValue>
+    <idCode>176</idCode>
+        <idValue>Court Submission</idValue>
+    <idCode>180</idCode>
+        <idValue>Return Merchandise Authorization and Notification</idValue>
+    <idCode>185</idCode>
+        <idValue>Royalty Regulatory Report</idValue>
+    <idCode>186</idCode>
+        <idValue>Insurance Underwriting Requirements Reporting</idValue>
+    <idCode>188</idCode>
+        <idValue>Educational Course Inventory</idValue>
+    <idCode>189</idCode>
+        <idValue>Application for Admission to Educational Institutions</idValue>
+    <idCode>190</idCode>
+        <idValue>Student Enrollment Verification</idValue>
+    <idCode>191</idCode>
+        <idValue>Student Loan Pre-Claims and Claims</idValue>
+    <idCode>194</idCode>
+        <idValue>Grant or Assistance Application</idValue>
+    <idCode>195</idCode>
+        <idValue>Federal Communications Commission (FCC) License Application</idValue>
+    <idCode>196</idCode>
+        <idValue>Contractor Cost Data Reporting</idValue>
+    <idCode>197</idCode>
+        <idValue>Real Estate Title Evidence</idValue>
+    <idCode>198</idCode>
+        <idValue>Loan Verification Information</idValue>
+    <idCode>199</idCode>
+        <idValue>Real Estate Settlement Information</idValue>
+    <idCode>200</idCode>
+        <idValue>Mortgage Credit Report</idValue>
+    <idCode>201</idCode>
+        <idValue>Residential Loan Application</idValue>
+    <idCode>202</idCode>
+        <idValue>Secondary Mortgage Market Loan Delivery</idValue>
+    <idCode>203</idCode>
+        <idValue>Secondary Mortgage Market Investor Report</idValue>
+    <idCode>204</idCode>
+        <idValue>Motor Carrier Load Tender</idValue>
+    <idCode>205</idCode>
+        <idValue>Mortgage Note</idValue>
+    <idCode>206</idCode>
+        <idValue>Real Estate Inspection</idValue>
+    <idCode>210</idCode>
+        <idValue>Motor Carrier Freight Details and Invoice</idValue>
+    <idCode>211</idCode>
+        <idValue>Motor Carrier Bill of Lading</idValue>
+    <idCode>212</idCode>
+        <idValue>Motor Carrier Delivery Trailer Manifest</idValue>
+    <idCode>213</idCode>
+        <idValue>Motor Carrier Shipment Status Inquiry</idValue>
+    <idCode>214</idCode>
+        <idValue>Transportation Carrier Shipment Status Message</idValue>
+    <idCode>215</idCode>
+        <idValue>Motor Carrier Pick-up Manifest</idValue>
+    <idCode>216</idCode>
+        <idValue>Motor Carrier Shipment Pick-up Notification</idValue>
+    <idCode>217</idCode>
+        <idValue>Motor Carrier Loading and Route Guide</idValue>
+    <idCode>218</idCode>
+        <idValue>Motor Carrier Tariff Information</idValue>
+    <idCode>219</idCode>
+        <idValue>Logistics Service Request</idValue>
+    <idCode>220</idCode>
+        <idValue>Logistics Service Response</idValue>
+    <idCode>222</idCode>
+        <idValue>Cartage Work Assignment</idValue>
+    <idCode>223</idCode>
+        <idValue>Consolidators Freight Bill and Invoice</idValue>
+    <idCode>224</idCode>
+        <idValue>Motor Carrier Summary Freight Bill Manifest</idValue>
+    <idCode>225</idCode>
+        <idValue>Response to a Cartage Work Assignment</idValue>
+    <idCode>242</idCode>
+        <idValue>Data Status Tracking</idValue>
+    <idCode>244</idCode>
+        <idValue>Product Source Information</idValue>
+    <idCode>248</idCode>
+        <idValue>Account Assignment/Inquiry and Service/Status</idValue>
+    <idCode>249</idCode>
+        <idValue>Animal Toxicological Data</idValue>
+    <idCode>250</idCode>
+        <idValue>Purchase Order Shipment Management Document</idValue>
+    <idCode>251</idCode>
+        <idValue>Pricing Support</idValue>
+    <idCode>252</idCode>
+        <idValue>Insurance Producer Administration</idValue>
+    <idCode>255</idCode>
+        <idValue>Underwriting Information Services</idValue>
+    <idCode>256</idCode>
+        <idValue>Periodic Compensation</idValue>
+    <idCode>260</idCode>
+        <idValue>Application for Mortgage Insurance Benefits</idValue>
+    <idCode>261</idCode>
+        <idValue>Real Estate Information Request</idValue>
+    <idCode>262</idCode>
+        <idValue>Real Estate Information Report</idValue>
+    <idCode>263</idCode>
+        <idValue>Residential Mortgage Insurance Application Response</idValue>
+    <idCode>264</idCode>
+        <idValue>Mortgage Loan Default Status</idValue>
+    <idCode>265</idCode>
+        <idValue>Real Estate Title Insurance Services Order</idValue>
+    <idCode>266</idCode>
+        <idValue>Mortgage or Property Record Change Notification</idValue>
+    <idCode>267</idCode>
+        <idValue>Individual Life, Annuity and Disability Application</idValue>
+    <idCode>268</idCode>
+        <idValue>Annuity Activity</idValue>
+    <idCode>270</idCode>
+        <idValue>Eligibility, Coverage or Benefit Inquiry</idValue>
+    <idCode>271</idCode>
+        <idValue>Eligibility, Coverage or Benefit Information</idValue>
+    <idCode>272</idCode>
+        <idValue>Property and Casualty Loss Notification</idValue>
+    <idCode>273</idCode>
+        <idValue>Insurance/Annuity Application Status</idValue>
+    <idCode>275</idCode>
+        <idValue>Patient Information</idValue>
+    <idCode>276</idCode>
+        <idValue>Health Care Claim Status Request</idValue>
+    <idCode>277</idCode>
+        <idValue>Health Care Claim Status Notification</idValue>
+    <idCode>278</idCode>
+        <idValue>Health Care Services Review Information</idValue>
+    <idCode>280</idCode>
+        <idValue>Voter Registration Information</idValue>
+    <idCode>285</idCode>
+        <idValue>Commercial Vehicle Safety and Credentials Information Exchange</idValue>
+    <idCode>286</idCode>
+        <idValue>Commercial Vehicle Credentials</idValue>
+    <idCode>288</idCode>
+        <idValue>Wage Determination</idValue>
+    <idCode>290</idCode>
+        <idValue>Cooperative Advertising Agreements</idValue>
+    <idCode>300</idCode>
+        <idValue>Reservation (Booking Request) (Ocean)</idValue>
+    <idCode>301</idCode>
+        <idValue>Confirmation (Ocean)</idValue>
+    <idCode>303</idCode>
+        <idValue>Booking Cancellation (Ocean)</idValue>
+    <idCode>304</idCode>
+        <idValue>Shipping Instructions</idValue>
+    <idCode>306</idCode>
+        <idValue>Dock Receipt</idValue>
+    <idCode>309</idCode>
+        <idValue>U.S. Customs Manifest</idValue>
+    <idCode>310</idCode>
+        <idValue>Freight Receipt and Invoice (Ocean)</idValue>
+    <idCode>311</idCode>
+        <idValue>Canadian Customs Information</idValue>
+    <idCode>312</idCode>
+        <idValue>Arrival Notice (Ocean)</idValue>
+    <idCode>313</idCode>
+        <idValue>Shipment Status Inquiry (Ocean)</idValue>
+    <idCode>315</idCode>
+        <idValue>Status Details (Ocean)</idValue>
+    <idCode>317</idCode>
+        <idValue>Delivery/Pickup Order</idValue>
+    <idCode>319</idCode>
+        <idValue>Terminal Information</idValue>
+    <idCode>321</idCode>
+        <idValue>Demurrage Guarantee (Ocean)</idValue>
+    <idCode>322</idCode>
+        <idValue>Terminal Operations and Intermodal Ramp Activity</idValue>
+    <idCode>323</idCode>
+        <idValue>Vessel Schedule and Itinerary (Ocean)</idValue>
+    <idCode>324</idCode>
+        <idValue>Vessel Stow Plan (Ocean)</idValue>
+    <idCode>325</idCode>
+        <idValue>Consolidation of Goods In Container</idValue>
+    <idCode>326</idCode>
+        <idValue>Consignment Summary List</idValue>
+    <idCode>350</idCode>
+        <idValue>U.S. Customs Status Information</idValue>
+    <idCode>352</idCode>
+        <idValue>U.S. Customs Carrier General Order Status</idValue>
+    <idCode>353</idCode>
+        <idValue>U.S. Customs Events Advisory Details</idValue>
+    <idCode>354</idCode>
+        <idValue>U.S. Customs Automated Manifest Archive Status</idValue>
+    <idCode>355</idCode>
+        <idValue>U.S. Customs Acceptance/Rejection</idValue>
+    <idCode>356</idCode>
+        <idValue>U.S. Customs Permit to Transfer Request</idValue>
+    <idCode>357</idCode>
+        <idValue>U.S. Customs In-Bond Information</idValue>
+    <idCode>358</idCode>
+        <idValue>U.S. Customs Consist Information</idValue>
+    <idCode>361</idCode>
+        <idValue>Carrier Interchange Agreement (Ocean)</idValue>
+    <idCode>362</idCode>
+        <idValue>Cargo Insurance Advice of Shipment</idValue>
+    <idCode>404</idCode>
+        <idValue>Rail Carrier Shipment Information</idValue>
+    <idCode>410</idCode>
+        <idValue>Rail Carrier Freight Details and Invoice</idValue>
+    <idCode>411</idCode>
+        <idValue>Freight Details and Invoice Summary (Rail)</idValue>
+    <idCode>414</idCode>
+        <idValue>Rail Carhire Settlements</idValue>
+    <idCode>417</idCode>
+        <idValue>Rail Carrier Waybill Interchange</idValue>
+    <idCode>418</idCode>
+        <idValue>Rail Advance Interchange Consist</idValue>
+    <idCode>419</idCode>
+        <idValue>Advance Car Disposition</idValue>
+    <idCode>420</idCode>
+        <idValue>Car Handling Information</idValue>
+    <idCode>421</idCode>
+        <idValue>Estimated Time of Arrival and Car Scheduling</idValue>
+    <idCode>422</idCode>
+        <idValue>Shipper&apos;s Car Order</idValue>
+    <idCode>423</idCode>
+        <idValue>Rail Industrial Switch List</idValue>
+    <idCode>425</idCode>
+        <idValue>Rail Waybill Request</idValue>
+    <idCode>426</idCode>
+        <idValue>Rail Revenue Waybill</idValue>
+    <idCode>429</idCode>
+        <idValue>Railroad Retirement Activity</idValue>
+    <idCode>431</idCode>
+        <idValue>Railroad Station Master File</idValue>
+    <idCode>432</idCode>
+        <idValue>Rail Deprescription</idValue>
+    <idCode>433</idCode>
+        <idValue>Railroad Reciprocal Switch File</idValue>
+    <idCode>434</idCode>
+        <idValue>Railroad Mark Register Update Activity</idValue>
+    <idCode>435</idCode>
+        <idValue>Standard Transportation Commodity Code Master</idValue>
+    <idCode>436</idCode>
+        <idValue>Locomotive Information</idValue>
+    <idCode>437</idCode>
+        <idValue>Railroad Junctions and Interchanges Activity</idValue>
+    <idCode>440</idCode>
+        <idValue>Shipment Weights</idValue>
+    <idCode>451</idCode>
+        <idValue>Railroad Event Report</idValue>
+    <idCode>452</idCode>
+        <idValue>Railroad Problem Log Inquiry or Advice</idValue>
+    <idCode>453</idCode>
+        <idValue>Railroad Service Commitment Advice</idValue>
+    <idCode>455</idCode>
+        <idValue>Railroad Parameter Trace Registration</idValue>
+    <idCode>456</idCode>
+        <idValue>Railroad Equipment Inquiry or Advice</idValue>
+    <idCode>460</idCode>
+        <idValue>Railroad Price Distribution Request or Response</idValue>
+    <idCode>463</idCode>
+        <idValue>Rail Rate Reply</idValue>
+    <idCode>466</idCode>
+        <idValue>Rate Request</idValue>
+    <idCode>468</idCode>
+        <idValue>Rate Docket Journal Log</idValue>
+    <idCode>470</idCode>
+        <idValue>Railroad Clearance</idValue>
+    <idCode>475</idCode>
+        <idValue>Rail Route File Maintenance</idValue>
+    <idCode>485</idCode>
+        <idValue>Ratemaking Action</idValue>
+    <idCode>486</idCode>
+        <idValue>Rate Docket Expiration</idValue>
+    <idCode>490</idCode>
+        <idValue>Rate Group Definition</idValue>
+    <idCode>492</idCode>
+        <idValue>Miscellaneous Rates</idValue>
+    <idCode>494</idCode>
+        <idValue>Scale Rate Table</idValue>
+    <idCode>500</idCode>
+        <idValue>Medical Event Reporting</idValue>
+    <idCode>501</idCode>
+        <idValue>Vendor Performance Review</idValue>
+    <idCode>503</idCode>
+        <idValue>Pricing History</idValue>
+    <idCode>504</idCode>
+        <idValue>Clauses and Provisions</idValue>
+    <idCode>511</idCode>
+        <idValue>Requisition</idValue>
+    <idCode>517</idCode>
+        <idValue>Material Obligation Validation</idValue>
+    <idCode>521</idCode>
+        <idValue>Income or Asset Offset</idValue>
+    <idCode>527</idCode>
+        <idValue>Material Due-In and Receipt</idValue>
+    <idCode>536</idCode>
+        <idValue>Logistics Reassignment</idValue>
+    <idCode>540</idCode>
+        <idValue>Notice of Employment Status</idValue>
+    <idCode>561</idCode>
+        <idValue>Contract Abstract</idValue>
+    <idCode>567</idCode>
+        <idValue>Contract Completion Status</idValue>
+    <idCode>568</idCode>
+        <idValue>Contract Payment Management Report</idValue>
+    <idCode>601</idCode>
+        <idValue>U.S. Customs Export Shipment Information</idValue>
+    <idCode>602</idCode>
+        <idValue>Transportation Services Tender</idValue>
+    <idCode>620</idCode>
+        <idValue>Excavation Communication</idValue>
+    <idCode>622</idCode>
+        <idValue>Intermodal Ramp Activity</idValue>
+    <idCode>625</idCode>
+        <idValue>Well Information</idValue>
+    <idCode>650</idCode>
+        <idValue>Maintenance Service Order</idValue>
+    <idCode>715</idCode>
+        <idValue>Intermodal Group Loading Plan</idValue>
+    <idCode>805</idCode>
+        <idValue>Contract Pricing Proposal</idValue>
+    <idCode>806</idCode>
+        <idValue>Project Schedule Reporting</idValue>
+    <idCode>810</idCode>
+        <idValue>Invoice</idValue>
+    <idCode>811</idCode>
+        <idValue>Consolidated Service Invoice/Statement</idValue>
+    <idCode>812</idCode>
+        <idValue>Credit/Debit Adjustment</idValue>
+    <idCode>813</idCode>
+        <idValue>Electronic Filing of Tax Return Data</idValue>
+    <idCode>814</idCode>
+        <idValue>General Request, Response or Confirmation</idValue>
+    <idCode>815</idCode>
+        <idValue>Cryptographic Service Message</idValue>
+    <idCode>816</idCode>
+        <idValue>Organizational Relationships</idValue>
+    <idCode>818</idCode>
+        <idValue>Commission Sales Report</idValue>
+    <idCode>819</idCode>
+        <idValue>Operating Expense Statement</idValue>
+    <idCode>820</idCode>
+        <idValue>Payment Order/Remittance Advice</idValue>
+    <idCode>821</idCode>
+        <idValue>Financial Information Reporting</idValue>
+    <idCode>822</idCode>
+        <idValue>Account Analysis</idValue>
+    <idCode>823</idCode>
+        <idValue>Lockbox</idValue>
+    <idCode>824</idCode>
+        <idValue>Application Advice</idValue>
+    <idCode>826</idCode>
+        <idValue>Tax Information Exchange</idValue>
+    <idCode>827</idCode>
+        <idValue>Financial Return Notice</idValue>
+    <idCode>828</idCode>
+        <idValue>Debit Authorization</idValue>
+    <idCode>829</idCode>
+        <idValue>Payment Cancellation Request</idValue>
+    <idCode>830</idCode>
+        <idValue>Planning Schedule with Release Capability</idValue>
+    <idCode>831</idCode>
+        <idValue>Application Control Totals</idValue>
+    <idCode>832</idCode>
+        <idValue>Price/Sales Catalog</idValue>
+    <idCode>833</idCode>
+        <idValue>Mortgage Credit Report Order</idValue>
+    <idCode>834</idCode>
+        <idValue>Benefit Enrollment and Maintenance</idValue>
+    <idCode>835</idCode>
+        <idValue>Health Care Claim Payment/Advice</idValue>
+    <idCode>836</idCode>
+        <idValue>Procurement Notices</idValue>
+    <idCode>837</idCode>
+        <idValue>Health Care Claim</idValue>
+    <idCode>838</idCode>
+        <idValue>Trading Partner Profile</idValue>
+    <idCode>839</idCode>
+        <idValue>Project Cost Reporting</idValue>
+    <idCode>840</idCode>
+        <idValue>Request for Quotation</idValue>
+    <idCode>841</idCode>
+        <idValue>Specifications/Technical Information</idValue>
+    <idCode>842</idCode>
+        <idValue>Nonconformance Report</idValue>
+    <idCode>843</idCode>
+        <idValue>Response to Request for Quotation</idValue>
+    <idCode>844</idCode>
+        <idValue>Product Transfer Account Adjustment</idValue>
+    <idCode>845</idCode>
+        <idValue>Price Authorization Acknowledgment/Status</idValue>
+    <idCode>846</idCode>
+        <idValue>Inventory Inquiry/Advice</idValue>
+    <idCode>847</idCode>
+        <idValue>Material Claim</idValue>
+    <idCode>848</idCode>
+        <idValue>Material Safety Data Sheet</idValue>
+    <idCode>849</idCode>
+        <idValue>Response to Product Transfer Account Adjustment</idValue>
+    <idCode>850</idCode>
+        <idValue>Purchase Order</idValue>
+    <idCode>851</idCode>
+        <idValue>Asset Schedule</idValue>
+    <idCode>852</idCode>
+        <idValue>Product Activity Data</idValue>
+    <idCode>853</idCode>
+        <idValue>Routing and Carrier Instruction</idValue>
+    <idCode>854</idCode>
+        <idValue>Shipment Delivery Discrepancy Information</idValue>
+    <idCode>855</idCode>
+        <idValue>Purchase Order Acknowledgment</idValue>
+    <idCode>856</idCode>
+        <idValue>Ship Notice/Manifest</idValue>
+    <idCode>857</idCode>
+        <idValue>Shipment and Billing Notice</idValue>
+    <idCode>858</idCode>
+        <idValue>Shipment Information</idValue>
+    <idCode>859</idCode>
+        <idValue>Freight Invoice</idValue>
+    <idCode>860</idCode>
+        <idValue>Purchase Order Change Request - Buyer Initiated</idValue>
+    <idCode>861</idCode>
+        <idValue>Receiving Advice/Acceptance Certificate</idValue>
+    <idCode>862</idCode>
+        <idValue>Shipping Schedule</idValue>
+    <idCode>863</idCode>
+        <idValue>Report of Test Results</idValue>
+    <idCode>864</idCode>
+        <idValue>Text Message</idValue>
+    <idCode>865</idCode>
+        <idValue>Purchase Order Change Acknowledgment/Request - Seller Initiated</idValue>
+    <idCode>866</idCode>
+        <idValue>Production Sequence</idValue>
+    <idCode>867</idCode>
+        <idValue>Product Transfer and Resale Report</idValue>
+    <idCode>868</idCode>
+        <idValue>Electronic Form Structure</idValue>
+    <idCode>869</idCode>
+        <idValue>Order Status Inquiry</idValue>
+    <idCode>870</idCode>
+        <idValue>Order Status Report</idValue>
+    <idCode>871</idCode>
+        <idValue>Component Parts Content</idValue>
+    <idCode>872</idCode>
+        <idValue>Residential Mortgage Insurance Application</idValue>
+    <idCode>875</idCode>
+        <idValue>Grocery Products Purchase Order</idValue>
+    <idCode>876</idCode>
+        <idValue>Grocery Products Purchase Order Change</idValue>
+    <idCode>877</idCode>
+        <idValue>Manufacturer Coupon Family Code Structure</idValue>
+    <idCode>878</idCode>
+        <idValue>Product Authorization/De-authorization</idValue>
+    <idCode>879</idCode>
+        <idValue>Price Information</idValue>
+    <idCode>880</idCode>
+        <idValue>Grocery Products Invoice</idValue>
+    <idCode>881</idCode>
+        <idValue>Manufacturer Coupon Redemption Detail</idValue>
+    <idCode>882</idCode>
+        <idValue>Direct Store Delivery Summary Information</idValue>
+    <idCode>883</idCode>
+        <idValue>Market Development Fund Allocation</idValue>
+    <idCode>884</idCode>
+        <idValue>Market Development Fund Settlement</idValue>
+    <idCode>885</idCode>
+        <idValue>Retail Account Characteristics</idValue>
+    <idCode>886</idCode>
+        <idValue>Customer Call Reporting</idValue>
+    <idCode>887</idCode>
+        <idValue>Coupon Notification</idValue>
+    <idCode>888</idCode>
+        <idValue>Item Maintenance</idValue>
+    <idCode>889</idCode>
+        <idValue>Promotion Announcement</idValue>
+    <idCode>891</idCode>
+        <idValue>Deduction Research Report</idValue>
+    <idCode>893</idCode>
+        <idValue>Item Information Request</idValue>
+    <idCode>894</idCode>
+        <idValue>Delivery/Return Base Record</idValue>
+    <idCode>895</idCode>
+        <idValue>Delivery/Return Acknowledgment or Adjustment</idValue>
+    <idCode>896</idCode>
+        <idValue>Product Dimension Maintenance</idValue>
+    <idCode>920</idCode>
+        <idValue>Loss or Damage Claim - General Commodities</idValue>
+    <idCode>924</idCode>
+        <idValue>Loss or Damage Claim - Motor Vehicle</idValue>
+    <idCode>925</idCode>
+        <idValue>Claim Tracer</idValue>
+    <idCode>926</idCode>
+        <idValue>Claim Status Report and Tracer Reply</idValue>
+    <idCode>928</idCode>
+        <idValue>Automotive Inspection Detail</idValue>
+    <idCode>940</idCode>
+        <idValue>Warehouse Shipping Order</idValue>
+    <idCode>943</idCode>
+        <idValue>Warehouse Stock Transfer Shipment Advice</idValue>
+    <idCode>944</idCode>
+        <idValue>Warehouse Stock Transfer Receipt Advice</idValue>
+    <idCode>945</idCode>
+        <idValue>Warehouse Shipping Advice</idValue>
+    <idCode>947</idCode>
+        <idValue>Warehouse Inventory Adjustment Advice</idValue>
+    <idCode>980</idCode>
+        <idValue>Functional Group Totals</idValue>
+    <idCode>990</idCode>
+        <idValue>Response to a Load Tender</idValue>
+    <idCode>994</idCode>
+        <idValue>Administrative Message</idValue>
+    <idCode>996</idCode>
+        <idValue>File Transfer</idValue>
+    <idCode>997</idCode>
+        <idValue>Functional Acknowledgment</idValue>
+    <idCode>998</idCode>
+        <idValue>Set Cancellation</idValue>
+</idList>

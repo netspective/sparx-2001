@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>A</idCode>
+        <idValue>1st Shift (Normal Working Hours)</idValue>
+    <idCode>B</idCode>
+        <idValue>2nd Shift</idValue>
+    <idCode>C</idCode>
+        <idValue>3rd Shift</idValue>
+    <idCode>D</idCode>
+        <idValue>A.M.</idValue>
+    <idCode>E</idCode>
+        <idValue>P.M.</idValue>
+    <idCode>F</idCode>
+        <idValue>As Directed</idValue>
+    <idCode>G</idCode>
+        <idValue>Any Shift</idValue>
+    <idCode>Y</idCode>
+        <idValue>None (Also Used to Cancel or Override a Previous Pattern)</idValue>
+    <idCode>Z</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

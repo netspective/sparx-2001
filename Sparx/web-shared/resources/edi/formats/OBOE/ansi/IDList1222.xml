@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>DEN</idCode>
+        <idValue>Denturist</idValue>
+    <idCode>DGP</idCode>
+        <idValue>Dental General Practice</idValue>
+    <idCode>END</idCode>
+        <idValue>Endodontics</idValue>
+    <idCode>IHG</idCode>
+        <idValue>Independent Hygienist</idValue>
+    <idCode>OPY</idCode>
+        <idValue>Oral Pathology</idValue>
+    <idCode>ORT</idCode>
+        <idValue>Orthodontics</idValue>
+    <idCode>OSY</idCode>
+        <idValue>Oral Surgery</idValue>
+    <idCode>PDT</idCode>
+        <idValue>Periodontics</idValue>
+    <idCode>PED</idCode>
+        <idValue>Pediatric Dentistry</idValue>
+    <idCode>PHD</idCode>
+        <idValue>Public Health Dentistry</idValue>
+    <idCode>PST</idCode>
+        <idValue>Prosthodontics</idValue>
+</idList>

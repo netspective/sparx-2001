@@ -1,0 +1,1669 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Discrete Quantity</idValue>
+    <idCode>02</idCode>
+        <idValue>Cumulative Quantity</idValue>
+    <idCode>03</idCode>
+        <idValue>Discreet Quantity - Rejected Material</idValue>
+    <idCode>04</idCode>
+        <idValue>Discrete Quantity - Rejected Material: Disposition Replacement</idValue>
+    <idCode>05</idCode>
+        <idValue>Discrete Quantity - Rejected Material: Disposition Credit</idValue>
+    <idCode>06</idCode>
+        <idValue>Discrete Quantity - Rejected Material: Disposition Pending</idValue>
+    <idCode>07</idCode>
+        <idValue>Cumulative Quantity - Rejected Material</idValue>
+    <idCode>08</idCode>
+        <idValue>Cumulative Quantity - Rejected Material: Disposition Replacement</idValue>
+    <idCode>09</idCode>
+        <idValue>Cumulative Quantity - Rejected Material: Disposition Credit</idValue>
+    <idCode>10</idCode>
+        <idValue>Cumulative Quantity - Rejected Material: Disposition Pending</idValue>
+    <idCode>11</idCode>
+        <idValue>Split Quantity</idValue>
+    <idCode>12</idCode>
+        <idValue>Ship Notice Quantity</idValue>
+    <idCode>13</idCode>
+        <idValue>Collateral Requirements</idValue>
+    <idCode>14</idCode>
+        <idValue>Quantity in Float</idValue>
+    <idCode>15</idCode>
+        <idValue>Quantity in Hold Out</idValue>
+    <idCode>16</idCode>
+        <idValue>Line Thread Quantity</idValue>
+    <idCode>17</idCode>
+        <idValue>Quantity on Hand</idValue>
+    <idCode>18</idCode>
+        <idValue>Previous Week Quantity</idValue>
+    <idCode>19</idCode>
+        <idValue>Unverified Receipts</idValue>
+    <idCode>1A</idCode>
+        <idValue>Original Duration (in calendar units)</idValue>
+    <idCode>1B</idCode>
+        <idValue>Current Duration (in calendar units)</idValue>
+    <idCode>1C</idCode>
+        <idValue>Remaining Duration (in calendar units)</idValue>
+    <idCode>1D</idCode>
+        <idValue>Total Float (in calendar units)</idValue>
+    <idCode>1E</idCode>
+        <idValue>Free Float (in calendar units)</idValue>
+    <idCode>1F</idCode>
+        <idValue>Lag (as in Lag Time - in calendar units)</idValue>
+    <idCode>1G</idCode>
+        <idValue>Lead Time (in calendar units)</idValue>
+    <idCode>1H</idCode>
+        <idValue>Started</idValue>
+    <idCode>1I</idCode>
+        <idValue>Completed</idValue>
+    <idCode>1J</idCode>
+        <idValue>Due</idValue>
+    <idCode>1K</idCode>
+        <idValue>Time Units</idValue>
+    <idCode>1L</idCode>
+        <idValue>Shifts</idValue>
+    <idCode>1M</idCode>
+        <idValue>Time units per shift</idValue>
+    <idCode>1N</idCode>
+        <idValue>Scrap allowed</idValue>
+    <idCode>1O</idCode>
+        <idValue>Calendar Units</idValue>
+    <idCode>1P</idCode>
+        <idValue>Resource (Quantity) available</idValue>
+    <idCode>1Q</idCode>
+        <idValue>Total Resource (Quantity)</idValue>
+    <idCode>1R</idCode>
+        <idValue>Level Resource (Quantity)</idValue>
+    <idCode>1S</idCode>
+        <idValue>Late</idValue>
+    <idCode>1T</idCode>
+        <idValue>Number of Delinquent Installments</idValue>
+    <idCode>1U</idCode>
+        <idValue>Number of Loans</idValue>
+    <idCode>1V</idCode>
+        <idValue>Total Number of Mortgagees</idValue>
+    <idCode>1W</idCode>
+        <idValue>Total Number of Loan Detail Records</idValue>
+    <idCode>1X</idCode>
+        <idValue>Prescription Effective Period</idValue>
+    <idCode>1Y</idCode>
+        <idValue>Rate Per Day (RPD)</idValue>
+    <idCode>1Z</idCode>
+        <idValue>End Of Month Inventory Prior To Ship</idValue>
+    <idCode>20</idCode>
+        <idValue>Unusable Quantity</idValue>
+    <idCode>21</idCode>
+        <idValue>Cumulative Quantity Shipped Short - Disposition Pending</idValue>
+    <idCode>22</idCode>
+        <idValue>Cumulative Quantity Shipped Short - Disposition Challenged</idValue>
+    <idCode>23</idCode>
+        <idValue>Cumulative Quantity Shipped Long - Disposition Pending</idValue>
+    <idCode>24</idCode>
+        <idValue>Cumulative Quantity Shipped Long - Disposition Challenged</idValue>
+    <idCode>25</idCode>
+        <idValue>OEM Inventory</idValue>
+    <idCode>26</idCode>
+        <idValue>Total Inventory</idValue>
+    <idCode>27</idCode>
+        <idValue>Committed Quantity</idValue>
+    <idCode>28</idCode>
+        <idValue>Quantity Available for Return</idValue>
+    <idCode>29</idCode>
+        <idValue>Projected Available Inventory</idValue>
+    <idCode>2A</idCode>
+        <idValue>Commitment Period</idValue>
+    <idCode>2B</idCode>
+        <idValue>Number of Borrowers</idValue>
+    <idCode>2C</idCode>
+        <idValue>Number of Adjustment Periods</idValue>
+    <idCode>2D</idCode>
+        <idValue>Age Nearest</idValue>
+    <idCode>2E</idCode>
+        <idValue>Total Other Properties Owned and Financed</idValue>
+    <idCode>2F</idCode>
+        <idValue>Age Next</idValue>
+    <idCode>2G</idCode>
+        <idValue>Reconsideration Period</idValue>
+    <idCode>2H</idCode>
+        <idValue>Flat Extra Premium</idValue>
+    <idCode>2I</idCode>
+        <idValue>CO2 Injection Volume</idValue>
+    <idCode>2J</idCode>
+        <idValue>Accounts Placed for Collection</idValue>
+    <idCode>2K</idCode>
+        <idValue>Changes</idValue>
+    <idCode>2L</idCode>
+        <idValue>Companies in Same Activity for a Period</idValue>
+    <idCode>2M</idCode>
+        <idValue>Comparison Period</idValue>
+    <idCode>2N</idCode>
+        <idValue>Departments</idValue>
+    <idCode>2O</idCode>
+        <idValue>Employees Shared</idValue>
+    <idCode>2P</idCode>
+        <idValue>Estimated Accounts</idValue>
+    <idCode>2Q</idCode>
+        <idValue>Installed Capacity</idValue>
+    <idCode>2R</idCode>
+        <idValue>Levels Occupied</idValue>
+    <idCode>2S</idCode>
+        <idValue>Registered Brands Distributed</idValue>
+    <idCode>2T</idCode>
+        <idValue>Electronic Signatures</idValue>
+    <idCode>2U</idCode>
+        <idValue>Bytes</idValue>
+    <idCode>2V</idCode>
+        <idValue>Employed at this Location</idValue>
+    <idCode>2W</idCode>
+        <idValue>Segments</idValue>
+    <idCode>2X</idCode>
+        <idValue>Registered Brands Manufactured</idValue>
+    <idCode>2Y</idCode>
+        <idValue>Functional Groups</idValue>
+    <idCode>2Z</idCode>
+        <idValue>Transaction Sets</idValue>
+    <idCode>30</idCode>
+        <idValue>Quote Quantity on Inventory</idValue>
+    <idCode>31</idCode>
+        <idValue>Additional Demand Quantity</idValue>
+    <idCode>32</idCode>
+        <idValue>Quantity Sold</idValue>
+    <idCode>33</idCode>
+        <idValue>Quantity Available for Sale (stock quantity)</idValue>
+    <idCode>34</idCode>
+        <idValue>Noncommitted Inventory on Shelf</idValue>
+    <idCode>35</idCode>
+        <idValue>Inventory on Shelf + Work in Progress</idValue>
+    <idCode>36</idCode>
+        <idValue>Distributor Inventory</idValue>
+    <idCode>37</idCode>
+        <idValue>Work In Process</idValue>
+    <idCode>38</idCode>
+        <idValue>Original Quantity</idValue>
+    <idCode>39</idCode>
+        <idValue>Shipped Quantity</idValue>
+    <idCode>3A</idCode>
+        <idValue>Total Credits Accepted</idValue>
+    <idCode>3B</idCode>
+        <idValue>Total Credits Rejected</idValue>
+    <idCode>3C</idCode>
+        <idValue>Total Debits Accepted</idValue>
+    <idCode>3D</idCode>
+        <idValue>Total Debits Rejected</idValue>
+    <idCode>3E</idCode>
+        <idValue>Total Payments Rejected</idValue>
+    <idCode>3F</idCode>
+        <idValue>Total Pre-advices Accepted</idValue>
+    <idCode>3G</idCode>
+        <idValue>Total Pre-advices Rejected</idValue>
+    <idCode>3H</idCode>
+        <idValue>Total Prenotes Accepted</idValue>
+    <idCode>3I</idCode>
+        <idValue>Total Prenotes Rejected</idValue>
+    <idCode>3J</idCode>
+        <idValue>Total Post-advices Accepted</idValue>
+    <idCode>3K</idCode>
+        <idValue>Total Post-advices Rejected</idValue>
+    <idCode>3L</idCode>
+        <idValue>Total Unidentified Transactions Rejected</idValue>
+    <idCode>3M</idCode>
+        <idValue>Total Credits Received</idValue>
+    <idCode>3N</idCode>
+        <idValue>Total Debits Received</idValue>
+    <idCode>3P</idCode>
+        <idValue>Total Pre-advices Received</idValue>
+    <idCode>3Q</idCode>
+        <idValue>Total Prenotes Received</idValue>
+    <idCode>3R</idCode>
+        <idValue>Total Post-advices Received</idValue>
+    <idCode>3S</idCode>
+        <idValue>Total Debits</idValue>
+    <idCode>3T</idCode>
+        <idValue>Total Credits</idValue>
+    <idCode>3U</idCode>
+        <idValue>Total Transactions</idValue>
+    <idCode>3V</idCode>
+        <idValue>Minimum Transfer</idValue>
+    <idCode>3W</idCode>
+        <idValue>Maximum Transfer</idValue>
+    <idCode>3X</idCode>
+        <idValue>Speed Capacity</idValue>
+    <idCode>3Y</idCode>
+        <idValue>Subcontractors</idValue>
+    <idCode>40</idCode>
+        <idValue>Remaining Quantity</idValue>
+    <idCode>41</idCode>
+        <idValue>Number of Batches</idValue>
+    <idCode>42</idCode>
+        <idValue>Number of Checks</idValue>
+    <idCode>43</idCode>
+        <idValue>Talk Paths</idValue>
+    <idCode>45</idCode>
+        <idValue>Cumulative quantity on order</idValue>
+    <idCode>46</idCode>
+        <idValue>Total transactions</idValue>
+    <idCode>47</idCode>
+        <idValue>Primary Net Quantity</idValue>
+    <idCode>48</idCode>
+        <idValue>Secondary Net Quantity</idValue>
+    <idCode>49</idCode>
+        <idValue>Number of Signed Bills of Lading</idValue>
+    <idCode>4A</idCode>
+        <idValue>Accounts</idValue>
+    <idCode>4B</idCode>
+        <idValue>Agents</idValue>
+    <idCode>4C</idCode>
+        <idValue>Authorized Shares</idValue>
+    <idCode>4D</idCode>
+        <idValue>Clerks</idValue>
+    <idCode>4E</idCode>
+        <idValue>Design Employees</idValue>
+    <idCode>4F</idCode>
+        <idValue>Foreign Related Entities</idValue>
+    <idCode>4G</idCode>
+        <idValue>Group Employees</idValue>
+    <idCode>4H</idCode>
+        <idValue>Issued Shares</idValue>
+    <idCode>4I</idCode>
+        <idValue>Laborers</idValue>
+    <idCode>4J</idCode>
+        <idValue>Other Employee Type</idValue>
+    <idCode>4K</idCode>
+        <idValue>Part Time Employees</idValue>
+    <idCode>4L</idCode>
+        <idValue>Related Entities</idValue>
+    <idCode>4M</idCode>
+        <idValue>Relatives Employed</idValue>
+    <idCode>4N</idCode>
+        <idValue>Salespersons</idValue>
+    <idCode>4O</idCode>
+        <idValue>Space Occupied</idValue>
+    <idCode>4P</idCode>
+        <idValue>Special Partners</idValue>
+    <idCode>4Q</idCode>
+        <idValue>Suppliers&apos; Credit</idValue>
+    <idCode>4R</idCode>
+        <idValue>Technicians</idValue>
+    <idCode>4S</idCode>
+        <idValue>Trainees</idValue>
+    <idCode>4T</idCode>
+        <idValue>Warehouse Employees</idValue>
+    <idCode>4U</idCode>
+        <idValue>Shareholders</idValue>
+    <idCode>50</idCode>
+        <idValue>Number of Copies of Bill of Lading</idValue>
+    <idCode>51</idCode>
+        <idValue>Number of Unsigned Bills of Lading</idValue>
+    <idCode>52</idCode>
+        <idValue>Number of Originals</idValue>
+    <idCode>53</idCode>
+        <idValue>Original payment item count.</idValue>
+    <idCode>54</idCode>
+        <idValue>Bank reject item count.</idValue>
+    <idCode>55</idCode>
+        <idValue>Net to pay item count.</idValue>
+    <idCode>56</idCode>
+        <idValue>Minimum Contract Quantity</idValue>
+    <idCode>57</idCode>
+        <idValue>Minimum Order Quantity</idValue>
+    <idCode>58</idCode>
+        <idValue>Payment Cancellation Item Count</idValue>
+    <idCode>5A</idCode>
+        <idValue>Aggregate Benefit Period</idValue>
+    <idCode>5B</idCode>
+        <idValue>Anticipated Length of Service</idValue>
+    <idCode>5C</idCode>
+        <idValue>Approval/Offer Duration</idValue>
+    <idCode>5D</idCode>
+        <idValue>Benefit Amount</idValue>
+    <idCode>5E</idCode>
+        <idValue>Benefit Period</idValue>
+    <idCode>5F</idCode>
+        <idValue>Brothers Deceased</idValue>
+    <idCode>5G</idCode>
+        <idValue>Brothers Living</idValue>
+    <idCode>5H</idCode>
+        <idValue>Children</idValue>
+    <idCode>5I</idCode>
+        <idValue>Citations</idValue>
+    <idCode>5J</idCode>
+        <idValue>Claim Period</idValue>
+    <idCode>5K</idCode>
+        <idValue>Coverage</idValue>
+    <idCode>5L</idCode>
+        <idValue>Elimination Period</idValue>
+    <idCode>5M</idCode>
+        <idValue>Elimination Period - Accident</idValue>
+    <idCode>5N</idCode>
+        <idValue>Elimination Period - Sickness</idValue>
+    <idCode>5O</idCode>
+        <idValue>Employees - Nonowner</idValue>
+    <idCode>5P</idCode>
+        <idValue>Employees - Owner</idValue>
+    <idCode>5Q</idCode>
+        <idValue>Employees - Part Time</idValue>
+    <idCode>5R</idCode>
+        <idValue>Employees - Same Duties</idValue>
+    <idCode>5S</idCode>
+        <idValue>Employees - Same Occupation</idValue>
+    <idCode>5T</idCode>
+        <idValue>Expense</idValue>
+    <idCode>5U</idCode>
+        <idValue>Frequency</idValue>
+    <idCode>5V</idCode>
+        <idValue>General Elimination Period</idValue>
+    <idCode>5W</idCode>
+        <idValue>Guarantee Period</idValue>
+    <idCode>5X</idCode>
+        <idValue>Height</idValue>
+    <idCode>5Y</idCode>
+        <idValue>Hours Flown - Aircraft Type/Life</idValue>
+    <idCode>5Z</idCode>
+        <idValue>Hours Flown - Aircraft Type/Period</idValue>
+    <idCode>60</idCode>
+        <idValue>Total Authorized Quantity</idValue>
+    <idCode>61</idCode>
+        <idValue>Remaining Authorized Quantity</idValue>
+    <idCode>62</idCode>
+        <idValue>Number of Days Covered by Inventory</idValue>
+    <idCode>63</idCode>
+        <idValue>On Order Quantity</idValue>
+    <idCode>64</idCode>
+        <idValue>Past Due Quantity</idValue>
+    <idCode>65</idCode>
+        <idValue>Previous Month&apos;s Usage</idValue>
+    <idCode>66</idCode>
+        <idValue>Minimum Fabrication Quantity</idValue>
+    <idCode>67</idCode>
+        <idValue>Minimum Ship Quantity</idValue>
+    <idCode>68</idCode>
+        <idValue>Maximum Number of Shipments Allowed</idValue>
+    <idCode>69</idCode>
+        <idValue>Incremental Order Quantity</idValue>
+    <idCode>6A</idCode>
+        <idValue>Hours Flown - Aircraft/Type Flying</idValue>
+    <idCode>6B</idCode>
+        <idValue>Hours Flown - Lifetime</idValue>
+    <idCode>6C</idCode>
+        <idValue>Hours Flown - Type Flying</idValue>
+    <idCode>6D</idCode>
+        <idValue>Impairment Duration</idValue>
+    <idCode>6E</idCode>
+        <idValue>Impairment Frequency</idValue>
+    <idCode>6F</idCode>
+        <idValue>Installment Frequency</idValue>
+    <idCode>6G</idCode>
+        <idValue>Installments</idValue>
+    <idCode>6H</idCode>
+        <idValue>Intended Change Time Period</idValue>
+    <idCode>6I</idCode>
+        <idValue>Interim Term Period</idValue>
+    <idCode>6J</idCode>
+        <idValue>Involvement Period</idValue>
+    <idCode>6K</idCode>
+        <idValue>Loan Rate</idValue>
+    <idCode>6L</idCode>
+        <idValue>Maximum Age</idValue>
+    <idCode>6M</idCode>
+        <idValue>Maximum Benefit Period - Accident</idValue>
+    <idCode>6N</idCode>
+        <idValue>Maximum Benefit Period - Sickness</idValue>
+    <idCode>6O</idCode>
+        <idValue>Maximum Benefit Period</idValue>
+    <idCode>6P</idCode>
+        <idValue>Medication Duration</idValue>
+    <idCode>6Q</idCode>
+        <idValue>Minimum Age</idValue>
+    <idCode>6R</idCode>
+        <idValue>Own Occupation Qualification Period</idValue>
+    <idCode>6S</idCode>
+        <idValue>Owner&apos;s Equity</idValue>
+    <idCode>6T</idCode>
+        <idValue>Ownership Change Age</idValue>
+    <idCode>6U</idCode>
+        <idValue>Ownership Duration</idValue>
+    <idCode>6V</idCode>
+        <idValue>Ownership Percentage</idValue>
+    <idCode>6W</idCode>
+        <idValue>Payment Frequency</idValue>
+    <idCode>6X</idCode>
+        <idValue>Payments Number</idValue>
+    <idCode>6Z</idCode>
+        <idValue>Placement Period Expiration</idValue>
+    <idCode>70</idCode>
+        <idValue>Maximum Order Quantity</idValue>
+    <idCode>72</idCode>
+        <idValue>Minimum Stock Level</idValue>
+    <idCode>73</idCode>
+        <idValue>Maximum Stock Level</idValue>
+    <idCode>74</idCode>
+        <idValue>Damaged Goods</idValue>
+    <idCode>75</idCode>
+        <idValue>Receipts</idValue>
+    <idCode>76</idCode>
+        <idValue>Returns</idValue>
+    <idCode>77</idCode>
+        <idValue>Stock Transfers In</idValue>
+    <idCode>78</idCode>
+        <idValue>Stock Transfers Out</idValue>
+    <idCode>79</idCode>
+        <idValue>Billing Unit(s) Per Pricing Unit</idValue>
+    <idCode>7A</idCode>
+        <idValue>Previous Benefits</idValue>
+    <idCode>7B</idCode>
+        <idValue>Qualification Period</idValue>
+    <idCode>7C</idCode>
+        <idValue>Range Average</idValue>
+    <idCode>7D</idCode>
+        <idValue>Range Maximum</idValue>
+    <idCode>7E</idCode>
+        <idValue>Range Minimum</idValue>
+    <idCode>7F</idCode>
+        <idValue>Relationship Duration</idValue>
+    <idCode>7G</idCode>
+        <idValue>Replaced Amount</idValue>
+    <idCode>7H</idCode>
+        <idValue>Residence Duration</idValue>
+    <idCode>7I</idCode>
+        <idValue>Sisters Deceased</idValue>
+    <idCode>7J</idCode>
+        <idValue>Sisters Living</idValue>
+    <idCode>7K</idCode>
+        <idValue>Time Frame</idValue>
+    <idCode>7L</idCode>
+        <idValue>Time in Country</idValue>
+    <idCode>7M</idCode>
+        <idValue>Time Since Hospitalization</idValue>
+    <idCode>7N</idCode>
+        <idValue>Time Since Last Application</idValue>
+    <idCode>7O</idCode>
+        <idValue>Time Since Last Civilian Flight</idValue>
+    <idCode>7P</idCode>
+        <idValue>Time Since Last Insurance Medical</idValue>
+    <idCode>7Q</idCode>
+        <idValue>Time Since Last Military Flight</idValue>
+    <idCode>7R</idCode>
+        <idValue>Time Since Medical Consult</idValue>
+    <idCode>7S</idCode>
+        <idValue>Time Since Medication End</idValue>
+    <idCode>7T</idCode>
+        <idValue>Time Since Medication Start</idValue>
+    <idCode>7U</idCode>
+        <idValue>Time Since Onset</idValue>
+    <idCode>7V</idCode>
+        <idValue>Time Since Surgery</idValue>
+    <idCode>7W</idCode>
+        <idValue>Time Since Trip</idValue>
+    <idCode>7X</idCode>
+        <idValue>Travel Frequency</idValue>
+    <idCode>7Y</idCode>
+        <idValue>Travel Period</idValue>
+    <idCode>7Z</idCode>
+        <idValue>Trip Duration</idValue>
+    <idCode>80</idCode>
+        <idValue>Pricing Unit(s) Per Billing Unit</idValue>
+    <idCode>81</idCode>
+        <idValue>Prepaid Quantity Shipped</idValue>
+    <idCode>82</idCode>
+        <idValue>Prepaid Quantity Not Shipped</idValue>
+    <idCode>83</idCode>
+        <idValue>Submitted Quantity Sold</idValue>
+    <idCode>84</idCode>
+        <idValue>Submitted Quantity Returned</idValue>
+    <idCode>85</idCode>
+        <idValue>Lot Size</idValue>
+    <idCode>86</idCode>
+        <idValue>Nonconformance Quantity</idValue>
+    <idCode>87</idCode>
+        <idValue>Quantity Received</idValue>
+    <idCode>88</idCode>
+        <idValue>Beds</idValue>
+    <idCode>89</idCode>
+        <idValue>Operating Beds</idValue>
+    <idCode>8A</idCode>
+        <idValue>Visitation Frequency</idValue>
+    <idCode>8B</idCode>
+        <idValue>Weight</idValue>
+    <idCode>8C</idCode>
+        <idValue>Weight Change Period</idValue>
+    <idCode>8D</idCode>
+        <idValue>Work Period</idValue>
+    <idCode>8E</idCode>
+        <idValue>Existence Limit Period</idValue>
+    <idCode>8F</idCode>
+        <idValue>Shares</idValue>
+    <idCode>8G</idCode>
+        <idValue>Directors</idValue>
+    <idCode>8H</idCode>
+        <idValue>Minimum</idValue>
+    <idCode>8I</idCode>
+        <idValue>Voting Shares Held</idValue>
+    <idCode>8J</idCode>
+        <idValue>Outstanding Shares</idValue>
+    <idCode>8K</idCode>
+        <idValue>Shares Held as Treasury Stock</idValue>
+    <idCode>8L</idCode>
+        <idValue>Shares Subscribed but Not Issued</idValue>
+    <idCode>8M</idCode>
+        <idValue>Total Shares of Stock</idValue>
+    <idCode>8N</idCode>
+        <idValue>Shares Owned by In-State Residents</idValue>
+    <idCode>8O</idCode>
+        <idValue>Shares Owned by Out-of-State Residents</idValue>
+    <idCode>8P</idCode>
+        <idValue>Partners</idValue>
+    <idCode>8Q</idCode>
+        <idValue>Land Holding</idValue>
+    <idCode>8R</idCode>
+        <idValue>Non-Domestic Stockholders</idValue>
+    <idCode>8S</idCode>
+        <idValue>Shares Subscribed</idValue>
+    <idCode>90</idCode>
+        <idValue>Acknowledged Quantity</idValue>
+    <idCode>91</idCode>
+        <idValue>Additional Usage Quantity</idValue>
+    <idCode>92</idCode>
+        <idValue>Allotted Usage Quantity</idValue>
+    <idCode>93</idCode>
+        <idValue>Attendant-Handled Quantity</idValue>
+    <idCode>94</idCode>
+        <idValue>Billable Quantity</idValue>
+    <idCode>95</idCode>
+        <idValue>Data Storage Quantity</idValue>
+    <idCode>96</idCode>
+        <idValue>Non-Billable Quantity</idValue>
+    <idCode>97</idCode>
+        <idValue>Non-Urgent Delivery Quantity</idValue>
+    <idCode>98</idCode>
+        <idValue>Overflow Quantity</idValue>
+    <idCode>99</idCode>
+        <idValue>Quantity Used</idValue>
+    <idCode>9A</idCode>
+        <idValue>Time Expended</idValue>
+    <idCode>9C</idCode>
+        <idValue>Primary Meter Reading Value</idValue>
+    <idCode>9D</idCode>
+        <idValue>Engineered Standard</idValue>
+    <idCode>9E</idCode>
+        <idValue>Active Maintenance Time</idValue>
+    <idCode>9F</idCode>
+        <idValue>Actual Duration</idValue>
+    <idCode>9H</idCode>
+        <idValue>Estimated Duration</idValue>
+    <idCode>9J</idCode>
+        <idValue>Gross Estimate</idValue>
+    <idCode>9K</idCode>
+        <idValue>Finish Offset</idValue>
+    <idCode>9L</idCode>
+        <idValue>Start Offset</idValue>
+    <idCode>9M</idCode>
+        <idValue>Picture Count</idValue>
+    <idCode>9N</idCode>
+        <idValue>Component Meter Reading Count</idValue>
+    <idCode>A1</idCode>
+        <idValue>Acceptable Unserviceable Quantity</idValue>
+    <idCode>A2</idCode>
+        <idValue>Optimistic Duration</idValue>
+    <idCode>A3</idCode>
+        <idValue>Most Likely Duration</idValue>
+    <idCode>A4</idCode>
+        <idValue>Pessimistic Duration</idValue>
+    <idCode>A5</idCode>
+        <idValue>Adjusted Quantity</idValue>
+    <idCode>A6</idCode>
+        <idValue>Accidents</idValue>
+    <idCode>A7</idCode>
+        <idValue>Years in School</idValue>
+    <idCode>A8</idCode>
+        <idValue>Number of Dependents</idValue>
+    <idCode>A9</idCode>
+        <idValue>Years on Job</idValue>
+    <idCode>AA</idCode>
+        <idValue>Unacknowledged Quantity</idValue>
+    <idCode>AB</idCode>
+        <idValue>Urgent Delivery Quantity</idValue>
+    <idCode>AC</idCode>
+        <idValue>Voice Storage Quantity</idValue>
+    <idCode>AD</idCode>
+        <idValue>Maintenance Units</idValue>
+    <idCode>AE</idCode>
+        <idValue>Minimum Average Time Requirement (MATR) Units</idValue>
+    <idCode>AF</idCode>
+        <idValue>Wide Area Telephone Service (WATS)/800 Service Units</idValue>
+    <idCode>AG</idCode>
+        <idValue>Number of End Users</idValue>
+    <idCode>AH</idCode>
+        <idValue>Number of Message Recipients</idValue>
+    <idCode>AI</idCode>
+        <idValue>Number of Operator Credits</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Daily Adjustments</idValue>
+    <idCode>AK</idCode>
+        <idValue>Years in this Line of Work/Profession</idValue>
+    <idCode>AL</idCode>
+        <idValue>Area per Units</idValue>
+    <idCode>AN</idCode>
+        <idValue>Age at Death</idValue>
+    <idCode>AO</idCode>
+        <idValue>Verified Receipts</idValue>
+    <idCode>AP</idCode>
+        <idValue>Order Quantity Multiple</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Contribution Total</idValue>
+    <idCode>AR</idCode>
+        <idValue>Loan Repayment Total</idValue>
+    <idCode>AS</idCode>
+        <idValue>Participant Total</idValue>
+    <idCode>AT</idCode>
+        <idValue>Actual</idValue>
+    <idCode>AU</idCode>
+        <idValue>Cumulative Actual</idValue>
+    <idCode>AV</idCode>
+        <idValue>Budget</idValue>
+    <idCode>AW</idCode>
+        <idValue>Cumulative Budget</idValue>
+    <idCode>AX</idCode>
+        <idValue>Number of Insured Lives</idValue>
+    <idCode>AY</idCode>
+        <idValue>Forecast</idValue>
+    <idCode>AZ</idCode>
+        <idValue>Forecast at Complete</idValue>
+    <idCode>B1</idCode>
+        <idValue>Number of Mortgagors</idValue>
+    <idCode>B2</idCode>
+        <idValue>Mortgage Pool Count</idValue>
+    <idCode>B3</idCode>
+        <idValue>Requested Amount</idValue>
+    <idCode>B4</idCode>
+        <idValue>Approved Amount</idValue>
+    <idCode>B5</idCode>
+        <idValue>Additional Amount</idValue>
+    <idCode>B6</idCode>
+        <idValue>Pre-op Days</idValue>
+    <idCode>B7</idCode>
+        <idValue>Post-op Days</idValue>
+    <idCode>B8</idCode>
+        <idValue>Average</idValue>
+    <idCode>BA</idCode>
+        <idValue>Due-In</idValue>
+    <idCode>BB</idCode>
+        <idValue>Contractor Cumulative to Date</idValue>
+    <idCode>BC</idCode>
+        <idValue>Budget At Complete</idValue>
+    <idCode>BD</idCode>
+        <idValue>Contractor at Complete</idValue>
+    <idCode>BE</idCode>
+        <idValue>Subcontractor Cumulative to Date</idValue>
+    <idCode>BF</idCode>
+        <idValue>Age Modifying Units</idValue>
+    <idCode>BG</idCode>
+        <idValue>Subcontractor at Complete</idValue>
+    <idCode>BH</idCode>
+        <idValue>Book Order Quantity</idValue>
+    <idCode>BI</idCode>
+        <idValue>Book Inventory</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Bedroom Count</idValue>
+    <idCode>BK</idCode>
+        <idValue>Bathroom Count</idValue>
+    <idCode>BQ</idCode>
+        <idValue>Backorder Quantity</idValue>
+    <idCode>BR</idCode>
+        <idValue>Blood Record</idValue>
+    <idCode>BW</idCode>
+        <idValue>Birth Weight</idValue>
+    <idCode>C0</idCode>
+        <idValue>Creditors</idValue>
+    <idCode>CA</idCode>
+        <idValue>Covered - Actual</idValue>
+    <idCode>CB</idCode>
+        <idValue>Closing Statement Balance</idValue>
+    <idCode>CC</idCode>
+        <idValue>Current Days on Market</idValue>
+    <idCode>CD</idCode>
+        <idValue>Co-insured - Actual</idValue>
+    <idCode>CE</idCode>
+        <idValue>Covered - Estimated</idValue>
+    <idCode>CF</idCode>
+        <idValue>Co-insured - Estimated</idValue>
+    <idCode>CG</idCode>
+        <idValue>Cumulative Gas Volume</idValue>
+    <idCode>CH</idCode>
+        <idValue>Cumulative Effect of Prior Period Adjustment</idValue>
+    <idCode>CI</idCode>
+        <idValue>Cumulative Gas Injection Volume</idValue>
+    <idCode>CL</idCode>
+        <idValue>Cumulative Liquid Injection Volume</idValue>
+    <idCode>CN</idCode>
+        <idValue>Continuance Duration</idValue>
+    <idCode>CO</idCode>
+        <idValue>Cumulative Oil/Condensate Volume</idValue>
+    <idCode>CP</idCode>
+        <idValue>Current Period Imbalance</idValue>
+    <idCode>CR</idCode>
+        <idValue>Certified Registered Nurse Anesthetist (CRNA) Number of Concurrent Procedures</idValue>
+    <idCode>CS</idCode>
+        <idValue>Current Service Life</idValue>
+    <idCode>CW</idCode>
+        <idValue>Cumulative Water Volume</idValue>
+    <idCode>CY</idCode>
+        <idValue>Convictions Sent</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Total Number of Convictions</idValue>
+    <idCode>D1</idCode>
+        <idValue>Billed</idValue>
+    <idCode>D3</idCode>
+        <idValue>Number of Co-insurance Days</idValue>
+    <idCode>DA</idCode>
+        <idValue>Dependent&apos;s Age</idValue>
+    <idCode>DB</idCode>
+        <idValue>Deductible Blood Units</idValue>
+    <idCode>DC</idCode>
+        <idValue>Dependent Count</idValue>
+    <idCode>DD</idCode>
+        <idValue>Distributed</idValue>
+    <idCode>DE</idCode>
+        <idValue>Debited</idValue>
+    <idCode>DF</idCode>
+        <idValue>Deleted</idValue>
+    <idCode>DG</idCode>
+        <idValue>Gas Used for Drilling</idValue>
+    <idCode>DI</idCode>
+        <idValue>Disposed</idValue>
+    <idCode>DN</idCode>
+        <idValue>Default Notification Response Period</idValue>
+    <idCode>DO</idCode>
+        <idValue>Days Operated</idValue>
+    <idCode>DP</idCode>
+        <idValue>Days Produced</idValue>
+    <idCode>DR</idCode>
+        <idValue>Direct Workers</idValue>
+    <idCode>DS</idCode>
+        <idValue>Dose</idValue>
+    <idCode>DT</idCode>
+        <idValue>Dependent Total</idValue>
+    <idCode>DY</idCode>
+        <idValue>Days</idValue>
+    <idCode>E1</idCode>
+        <idValue>Course Segments</idValue>
+    <idCode>E2</idCode>
+        <idValue>Degree Segments</idValue>
+    <idCode>E3</idCode>
+        <idValue>Employed on this job</idValue>
+    <idCode>E4</idCode>
+        <idValue>Employed in this Profession</idValue>
+    <idCode>E5</idCode>
+        <idValue>Employed by this Company</idValue>
+    <idCode>EA</idCode>
+        <idValue>Exclusive Uses</idValue>
+    <idCode>EB</idCode>
+        <idValue>Nonexclusive Uses</idValue>
+    <idCode>EC</idCode>
+        <idValue>Use of Extracorporeal Circulation</idValue>
+    <idCode>ED</idCode>
+        <idValue>Domestic Uses</idValue>
+    <idCode>EE</idCode>
+        <idValue>Small Business Uses</idValue>
+    <idCode>EM</idCode>
+        <idValue>Emergency Modifying Units</idValue>
+    <idCode>EP</idCode>
+        <idValue>Product Exchange Amount</idValue>
+    <idCode>EQ</idCode>
+        <idValue>Equity Security Holder</idValue>
+    <idCode>ER</idCode>
+        <idValue>Estimated Remaining Economic Life</idValue>
+    <idCode>ES</idCode>
+        <idValue>Ending Stock</idValue>
+    <idCode>ET</idCode>
+        <idValue>Employee Total</idValue>
+    <idCode>EW</idCode>
+        <idValue>Evaporated Water</idValue>
+    <idCode>F1</idCode>
+        <idValue>Off Lease Fuel</idValue>
+    <idCode>FA</idCode>
+        <idValue>Full Baths</idValue>
+    <idCode>FB</idCode>
+        <idValue>Furnished Blood Units</idValue>
+    <idCode>FC</idCode>
+        <idValue>Fuel Consumed or Burned Amount</idValue>
+    <idCode>FD</idCode>
+        <idValue>Vehicular Radios</idValue>
+    <idCode>FE</idCode>
+        <idValue>Portable Radios</idValue>
+    <idCode>FF</idCode>
+        <idValue>Flare or Flash</idValue>
+    <idCode>FG</idCode>
+        <idValue>Marine Radios</idValue>
+    <idCode>FH</idCode>
+        <idValue>Pagers</idValue>
+    <idCode>FI</idCode>
+        <idValue>Conventional Mobiles</idValue>
+    <idCode>FJ</idCode>
+        <idValue>Trunked Channels</idValue>
+    <idCode>FK</idCode>
+        <idValue>Mobile Loading Allocation</idValue>
+    <idCode>FL</idCode>
+        <idValue>Units</idValue>
+    <idCode>FM</idCode>
+        <idValue>Aircraft Radios</idValue>
+    <idCode>FR</idCode>
+        <idValue>Units For Sale</idValue>
+    <idCode>FS</idCode>
+        <idValue>Gas Used for Fuel System</idValue>
+    <idCode>FT</idCode>
+        <idValue>Forecast to Complete</idValue>
+    <idCode>GA</idCode>
+        <idValue>Gross Building Area</idValue>
+    <idCode>GB</idCode>
+        <idValue>Gross Annual Income Multiplier</idValue>
+    <idCode>GC</idCode>
+        <idValue>Gross Living Area</idValue>
+    <idCode>GE</idCode>
+        <idValue>Original Term In Years</idValue>
+    <idCode>GF</idCode>
+        <idValue>Years Remaining</idValue>
+    <idCode>GI</idCode>
+        <idValue>Gas Injection Volume</idValue>
+    <idCode>GL</idCode>
+        <idValue>Gas Lift Volume</idValue>
+    <idCode>GP</idCode>
+        <idValue>Gross Production</idValue>
+    <idCode>GQ</idCode>
+        <idValue>Government Reporting Quantity</idValue>
+    <idCode>GR</idCode>
+        <idValue>Gas Receipt Volume</idValue>
+    <idCode>GS</idCode>
+        <idValue>Gas Sold</idValue>
+    <idCode>GT</idCode>
+        <idValue>Grade Transfer Amount</idValue>
+    <idCode>GU</idCode>
+        <idValue>Employee Total First Month of Quarter</idValue>
+    <idCode>GV</idCode>
+        <idValue>Gas Volume</idValue>
+    <idCode>GW</idCode>
+        <idValue>Employee Total Second Month of Quarter</idValue>
+    <idCode>GX</idCode>
+        <idValue>Employee Total Third Month of Quarter</idValue>
+    <idCode>GZ</idCode>
+        <idValue>Active Listings</idValue>
+    <idCode>HA</idCode>
+        <idValue>Market Price Change</idValue>
+    <idCode>HB</idCode>
+        <idValue>Unpaid</idValue>
+    <idCode>HC</idCode>
+        <idValue>Branches</idValue>
+    <idCode>HD</idCode>
+        <idValue>Subsidiaries</idValue>
+    <idCode>HE</idCode>
+        <idValue>Age of Financial Information</idValue>
+    <idCode>HF</idCode>
+        <idValue>Invoices</idValue>
+    <idCode>HG</idCode>
+        <idValue>Financial Coverage Period</idValue>
+    <idCode>HH</idCode>
+        <idValue>Maximum Number of Employees at Location</idValue>
+    <idCode>HI</idCode>
+        <idValue>Previous Number of Accounts</idValue>
+    <idCode>HJ</idCode>
+        <idValue>Collection Period</idValue>
+    <idCode>HK</idCode>
+        <idValue>Disbursement Period</idValue>
+    <idCode>HL</idCode>
+        <idValue>Seats</idValue>
+    <idCode>HM</idCode>
+        <idValue>Use of Hypothermia</idValue>
+    <idCode>HN</idCode>
+        <idValue>Previous Number of Employees</idValue>
+    <idCode>HO</idCode>
+        <idValue>Use of Hypotension</idValue>
+    <idCode>HP</idCode>
+        <idValue>Use of Hyperbaric Pressurization</idValue>
+    <idCode>HR</idCode>
+        <idValue>Use of Hypertension</idValue>
+    <idCode>HS</idCode>
+        <idValue>Hours</idValue>
+    <idCode>II</idCode>
+        <idValue>Number of Irregular Interest Payments</idValue>
+    <idCode>IN</idCode>
+        <idValue>Indirect Workers</idValue>
+    <idCode>IP</idCode>
+        <idValue>Number of Interest Payments</idValue>
+    <idCode>IQ</idCode>
+        <idValue>In-Transit Quantity</idValue>
+    <idCode>IS</idCode>
+        <idValue>Information Provider Standardized Motor Vehicle Penalty Points</idValue>
+    <idCode>IT</idCode>
+        <idValue>Intertank Transfer Amount</idValue>
+    <idCode>JA</idCode>
+        <idValue>Activity Codes</idValue>
+    <idCode>JB</idCode>
+        <idValue>Associates</idValue>
+    <idCode>JC</idCode>
+        <idValue>Average Employees</idValue>
+    <idCode>JD</idCode>
+        <idValue>Cooperative Shares</idValue>
+    <idCode>JE</idCode>
+        <idValue>Estimated Employees at Location</idValue>
+    <idCode>JF</idCode>
+        <idValue>Estimated Total Employees</idValue>
+    <idCode>JG</idCode>
+        <idValue>Financial Institutions</idValue>
+    <idCode>JH</idCode>
+        <idValue>Judgments</idValue>
+    <idCode>JI</idCode>
+        <idValue>Land Size</idValue>
+    <idCode>JJ</idCode>
+        <idValue>Liens</idValue>
+    <idCode>JK</idCode>
+        <idValue>Minimum Employees at Location</idValue>
+    <idCode>JL</idCode>
+        <idValue>Office Size</idValue>
+    <idCode>JM</idCode>
+        <idValue>Owner</idValue>
+    <idCode>JN</idCode>
+        <idValue>Plant Size</idValue>
+    <idCode>JO</idCode>
+        <idValue>Previous Number of Branches</idValue>
+    <idCode>JP</idCode>
+        <idValue>Protested Bills</idValue>
+    <idCode>JQ</idCode>
+        <idValue>Suits</idValue>
+    <idCode>JR</idCode>
+        <idValue>Uniform Commercial Code (UCC) Filings</idValue>
+    <idCode>JS</idCode>
+        <idValue>Judicial Stay Duration</idValue>
+    <idCode>JT</idCode>
+        <idValue>Warehouse Size</idValue>
+    <idCode>K6</idCode>
+        <idValue>Drafts</idValue>
+    <idCode>KA</idCode>
+        <idValue>Estimated</idValue>
+    <idCode>KB</idCode>
+        <idValue>Net Quantity Increase</idValue>
+    <idCode>KC</idCode>
+        <idValue>Net Quantity Decrease</idValue>
+    <idCode>KD</idCode>
+        <idValue>Expenditure Quantity</idValue>
+    <idCode>KE</idCode>
+        <idValue>Originals</idValue>
+    <idCode>KF</idCode>
+        <idValue>Duplicates</idValue>
+    <idCode>KG</idCode>
+        <idValue>Completed Line Items</idValue>
+    <idCode>KH</idCode>
+        <idValue>Completed Contracts</idValue>
+    <idCode>KI</idCode>
+        <idValue>Active Contracts Delinquent-Buying Party Caused</idValue>
+    <idCode>KJ</idCode>
+        <idValue>Active Contracts Delinquent</idValue>
+    <idCode>KK</idCode>
+        <idValue>Active Contracts Delinquent-Contractor Caused</idValue>
+    <idCode>KL</idCode>
+        <idValue>Active Contracts Delinquent-Unknown Causes</idValue>
+    <idCode>KM</idCode>
+        <idValue>Active Line Items Delinquent</idValue>
+    <idCode>KN</idCode>
+        <idValue>Active Line Items Delinquent-Buying Party Caused</idValue>
+    <idCode>KO</idCode>
+        <idValue>Active Line Items Delinquent-Contractor Caused</idValue>
+    <idCode>KP</idCode>
+        <idValue>Active Line Items Delinquent-Unknown Causes</idValue>
+    <idCode>KQ</idCode>
+        <idValue>Contracts Completed Delinquent-Buying Party Caused</idValue>
+    <idCode>KR</idCode>
+        <idValue>Contract Completed Delinquent-Contractor Caused</idValue>
+    <idCode>KS</idCode>
+        <idValue>Contracts Completed Delinquent-Unknown Causes</idValue>
+    <idCode>KU</idCode>
+        <idValue>Reported Deficiencies</idValue>
+    <idCode>KV</idCode>
+        <idValue>Line Items Completed Delinquent-Buying Party Caused</idValue>
+    <idCode>KW</idCode>
+        <idValue>Line Items Completed Delinquent-Contractor Caused</idValue>
+    <idCode>KX</idCode>
+        <idValue>Line Items Completed Delinquent-Unknown Causes</idValue>
+    <idCode>KY</idCode>
+        <idValue>Corrective Action Requests-Verbal</idValue>
+    <idCode>KZ</idCode>
+        <idValue>Corrective Action Requests-Written</idValue>
+    <idCode>L2</idCode>
+        <idValue>Guarantee Fee Buyup Maximum</idValue>
+    <idCode>L3</idCode>
+        <idValue>Contract Buyup</idValue>
+    <idCode>L4</idCode>
+        <idValue>Contract Buydown</idValue>
+    <idCode>L5</idCode>
+        <idValue>Guarantee Fee Rate after Alternate Payment Method</idValue>
+    <idCode>L6</idCode>
+        <idValue>Guarantee Fee Rate after Buyup or Buydown</idValue>
+    <idCode>L7</idCode>
+        <idValue>Buyup or Buydown Rate per Basis Point</idValue>
+    <idCode>LA</idCode>
+        <idValue>Life-time Reserve - Actual</idValue>
+    <idCode>LB</idCode>
+        <idValue>Loss Allowance</idValue>
+    <idCode>LC</idCode>
+        <idValue>Late Payment Period</idValue>
+    <idCode>LE</idCode>
+        <idValue>Life-time Reserve - Estimated</idValue>
+    <idCode>LG</idCode>
+        <idValue>Loss or Gain</idValue>
+    <idCode>LH</idCode>
+        <idValue>Lost Gas</idValue>
+    <idCode>LI</idCode>
+        <idValue>Liquid Injection Volume</idValue>
+    <idCode>LK</idCode>
+        <idValue>Corrective Action Requests-Method C</idValue>
+    <idCode>LL</idCode>
+        <idValue>Corrective Action Requests-Method D</idValue>
+    <idCode>LM</idCode>
+        <idValue>Corrective Action Requests-Method E</idValue>
+    <idCode>LN</idCode>
+        <idValue>Aged Active Line Items Delinquent-Contractor Caused</idValue>
+    <idCode>LO</idCode>
+        <idValue>Lost Oil</idValue>
+    <idCode>LP</idCode>
+        <idValue>Lease Periods</idValue>
+    <idCode>LQ</idCode>
+        <idValue>Aged Line Items Delinquent</idValue>
+    <idCode>LR</idCode>
+        <idValue>Aged Line Items Completed-Contractor Caused</idValue>
+    <idCode>LS</idCode>
+        <idValue>Oil Condensate Sold</idValue>
+    <idCode>LT</idCode>
+        <idValue>Tariff Loss Allowance</idValue>
+    <idCode>LV</idCode>
+        <idValue>Oil/Condensate Volume</idValue>
+    <idCode>LW</idCode>
+        <idValue>Lost Work Time Actual</idValue>
+    <idCode>LX</idCode>
+        <idValue>Lost Work Time Estimated</idValue>
+    <idCode>LY</idCode>
+        <idValue>Length of Residency</idValue>
+    <idCode>M1</idCode>
+        <idValue>Matching Equipment</idValue>
+    <idCode>M2</idCode>
+        <idValue>Maximum</idValue>
+    <idCode>MA</idCode>
+        <idValue>Miscellaneous Allowance</idValue>
+    <idCode>MD</idCode>
+        <idValue>Million Dollar Roundtable Credits</idValue>
+    <idCode>ME</idCode>
+        <idValue>Minimum Number of Employees</idValue>
+    <idCode>MF</idCode>
+        <idValue>Manufactured</idValue>
+    <idCode>MI</idCode>
+        <idValue>Miles</idValue>
+    <idCode>MM</idCode>
+        <idValue>Maximum Maturity Extension</idValue>
+    <idCode>MN</idCode>
+        <idValue>Month</idValue>
+    <idCode>MO</idCode>
+        <idValue>Minimum Order Package Level</idValue>
+    <idCode>MQ</idCode>
+        <idValue>Maximum Ship Quantity</idValue>
+    <idCode>MX</idCode>
+        <idValue>Maximum Number of Employees</idValue>
+    <idCode>N1</idCode>
+        <idValue>Number of Attacks or Occurrences</idValue>
+    <idCode>N2</idCode>
+        <idValue>Number of Dead</idValue>
+    <idCode>N3</idCode>
+        <idValue>Number of Living</idValue>
+    <idCode>N4</idCode>
+        <idValue>Number of Times</idValue>
+    <idCode>N5</idCode>
+        <idValue>Minimum Forecast Quantity</idValue>
+    <idCode>N6</idCode>
+        <idValue>Maximum Forecast Quantity</idValue>
+    <idCode>NA</idCode>
+        <idValue>Number of Non-covered Days</idValue>
+    <idCode>NB</idCode>
+        <idValue>Number of Units (Housing)</idValue>
+    <idCode>NC</idCode>
+        <idValue>Number of Claimants</idValue>
+    <idCode>ND</idCode>
+        <idValue>Number of Late Charges</idValue>
+    <idCode>NE</idCode>
+        <idValue>Non-Covered - Estimated</idValue>
+    <idCode>NF</idCode>
+        <idValue>Number of Full-Time Employees</idValue>
+    <idCode>NG</idCode>
+        <idValue>Number of Nonsufficient Fund Items</idValue>
+    <idCode>NL</idCode>
+        <idValue>Number of Levels</idValue>
+    <idCode>NN</idCode>
+        <idValue>Number of Hospitals</idValue>
+    <idCode>NO</idCode>
+        <idValue>Number of Physicians</idValue>
+    <idCode>NP</idCode>
+        <idValue>Number of Members</idValue>
+    <idCode>NQ</idCode>
+        <idValue>Number of Franchisees</idValue>
+    <idCode>NR</idCode>
+        <idValue>Not Replaced Blood Units</idValue>
+    <idCode>NS</idCode>
+        <idValue>Number of Stations</idValue>
+    <idCode>NT</idCode>
+        <idValue>Reports</idValue>
+    <idCode>NU</idCode>
+        <idValue>Since Last Travel</idValue>
+    <idCode>NV</idCode>
+        <idValue>Net</idValue>
+    <idCode>NW</idCode>
+        <idValue>Until Next Travel</idValue>
+    <idCode>OC</idCode>
+        <idValue>Order Count</idValue>
+    <idCode>OD</idCode>
+        <idValue>Other Miscellaneous Disposition</idValue>
+    <idCode>OF</idCode>
+        <idValue>Off Premise Sales Quantity</idValue>
+    <idCode>OG</idCode>
+        <idValue>Other Gas Disposition</idValue>
+    <idCode>OH</idCode>
+        <idValue>Other Injection Volume</idValue>
+    <idCode>OI</idCode>
+        <idValue>Opening Statement Balance</idValue>
+    <idCode>OL</idCode>
+        <idValue>Original Loan Term</idValue>
+    <idCode>ON</idCode>
+        <idValue>On Premise Sales Quantity</idValue>
+    <idCode>OO</idCode>
+        <idValue>Other Oil Condensate Disposition</idValue>
+    <idCode>OR</idCode>
+        <idValue>Original</idValue>
+    <idCode>OT</idCode>
+        <idValue>Number of Operating Periods at Failure</idValue>
+    <idCode>OU</idCode>
+        <idValue>Outlier Days</idValue>
+    <idCode>OV</idCode>
+        <idValue>Overage</idValue>
+    <idCode>OW</idCode>
+        <idValue>Other Water Disposition</idValue>
+    <idCode>P1</idCode>
+        <idValue>Project Phases</idValue>
+    <idCode>P3</idCode>
+        <idValue>Physical Status III</idValue>
+    <idCode>P4</idCode>
+        <idValue>Physical Status IV</idValue>
+    <idCode>P5</idCode>
+        <idValue>Physical Status V</idValue>
+    <idCode>P6</idCode>
+        <idValue>Number of Services or Procedures</idValue>
+    <idCode>P7</idCode>
+        <idValue>Prescription Dosage</idValue>
+    <idCode>P8</idCode>
+        <idValue>Prescription Frequency</idValue>
+    <idCode>P9</idCode>
+        <idValue>Number of People Living at Residence</idValue>
+    <idCode>PA</idCode>
+        <idValue>Pipeline Adjustment or Allowance</idValue>
+    <idCode>PB</idCode>
+        <idValue>Pressure Base</idValue>
+    <idCode>PC</idCode>
+        <idValue>Prior Cumulative Imbalance</idValue>
+    <idCode>PD</idCode>
+        <idValue>Payment Duration Weeks</idValue>
+    <idCode>PE</idCode>
+        <idValue>Period of Employment</idValue>
+    <idCode>PF</idCode>
+        <idValue>Gas Used for Plant Fuel</idValue>
+    <idCode>PG</idCode>
+        <idValue>Persistency</idValue>
+    <idCode>PK</idCode>
+        <idValue>Parking Spaces</idValue>
+    <idCode>PL</idCode>
+        <idValue>Partial Baths</idValue>
+    <idCode>PO</idCode>
+        <idValue>Percentage of Ordered Quantity</idValue>
+    <idCode>PP</idCode>
+        <idValue>Purchase of Product</idValue>
+    <idCode>PQ</idCode>
+        <idValue>Cumulative Quantity Required Prior to the First Scheduled Period</idValue>
+    <idCode>PR</idCode>
+        <idValue>Requirement Quantity that was Previously Released</idValue>
+    <idCode>PS</idCode>
+        <idValue>Prescription</idValue>
+    <idCode>PT</idCode>
+        <idValue>Patients</idValue>
+    <idCode>PW</idCode>
+        <idValue>Pitted Water</idValue>
+    <idCode>PX</idCode>
+        <idValue>Prior Units Accepted</idValue>
+    <idCode>Q1</idCode>
+        <idValue>Minimum quantity to which tax rate applies</idValue>
+    <idCode>Q2</idCode>
+        <idValue>Maximum quantity to which tax rate applies</idValue>
+    <idCode>Q3</idCode>
+        <idValue>Quantity Earned</idValue>
+    <idCode>Q4</idCode>
+        <idValue>Quantity Carried Forward</idValue>
+    <idCode>QA</idCode>
+        <idValue>Quantity Approved</idValue>
+    <idCode>QB</idCode>
+        <idValue>Quantity Dispensed</idValue>
+    <idCode>QC</idCode>
+        <idValue>Quantity Disapproved</idValue>
+    <idCode>QD</idCode>
+        <idValue>Quantity Delivered</idValue>
+    <idCode>QE</idCode>
+        <idValue>Quantity Deferred</idValue>
+    <idCode>QF</idCode>
+        <idValue>High Fabrication Authorization Quantity</idValue>
+    <idCode>QH</idCode>
+        <idValue>Quantity on Hold</idValue>
+    <idCode>QI</idCode>
+        <idValue>Community Service Duration</idValue>
+    <idCode>QJ</idCode>
+        <idValue>Number of Times Deported</idValue>
+    <idCode>QL</idCode>
+        <idValue>Jail Sentence Duration</idValue>
+    <idCode>QM</idCode>
+        <idValue>Probation Duration</idValue>
+    <idCode>QN</idCode>
+        <idValue>Restriction Duration</idValue>
+    <idCode>QO</idCode>
+        <idValue>Operating Quantity</idValue>
+    <idCode>QP</idCode>
+        <idValue>Quantity by Position</idValue>
+    <idCode>QQ</idCode>
+        <idValue>Suspended Duration</idValue>
+    <idCode>QR</idCode>
+        <idValue>High Raw Material Authorization Quantity</idValue>
+    <idCode>QS</idCode>
+        <idValue>Quantity Per Skid</idValue>
+    <idCode>QU</idCode>
+        <idValue>Quantity Serviced</idValue>
+    <idCode>QV</idCode>
+        <idValue>Quantity Cancelled</idValue>
+    <idCode>QW</idCode>
+        <idValue>Quantity Withdrawn</idValue>
+    <idCode>QX</idCode>
+        <idValue>Qualifying Weeks</idValue>
+    <idCode>R3</idCode>
+        <idValue>Estimated Remaining Physical Life</idValue>
+    <idCode>R5</idCode>
+        <idValue>Axles</idValue>
+    <idCode>R6</idCode>
+        <idValue>Platform Count</idValue>
+    <idCode>R9</idCode>
+        <idValue>Fuel</idValue>
+    <idCode>RA</idCode>
+        <idValue>Refills Authorized</idValue>
+    <idCode>RB</idCode>
+        <idValue>Replaced Blood Units</idValue>
+    <idCode>RC</idCode>
+        <idValue>Number of Items Authorized at Store</idValue>
+    <idCode>RD</idCode>
+        <idValue>Number of Items Authorized at Warehouse</idValue>
+    <idCode>RE</idCode>
+        <idValue>Gas Returned to Earth</idValue>
+    <idCode>RF</idCode>
+        <idValue>Number of Items in Stock</idValue>
+    <idCode>RG</idCode>
+        <idValue>Gas Used for Repressuring or Pressure Maintenance</idValue>
+    <idCode>RH</idCode>
+        <idValue>Number of Shelf Tags</idValue>
+    <idCode>RJ</idCode>
+        <idValue>Quantity Available on Shelf</idValue>
+    <idCode>RL</idCode>
+        <idValue>Gas Returned to Property for fuel</idValue>
+    <idCode>RM</idCode>
+        <idValue>Room Count</idValue>
+    <idCode>RN</idCode>
+        <idValue>Units Rented</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Royalty</idValue>
+    <idCode>RS</idCode>
+        <idValue>Number of Shelf Facings</idValue>
+    <idCode>RT</idCode>
+        <idValue>Retail Sales Quantity</idValue>
+    <idCode>RW</idCode>
+        <idValue>Water Re-injected on Property</idValue>
+    <idCode>RY</idCode>
+        <idValue>Requirement Quantity</idValue>
+    <idCode>S1</idCode>
+        <idValue>Planned Unit Development (PUD) Units</idValue>
+    <idCode>S2</idCode>
+        <idValue>Rooms, Finished Area Above Grade</idValue>
+    <idCode>S3</idCode>
+        <idValue>Dwelling Area</idValue>
+    <idCode>S4</idCode>
+        <idValue>Garage or Carport Area</idValue>
+    <idCode>S5</idCode>
+        <idValue>Units for Sale</idValue>
+    <idCode>S6</idCode>
+        <idValue>Gross Rent Multiplier</idValue>
+    <idCode>S7</idCode>
+        <idValue>Age, High Value</idValue>
+    <idCode>S8</idCode>
+        <idValue>Age, Low Value</idValue>
+    <idCode>S9</idCode>
+        <idValue>Bedrooms, Finished Area Above Grade</idValue>
+    <idCode>SA</idCode>
+        <idValue>Shipments</idValue>
+    <idCode>SB</idCode>
+        <idValue>Solicited</idValue>
+    <idCode>SC</idCode>
+        <idValue>Bathrooms, Finished Area Above Grade</idValue>
+    <idCode>SD</idCode>
+        <idValue>Criminal Sentence Duration</idValue>
+    <idCode>SE</idCode>
+        <idValue>Gross Living, Finished Area Above Grade</idValue>
+    <idCode>SF</idCode>
+        <idValue>Site</idValue>
+    <idCode>SG</idCode>
+        <idValue>Swan-Ganz</idValue>
+    <idCode>SH</idCode>
+        <idValue>Shortage</idValue>
+    <idCode>SI</idCode>
+        <idValue>Rooms</idValue>
+    <idCode>SJ</idCode>
+        <idValue>Area of Level</idValue>
+    <idCode>SK</idCode>
+        <idValue>Gas Shrinkage</idValue>
+    <idCode>SL</idCode>
+        <idValue>Predominate Age</idValue>
+    <idCode>SM</idCode>
+        <idValue>Minimum Criminal Sentence Duration</idValue>
+    <idCode>SN</idCode>
+        <idValue>Age</idValue>
+    <idCode>SO</idCode>
+        <idValue>Oil Sedimentation</idValue>
+    <idCode>SP</idCode>
+        <idValue>Days Supply</idValue>
+    <idCode>SQ</idCode>
+        <idValue>Product Sales Amount</idValue>
+    <idCode>SR</idCode>
+        <idValue>Effective Age</idValue>
+    <idCode>SS</idCode>
+        <idValue>Shares of Preferred Stock</idValue>
+    <idCode>ST</idCode>
+        <idValue>Standard</idValue>
+    <idCode>SU</idCode>
+        <idValue>Forecasted Scanned Quantity</idValue>
+    <idCode>SV</idCode>
+        <idValue>Shares of Common Stock</idValue>
+    <idCode>SW</idCode>
+        <idValue>Sample Amount</idValue>
+    <idCode>SX</idCode>
+        <idValue>Maximum Criminal Sentence Duration</idValue>
+    <idCode>SY</idCode>
+        <idValue>State or Province Motor Vehicle Penalty Points</idValue>
+    <idCode>T1</idCode>
+        <idValue>Time Units Known</idValue>
+    <idCode>T2</idCode>
+        <idValue>Time Units Spent on Duty</idValue>
+    <idCode>T3</idCode>
+        <idValue>Total Days on Market</idValue>
+    <idCode>T4</idCode>
+        <idValue>Total Rooms</idValue>
+    <idCode>T5</idCode>
+        <idValue>Total Number of Units</idValue>
+    <idCode>T6</idCode>
+        <idValue>Total Number of Units for Sale</idValue>
+    <idCode>T7</idCode>
+        <idValue>Tires</idValue>
+    <idCode>TA</idCode>
+        <idValue>Tank Allowance</idValue>
+    <idCode>TB</idCode>
+        <idValue>Oil Theft</idValue>
+    <idCode>TC</idCode>
+        <idValue>Total at Complete</idValue>
+    <idCode>TD</idCode>
+        <idValue>Total to Date</idValue>
+    <idCode>TE</idCode>
+        <idValue>Number of Theatres</idValue>
+    <idCode>TG</idCode>
+        <idValue>Total Gas Injection Volume</idValue>
+    <idCode>TH</idCode>
+        <idValue>Theoretical Quantity</idValue>
+    <idCode>TI</idCode>
+        <idValue>Total Oil and/or Condensate Injection Volume</idValue>
+    <idCode>TJ</idCode>
+        <idValue>Duration in Current Job</idValue>
+    <idCode>TK</idCode>
+        <idValue>Total Oil and/or Condensate Disposition</idValue>
+    <idCode>TM</idCode>
+        <idValue>Total Water Disposition</idValue>
+    <idCode>TN</idCode>
+        <idValue>Total Beginning Inventory</idValue>
+    <idCode>TO</idCode>
+        <idValue>Total</idValue>
+    <idCode>TP</idCode>
+        <idValue>Time in Position</idValue>
+    <idCode>TR</idCode>
+        <idValue>Trips</idValue>
+    <idCode>TS</idCode>
+        <idValue>Total Number of Parking Spaces</idValue>
+    <idCode>TT</idCode>
+        <idValue>Total Production Volume</idValue>
+    <idCode>TU</idCode>
+        <idValue>Total Adjustments Volume</idValue>
+    <idCode>TV</idCode>
+        <idValue>Total Gas Disposition</idValue>
+    <idCode>TW</idCode>
+        <idValue>Total Water Injection Volume</idValue>
+    <idCode>TX</idCode>
+        <idValue>Total Ending Inventory</idValue>
+    <idCode>TY</idCode>
+        <idValue>Total Sales Volume</idValue>
+    <idCode>UA</idCode>
+        <idValue>Units Completed</idValue>
+    <idCode>UG</idCode>
+        <idValue>Gas Used on Property</idValue>
+    <idCode>UL</idCode>
+        <idValue>Approximate Number of Units for Sale Projected</idValue>
+    <idCode>UO</idCode>
+        <idValue>Oil Condensate Used on Property</idValue>
+    <idCode>US</idCode>
+        <idValue>In-Use</idValue>
+    <idCode>UU</idCode>
+        <idValue>Used</idValue>
+    <idCode>V1</idCode>
+        <idValue>Retention Quantity</idValue>
+    <idCode>V2</idCode>
+        <idValue>Available Quantity</idValue>
+    <idCode>V3</idCode>
+        <idValue>Transfer Quantity</idValue>
+    <idCode>V4</idCode>
+        <idValue>Surveys in Average Rating</idValue>
+    <idCode>V5</idCode>
+        <idValue>Vacancies</idValue>
+    <idCode>VA</idCode>
+        <idValue>Volume Shrinkage Adjustment or Allowance</idValue>
+    <idCode>VB</idCode>
+        <idValue>Blank Votes</idValue>
+    <idCode>VC</idCode>
+        <idValue>Cumulative Earned Value</idValue>
+    <idCode>VD</idCode>
+        <idValue>Scattered Votes</idValue>
+    <idCode>VE</idCode>
+        <idValue>Earned Value</idValue>
+    <idCode>VF</idCode>
+        <idValue>Federal Votes</idValue>
+    <idCode>VG</idCode>
+        <idValue>Gas Vented</idValue>
+    <idCode>VH</idCode>
+        <idValue>Schedule Variance</idValue>
+    <idCode>VI</idCode>
+        <idValue>Cumulative Schedule Variance</idValue>
+    <idCode>VJ</idCode>
+        <idValue>Cumulative Variance</idValue>
+    <idCode>VK</idCode>
+        <idValue>Estimate at Complete</idValue>
+    <idCode>VL</idCode>
+        <idValue>At Complete Variance</idValue>
+    <idCode>VM</idCode>
+        <idValue>Variance Adjustment</idValue>
+    <idCode>VN</idCode>
+        <idValue>No Votes</idValue>
+    <idCode>VP</idCode>
+        <idValue>Presidential Votes</idValue>
+    <idCode>VR</idCode>
+        <idValue>Variance</idValue>
+    <idCode>VS</idCode>
+        <idValue>Visits</idValue>
+    <idCode>VT</idCode>
+        <idValue>Votes</idValue>
+    <idCode>VV</idCode>
+        <idValue>Void Votes</idValue>
+    <idCode>VY</idCode>
+        <idValue>Yes Votes</idValue>
+    <idCode>WA</idCode>
+        <idValue>Total number of Workers&apos; Compensation First Reports</idValue>
+    <idCode>WB</idCode>
+        <idValue>Total number of Workers&apos; Compensation Subsequent Reports</idValue>
+    <idCode>WC</idCode>
+        <idValue>Total number of Workers&apos; Compensation Combined Reports</idValue>
+    <idCode>WD</idCode>
+        <idValue>Units Worked per Day</idValue>
+    <idCode>WE</idCode>
+        <idValue>Limited Quantity</idValue>
+    <idCode>WG</idCode>
+        <idValue>Weight Gain</idValue>
+    <idCode>WL</idCode>
+        <idValue>Weight Loss</idValue>
+    <idCode>WO</idCode>
+        <idValue>Operator&apos;s Working Interest</idValue>
+    <idCode>WP</idCode>
+        <idValue>Number of Producing Wells Remaining on Property or Facility</idValue>
+    <idCode>WR</idCode>
+        <idValue>Number of Producing Wells Remaining on Royalty Account</idValue>
+    <idCode>WT</idCode>
+        <idValue>Total Working Interest</idValue>
+    <idCode>WV</idCode>
+        <idValue>Water Volume</idValue>
+    <idCode>WW</idCode>
+        <idValue>Weeks Worked</idValue>
+    <idCode>WX</idCode>
+        <idValue>License Withdrawal Duration</idValue>
+    <idCode>WY</idCode>
+        <idValue>License Withdrawals Sent</idValue>
+    <idCode>X1</idCode>
+        <idValue>Producing Wells</idValue>
+    <idCode>XA</idCode>
+        <idValue>Total of Issuable Assets</idValue>
+    <idCode>XB</idCode>
+        <idValue>Total System Backorder Quantity, High Priority</idValue>
+    <idCode>XC</idCode>
+        <idValue>Total Service Backorder Quantity, High Priority</idValue>
+    <idCode>XD</idCode>
+        <idValue>Total System Backorder Quantity, Low Priority</idValue>
+    <idCode>XE</idCode>
+        <idValue>Total Service Backorder Quantity, Low Priority</idValue>
+    <idCode>XG</idCode>
+        <idValue>On Hand and Due-In</idValue>
+    <idCode>XI</idCode>
+        <idValue>Installment Payments</idValue>
+    <idCode>XJ</idCode>
+        <idValue>Other War Reserve Material Requirements Protectable (OWRMRP) Quantity</idValue>
+    <idCode>XL</idCode>
+        <idValue>Approximate Number of Units Projected</idValue>
+    <idCode>XN</idCode>
+        <idValue>Approximate Number of Holders</idValue>
+    <idCode>XO</idCode>
+        <idValue>Circulating Oil</idValue>
+    <idCode>XT</idCode>
+        <idValue>Protected Quantity</idValue>
+    <idCode>XU</idCode>
+        <idValue>Reserved</idValue>
+    <idCode>XV</idCode>
+        <idValue>Requisitioning Objective</idValue>
+    <idCode>XX</idCode>
+        <idValue>Authorized Retention Level</idValue>
+    <idCode>XY</idCode>
+        <idValue>Safety Level</idValue>
+    <idCode>XZ</idCode>
+        <idValue>Backorder Lines</idValue>
+    <idCode>YA</idCode>
+        <idValue>Total Demand Quantity</idValue>
+    <idCode>YB</idCode>
+        <idValue>Total Demand Orders</idValue>
+    <idCode>YC</idCode>
+        <idValue>First Quarter Recurring Demand</idValue>
+    <idCode>YD</idCode>
+        <idValue>First Quarter Recurring Orders</idValue>
+    <idCode>YE</idCode>
+        <idValue>First Quarter Non-recurring Demand</idValue>
+    <idCode>YF</idCode>
+        <idValue>First Quarter Non-recurring Orders</idValue>
+    <idCode>YG</idCode>
+        <idValue>Second Quarter Recurring Demand</idValue>
+    <idCode>YH</idCode>
+        <idValue>Second Quarter Recurring Orders</idValue>
+    <idCode>YJ</idCode>
+        <idValue>Second Quarter Non-recurring Demand</idValue>
+    <idCode>YK</idCode>
+        <idValue>Second Quarter Non-recurring Orders</idValue>
+    <idCode>YL</idCode>
+        <idValue>Third Quarter Recurring Demand</idValue>
+    <idCode>YM</idCode>
+        <idValue>Third Quarter Recurring Orders</idValue>
+    <idCode>YN</idCode>
+        <idValue>Third Quarter Non-recurring Demand</idValue>
+    <idCode>YP</idCode>
+        <idValue>Third Quarter Non-recurring Orders</idValue>
+    <idCode>YQ</idCode>
+        <idValue>Fourth Quarter Recurring Demand</idValue>
+    <idCode>YR</idCode>
+        <idValue>Fourth Quarter Recurring Orders</idValue>
+    <idCode>YS</idCode>
+        <idValue>Fourth Quarter Non-recurring Demand</idValue>
+    <idCode>YT</idCode>
+        <idValue>Fourth Quarter Non-recurring Orders</idValue>
+    <idCode>YW</idCode>
+        <idValue>Reorder Point Quantity</idValue>
+    <idCode>YX</idCode>
+        <idValue>Contract Line Item Quantity</idValue>
+    <idCode>YY</idCode>
+        <idValue>Years</idValue>
+    <idCode>Z1</idCode>
+        <idValue>Units Worked Last Day</idValue>
+    <idCode>Z2</idCode>
+        <idValue>Units Worked per Week</idValue>
+    <idCode>Z3</idCode>
+        <idValue>Units Worked per Quarter</idValue>
+    <idCode>Z4</idCode>
+        <idValue>Number Weeks Paid</idValue>
+    <idCode>Z6</idCode>
+        <idValue>Unused Accumulated Sick Days</idValue>
+    <idCode>ZA</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 1</idValue>
+    <idCode>ZB</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 2</idValue>
+    <idCode>ZC</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 3</idValue>
+    <idCode>ZD</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 4</idValue>
+    <idCode>ZE</idCode>
+        <idValue>Federal Medicare or Medicaid Claim Mandate - Category 5</idValue>
+    <idCode>ZF</idCode>
+        <idValue>Federal Pension Mandate - Category 1</idValue>
+    <idCode>ZG</idCode>
+        <idValue>Federal Pension Mandate - Category 2</idValue>
+    <idCode>ZH</idCode>
+        <idValue>Federal Pension Mandate - Category 3</idValue>
+    <idCode>ZI</idCode>
+        <idValue>Holding Period</idValue>
+    <idCode>ZJ</idCode>
+        <idValue>Federal Pension Mandate - Category 5</idValue>
+    <idCode>ZK</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 1</idValue>
+    <idCode>ZL</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 2</idValue>
+    <idCode>ZM</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 3</idValue>
+    <idCode>ZN</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 4</idValue>
+    <idCode>ZO</idCode>
+        <idValue>Federal Medicare or Medicaid Payment Mandate - Category 5</idValue>
+    <idCode>ZP</idCode>
+        <idValue>Federal Pension Mandate - Category 4</idValue>
+    <idCode>ZR</idCode>
+        <idValue>Extended Term</idValue>
+    <idCode>ZS</idCode>
+        <idValue>Amortization Term</idValue>
+</idList>

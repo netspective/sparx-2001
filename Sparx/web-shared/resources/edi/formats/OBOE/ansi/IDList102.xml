@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>L</idCode>
+        <idValue>Railroad Leased</idValue>
+    <idCode>N</idCode>
+        <idValue>Not Customer Owned or Leased</idValue>
+    <idCode>R</idCode>
+        <idValue>Seller Owned, Returnable</idValue>
+    <idCode>S</idCode>
+        <idValue>Customer Owned or Leased</idValue>
+    <idCode>T</idCode>
+        <idValue>Trip Leased</idValue>
+</idList>

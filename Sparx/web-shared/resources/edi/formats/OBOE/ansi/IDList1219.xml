@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Termination of Employment</idValue>
+    <idCode>2</idCode>
+        <idValue>Reduction of work hours</idValue>
+    <idCode>3</idCode>
+        <idValue>Medicare</idValue>
+    <idCode>4</idCode>
+        <idValue>Death</idValue>
+    <idCode>5</idCode>
+        <idValue>Divorce</idValue>
+    <idCode>6</idCode>
+        <idValue>Separation</idValue>
+    <idCode>7</idCode>
+        <idValue>Ineligible Child</idValue>
+    <idCode>8</idCode>
+        <idValue>Bankruptcy of a Retired Employee</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

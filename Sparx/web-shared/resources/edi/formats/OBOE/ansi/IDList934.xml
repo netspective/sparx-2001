@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>AA</idCode>
+        <idValue>Advance The Specified Number of Lines Before Print</idValue>
+    <idCode>AT</idCode>
+        <idValue>Advanced Three Lines Before Print</idValue>
+    <idCode>DS</idCode>
+        <idValue>Advance two lines before print</idValue>
+    <idCode>LC</idCode>
+        <idValue>Line Continuation</idValue>
+    <idCode>NP</idCode>
+        <idValue>Advance to next page before print</idValue>
+    <idCode>NS</idCode>
+        <idValue>No advance before print</idValue>
+    <idCode>SS</idCode>
+        <idValue>Advance to new line before print</idValue>
+</idList>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>CHD</idCode>
+        <idValue>Children Only</idValue>
+    <idCode>DEP</idCode>
+        <idValue>Dependents Only</idValue>
+    <idCode>E1D</idCode>
+        <idValue>Employee and One Dependent</idValue>
+    <idCode>E2D</idCode>
+        <idValue>Employee and Two Dependents</idValue>
+    <idCode>E3D</idCode>
+        <idValue>Employee and Three Dependents</idValue>
+    <idCode>E5D</idCode>
+        <idValue>Employee and One or More Dependents</idValue>
+    <idCode>E6D</idCode>
+        <idValue>Employee and Two or More Dependents</idValue>
+    <idCode>E7D</idCode>
+        <idValue>Employee and Three or More Dependents</idValue>
+    <idCode>E8D</idCode>
+        <idValue>Employee and Four or More Dependents</idValue>
+    <idCode>E9D</idCode>
+        <idValue>Employee and Five or More Dependents</idValue>
+    <idCode>ECH</idCode>
+        <idValue>Employee and Children</idValue>
+    <idCode>EMP</idCode>
+        <idValue>Employee Only</idValue>
+    <idCode>ESP</idCode>
+        <idValue>Employee and Spouse</idValue>
+    <idCode>FAM</idCode>
+        <idValue>Family</idValue>
+    <idCode>IND</idCode>
+        <idValue>Individual</idValue>
+    <idCode>SPC</idCode>
+        <idValue>Spouse and Children</idValue>
+    <idCode>SPO</idCode>
+        <idValue>Spouse Only</idValue>
+    <idCode>TWO</idCode>
+        <idValue>Two Party</idValue>
+</idList>

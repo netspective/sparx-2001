@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>E</idCode>
+        <idValue>Metric Ton</idValue>
+    <idCode>G</idCode>
+        <idValue>Grams</idValue>
+    <idCode>K</idCode>
+        <idValue>Kilograms</idValue>
+    <idCode>L</idCode>
+        <idValue>Pounds</idValue>
+    <idCode>M</idCode>
+        <idValue>Measurement Ton</idValue>
+    <idCode>O</idCode>
+        <idValue>Ounces</idValue>
+    <idCode>S</idCode>
+        <idValue>Short Ton</idValue>
+    <idCode>T</idCode>
+        <idValue>Long Ton</idValue>
+</idList>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>00</idCode>
+        <idValue>Original</idValue>
+    <idCode>01</idCode>
+        <idValue>Cancellation</idValue>
+    <idCode>02</idCode>
+        <idValue>Add</idValue>
+    <idCode>03</idCode>
+        <idValue>Delete</idValue>
+    <idCode>04</idCode>
+        <idValue>Change</idValue>
+    <idCode>05</idCode>
+        <idValue>Replace</idValue>
+    <idCode>06</idCode>
+        <idValue>Confirmation</idValue>
+    <idCode>07</idCode>
+        <idValue>Duplicate</idValue>
+    <idCode>08</idCode>
+        <idValue>Status</idValue>
+    <idCode>10</idCode>
+        <idValue>Not Found</idValue>
+    <idCode>11</idCode>
+        <idValue>Response</idValue>
+    <idCode>12</idCode>
+        <idValue>Not Processed</idValue>
+    <idCode>13</idCode>
+        <idValue>Request</idValue>
+    <idCode>14</idCode>
+        <idValue>Advance Notification</idValue>
+    <idCode>15</idCode>
+        <idValue>Re-Submission</idValue>
+    <idCode>16</idCode>
+        <idValue>Proposed</idValue>
+    <idCode>17</idCode>
+        <idValue>Cancel, to be Reissued</idValue>
+    <idCode>18</idCode>
+        <idValue>Reissue</idValue>
+    <idCode>19</idCode>
+        <idValue>Seller initiated change</idValue>
+    <idCode>20</idCode>
+        <idValue>Final Transmission</idValue>
+    <idCode>21</idCode>
+        <idValue>Transaction on Hold</idValue>
+    <idCode>22</idCode>
+        <idValue>Information Copy</idValue>
+    <idCode>24</idCode>
+        <idValue>Draft</idValue>
+    <idCode>25</idCode>
+        <idValue>Incremental</idValue>
+    <idCode>26</idCode>
+        <idValue>Replace - Specified Buyers Parts Only</idValue>
+    <idCode>27</idCode>
+        <idValue>Verify</idValue>
+    <idCode>28</idCode>
+        <idValue>Query</idValue>
+    <idCode>30</idCode>
+        <idValue>Renewal</idValue>
+    <idCode>31</idCode>
+        <idValue>Allowance/Addition</idValue>
+    <idCode>32</idCode>
+        <idValue>Recovery/Deduction</idValue>
+    <idCode>33</idCode>
+        <idValue>Request for Payment</idValue>
+    <idCode>34</idCode>
+        <idValue>Payment Declined</idValue>
+    <idCode>35</idCode>
+        <idValue>Request Authority</idValue>
+    <idCode>36</idCode>
+        <idValue>Authority to Deduct (Reply)</idValue>
+    <idCode>37</idCode>
+        <idValue>Authority Declined (Reply)</idValue>
+    <idCode>38</idCode>
+        <idValue>No Financial Value</idValue>
+    <idCode>39</idCode>
+        <idValue>Response to Proposed Trip Plan</idValue>
+    <idCode>40</idCode>
+        <idValue>Commitment Advice</idValue>
+    <idCode>41</idCode>
+        <idValue>Corrected and Verified</idValue>
+    <idCode>42</idCode>
+        <idValue>Temporary Record</idValue>
+    <idCode>43</idCode>
+        <idValue>Request Permission to Service</idValue>
+    <idCode>44</idCode>
+        <idValue>Rejection</idValue>
+    <idCode>45</idCode>
+        <idValue>Follow-up</idValue>
+    <idCode>46</idCode>
+        <idValue>Cancellation with Refund</idValue>
+    <idCode>47</idCode>
+        <idValue>Transfer</idValue>
+    <idCode>48</idCode>
+        <idValue>Suspended</idValue>
+    <idCode>49</idCode>
+        <idValue>Original - No Response Necessary</idValue>
+    <idCode>50</idCode>
+        <idValue>Register</idValue>
+    <idCode>51</idCode>
+        <idValue>Historical Inquiry</idValue>
+    <idCode>52</idCode>
+        <idValue>Response to Historical Inquiry</idValue>
+    <idCode>53</idCode>
+        <idValue>Completion</idValue>
+    <idCode>54</idCode>
+        <idValue>Approval</idValue>
+    <idCode>55</idCode>
+        <idValue>Excavation</idValue>
+    <idCode>56</idCode>
+        <idValue>Expiration Notification</idValue>
+    <idCode>5C</idCode>
+        <idValue>Chargeable Resubmission</idValue>
+    <idCode>77</idCode>
+        <idValue>Simulation Exercise</idValue>
+    <idCode>CN</idCode>
+        <idValue>Completion Notification</idValue>
+    <idCode>CO</idCode>
+        <idValue>Corrected</idValue>
+    <idCode>EX</idCode>
+        <idValue>Final Loading Configuration</idValue>
+    <idCode>GR</idCode>
+        <idValue>Granted</idValue>
+    <idCode>PR</idCode>
+        <idValue>Proposed Loading Configuration</idValue>
+    <idCode>RH</idCode>
+        <idValue>Release Hold</idValue>
+    <idCode>RV</idCode>
+        <idValue>Revised Loading Configuration</idValue>
+    <idCode>SU</idCode>
+        <idValue>Status Update</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

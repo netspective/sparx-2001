@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>C</idCode>
+        <idValue>Please Correct and Resubmit</idValue>
+    <idCode>D</idCode>
+        <idValue>Resubmit Entire Claim</idValue>
+    <idCode>E</idCode>
+        <idValue>Resubmit This Item Only</idValue>
+    <idCode>N</idCode>
+        <idValue>Resubmission Not Allowed</idValue>
+    <idCode>P</idCode>
+        <idValue>Please Resubmit Original Transaction</idValue>
+    <idCode>R</idCode>
+        <idValue>Resubmission Allowed</idValue>
+    <idCode>S</idCode>
+        <idValue>Do Not Resubmit; Inquiry Initiated to a Third Party</idValue>
+    <idCode>W</idCode>
+        <idValue>Please Wait 30 Days and Resubmit</idValue>
+    <idCode>X</idCode>
+        <idValue>Please Wait 10 Days and Resubmit</idValue>
+    <idCode>Y</idCode>
+        <idValue>Do Not Resubmit; We Will Hold Your Request and Respond Again Shortly</idValue>
+</idList>

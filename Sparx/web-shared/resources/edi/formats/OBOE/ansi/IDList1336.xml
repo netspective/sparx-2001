@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>12</idCode>
+        <idValue>Medicare Secondary Working Aged Beneficiary or Spouse with Employer Group Health Plan</idValue>
+    <idCode>13</idCode>
+        <idValue>Medicare Secondary End-Stage Renal Disease Beneficiary in the 12 month coordination period with an employer&apos;s group health plan</idValue>
+    <idCode>14</idCode>
+        <idValue>Medicare Secondary, No-fault Insurance including Auto is Primary</idValue>
+    <idCode>15</idCode>
+        <idValue>Medicare Secondary Worker&apos;s Compensation</idValue>
+    <idCode>16</idCode>
+        <idValue>Medicare Secondary Public Health Service (PHS)or Other Federal Agency</idValue>
+    <idCode>41</idCode>
+        <idValue>Medicare Secondary Black Lung</idValue>
+    <idCode>42</idCode>
+        <idValue>Medicare Secondary Veteran&apos;s Administration</idValue>
+    <idCode>43</idCode>
+        <idValue>Medicare Secondary Disabled Beneficiary Under Age 65 with Large Group Health Plan (LGHP)</idValue>
+    <idCode>47</idCode>
+        <idValue>Medicare Secondary, Other Liability Insurance is Primary</idValue>
+    <idCode>AP</idCode>
+        <idValue>Auto Insurance Policy</idValue>
+    <idCode>C1</idCode>
+        <idValue>Commercial</idValue>
+    <idCode>CO</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA)</idValue>
+    <idCode>CP</idCode>
+        <idValue>Medicare Conditionally Primary</idValue>
+    <idCode>D</idCode>
+        <idValue>Disability</idValue>
+    <idCode>DB</idCode>
+        <idValue>Disability Benefits</idValue>
+    <idCode>EP</idCode>
+        <idValue>Exclusive Provider Organization</idValue>
+    <idCode>FF</idCode>
+        <idValue>Family or Friends</idValue>
+    <idCode>GP</idCode>
+        <idValue>Group Policy</idValue>
+    <idCode>HM</idCode>
+        <idValue>Health Maintenance Organization (HMO)</idValue>
+    <idCode>HN</idCode>
+        <idValue>Health Maintenance Organization (HMO) - Medicare Risk</idValue>
+    <idCode>HS</idCode>
+        <idValue>Special Low Income Medicare Beneficiary</idValue>
+    <idCode>IN</idCode>
+        <idValue>Indemnity</idValue>
+    <idCode>IP</idCode>
+        <idValue>Individual Policy</idValue>
+    <idCode>LC</idCode>
+        <idValue>Long Term Care</idValue>
+    <idCode>LD</idCode>
+        <idValue>Long Term Policy</idValue>
+    <idCode>LI</idCode>
+        <idValue>Life Insurance</idValue>
+    <idCode>LT</idCode>
+        <idValue>Litigation</idValue>
+    <idCode>MA</idCode>
+        <idValue>Medicare Part A</idValue>
+    <idCode>MB</idCode>
+        <idValue>Medicare Part B</idValue>
+    <idCode>MC</idCode>
+        <idValue>Medicaid</idValue>
+    <idCode>MH</idCode>
+        <idValue>Medigap Part A</idValue>
+    <idCode>MI</idCode>
+        <idValue>Medigap Part B</idValue>
+    <idCode>MP</idCode>
+        <idValue>Medicare Primary</idValue>
+    <idCode>OT</idCode>
+        <idValue>Other</idValue>
+    <idCode>PE</idCode>
+        <idValue>Property Insurance - Personal</idValue>
+    <idCode>PL</idCode>
+        <idValue>Personal</idValue>
+    <idCode>PP</idCode>
+        <idValue>Personal Payment (Cash - No Insurance)</idValue>
+    <idCode>PR</idCode>
+        <idValue>Preferred Provider Organization (PPO)</idValue>
+    <idCode>PS</idCode>
+        <idValue>Point of Service (POS)</idValue>
+    <idCode>QM</idCode>
+        <idValue>Qualified Medicare Beneficiary</idValue>
+    <idCode>RP</idCode>
+        <idValue>Property Insurance - Real</idValue>
+    <idCode>SP</idCode>
+        <idValue>Supplemental Policy</idValue>
+    <idCode>TF</idCode>
+        <idValue>Tax Equity Fiscal Responsibility Act (TEFRA)</idValue>
+    <idCode>WC</idCode>
+        <idValue>Workers Compensation</idValue>
+    <idCode>WU</idCode>
+        <idValue>Wrap Up Policy</idValue>
+</idList>

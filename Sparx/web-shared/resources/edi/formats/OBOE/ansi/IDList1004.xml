@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Lease Rate Factor</idValue>
+    <idCode>2</idCode>
+        <idValue>Early Termination Rate</idValue>
+    <idCode>3</idCode>
+        <idValue>Renewal Rate</idValue>
+    <idCode>4</idCode>
+        <idValue>Renewal Rate Cap</idValue>
+    <idCode>5</idCode>
+        <idValue>One Family</idValue>
+    <idCode>6</idCode>
+        <idValue>2-4 Family</idValue>
+    <idCode>7</idCode>
+        <idValue>Multifamily</idValue>
+    <idCode>8</idCode>
+        <idValue>Commercial</idValue>
+    <idCode>9</idCode>
+        <idValue>Other</idValue>
+    <idCode>01</idCode>
+        <idValue>Guaranteed Interest Rate</idValue>
+    <idCode>02</idCode>
+        <idValue>Locked Interest Rate</idValue>
+    <idCode>05</idCode>
+        <idValue>Target Fee or Profit</idValue>
+    <idCode>06</idCode>
+        <idValue>Current Schedule Variance</idValue>
+    <idCode>07</idCode>
+        <idValue>Current Cost Variance</idValue>
+    <idCode>08</idCode>
+        <idValue>Cumulative Schedule Variance</idValue>
+    <idCode>09</idCode>
+        <idValue>Cumulative Cost Variance</idValue>
+    <idCode>10</idCode>
+        <idValue>Complete</idValue>
+    <idCode>11</idCode>
+        <idValue>Remaining</idValue>
+    <idCode>12</idCode>
+        <idValue>Vacant</idValue>
+    <idCode>13</idCode>
+        <idValue>Owner Occupancy</idValue>
+    <idCode>14</idCode>
+        <idValue>Availability Factor</idValue>
+    <idCode>15</idCode>
+        <idValue>Efficiency Factor</idValue>
+    <idCode>16</idCode>
+        <idValue>Scrap or Rework Yield</idValue>
+    <idCode>17</idCode>
+        <idValue>Physical (Percent) Completed</idValue>
+    <idCode>18</idCode>
+        <idValue>Percent of Value</idValue>
+    <idCode>19</idCode>
+        <idValue>Premium Rate</idValue>
+    <idCode>20</idCode>
+        <idValue>Loan-to-Value Balance Remaining</idValue>
+    <idCode>21</idCode>
+        <idValue>Annual Demand Quantity Weighting Factor</idValue>
+    <idCode>22</idCode>
+        <idValue>Annual Demand Value Weighting Factor</idValue>
+    <idCode>23</idCode>
+        <idValue>Essentiality Weighting Factor</idValue>
+    <idCode>24</idCode>
+        <idValue>Procurement Lead-time Weighting Factor</idValue>
+    <idCode>25</idCode>
+        <idValue>Months To Procurement Weighting Factor</idValue>
+    <idCode>26</idCode>
+        <idValue>Annual Demand Frequency Weighting Factor</idValue>
+    <idCode>27</idCode>
+        <idValue>Tenant Occupancy</idValue>
+    <idCode>28</idCode>
+        <idValue>Occupancy Rate</idValue>
+    <idCode>30</idCode>
+        <idValue>Active Contracts Delinquent-Contractor Caused</idValue>
+    <idCode>31</idCode>
+        <idValue>Active Contracts Delinquent-All Causes</idValue>
+    <idCode>32</idCode>
+        <idValue>Active Line Items Delinquent-Contactor Caused</idValue>
+    <idCode>33</idCode>
+        <idValue>Active Line Items Delinquent-All Causes</idValue>
+    <idCode>34</idCode>
+        <idValue>Contracts Completed Delinquent-Contractor Caused</idValue>
+    <idCode>35</idCode>
+        <idValue>Contracts Completed Delinquent-All Causes</idValue>
+    <idCode>36</idCode>
+        <idValue>Line Items Completed Delinquent-Contractor Caused</idValue>
+    <idCode>37</idCode>
+        <idValue>Line Items Completed Delinquent-All Causes</idValue>
+    <idCode>38</idCode>
+        <idValue>Delinquent Active Line Items in the Aging Population</idValue>
+    <idCode>40</idCode>
+        <idValue>Participation</idValue>
+    <idCode>41</idCode>
+        <idValue>Servicing Fee</idValue>
+    <idCode>42</idCode>
+        <idValue>Percentage of Original Loan Amount</idValue>
+    <idCode>43</idCode>
+        <idValue>Percentage of Principal Balance</idValue>
+    <idCode>44</idCode>
+        <idValue>Percentage of Principal and Interest Payment</idValue>
+    <idCode>45</idCode>
+        <idValue>Percentage of Total Mortgage Payment</idValue>
+    <idCode>46</idCode>
+        <idValue>Guarantee Fee Per Contract</idValue>
+    <idCode>47</idCode>
+        <idValue>Guarantee Fee After Alternate Payment Method</idValue>
+    <idCode>48</idCode>
+        <idValue>Guarantee Fee After Buyup or Buydown</idValue>
+    <idCode>49</idCode>
+        <idValue>Buyup or Buydown Rate per Basis Point</idValue>
+    <idCode>50</idCode>
+        <idValue>Security Margin</idValue>
+    <idCode>51</idCode>
+        <idValue>Insurance Coverage</idValue>
+    <idCode>52</idCode>
+        <idValue>Guarantee Amount</idValue>
+    <idCode>53</idCode>
+        <idValue>Participation Retained or Owned</idValue>
+    <idCode>59</idCode>
+        <idValue>Basement Finished</idValue>
+    <idCode>60</idCode>
+        <idValue>Late Charge Rate</idValue>
+    <idCode>61</idCode>
+        <idValue>Original Annual Interest Rate</idValue>
+    <idCode>62</idCode>
+        <idValue>Default Interest Rate</idValue>
+    <idCode>63</idCode>
+        <idValue>Default Note Holder&apos;s Rate</idValue>
+    <idCode>64</idCode>
+        <idValue>Original Index Value</idValue>
+    <idCode>65</idCode>
+        <idValue>Indebtedness</idValue>
+    <idCode>66</idCode>
+        <idValue>Liquid Ratio</idValue>
+    <idCode>67</idCode>
+        <idValue>Net Worth to Total Assets</idValue>
+    <idCode>68</idCode>
+        <idValue>Subcontracted</idValue>
+    <idCode>69</idCode>
+        <idValue>Percent of Points Paid by Borrower</idValue>
+    <idCode>70</idCode>
+        <idValue>Percent of Points Paid by Seller</idValue>
+    <idCode>71</idCode>
+        <idValue>Percent of Points Paid by Other</idValue>
+    <idCode>72</idCode>
+        <idValue>Cooperative</idValue>
+    <idCode>76</idCode>
+        <idValue>Sales per Employee</idValue>
+    <idCode>77</idCode>
+        <idValue>Sales to Net Working Capital</idValue>
+    <idCode>78</idCode>
+        <idValue>Tax Percentage Factor</idValue>
+    <idCode>79</idCode>
+        <idValue>Total Liability to Net Worth</idValue>
+    <idCode>80</idCode>
+        <idValue>Percentage of Time</idValue>
+    <idCode>81</idCode>
+        <idValue>Predominant Occupancy Vacant</idValue>
+    <idCode>82</idCode>
+        <idValue>Asset to Sales</idValue>
+    <idCode>83</idCode>
+        <idValue>Capital per Employee</idValue>
+    <idCode>84</idCode>
+        <idValue>Cash Sales</idValue>
+    <idCode>85</idCode>
+        <idValue>Collection Period (Days)</idValue>
+    <idCode>86</idCode>
+        <idValue>Costs per Employee</idValue>
+    <idCode>87</idCode>
+        <idValue>Accounts Payable (Creditors) to Sales</idValue>
+    <idCode>88</idCode>
+        <idValue>Current Liabilities to Net Worth</idValue>
+    <idCode>89</idCode>
+        <idValue>Current Liabilities to Inventory (Stock)</idValue>
+    <idCode>90</idCode>
+        <idValue>Current Ratio</idValue>
+    <idCode>91</idCode>
+        <idValue>Fixed Assets to Net Worth</idValue>
+    <idCode>92</idCode>
+        <idValue>Inventory (Stock) Turnover</idValue>
+    <idCode>93</idCode>
+        <idValue>Profit per Employee</idValue>
+    <idCode>94</idCode>
+        <idValue>Quick Ratio (Acid Test)</idValue>
+    <idCode>95</idCode>
+        <idValue>Retainage Required for Project</idValue>
+    <idCode>96</idCode>
+        <idValue>Return on Assets</idValue>
+    <idCode>97</idCode>
+        <idValue>Return on Sales (Profit Margin)</idValue>
+    <idCode>98</idCode>
+        <idValue>Return on Capital</idValue>
+    <idCode>99</idCode>
+        <idValue>Shareholders&apos; Return (Return on Net Worth)</idValue>
+    <idCode>A</idCode>
+        <idValue>Non-recoverable Depreciation</idValue>
+    <idCode>AB</idCode>
+        <idValue>Contracts Obtained by Negotiation</idValue>
+    <idCode>AC</idCode>
+        <idValue>Cost Plus Basis</idValue>
+    <idCode>AD</idCode>
+        <idValue>Lump Sum Payments</idValue>
+    <idCode>AE</idCode>
+        <idValue>Purchases on Letter of Credit</idValue>
+    <idCode>AF</idCode>
+        <idValue>Purchases on Floor Plan</idValue>
+    <idCode>AG</idCode>
+        <idValue>Change in Sales</idValue>
+    <idCode>AH</idCode>
+        <idValue>Change in Profit</idValue>
+    <idCode>AI</idCode>
+        <idValue>Damage</idValue>
+    <idCode>AJ</idCode>
+        <idValue>Interest on Liabilities</idValue>
+    <idCode>AK</idCode>
+        <idValue>Risk Margin</idValue>
+    <idCode>AL</idCode>
+        <idValue>Liability Ratio</idValue>
+    <idCode>AM</idCode>
+        <idValue>Interest Cover</idValue>
+    <idCode>AN</idCode>
+        <idValue>Annual Limit</idValue>
+    <idCode>AP</idCode>
+        <idValue>Allocation</idValue>
+    <idCode>AR</idCode>
+        <idValue>Accounts Receivable Turnover</idValue>
+    <idCode>AT</idCode>
+        <idValue>Apartments</idValue>
+    <idCode>B</idCode>
+        <idValue>Recoverable Depreciation</idValue>
+    <idCode>BA</idCode>
+        <idValue>All Shares of Stock Owned</idValue>
+    <idCode>BB</idCode>
+        <idValue>Class of Stock Owned</idValue>
+    <idCode>BC</idCode>
+        <idValue>Voting Shares Issued</idValue>
+    <idCode>BD</idCode>
+        <idValue>Property in County</idValue>
+    <idCode>BE</idCode>
+        <idValue>Property in State</idValue>
+    <idCode>BF</idCode>
+        <idValue>Apportionment</idValue>
+    <idCode>BG</idCode>
+        <idValue>Bid Guarantee</idValue>
+    <idCode>BH</idCode>
+        <idValue>Ownership</idValue>
+    <idCode>BP</idCode>
+        <idValue>Total Base Period Wages</idValue>
+    <idCode>BS</idCode>
+        <idValue>Business Portion</idValue>
+    <idCode>BU</idCode>
+        <idValue>Built-up</idValue>
+    <idCode>C</idCode>
+        <idValue>Depreciation</idValue>
+    <idCode>CA</idCode>
+        <idValue>Contribution</idValue>
+    <idCode>CB</idCode>
+        <idValue>Commission</idValue>
+    <idCode>CH</idCode>
+        <idValue>Change</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Charge</idValue>
+    <idCode>CN</idCode>
+        <idValue>Condominium</idValue>
+    <idCode>CO</idCode>
+        <idValue>Corporate</idValue>
+    <idCode>CP</idCode>
+        <idValue>Contract to Lease</idValue>
+    <idCode>CR</idCode>
+        <idValue>Contractor Share Ratio</idValue>
+    <idCode>CS</idCode>
+        <idValue>Customer Share Ratio</idValue>
+    <idCode>CU</idCode>
+        <idValue>Capacity Used</idValue>
+    <idCode>D</idCode>
+        <idValue>Overhead on Recoverable Depreciation</idValue>
+    <idCode>DF</idCode>
+        <idValue>Decrement Factor</idValue>
+    <idCode>DY</idCode>
+        <idValue>Per Day Limit</idValue>
+    <idCode>E</idCode>
+        <idValue>Profit on Recoverable Depreciation</idValue>
+    <idCode>EA</idCode>
+        <idValue>Estimate Accuracy</idValue>
+    <idCode>EF</idCode>
+        <idValue>Escalation Factor</idValue>
+    <idCode>EP</idCode>
+        <idValue>Expense Percentage</idValue>
+    <idCode>F</idCode>
+        <idValue>Overhead</idValue>
+    <idCode>FT</idCode>
+        <idValue>Fault Isolation Time</idValue>
+    <idCode>FV</idCode>
+        <idValue>Forecasted Vacancy and Collection Loss</idValue>
+    <idCode>GA</idCode>
+        <idValue>Gross Adjustment</idValue>
+    <idCode>IA</idCode>
+        <idValue>Intersell</idValue>
+    <idCode>IN</idCode>
+        <idValue>Industrial</idValue>
+    <idCode>KA</idCode>
+        <idValue>Variation in Quantity Over</idValue>
+    <idCode>KB</idCode>
+        <idValue>Variation in Quantity Under</idValue>
+    <idCode>LM</idCode>
+        <idValue>Limit</idValue>
+    <idCode>M</idCode>
+        <idValue>Miscellaneous Ownership Percentage</idValue>
+    <idCode>MA</idCode>
+        <idValue>Maximum Allowable Withholding from Disposable Income</idValue>
+    <idCode>MN</idCode>
+        <idValue>Monthly Limit</idValue>
+    <idCode>MS</idCode>
+        <idValue>Market Share</idValue>
+    <idCode>MX</idCode>
+        <idValue>Maximum Owned by Small Shareholders</idValue>
+    <idCode>N</idCode>
+        <idValue>Net Profit Payment Ownership Percentage</idValue>
+    <idCode>NA</idCode>
+        <idValue>Net Adjustment</idValue>
+    <idCode>NH</idCode>
+        <idValue>New Homes</idValue>
+    <idCode>O</idCode>
+        <idValue>Overriding Royalty Payment Ownership Percentage</idValue>
+    <idCode>OC</idCode>
+        <idValue>Overall Capitalization Rate</idValue>
+    <idCode>OF</idCode>
+        <idValue>Offtake</idValue>
+    <idCode>OH</idCode>
+        <idValue>Outside Hours</idValue>
+    <idCode>OP</idCode>
+        <idValue>Option Percentage</idValue>
+    <idCode>P</idCode>
+        <idValue>Production Payment Ownership Percentage</idValue>
+    <idCode>PA</idCode>
+        <idValue>Lease Production</idValue>
+    <idCode>PC</idCode>
+        <idValue>Primary Coverage</idValue>
+    <idCode>PD</idCode>
+        <idValue>Paid in Capital</idValue>
+    <idCode>PF</idCode>
+        <idValue>Per Person Deductible</idValue>
+    <idCode>PH</idCode>
+        <idValue>Per Occurrence Deductible</idValue>
+    <idCode>PM</idCode>
+        <idValue>Per Person Monthly Limit</idValue>
+    <idCode>PN</idCode>
+        <idValue>Per Occurrence Monthly Limit</idValue>
+    <idCode>PP</idCode>
+        <idValue>Per Person Limit</idValue>
+    <idCode>PR</idCode>
+        <idValue>Per Occurrence Limit</idValue>
+    <idCode>PT</idCode>
+        <idValue>Previous Participation</idValue>
+    <idCode>PV</idCode>
+        <idValue>Percent of Value of Real Estate Taxes</idValue>
+    <idCode>R</idCode>
+        <idValue>Royalty Ownership Percentage</idValue>
+    <idCode>RA</idCode>
+        <idValue>Above Share</idValue>
+    <idCode>RB</idCode>
+        <idValue>Below Share</idValue>
+    <idCode>RC</idCode>
+        <idValue>Contractor Above Share</idValue>
+    <idCode>RD</idCode>
+        <idValue>Contractor Below Share</idValue>
+    <idCode>RF</idCode>
+        <idValue>Fixed Fee Rate</idValue>
+    <idCode>RG</idCode>
+        <idValue>Progress Payment Rate</idValue>
+    <idCode>RI</idCode>
+        <idValue>Incentive Fee Rate</idValue>
+    <idCode>RL</idCode>
+        <idValue>Progress Payment Liquidation Rate</idValue>
+    <idCode>RO</idCode>
+        <idValue>Real Estate Owned and Foreclosures</idValue>
+    <idCode>RP</idCode>
+        <idValue>Royalty</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Estimated</idValue>
+    <idCode>RR</idCode>
+        <idValue>Alternate Progress Payment Liquidation Rate</idValue>
+    <idCode>RS</idCode>
+        <idValue>Resale</idValue>
+    <idCode>S</idCode>
+        <idValue>Special Overriding Royalty Ownership Percentage</idValue>
+    <idCode>SA</idCode>
+        <idValue>Set Aside</idValue>
+    <idCode>SC</idCode>
+        <idValue>Subcontracted Costs</idValue>
+    <idCode>SD</idCode>
+        <idValue>Moisture Content</idValue>
+    <idCode>SE</idCode>
+        <idValue>Protein Content</idValue>
+    <idCode>SF</idCode>
+        <idValue>Percent Dockage</idValue>
+    <idCode>SG</idCode>
+        <idValue>Test Weight</idValue>
+    <idCode>T</idCode>
+        <idValue>Tax Ownership Percentage</idValue>
+    <idCode>TP</idCode>
+        <idValue>Tract</idValue>
+    <idCode>W</idCode>
+        <idValue>Working Ownership Percentage</idValue>
+    <idCode>WI</idCode>
+        <idValue>Working Interest</idValue>
+    <idCode>WK</idCode>
+        <idValue>Per Week Limit</idValue>
+    <idCode>X</idCode>
+        <idValue>Purchase Ownership Percentage</idValue>
+    <idCode>X1</idCode>
+        <idValue>Interest</idValue>
+    <idCode>XT</idCode>
+        <idValue>Asset Turnover</idValue>
+</idList>

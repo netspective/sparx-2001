@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>2</idCode>
+        <idValue>Dun&apos;s SIC 2+2, Dun &amp; Bradstreet</idValue>
+    <idCode>3</idCode>
+        <idValue>Empty Non-hazardous Last Contained (HMRC) Code</idValue>
+    <idCode>A</idCode>
+        <idValue>Harmonized Tariff Schedule of the United States Annotated</idValue>
+    <idCode>B</idCode>
+        <idValue>U.S. Foreign Trade Schedule B, Statistical Classification of Domestic and Foreign Commodities Exported from the United States</idValue>
+    <idCode>C</idCode>
+        <idValue>Canadian Freight Classification</idValue>
+    <idCode>D</idCode>
+        <idValue>Department of Defense Unique Codes</idValue>
+    <idCode>E</idCode>
+        <idValue>Coordinated Motor Freight Classification</idValue>
+    <idCode>F</idCode>
+        <idValue>National Stock Number</idValue>
+    <idCode>G</idCode>
+        <idValue>Canadian Wheat Board, Grain Code for Terminal Elevator Accounting</idValue>
+    <idCode>H</idCode>
+        <idValue>Brussels Nomenclature</idValue>
+    <idCode>I</idCode>
+        <idValue>Milstamp AITC or Water Commodity Code</idValue>
+    <idCode>J</idCode>
+        <idValue>Harmonized System-Based Schedule B</idValue>
+    <idCode>K</idCode>
+        <idValue>Federal Supply Classification</idValue>
+    <idCode>L</idCode>
+        <idValue>Last Contained Contents STCC</idValue>
+    <idCode>M</idCode>
+        <idValue>Dun &amp; Bradstreet Standard Product and Service Code</idValue>
+    <idCode>N</idCode>
+        <idValue>National Motor Freight Classification (NMFC)</idValue>
+    <idCode>P</idCode>
+        <idValue>Bulk Petroleum Codes</idValue>
+    <idCode>Q</idCode>
+        <idValue>Quota Category</idValue>
+    <idCode>S</idCode>
+        <idValue>Standard International Trade Classification (SITC)</idValue>
+    <idCode>T</idCode>
+        <idValue>Standard Transportation Commodity Code (STCC)</idValue>
+    <idCode>U</idCode>
+        <idValue>Uniform Freight Classification (UFC)</idValue>
+    <idCode>V</idCode>
+        <idValue>Standard Industrial Classification (SIC) Code</idValue>
+    <idCode>Z</idCode>
+        <idValue>Mutually defined</idValue>
+</idList>

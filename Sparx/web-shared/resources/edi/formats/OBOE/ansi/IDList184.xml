@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>B</idCode>
+        <idValue>Barge</idValue>
+    <idCode>C</idCode>
+        <idValue>Cubic Centimeters</idValue>
+    <idCode>D</idCode>
+        <idValue>Cord</idValue>
+    <idCode>E</idCode>
+        <idValue>Cubic Feet</idValue>
+    <idCode>F</idCode>
+        <idValue>100 Board Feet</idValue>
+    <idCode>G</idCode>
+        <idValue>Gallons</idValue>
+    <idCode>H</idCode>
+        <idValue>Hundreds of Measurement Tons</idValue>
+    <idCode>L</idCode>
+        <idValue>Load</idValue>
+    <idCode>M</idCode>
+        <idValue>Cubic Decimeters</idValue>
+    <idCode>N</idCode>
+        <idValue>Cubic Inches</idValue>
+    <idCode>R</idCode>
+        <idValue>Car</idValue>
+    <idCode>S</idCode>
+        <idValue>Measurement Ton</idValue>
+    <idCode>T</idCode>
+        <idValue>Container</idValue>
+    <idCode>U</idCode>
+        <idValue>Volumetric Unit</idValue>
+    <idCode>V</idCode>
+        <idValue>Liter</idValue>
+    <idCode>X</idCode>
+        <idValue>Cubic Meters</idValue>
+</idList>

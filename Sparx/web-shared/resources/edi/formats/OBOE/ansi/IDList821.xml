@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>ACT</idCode>
+        <idValue>Acute Toxicity Data</idValue>
+    <idCode>AM2</idCode>
+        <idValue>Analytical Methods</idValue>
+    <idCode>AP2</idCode>
+        <idValue>Approvals</idValue>
+    <idCode>CAR</idCode>
+        <idValue>Carcinogenicity</idValue>
+    <idCode>CI2</idCode>
+        <idValue>Chemical Product and Company Information</idValue>
+    <idCode>CO2</idCode>
+        <idValue>Composition or Information on Ingredients</idValue>
+    <idCode>CON</idCode>
+        <idValue>Conditions to Avoid</idValue>
+    <idCode>CTD</idCode>
+        <idValue>Chronic Toxicity Data</idValue>
+    <idCode>DCL</idCode>
+        <idValue>Disclaimer</idValue>
+    <idCode>DEC</idCode>
+        <idValue>Decomposition, Decomposition Products</idValue>
+    <idCode>DEH</idCode>
+        <idValue>Hazardous Decomposition Products</idValue>
+    <idCode>DI2</idCode>
+        <idValue>Disposal Considerations</idValue>
+    <idCode>DIS</idCode>
+        <idValue>Distribution of Chemical in Environment</idValue>
+    <idCode>DM2</idCode>
+        <idValue>Detection Methods</idValue>
+    <idCode>EDD</idCode>
+        <idValue>Sensitive to Static Charge</idValue>
+    <idCode>EFA</idCode>
+        <idValue>Emergency and First Aid Procedures</idValue>
+    <idCode>EFB</idCode>
+        <idValue>Emergency Procedures</idValue>
+    <idCode>EFX</idCode>
+        <idValue>Effects of Overexposure</idValue>
+    <idCode>EIM</idCode>
+        <idValue>Explosion Impact Sensitive Material</idValue>
+    <idCode>EN2</idCode>
+        <idValue>Ecological Information</idValue>
+    <idCode>ENA</idCode>
+        <idValue>Environmental - Acute Aquatic Effects</idValue>
+    <idCode>ENB</idCode>
+        <idValue>Environmental - Bioconcentration Material</idValue>
+    <idCode>ENG</idCode>
+        <idValue>Engineering Controls</idValue>
+    <idCode>ENO</idCode>
+        <idValue>Environmental - Oxygen Demand</idValue>
+    <idCode>ENS</idCode>
+        <idValue>Environmental - Summary</idValue>
+    <idCode>EO2</idCode>
+        <idValue>Emergency Overview</idValue>
+    <idCode>EP2</idCode>
+        <idValue>Exposure Controls or Personal Protection</idValue>
+    <idCode>EPA</idCode>
+        <idValue>Employee Protection</idValue>
+    <idCode>ESD</idCode>
+        <idValue>Static Sensitive Material</idValue>
+    <idCode>EVP</idCode>
+        <idValue>Environmental Protection</idValue>
+    <idCode>EXC</idCode>
+        <idValue>Ecotoxicological Information</idValue>
+    <idCode>EXG</idCode>
+        <idValue>Exposure Guidelines</idValue>
+    <idCode>EXI</idCode>
+        <idValue>Exposure Information</idValue>
+    <idCode>EXL</idCode>
+        <idValue>Exposure Limits, Occupational Exposure Limits</idValue>
+    <idCode>EYA</idCode>
+        <idValue>Eye Contact: Acute Exposure</idValue>
+    <idCode>EYC</idCode>
+        <idValue>Eye Contact: Chronic Exposure</idValue>
+    <idCode>EYF</idCode>
+        <idValue>Eye Contact</idValue>
+    <idCode>EYZ</idCode>
+        <idValue>Eye</idValue>
+    <idCode>FA2</idCode>
+        <idValue>First Aid Measures</idValue>
+    <idCode>FAA</idCode>
+        <idValue>Extinguishing Media: All Fires</idValue>
+    <idCode>FAL</idCode>
+        <idValue>Extinguishing Media: Large Fires</idValue>
+    <idCode>FAS</idCode>
+        <idValue>Extinguishing Media: Small Fires</idValue>
+    <idCode>FAT</idCode>
+        <idValue>Environmental Fate (i.e., Oxidized, Photodegraded, etc.)</idValue>
+    <idCode>FAZ</idCode>
+        <idValue>Extinguishing Media</idValue>
+    <idCode>FE2</idCode>
+        <idValue>Fire Fighting Measures</idValue>
+    <idCode>FEH</idCode>
+        <idValue>Fire and Explosion Hazards</idValue>
+    <idCode>FEZ</idCode>
+        <idValue>Fire and Explosion Data</idValue>
+    <idCode>FLC</idCode>
+        <idValue>Flammability Conditions</idValue>
+    <idCode>FLP</idCode>
+        <idValue>Flammable Properties</idValue>
+    <idCode>GCA</idCode>
+        <idValue>General Controls</idValue>
+    <idCode>GMA</idCode>
+        <idValue>General Measures</idValue>
+    <idCode>GPI</idCode>
+        <idValue>General Safe Handling Procedures or Information</idValue>
+    <idCode>HAI</idCode>
+        <idValue>Handling Information</idValue>
+    <idCode>HCA</idCode>
+        <idValue>Hazardous Component or Ingredient</idValue>
+    <idCode>HCP</idCode>
+        <idValue>Hazardous Product of Combustion</idValue>
+    <idCode>HH2</idCode>
+        <idValue>Hazards Identification</idValue>
+    <idCode>HHA</idCode>
+        <idValue>Health Hazard Information</idValue>
+    <idCode>HI2</idCode>
+        <idValue>Potential Health Effects</idValue>
+    <idCode>HZC</idCode>
+        <idValue>Hazard Class</idValue>
+    <idCode>HZR</idCode>
+        <idValue>Hazard Rating System</idValue>
+    <idCode>IA2</idCode>
+        <idValue>Other Information</idValue>
+    <idCode>IGA</idCode>
+        <idValue>Ingestion: Acute Exposure</idValue>
+    <idCode>IGC</idCode>
+        <idValue>Ingestion: Chronic Exposure</idValue>
+    <idCode>IGZ</idCode>
+        <idValue>Ingestion</idValue>
+    <idCode>IHA</idCode>
+        <idValue>Inhalation: Acute Exposure</idValue>
+    <idCode>IHC</idCode>
+        <idValue>Inhalation: Chronic Exposure</idValue>
+    <idCode>IHZ</idCode>
+        <idValue>Inhalation</idValue>
+    <idCode>INC</idCode>
+        <idValue>Incompatibility</idValue>
+    <idCode>INS</idCode>
+        <idValue>Instability</idValue>
+    <idCode>INX</idCode>
+        <idValue>Incompatibility Conditions</idValue>
+    <idCode>IRR</idCode>
+        <idValue>Irritancy</idValue>
+    <idCode>KY2</idCode>
+        <idValue>Key or Legend</idValue>
+    <idCode>LAB</idCode>
+        <idValue>Label Text</idValue>
+    <idCode>LKI</idCode>
+        <idValue>Leak Avoidance, Remediation, or Hazards</idValue>
+    <idCode>MAT</idCode>
+        <idValue>Material to Avoid</idValue>
+    <idCode>MCE</idCode>
+        <idValue>Medical Conditions Aggravated by Exposure</idValue>
+    <idCode>MUT</idCode>
+        <idValue>Mutagenicity</idValue>
+    <idCode>NOT</idCode>
+        <idValue>Notification of Chemical Storage Amount, Spill or Release to the Environment</idValue>
+    <idCode>NTE</idCode>
+        <idValue>Note to Physician: Eyes</idValue>
+    <idCode>NTR</idCode>
+        <idValue>Note to Physician: Respiratory</idValue>
+    <idCode>NTS</idCode>
+        <idValue>Note to Physician: Skin</idValue>
+    <idCode>NTZ</idCode>
+        <idValue>Note to Physician</idValue>
+    <idCode>OPH</idCode>
+        <idValue>Other Physical Hazards</idValue>
+    <idCode>OPR</idCode>
+        <idValue>Other Precautions</idValue>
+    <idCode>ORC</idCode>
+        <idValue>Other Regulatory Controls</idValue>
+    <idCode>PD2</idCode>
+        <idValue>Physical and Chemical Properties</idValue>
+    <idCode>PM2</idCode>
+        <idValue>Preventive Measures</idValue>
+    <idCode>POL</idCode>
+        <idValue>Hazardous Polymerization</idValue>
+    <idCode>PPA</idCode>
+        <idValue>Personal Protection: Additional Equipment</idValue>
+    <idCode>PPB</idCode>
+        <idValue>Personal Protection: Boots</idValue>
+    <idCode>PPC</idCode>
+        <idValue>Personal Protection: Clothing</idValue>
+    <idCode>PPD</idCode>
+        <idValue>Personal Protection: Eye/Face</idValue>
+    <idCode>PPE</idCode>
+        <idValue>Personal Protection: Eye</idValue>
+    <idCode>PPF</idCode>
+        <idValue>Personal Protection: Face</idValue>
+    <idCode>PPG</idCode>
+        <idValue>Personal Protection: Gloves</idValue>
+    <idCode>PPR</idCode>
+        <idValue>Personal Protection: Respiratory</idValue>
+    <idCode>PPS</idCode>
+        <idValue>Personal Protection: Skin</idValue>
+    <idCode>PPZ</idCode>
+        <idValue>Personal Protection Equipment</idValue>
+    <idCode>PR2</idCode>
+        <idValue>Preparation and Revision Information</idValue>
+    <idCode>PRE</idCode>
+        <idValue>Primary Route(s) of Entry: Eye Contact</idValue>
+    <idCode>PRF</idCode>
+        <idValue>Primary Route(s) of Entry: Eye, Inhalation</idValue>
+    <idCode>PRG</idCode>
+        <idValue>Primary Route(s) of Entry: Eye, Oral</idValue>
+    <idCode>PRH</idCode>
+        <idValue>Primary Route(s) of Entry: Eye, Oral, Skin</idValue>
+    <idCode>PRI</idCode>
+        <idValue>Primary Route(s) of Entry: Inhalation</idValue>
+    <idCode>PRJ</idCode>
+        <idValue>Primary Route(s) of Entry: Inhalation, Oral</idValue>
+    <idCode>PRK</idCode>
+        <idValue>Primary Route(s) of Entry: Inhalation, Oral, Skin</idValue>
+    <idCode>PRL</idCode>
+        <idValue>Primary Route(s) of Entry: Inhalation, Skin</idValue>
+    <idCode>PRM</idCode>
+        <idValue>Primary Route(s) of Entry: Inhalation, Eye, Oral</idValue>
+    <idCode>PRO</idCode>
+        <idValue>Primary Route(s) of Entry: Oral</idValue>
+    <idCode>PRQ</idCode>
+        <idValue>Primary Route(s) of Entry: Oral, Skin</idValue>
+    <idCode>PRS</idCode>
+        <idValue>Primary Route(s) of Entry: Skin Contact</idValue>
+    <idCode>PRT</idCode>
+        <idValue>Primary Route(s) of Entry: Eye and Skin Contact</idValue>
+    <idCode>PRU</idCode>
+        <idValue>Primary Route(s) of Entry: Eye, Skin, Inhalation</idValue>
+    <idCode>PRZ</idCode>
+        <idValue>Primary Route(s) of Entry</idValue>
+    <idCode>RE2</idCode>
+        <idValue>Stability and Reactivity Information</idValue>
+    <idCode>REA</idCode>
+        <idValue>Reactivity</idValue>
+    <idCode>REC</idCode>
+        <idValue>Reactivity Conditions</idValue>
+    <idCode>REP</idCode>
+        <idValue>Reproduction</idValue>
+    <idCode>RG2</idCode>
+        <idValue>Regulatory Information</idValue>
+    <idCode>RLI</idCode>
+        <idValue>Release Information</idValue>
+    <idCode>RTK</idCode>
+        <idValue>Right to Know Statement of Hazard Code/Information</idValue>
+    <idCode>SAP</idCode>
+        <idValue>Safety Precautions</idValue>
+    <idCode>SBY</idCode>
+        <idValue>Stability</idValue>
+    <idCode>SCE</idCode>
+        <idValue>Sub-chronic Effects</idValue>
+    <idCode>SGW</idCode>
+        <idValue>Signal Word</idValue>
+    <idCode>SH2</idCode>
+        <idValue>Transport Information</idValue>
+    <idCode>SHI</idCode>
+        <idValue>Shipping Information, Transportation Requirements</idValue>
+    <idCode>SKA</idCode>
+        <idValue>Skin Contact: Acute Exposure</idValue>
+    <idCode>SKC</idCode>
+        <idValue>Skin Contact: Chronic Exposure</idValue>
+    <idCode>SKS</idCode>
+        <idValue>Skin Sensitization</idValue>
+    <idCode>SKT</idCode>
+        <idValue>Skin Contact</idValue>
+    <idCode>SKZ</idCode>
+        <idValue>Skin</idValue>
+    <idCode>SL2</idCode>
+        <idValue>Accidental Release Measures</idValue>
+    <idCode>SNS</idCode>
+        <idValue>Sensitization</idValue>
+    <idCode>SPF</idCode>
+        <idValue>Special Fire Fighting Instructions</idValue>
+    <idCode>SPI</idCode>
+        <idValue>Special Information</idValue>
+    <idCode>SPJ</idCode>
+        <idValue>Spill Information</idValue>
+    <idCode>SPL</idCode>
+        <idValue>Spill and Leak Information</idValue>
+    <idCode>SPP</idCode>
+        <idValue>Special Precautions</idValue>
+    <idCode>ST2</idCode>
+        <idValue>Handling and Storage</idValue>
+    <idCode>STA</idCode>
+        <idValue>Storage Conditions</idValue>
+    <idCode>SUB</idCode>
+        <idValue>Subchronic</idValue>
+    <idCode>SYP</idCode>
+        <idValue>Synergistic Products</idValue>
+    <idCode>SYS</idCode>
+        <idValue>Systematic Effects</idValue>
+    <idCode>TER</idCode>
+        <idValue>Teratogenicity</idValue>
+    <idCode>TOC</idCode>
+        <idValue>Toxicity of Other Components</idValue>
+    <idCode>TOG</idCode>
+        <idValue>Target Organ</idValue>
+    <idCode>TRH</idCode>
+        <idValue>Transportation Hazard</idValue>
+    <idCode>TS2</idCode>
+        <idValue>Trade Secret Exemptions</idValue>
+    <idCode>TX2</idCode>
+        <idValue>Toxicological Information</idValue>
+    <idCode>VRZ</idCode>
+        <idValue>Ventilation Requirements</idValue>
+    <idCode>WAR</idCode>
+        <idValue>Warning</idValue>
+    <idCode>WDI</idCode>
+        <idValue>Waste Disposal Information</idValue>
+</idList>

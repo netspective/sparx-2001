@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>0001</idCode>
+        <idValue>Shipment, Order, Packaging, Item</idValue>
+    <idCode>0002</idCode>
+        <idValue>Shipment, Order, Item, Packaging</idValue>
+    <idCode>0003</idCode>
+        <idValue>Shipment, Packaging, Order, Item</idValue>
+    <idCode>0004</idCode>
+        <idValue>Shipment, Order, Item</idValue>
+    <idCode>0010</idCode>
+        <idValue>Information Source, Information Receiver, Provider of Service, Subscriber, Dependent</idValue>
+    <idCode>0011</idCode>
+        <idValue>Information Receiver, Information Source, Provider of Service, Subscriber, Dependent</idValue>
+    <idCode>0012</idCode>
+        <idValue>Information Source, Provider of Service, Subscriber, Dependent</idValue>
+    <idCode>0013</idCode>
+        <idValue>Provider of Service, Information Source, Subscriber, Dependent</idValue>
+    <idCode>0014</idCode>
+        <idValue>Provider of Service, Information Source, Information Receiver, Subscriber, Dependent</idValue>
+    <idCode>0015</idCode>
+        <idValue>Information Receiver, Provider of Service, Subscriber, Dependent</idValue>
+    <idCode>0016</idCode>
+        <idValue>Provider of Service, Subscriber, Dependent</idValue>
+    <idCode>0017</idCode>
+        <idValue>Subscriber, Dependent</idValue>
+    <idCode>0018</idCode>
+        <idValue>Information Receiver, Subscriber, Dependent</idValue>
+    <idCode>0019</idCode>
+        <idValue>Information Source, Subscriber, Dependent</idValue>
+    <idCode>0020</idCode>
+        <idValue>Information Source, Information Receiver, Group Coverage Options, Subscriber, Dependent</idValue>
+    <idCode>0021</idCode>
+        <idValue>Information Source, Information Receiver, Group Coverage Options</idValue>
+    <idCode>0022</idCode>
+        <idValue>Information Source, Information Receiver, Subscriber, Dependent</idValue>
+    <idCode>0023</idCode>
+        <idValue>Information Receiver, Information Source, Subscriber, Dependent</idValue>
+    <idCode>0035</idCode>
+        <idValue>Address, Shipment, Order</idValue>
+    <idCode>0036</idCode>
+        <idValue>Address, Transaction Reference Number, Suffix, Serial Number</idValue>
+    <idCode>0055</idCode>
+        <idValue>Supergroup, Group, Subgroup, Member</idValue>
+    <idCode>0056</idCode>
+        <idValue>Supergroup, subgroup, member, ancillary facility or department</idValue>
+    <idCode>0057</idCode>
+        <idValue>Supergroup, subgroup, member</idValue>
+    <idCode>0058</idCode>
+        <idValue>Group, member, ancillary facility or department</idValue>
+    <idCode>0059</idCode>
+        <idValue>Group, member</idValue>
+    <idCode>0060</idCode>
+        <idValue>Hospital, ancillary facility or department</idValue>
+    <idCode>0061</idCode>
+        <idValue>Health Industry Business Communications Council (HIBCC) Health Industry Number (HIN) database, facility record, location record</idValue>
+    <idCode>0062</idCode>
+        <idValue>Franchisor, franchisee</idValue>
+    <idCode>0063</idCode>
+        <idValue>Franchisee association, franchisee</idValue>
+    <idCode>0064</idCode>
+        <idValue>Company, Company</idValue>
+    <idCode>0065</idCode>
+        <idValue>Company, Operating Unit</idValue>
+    <idCode>0066</idCode>
+        <idValue>Operating Unit, Operating Unit</idValue>
+    <idCode>0067</idCode>
+        <idValue>Company, Property</idValue>
+    <idCode>0068</idCode>
+        <idValue>Company, Property Property, Property</idValue>
+    <idCode>0069</idCode>
+        <idValue>Operating Unit, Property</idValue>
+    <idCode>0070</idCode>
+        <idValue>Property, Property</idValue>
+    <idCode>0071</idCode>
+        <idValue>Company, Tradename</idValue>
+    <idCode>0072</idCode>
+        <idValue>Operating Unit, Tradename</idValue>
+    <idCode>0073</idCode>
+        <idValue>Property, Tradename</idValue>
+    <idCode>0074</idCode>
+        <idValue>Company, Operating Unit, Operating Unit, Operating Unit</idValue>
+    <idCode>0075</idCode>
+        <idValue>Operating Unit, Operating Unit, Operating Unit, Operating Unit</idValue>
+    <idCode>0076</idCode>
+        <idValue>Company, Operating Unit, Operating Unit, Property</idValue>
+    <idCode>0077</idCode>
+        <idValue>Tradename, Property</idValue>
+    <idCode>0078</idCode>
+        <idValue>Information Source, Information Receiver, Subscriber, Dependent, Provider of Service, Services</idValue>
+    <idCode>0079</idCode>
+        <idValue>Information Source, Information Receiver, Company/Corporation, Operating Unit</idValue>
+    <idCode>0080</idCode>
+        <idValue>Information Source, Employer, Patient</idValue>
+    <idCode>0081</idCode>
+        <idValue>Information Source, Patient</idValue>
+    <idCode>0082</idCode>
+        <idValue>Information Source, Employer, Subscriber, Dependent</idValue>
+    <idCode>0083</idCode>
+        <idValue>Information Source, Information Receiver, Subscriber, Dependent, Referring Provider, Provider of Service, Services</idValue>
+    <idCode>0200</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Quantity (R), Transportation Equipment (E), Fleet (FL), Jurisdiction (JU)</idValue>
+    <idCode>0201</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Transportation Equipment (E)</idValue>
+    <idCode>0202</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Quantity (R), Transportation Equipment (E), Jurisdiction (JU)</idValue>
+    <idCode>0203</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Quantity (R), Transportation Equipment (E)</idValue>
+    <idCode>0204</idCode>
+        <idValue>Report (RP), Jurisdiction (JU), Company/Corporation (35)</idValue>
+    <idCode>0205</idCode>
+        <idValue>Report (RP), Company/Corporation (35), Fleet (FL), Jurisdiction (JU), Transportation Equipment (E)</idValue>
+    <idCode>0206</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Jurisdiction (JU), Transportation Equipment (E)</idValue>
+    <idCode>0207</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Transportation Equipment (E), Component (F), Measurement (M), Jurisdiction (JU)</idValue>
+    <idCode>0208</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35), Cost Type (CT), Jurisdiction (JU)</idValue>
+    <idCode>0209</idCode>
+        <idValue>Credential Action (AP), Company/Corporation (35)</idValue>
+    <idCode>0210</idCode>
+        <idValue>Credential Action (AP)</idValue>
+    <idCode>ZZZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

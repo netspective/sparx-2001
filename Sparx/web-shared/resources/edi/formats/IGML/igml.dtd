@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ******************************************************************** -->
+<!--	Implementation Guideline Markup Language
+		igML DTD version DRAFT, December 1999 
+
+		Members of the igML consortium:
+
+			American Coders, Ltd.			Raleigh, US-NC				www.americancoders.com
+			CMASS									Zaventem, BE				www.cmass.be
+			DISA									Alexandria, US-VA			www.disa.org
+			DynamicWeb Enterprises, Inc.	Fairfield, US-NJ			www.dynamicweb.com
+			EXTOL, Inc.							Pottsville, US-PA			www.extol.com
+			FORESIGHT Corp.					Dublin, US-OH				www.foresightcorp.com
+			PaperFree Systems, Inc.			Vienna, US-VA				www.paperfree.com
+			Perwill plc							Alton, Hampshire, UK		www.perwill.com
+			Washington Publishing Company	Rockville, US-MD			www.wpc-edi.com
+			XMLSolutions Corporation		McLean, US-VA				www.xmlsolutions.com
+
+		
+		Notes:
+			The igML file will contain all objects necessary to recreate
+			the guideline.  Any text information that can be deduced from the
+			base standard will not be included in the igML file.  If the igML
+			file is a base standard, then all text will be included.  -->
+<!-- ******************************************************************** -->
+
+
+<!-- ******************************************************************** -->
+<!-- Conventions used:
+
+		Throughout this DTD there many comments that start with the heading
+		of Note:.  The text following this heading will explain in more detail 
+		how an element or attribute is expected to be used.  The text following 
+		the heading of Comment: refers to issues that still need to be 
+		addressed.  -->
+<!-- ******************************************************************** -->
+
+
+<!-- ******************************************************************** -->
+<!-- Parameter Entity: att-requirement
+			Defines the valid requirement status enumeration.  It is used 
+			by the following elements:
+				SegmentRef
+				DataElementRef
+				CompositeRef
+				Group  -->
+<!-- ******************************************************************** -->
+<!ENTITY % att-requirement
+	'Req		(M|O|F|C|X)			#IMPLIED' >
+
+<!-- Valid Req Types
+		M	Mandatory
+		O	Optional
+		F	Floating
+		C	Conditional
+		X	Conditional (ASC X12 only)  -->
+
+<!-- Comment:
+		X can be inferred by the ASC X12 syntax rules.  So is it really needed?
+		Also, should there be a default value of O for ASC X12 and C for 
+		UN/EDIFACT?  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Parameter Entity: att-userspec
+			Defines the valid user specification enumeration.  It is used
+			by the following elements:
+				SegmentRef
+				DataElementRef
+				CompositeRef
+				Group  -->
+<!-- ******************************************************************** -->
+<!ENTITY % att-userspec
+	'Usage		(U|NU|R|A|NR|D)	"U"' >
+
+<!-- Valid User Types
+		U	Used
+		NU	Not Used
+		R	Required
+		A	Advised
+		NR	Not Recommended
+		D	Dependent  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Standard:
+			The root element of the XML file.  It contains all elements, 
+			attributes, etc for describing an EDI implementation guideline. -->
+<!-- ******************************************************************** -->
+<!ELEMENT Standard ( Text*, MessageDirectory?, SegmentDictionary?,
+							CompositeDictionary?, ElementDictionary?, ValueLists?,
+							Private* ) >
+<!ATTLIST Standard
+	IGMLVersion		CDATA				#FIXED				"DRAFT_DEC_1999"
+	ID					CDATA				#REQUIRED
+	Version			CDATA				#REQUIRED
+	Release			CDATA				#REQUIRED
+	Industry			CDATA				#IMPLIED
+	Implementation	CDATA				#IMPLIED
+	Authority		(GC|TD|T|UN|X)	#REQUIRED
+	DerivedFrom		CDATA				"N/A"
+	LastModified	CDATA				#IMPLIED >
+
+<!-- IGMLVersion
+		Identifies the release version of the igML file to
+		which the implementation guideline conforms.  -->
+
+<!-- ID
+		The name of the standard.  -->
+
+<!-- Version
+		The version number.  
+			ASC X12: positions 1-3 of element 480
+			UN/EDIFACT: element 0122  -->
+
+<!-- Release
+		The release and subrelease.
+			ASC X12: positions 4-6 of element 480
+			UN/EDIFACT: element 0124  -->
+
+<!-- Industry
+		The industry code.  
+			ASC X12: positions 7-12 of element 480
+			UN/EDIFACT: element 0051  -->
+
+<!-- Implementation
+		The implementation convention reference or the message implementation 
+		guideline identification.
+			ASC X12: element 1705
+			UN/EDIFACT: element 0121  -->
+
+<!-- Authority
+		The responsible agency code.  Valid Authority Types:
+			GC		GENCOD
+			TD		TRADACOMS
+			T		T.D.C.C. (EDIA)
+			UN		UN/EDIFACT
+			X		ANS ASC X12 (DISA)  -->
+
+<!-- DerivedFrom
+		The standard on which this implementation guideline is based.  The
+		default value for DerivedFrom is "N/A" and when used specifies that
+		the igML file represents the base standard.  -->
+
+<!-- LastModified
+		The date of time of the last modification to the standard in 
+		ISO 8601 format: CCYY-MM-DDThh:mm:ss
+		See ISO 8601:1988(E) 5.4.1 for more information.  -->
+
+<!-- Common Text Types for Standard:
+		Definition				UN/EDIFACT standard terms and definitions
+		Title						Title of the standard, for example: Draft 
+									Standards Approved by ASC X12 through October 
+									1992  -->
+
+
+<!-- ******************************************************************** -->
+<!-- MessageDirectory:
+			Contains each transaction set or message within
+			the implementation guideline.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT MessageDirectory ( Message* ) >
+
+
+<!-- ******************************************************************** -->
+<!-- Message:
+			Defines the transaction set or message by specifying the tables,
+			segments, loops or groups, etc.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Message ( Text*, ( (Table+) | (SegmentRef, (SegmentRef|Group)*) ), 
+						  Relational* ) >
+<!ATTLIST Message
+	ID						CDATA				#REQUIRED
+	Type					(UNSM|MID)		#IMPLIED
+	Revision				CDATA				#IMPLIED
+	Date					CDATA				#IMPLIED
+	ControlAgency		CDATA				#IMPLIED >
+
+<!-- ID
+		The name or number of the transaction set or message.  -->
+
+<!-- Type
+		Indicator used by UN/EDIFACT to specify that a message is
+		either:
+			UNSM	United Nations standard message
+			MID	Message in development  -->
+
+<!-- Revision
+		Revision of the message.  -->
+
+<!-- Date
+		Date of the message in ISO 8601 format: CCYY-MM-DDThh:mm:ss  -->
+
+<!-- ControlAgency
+		The controlling agency for the message.  -->
+		
+
+<!-- Common Text Types for Message:
+		Definition				UN/EDIFACT message terms and definitions
+		FieldOfApplication	Field of Application
+		FuncDefinition			Functional Defintion
+		FuncGroup				Function Group
+		Name						Name or Title
+		Principle				Principles
+		Purpose					Purpose
+		Reference				References
+		Source					Message source  -->
+
+<!-- Note:
+		UN/EDIFACT does allow for a Message to have Dependencies (Relational).
+		See ISO 9735-1.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Text:
+			Contains text items, such as Name, Purpose, etc. -->
+<!-- ******************************************************************** -->
+<!ELEMENT Text ( #PCDATA ) >
+<!ATTLIST Text
+	Type				(Comment|Definition|Description|Explanation|
+						 FieldOfApplication|FuncDefinition|FuncGroup|
+						 Name|Principle|Purpose|Reference|SegmentNote|
+						 SemanticNote|SetComment|SetNote|Source|Title|
+						 User)															#REQUIRED
+	UserType			CDATA																#IMPLIED
+	AlternateName	CDATA																#IMPLIED >
+
+<!-- Valid Type Types:
+		Comment						Comment
+		Definition					Definition
+		Description					Description
+		Explanation					Explanation
+		FieldOfApplication		Field of Application
+		FuncDefinition				Functional Definition
+		FuncGroup					Functional Group
+		Name							Name or Title
+		Principle					Principles
+		Purpose						Purpose
+		Reference					References
+		SegmentNote					Segment Note
+		SemanticNote				Semantic Note
+		SetComment					Set Comment  
+		SetNote						Set Note
+		Source						Source
+		Title							Title
+		User							Text as defined by the user.
+										Specify the UserType attribute when 
+										Type=User -->
+
+<!-- UserType
+		UserType should be specified when the Type is set as User.  Any
+		text not covered by the Type enumeration can be specified as Type
+		user and then further clarified by the UserType attribute.
+
+		FORESIGHT recognizes the following UserType types: 
+				User1		User Level 1 Note
+				User2		User Level 2 Note
+				User3		User Level 3 Note  -->
+
+<!-- AlternateName
+		An altername name for the type of text that could be used in the
+		presentation of the guideline.  For example, you could could have
+		text with the Type = User and the AlternateName = Kaver Corp. 
+		When the guideline is printed or shown in some other manner, 
+		instead of printing User, it would print Kaver Corp. -->
+
+<!-- Note:
+		Any text information that can be deduced from the base standard 
+		will not be included in the igML file.  If the igML file is a 
+		base standard, then all text will be included.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Table: 
+			Used to group segments.  If Table is used, there are usually
+			three: Heading, Detail, and Summary.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Table ( (SegmentRef|Group)* ) >
+<!ATTLIST Table 
+	Area	CDATA		#IMPLIED >
+
+<!-- Area
+		The table number of the table.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- SegmentRef:
+			Defines how a segment is used in a transaction set or message.   -->
+<!-- ******************************************************************** -->
+<!ELEMENT SegmentRef ( Text*, BusinessRule*, DataElements? ) >
+<!ATTLIST SegmentRef
+	ID			CDATA					#IMPLIED
+	Pos		CDATA					#IMPLIED
+	%att-requirement;
+	%att-userspec;
+	MinUse	CDATA					"0"
+	MaxUse	CDATA					"1" >
+
+<!-- ID
+		The id or name of the segment.  -->
+
+<!-- Pos
+		The position of the segment within the transaction set or message.  -->
+
+<!-- %att-requirement;
+		See the parameter entity definition.  -->
+
+<!-- %att-userspec;
+		See the parameter entity definition.  -->
+
+<!-- MinUse
+		The minimum usage or minimum repeat count of the segment. -->
+
+<!-- MaxUse
+		The maximum usage or maximum repeat count of the segment.  
+		A value of "N/A" means unlimited ("N/A" applies to ASC 
+		X12 only).  -->
+
+<!-- Common Text Types:
+		Name				Name or Title
+		Purpose			Purpose
+		SegmentNote		Segment Note
+		SetNote			Set Note
+		SetComment		Set Comment  -->
+
+
+<!-- ******************************************************************** -->
+<!-- DataElements:
+			Defines a group of DataElement and Composite that would be used
+			for a DictSegment or SegmentRef -->
+<!-- ******************************************************************** -->
+<!ELEMENT DataElements ( (DataElementRef|CompositeRef)* ) >
+
+
+<!-- ******************************************************************** -->
+<!-- DataElementRef:
+			Defines how a data element is used in a particular segment.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT DataElementRef ( Text*, BusinessRule*, Codes? ) >
+<!ATTLIST DataElementRef
+	Pos				CDATA																		#IMPLIED
+	ID					CDATA																		#IMPLIED
+	%att-requirement;
+	%att-userspec;
+	Type				(R|ID|AN|A|DT|TM|B|N|N0|N1|N2|N3|N4|N5|N6|N7|N8|N9|NX)	#IMPLIED
+	Min				CDATA																		#IMPLIED
+	Max				CDATA																		#IMPLIED
+	MinUse			CDATA																		"0"
+	MaxUse			CDATA																		"1"
+	VariableName	CDATA																		#IMPLIED
+	ValueListName	CDATA																		#IMPLIED 
+	DefaultValue	CDATA																		#IMPLIED >
+
+<!-- Pos
+		The position of the data element within the segment or composite. -->
+
+<!-- ID
+		The ID or name of the data element.  -->
+
+<!-- %att-requirement;
+		See the parameter entity definition.  -->
+
+<!-- %att-userspec;
+		See the parameter entity definition.  -->
+
+<!-- Type
+		The data element type.  -->
+
+<!-- Min
+		Minimum number of character positions for the element.  -->
+
+<!-- Max
+		Maximum number of character positions for the element.  -->
+
+<!-- MinUse
+		The minimum usage or minimum repeat count for the element.  -->
+
+<!-- MaxUse
+		The maximum usage or maximum repeat count for the element.  -->
+
+<!-- VariableName
+		The user supplied name for the data element.  This variable name
+		can then be used in a BusinessRule element.  -->
+
+<!-- ValueListName
+		The name of the value list that is attached to the data element.  
+		The actual list will be stored in the ValueList element.  -->
+
+<!-- DefaultValue
+		The value of the element, if the element is not found in the 
+		EDI data.  -->
+
+<!-- Common Text Types for DataElementRef:
+		Name				Name or Title
+		Purpose			Purpose  
+		SemanticNote	Semantic Note, only when used in a DictComposite
+		Comment			Comment, only when used in a DictComposite  -->
+
+<!-- Note:
+		The MinUse and MaxUse can only be used if the DataElementRef is a 
+		child of a SegmentRef.  DataElementRefs that are children of a
+		CompositeRef cannot have a MinUse or MaxUse specified.
+
+		A Codes element will be present if the codes have been changed from
+		the codes in the corresponding DictDataElement.  -->
+
+<!-- Comments:
+		Attributes or elements will need to be added to this element to
+		allow for mapping.  -->
+		
+
+<!-- ******************************************************************** -->
+<!-- CompositeRef:
+			Groups DataElementRef into a composite for use by a segment.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT CompositeRef ( Text*, BusinessRule*, DataElementRef* ) >
+<!ATTLIST CompositeRef
+	Pos						CDATA		#IMPLIED
+	ID							CDATA		#IMPLIED
+	%att-requirement;
+	%att-userspec;
+	MinUse					CDATA		"0"
+	MaxUse					CDATA		"1"
+	IgnoreBaseStructure	(YES)		#IMPLIED >
+
+
+<!-- Pos
+		The position of the composite within the segment.  -->
+
+<!-- ID
+		The ID or name of the composite.  -->
+
+<!-- %att-requirement;
+		See the parameter entity definition.  -->
+
+<!-- %att-userspec;
+		See the parameter entity definition.  -->
+
+<!-- MinUse
+		The minimum usage or minimum repeat count of the composite.  -->
+
+<!-- MaxUse
+		The maximum usage or maximum repeat count of the composite.  -->
+
+<!-- BusinessRule
+		The semantic rule for the use of the data element.  -->
+
+<!-- Common Text Types for CompositeRef:
+		Name				Name or Title
+		Purpose			Purpose  
+		SemanticNote	Semantic Note, only when used in a DictSegment
+		Comment			Comment, only when used in a DictSegment  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Codes:
+			Contains the codes that are used by a DataElementRef, or
+			DictDataElement. -->
+<!-- ******************************************************************** -->
+<!ELEMENT Codes (Code*) >
+
+<!-- ******************************************************************** -->
+<!-- Code:
+			Defines the codes that are contained in a Codes element.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Code (Text*) >
+<!ATTLIST Code
+	ID			CDATA		#REQUIRED 
+	Part		(1|2)		"1"
+	User		(YES|NO)	"NO" >
+
+<!-- ID
+		The id or tag.  -->
+
+<!-- Part
+		Shows which part of a two part code.  Applies to ASC X12 only. -->
+
+<!-- User
+		Specifies if the code has been defined by the user.
+			YES	The code was defined by the user.
+			NO		The code is defined in the dictionary.  -->
+
+<!-- Common Text Types:
+		Definition	Definition
+		Explanation	Explanation  -->
+
+
+<!-- ******************************************************************** -->
+<!-- BusinessRule:
+			Defines a conditional expression to be applied to the
+			corresponding data element or composite.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT BusinessRule (Condition, Setting, Parameter?) >
+<!ATTLIST BusinessRule
+	Type		(USAGE|LOCALCODE|EXTERNALCODE|APPVALUE|COMEXIT)	#REQUIRED >
+
+<!-- Type:
+		USAGE				Indicates that when the condition is met, the segment,
+							data element, or composite should be set to the usage
+							indicated by the Setting element.  The Parameter element
+							will not be used.
+
+		LOCALCODE		Indicates that when the condition is met, the code set
+							specified by the Setting element should be used.  The 
+							Parameter element will not be used.
+
+		EXTERNALCODE	Indicates that when the condition is met, the code set
+							specified by the Setting element should be used.  I'm 
+							not exactly sure how this is going to work yet.
+
+		APPVALUE			Indicates that when the condition is met, the application
+							value list specified in the Setting element should be
+							used.  The Parameter element will not be used.
+
+		COMEXIT			Indicates that when the condition is met, the COM-enabled
+							server specified by the Setting element should be used.
+							The Parameter element will specify the parameters to be
+							passed to the COM-enabled server.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Condition:
+			Defines the conditional part of the BusinessRule.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Condition ( (Condition|Variable|Value)?, (Condition|Variable|Value)?) >
+<!ATTLIST Condition
+	Operator (AND|OR|EQ|NE|GT|GE|LT|LE|EXIST|NEXIST|ALWAYS)	#REQUIRED >
+
+<!-- Operator
+		The conditional operator for the expression.
+			AND		Both the first argument and the second argument must be true.
+						Usually an AND will be used when both arguments are Conditions.
+			OR			Either the first argument or the second argument must be true.
+						Usually an OR will be used when both arguments are Conditions.
+			EQ			Equals, does the first argument equal the second argument?
+			NE			Not Equals, is the first argument not equal to the second argument?
+			GT			Greater Than, is the first argument greater than the second argument?
+			GE			Greater Than or Equal, is the first argument greater than or
+						equal to the second argument?
+			LT			Less Than, is the first argument less than the second argument?
+			LE			Less Than or Equal, is the first argument less than or equal
+						to the second argument?
+			EXIST		Exists, does the first argument exist?  The first argument will
+						be a Variable.  The second argument is not needed when 
+						EXISTS is used.
+			NEXIST	Does not exist, the first argument does not exist.  The first 
+						argument will be a Variable.  The second argument is not needed 
+						when NEXIST is used.
+			ALWAYS	The condition is always true.  Neither the first argument or
+						the second argument is used when ALWAYS is specified.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Variable:
+			Represents the variable name for objects in the guideline.  For
+			example you could assign the variable name of 'invtype' to the 
+			beg08 element of the 850 transaction set.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Variable (#PCDATA) >
+
+
+<!-- ******************************************************************** -->
+<!-- Value
+		Defines a value that could be used in a BusinessRule or 
+		a ValueList.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Value (#PCDATA) >
+<!ATTLIST Value
+	Type		(LITERAL|EXPRESSION)		"LITERAL" >
+
+<!-- Type
+		The type of the value.  
+			LITERAL specifies that it is a literal value.  
+			EXPRESSION specifies that Value is a regular expression.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Setting:
+			Used in various ways to further define the BusinessRule.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Setting (#PCDATA) >
+
+<!-- Note:
+		The value of the Setting element can indicate one of four things.  It
+		can indicate a usage:
+			U	Used
+			NU	Not Used
+			R	Required
+			A	Advised
+			NR	Not Recommended
+			D	Dependent
+		It can be the name of the code set to be used.  It can be the name of
+		the application value list to be used.  Or it can be the name of a 
+		COM-enabled server to be run.
+
+		See the notes under the BusinessRule element for further explanation.
+-->
+
+
+<!-- ******************************************************************** -->
+<!-- Parameter:
+			Optional parameters that may be used by certain Type and 
+			Setting.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Parameter (#PCDATA) >
+
+<!-- Note:
+		The value of the Parameter element , when used, is the parameters to
+		send to the COM-enabled server.  See the notes under the BusinessRule
+		element for a further explanation.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Group:
+			Defines a loop or group of segments. -->
+<!-- ******************************************************************** -->
+<!ELEMENT Group ( Text*, SegmentRef, (SegmentRef|Group)* ) >
+<!ATTLIST Group
+	ID			CDATA		#IMPLIED
+	Pos		CDATA		#IMPLIED
+	%att-requirement;
+	%att-userspec;
+	MinUse	CDATA		"0"
+	MaxUse	CDATA		"1" >
+
+<!-- ID
+		The ID or name of the loop or group.  -->
+
+<!-- Pos
+		The position of the group within the message.  -->
+
+<!-- %att-requirement;
+		See the parameter entity definition.  -->
+
+<!-- %att-userspec;
+		See the parameter entity definition.  -->
+
+<!-- MinUse
+		The minimum usage or minimum repeat count of the group or loop.  -->
+
+<!-- MaxUse
+		The maximum usage or maximum repeat count of the group or loop.  -->
+
+<!-- Common Text Types for Group
+		Name		Name
+		Purpose	Purpose  -->
+
+
+<!-- ******************************************************************** -->
+<!-- SegmentDictionary:
+			Contains a list of segments in the standard. -->
+<!-- ******************************************************************** -->
+<!ELEMENT SegmentDictionary ( DictSegment+ ) >
+
+
+<!-- ******************************************************************** -->
+<!-- DictSegment:
+			Contains a list of composites and elements that can be used 
+			by each segment.  Also contains any syntax or semantic rules.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT DictSegment ( Text*, Relational*, BusinessRule*, DataElements? ) >
+<!ATTLIST DictSegment
+	ID							CDATA						#REQUIRED
+	IgnoreBaseStructure	(YES)						#IMPLIED
+	Type						(BATCH|INTERACTIVE)	#IMPLIED >
+
+<!-- ID
+		The id or name of the segment.  -->
+
+<!-- IgnoreBaseStructure
+		When used, the value will be set to YES and signifies
+		that the structure of the segment has changed from
+		how the segment was defined in the base standard
+		dictionary.  Therefore, all DataElementRefs and 
+		CompositeRefs of the segment must be specified in the
+		child elements. -->
+
+<!-- Type
+		For UN/EDIFACT segments only.  Specifies that the segment is
+		either batch or interactive.  -->
+
+<!-- Common Text Types for DictSegment:
+		Name				Name or Title
+		Purpose			Purpose  
+		SemanticNote	Semantic Note
+		Comment			Comment  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Relational:
+			Contains a syntax rule or dependancy.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Relational (Position, Position+) >
+<!ATTLIST Relational
+	Condition	(R|C|E|L|P|D1|D2|D3|D4|D5|D6|D7)		#REQUIRED >
+
+<!-- Condition
+		The kind of syntax rule.  R, C, E, L, P are used by ASC X12.  D1 - D7 
+		are used by UN/EDIFACT.
+
+			R	Required				At least one of the Entity is required.
+			C	Conditional			If the first Entity is present, then all the other
+										Entity are required.
+			E	Exclusion			Only one of the Entity can be present at a time.
+			L	List Conditional	If the first Entity is present, then one of the
+										remaining Entity must be present.
+			P	Paired				If any of the Entity are present, then all must
+										be present.
+
+			D1	One and Only One	One and only one of the Entity can be used.
+			D2	All or None			If one of the Entity is used, then all of the
+										Entity must be used.
+			D3	One or More			At least one of the Entity must be used.
+			D4	One or None			No more than one of the Entity can be used.
+			D5	If First, Then		If the first Entity is used, then all the
+				All					other Entity must be used.
+			D6	If First, Then		If the first Entity is used, then at least
+				At Least One More one of the other Entity must be used.
+			D7	If First, Then		If the first Entity is used, then none of
+				None of the			the other Entity may be used.
+				Others  -->
+			
+
+
+<!-- ******************************************************************** -->
+<!-- Position:
+			Specfies the position of the element or segment that is to 
+			be used for the Relational. -->
+<!-- ******************************************************************** -->
+<!ELEMENT Position (#PCDATA) >
+
+
+<!-- ******************************************************************** -->
+<!-- ElementDictionary:
+			Contains a list of elements used in the standard. -->
+<!-- ******************************************************************** -->
+<!ELEMENT ElementDictionary ( DictDataElement+ ) >
+
+
+<!-- ******************************************************************** -->
+<!-- DictDataElement -->
+<!-- ******************************************************************** -->
+<!ELEMENT DictDataElement ( Text*, BusinessRule*, Codes? ) >
+<!ATTLIST DictDataElement
+	ID					CDATA																		#REQUIRED
+	Type				(R|ID|AN|A|DT|TM|B|N|N0|N1|N2|N3|N4|N5|N6|N7|N8|N9|NX)	#IMPLIED
+	Min				CDATA																		#IMPLIED
+	Max				CDATA																		#IMPLIED
+	VariableName	CDATA																		#IMPLIED
+	ValueListName	CDATA																		#IMPLIED
+	DefaultValue	CDATA																		#IMPLIED >
+
+<!-- ID
+		The id or name of the dictionary data element.  -->
+
+<!-- Type
+		The data element type.  -->
+
+<!-- Min
+		The minimum character positions.  -->
+
+<!-- Max
+		The maximum character positions.  Max is always greater than min,
+		or is "N/A" (i.e. binary segments).  -->
+
+<!-- VariableName
+		The user supplied name for the data element.  This variable name
+		can then be used in a BusinessRule element.  -->
+
+<!-- ValueListName
+		The name of the value list that is attached to the data element.  The
+		actual list will be stored in the ValueList element.  -->
+
+<!-- DefaultValue
+		The value of the element, if the element is not found in the 
+		EDI data.  -->
+
+<!-- Common Text Types for DictDataElement:
+		Name				Name or Title
+		Purpose			Purpose
+		SemanticNote	Semantic Note
+		Comment			Comment  -->
+
+
+<!-- ******************************************************************** -->
+<!-- CompositeDictionary 
+			Contains a list of composites used in the standard.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT CompositeDictionary ( DictComposite+ ) >
+
+
+<!-- ******************************************************************** -->
+<!-- DictComposite
+			Defines a composite that can be used by the standard.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT DictComposite ( Text*, Relational*, BusinessRule*, DataElementRef* ) >
+<!ATTLIST DictComposite
+	ID							CDATA		#REQUIRED
+	IgnoreBaseStructure	(YES)		#IMPLIED >
+
+<!-- ID
+		The id or name of the composite.  -->
+
+<!-- IgnoreBaseStructure
+		When used, the value will be set to YES and signifies
+		that the structure of the composite has changed from
+		how the composite was defined in the base standard
+		dictionary.  Therefore, all DataElementRefs of the 
+		composite must be specified in the child elements. -->
+
+<!-- Common Text Types for DictSegment:
+		Name				Name or Title
+		Purpose			Purpose
+		SemanticNote	Semantic Note
+		Comment			Comment  -->
+
+<!-- ******************************************************************** -->
+<!-- ValueLists
+		The ValueLists element contains the implementation's application
+		value lists.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT ValueLists (ValueList+) >
+
+
+<!-- ******************************************************************** -->
+<!-- ValueList
+		Contains the an implementation's application value list which define 
+		regular expressions to validate code values.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT ValueList (Value+) >
+<!ATTLIST ValueList
+	Name				CDATA		#REQUIRED
+	Description		CDATA		#IMPLIED >
+
+<!-- Name
+		The name of the value list.  -->
+
+<!-- Description
+		The description of the value list.  -->
+
+
+<!-- ******************************************************************** -->
+<!-- Private 
+			The Private element is a place for companies to place 
+			information that is useful to themselves but is of no 
+			interest to others.-->
+<!-- ******************************************************************** -->
+<!ELEMENT Private ( Entity, Item+ ) >
+
+
+<!-- ******************************************************************** -->
+<!-- Entity
+			The Entity element is a child of the Private element and usually
+			refers to a company name.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Entity (#PCDATA) >
+
+
+<!-- ******************************************************************** -->
+<!-- Item
+			The Item element is a child of the Private element and is free
+			form information that will be used by the Entity.  -->
+<!-- ******************************************************************** -->
+<!ELEMENT Item (#PCDATA) >
+
+
+<!-- ******************************************************************** -->
+<!-- End of DTD  -->
+<!-- ******************************************************************** -->

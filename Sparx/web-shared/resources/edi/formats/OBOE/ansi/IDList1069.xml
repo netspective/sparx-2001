@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Spouse</idValue>
+    <idCode>02</idCode>
+        <idValue>Son or Daughter</idValue>
+    <idCode>03</idCode>
+        <idValue>Father or Mother</idValue>
+    <idCode>04</idCode>
+        <idValue>Grandfather or Grandmother</idValue>
+    <idCode>05</idCode>
+        <idValue>Grandson or Granddaughter</idValue>
+    <idCode>06</idCode>
+        <idValue>Uncle or Aunt</idValue>
+    <idCode>07</idCode>
+        <idValue>Nephew or Niece</idValue>
+    <idCode>08</idCode>
+        <idValue>Cousin</idValue>
+    <idCode>09</idCode>
+        <idValue>Adopted Child</idValue>
+    <idCode>10</idCode>
+        <idValue>Foster Child</idValue>
+    <idCode>11</idCode>
+        <idValue>Son-in-law or Daughter-in-law</idValue>
+    <idCode>12</idCode>
+        <idValue>Brother-in-law or Sister-in-law</idValue>
+    <idCode>13</idCode>
+        <idValue>Mother-in-law or Father-in-law</idValue>
+    <idCode>14</idCode>
+        <idValue>Brother or Sister</idValue>
+    <idCode>15</idCode>
+        <idValue>Ward</idValue>
+    <idCode>17</idCode>
+        <idValue>Stepson or Stepdaughter</idValue>
+    <idCode>18</idCode>
+        <idValue>Self</idValue>
+    <idCode>19</idCode>
+        <idValue>Child</idValue>
+    <idCode>20</idCode>
+        <idValue>Employee</idValue>
+    <idCode>21</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>22</idCode>
+        <idValue>Handicapped Dependent</idValue>
+    <idCode>23</idCode>
+        <idValue>Sponsored Dependent</idValue>
+    <idCode>24</idCode>
+        <idValue>Dependent of a Minor Dependent</idValue>
+    <idCode>25</idCode>
+        <idValue>Ex-spouse</idValue>
+    <idCode>26</idCode>
+        <idValue>Guardian</idValue>
+    <idCode>27</idCode>
+        <idValue>Student</idValue>
+    <idCode>28</idCode>
+        <idValue>Friend</idValue>
+    <idCode>29</idCode>
+        <idValue>Significant Other</idValue>
+    <idCode>30</idCode>
+        <idValue>Both Parents</idValue>
+    <idCode>31</idCode>
+        <idValue>Court Appointed Guardian</idValue>
+    <idCode>32</idCode>
+        <idValue>Mother</idValue>
+    <idCode>33</idCode>
+        <idValue>Father</idValue>
+    <idCode>34</idCode>
+        <idValue>Other Adult</idValue>
+    <idCode>36</idCode>
+        <idValue>Emancipated Minor</idValue>
+    <idCode>37</idCode>
+        <idValue>Agency Representative</idValue>
+    <idCode>38</idCode>
+        <idValue>Collateral Dependent</idValue>
+    <idCode>39</idCode>
+        <idValue>Organ Donor</idValue>
+    <idCode>40</idCode>
+        <idValue>Cadaver Donor</idValue>
+    <idCode>41</idCode>
+        <idValue>Injured Plaintiff</idValue>
+    <idCode>43</idCode>
+        <idValue>Child Where Insured Has No Financial Responsibility</idValue>
+    <idCode>45</idCode>
+        <idValue>Widow</idValue>
+    <idCode>46</idCode>
+        <idValue>Widower</idValue>
+    <idCode>47</idCode>
+        <idValue>State Fund</idValue>
+    <idCode>48</idCode>
+        <idValue>Stepfather</idValue>
+    <idCode>49</idCode>
+        <idValue>Stepmother</idValue>
+    <idCode>50</idCode>
+        <idValue>Foster Parent</idValue>
+    <idCode>51</idCode>
+        <idValue>Emergency Contact</idValue>
+    <idCode>52</idCode>
+        <idValue>Employer</idValue>
+    <idCode>53</idCode>
+        <idValue>Life Partner</idValue>
+    <idCode>55</idCode>
+        <idValue>Adopted Daughter</idValue>
+    <idCode>56</idCode>
+        <idValue>Adopted Son</idValue>
+    <idCode>57</idCode>
+        <idValue>Adoptive Father</idValue>
+    <idCode>58</idCode>
+        <idValue>Adoptive Mother</idValue>
+    <idCode>59</idCode>
+        <idValue>Adoptive Parents</idValue>
+    <idCode>60</idCode>
+        <idValue>Annuitant</idValue>
+    <idCode>61</idCode>
+        <idValue>Aunt</idValue>
+    <idCode>62</idCode>
+        <idValue>Brother</idValue>
+    <idCode>63</idCode>
+        <idValue>Brother-in-Law</idValue>
+    <idCode>64</idCode>
+        <idValue>Business</idValue>
+    <idCode>65</idCode>
+        <idValue>Business Associate</idValue>
+    <idCode>66</idCode>
+        <idValue>Business Insurance Trust</idValue>
+    <idCode>67</idCode>
+        <idValue>Business Partner</idValue>
+    <idCode>68</idCode>
+        <idValue>Charity</idValue>
+    <idCode>70</idCode>
+        <idValue>Children of Marriage</idValue>
+    <idCode>71</idCode>
+        <idValue>Company</idValue>
+    <idCode>72</idCode>
+        <idValue>Corporation</idValue>
+    <idCode>73</idCode>
+        <idValue>Creditor</idValue>
+    <idCode>74</idCode>
+        <idValue>Daughter</idValue>
+    <idCode>75</idCode>
+        <idValue>Daughter-in-Law</idValue>
+    <idCode>76</idCode>
+        <idValue>Dependent</idValue>
+    <idCode>78</idCode>
+        <idValue>Estate</idValue>
+    <idCode>79</idCode>
+        <idValue>Ex-wife</idValue>
+    <idCode>80</idCode>
+        <idValue>Family Member</idValue>
+    <idCode>81</idCode>
+        <idValue>Father-in-Law</idValue>
+    <idCode>82</idCode>
+        <idValue>Fiancé (Male)</idValue>
+    <idCode>83</idCode>
+        <idValue>Financée (Female)</idValue>
+    <idCode>84</idCode>
+        <idValue>Fiduciary</idValue>
+    <idCode>86</idCode>
+        <idValue>Foster Daughter</idValue>
+    <idCode>87</idCode>
+        <idValue>Foster Father</idValue>
+    <idCode>88</idCode>
+        <idValue>Foster Mother</idValue>
+    <idCode>90</idCode>
+        <idValue>Foster Son</idValue>
+    <idCode>91</idCode>
+        <idValue>God Daughter</idValue>
+    <idCode>92</idCode>
+        <idValue>God Father</idValue>
+    <idCode>93</idCode>
+        <idValue>God Parents</idValue>
+    <idCode>94</idCode>
+        <idValue>God Son</idValue>
+    <idCode>95</idCode>
+        <idValue>Grandchildren</idValue>
+    <idCode>96</idCode>
+        <idValue>Granddaughter</idValue>
+    <idCode>97</idCode>
+        <idValue>Grandfather</idValue>
+    <idCode>98</idCode>
+        <idValue>Grandmother</idValue>
+    <idCode>99</idCode>
+        <idValue>Grandparents</idValue>
+    <idCode>A1</idCode>
+        <idValue>Grandson</idValue>
+    <idCode>A2</idCode>
+        <idValue>Great Aunt</idValue>
+    <idCode>A3</idCode>
+        <idValue>Ex-husband</idValue>
+    <idCode>A4</idCode>
+        <idValue>Half Brother</idValue>
+    <idCode>A5</idCode>
+        <idValue>Half Sister</idValue>
+    <idCode>A6</idCode>
+        <idValue>Husband</idValue>
+    <idCode>A7</idCode>
+        <idValue>Institution</idValue>
+    <idCode>A8</idCode>
+        <idValue>Mortgage Holder</idValue>
+    <idCode>A9</idCode>
+        <idValue>Mother-in-Law</idValue>
+    <idCode>B1</idCode>
+        <idValue>Nephew</idValue>
+    <idCode>B2</idCode>
+        <idValue>Niece</idValue>
+    <idCode>B3</idCode>
+        <idValue>Parents-in-Law</idValue>
+    <idCode>B4</idCode>
+        <idValue>Partnership</idValue>
+    <idCode>B5</idCode>
+        <idValue>Partner</idValue>
+    <idCode>B6</idCode>
+        <idValue>Personal Insurance Trust</idValue>
+    <idCode>B7</idCode>
+        <idValue>Sister</idValue>
+    <idCode>B8</idCode>
+        <idValue>Sister-in-Law</idValue>
+    <idCode>B9</idCode>
+        <idValue>Sole Proprietorship</idValue>
+    <idCode>C1</idCode>
+        <idValue>Son</idValue>
+    <idCode>C2</idCode>
+        <idValue>Son-in-Law</idValue>
+    <idCode>C3</idCode>
+        <idValue>Step Brother</idValue>
+    <idCode>C4</idCode>
+        <idValue>Step Children</idValue>
+    <idCode>C5</idCode>
+        <idValue>Step Daughter</idValue>
+    <idCode>C8</idCode>
+        <idValue>Step Sister</idValue>
+    <idCode>C9</idCode>
+        <idValue>Step Son</idValue>
+    <idCode>D1</idCode>
+        <idValue>Trust</idValue>
+    <idCode>D2</idCode>
+        <idValue>Trustee</idValue>
+    <idCode>D3</idCode>
+        <idValue>Uncle</idValue>
+    <idCode>D4</idCode>
+        <idValue>Wife</idValue>
+    <idCode>D5</idCode>
+        <idValue>Teacher</idValue>
+    <idCode>D6</idCode>
+        <idValue>School Counselor</idValue>
+    <idCode>D7</idCode>
+        <idValue>School Principal</idValue>
+    <idCode>D8</idCode>
+        <idValue>Other School Administrator</idValue>
+    <idCode>D9</idCode>
+        <idValue>Coach</idValue>
+    <idCode>E1</idCode>
+        <idValue>Activity Sponsor</idValue>
+    <idCode>E2</idCode>
+        <idValue>Supervisor</idValue>
+    <idCode>E3</idCode>
+        <idValue>Co-worker</idValue>
+    <idCode>E4</idCode>
+        <idValue>Minister or Priest</idValue>
+    <idCode>E5</idCode>
+        <idValue>Ecclesiastical or Religious Leader</idValue>
+    <idCode>E6</idCode>
+        <idValue>God Mother</idValue>
+    <idCode>E7</idCode>
+        <idValue>Probation Officer</idValue>
+    <idCode>E8</idCode>
+        <idValue>Accountant</idValue>
+    <idCode>E9</idCode>
+        <idValue>Advisor</idValue>
+    <idCode>F1</idCode>
+        <idValue>Alma Mater</idValue>
+    <idCode>F2</idCode>
+        <idValue>Applicant</idValue>
+    <idCode>F3</idCode>
+        <idValue>Banker</idValue>
+    <idCode>F6</idCode>
+        <idValue>Clergyman</idValue>
+    <idCode>F7</idCode>
+        <idValue>Client</idValue>
+    <idCode>F8</idCode>
+        <idValue>Club or Organization Officer</idValue>
+    <idCode>F9</idCode>
+        <idValue>Doctor</idValue>
+    <idCode>G2</idCode>
+        <idValue>Educator/Teacher/Instructor</idValue>
+    <idCode>G3</idCode>
+        <idValue>Betrothed</idValue>
+    <idCode>G4</idCode>
+        <idValue>Insured</idValue>
+    <idCode>G5</idCode>
+        <idValue>Lawyer</idValue>
+    <idCode>G6</idCode>
+        <idValue>Medical Care Provider</idValue>
+    <idCode>G7</idCode>
+        <idValue>Neighbor</idValue>
+    <idCode>G8</idCode>
+        <idValue>Other Relationship</idValue>
+    <idCode>G9</idCode>
+        <idValue>Other Relative</idValue>
+    <idCode>H1</idCode>
+        <idValue>Owner</idValue>
+    <idCode>H4</idCode>
+        <idValue>Payor</idValue>
+    <idCode>N1</idCode>
+        <idValue>None</idValue>
+    <idCode>OT</idCode>
+        <idValue>Non-applicable Individual Relationship Category</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>AA</idCode>
+        <idValue>International Telephone Access Code</idValue>
+    <idCode>AB</idCode>
+        <idValue>Joint Facsimile and Phone Number</idValue>
+    <idCode>AC</idCode>
+        <idValue>Message Only Voice Number</idValue>
+    <idCode>AD</idCode>
+        <idValue>Delivery Location Phone</idValue>
+    <idCode>AP</idCode>
+        <idValue>Alternate Telephone</idValue>
+    <idCode>AS</idCode>
+        <idValue>Answering Service</idValue>
+    <idCode>AU</idCode>
+        <idValue>Defense Switched Network</idValue>
+    <idCode>BN</idCode>
+        <idValue>Beeper Number</idValue>
+    <idCode>BT</idCode>
+        <idValue>BTX Number</idValue>
+    <idCode>CA</idCode>
+        <idValue>Cable</idValue>
+    <idCode>CP</idCode>
+        <idValue>Cellular Phone</idValue>
+    <idCode>DN</idCode>
+        <idValue>Defense Data Network (DDN)</idValue>
+    <idCode>ED</idCode>
+        <idValue>Electronic Data Interchange Access Number</idValue>
+    <idCode>EM</idCode>
+        <idValue>Electronic Mail</idValue>
+    <idCode>EX</idCode>
+        <idValue>Telephone Extension</idValue>
+    <idCode>FT</idCode>
+        <idValue>Federal Telecommunications System (FTS)</idValue>
+    <idCode>FU</idCode>
+        <idValue>Facsimile User Identifier</idValue>
+    <idCode>FX</idCode>
+        <idValue>Facsimile</idValue>
+    <idCode>HF</idCode>
+        <idValue>Home Facsimile Number</idValue>
+    <idCode>HP</idCode>
+        <idValue>Home Phone Number</idValue>
+    <idCode>IT</idCode>
+        <idValue>International Telephone</idValue>
+    <idCode>MN</idCode>
+        <idValue>Modem Number</idValue>
+    <idCode>NP</idCode>
+        <idValue>Night Telephone</idValue>
+    <idCode>OF</idCode>
+        <idValue>Other Residential Facsimile Number</idValue>
+    <idCode>OT</idCode>
+        <idValue>Other Residential Telephone Number</idValue>
+    <idCode>PA</idCode>
+        <idValue>Appointment Phone</idValue>
+    <idCode>PC</idCode>
+        <idValue>Personal Cellular</idValue>
+    <idCode>PP</idCode>
+        <idValue>Personal Phone</idValue>
+    <idCode>PS</idCode>
+        <idValue>Packet Switching</idValue>
+    <idCode>SP</idCode>
+        <idValue>Showing Phone</idValue>
+    <idCode>TE</idCode>
+        <idValue>Telephone</idValue>
+    <idCode>TL</idCode>
+        <idValue>Telex</idValue>
+    <idCode>TM</idCode>
+        <idValue>Telemail</idValue>
+    <idCode>TN</idCode>
+        <idValue>Teletex Number</idValue>
+    <idCode>TX</idCode>
+        <idValue>TWX</idValue>
+    <idCode>UR</idCode>
+        <idValue>Uniform Resource Locator (URL)</idValue>
+    <idCode>VM</idCode>
+        <idValue>Voice Mail</idValue>
+    <idCode>WC</idCode>
+        <idValue>Work Cellular</idValue>
+    <idCode>WF</idCode>
+        <idValue>Work Facsimile Number</idValue>
+    <idCode>WP</idCode>
+        <idValue>Work Phone Number</idValue>
+</idList>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Parent</idValue>
+    <idCode>02</idCode>
+        <idValue>Child</idValue>
+    <idCode>03</idCode>
+        <idValue>Corporation</idValue>
+    <idCode>04</idCode>
+        <idValue>Subsidiary</idValue>
+    <idCode>05</idCode>
+        <idValue>Wholly-Owned Subsidiary</idValue>
+    <idCode>06</idCode>
+        <idValue>Division</idValue>
+    <idCode>07</idCode>
+        <idValue>Company</idValue>
+    <idCode>08</idCode>
+        <idValue>Doing Business As</idValue>
+    <idCode>09</idCode>
+        <idValue>Component</idValue>
+    <idCode>10</idCode>
+        <idValue>Partnership</idValue>
+    <idCode>11</idCode>
+        <idValue>Partner</idValue>
+    <idCode>12</idCode>
+        <idValue>Member</idValue>
+    <idCode>13</idCode>
+        <idValue>Association</idValue>
+    <idCode>14</idCode>
+        <idValue>Headquarters</idValue>
+    <idCode>15</idCode>
+        <idValue>Profit Center</idValue>
+    <idCode>16</idCode>
+        <idValue>Cost Center</idValue>
+    <idCode>17</idCode>
+        <idValue>Product Line</idValue>
+    <idCode>18</idCode>
+        <idValue>Union</idValue>
+    <idCode>19</idCode>
+        <idValue>Group</idValue>
+    <idCode>20</idCode>
+        <idValue>Department</idValue>
+    <idCode>21</idCode>
+        <idValue>Multinational Corporation</idValue>
+    <idCode>22</idCode>
+        <idValue>Sibling</idValue>
+    <idCode>23</idCode>
+        <idValue>Affiliate</idValue>
+    <idCode>24</idCode>
+        <idValue>Direct Affiliate</idValue>
+    <idCode>25</idCode>
+        <idValue>Established Patient</idValue>
+    <idCode>26</idCode>
+        <idValue>Not Established Patient</idValue>
+    <idCode>27</idCode>
+        <idValue>Domestic Partner</idValue>
+    <idCode>29</idCode>
+        <idValue>Power of Attorney Delegee</idValue>
+    <idCode>30</idCode>
+        <idValue>Significant Other</idValue>
+    <idCode>31</idCode>
+        <idValue>Ultimate Parent Company</idValue>
+    <idCode>32</idCode>
+        <idValue>Branch</idValue>
+    <idCode>33</idCode>
+        <idValue>Owned</idValue>
+    <idCode>34</idCode>
+        <idValue>Managed</idValue>
+    <idCode>35</idCode>
+        <idValue>Leased</idValue>
+    <idCode>36</idCode>
+        <idValue>Group Affiliate</idValue>
+    <idCode>37</idCode>
+        <idValue>Owner Affiliate</idValue>
+    <idCode>38</idCode>
+        <idValue>Owner</idValue>
+    <idCode>39</idCode>
+        <idValue>Related for U.S. Customs Purposes</idValue>
+    <idCode>40</idCode>
+        <idValue>Related for U.S. Bureau of the Census Purposes</idValue>
+    <idCode>41</idCode>
+        <idValue>Spouse</idValue>
+    <idCode>42</idCode>
+        <idValue>Adoptive Parent</idValue>
+    <idCode>43</idCode>
+        <idValue>Bank</idValue>
+    <idCode>44</idCode>
+        <idValue>Brother</idValue>
+    <idCode>45</idCode>
+        <idValue>Business Associate</idValue>
+    <idCode>46</idCode>
+        <idValue>Daughter</idValue>
+    <idCode>47</idCode>
+        <idValue>Dependent</idValue>
+    <idCode>48</idCode>
+        <idValue>Employee</idValue>
+    <idCode>49</idCode>
+        <idValue>Employer</idValue>
+    <idCode>50</idCode>
+        <idValue>Father</idValue>
+    <idCode>51</idCode>
+        <idValue>Fiancée</idValue>
+    <idCode>52</idCode>
+        <idValue>Foreman</idValue>
+    <idCode>53</idCode>
+        <idValue>Foster Parent</idValue>
+    <idCode>54</idCode>
+        <idValue>Friend</idValue>
+    <idCode>55</idCode>
+        <idValue>Grand Child</idValue>
+    <idCode>56</idCode>
+        <idValue>Grand Parent</idValue>
+    <idCode>57</idCode>
+        <idValue>Guardian</idValue>
+    <idCode>58</idCode>
+        <idValue>Inforce Policyholder</idValue>
+    <idCode>59</idCode>
+        <idValue>Institution</idValue>
+    <idCode>60</idCode>
+        <idValue>Minister</idValue>
+    <idCode>61</idCode>
+        <idValue>Mother</idValue>
+    <idCode>62</idCode>
+        <idValue>Neighbor</idValue>
+    <idCode>63</idCode>
+        <idValue>Non Family</idValue>
+    <idCode>64</idCode>
+        <idValue>None</idValue>
+    <idCode>65</idCode>
+        <idValue>Other</idValue>
+    <idCode>66</idCode>
+        <idValue>Other Family</idValue>
+    <idCode>67</idCode>
+        <idValue>Self</idValue>
+    <idCode>68</idCode>
+        <idValue>Sister</idValue>
+    <idCode>69</idCode>
+        <idValue>Step Child</idValue>
+    <idCode>70</idCode>
+        <idValue>Supervisor</idValue>
+    <idCode>71</idCode>
+        <idValue>Teacher</idValue>
+    <idCode>72</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>73</idCode>
+        <idValue>Business Name</idValue>
+    <idCode>74</idCode>
+        <idValue>Counselor</idValue>
+    <idCode>75</idCode>
+        <idValue>Sanctioning Organization</idValue>
+    <idCode>76</idCode>
+        <idValue>Sponsoring Organization</idValue>
+    <idCode>77</idCode>
+        <idValue>Same Job as Applicant</idValue>
+    <idCode>78</idCode>
+        <idValue>Stockholder</idValue>
+    <idCode>79</idCode>
+        <idValue>Attorney</idValue>
+    <idCode>80</idCode>
+        <idValue>Aunt</idValue>
+    <idCode>81</idCode>
+        <idValue>Brother-in-law</idValue>
+    <idCode>82</idCode>
+        <idValue>Cousin</idValue>
+    <idCode>83</idCode>
+        <idValue>Daughter-in-law</idValue>
+    <idCode>84</idCode>
+        <idValue>Family</idValue>
+    <idCode>85</idCode>
+        <idValue>Father-in-law</idValue>
+    <idCode>86</idCode>
+        <idValue>Financial Interest</idValue>
+    <idCode>87</idCode>
+        <idValue>Marketing Unit</idValue>
+    <idCode>88</idCode>
+        <idValue>Mother-in-law</idValue>
+    <idCode>89</idCode>
+        <idValue>Nephew</idValue>
+    <idCode>90</idCode>
+        <idValue>Niece</idValue>
+    <idCode>91</idCode>
+        <idValue>Officer</idValue>
+    <idCode>92</idCode>
+        <idValue>Principal Customer</idValue>
+    <idCode>93</idCode>
+        <idValue>Principal Supplier</idValue>
+    <idCode>94</idCode>
+        <idValue>Sister-in-law</idValue>
+    <idCode>95</idCode>
+        <idValue>Son</idValue>
+    <idCode>96</idCode>
+        <idValue>Son-in-law</idValue>
+    <idCode>97</idCode>
+        <idValue>Uncle</idValue>
+</idList>

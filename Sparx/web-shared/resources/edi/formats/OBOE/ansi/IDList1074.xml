@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Manufactured</idValue>
+    <idCode>02</idCode>
+        <idValue>Commercial - Non-Residential</idValue>
+    <idCode>03</idCode>
+        <idValue>Commercial - Residential</idValue>
+    <idCode>04</idCode>
+        <idValue>Condominium</idValue>
+    <idCode>05</idCode>
+        <idValue>Farm</idValue>
+    <idCode>06</idCode>
+        <idValue>Home &amp; Business Combined</idValue>
+    <idCode>07</idCode>
+        <idValue>Land and Lots</idValue>
+    <idCode>08</idCode>
+        <idValue>Mobile Home</idValue>
+    <idCode>09</idCode>
+        <idValue>Deminimus Planned Unit Development (PUD)</idValue>
+    <idCode>10</idCode>
+        <idValue>Attached</idValue>
+    <idCode>11</idCode>
+        <idValue>Detached</idValue>
+    <idCode>13</idCode>
+        <idValue>Cooperative</idValue>
+    <idCode>14</idCode>
+        <idValue>Single-family Residence</idValue>
+    <idCode>15</idCode>
+        <idValue>Two-to-Four-unit Residence</idValue>
+    <idCode>16</idCode>
+        <idValue>Townhouse</idValue>
+    <idCode>17</idCode>
+        <idValue>Apartment Condominium</idValue>
+    <idCode>18</idCode>
+        <idValue>Multifamily (More than Four Units)</idValue>
+    <idCode>19</idCode>
+        <idValue>Twin Home</idValue>
+    <idCode>20</idCode>
+        <idValue>Bridges</idValue>
+    <idCode>21</idCode>
+        <idValue>Dams</idValue>
+    <idCode>22</idCode>
+        <idValue>Towers</idValue>
+    <idCode>23</idCode>
+        <idValue>Tunnels</idValue>
+    <idCode>24</idCode>
+        <idValue>Pipelines</idValue>
+    <idCode>25</idCode>
+        <idValue>Drilling Rigs</idValue>
+    <idCode>26</idCode>
+        <idValue>Antennas</idValue>
+    <idCode>27</idCode>
+        <idValue>Storage Tanks</idValue>
+    <idCode>28</idCode>
+        <idValue>Billboards and Signs</idValue>
+    <idCode>29</idCode>
+        <idValue>Fixed Machinery</idValue>
+    <idCode>30</idCode>
+        <idValue>Planned Unit Development</idValue>
+    <idCode>31</idCode>
+        <idValue>Site Built</idValue>
+    <idCode>32</idCode>
+        <idValue>High-rise</idValue>
+    <idCode>33</idCode>
+        <idValue>Subdivision</idValue>
+    <idCode>34</idCode>
+        <idValue>Stacked</idValue>
+    <idCode>35</idCode>
+        <idValue>Zero Lot Line</idValue>
+    <idCode>36</idCode>
+        <idValue>Row House</idValue>
+    <idCode>39</idCode>
+        <idValue>Modular</idValue>
+    <idCode>40</idCode>
+        <idValue>Yard</idValue>
+    <idCode>41</idCode>
+        <idValue>Factory</idValue>
+    <idCode>42</idCode>
+        <idValue>Garage</idValue>
+    <idCode>43</idCode>
+        <idValue>Office</idValue>
+    <idCode>44</idCode>
+        <idValue>Premises</idValue>
+    <idCode>45</idCode>
+        <idValue>Shop</idValue>
+    <idCode>46</idCode>
+        <idValue>Showroom</idValue>
+    <idCode>47</idCode>
+        <idValue>Warehouse</idValue>
+    <idCode>48</idCode>
+        <idValue>Works</idValue>
+    <idCode>49</idCode>
+        <idValue>Workshop</idValue>
+    <idCode>50</idCode>
+        <idValue>Residential</idValue>
+    <idCode>51</idCode>
+        <idValue>Commercial</idValue>
+    <idCode>52</idCode>
+        <idValue>Seasonal</idValue>
+    <idCode>53</idCode>
+        <idValue>Timeshare</idValue>
+    <idCode>54</idCode>
+        <idValue>Business Opportunity</idValue>
+    <idCode>55</idCode>
+        <idValue>Industrial</idValue>
+    <idCode>56</idCode>
+        <idValue>Ranch</idValue>
+    <idCode>57</idCode>
+        <idValue>Industrial Building</idValue>
+    <idCode>58</idCode>
+        <idValue>Semi Detached Building</idValue>
+    <idCode>59</idCode>
+        <idValue>Detached Building</idValue>
+    <idCode>60</idCode>
+        <idValue>Industrial Mall</idValue>
+    <idCode>61</idCode>
+        <idValue>Shopping Plaza</idValue>
+    <idCode>62</idCode>
+        <idValue>Shopping Mall</idValue>
+    <idCode>63</idCode>
+        <idValue>Apartment Building</idValue>
+    <idCode>64</idCode>
+        <idValue>Residential Buildings</idValue>
+    <idCode>65</idCode>
+        <idValue>Other Property Type</idValue>
+    <idCode>66</idCode>
+        <idValue>Coldstore</idValue>
+    <idCode>67</idCode>
+        <idValue>Complex</idValue>
+    <idCode>68</idCode>
+        <idValue>Forecourt</idValue>
+    <idCode>69</idCode>
+        <idValue>Hotel</idValue>
+    <idCode>70</idCode>
+        <idValue>Laboratory</idValue>
+    <idCode>71</idCode>
+        <idValue>Stadium</idValue>
+    <idCode>72</idCode>
+        <idValue>Store</idValue>
+    <idCode>UN</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

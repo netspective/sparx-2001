@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>AD</idCode>
+        <idValue>Admitting</idValue>
+    <idCode>AS</idCode>
+        <idValue>Assistant Surgeon</idValue>
+    <idCode>AT</idCode>
+        <idValue>Attending</idValue>
+    <idCode>BI</idCode>
+        <idValue>Billing</idValue>
+    <idCode>BS</idCode>
+        <idValue>Billing Service</idValue>
+    <idCode>CO</idCode>
+        <idValue>Consulting</idValue>
+    <idCode>CV</idCode>
+        <idValue>Covering</idValue>
+    <idCode>H</idCode>
+        <idValue>Hospital</idValue>
+    <idCode>HH</idCode>
+        <idValue>Home Health Care</idValue>
+    <idCode>LA</idCode>
+        <idValue>Laboratory</idValue>
+    <idCode>ON</idCode>
+        <idValue>On Staff</idValue>
+    <idCode>OP</idCode>
+        <idValue>Operating</idValue>
+    <idCode>OR</idCode>
+        <idValue>Ordering</idValue>
+    <idCode>OT</idCode>
+        <idValue>Other Physician</idValue>
+    <idCode>P1</idCode>
+        <idValue>Pharmacist</idValue>
+    <idCode>P2</idCode>
+        <idValue>Pharmacy</idValue>
+    <idCode>PC</idCode>
+        <idValue>Primary Care Physician</idValue>
+    <idCode>PE</idCode>
+        <idValue>Performing</idValue>
+    <idCode>PT</idCode>
+        <idValue>Pay-To</idValue>
+    <idCode>PU</idCode>
+        <idValue>Purchasing</idValue>
+    <idCode>R</idCode>
+        <idValue>Rural Health Clinic</idValue>
+    <idCode>RF</idCode>
+        <idValue>Referring</idValue>
+    <idCode>RP</idCode>
+        <idValue>Reporting Provider</idValue>
+    <idCode>SB</idCode>
+        <idValue>Submitting</idValue>
+    <idCode>SK</idCode>
+        <idValue>Skilled Nursing Facility</idValue>
+    <idCode>SU</idCode>
+        <idValue>Supervising</idValue>
+</idList>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>AA</idCode>
+        <idValue>Leave of Absence with Pay</idValue>
+    <idCode>AB</idCode>
+        <idValue>Leave of Absence without Pay</idValue>
+    <idCode>AC</idCode>
+        <idValue>Active</idValue>
+    <idCode>AD</idCode>
+        <idValue>Apprenticeship Full-time</idValue>
+    <idCode>AE</idCode>
+        <idValue>Active Reserve</idValue>
+    <idCode>AF</idCode>
+        <idValue>Flexible Work Plan</idValue>
+    <idCode>AG</idCode>
+        <idValue>Alerted</idValue>
+    <idCode>AH</idCode>
+        <idValue>Assigned</idValue>
+    <idCode>AO</idCode>
+        <idValue>Active Military - Overseas</idValue>
+    <idCode>AP</idCode>
+        <idValue>Apprenticeship Part-time</idValue>
+    <idCode>AU</idCode>
+        <idValue>Active Military - USA</idValue>
+    <idCode>CA</idCode>
+        <idValue>Non-applicable Employment Status Category</idValue>
+    <idCode>CO</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA)</idValue>
+    <idCode>CT</idCode>
+        <idValue>Continued</idValue>
+    <idCode>DC</idCode>
+        <idValue>Discharged or Terminated for Cause</idValue>
+    <idCode>DD</idCode>
+        <idValue>Dishonorably Discharged</idValue>
+    <idCode>DI</idCode>
+        <idValue>Deceased</idValue>
+    <idCode>DQ</idCode>
+        <idValue>Disqualified: Medical or Physical Condition</idValue>
+    <idCode>DR</idCode>
+        <idValue>Disqualified: Other</idValue>
+    <idCode>DS</idCode>
+        <idValue>Disabled</idValue>
+    <idCode>FA</idCode>
+        <idValue>Furloughed: Job Abolished, Force Reduction</idValue>
+    <idCode>FB</idCode>
+        <idValue>Furloughed: Bumped or Displaced</idValue>
+    <idCode>FC</idCode>
+        <idValue>Furloughed: Facility Closed</idValue>
+    <idCode>FO</idCode>
+        <idValue>Furloughed: Other</idValue>
+    <idCode>FT</idCode>
+        <idValue>Full-time</idValue>
+    <idCode>HD</idCode>
+        <idValue>Honorably Discharged</idValue>
+    <idCode>IA</idCode>
+        <idValue>Inactive</idValue>
+    <idCode>IR</idCode>
+        <idValue>Inactive Reserves</idValue>
+    <idCode>L1</idCode>
+        <idValue>Leave of Absence</idValue>
+    <idCode>LA</idCode>
+        <idValue>Leave of Absence: Personal</idValue>
+    <idCode>LE</idCode>
+        <idValue>Leave of Absence: Education</idValue>
+    <idCode>LF</idCode>
+        <idValue>Leave of Absence: Family Medical Leave Act (FMLA)</idValue>
+    <idCode>LM</idCode>
+        <idValue>Leave of Absence: Maternity</idValue>
+    <idCode>LS</idCode>
+        <idValue>Leave of Absence: Sickness</idValue>
+    <idCode>LU</idCode>
+        <idValue>Leave of Absence: Union</idValue>
+    <idCode>LW</idCode>
+        <idValue>Leave of Absence: Without Permission, Unauthorized</idValue>
+    <idCode>LX</idCode>
+        <idValue>Leave of Absence: Military</idValue>
+    <idCode>NE</idCode>
+        <idValue>Not Employed</idValue>
+    <idCode>OS</idCode>
+        <idValue>On Strike</idValue>
+    <idCode>OT</idCode>
+        <idValue>Other</idValue>
+    <idCode>PA</idCode>
+        <idValue>Promoted</idValue>
+    <idCode>PE</idCode>
+        <idValue>Plan to Enlist</idValue>
+    <idCode>PT</idCode>
+        <idValue>Part-time</idValue>
+    <idCode>PV</idCode>
+        <idValue>Previous</idValue>
+    <idCode>PW</idCode>
+        <idValue>Piece Worker</idValue>
+    <idCode>RA</idCode>
+        <idValue>Resigned: Retired</idValue>
+    <idCode>RB</idCode>
+        <idValue>Relocated</idValue>
+    <idCode>RC</idCode>
+        <idValue>Reassigned</idValue>
+    <idCode>RD</idCode>
+        <idValue>Resigned: Moved</idValue>
+    <idCode>RE</idCode>
+        <idValue>Recommissioned</idValue>
+    <idCode>RI</idCode>
+        <idValue>Resigned: Injury</idValue>
+    <idCode>RM</idCode>
+        <idValue>Retired Military - Overseas</idValue>
+    <idCode>RP</idCode>
+        <idValue>Resigned: Personal Reasons</idValue>
+    <idCode>RT</idCode>
+        <idValue>Retired</idValue>
+    <idCode>RU</idCode>
+        <idValue>Retired Military - USA</idValue>
+    <idCode>RW</idCode>
+        <idValue>Dual Retired Status</idValue>
+    <idCode>SA</idCode>
+        <idValue>Resigned: Accepted Separation Allowance</idValue>
+    <idCode>SB</idCode>
+        <idValue>Separated</idValue>
+    <idCode>SE</idCode>
+        <idValue>Self-Employed</idValue>
+    <idCode>SL</idCode>
+        <idValue>Seasonal</idValue>
+    <idCode>SU</idCode>
+        <idValue>Suspended</idValue>
+    <idCode>TE</idCode>
+        <idValue>Terminated</idValue>
+    <idCode>TF</idCode>
+        <idValue>Temporary Full-Time</idValue>
+    <idCode>TM</idCode>
+        <idValue>Temporary</idValue>
+    <idCode>TP</idCode>
+        <idValue>Temporary Part-Time</idValue>
+    <idCode>TR</idCode>
+        <idValue>Transferred</idValue>
+    <idCode>UK</idCode>
+        <idValue>Unknown</idValue>
+    <idCode>VO</idCode>
+        <idValue>Volunteer</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

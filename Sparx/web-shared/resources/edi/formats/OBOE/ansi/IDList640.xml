@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>01</idCode>
+        <idValue>Location Address Message</idValue>
+    <idCode>02</idCode>
+        <idValue>Location Relation Information</idValue>
+    <idCode>03</idCode>
+        <idValue>Report Message</idValue>
+    <idCode>04</idCode>
+        <idValue>Electronic Mail Message</idValue>
+    <idCode>05</idCode>
+        <idValue>Request for Co-op</idValue>
+    <idCode>06</idCode>
+        <idValue>Guidelines</idValue>
+    <idCode>07</idCode>
+        <idValue>Budget</idValue>
+    <idCode>08</idCode>
+        <idValue>Commitment</idValue>
+    <idCode>09</idCode>
+        <idValue>Co-op Actual</idValue>
+    <idCode>10</idCode>
+        <idValue>Distribution</idValue>
+    <idCode>11</idCode>
+        <idValue>National Property Registry System Real Estate Property Transaction</idValue>
+    <idCode>13</idCode>
+        <idValue>Maintenance Request</idValue>
+    <idCode>14</idCode>
+        <idValue>Maintenance Response</idValue>
+    <idCode>15</idCode>
+        <idValue>Request with Immediate Response Required (No Follow-up)</idValue>
+    <idCode>16</idCode>
+        <idValue>Request with Immediate Response Required (Follow-up Required)</idValue>
+    <idCode>17</idCode>
+        <idValue>Request with Immediate Response to Mailbox</idValue>
+    <idCode>18</idCode>
+        <idValue>Response - No Further Updates to Follow</idValue>
+    <idCode>19</idCode>
+        <idValue>Response - Further Updates to Follow</idValue>
+    <idCode>20</idCode>
+        <idValue>Air Export Waybill and Invoice</idValue>
+    <idCode>21</idCode>
+        <idValue>Air Import Invoice</idValue>
+    <idCode>22</idCode>
+        <idValue>Ocean Export Direct Invoice</idValue>
+    <idCode>23</idCode>
+        <idValue>Ocean Export Indirect Invoice</idValue>
+    <idCode>24</idCode>
+        <idValue>Ocean Export Brokerage Invoice</idValue>
+    <idCode>25</idCode>
+        <idValue>Ocean Import Invoice</idValue>
+    <idCode>26</idCode>
+        <idValue>Miscellaneous Services Invoice</idValue>
+    <idCode>27</idCode>
+        <idValue>Warehouse Services Invoice</idValue>
+    <idCode>28</idCode>
+        <idValue>Pre-registration</idValue>
+    <idCode>29</idCode>
+        <idValue>Registration</idValue>
+    <idCode>30</idCode>
+        <idValue>Delivery</idValue>
+    <idCode>33</idCode>
+        <idValue>Normal</idValue>
+    <idCode>34</idCode>
+        <idValue>Emergency Request</idValue>
+    <idCode>35</idCode>
+        <idValue>Short Notice Request</idValue>
+    <idCode>36</idCode>
+        <idValue>Damage Notification</idValue>
+    <idCode>37</idCode>
+        <idValue>Design Report</idValue>
+    <idCode>38</idCode>
+        <idValue>Test</idValue>
+    <idCode>39</idCode>
+        <idValue>Notice of Occupational Disease</idValue>
+    <idCode>3M</idCode>
+        <idValue>Supporting Information</idValue>
+    <idCode>40</idCode>
+        <idValue>Notice of Traumatic Injury</idValue>
+    <idCode>41</idCode>
+        <idValue>Statement of Financial Affairs</idValue>
+    <idCode>60</idCode>
+        <idValue>Material In Transit</idValue>
+    <idCode>62</idCode>
+        <idValue>Preaward Notification</idValue>
+    <idCode>63</idCode>
+        <idValue>Postaward Notification</idValue>
+    <idCode>64</idCode>
+        <idValue>Small Business Award Notification</idValue>
+    <idCode>65</idCode>
+        <idValue>Award Notification</idValue>
+    <idCode>66</idCode>
+        <idValue>Notification to Late Bidders</idValue>
+    <idCode>67</idCode>
+        <idValue>Notification of Protest Receipt</idValue>
+    <idCode>68</idCode>
+        <idValue>Abstract of Offers</idValue>
+    <idCode>69</idCode>
+        <idValue>Bid Rejection Notice</idValue>
+    <idCode>6A</idCode>
+        <idValue>Accomplishment Based Renewal</idValue>
+    <idCode>6C</idCode>
+        <idValue>Competitive Renewal</idValue>
+    <idCode>6N</idCode>
+        <idValue>Non-competitive Renewal</idValue>
+    <idCode>6R</idCode>
+        <idValue>Resubmission</idValue>
+    <idCode>6S</idCode>
+        <idValue>Supplemental</idValue>
+    <idCode>70</idCode>
+        <idValue>Unsolicited Bid Notice</idValue>
+    <idCode>71</idCode>
+        <idValue>Filing and Search Request</idValue>
+    <idCode>72</idCode>
+        <idValue>Termination</idValue>
+    <idCode>73</idCode>
+        <idValue>Filing Officer Confirmation</idValue>
+    <idCode>74</idCode>
+        <idValue>Amendment</idValue>
+    <idCode>75</idCode>
+        <idValue>Full Assignment</idValue>
+    <idCode>76</idCode>
+        <idValue>Partial Assignment</idValue>
+    <idCode>77</idCode>
+        <idValue>Full Release of Collateral</idValue>
+    <idCode>78</idCode>
+        <idValue>Partial Release of Collateral</idValue>
+    <idCode>79</idCode>
+        <idValue>Continuation</idValue>
+    <idCode>80</idCode>
+        <idValue>Uniform Commercial Code Filing with Broad Collateral Description</idValue>
+    <idCode>81</idCode>
+        <idValue>Uniform Commercial Code Filing with Specific Collateral Description</idValue>
+    <idCode>82</idCode>
+        <idValue>Segregation by Purchase Order Number</idValue>
+    <idCode>83</idCode>
+        <idValue>Segregation by Carrier PRO Number</idValue>
+    <idCode>85</idCode>
+        <idValue>Response - No Action Taken</idValue>
+    <idCode>87</idCode>
+        <idValue>Disability Benefits Proof of Coverage Notification</idValue>
+    <idCode>88</idCode>
+        <idValue>Debtor Filing</idValue>
+    <idCode>91</idCode>
+        <idValue>Secured Party Filing</idValue>
+    <idCode>94</idCode>
+        <idValue>Partial Release Filing</idValue>
+    <idCode>95</idCode>
+        <idValue>Full (Total) Release</idValue>
+    <idCode>97</idCode>
+        <idValue>Multiple Listing</idValue>
+    <idCode>98</idCode>
+        <idValue>Sale</idValue>
+    <idCode>99</idCode>
+        <idValue>Loan</idValue>
+    <idCode>A0</idCode>
+        <idValue>Requisition</idValue>
+    <idCode>A1</idCode>
+        <idValue>Storage Item Data Change</idValue>
+    <idCode>A3</idCode>
+        <idValue>Administrative Fees</idValue>
+    <idCode>A4</idCode>
+        <idValue>Amended Return</idValue>
+    <idCode>A5</idCode>
+        <idValue>Notice of Charge</idValue>
+    <idCode>A6</idCode>
+        <idValue>Protest or Response to Charge</idValue>
+    <idCode>A7</idCode>
+        <idValue>Charge Decision</idValue>
+    <idCode>AA</idCode>
+        <idValue>Due to Analysis</idValue>
+    <idCode>AB</idCode>
+        <idValue>Advance Shipment and Billing Notice</idValue>
+    <idCode>AC</idCode>
+        <idValue>Requisition Cancellation</idValue>
+    <idCode>AD</idCode>
+        <idValue>Notice of Availability</idValue>
+    <idCode>AE</idCode>
+        <idValue>Due to Reconciliation (Full)</idValue>
+    <idCode>AF</idCode>
+        <idValue>Requisition Follow-Up</idValue>
+    <idCode>AG</idCode>
+        <idValue>Due to Reconciliation (Partial)</idValue>
+    <idCode>AI</idCode>
+        <idValue>Adjusted Invoice</idValue>
+    <idCode>AM</idCode>
+        <idValue>Requisition Modification</idValue>
+    <idCode>AN</idCode>
+        <idValue>Material Obligation Inquiry</idValue>
+    <idCode>AP</idCode>
+        <idValue>Material Obligation Advice</idValue>
+    <idCode>AQ</idCode>
+        <idValue>Quantity Verification Inquiry</idValue>
+    <idCode>AR</idCode>
+        <idValue>Supply Assistance</idValue>
+    <idCode>AS</idCode>
+        <idValue>Shipment Advice</idValue>
+    <idCode>AT</idCode>
+        <idValue>Administrative Action</idValue>
+    <idCode>AV</idCode>
+        <idValue>Quantity Verification Advice</idValue>
+    <idCode>AW</idCode>
+        <idValue>Material Obligation Reinstatement</idValue>
+    <idCode>AZ</idCode>
+        <idValue>Disposal Shipment Advice</idValue>
+    <idCode>BA</idCode>
+        <idValue>Backbill Invoice</idValue>
+    <idCode>BB</idCode>
+        <idValue>Billback</idValue>
+    <idCode>BD</idCode>
+        <idValue>Statement of Balance Due</idValue>
+    <idCode>BF</idCode>
+        <idValue>Best and Final Offer</idValue>
+    <idCode>BH</idCode>
+        <idValue>Bill and Hold Goods</idValue>
+    <idCode>BJ</idCode>
+        <idValue>Bankruptcy Petition</idValue>
+    <idCode>BK</idCode>
+        <idValue>Bankruptcy Schedules</idValue>
+    <idCode>BL</idCode>
+        <idValue>Blanket Lease Schedule</idValue>
+    <idCode>BM</idCode>
+        <idValue>Requisition Passing Order</idValue>
+    <idCode>BN</idCode>
+        <idValue>Requisition Referral Order</idValue>
+    <idCode>BO</idCode>
+        <idValue>Procurement Cancellation</idValue>
+    <idCode>BP</idCode>
+        <idValue>Procurement Modification</idValue>
+    <idCode>BR</idCode>
+        <idValue>Business Taxpayer Registration</idValue>
+    <idCode>BS</idCode>
+        <idValue>Bill of Sale Schedule</idValue>
+    <idCode>BT</idCode>
+        <idValue>Balance and Transaction Report</idValue>
+    <idCode>BU</idCode>
+        <idValue>Workers&apos; Compensation 1st Report of Injury</idValue>
+    <idCode>BV</idCode>
+        <idValue>Workers&apos; Compensation Subsequent Report</idValue>
+    <idCode>BW</idCode>
+        <idValue>Workers&apos; Compensation Combined 1st and Subsequent Report</idValue>
+    <idCode>C0</idCode>
+        <idValue>Customs Entry Detail</idValue>
+    <idCode>C1</idCode>
+        <idValue>Claim Information</idValue>
+    <idCode>C2</idCode>
+        <idValue>Case Opening</idValue>
+    <idCode>C3</idCode>
+        <idValue>Consignment</idValue>
+    <idCode>CA</idCode>
+        <idValue>Cash</idValue>
+    <idCode>CB</idCode>
+        <idValue>Contribution</idValue>
+    <idCode>CC</idCode>
+        <idValue>Credit Commission Invoice</idValue>
+    <idCode>CD</idCode>
+        <idValue>Consolidated Debit Invoice</idValue>
+    <idCode>CE</idCode>
+        <idValue>Consolidated Credit Invoice</idValue>
+    <idCode>CF</idCode>
+        <idValue>Consolidated Debit Memo</idValue>
+    <idCode>CG</idCode>
+        <idValue>Consolidated Credit Memo</idValue>
+    <idCode>CH</idCode>
+        <idValue>Chargeable</idValue>
+    <idCode>CI</idCode>
+        <idValue>Consolidated Invoice</idValue>
+    <idCode>CJ</idCode>
+        <idValue>Confirmation</idValue>
+    <idCode>CK</idCode>
+        <idValue>Claim Submission</idValue>
+    <idCode>CL</idCode>
+        <idValue>Customer Allocation</idValue>
+    <idCode>CM</idCode>
+        <idValue>Call Detail Memo</idValue>
+    <idCode>CN</idCode>
+        <idValue>Credit Invoice</idValue>
+    <idCode>CO</idCode>
+        <idValue>Corrected</idValue>
+    <idCode>CP</idCode>
+        <idValue>Commission Payment</idValue>
+    <idCode>CR</idCode>
+        <idValue>Credit Memo</idValue>
+    <idCode>CS</idCode>
+        <idValue>Cash Surrender Distribution</idValue>
+    <idCode>CT</idCode>
+        <idValue>Cost Type Invoice</idValue>
+    <idCode>CU</idCode>
+        <idValue>Cargo Outturn Report</idValue>
+    <idCode>CV</idCode>
+        <idValue>Cost Voucher</idValue>
+    <idCode>CW</idCode>
+        <idValue>Cash Letter</idValue>
+    <idCode>CX</idCode>
+        <idValue>Check List</idValue>
+    <idCode>CY</idCode>
+        <idValue>Citation to Pay or Appear</idValue>
+    <idCode>CZ</idCode>
+        <idValue>Conviction Notice</idValue>
+    <idCode>D1</idCode>
+        <idValue>Dividend Payment</idValue>
+    <idCode>D4</idCode>
+        <idValue>Receipt</idValue>
+    <idCode>DA</idCode>
+        <idValue>Due-In</idValue>
+    <idCode>DB</idCode>
+        <idValue>Detour Billing</idValue>
+    <idCode>DC</idCode>
+        <idValue>Debit Commission Invoice</idValue>
+    <idCode>DD</idCode>
+        <idValue>Interdistrict (Pre-Kindergarten - Grade 12) Student Record</idValue>
+    <idCode>DE</idCode>
+        <idValue>Advance Receipt</idValue>
+    <idCode>DF</idCode>
+        <idValue>Diesel Fuel Bill</idValue>
+    <idCode>DG</idCode>
+        <idValue>Response</idValue>
+    <idCode>DH</idCode>
+        <idValue>Discretionary Additional Company Contribution</idValue>
+    <idCode>DI</idCode>
+        <idValue>Debit Invoice</idValue>
+    <idCode>DK</idCode>
+        <idValue>Duty Drawback</idValue>
+    <idCode>DL</idCode>
+        <idValue>Deposit List</idValue>
+    <idCode>DN</idCode>
+        <idValue>Direct Nonqualified Rollover</idValue>
+    <idCode>DO</idCode>
+        <idValue>Drop Shipment Invoice</idValue>
+    <idCode>DP</idCode>
+        <idValue>District to Postsecondary Student Record</idValue>
+    <idCode>DQ</idCode>
+        <idValue>Direct Qualified Rollover</idValue>
+    <idCode>DR</idCode>
+        <idValue>Debit Memo</idValue>
+    <idCode>DS</idCode>
+        <idValue>Disposition</idValue>
+    <idCode>DT</idCode>
+        <idValue>Detail</idValue>
+    <idCode>DU</idCode>
+        <idValue>Duplicate</idValue>
+    <idCode>EA</idCode>
+        <idValue>Excess Interest Allocation</idValue>
+    <idCode>EB</idCode>
+        <idValue>Engineering Final Bill</idValue>
+    <idCode>EF</idCode>
+        <idValue>Engineering Installation, Right to Use, Final Bill</idValue>
+    <idCode>EI</idCode>
+        <idValue>Engineering Installation, Final Bill</idValue>
+    <idCode>EM</idCode>
+        <idValue>Estimate of Record</idValue>
+    <idCode>EP</idCode>
+        <idValue>Expense Payment</idValue>
+    <idCode>ER</idCode>
+        <idValue>Engineering Right to Use, Final Bill</idValue>
+    <idCode>EX</idCode>
+        <idValue>Excess Material Notification</idValue>
+    <idCode>FA</idCode>
+        <idValue>Forfeiture Allocation</idValue>
+    <idCode>FB</idCode>
+        <idValue>Final Bill</idValue>
+    <idCode>FC</idCode>
+        <idValue>Forfeiture Credit</idValue>
+    <idCode>FD</idCode>
+        <idValue>Consolidated Invoice, Final Bill</idValue>
+    <idCode>FE</idCode>
+        <idValue>Memorandum, Final Bill</idValue>
+    <idCode>FF</idCode>
+        <idValue>Full Assignment Filing</idValue>
+    <idCode>FG</idCode>
+        <idValue>Filing</idValue>
+    <idCode>FI</idCode>
+        <idValue>First Cost Invoice</idValue>
+    <idCode>FL</idCode>
+        <idValue>Final Notice</idValue>
+    <idCode>FM</idCode>
+        <idValue>Funding Modification</idValue>
+    <idCode>FN</idCode>
+        <idValue>First Notice of Loss</idValue>
+    <idCode>FP</idCode>
+        <idValue>Flat Rate Per Unit Bill</idValue>
+    <idCode>FR</idCode>
+        <idValue>Federal Royalty</idValue>
+    <idCode>FS</idCode>
+        <idValue>Financial Statement Report</idValue>
+    <idCode>FT</idCode>
+        <idValue>Material Returns</idValue>
+    <idCode>GA</idCode>
+        <idValue>Government Furnished Material Inquiry Advice</idValue>
+    <idCode>GI</idCode>
+        <idValue>Government Furnished Material Inquiry</idValue>
+    <idCode>GR</idCode>
+        <idValue>Garnishment</idValue>
+    <idCode>HP</idCode>
+        <idValue>Horsepower Equalization Bill</idValue>
+    <idCode>I1</idCode>
+        <idValue>In-Ad Coupon Notification</idValue>
+    <idCode>IA</idCode>
+        <idValue>Inventory</idValue>
+    <idCode>IB</idCode>
+        <idValue>Installation Final Bill</idValue>
+    <idCode>IC</idCode>
+        <idValue>Insurance Coverage Notification</idValue>
+    <idCode>ID</idCode>
+        <idValue>Employers Report of Disability</idValue>
+    <idCode>IE</idCode>
+        <idValue>Indian Royalty</idValue>
+    <idCode>IF</idCode>
+        <idValue>Material, Engineering, Installation, Final Bill</idValue>
+    <idCode>II</idCode>
+        <idValue>Interfund Transfer In</idValue>
+    <idCode>IM</idCode>
+        <idValue>Incident Notice</idValue>
+    <idCode>IN</idCode>
+        <idValue>Inquiry</idValue>
+    <idCode>IO</idCode>
+        <idValue>Interfund Transfer Out</idValue>
+    <idCode>IR</idCode>
+        <idValue>Installation, Right to Use, Final Bill</idValue>
+    <idCode>IU</idCode>
+        <idValue>Material, Installation, Right to Use, Final Bill</idValue>
+    <idCode>IW</idCode>
+        <idValue>Workers Compensation Report of Injury or Illness</idValue>
+    <idCode>IX</idCode>
+        <idValue>Interchange Update</idValue>
+    <idCode>IZ</idCode>
+        <idValue>Investment Fees</idValue>
+    <idCode>JM</idCode>
+        <idValue>Maintenance and Operations Bill</idValue>
+    <idCode>JO</idCode>
+        <idValue>Joint Facility Miscellaneous Bill or Other</idValue>
+    <idCode>JR</idCode>
+        <idValue>Rental Bill</idValue>
+    <idCode>JS</idCode>
+        <idValue>Junction Settlement Update</idValue>
+    <idCode>JU</idCode>
+        <idValue>Judgment</idValue>
+    <idCode>JX</idCode>
+        <idValue>Junction Update</idValue>
+    <idCode>KB</idCode>
+        <idValue>Termination for Default</idValue>
+    <idCode>KC</idCode>
+        <idValue>Definitization of Contract</idValue>
+    <idCode>KD</idCode>
+        <idValue>Definitization of Order</idValue>
+    <idCode>KE</idCode>
+        <idValue>Exercise of Option</idValue>
+    <idCode>KF</idCode>
+        <idValue>Intent to Exercise Option</idValue>
+    <idCode>KG</idCode>
+        <idValue>Administrative Change</idValue>
+    <idCode>KH</idCode>
+        <idValue>Change Order</idValue>
+    <idCode>KI</idCode>
+        <idValue>Supplemental Agreement</idValue>
+    <idCode>KJ</idCode>
+        <idValue>Amended Shipping Instructions</idValue>
+    <idCode>KK</idCode>
+        <idValue>Provisioned Item</idValue>
+    <idCode>KL</idCode>
+        <idValue>Withdrawal of Offer</idValue>
+    <idCode>KM</idCode>
+        <idValue>Additions to General Provisions</idValue>
+    <idCode>KN</idCode>
+        <idValue>Request for Price Quote</idValue>
+    <idCode>KS</idCode>
+        <idValue>Addition to Solicitation Mailing List</idValue>
+    <idCode>KT</idCode>
+        <idValue>Termination for Convenience</idValue>
+    <idCode>LC</idCode>
+        <idValue>Due-in Reconciliation Inquiry</idValue>
+    <idCode>LD</idCode>
+        <idValue>Loan Distribution</idValue>
+    <idCode>LE</idCode>
+        <idValue>Loan Repayment Expense</idValue>
+    <idCode>LF</idCode>
+        <idValue>Landed Costs</idValue>
+    <idCode>LN</idCode>
+        <idValue>Loss Notification</idValue>
+    <idCode>LO</idCode>
+        <idValue>Loan Repayment to Principal Only</idValue>
+    <idCode>LP</idCode>
+        <idValue>Loan Repayment</idValue>
+    <idCode>LR</idCode>
+        <idValue>Logistics Reassignment</idValue>
+    <idCode>LV</idCode>
+        <idValue>Levy</idValue>
+    <idCode>M1</idCode>
+        <idValue>Manufacturer Coupon Notification</idValue>
+    <idCode>MA</idCode>
+        <idValue>Mailing List</idValue>
+    <idCode>MB</idCode>
+        <idValue>Maintenance to Business Taxpayer Registration</idValue>
+    <idCode>MC</idCode>
+        <idValue>Material Credit Invoice</idValue>
+    <idCode>MD</idCode>
+        <idValue>Market Development Fund</idValue>
+    <idCode>ME</idCode>
+        <idValue>Memorandum</idValue>
+    <idCode>MF</idCode>
+        <idValue>Material, Engineering, Final Bill</idValue>
+    <idCode>MI</idCode>
+        <idValue>Material, Installation, Final Bill</idValue>
+    <idCode>ML</idCode>
+        <idValue>Membership List</idValue>
+    <idCode>MM</idCode>
+        <idValue>Multiple Shippers, Multiple Consignees</idValue>
+    <idCode>MP</idCode>
+        <idValue>Mise En Place (In Place)</idValue>
+    <idCode>MR</idCode>
+        <idValue>Material, Right to Use, Final Bill</idValue>
+    <idCode>MS</idCode>
+        <idValue>Material Final Bill</idValue>
+    <idCode>MU</idCode>
+        <idValue>Multifamily Program</idValue>
+    <idCode>N1</idCode>
+        <idValue>Bilateral</idValue>
+    <idCode>N2</idCode>
+        <idValue>Notice of Assessment</idValue>
+    <idCode>N3</idCode>
+        <idValue>Notice of Warrant</idValue>
+    <idCode>N4</idCode>
+        <idValue>Notice of Adjustment</idValue>
+    <idCode>N5</idCode>
+        <idValue>Notice of Determination</idValue>
+    <idCode>N6</idCode>
+        <idValue>Notice of Settlement</idValue>
+    <idCode>N7</idCode>
+        <idValue>Notice of Recorded Lien</idValue>
+    <idCode>N8</idCode>
+        <idValue>Notice of Deficiency</idValue>
+    <idCode>NA</idCode>
+        <idValue>Material Release Order</idValue>
+    <idCode>NB</idCode>
+        <idValue>Material Release Inquiry</idValue>
+    <idCode>NC</idCode>
+        <idValue>Material Release Order Forced Closure</idValue>
+    <idCode>ND</idCode>
+        <idValue>Material Release Cancellation</idValue>
+    <idCode>NE</idCode>
+        <idValue>Disposal Release Order</idValue>
+    <idCode>NF</idCode>
+        <idValue>Disposal Release Inquiry</idValue>
+    <idCode>NG</idCode>
+        <idValue>Disposal Release Cancellation</idValue>
+    <idCode>NH</idCode>
+        <idValue>Disposal Shipment Confirmation Inquiry</idValue>
+    <idCode>NI</idCode>
+        <idValue>Redistribution Order</idValue>
+    <idCode>NJ</idCode>
+        <idValue>Material Release Confirmation</idValue>
+    <idCode>NK</idCode>
+        <idValue>Material Release Denial</idValue>
+    <idCode>NL</idCode>
+        <idValue>Material Release Advice</idValue>
+    <idCode>NM</idCode>
+        <idValue>Disposal Release Confirmation</idValue>
+    <idCode>NO</idCode>
+        <idValue>Notice</idValue>
+    <idCode>NP</idCode>
+        <idValue>Disposal Release Denial</idValue>
+    <idCode>NQ</idCode>
+        <idValue>Disposal Shipment Confirmation</idValue>
+    <idCode>NR</idCode>
+        <idValue>Material Release Cancellation Advice</idValue>
+    <idCode>NT</idCode>
+        <idValue>Disposal Release Cancellation Advice</idValue>
+    <idCode>NU</idCode>
+        <idValue>Inventory Adjustment</idValue>
+    <idCode>OC</idCode>
+        <idValue>On Approval</idValue>
+    <idCode>OF</idCode>
+        <idValue>Offer</idValue>
+    <idCode>OP</idCode>
+        <idValue>Opinion</idValue>
+    <idCode>OR</idCode>
+        <idValue>Order</idValue>
+    <idCode>P1</idCode>
+        <idValue>Preliminary</idValue>
+    <idCode>PA</idCode>
+        <idValue>Progress Payment Invoice</idValue>
+    <idCode>PB</idCode>
+        <idValue>Partial Bill</idValue>
+    <idCode>PC</idCode>
+        <idValue>Invention Report</idValue>
+    <idCode>PD</idCode>
+        <idValue>Product Allocation</idValue>
+    <idCode>PE</idCode>
+        <idValue>Pleading</idValue>
+    <idCode>PF</idCode>
+        <idValue>Partial Assignment Filing</idValue>
+    <idCode>PG</idCode>
+        <idValue>Premium Routing Guide</idValue>
+    <idCode>PI</idCode>
+        <idValue>Personal Injury Bill</idValue>
+    <idCode>PL</idCode>
+        <idValue>Plan Allocation</idValue>
+    <idCode>PM</idCode>
+        <idValue>Premium Payment</idValue>
+    <idCode>PO</idCode>
+        <idValue>Plan Takeover</idValue>
+    <idCode>PP</idCode>
+        <idValue>Prepaid Invoice</idValue>
+    <idCode>PR</idCode>
+        <idValue>Product (or Service)</idValue>
+    <idCode>PS</idCode>
+        <idValue>Postsecondary Student Academic Record</idValue>
+    <idCode>PT</idCode>
+        <idValue>Plan-to-plan Transfer</idValue>
+    <idCode>PU</idCode>
+        <idValue>Notice of Claim</idValue>
+    <idCode>PV</idCode>
+        <idValue>Protest or Response to Claim</idValue>
+    <idCode>PW</idCode>
+        <idValue>Claim Decision</idValue>
+    <idCode>PX</idCode>
+        <idValue>Wage Verification Notice</idValue>
+    <idCode>PZ</idCode>
+        <idValue>Purchase Report</idValue>
+    <idCode>QA</idCode>
+        <idValue>Coupon Regular Clearinghouse Invoice</idValue>
+    <idCode>QB</idCode>
+        <idValue>Coupon Direct Retailer Invoice</idValue>
+    <idCode>QC</idCode>
+        <idValue>Coupon Clearinghouse Pay Direct Invoice</idValue>
+    <idCode>QD</idCode>
+        <idValue>Product Quality Deficiency</idValue>
+    <idCode>QE</idCode>
+        <idValue>Coupon Scan Validate Invoice</idValue>
+    <idCode>QF</idCode>
+        <idValue>Scan Validate Adjustment</idValue>
+    <idCode>QG</idCode>
+        <idValue>Quick Response Routing Guide</idValue>
+    <idCode>QH</idCode>
+        <idValue>Full Coupon Redemption (No Adjustments)</idValue>
+    <idCode>QJ</idCode>
+        <idValue>Adjusted Coupon Redemption</idValue>
+    <idCode>QK</idCode>
+        <idValue>Coupon Redemption Detail</idValue>
+    <idCode>QL</idCode>
+        <idValue>Adjustments to Previous Coupon Redemption</idValue>
+    <idCode>QP</idCode>
+        <idValue>Coupon Quick Pay Invoice</idValue>
+    <idCode>QR</idCode>
+        <idValue>Product Quality Deficiency Response</idValue>
+    <idCode>R1</idCode>
+        <idValue>Request for Enrollment Verification</idValue>
+    <idCode>R2</idCode>
+        <idValue>Response to Request for Enrollment Verification</idValue>
+    <idCode>R3</idCode>
+        <idValue>Response to Garnishment</idValue>
+    <idCode>R4</idCode>
+        <idValue>Release of Garnishment</idValue>
+    <idCode>R5</idCode>
+        <idValue>Response to Levy</idValue>
+    <idCode>R6</idCode>
+        <idValue>Release of Levy</idValue>
+    <idCode>R7</idCode>
+        <idValue>Response to Order to Withhold</idValue>
+    <idCode>R8</idCode>
+        <idValue>Release of Order to Withhold</idValue>
+    <idCode>RA</idCode>
+        <idValue>Request for Credit</idValue>
+    <idCode>RB</idCode>
+        <idValue>Right to Use</idValue>
+    <idCode>RC</idCode>
+        <idValue>Request for Quote</idValue>
+    <idCode>RD</idCode>
+        <idValue>Returns Detail</idValue>
+    <idCode>RE</idCode>
+        <idValue>Rebill</idValue>
+    <idCode>RF</idCode>
+        <idValue>Material, Engineering, Right to Use, Final Bill</idValue>
+    <idCode>RG</idCode>
+        <idValue>Revised Final Bill</idValue>
+    <idCode>RH</idCode>
+        <idValue>Request for Additional Funds</idValue>
+    <idCode>RK</idCode>
+        <idValue>Registration</idValue>
+    <idCode>RM</idCode>
+        <idValue>Reminder to File</idValue>
+    <idCode>RP</idCode>
+        <idValue>Reporting</idValue>
+    <idCode>RQ</idCode>
+        <idValue>Request</idValue>
+    <idCode>RS</idCode>
+        <idValue>Response - Additional Response(s) Available</idValue>
+    <idCode>RT</idCode>
+        <idValue>Spend Down</idValue>
+    <idCode>RU</idCode>
+        <idValue>Medical Services Reservation</idValue>
+    <idCode>RZ</idCode>
+        <idValue>Removed from Solicitation Mailing List</idValue>
+    <idCode>S1</idCode>
+        <idValue>Special Routing Guide</idValue>
+    <idCode>S2</idCode>
+        <idValue>Standard Routing Guide</idValue>
+    <idCode>S3</idCode>
+        <idValue>Supplemental Loan Repayment</idValue>
+    <idCode>S4</idCode>
+        <idValue>Submission</idValue>
+    <idCode>SA</idCode>
+        <idValue>Stand-alone Lease Schedule</idValue>
+    <idCode>SB</idCode>
+        <idValue>Second Notice of Balance Due</idValue>
+    <idCode>SC</idCode>
+        <idValue>Deprescription</idValue>
+    <idCode>SD</idCode>
+        <idValue>Supply Process Deficiency</idValue>
+    <idCode>SE</idCode>
+        <idValue>Special Bilateral</idValue>
+    <idCode>SF</idCode>
+        <idValue>Single Family Program</idValue>
+    <idCode>SG</idCode>
+        <idValue>Sample Goods Invoice</idValue>
+    <idCode>SH</idCode>
+        <idValue>Shipment Status Notification</idValue>
+    <idCode>SL</idCode>
+        <idValue>Summary Lease Schedule</idValue>
+    <idCode>SM</idCode>
+        <idValue>Single Shipper, Multiple Consignees</idValue>
+    <idCode>SO</idCode>
+        <idValue>Spot Rate</idValue>
+    <idCode>SP</idCode>
+        <idValue>Supplier Rating</idValue>
+    <idCode>SQ</idCode>
+        <idValue>Schedule Query</idValue>
+    <idCode>SR</idCode>
+        <idValue>Supply Process Deficiency Response</idValue>
+    <idCode>SS</idCode>
+        <idValue>Single Shipper, Single Consignee</idValue>
+    <idCode>ST</idCode>
+        <idValue>State Royalty</idValue>
+    <idCode>SU</idCode>
+        <idValue>Survey</idValue>
+    <idCode>SV</idCode>
+        <idValue>Supplemental Invoice</idValue>
+    <idCode>TD</idCode>
+        <idValue>Shipment or Movement Deficiency</idValue>
+    <idCode>TG</idCode>
+        <idValue>Receipt Acknowledgment Inquiry</idValue>
+    <idCode>TH</idCode>
+        <idValue>Receipt Acknowledgment Advice</idValue>
+    <idCode>TI</idCode>
+        <idValue>Delinquent Due-in Advice</idValue>
+    <idCode>TJ</idCode>
+        <idValue>Delinquent Due-in Inquiry</idValue>
+    <idCode>TK</idCode>
+        <idValue>Due-in Reconciliation Advice</idValue>
+    <idCode>TP</idCode>
+        <idValue>Trading Partner Information</idValue>
+    <idCode>TR</idCode>
+        <idValue>Shipment or Movement Deficiency Response</idValue>
+    <idCode>TS</idCode>
+        <idValue>Transfer Statement</idValue>
+    <idCode>TT</idCode>
+        <idValue>Testing Service Report</idValue>
+    <idCode>TX</idCode>
+        <idValue>Request for Testing Service Report</idValue>
+    <idCode>U1</idCode>
+        <idValue>Contract Abstract</idValue>
+    <idCode>U2</idCode>
+        <idValue>Shipment Performance Notice</idValue>
+    <idCode>U4</idCode>
+        <idValue>Acceptance Alert</idValue>
+    <idCode>U5</idCode>
+        <idValue>Update</idValue>
+    <idCode>U9</idCode>
+        <idValue>Contract Payment Notice</idValue>
+    <idCode>UA</idCode>
+        <idValue>Amendment Filing</idValue>
+    <idCode>UC</idCode>
+        <idValue>Uniform Commercial Code Filing</idValue>
+    <idCode>UD</idCode>
+        <idValue>Unsalable Detail</idValue>
+    <idCode>UF</idCode>
+        <idValue>Material, Engineering, Installation, Right to Use, Final Bill</idValue>
+    <idCode>UI</idCode>
+        <idValue>Uniform Commercial Code Filing Inquiry</idValue>
+    <idCode>UM</idCode>
+        <idValue>Termination Filing</idValue>
+    <idCode>UO</idCode>
+        <idValue>Original Filing</idValue>
+    <idCode>UP</idCode>
+        <idValue>Unsalable Product Invoice</idValue>
+    <idCode>UR</idCode>
+        <idValue>Uniform Commercial Code Filing Response to Inquiry</idValue>
+    <idCode>UT</idCode>
+        <idValue>Continuation Filing</idValue>
+    <idCode>V1</idCode>
+        <idValue>Contract Completion Report</idValue>
+    <idCode>VH</idCode>
+        <idValue>Public Voucher</idValue>
+    <idCode>VJ</idCode>
+        <idValue>Commercial Invoice</idValue>
+    <idCode>VL</idCode>
+        <idValue>Violation Notice</idValue>
+    <idCode>VM</idCode>
+        <idValue>Voluntary MEDWATCH Report</idValue>
+    <idCode>VN</idCode>
+        <idValue>Mandatory MEDWATCH Report</idValue>
+    <idCode>VO</idCode>
+        <idValue>Medical Device New Baseline Report</idValue>
+    <idCode>VP</idCode>
+        <idValue>Medical Device Annual Baseline Report</idValue>
+    <idCode>VQ</idCode>
+        <idValue>User Facility Semi-Annual Medical Device Report</idValue>
+    <idCode>VR</idCode>
+        <idValue>Annual Certification of Medical Device Report</idValue>
+    <idCode>W1</idCode>
+        <idValue>Weapons Data Change</idValue>
+    <idCode>W4</idCode>
+        <idValue>Weapons Control Report</idValue>
+    <idCode>W5</idCode>
+        <idValue>Weapons Control Report Reconciliation</idValue>
+    <idCode>WA</idCode>
+        <idValue>Work Assignment</idValue>
+    <idCode>WC</idCode>
+        <idValue>Workers Compensation Proof of Coverage Notification</idValue>
+    <idCode>WD</idCode>
+        <idValue>Withdrawal</idValue>
+    <idCode>WH</idCode>
+        <idValue>Order to Withhold</idValue>
+    <idCode>WO</idCode>
+        <idValue>Work Order</idValue>
+    <idCode>WS</idCode>
+        <idValue>Waste</idValue>
+    <idCode>WT</idCode>
+        <idValue>Warrant</idValue>
+    <idCode>X1</idCode>
+        <idValue>Consolidator&apos;s Invoice</idValue>
+    <idCode>XA</idCode>
+        <idValue>Cancel Pending New Offer</idValue>
+    <idCode>XB</idCode>
+        <idValue>Bilateral Spot Rate</idValue>
+    <idCode>XC</idCode>
+        <idValue>Automatic Concurrence</idValue>
+    <idCode>XD</idCode>
+        <idValue>Special Deprescription</idValue>
+    <idCode>XX</idCode>
+        <idValue>Firm Order Confirmation with Facility Information</idValue>
+    <idCode>XY</idCode>
+        <idValue>Firm Order Confirmation</idValue>
+    <idCode>XZ</idCode>
+        <idValue>Facility Confirmation</idValue>
+    <idCode>YI</idCode>
+        <idValue>Funds Validation Inquiry</idValue>
+    <idCode>YR</idCode>
+        <idValue>Funds Validation Response</idValue>
+    <idCode>ZA</idCode>
+        <idValue>Request Initiation of Work Candidate</idValue>
+    <idCode>ZB</idCode>
+        <idValue>Report of Work Candidate</idValue>
+    <idCode>ZC</idCode>
+        <idValue>Report of Assignment or Deletion of Work Candidate to Maintenance Period</idValue>
+    <idCode>ZD</idCode>
+        <idValue>Request Assignment of Work Candidate to Planning Maintenance Activity</idValue>
+    <idCode>ZE</idCode>
+        <idValue>Request for Full Work Candidate Detail</idValue>
+    <idCode>ZF</idCode>
+        <idValue>Report of Full Work Candidate Detail</idValue>
+    <idCode>ZG</idCode>
+        <idValue>Report of Approved Work Candidate</idValue>
+    <idCode>ZH</idCode>
+        <idValue>Request Work Candidate Cost/Duration Estimate</idValue>
+    <idCode>ZI</idCode>
+        <idValue>Report of Work Candidate Cost/Duration Estimate</idValue>
+    <idCode>ZJ</idCode>
+        <idValue>Request Work Candidate Planning Services</idValue>
+    <idCode>ZK</idCode>
+        <idValue>Report of Work Candidate Planning Services</idValue>
+    <idCode>ZL</idCode>
+        <idValue>Report of Assignment or Deletion of Work Candidate to Planning/Maintenance Activity</idValue>
+    <idCode>ZM</idCode>
+        <idValue>Request of Assignment or Deletion of Work Candidate to Maintenance Period</idValue>
+    <idCode>ZN</idCode>
+        <idValue>Stop Work Order</idValue>
+    <idCode>ZO</idCode>
+        <idValue>Authorization to Continue Work</idValue>
+    <idCode>ZP</idCode>
+        <idValue>Request for Departure From Specification</idValue>
+    <idCode>ZQ</idCode>
+        <idValue>Report of Authorized Departure From Specification</idValue>
+    <idCode>ZR</idCode>
+        <idValue>Request Work Progress Status</idValue>
+    <idCode>ZS</idCode>
+        <idValue>Report of Work Progress Status</idValue>
+    <idCode>ZT</idCode>
+        <idValue>Report of Rejection or Return of Work Candidate</idValue>
+    <idCode>ZU</idCode>
+        <idValue>Request Work Candidate Change</idValue>
+    <idCode>ZW</idCode>
+        <idValue>Sort and Segregate Detail</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

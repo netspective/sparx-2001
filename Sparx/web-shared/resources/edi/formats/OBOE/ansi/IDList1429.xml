@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>0</idCode>
+        <idValue>Adobe</idValue>
+    <idCode>1</idCode>
+        <idValue>Aluminum Siding</idValue>
+    <idCode>2</idCode>
+        <idValue>Asbestos Siding</idValue>
+    <idCode>3</idCode>
+        <idValue>Cement</idValue>
+    <idCode>4</idCode>
+        <idValue>Concrete</idValue>
+    <idCode>5</idCode>
+        <idValue>Concrete Block</idValue>
+    <idCode>6</idCode>
+        <idValue>Corrugated Metal</idValue>
+    <idCode>7</idCode>
+        <idValue>Galvanized Plate</idValue>
+    <idCode>8</idCode>
+        <idValue>Glass</idValue>
+    <idCode>9</idCode>
+        <idValue>Granite</idValue>
+    <idCode>A</idCode>
+        <idValue>Aluminum</idValue>
+    <idCode>A0</idCode>
+        <idValue>Wood Metal Coating</idValue>
+    <idCode>A1</idCode>
+        <idValue>Sheet Metal</idValue>
+    <idCode>A2</idCode>
+        <idValue>Siding</idValue>
+    <idCode>A3</idCode>
+        <idValue>Slate</idValue>
+    <idCode>A4</idCode>
+        <idValue>Stucco</idValue>
+    <idCode>A5</idCode>
+        <idValue>Teja</idValue>
+    <idCode>A6</idCode>
+        <idValue>Tile</idValue>
+    <idCode>A7</idCode>
+        <idValue>Tin</idValue>
+    <idCode>A8</idCode>
+        <idValue>Veneer</idValue>
+    <idCode>A9</idCode>
+        <idValue>Vinyl Siding</idValue>
+    <idCode>AA</idCode>
+        <idValue>Wood Siding</idValue>
+    <idCode>B</idCode>
+        <idValue>Brick</idValue>
+    <idCode>C</idCode>
+        <idValue>Cement Block</idValue>
+    <idCode>D</idCode>
+        <idValue>Cinder Block</idValue>
+    <idCode>E</idCode>
+        <idValue>Grey Brick</idValue>
+    <idCode>F</idCode>
+        <idValue>Fiberglass</idValue>
+    <idCode>G</idCode>
+        <idValue>Hollow Tile</idValue>
+    <idCode>H</idCode>
+        <idValue>Lava Stone</idValue>
+    <idCode>I</idCode>
+        <idValue>Limestone</idValue>
+    <idCode>J</idCode>
+        <idValue>Logs</idValue>
+    <idCode>K</idCode>
+        <idValue>Marble</idValue>
+    <idCode>L</idCode>
+        <idValue>Metal</idValue>
+    <idCode>M</idCode>
+        <idValue>Frame</idValue>
+    <idCode>N</idCode>
+        <idValue>Metal Coating</idValue>
+    <idCode>O</idCode>
+        <idValue>Other</idValue>
+    <idCode>P</idCode>
+        <idValue>Metallic</idValue>
+    <idCode>Q</idCode>
+        <idValue>Plaster</idValue>
+    <idCode>R</idCode>
+        <idValue>Plastic</idValue>
+    <idCode>S</idCode>
+        <idValue>Steel</idValue>
+    <idCode>T</idCode>
+        <idValue>Plate Ceiling</idValue>
+    <idCode>U</idCode>
+        <idValue>Plywood</idValue>
+    <idCode>V</idCode>
+        <idValue>Reinforced Concrete</idValue>
+    <idCode>W</idCode>
+        <idValue>Rock</idValue>
+    <idCode>X</idCode>
+        <idValue>Sandstone</idValue>
+    <idCode>Y</idCode>
+        <idValue>Sheet Iron</idValue>
+    <idCode>Z</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

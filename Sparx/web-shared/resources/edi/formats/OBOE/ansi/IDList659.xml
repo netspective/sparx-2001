@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Birth Certificate</idValue>
+    <idCode>2</idCode>
+        <idValue>Passport</idValue>
+    <idCode>3</idCode>
+        <idValue>Hospital Certificate</idValue>
+    <idCode>4</idCode>
+        <idValue>Affidavit</idValue>
+    <idCode>5</idCode>
+        <idValue>Immigration Document</idValue>
+    <idCode>6</idCode>
+        <idValue>Baptismal or Church Certificate</idValue>
+    <idCode>7</idCode>
+        <idValue>Physician&apos;s Certificate</idValue>
+    <idCode>8</idCode>
+        <idValue>Undocumented</idValue>
+    <idCode>9</idCode>
+        <idValue>Driver&apos;s License</idValue>
+    <idCode>A</idCode>
+        <idValue>Photo ID</idValue>
+    <idCode>B</idCode>
+        <idValue>Social Insurance Certificate</idValue>
+</idList>

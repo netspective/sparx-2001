@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>1</idCode>
+        <idValue>Service/Billing Provider</idValue>
+    <idCode>2</idCode>
+        <idValue>Billing Arrangement</idValue>
+    <idCode>3</idCode>
+        <idValue>Sub-Billing Arrangement</idValue>
+    <idCode>4</idCode>
+        <idValue>Group</idValue>
+    <idCode>5</idCode>
+        <idValue>Category</idValue>
+    <idCode>6</idCode>
+        <idValue>Sub-Category</idValue>
+    <idCode>7</idCode>
+        <idValue>Type</idValue>
+    <idCode>8</idCode>
+        <idValue>Charge Detail</idValue>
+    <idCode>9</idCode>
+        <idValue>Line Detail</idValue>
+    <idCode>19</idCode>
+        <idValue>Provider of Service</idValue>
+    <idCode>20</idCode>
+        <idValue>Information Source</idValue>
+    <idCode>21</idCode>
+        <idValue>Information Receiver</idValue>
+    <idCode>22</idCode>
+        <idValue>Subscriber</idValue>
+    <idCode>23</idCode>
+        <idValue>Dependent</idValue>
+    <idCode>24</idCode>
+        <idValue>Supergroup</idValue>
+    <idCode>25</idCode>
+        <idValue>Subgroup</idValue>
+    <idCode>26</idCode>
+        <idValue>Member</idValue>
+    <idCode>27</idCode>
+        <idValue>Ancillary Facility or Department</idValue>
+    <idCode>28</idCode>
+        <idValue>Hospital</idValue>
+    <idCode>29</idCode>
+        <idValue>Franchisor</idValue>
+    <idCode>2A</idCode>
+        <idValue>Branch</idValue>
+    <idCode>2B</idCode>
+        <idValue>Direct Affiliate</idValue>
+    <idCode>2C</idCode>
+        <idValue>Director</idValue>
+    <idCode>2D</idCode>
+        <idValue>Headquarters</idValue>
+    <idCode>2E</idCode>
+        <idValue>Indirect Affiliate</idValue>
+    <idCode>2F</idCode>
+        <idValue>Management Antecedents</idValue>
+    <idCode>2G</idCode>
+        <idValue>Management or Principal</idValue>
+    <idCode>2H</idCode>
+        <idValue>Parent Company</idValue>
+    <idCode>2I</idCode>
+        <idValue>Stockholder</idValue>
+    <idCode>2J</idCode>
+        <idValue>Subsidiary</idValue>
+    <idCode>2K</idCode>
+        <idValue>Ultimate Domestic Parent Company</idValue>
+    <idCode>2L</idCode>
+        <idValue>Ultimate Parent Company</idValue>
+    <idCode>30</idCode>
+        <idValue>Franchisee</idValue>
+    <idCode>31</idCode>
+        <idValue>Franchisee Association</idValue>
+    <idCode>32</idCode>
+        <idValue>Health Industry Business Communications Council (HIBCC) Health Industry Number (HIN) Database</idValue>
+    <idCode>33</idCode>
+        <idValue>Activity</idValue>
+    <idCode>34</idCode>
+        <idValue>Location Record</idValue>
+    <idCode>35</idCode>
+        <idValue>Company/Corporation</idValue>
+    <idCode>36</idCode>
+        <idValue>Operating Unit</idValue>
+    <idCode>37</idCode>
+        <idValue>Property</idValue>
+    <idCode>38</idCode>
+        <idValue>Tradename</idValue>
+    <idCode>39</idCode>
+        <idValue>Accountant</idValue>
+    <idCode>40</idCode>
+        <idValue>Financial Institution</idValue>
+    <idCode>41</idCode>
+        <idValue>Product Level</idValue>
+    <idCode>42</idCode>
+        <idValue>Activity Details</idValue>
+    <idCode>43</idCode>
+        <idValue>Payment Summary Score</idValue>
+    <idCode>44</idCode>
+        <idValue>Corporate Registration Filings</idValue>
+    <idCode>45</idCode>
+        <idValue>Bankruptcy Details</idValue>
+    <idCode>46</idCode>
+        <idValue>Company History</idValue>
+    <idCode>47</idCode>
+        <idValue>Complete Financial History</idValue>
+    <idCode>48</idCode>
+        <idValue>Balance Sheet</idValue>
+    <idCode>49</idCode>
+        <idValue>Comparative Figures</idValue>
+    <idCode>50</idCode>
+        <idValue>Payment Analysis</idValue>
+    <idCode>51</idCode>
+        <idValue>Special Notification</idValue>
+    <idCode>52</idCode>
+        <idValue>Public Record Financing Details</idValue>
+    <idCode>53</idCode>
+        <idValue>Public Record Financing Summary</idValue>
+    <idCode>54</idCode>
+        <idValue>Public Record Claim Details</idValue>
+    <idCode>55</idCode>
+        <idValue>Public Record Claim Summary</idValue>
+    <idCode>56</idCode>
+        <idValue>Statement of Work</idValue>
+    <idCode>57</idCode>
+        <idValue>Legal Action Details</idValue>
+    <idCode>58</idCode>
+        <idValue>Legal Action Summary</idValue>
+    <idCode>59</idCode>
+        <idValue>Company Evaluation</idValue>
+    <idCode>60</idCode>
+        <idValue>Company Summary</idValue>
+    <idCode>61</idCode>
+        <idValue>Credit Scores</idValue>
+    <idCode>62</idCode>
+        <idValue>Industry Averages</idValue>
+    <idCode>A</idCode>
+        <idValue>Assembly</idValue>
+    <idCode>AD</idCode>
+        <idValue>Administrative Information</idValue>
+    <idCode>AG</idCode>
+        <idValue>Agent</idValue>
+    <idCode>AL</idCode>
+        <idValue>Alternate Specification - Lift Level</idValue>
+    <idCode>AP</idCode>
+        <idValue>Credential Action</idValue>
+    <idCode>AS</idCode>
+        <idValue>Animal Subject Group</idValue>
+    <idCode>B</idCode>
+        <idValue>Buyer&apos;s Location</idValue>
+    <idCode>BD</idCode>
+        <idValue>Building</idValue>
+    <idCode>BE</idCode>
+        <idValue>Business Entity</idValue>
+    <idCode>BP</idCode>
+        <idValue>Body Part</idValue>
+    <idCode>C</idCode>
+        <idValue>Date</idValue>
+    <idCode>CB</idCode>
+        <idValue>Contractholder Branch Office</idValue>
+    <idCode>CC</idCode>
+        <idValue>Cost Center</idValue>
+    <idCode>CE</idCode>
+        <idValue>Cost Element</idValue>
+    <idCode>CH</idCode>
+        <idValue>Contractholder</idValue>
+    <idCode>CI</idCode>
+        <idValue>Cause of Injury</idValue>
+    <idCode>CL</idCode>
+        <idValue>Claimant</idValue>
+    <idCode>CN</idCode>
+        <idValue>Container</idValue>
+    <idCode>CO</idCode>
+        <idValue>Consortium</idValue>
+    <idCode>CT</idCode>
+        <idValue>Cost Type</idValue>
+    <idCode>D</idCode>
+        <idValue>Product Description</idValue>
+    <idCode>DG</idCode>
+        <idValue>Drawing</idValue>
+    <idCode>DP</idCode>
+        <idValue>Department</idValue>
+    <idCode>E</idCode>
+        <idValue>Transportation Equipment</idValue>
+    <idCode>ED</idCode>
+        <idValue>Engineering Data List</idValue>
+    <idCode>EL</idCode>
+        <idValue>Exhibit Line Item</idValue>
+    <idCode>EM</idCode>
+        <idValue>Employer</idValue>
+    <idCode>EV</idCode>
+        <idValue>Event</idValue>
+    <idCode>EX</idCode>
+        <idValue>Exception</idValue>
+    <idCode>F</idCode>
+        <idValue>Component</idValue>
+    <idCode>FC</idCode>
+        <idValue>Function Code</idValue>
+    <idCode>FG</idCode>
+        <idValue>Functional Group</idValue>
+    <idCode>FI</idCode>
+        <idValue>Financial Information</idValue>
+    <idCode>FL</idCode>
+        <idValue>Fleet</idValue>
+    <idCode>FR</idCode>
+        <idValue>Frame</idValue>
+    <idCode>G</idCode>
+        <idValue>Quality Characteristics</idValue>
+    <idCode>GC</idCode>
+        <idValue>Group Coverage Options</idValue>
+    <idCode>GP</idCode>
+        <idValue>Group Purchasing Organization</idValue>
+    <idCode>GW</idCode>
+        <idValue>Group Work Candidate</idValue>
+    <idCode>H</idCode>
+        <idValue>Bill of Materials</idValue>
+    <idCode>I</idCode>
+        <idValue>Item</idValue>
+    <idCode>IA</idCode>
+        <idValue>Subline Item</idValue>
+    <idCode>IB</idCode>
+        <idValue>Contract</idValue>
+    <idCode>IC</idCode>
+        <idValue>Contract Data Requirements List (CDRL)</idValue>
+    <idCode>IN</idCode>
+        <idValue>Interchange</idValue>
+    <idCode>J</idCode>
+        <idValue>Part Characteristic</idValue>
+    <idCode>JU</idCode>
+        <idValue>Jurisdiction</idValue>
+    <idCode>K</idCode>
+        <idValue>Kit</idValue>
+    <idCode>L</idCode>
+        <idValue>Supplier&apos;s Location</idValue>
+    <idCode>M</idCode>
+        <idValue>Measurement</idValue>
+    <idCode>ML</idCode>
+        <idValue>Manufacturing Level</idValue>
+    <idCode>NI</idCode>
+        <idValue>Nature of Injury</idValue>
+    <idCode>NS</idCode>
+        <idValue>National Stock Number</idValue>
+    <idCode>O</idCode>
+        <idValue>Order</idValue>
+    <idCode>OS</idCode>
+        <idValue>Support</idValue>
+    <idCode>P</idCode>
+        <idValue>Pack</idValue>
+    <idCode>PA</idCode>
+        <idValue>Primary Administrator</idValue>
+    <idCode>PB</idCode>
+        <idValue>Personal Property</idValue>
+    <idCode>PC</idCode>
+        <idValue>Project Code</idValue>
+    <idCode>PD</idCode>
+        <idValue>Procedure</idValue>
+    <idCode>PH</idCode>
+        <idValue>Product Characteristic</idValue>
+    <idCode>PL</idCode>
+        <idValue>Primary Specification - Lift Level</idValue>
+    <idCode>PP</idCode>
+        <idValue>Related Parties</idValue>
+    <idCode>PR</idCode>
+        <idValue>Principal</idValue>
+    <idCode>PS</idCode>
+        <idValue>Property Segment Group</idValue>
+    <idCode>PT</idCode>
+        <idValue>Patient</idValue>
+    <idCode>PY</idCode>
+        <idValue>Payment Detail</idValue>
+    <idCode>Q</idCode>
+        <idValue>Subpack</idValue>
+    <idCode>R</idCode>
+        <idValue>Quantity</idValue>
+    <idCode>RA</idCode>
+        <idValue>Reporting Agency</idValue>
+    <idCode>RB</idCode>
+        <idValue>Response</idValue>
+    <idCode>RC</idCode>
+        <idValue>Response Details</idValue>
+    <idCode>RD</idCode>
+        <idValue>Response Sub-details</idValue>
+    <idCode>RE</idCode>
+        <idValue>Response Particular</idValue>
+    <idCode>RF</idCode>
+        <idValue>Medication</idValue>
+    <idCode>RM</idCode>
+        <idValue>Room</idValue>
+    <idCode>RP</idCode>
+        <idValue>Report</idValue>
+    <idCode>S</idCode>
+        <idValue>Shipment</idValue>
+    <idCode>SA</idCode>
+        <idValue>Secondary Administrator</idValue>
+    <idCode>SB</idCode>
+        <idValue>Substitute</idValue>
+    <idCode>SC</idCode>
+        <idValue>Subcontract Line Item</idValue>
+    <idCode>SD</idCode>
+        <idValue>Support Document</idValue>
+    <idCode>SE</idCode>
+        <idValue>Subexhibit Line Item</idValue>
+    <idCode>SH</idCode>
+        <idValue>Sheet</idValue>
+    <idCode>SI</idCode>
+        <idValue>Source of Injury</idValue>
+    <idCode>SL</idCode>
+        <idValue>Solicitation</idValue>
+    <idCode>SP</idCode>
+        <idValue>Sub-Project</idValue>
+    <idCode>SR</idCode>
+        <idValue>Subroom</idValue>
+    <idCode>SS</idCode>
+        <idValue>Services</idValue>
+    <idCode>SY</idCode>
+        <idValue>System</idValue>
+    <idCode>T</idCode>
+        <idValue>Shipping Tare</idValue>
+    <idCode>TI</idCode>
+        <idValue>Technical Information Package</idValue>
+    <idCode>TS</idCode>
+        <idValue>Transaction Set</idValue>
+    <idCode>U</idCode>
+        <idValue>Subassembly</idValue>
+    <idCode>UT</idCode>
+        <idValue>Unit or Lot</idValue>
+    <idCode>V</idCode>
+        <idValue>Address Information</idValue>
+    <idCode>W</idCode>
+        <idValue>Transaction Reference Number</idValue>
+    <idCode>WB</idCode>
+        <idValue>Work Breakdown Structure</idValue>
+    <idCode>WC</idCode>
+        <idValue>Work Candidate</idValue>
+    <idCode>WL</idCode>
+        <idValue>Well</idValue>
+    <idCode>WP</idCode>
+        <idValue>Well Completion</idValue>
+    <idCode>WR</idCode>
+        <idValue>Wellbore</idValue>
+    <idCode>X</idCode>
+        <idValue>Serial Number</idValue>
+    <idCode>Y</idCode>
+        <idValue>Suffix</idValue>
+    <idCode>ZZ</idCode>
+        <idValue>Mutually Defined</idValue>
+</idList>

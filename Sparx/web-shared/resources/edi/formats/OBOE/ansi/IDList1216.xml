@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE idList SYSTEM "idList.dtd">
+<!-- Revision 2.5.0 data/OBOE, docs,February 25, 2002, -->
+<idList>
+    <idCode>A</idCode>
+        <idValue>Active</idValue>
+    <idCode>C</idCode>
+        <idValue>Consolidated Omnibus Budget Reconciliation Act (COBRA)</idValue>
+    <idCode>I</idCode>
+        <idValue>Involuntary</idValue>
+    <idCode>S</idCode>
+        <idValue>Surviving Insured</idValue>
+    <idCode>T</idCode>
+        <idValue>Tax Equity and Fiscal Responsibility Act (TEFRA)</idValue>
+    <idCode>V</idCode>
+        <idValue>Voluntary</idValue>
+</idList>
