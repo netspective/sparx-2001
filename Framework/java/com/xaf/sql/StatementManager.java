@@ -205,6 +205,7 @@ public class StatementManager extends XmlSource
 			}
 		}
 
+		addMetaInformation();
 	}
 
 	static public ResultInfo execute(DatabaseContext dc, ValueContext vc, String dataSourceId, StatementInfo si, Object[] params) throws NamingException, SQLException
