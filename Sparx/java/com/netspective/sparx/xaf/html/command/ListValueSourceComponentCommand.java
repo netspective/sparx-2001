@@ -3,6 +3,7 @@ package com.netspective.sparx.xaf.html.command;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.xaf.html.ComponentCommandException;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 
@@ -15,9 +16,16 @@ import java.io.Writer;
 public class ListValueSourceComponentCommand extends AbstractComponentCommand
 {
     static public final String COMMAND_ID = "lvs";
+    static public final String LVSTYPENAME_REFERENCE = "reference";
+    static public final String LVSTYPENAME_INSTANCE  = "instance";
+    static public final int LVSTYPE_UNKNOWN = 0;
+    static public final int LVSTYPE_REFERENCE = 1;
+    static public final int LVSTYPE_INSTANCE  = 2;
 
+    private int valueSourceType;
     private String valueSourceSpec;
-    private ListValueSource valueSource;
+    private SingleValueSource valueSourceReference;
+    private ListValueSource valueSourceInstance;
     private boolean isPopup;
     private String skinName;
     private String[] urlFormats;
@@ -27,11 +35,15 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
         return new Documentation(
                 "Displays the contents of a ListValueSource. Unlike most of the other commands, this command has " +
                 "parameters separated by semi-colons instead of commas since commas may be found within a value-source "+
-                "specification. The value-source parameter is basically the value-source spefication like xxx:yyy. The "+
+                "specification. The value-source-type parameter may be either 'reference' or 'instance'. When it is set " +
+                "to reference, the value-source-spec parameter is basically the value-source spefication like xxx:yyy. " +
+                "When the value-source-type parameter is set to 'reference' it means that the value-source-spec is actually " +
+                "a single value source that points to an actual ListValueSource at runtime. The "+
                 "isPopup parameter may be '-' or 'true', 'popup', or 'no'. The urlFormats parameter is one or more "+
                 "comma-separated URL formats that may override those within a report.",
                 new Documentation.Parameter[]
                     {
+                        new Documentation.Parameter("value-source-type", true),
                         new Documentation.Parameter("value-source-spec", true),
                         new Documentation.Parameter("is-popup", false, "yes"),
                         new Documentation.Parameter("url-formats", false),
@@ -47,6 +59,7 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
 
     public void setCommand(StringTokenizer params)
     {
+        setValueSourceType(params.nextToken());
         setValueSourceSpec(params.nextToken());
 
         if(params.hasMoreTokens())
@@ -93,6 +106,29 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
             setSkinName(null);
     }
 
+    public int getValueSourceType()
+    {
+        return valueSourceType;
+    }
+
+    public String getValueSourceTypeName()
+    {
+        return valueSourceType == LVSTYPE_REFERENCE ? LVSTYPENAME_REFERENCE : LVSTYPENAME_INSTANCE;
+    }
+
+    public void setValueSourceType(int valueSourceType)
+    {
+        this.valueSourceType = valueSourceType;
+    }
+
+    public void setValueSourceType(String valueSourceType)
+    {
+        if(valueSourceType.equals(LVSTYPENAME_REFERENCE))
+            setValueSourceType(LVSTYPE_REFERENCE);
+        else
+            setValueSourceType(LVSTYPE_INSTANCE);
+    }
+
     public String getValueSourceSpec()
     {
         return valueSourceSpec;
@@ -101,7 +137,10 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
     public void setValueSourceSpec(String valueSourceSpec)
     {
         this.valueSourceSpec = valueSourceSpec;
-        setValueSource(ValueSourceFactory.getListValueSource(valueSourceSpec));
+        if(valueSourceType == LVSTYPE_INSTANCE)
+            setValueSourceInstance(ValueSourceFactory.getListValueSource(valueSourceSpec));
+        else
+            setValueSourceReference(ValueSourceFactory.getSingleValueSource(valueSourceSpec));
     }
 
     public boolean isPopup()
@@ -134,14 +173,24 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
         this.urlFormats = urlFormats;
     }
 
-    public ListValueSource getValueSource()
+    public SingleValueSource getValueSourceReference()
     {
-        return valueSource;
+        return valueSourceReference;
     }
 
-    public void setValueSource(ListValueSource valueSource)
+    public void setValueSourceReference(SingleValueSource valueSourceReference)
     {
-        this.valueSource = valueSource;
+        this.valueSourceReference = valueSourceReference;
+    }
+
+    public ListValueSource getValueSourceInstance()
+    {
+        return valueSourceInstance;
+    }
+
+    public void setValueSourceInstance(ListValueSource valueSourceInstance)
+    {
+        this.valueSourceInstance = valueSourceInstance;
     }
 
     public String getCommand()
@@ -168,9 +217,30 @@ public class ListValueSourceComponentCommand extends AbstractComponentCommand
 
     public void handleCommand(ValueContext vc, Writer writer, boolean unitTest) throws ComponentCommandException, IOException
     {
-        if(valueSource != null)
-            valueSource.renderChoicesHtml(vc, writer, urlFormats, skinName != null ? SkinFactory.getReportSkin(skinName) : null, true);
-        else
-            writer.write("ListValueSource '"+ valueSourceSpec +"' not found in "+ this.getClass().getName() +".handleValueSource().");
+        switch(valueSourceType)
+        {
+            case LVSTYPE_REFERENCE:
+                if(valueSourceReference != null)
+                {
+                    Object actualInstance = valueSourceReference.getObjectValue(vc);
+                    if(actualInstance != null)
+                    {
+                        if(actualInstance instanceof ListValueSource)
+                            ((ListValueSource) actualInstance).renderItemsHtml(vc, writer, urlFormats, skinName != null ? SkinFactory.getReportSkin(skinName) : null, isPopup);
+                        else
+                            writer.write("ListValueSource reference '"+ valueSourceSpec +"' is a "+ actualInstance+ ", not a ListValueSource in " + this.getClass().getName() +".handleValueSource().");
+                    }
+                }
+                else
+                    writer.write("ListValueSource reference '"+ valueSourceSpec +"' not found in "+ this.getClass().getName() +".handleValueSource().");
+                break;
+
+            case LVSTYPE_INSTANCE:
+                if(valueSourceInstance != null)
+                    valueSourceInstance.renderItemsHtml(vc, writer, urlFormats, skinName != null ? SkinFactory.getReportSkin(skinName) : null, isPopup);
+                else
+                    writer.write("ListValueSource instance '"+ valueSourceSpec +"' not found in "+ this.getClass().getName() +".handleValueSource().");
+                break;
+        }
     }
 }
