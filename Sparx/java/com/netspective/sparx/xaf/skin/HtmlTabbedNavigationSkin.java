@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.8 2002-12-31 19:52:37 shahid.shah Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.9 2003-01-01 21:29:02 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -79,11 +79,11 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
     public HtmlTabbedNavigationSkin()
     {
-        levelOneStyle = new HorizontalImagesStyle();
-        levelTwoStyle = new HorizontalCaptionsStyle();
-        levelThreeStyle = new VerticalCaptionsStyle();
-        cssFileName = "/sparx/resources/css/tabbed-navigation-skin.css";
-        imagesBasePath = "/resources/skin/tabbed-navigation";
+        levelOneStyle = new Level1Style();
+        levelTwoStyle = new Level2Style();
+        levelThreeStyle = new Level3Style();
+        cssFileName = "/sparx/resources/skin/default/navigation/css/tabbed-navigation.css";
+        imagesBasePath = "/sparx/resources/skin/default/navigation";
     }
 
     public NavigationPathContext createContext(javax.servlet.jsp.PageContext jspPageContext, NavigationPath tree, String navTreeId, boolean popup)
@@ -154,7 +154,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("<!-- Master Header Ends -->");
     }
 
-    public void renderPageMenusLevelOne(Writer writer, NavigationPathContext nc) throws IOException
+   	public void renderPageMenusLevelOne(Writer writer, NavigationPathContext nc) throws IOException
     {
         writer.write("<!-- App Tabs Begins -->");
 
@@ -165,7 +165,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("<!-- App Tabs Ends -->");
 
         writer.write("	        </TD>");
-        writer.write("         <TD><IMG height=15 alt=\"\" src=\"" + nc.getRootUrl() + imagesBasePath + "/apptab_div.gif\" width=\"100%\" border=0></TD>");
+        writer.write("         <TD class=\"inner-apptab-separator\"><IMG height=15 alt=\"\" src=\"" + nc.getRootUrl() + imagesBasePath + "/apptab_div.gif\" width=\"100%\"></TD>");
         writer.write("      </TR>");
         writer.write("   </TABLE>");
     }
@@ -369,56 +369,84 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         abstract public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException;
     }
 
-    public class HorizontalImagesStyle extends NavigationStyle
-    {
-        public HorizontalImagesStyle()
+        public class Level1Style extends NavigationStyle
         {
-            flags = NAVFLAG_USE_IMAGES | NAVFLAG_EXPAND_MARGIN_LEFT;
-            tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
-            tableClass = "";
-            innerSeparatorImgAttrs = "height=15 width=10 border=0 alt=\"\"";
-            innerSeparatorImgClass = "";
-            navAttrs = "width=75";
-            navClass = "class=\"function_tab_";
-            navImgAttrs = "height=15 width=75 border=0 alt=\"\"";
-        }
-
-        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
-        {
-            //render each appTab
-            List tabElements = currentNavTree.getSibilingList();
-
-            writer.write("<TABLE " + tableClass + " " + tableAttrs + ">");
-            //TODO: add flag to see wether we need an outer separator and how many of them.
-            writer.write("<TR " + containerClass + " " + containerAttrs + ">");
-            for (int i = 0; i < tabElements.size(); i++)
+            public Level1Style()
             {
+                this.tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\"";
+                this.tableClass = "";
 
-                NavigationPath tabElement = (NavigationPath) tabElements.get(i);
-                if (tabElement.isVisible(nc))
+                this.outerSeparatorAttrs = "colspan=\"50\" width=\"100%\"";
+                this.outerSeparatorClass = "";
+                this.outerSeparatorImgAttrs = "height=2 width=10 border=0 alt=\"\"";
+                this.outerSeparatorImgClass = "";
+
+                this.innerSeparatorAttrs = "";
+                this.innerSeparatorClass = "class=\"inner-apptab-separator\"";
+                this.innerSeparatorImgAttrs = "height=8 width=10 border=0 alt=\"\"";
+                this.innerSeparatorImgClass = "";
+
+                this.containerAttrs = "";
+                this.containerClass = "";
+
+                this.navAttrs = "nowrap";
+                this.navClass = "class=\"app_tab_";
+                this.navImgAttrs = "";
+
+                this.navLinkAttrs = "";
+                this.navLinkClass = "class=\"apptab_navigation_";
+
+                this.flags = NAVFLAG_EXPAND_MARGIN_RIGHT;
+            }
+
+            public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
+            {
+                List tabElements = currentNavTree.getSibilingList();
+
+                if (tabElements == null || tabElements.isEmpty())
                 {
-                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " ");
-                    writer.write("src=\"" + nc.getRootUrl() + imagesBasePath + tabElement.getId() + "/tab_separator.gif" + "\"></TD>");
-                    writer.write("<TD " + navAttrs + ">");
-                    writer.write("<A " + navLinkAttrs + " href=\"" + tabElement.getUrl(nc) + "\">");
-                    writer.write("<IMG " + navImgAttrs + " ");
-                    writer.write("src=\"" + nc.getRootUrl() + imagesBasePath + tabElement.getId() + "/tab_" + (tabElement.isInActivePath(nc) ? "on" : "off") + ".gif" + "\"></A></TD>");
+                    return;
                 }
-            }
+                //TODO: 1) think about images
 
-            if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
-            {
-                writer.write("<TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\" ></TD>");
-            }
+                writer.write("   <table " + tableClass + " " + tableAttrs + ">");
+                writer.write("       <tr>");
+                writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
+                writer.write("       </tr>");
+                writer.write("       <tr" + containerClass + " " + containerAttrs + ">");
 
-            writer.write("</TR>");
-            writer.write("</TABLE>");
+                if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_LEFT))
+                {
+                    writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
+                }
+
+                for (int i = 0; i < tabElements.size(); i++)
+                {
+                    NavigationPath tabElement = (NavigationPath) tabElements.get(i);
+                    if (tabElement.isVisible(nc))
+                    {
+                        writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
+                        writer.write("<TD " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
+                        writer.write("<a " + navLinkAttrs + " " + navLinkClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "</a></TD>");
+                    }
+                }
+
+                if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
+                {
+                    writer.write("           <TD " + innerSeparatorClass + " " + "width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
+                }
+
+                writer.write("       </tr>");
+                
+                writer.write("   </table>");
+            }
         }
-    }
 
-    public class HorizontalCaptionsStyle extends NavigationStyle
+
+
+    public class Level2Style extends NavigationStyle
     {
-        public HorizontalCaptionsStyle()
+        public Level2Style()
         {
             this.tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\"";
             this.tableClass = "class=\"function_tabs\"";
@@ -491,9 +519,9 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         }
     }
 
-    public class VerticalCaptionsStyle extends NavigationStyle
+    public class Level3Style extends NavigationStyle
     {
-        public VerticalCaptionsStyle()
+        public Level3Style()
         {
             flags = NavigationStyle.NAVFLAG_VERTICAL_DISPLAY;
             tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
@@ -545,4 +573,54 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD></TR></TABLE>");
         }
     }
+
+public class Level1ImagesStyle extends NavigationStyle
+    {
+        public Level1ImagesStyle()
+        {
+            flags = NAVFLAG_USE_IMAGES | NAVFLAG_EXPAND_MARGIN_LEFT;
+            tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
+            tableClass = "";
+            innerSeparatorImgAttrs = "height=15 width=10 border=0 alt=\"\"";
+            innerSeparatorImgClass = "";
+            navAttrs = "width=75";
+            navClass = "class=\"function_tab_";
+            navImgAttrs = "height=15 width=75 border=0 alt=\"\"";
+        }
+
+        public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException
+        {
+            //render each appTab
+            List tabElements = currentNavTree.getSibilingList();
+
+            writer.write("<TABLE " + tableClass + " " + tableAttrs + ">");
+            //TODO: add flag to see wether we need an outer separator and how many of them.
+            writer.write("<TR " + containerClass + " " + containerAttrs + ">");
+            for (int i = 0; i < tabElements.size(); i++)
+            {
+
+                NavigationPath tabElement = (NavigationPath) tabElements.get(i);
+                if (tabElement.isVisible(nc))
+                {
+                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " ");
+                    writer.write("src=\"" + nc.getRootUrl() + imagesBasePath + tabElement.getId() + "/tab_separator.gif" + "\"></TD>");
+                    writer.write("<TD " + navAttrs + ">");
+                    writer.write("<A " + navLinkAttrs + " href=\"" + tabElement.getUrl(nc) + "\">");
+                    writer.write("<IMG " + navImgAttrs + " ");
+                    writer.write("src=\"" + nc.getRootUrl() + imagesBasePath + tabElement.getId() + "/tab_" + (tabElement.isInActivePath(nc) ? "on" : "off") + ".gif" + "\"></A></TD>");
+                }
+            }
+
+            if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
+            {
+                writer.write("<TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\" ></TD>");
+            }
+
+            writer.write("</TR>");
+            writer.write("</TABLE>");
+        }
+    }
+
+
+
 }
