@@ -102,6 +102,40 @@ public class SelectField extends DialogField
         setListSource(vs);
 	}
 
+    public void setChoices(Element elem)
+	{
+        StringsListValue vs = null;
+        if(elem != null)
+        {
+            SelectChoicesList list = new SelectChoicesList();
+
+            NodeList children = elem.getChildNodes();
+            for(int n = 0; n < children.getLength(); n++)
+            {
+                Node node = children.item(n);
+                if(node.getNodeType() != Node.ELEMENT_NODE)
+                    continue;
+
+                Element choice = (Element) node;
+                if(choice.getNodeName().equals("choice"))
+                {
+                    String value = choice.getAttribute("value");
+                    String caption = choice.getFirstChild().getNodeValue();
+
+                    if(value.length() > 0)
+                        list.add(new SelectChoice(caption, value));
+                    else
+                        list.add(new SelectChoice(caption));
+                }
+            }
+
+            vs = new StringsListValue();
+            vs.setChoices(list);
+        }
+
+        setListSource(vs);
+	}
+
 	public final ListValueSource getListSource() { return listSource; }
 	public void setListSource(ListValueSource value) { listSource = value; }
 
@@ -160,6 +194,10 @@ public class SelectField extends DialogField
 		String choicesValue = elem.getAttribute("choices");
 		if(choicesValue.length() > 0)
 			setChoices(choicesValue);
+
+        NodeList choicesList = elem.getElementsByTagName("choices");
+        if(choicesList.getLength() > 0)
+            setChoices((Element) choicesList.item(0));
 
 		String blank = elem.getAttribute("prepend-blank");
 		if(blank.length() > 0 && blank.equals("yes"))
