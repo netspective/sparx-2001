@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.18 2003-02-03 00:49:06 shahid.shah Exp $
+ * $Id: NavigationPath.java,v 1.19 2003-02-03 04:24:28 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -212,6 +212,7 @@ public class NavigationPath
     private String entityImageUrl;
     private String controllerName;
     private List conditionalActions;
+    private PageComponent component;
     private NavigationController controller;
     private List childrenList = new ArrayList();
     private Map childrenMap = new HashMap();
@@ -496,6 +497,12 @@ public class NavigationPath
                 continue;
             }
 
+            if (childName.equals("components"))
+            {
+                importComponentsFromXml(childElem, parent);
+                continue;
+            }
+
             if (childElem.getNodeName().equals("page"))
             {
                 String childClassName = childElem.getAttribute("class");
@@ -685,6 +692,12 @@ public class NavigationPath
             actionInst.importFromXml(elem);
             path.addConditionalAction(actionInst);
         }
+    }
+
+    public void importComponentsFromXml(Element elem, NavigationPath path)
+    {
+        path.setComponent(new PageComponent());
+        path.getComponent().importFromXml(elem);
     }
 
     public FindResults findPath(String path)
@@ -1009,6 +1022,14 @@ public class NavigationPath
     public void setSubHeading(String value)
     {
         this.subHeading = ValueSourceFactory.getSingleOrStaticValueSource(value);
+    }
+
+    public PageComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(PageComponent component) {
+        this.component = component;
     }
 
     /**

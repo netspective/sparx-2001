@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageTag.java,v 1.13 2003-02-03 00:50:30 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.14 2003-02-03 04:26:37 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -283,13 +283,21 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
     public boolean handleDefaultBodyItem() throws javax.servlet.jsp.JspException
     {
+        boolean returnValue = false;
         try
         {
-            return ComponentCommandFactory.handleDefaultBodyItem(
+            returnValue =  ComponentCommandFactory.handleDefaultBodyItem(
                     pageContext.getServletContext(),
                     (Servlet) pageContext.getPage(),
                     pageContext.getRequest(), pageContext.getResponse()
                     );
+
+            if (!returnValue && activePage != null){
+                if (activePage.getComponent() != null){
+                    returnValue = true;
+                    activePage.getComponent().handleDefaultBody(nc);
+                }
+            }
         }
         catch(IOException e)
         {
@@ -299,6 +307,8 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         {
             throw new JspException(e);
         }
+
+        return returnValue;
     }
 
     public int doStartTag() throws javax.servlet.jsp.JspException
