@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.36 2003-02-26 07:54:13 aye.thu Exp $
+ * $Id: DialogContext.java,v 1.37 2003-04-11 13:33:49 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -985,6 +985,8 @@ public class DialogContext extends ServletValueContext
             autoExec = (String) request.getAttribute(Dialog.PARAMNAME_AUTOEXECUTE);
         }
 
+        int isValidReturnVal = -1;
+
         if(autoExec != null && !autoExec.equals("no"))
         {
             activeMode = dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
@@ -995,11 +997,18 @@ public class DialogContext extends ServletValueContext
             if(modeParamValue != null)
             {
                 char givenMode = modeParamValue.charAt(0);
-                activeMode = (
-                        givenMode == DIALOGMODE_VALIDATE ?
-                        (dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE) :
-                        givenMode
-                        );
+                if(givenMode == DIALOGMODE_VALIDATE)
+                {
+                    isValidReturnVal = dialog.isValid(this) ? 1 : 0;
+                    activeMode = isValidReturnVal == 1 ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
+                }
+                else
+                    activeMode = givenMode;
+//                activeMode = (
+//                        givenMode == DIALOGMODE_VALIDATE ?
+//                        (dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE) :
+//                        givenMode
+//                        );
             }
         }
 
@@ -1010,7 +1019,9 @@ public class DialogContext extends ServletValueContext
         }
         else if(activeMode == DIALOGMODE_VALIDATE)
         {
-            nextMode = dialog.isValid(this) ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
+            if(isValidReturnVal == -1)
+                isValidReturnVal = dialog.isValid(this) ? 1 : 0;
+            nextMode = isValidReturnVal == 1 ? DIALOGMODE_EXECUTE : DIALOGMODE_VALIDATE;
         }
         else if(activeMode == DIALOGMODE_EXECUTE)
         {
