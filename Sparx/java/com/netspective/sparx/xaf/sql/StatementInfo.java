@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.9 2002-12-30 16:00:47 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.10 2002-12-30 21:18:14 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -70,7 +70,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
-import org.apache.oro.text.perl.Perl5Util;
 
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.dal.ConnectionContext;
