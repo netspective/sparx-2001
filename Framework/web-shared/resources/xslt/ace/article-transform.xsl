@@ -278,7 +278,16 @@
 							<font color="red"><u>[<B>NEW</B>]</u>: 
 							</font>
 						</xsl:if>
-						<xsl:apply-templates select="name"/>
+						<xsl:choose>
+							<xsl:when test="completed = 100">
+							 	<strike>
+									<xsl:apply-templates select="name"/>
+								</strike>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:apply-templates select="name"/>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:if test="comments">
 						<DIV>
 							<xsl:attribute name="STYLE">
