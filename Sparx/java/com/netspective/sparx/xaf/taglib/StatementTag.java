@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTag.java,v 1.2 2002-09-03 22:29:20 aye.thu Exp $
+ * $Id: StatementTag.java,v 1.3 2003-01-31 06:15:10 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -87,6 +87,11 @@ public class StatementTag extends javax.servlet.jsp.tagext.TagSupport
     public void setDebug(String value)
     {
         if(value.equals("yes")) task.setFlag(com.netspective.sparx.xaf.task.Task.TASKFLAG_DEBUG);
+    }
+
+    public void setPermission(String value)
+    {
+        task.setPermissions(value);
     }
 
     public void setDataCmd(String value)
