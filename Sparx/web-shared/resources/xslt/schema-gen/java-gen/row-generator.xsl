@@ -409,7 +409,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 	public void setData(DialogContext dc)
 	{
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
-<xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		<xsl:choose><xsl:when test="type = 'enum'">dc.setValueAsTextSet</xsl:when><xsl:otherwise>dc.setValue</xsl:otherwise></xsl:choose>(DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">get<xsl:value-of select="@_gen-method-name"/>()</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().format(dc, get<xsl:value-of select="@_gen-method-name"/>())</xsl:otherwise></xsl:choose>);
+<xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable><xsl:text>		</xsl:text><xsl:choose><xsl:when test="@type = 'enum-set'">dc.setValuesAsTextSet</xsl:when><xsl:otherwise>dc.setValue</xsl:otherwise></xsl:choose>(DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">get<xsl:value-of select="@_gen-method-name"/>()</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().format(dc, get<xsl:value-of select="@_gen-method-name"/>())</xsl:otherwise></xsl:choose>);
 </xsl:for-each>	}
 
 	public void setData(DialogContext dc, Map colNameFieldNameMap)
@@ -417,7 +417,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		String fieldName = null;
 <xsl:for-each select="column"><xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>		fieldName = (String) colNameFieldNameMap.get(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-		dc.setValue(fieldName != null ? fieldName : DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">get<xsl:value-of select="@_gen-method-name"/>()</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().format(dc, get<xsl:value-of select="@_gen-method-name"/>())</xsl:otherwise></xsl:choose>);
+		<xsl:choose><xsl:when test="@type = 'enum-set'">dc.setValuesAsTextSet</xsl:when><xsl:otherwise>dc.setValue</xsl:otherwise></xsl:choose>(fieldName != null ? fieldName : DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">get<xsl:value-of select="@_gen-method-name"/>()</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().format(dc, get<xsl:value-of select="@_gen-method-name"/>())</xsl:otherwise></xsl:choose>);
 </xsl:for-each>	}
 
 <xsl:if test="column/trigger[@type='dal-row-java' and @time = 'before' and @event='insert']">

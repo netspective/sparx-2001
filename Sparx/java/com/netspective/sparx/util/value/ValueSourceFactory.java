@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.10 2003-01-22 06:26:31 roque.hernandez Exp $
+ * $Id: ValueSourceFactory.java,v 1.11 2003-01-30 16:07:44 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -98,6 +98,7 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("session", SessionAttributeValue.class);
         srcClasses.put("schema-tables", SchemaDocTablesListValue.class);
         srcClasses.put("schema-enum", SchemaDocEnumDataListValue.class);
+        srcClasses.put("schema-enum-set", SchemaDocEnumSetListValue.class);
         srcClasses.put("generate-id", GenerateIdValue.class);
         srcClasses.put("system-property", SystemPropertyValue.class);
         srcClasses.put("servlet-context-init-param", ServletContextInitParamValue.class);

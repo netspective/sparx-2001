@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.31 2003-01-21 17:58:36 shahbaz.javeed Exp $
+ * $Id: DialogContext.java,v 1.32 2003-01-30 16:07:44 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -102,6 +102,7 @@ import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.StringUtilities;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
@@ -1567,7 +1568,7 @@ public class DialogContext extends ServletValueContext
         return getValue(field);
     }
 
-    public String getValueValueAsTextSet(String qualifiedName)
+    public String getValueAsTextSet(String qualifiedName)
     {
         return getValue(qualifiedName);
     }
@@ -1728,13 +1729,12 @@ public class DialogContext extends ServletValueContext
 
         String returnValue = "";
 
-        for(int i = 0; i < state.values.length; i ++)
-        {
-            if (i == 0)
-                returnValue += state.values[i];
-            else
-                returnValue += "," + state.values[i];
-        }
+        if (state.values != null)
+            returnValue = StringUtilities.convertStringsToTextSet(state.values);
+        else if (state.value != null)
+            returnValue = state.value;
+        else
+            returnValue = null;
 
         return returnValue;
     }
@@ -1747,13 +1747,12 @@ public class DialogContext extends ServletValueContext
 
         String returnValue = "";
 
-        for(int i = 0; i < state.values.length; i ++)
-        {
-            if (i == 0)
-                returnValue += state.values[i];
-            else
-                returnValue += "," + state.values[i];
-        }
+        if (state.values != null)
+            returnValue = StringUtilities.convertStringsToTextSet(state.values);
+        else if (state.value != null)
+            returnValue = state.value;
+        else
+            returnValue = null;
 
         return returnValue;
     }
@@ -1773,32 +1772,22 @@ public class DialogContext extends ServletValueContext
 
     public void setValuesAsTextSet(String qualifiedName, String values)
     {
-        ArrayList textSetItem = new ArrayList();
-        StringTokenizer st = new StringTokenizer(values, ",");
-
-        while(st.hasMoreTokens())
-        {
-            textSetItem.add(st.nextToken().trim());
-        }
-
         DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
-        if(state != null)
-            state.values = (String[]) textSetItem.toArray();
+        if (null != state)
+        {
+            state.value = values;
+            state.values = StringUtilities.convertTextSetToStrings(values);
+        }
     }
 
     public void setValuesAsTextSet(DialogField field, String values)
     {
-        ArrayList textSetItem = new ArrayList();
-        StringTokenizer st = new StringTokenizer(values, ",");
-
-        while(st.hasMoreTokens())
-        {
-            textSetItem.add(st.nextToken().trim());
-        }
-
         DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
-        if(state != null)
-            state.values = (String[]) textSetItem.toArray();
+        if (null != state)
+        {
+            state.value = values;
+            state.values = StringUtilities.convertTextSetToStrings(values);
+        }
     }
 
     public List getErrorMessages(DialogField field)

@@ -51,16 +51,18 @@
  */
 
 /**
- * $Id: AbstractRow.java,v 1.9 2003-01-08 06:39:36 shahbaz.javeed Exp $
+ * $Id: AbstractRow.java,v 1.10 2003-01-30 16:07:45 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.sql.DmlStatement;
 import com.netspective.sparx.xif.dal.validation.UnknownValidationResultException;
 import com.netspective.sparx.xif.dal.validation.result.RowValidationResult;
 import com.netspective.sparx.xif.db.DatabasePolicy;
+import com.netspective.sparx.util.StringUtilities;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -451,17 +453,31 @@ public abstract class AbstractRow implements Row
                 for(int c = 0; c < rowColumns.length; c++)
                 {
                     Column column = rowColumns[c];
+                    DialogField field = dc.getField(column.getDialogFieldName());
                     DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(column.getDialogFieldName());
-                    if(state != null && state.value != null && state.value.length() > 0)
+                    if (null != state)
                     {
-                        String dataClassName = column.getDataClassName();
-                        if(dataClassName.equals("java.lang.String"))
-                            setDataByColumn(column, state.value);
-                        else if(dataClassName.equals("java.util.Date"))
-                            setDataByColumn(column, state.field.getValueForSqlBindParam(state.value));
-                        else
+                        if (field.isMulti() && state.values != null && 0 < state.values.length)
                         {
-                            try { setTextByColumn(column, state.value, false); } catch (ParseException e) { }
+                            String dataClassName = column.getDataClassName();
+                            if(dataClassName.equals("java.lang.String"))
+                                setDataByColumn(column, StringUtilities.convertStringsToTextSet(state.values));
+                            else
+                            {
+                                try { setTextByColumn(column, StringUtilities.convertStringsToTextSet(state.values), false); } catch (ParseException e) { }
+                            }
+                        }
+                        else if (null != state.value && 0 < state.value.length())
+                        {
+                            String dataClassName = column.getDataClassName();
+                            if(dataClassName.equals("java.lang.String"))
+                                setDataByColumn(column, state.value);
+                            else if(dataClassName.equals("java.util.Date"))
+                                setDataByColumn(column, state.field.getValueForSqlBindParam(state.value));
+                            else
+                            {
+                                try { setTextByColumn(column, state.value, false); } catch (ParseException e) { }
+                            }
                         }
                     }
                 }
@@ -471,17 +487,31 @@ public abstract class AbstractRow implements Row
                 for(int c = 0; c < rowColumns.length; c++)
                 {
                     Column column = rowColumns[c];
+                    DialogField field = dc.getField(column.getDialogFieldName());
                     DialogContext.DialogFieldState state = (DialogContext.DialogFieldState) fieldStates.get(column.getDialogFieldName());
                     if(state != null)
                     {
-                        String dataClassName = column.getDataClassName();
-                        if(dataClassName.equals("java.lang.String"))
-                            setDataByColumn(column, state.value);
-                        else if(dataClassName.equals("java.util.Date"))
-                            setDataByColumn(column, state.value != null && state.value.length() > 0 ? state.field.getValueForSqlBindParam(state.value) : null);
+                        if (field.isMulti())
+                        {
+                            String dataClassName = column.getDataClassName();
+                            if(dataClassName.equals("java.lang.String"))
+                                setDataByColumn(column, StringUtilities.convertStringsToTextSet(state.values));
+                            else
+                            {
+                                try { setTextByColumn(column, null != state.values && state.values.length > 0 ? StringUtilities.convertStringsToTextSet(state.values) : null, false); } catch (ParseException e) { }
+                            }
+                        }
                         else
                         {
-                            try { setTextByColumn(column, state.value != null && state.value.length() > 0 ? state.value : null, false); } catch (ParseException e) { }
+                            String dataClassName = column.getDataClassName();
+                            if(dataClassName.equals("java.lang.String"))
+                                setDataByColumn(column, state.value);
+                            else if(dataClassName.equals("java.util.Date"))
+                                setDataByColumn(column, state.value != null && state.value.length() > 0 ? state.field.getValueForSqlBindParam(state.value) : null);
+                            else
+                            {
+                                try { setTextByColumn(column, state.value != null && state.value.length() > 0 ? state.value : null, false); } catch (ParseException e) { }
+                            }
                         }
                     }
                 }

@@ -336,7 +336,7 @@
                 while(st.hasMoreTokens())
                 {
                     String enumCaption = st.nextToken().trim();
-                    Integer enumValue = ${column.getAttribute('_gen-enumeration-table-item-class')}.getItemByCaption(enumCaption).getIdAsInteger();
+                    Integer enumValue = ${column.getAttribute('_gen-enumeration-table-item-class')}.parseItem(enumCaption).getIdAsInteger();
                     
                     ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
                     row.setEnumIndex(itemIndex);
@@ -355,7 +355,7 @@
                 while(st.hasMoreTokens())
                 {
                     String enumCaption = st.nextToken().trim();
-                    Integer enumValue = ${column.getAttribute('_gen-enumeration-table-item-class')}.getItemByCaption(enumCaption).getIdAsInteger();
+                    Integer enumValue = ${column.getAttribute('_gen-enumeration-table-item-class')}.parseItem(enumCaption).getIdAsInteger();
 
                     ${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-class-name")} row = create${column.getElementsByTagName("generated-child-table").item(0).getAttribute("_gen-row-name")}();
                     row.setEnumIndex(itemIndex);

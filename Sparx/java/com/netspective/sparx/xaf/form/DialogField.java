@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.15 2003-01-14 23:15:52 aye.thu Exp $
+ * $Id: DialogField.java,v 1.16 2003-01-30 16:07:44 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -117,6 +117,7 @@ public class DialogField
     static public String FIELDTAGPREFIX = "field.";
 
     static public int fieldCounter = 0;
+    private boolean multi = false;
 
     private DialogField parent;
     private String id;
@@ -493,6 +494,27 @@ public class DialogField
     public void setParent(DialogField newParent)
     {
         parent = newParent;
+    }
+
+    /**
+     * Returns true if the field is supposed to return multiple values
+     *
+     * @return boolean Does this field return multiple values (e.g. multilist select field)
+     */
+    public boolean isMulti()
+    {
+        return multi;
+    }
+
+    /**
+     * Sets the value of the multi attribute which determines whether a field returns multiple values or not (e.g.
+     * a multilist select field)
+     *
+     * @param multi boolean true/false - Whether or not this field returns multiple values
+     */
+    public void setMulti(boolean multi)
+    {
+        this.multi = multi;
     }
 
     public String getId()
