@@ -121,6 +121,10 @@
             <name>listener</name>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <name>permission</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
 
     </tag>
 
