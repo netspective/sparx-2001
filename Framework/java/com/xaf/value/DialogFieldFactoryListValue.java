@@ -19,10 +19,6 @@ public class DialogFieldFactoryListValue extends ListSource
     {
     }
 
-    public void initializeSource(String srcParams)
-    {
-    }
-
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
 		SelectChoicesList choices = new SelectChoicesList();

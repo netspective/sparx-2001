@@ -33,6 +33,7 @@ public class QueryDefnFieldsListValue extends ListSource
 
     public void initializeSource(String srcParams)
     {
+		super.initializeSource(srcParams);
         int delimPos = srcParams.indexOf('/');
         if(delimPos >= 0)
         {

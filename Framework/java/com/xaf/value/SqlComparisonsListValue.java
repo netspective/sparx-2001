@@ -16,15 +16,8 @@ import com.xaf.sql.query.*;
 
 public class SqlComparisonsListValue extends ListSource
 {
-	private String groupName;
-
     public SqlComparisonsListValue()
     {
-    }
-
-    public void initializeSource(String srcParams)
-    {
-		groupName = srcParams;
     }
 
     public SelectChoicesList getSelectChoices(ValueContext vc)
@@ -32,7 +25,7 @@ public class SqlComparisonsListValue extends ListSource
 		SelectChoicesList choices = new SelectChoicesList();
 
 		List comparisons = SqlComparisonFactory.getComparisonsList();
-		if(groupName == null || groupName.equals("all"))
+		if(valueKey == null || valueKey.equals("all"))
 		{
 			for(Iterator i = comparisons.iterator(); i.hasNext(); )
 			{
@@ -45,7 +38,7 @@ public class SqlComparisonsListValue extends ListSource
 			for(Iterator i = comparisons.iterator(); i.hasNext(); )
 			{
 				SqlComparison comp = (SqlComparison) i.next();
-				if(comp.getGroupName().equals(groupName))
+				if(comp.getGroupName().equals(valueKey))
 					choices.add(new SelectChoice(comp.getCaption(), comp.getName()));
 			}
 		}

@@ -24,6 +24,8 @@ public class StringsListValue extends ListSource
 
     public void initializeSource(String srcParams)
     {
+		super.initializeSource(srcParams);
+
         SelectChoicesList choices = new SelectChoicesList();
 		if(srcParams == null) return;
 

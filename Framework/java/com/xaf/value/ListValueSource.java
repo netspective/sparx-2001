@@ -14,6 +14,7 @@ import com.xaf.form.field.SelectChoicesList;
 
 public interface ListValueSource
 {
+	public String getId();
     public void initializeSource(String srcParams);
     public SelectChoicesList getSelectChoices(ValueContext dc);
 	public String[] getValues(ValueContext vc);

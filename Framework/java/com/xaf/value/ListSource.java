@@ -12,12 +12,21 @@ package com.xaf.value;
 import com.xaf.form.DialogContext;
 import com.xaf.form.field.SelectChoicesList;
 
-abstract public class ListSource implements ListValueSource
+public class ListSource implements ListValueSource
 {
     private SelectChoicesList choices;
 	private String[] values;
+	protected String valueKey;
 
-    abstract public void initializeSource(String srcParams);
+    public void initializeSource(String srcParams)
+	{
+		valueKey = srcParams;
+	}
+
+	public String getId()
+	{
+		return getClass().getName() + ":" + valueKey;
+	}
 
     public SelectChoicesList getSelectChoices(ValueContext vc)
 	{

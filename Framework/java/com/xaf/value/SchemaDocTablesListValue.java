@@ -8,10 +8,6 @@ import com.xaf.form.field.*;
 
 public class SchemaDocTablesListValue extends ListSource
 {
-    public void initializeSource(String srcParams)
-    {
-    }
-
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
 		SelectChoicesList choices = new SelectChoicesList();
