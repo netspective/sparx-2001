@@ -444,9 +444,10 @@ public class DialogField
 
 	public final boolean isRequired(DialogContext dc)
 	{
-		if(simpleName != null)
+        String qName = getQualifiedName();
+		if(qName != null)
 		{
-			if(dc.flagIsSet(getQualifiedName(), FLDFLAG_REQUIRED)) return true;
+			if(dc.flagIsSet(qName, FLDFLAG_REQUIRED)) return true;
 		}
 		else
 		{
@@ -485,17 +486,22 @@ public class DialogField
 				}
 			}
 		}
-
-		if(simpleName != null)
-			return dc.flagIsSet(getQualifiedName(), FLDFLAG_INVISIBLE) ? false : true;
+        String qName = getQualifiedName();
+		if(qName != null)
+        {
+			return dc.flagIsSet(qName, FLDFLAG_INVISIBLE) ? false : true;
+        }
 		else
+        {
 			return flagIsSet(FLDFLAG_INVISIBLE) ? false : true;
+        }
 	}
 
 	public final boolean isReadOnly(DialogContext dc)
 	{
-		if(simpleName != null)
-			return dc.flagIsSet(getQualifiedName(), FLDFLAG_READONLY);
+        String qName = getQualifiedName();
+		if(qName != null)
+			return dc.flagIsSet(qName, FLDFLAG_READONLY);
 		else
 			return flagIsSet(FLDFLAG_READONLY);
 	}

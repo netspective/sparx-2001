@@ -95,7 +95,7 @@ public class QuerySelectDialog extends QueryBuilderDialog
 			addField(options);
 		}
 
-		setDirector(new DialogDirector());
+		//setDirector(new DialogDirector());
 		addField(new ResultSetNavigatorButtonsField());
 	}
 
