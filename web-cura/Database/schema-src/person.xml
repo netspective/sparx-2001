@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "../../../Framework/web-shared/resources/dtd/schema-markup.dtd">
+
+<schema name="person">
+
+	<table name="Gender" type="Enumeration">
+		<enum>Male</enum>
+		<enum>Female</enum>
+		<enum>Not applicable</enum>
+	</table>
+
+	<table name="Marital_Status" abbrev="MarStat" type="Enumeration">
+		<enum>Unknown</enum>
+		<enum>Single</enum>
+		<enum>Married</enum>
+		<enum>Partner</enum>
+		<enum>Legally Separated</enum>
+		<enum>Divorced</enum>
+		<enum>Widowed</enum>
+		<enum>Not applicable</enum>
+	</table>
+
+	<table name="Person" abbrev="Per" type="Default">
+		<description>Any person (client, staff member, etc.)</description>
+		<column name="person_id" primarykey="yes" type="autoinc" descr="Auto-generated Unique ID for a person within the entire system"/>
+		<column name="name_prefix" type="text" size="16"/>
+		<column name="name_first" type="text" required="yes" size="32"/>
+		<column name="name_middle" type="text" size="32"/>
+		<column name="name_last" type="text" required="yes" size="32"/>
+		<column name="name_suffix" type="text" size="16"/>
+		<column name="short_name" type="text" required="dbms" size="42" descr="[first letter of name_first] [name_last]"/>
+		<column name="simple_name" type="text" required="dbms" size="96" descr="[name_first] [name_last]"/>
+		<column name="complete_name" type="text" required="dbms" size="128" descr="[name_prefix] [name_first] [name_middle] [name_last] [name_suffix]"/>
+		<column name="short_sortable_name" type="text" required="dbms" size="42" descr="[name_last], [first letter of name_first]"/>
+		<column name="complete_sortable_name" type="text" required="dbms" size="128" descr="[name_last], [name_first] [name_middle]"/>
+		<column name="ssn" indexed="yes" type="text" size="11" descr="Social Security number"/>
+		<column name="gender" lookupref="Gender" default="0" descr="Gender"/>
+		<column name="marital_status" lookupref="Marital_Status" default="0" descr="Marital status"/>
+		<column name="date_of_birth" type="date" descr="Date of Birth"/>
+		<column name="age" type="integer" descr="Actual age (only required if date_of_birth is NULL or not known)"/>
+	</table>
+
+	<table name="Person_Event_Type" abbrev="PerETy" type="Enumeration">
+	</table>
+
+	<table name="Person_Event_Status" abbrev="PerESt" type="Event_Status"/>
+
+	<table name="Person_Event" abbrev="PrjEvt" type="Event">
+		<param name="parent-ref">Person.person_id</param>
+		<param name="event-type-enum">Person_Event_Type</param>
+		<param name="record-status-enum">Person_Event_Status</param>
+	</table>
+
+	<table name="Person_Flag_Type" abbrev="PerFlTy" type="Flag_Type">
+	</table>
+
+	<table name="Person_Flag_Status" abbrev="PerFlSt" type="Flag_Status"/>
+
+	<table name="Person_Flag" abbrev="PrjFlg" type="Flag">
+		<param name="parent-ref">Person.person_id</param>
+		<param name="record-status-enum">Person_Flag_Status</param>
+		<param name="flag-type-enum">Person_Flag_Type</param>
+	</table>
+
+	<table name="Person_Identifier_Type" abbrev="PerIDTy" type="Enumeration">
+		<enum>Person ID Specific to Org</enum>
+	</table>
+
+	<table name="Person_Identifier" abbrev="PerID" type="Default">
+		<description>
+			Allows an unlimited number of identifiers for a given person. This allows for a useful
+			master person index where personal information from multiple data sources may easily be
+			aggregated without losing identifiers or causing name mangling.
+		</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="person_id" parentref="Person.person_id" descr="The actual person record for which identifier is being defined"/>
+		<column name="org_id" lookupref="Org.org_id" descr="The org record for which person's identifier is being defined"/>
+		<column name="id_type" lookupref="Person_Identifier_Type" descr="The type of identifier"/>
+		<column name="identifier" type="text" size="64" descr="The actual identification for given type, person_id, and org_id"/>
+	</table>
+
+	<table name="Person_Login_Status" abbrev="PerLgSt" type="Status">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</table>
+
+	<table name="Person_Login" abbrev="PerLg" type="Default">
+		<description>
+			Stores the login records for each person. This table has a one to one relationship with the
+			Person table and is separated to allow easily changing login information (username/password)
+			without affecting a person's registation record.
+		</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="login_id" type="autoinc" primarykey="yes" descr="Unique identifier for any given row"/>
+		<column name="person_id" parentref="Person.person_id" indexed="yes" descr="The person for whom login information is specified"/>
+		<column name="user_id" type="text" size="32" unique="yes" descr="The login ID for the person in this system"/>
+		<column name="password" type="text" size="16" descr="The login password"/>
+		<column name="login_status" lookupref="Person_Login_Status" required="yes" descr="Whether or not login is actually allowed at this time"/>
+		<column name="quantity" type="integer" default="1" descr="The number of times login is allowed from different sessions"/>
+	</table>
+
+	<table name="Person_Role_Type" abbrev="PerRlTy" type="Enumeration">
+		<enum>Security Role (used for authorization)</enum>
+		<enum>Functional Role (used for business rules processing)</enum>
+	</table>
+
+	<table name="Person_Role_Name" abbrev="PerRlNm" type="Default">
+		<column name="role_name_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="role_type_id" parentref="Person_Role_Type.id" indexed="yes" required="yes" descr="What type of role this is"/>
+		<column name="role_name" type="text" size="255" required="yes" descr="The role name"/>
+
+		<index name="$tbl_name$_unq" type="unique" columns="role_type_id,role_name"/>
+	</table>
+
+	<table name="Person_Role_Status" abbrev="PerRlSt" type="Status">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</table>
+
+	<table name="Person_Role" abbrev="PerLg" type="Default">
+		<description>
+			Stores the login roles for each person.
+		</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="person_id" parentref="Person.person_id" indexed="yes" required="yes" descr="The person for whom role information is specified"/>
+		<column name="role_type_id" lookupref="Person_Role_Type.id" indexed="yes" required="yes" descr="What type of role this is"/>
+		<column name="role_name_id" lookupref="Person_Role_Name.role_name_id" indexed="yes" required="yes" descr="What type of role this is"/>
+	</table>
+
+	<table name="Person_Relationship_Type" abbrev="PerRelTy" type="Relationship_Type">
+		<enum>Family</enum>
+		<enum>Other</enum>
+	</table>
+
+	<table name="Person_Relationship_Status" abbrev="PerRelSt" type="Relationship_Status"/>
+
+	<table name="Person_Relationship" abbrev="PerRel" type="Person_Relationship">
+		<description>The relationship between a person and another person.</description>
+		<param name="parent-ref">Person.person_id</param>
+		<param name="record-status-enum">Person_Relationship_Status</param>
+		<param name="relationship-type-enum">Person_Relationship_Type</param>
+	</table>
+
+	<table name="PersonOrg_Relationship_Type" abbrev="PeORelTy" type="Relationship_Type">
+		<enum>Member (person_id is a member of org_id)</enum>
+		<enum>Client (person_id is a client of org_id)</enum>
+	</table>
+
+	<table name="PersonOrg_Relationship_Status" abbrev="PeORelSt" type="Relationship_Status"/>
+
+	<table name="PersonOrg_Relationship" abbrev="PeORel" type="Org_Relationship">
+		<description>The relationship between a person and an organization.</description>
+		<param name="parent-ref">Person.person_id</param>
+		<param name="record-status-enum">PersonOrg_Relationship_Status</param>
+		<param name="relationship-type-enum">PersonOrg_Relationship_Type</param>
+	</table>
+
+	<table name="Person_Address" abbrev="PerAddr" type="Physical_Address">
+		<param name="parentref">Person.person_id</param>
+	</table>
+
+	<table name="Person_Contact" abbrev="PerCont" type="Contact_Method">
+		<param name="parentref">Person.person_id</param>
+	</table>
+
+</schema>

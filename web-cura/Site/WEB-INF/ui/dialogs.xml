@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<xaf>
+	<dialogs package="org">
+		<dialog name="registration" heading="Add Account">
+			<field.text name="org_code" caption="Account Code" required="yes"/>
+			<field.text name="org_name" caption="Name" required="yes"/>
+			<field.text name="org_abbrev" caption="Abbreviation"/>
+			<field.select name="org_type" caption="Type" choices="query:org.enum-types-all"/>
+			<field.select name="org_industry" caption="Industry" choices="query:org.enum-industries-all"/>
+			<field.select name="ownership" caption="Ownership" choices="query:org.enum-ownerships-all"/>
+			<field.text name="ticker_symbol" caption="Ticker Symbol"/>
+			<field.integer name="employees" caption="Employees"/>
+			<field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
+
+			<execute-tasks>
+				<exec-transaction command="begin"/>
+				<exec-statement store="request-attr:org_id" store-type="single-column" report="none">
+					select org_org_id_seq.nextval from dual
+				</exec-statement>
+				<exec-dml command="insert" table="org" columns="org_id=request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/>
+				<exec-dml command="insert" table="org_industry" columns="org_id=request-attr:org_id,system_id=custom-sql:oind_system_id_seq.nextval" fields="org_industry"/>
+				<exec-dml command="insert" table="org_type" columns="org_id=request-attr:org_id,system_id=custom-sql:otyp_system_id_seq.nextval" fields="org_type"/>
+				<exec-transaction command="end"/>
+				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
+			</execute-tasks>
+		</dialog>
+	</dialogs>
+
+	<dialogs package="train">
+		<dialog name="test" heading="Add Account">
+			<field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/>
+			<field.select name="org_type" caption="Type" style="multidual" choices="query:org.enum-types-all"/>
+			<field.integer name="employees" caption="Employees" min="10" max="20"/>
+		</dialog>
+	</dialogs>
+</xaf>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "../../../Framework/web-shared/resources/dtd/schema-markup.dtd">
+
+<schema name="enumerations">
+	<include file="datatypes.xml"/>
+
+	<table name="Project_Org_Relationship_Type" abbrev="PrjORTy" type="Relationship_Type">
+	</table>
+
+	<table name="Project_Person_Relationship_Type" abbrev="PrjPRTy" type="Relationship_Type">
+	</table>
+
+	<table name="Project_Event_Type" abbrev="PrjETy" type="Event_Type">
+	</table>
+
+	<table name="Project_Event_Status" abbrev="PrjESt" type="Status">
+	</table>
+
+</schema>

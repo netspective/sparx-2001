@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "../../../Framework/web-shared/resources/dtd/schema-markup.dtd">
+
+<schema name="tabletypes">
+
+	<indextype name="unique"/>
+
+	<tabletype name="Status" type="Enumeration">
+		<enum id="0" abbrev="I">Inactive</enum>
+		<enum id="1" abbrev="A">Active</enum>
+		<enum id="99" abbrev="U">Unknown</enum>
+	</tabletype>
+
+	<table name="Record_Status" type="Status">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</table>
+
+	<tabletype name="Default">
+		<column name="cr_stamp" type="stamp" required="dbms" default="sysdate" descr="Date/time record was created"/>
+		<column name="cr_person_id" lookupref="Person.person_id" descr="The user that created the record"/>
+		<column name="cr_org_id" lookupref="Org.org_id" descr="The org that created the record (the one the cr_user_id was logged-into)"/>
+		<column name="record_status_id" lookupref="$record-status-enum$" default="0" required="yes" descr="The status of a row in the table"/>
+
+		<!-- this is made as a parameter so that inheriting tables can override the status enumeration if needed -->
+		<param name="record-status-enum">Record_Status</param>
+	</tabletype>
+
+	<!--
+	*********************************************************************
+	** Enumeration and Lookup Templates
+	*********************************************************************
+	-->
+
+	<table name="Reference_Item">
+		<description>
+			This table is basically used for creating parent/child relationships
+			for Enumeration and Lookup tables. Since it has no columns, no physical
+			table will exist so it becomes a simple logical placeholder.
+		</description>
+	</table>
+
+	<tabletype name="Enumeration" parent="Reference_Item">
+		<param name="capsize">64</param>
+		<param name="abbrevsize">32</param>
+
+		<column name="id" type="integer" primarykey="yes" descr="The value associated with a single enum"/>
+		<column name="caption" type="text" size="$capsize$" required="yes" descr="The name/text an end-user would see"/>
+		<column name="abbrev" type="text" size="$abbrevsize$" unique="yes" descr="An abbreviated form of the caption"/>
+	</tabletype>
+
+	<table name="Lookup_Result_Type" abbrev="LkResTy" type="Enumeration">
+		<enum>ID</enum>
+		<enum>Caption</enum>
+		<enum>Abbreviation</enum>
+	</table>
+
+	<tabletype name="Lookup" type="Enumeration">
+		<column name="group_name" type="text" size="32" descr="The group to which the lookup item belongs"/>
+		<column name="sort_seq" type="integer" descr="The sorting sequence within the group (if sorting differently than the ID or Caption"/>
+		<column name="result" lookupref="Lookup_Result_Type" descr="The type of result after a lookup (the value that should be used for the lookup -- the id or caption or abbreviation)"/>
+	</tabletype>
+
+	<!--
+	*********************************************************************
+	** Relationship Tables and Enumerations
+	*********************************************************************
+	-->
+
+	<tabletype name="Relationship_Type" type="Enumeration">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</tabletype>
+
+	<tabletype name="Relationship_Status" type="Status">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</tabletype>
+
+	<tabletype name="Relationship" type="Default">
+		<description>Basic information required for almost any relationship.</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="parent_id" parentref="$parent-ref$" descr="Source ID for whom relationship is being defined"/>
+		<column name="rel_type" lookupref="$relationship-type-enum$" required="yes" descr="The type of relationship"/>
+		<column name="rel_begin" type="date" descr="Relationship start date/time"/>
+		<column name="rel_end" type="date" descr="Relationship end date/time"/>
+		<column name="rel_descr" type="text" size="1024" descr="Any extra description required for relationship"/>
+	</tabletype>
+
+	<tabletype name="Person_Relationship" type="Relationship">
+		<description>Basic information required for an entity that may be related to a person.</description>
+		<column name="rel_person_id" lookupref="Person.person_id" required="yes" descr="The person this entry is related to"/>
+	</tabletype>
+
+	<tabletype name="Org_Relationship" type="Relationship">
+		<description>Basic information required for an entity that may be related to an organization.</description>
+		<column name="rel_org_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
+	</tabletype>
+
+	<tabletype name="PersonOrg_Relationship" type="Relationship">
+		<description>Basic information required for an entity that may be related to a person/org combination.</description>
+		<column name="rel_person_id" lookupref="Person.person_id" required="yes" descr="The person this entry is related to"/>
+		<column name="rel_org_id" lookupref="Org.org_id" required="yes" descr="The org this entry is related to"/>
+	</tabletype>
+
+	<!--
+	*********************************************************************
+	** Contact Methods Tables and Enumerations
+	*********************************************************************
+	-->
+
+	<table name="Contact_Method_Type" abbrev="CntMthTy" type="Enumeration">
+		<enum>Physical Address</enum>
+		<enum>Telephone/Fax as text (stored in method_value only)</enum>
+		<enum>Telephone/Fax as text+numbers (stored in method_value and phone_* columns)</enum>
+		<enum>E-mail</enum>
+		<enum>URL</enum>
+	</table>
+
+	<table name="Contact_Address_Type" abbrev="CntAdrTy" type="Enumeration">
+		<enum>Business</enum>
+		<enum>Home</enum>
+		<enum>Other</enum>
+	</table>
+
+	<tabletype name="Physical_Address" type="Default">
+		<description>An address of a member of a certain entity, such as a person or org.</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique identifier for foreign-key and update purposes"/>
+		<column name="parent_id" parentref="$parentref$" indexed="yes" descr="The owner of the address"/>
+		<column name="address_name" indexed="yes" type="text" size="128" descr="The address name"/>
+
+		<column name="mailing" type="boolean" descr="True if this is the mailing address"/>
+
+		<column name="line1" type="text" size="256" descr="The first address line"/>
+		<column name="line2" type="text" size="256" descr="The second address line"/>
+		<column name="city" type="text" size="128" descr="The city of the state"/>
+		<column name="county" type="text" size="128" descr="The county of the state"/>
+		<column name="state" type="text" size="128" descr="The state of the union"/>
+		<column name="zip" type="text" size="128" descr="The postal code (+4 format)"/>
+		<column name="country" type="text" size="128" descr="The country of the address"/>
+
+		<index name="$tbl_abbrev$_unq" type="unique" columns="parent_id,address_name"/>
+	</tabletype>
+
+	<table name="Contact_Telephone_Type" abbrev="CntTelTy" type="Enumeration">
+		<enum>Assistant</enum>
+		<enum>Business</enum>
+		<enum>Business 2</enum>
+		<enum>Business Fax</enum>
+		<enum>Callback</enum>
+		<enum>Car</enum>
+		<enum>Company</enum>
+		<enum>Home</enum>
+		<enum>Home 2</enum>
+		<enum>Home Fax</enum>
+		<enum>ISDN</enum>
+		<enum>Mobile</enum>
+		<enum>Other</enum>
+		<enum>Other Fax</enum>
+		<enum>Pager</enum>
+		<enum>Primary</enum>
+		<enum>Radio</enum>
+		<enum>Telex</enum>
+		<enum>TTY/TDD</enum>
+	</table>
+
+	<table name="Contact_Email_Type" abbrev="CntEMTy" type="Enumeration">
+		<enum>Business</enum>
+		<enum>Home</enum>
+		<enum>Other</enum>
+		<enum>Primary</enum>
+	</table>
+
+	<tabletype name="Contact_Method" type="Default">
+		<description>
+			A contact method of a member of a certain entity, such as a person or org. Phone numbers may be stored
+			as simple text (in method_value) or as simple text and parsed values (in phone_*). If parsed values are
+			stored, the complete phone number should still be stored in method_value for performance reasons.
+		</description>
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique identifier for foreign-key and update purposes"/>
+		<column name="parent_id" parentref="$parentref$" indexed="yes" descr="The owner of the contact method"/>
+		<column name="method_type" indexed="yes" lookupref="Contact_Method_Type.id" descr="The contact method type"/>
+		<column name="method_name" indexed="yes" type="text" size="128" descr="The contact method name"/>
+		<column name="method_value" indexed="yes" type="text" size="255" descr="The contact method value (full telephone, e-mail address, URL, etc.)"/>
+		<column name="phone_cc" indexed="yes" type="text" size="16" default="1" descr="The country code if this is a separated phone number"/>
+		<column name="phone_ac" indexed="yes" type="integer" descr="The area code if this is a separated phone number"/>
+		<column name="phone_prefix" indexed="yes" type="integer" descr="The prefix code if this is a separated phone number"/>
+		<column name="phone_suffix" indexed="yes" type="integer" descr="The suffix code if this is a separated phone number"/>
+
+		<index name="$tbl_abbrev$_unq" type="unique" columns="parent_id,method_name"/>
+	</tabletype>
+
+	<!--
+	*********************************************************************
+	** Event and Flag Storage Table Templates
+	*********************************************************************
+	-->
+
+	<tabletype name="Event_Status" type="Status">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</tabletype>
+
+	<tabletype name="Event_Type" type="Enumeration">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</tabletype>
+
+	<tabletype name="Event" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="parent_id" parentref="$parent-ref$" descr="Source parent ID"/>
+		<column name="parent_event_id" selfref="$tbl_name$.system_id" descr="If this event was generated by another event"/>
+		<column name="event_type" lookupref="$event-type-enum$" descr="The type of event"/>
+		<column name="event_name" type="text" size="128" descr="The name of the event"/>
+		<column name="event_descr" type="text" size="4000" descr="The description of the event"/>
+		<column name="event_begin" type="date" descr="The start date/time of the event"/>
+		<column name="event_end" type="date" descr="The end date/time of the event"/>
+	</tabletype>
+
+	<tabletype name="Flag_Type" type="Enumeration">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</tabletype>
+
+	<tabletype name="Flag_Status" type="Status">
+		<!-- nothing here yet, just a placeholder for later enhancements -->
+	</tabletype>
+
+	<tabletype name="Flag" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="parent_id" parentref="$parent-ref$" descr="Source ID"/>
+		<column name="flag" lookupref="$flag-type-enum$" descr="The flag type"/>
+	</tabletype>
+
+</schema>

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE schema SYSTEM "../../../Framework/web-shared/resources/dtd/schema-markup.dtd">
+
+<schema name="db">
+
+	<include file="datatypes.xml"/>
+	<include file="tabletypes.xml"/>
+	<include file="enums.xml"/>
+
+	<include file="person.xml"/>
+	<include file="org.xml"/>
+	<include file="artifact.xml"/>
+
+	<table name="Project" abbrev="Prj" type="Default">
+		<column name="project_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="parent_id" selfref="Project.project_id" descr="Parent project (NULL if this is not a sub-project)"/>
+		<column name="project_code" type="text" size="64" unique="yes" descr="General project code"/>
+		<column name="project_name" type="text" size="256" descr="The name of the project"/>
+		<column name="project_descr" type="text" size="4000" descr="Project details"/>
+	</table>
+
+	<table name="Project_Relationship_Type" abbrev="PrjRelTy" type="Relationship_Type">
+	</table>
+
+	<table name="Project_Relationship_Status" abbrev="PrjRelSt" type="Relationship_Status"/>
+
+	<table name="Project_Relation" abbrev="PrjRel" type="PersonOrg_Relationship">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Relationship_Status</param>
+		<param name="relationship-type-enum">Project_Relationship_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+	</table>
+
+	<table name="Project_Event" abbrev="PrjEvt" type="Event">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Event_Status</param>
+		<param name="event-type-enum">Project_Event_Type</param>
+	</table>
+
+	<table name="Project_Flag_Type" abbrev="PrjFlTy" type="Flag_Type">
+	</table>
+
+	<table name="Project_Flag_Status" abbrev="PrjFlSt" type="Flag_Status"/>
+
+	<table name="Project_Flag" abbrev="PrjFlg" type="Flag">
+		<param name="parent-ref">Project.project_id</param>
+		<param name="record-status-enum">Project_Flag_Status</param>
+		<param name="flag-type-enum">Project_Flag_Type</param>
+	</table>
+
+	<table name="Task" type="Default">
+		<column name="task_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="owner_project_id" lookupref="Project.project_id" descr="Source Project ID (NULL if belongs to an org or person)"/>
+		<column name="owner_org_id" lookupref="Org.org_id" descr="If this task belongs to a specific org, this is the ID of the org (NULL if belongs to a project or person)"/>
+		<column name="owner_person_id" lookupref="Person.person_id" descr="If this task belongs to a specific person, this is the ID (NULL if belongs to an org or person)"/>
+		<column name="task_type" lookupref="Task_Type" descr="The type of task"/>
+		<column name="task_summary" type="text" size="512" descr="Summary of the task"/>
+		<column name="parent_task_id" selfref="Task.task_id" descr="Parent task (NULL if this is not a sub-task)"/>
+		<column name="priority_id" lookupref="Task_Priority" descr="The priority of the task"/>
+		<column name="impact_id" lookupref="Task_Impact" descr="The impact of the task"/>
+		<column name="task_status" lookupref="Task_Status" descr="The active status of this task"/>
+		<column name="task_resolution" lookupref="Task_Resolution" descr="The resolution status of this task"/>
+		<column name="task_descr" type="text" size="4000" descr="Description of the task"/>
+	</table>
+
+	<table name="Task_Relation" abbrev="TskRel" type="PersonOrg_Relationship">
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Relationship_Status</param>
+		<param name="relationship-type-enum">Task_Relationship_Type</param>
+		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
+	</table>
+
+	<table name="Task_Dependency" abbrev="TskDep" type="Default">
+		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
+		<column name="dependency_type" lookupref="Task_Dependency_Type" descr="The type of dependency"/>
+		<column name="parent_id" parentref="Task.task_id" descr="Parent task"/>
+		<column name="dependent_id" lookupref="Task.task_id" descr="Dependent task"/>
+	</table>
+
+	<table name="Task_Event" abbrev="TskEvt" type="Event">
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Event_Status</param>
+		<param name="event-type-enum">Task_Event_Type</param>
+	</table>
+
+	<table name="Task_Flag" abbrev="TskFlg" type="Flag">
+		<param name="parent-ref">Task.task_id</param>
+		<param name="record-status-enum">Task_Flag_Status</param>
+		<param name="flag-type-enum">Task_Flag_Type</param>
+	</table>
+
+</schema>

@@ -1,0 +1,64 @@
+Exp 1  Value
+Alabama         (AL)  AL
+Alaska          (AK)  AK
+American Samoa  (AS)  AS
+Arizona         (AZ)  AZ
+Arkansas        (AR)  AR
+California      (CA)  CA
+Colorado        (CO)  CO
+Connecticut     (CT)  CT
+Delaware        (DE)  DE
+Dist. Columbia  (DC)  DC
+Dist. Columbia  (DC)  DC
+Florida         (FL)  FL
+Georgia         (GA)  GA
+Guam            (GU)  GU
+Hawaii          (HI)  HI
+Idaho           (ID)  ID
+Illinois        (IL)  IL
+Illinois        (IL)  IL
+Indiana         (IN)  IN
+Iowa            (IA)  IA
+Kansas          (KS)  KS
+Kentucky        (KY)  KY
+Kentucky        (KY)  KY
+Louisiana       (LA)  LA
+Maine           (ME)  ME
+Maryland        (MD)  MD
+Massachusetts   (MA)  MA
+Michigan        (MI)  MI
+Minnesota       (MN)  MN
+Minnesota       (MN)  MN
+Mississippi     (MS)  MS
+Missouri        (MO)  MO
+Montana         (MT)  MT
+Nebraska        (NE)  NE
+Nevada          (NV)  NV
+New Hampshire   (NH)  NH
+New Jersey      (NJ)  NJ
+New Jersey      (NJ)  NJ
+New Mexico      (NM)  NM
+New York        (NY)  NY
+North Carolina  (NC)  NC
+North Dakota    (ND)  ND
+Ohio            (OH)  OH
+Oklahoma        (OK)  OK
+Oregon          (OR)  OR
+Pennsylvania    (PA)  PA
+Puerto Rico     (PR)  PR
+Rhode Island    (RI)  RI
+Siapan          (CM)  CM
+South Carolina  (SC)  SC
+South Dakota    (SD)  SD
+Tennessee       (TN)  TN
+Texas           (TX)  TX
+Utah            (UT)  UT
+Vermont         (VT)  VT
+Virgin Islands  (VI)  VI
+Virginia        (VA)  VA
+Virginia        (VA)  VA
+Washington      (WA)  WA
+West Virginia   (WV)  WV
+West Virginia   (WV)  WV
+Wisconsin       (WI)  WI
+Wyoming         (WY)  WY
