@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<page name="xaf/reports">
+	<summary>
+		XAF reports are defined completely in XML. This includes headings, banners,
+		column types, calculations, grouping, sort order, etc. By keeping the entire
+		definition in XML, 	non-programmers or junior engineers can create report
+		definitions and more experienced developers can attach business logic.
+	</summary>
+
+	<section heading="Multiple Source Reports">
+		The data for reports can come from a single or multiple SQL data source,
+		object arrays, or virtually and dynamic data source. A single XML-based
+		report definition can serve a variety of needs.
+	</section>
+
+	<section heading="Skins for Multiple Output Destinations">
+		XAF uses special skins for automatically presenting reports in suitable
+		formats; for instance, XAF reports can be formatted for HTML, PDF, ASCII,
+		or any other user-defined format by creating appropriate skins. The same
+		report definition will be able to support access on mobile devices, hand-held
+		PDAs, notebooks, and desktops.
+	</section>
+</page>

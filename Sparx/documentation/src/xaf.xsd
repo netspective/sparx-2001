@@ -1,0 +1,1845 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Shahid N. Shah (Netspective Corporation) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="xaf">
+		<xsd:annotation>
+			<xsd:documentation>This is the root tag for all of the XAF XML resource files. Although all of the children are ultimately owned by this element, please refer to each child to ensure that you place the XML tags in the appropriate file(s).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element name="dialogs" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Application forms and dialogs are defined under this tag. This tag and its children typically reside in the file WEB-INF/ui/dialogs.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="dialog" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Specify an application form.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:group ref="dialog-fields"/>
+										<xsd:element name="director" minOccurs="0">
+											<xsd:complexType>
+												<xsd:attribute name="style" use="optional">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:enumeration value="data"/>
+															<xsd:enumeration value="confirm"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:attribute>
+												<xsd:attribute name="submit-caption" type="single-value-source" use="optional"/>
+												<xsd:attribute name="cancel-caption" type="single-value-source" use="optional"/>
+												<xsd:attribute name="submit-url" type="single-value-source" use="optional"/>
+												<xsd:attribute name="cancel-url" type="single-value-source" use="optional"/>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="populate-tasks" type="execute-tasksType" minOccurs="0"/>
+										<xsd:element name="execute-tasks" type="execute-tasksType" minOccurs="0"/>
+										<xsd:element name="client-js" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Include client-side JavaScript</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:attribute name="href" type="xsd:anyURI" use="required">
+													<xsd:annotation>
+														<xsd:documentation>The href of the javascript file to include.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:attribute>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:attribute name="name" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The name of the dialog. The name may only contain upper or lowercase letters, numbers, and underscores. There should no punctuation characters or spaces and the name should be valid JavaScript name.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="heading" type="single-value-source" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Specifies the single value source that will provide the heading for the dialog.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="class" type="java-class" use="optional" default="com.xaf.form.Dialog">
+										<xsd:annotation>
+											<xsd:documentation>Specifies a subclass of com.xaf.form.Dialog to dynamically load and instantiate instead of the default java class. This attribute is very useful when you want to use XML for the dialog definition but want to alter the behavior of the Dialog processing or want to some specific validation not allowed by the default class.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="director-class" type="java-class" use="optional" default="com.xaf.form.DialogDirector">
+										<xsd:annotation>
+											<xsd:documentation>Specifies a subclass of com.xaf.form.DialogDirector to dynamically load and instantiate instead of the default java class used for dialog director. This is useful when you want more control over how submit and navigation buttons are created for the dialog.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="loop" use="optional" default="append">
+										<xsd:annotation>
+											<xsd:documentation>Specifies whether or not to show the dialog even after the dialog executes. Many websites commonly show forms after searches complete, this feature allows that capability.</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:enumeration value="no"/>
+												<xsd:enumeration value="append"/>
+												<xsd:enumeration value="prepend"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:attribute>
+									<xsd:attribute name="loop-sep" type="xsd:string" use="optional" default="&lt;p&gt;">
+										<xsd:annotation>
+											<xsd:documentation>When loop is set to append or prepend, this attribute specifies the HTML that will be inserted either before or after the dialog and its execution content.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="hide-readonly-hints" type="yes-no" use="optional" default="no">
+										<xsd:annotation>
+											<xsd:documentation>Specifies whether or not to show hints for read-only values.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="retain-params" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Specifies the names of the URL parameters that should be retained during multiple invocations of this dialog. As dialogs are processed by browsers, the same dialog may be called during more than one request/response cycle. This parameter provides one or more comma-separated list of URL parameter names that should be kept between request/response cycles. If you would like to retain all parameters, pass an asterisk (*) as the value to this attribute.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="dialog-skin" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Create or register a dialog skin</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:attribute name="name" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The name of the skin.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="class" type="java-class" use="optional" default="com.xaf.skin.StandardDialogSkin">
+										<xsd:annotation>
+											<xsd:documentation>The Java class that will be dynamically loaded when the given skin name is used. The class will be instantiated and the XML that is found in the dialog-skin element will be passed to the Java class's importFromXml method. The class provided must implement the com.xaf.form.DialogSkin interface.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="register-field" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Register a new dialog field class.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:attribute name="tag-name" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The tag name to use for the new field (should begin with "field.").</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="class" type="java-class" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The Java class that will be dynamically loaded when the given tag-name is encountered. The class will be instantiated and the XML that is found in the field.xxx element will be passed to the Java class's importFromXml method. The class provided must extend the com.xaf.form.DialogField class.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="package" type="xsd:string" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="sql-statements" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Tthe static SQL statements are defined under this tag. This tag and its children typically reside in the file WEB-INF/ui/sql.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="statement" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>An SQL Statement along with its parameters and report definitions. The SQL text may be specified as the first child in the statement (mixed content) or using the sql tag.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="statementType"/>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="package" type="xsd:string"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="query-defn" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Tthe dynamic SQL statements (Query Definitions) are defined under this tag. This tag and its children typically reside in WEB-INF/sql/statements.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="field" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Defines a database column or column expression which will be allowed to be included in the generated SQL. A field is considered a virtual database column.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:element name="report" type="report-columnType" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Defines how the field, when presented, will appear.</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:attribute name="id" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The unique id that his field will be known by. Typically, it is the same name as the column attribute but it can be more descriptive if needed. </xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="caption" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>Specifies the default column heading when the user views the data. When this field will be requested by the user, this attribute also specifies the default caption (the field label) that will appear in the dialog (but the dialog can override it).</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="join" type="query-defn-join-id" use="required">
+										<xsd:annotation>
+											<xsd:documentation>Specifies which join (using the join id) will retrieve the contents of this field.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="column" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The column name in the table specified by the join attribute where the data for this field resides. This attribute becomes the default for the column-expr, where-expr, and order-by-expr attributes if those attributes are not provided. This should refer to a real column in the table that is referenced in the join attribute for the field.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="column-expr" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Defines the SQL expression that will be used for this field in the select clause of the SQL. This attribute overrides the default expression, which is just the column name specified in the column attribute.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="where-expr" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Defines the SQL expression that will be used for this field in the where clause of the SQL. This attribute overrides the default expression, which is just the column name specified in the column attribute.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="oder-by-expr" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Defines the SQL expression that will be used for this field in the order by clause of the SQL. This attribute overrides the default expression, which is just the column name specified in the column attribute.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="join" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Defines a table or join condition which will be included in the generated SQL for each field that references it.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:attribute name="id" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The unique id that his join will be known by. Typically, it is the same name as the table attribute but it can be more descriptive if needed. </xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="table" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The name of the table that should be placed into the from clause when the select statement is generated. This should refer to a real table in the database.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="condition" type="xsd:string" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Specifies a condition that will automatically be placed into the where clause when the select statement is generated. This should be used if the join is used to connect two tables.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="auto-include" type="yes-no" use="optional" default="no">
+										<xsd:annotation>
+											<xsd:documentation>Specifies whether or not to always include this join in the generated select statement. If this attribute is set to yes, then the table and condition specified in this join will appear in the select statement even if no fields refer to this join.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="imply-join" type="query-defn-join-ids" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>Specifies one or more join ids (separated by commas with no white-space in the middle) that should be implied whenever this join is included in the SQL statement. This is useful for second- or third-level joins.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="weight" type="xsd:integer" use="optional" default="0">
+										<xsd:annotation>
+											<xsd:documentation>This attribute is reserved for future use.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="select" type="query-defn-selectType" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Using the defined fields and joins, will generate an SQL statement and cache it for future use. If the fields (column expressions) or joins change, the SQL will change automatically.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="select-dialog" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Defines a dialog which will request user information, generate appropriate SQL, execute the SQL, retrieve a result set, and display the result set to user.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:group ref="dialog-fields"/>
+										<xsd:element name="select" type="query-defn-selectType" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>The select statement that should be generated based on the fields provided.</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:attribute name="name" type="xsd:string" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="default-condition" type="query-defn-conditionType" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Defines a condition that will always be present in any SQL query generated by this query-defn.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="default-where-expr" type="query-defn-where-exprType" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Defines a where expression (any arbitrary SQL expression) that will always be present in any SQL query generated by this query-defn.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="id" type="xsd:string" use="required">
+							<xsd:annotation>
+								<xsd:documentation>A unique identifier for this query definition.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="register-report-skin" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Registers a report skin class to be used for any type of report. This tag typically resides in  WEB-INF/sql/statements.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:attribute name="name" type="xsd:string" use="required"/>
+						<xsd:attribute name="class" type="java-class" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="register-column-data-calc" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Registers a new report column data calculator class. This tag typically resides in the file WEB-INF/sql/statements.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:attribute name="name" type="xsd:string" use="required"/>
+						<xsd:attribute name="class" type="java-class" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="include" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Merges the contents of other XML files into the current file, allowing encapsulation of XML resources. This tag may be used in any XML file.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:attribute name="file" type="xsd:anyURI" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="pre-process" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>After processing all the include tags, this tag calls a stylesheet and transforms the XML document based on the instructions provided in the style-sheet. This tag may be used in any XML file.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:attribute name="style-sheet" type="xsd:anyURI" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="report" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Creates a report definition. This tag is typically found in WEB-INF/sql/statements.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:complexContent>
+							<xsd:extension base="reportType"/>
+						</xsd:complexContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Defines configuration properties. This tag is used in WEB-INF/configuration.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Define a single-valued property.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="properties" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Define a multi-valued property (property list).</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:choice>
+										<xsd:element name="property" type="propertyType" maxOccurs="unbounded">
+											<xsd:annotation>
+												<xsd:documentation>Define a single-valued property for the property list.</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:choice>
+									<xsd:attribute name="name" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The name of the property list.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="system-property" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>Define a Java system property.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:attribute name="name" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The name of the Java system property.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="value" type="xsd:string" use="required">
+										<xsd:annotation>
+											<xsd:documentation>The value of the Java system property.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="name" type="xsd:string" use="optional"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="register-value-source" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Registers a new value source class for use by other XML resources. This tag is used in WEB-INF/configuration.xml.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:attribute name="name" type="xsd:string" use="required"/>
+						<xsd:attribute name="class" type="java-class" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="templates" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Defines basic XML replacement templates for use when the pre-process directive is too heavy.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="template" minOccurs="0" maxOccurs="unbounded"/>
+							<xsd:any minOccurs="0"/>
+						</xsd:choice>
+						<xsd:attribute name="package" type="xsd:string" use="optional"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="access-control" type="permissionType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Defines an access control list (ACL). This tag is used in  WEB-INF/security/access-control.xml</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="java-class">
+		<xsd:annotation>
+			<xsd:documentation>The fully qualified name of a Java class</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:attributeGroup name="conditional">
+		<xsd:annotation>
+			<xsd:documentation>Basic attributes that can be set for conditional tags</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="clear" type="yes-no" use="optional" default="no"/>
+		<xsd:attribute name="has-permission" type="acl-permissions" use="optional"/>
+		<xsd:attribute name="lack-permission" type="acl-permissions" use="optional"/>
+		<xsd:attribute name="has-value" type="single-value-source" use="optional"/>
+		<xsd:attribute name="is-true" type="single-value-source" use="optional"/>
+	</xsd:attributeGroup>
+	<xsd:attributeGroup name="dialog-field-container">
+		<xsd:annotation>
+			<xsd:documentation>Basic attributes that can be set for dialog fields that act as containers</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="show-child-caption" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not the captions (field labels) of the children should be displayed. Even if the children of this field have captions, they will not be displayed unless this attribute is set to yes.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	<xsd:attributeGroup name="dialog-field">
+		<xsd:annotation>
+			<xsd:documentation>Basic attributes that can be set for all dialog fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The name of the field. If this field is a child of a composite or grid field, the name provided is automatically appended to the parent's name to create a unique name. The actual name of the control when the HTML is generated is usually _dc.name.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="caption" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The caption or label that describes the usage of the field to the end user. If this field is a member of a composite or grid field thn the caption will only show if the parent field's show-child-caption is set to yes.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="default" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The single value source (or list value source if appropriate) that specifies the default value of the field.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="hint" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The text that will be shown to a user to provide a hint as to the usage of the field. The exact behavior of this attribute depends upon the skin being used, but typically the contents of the hint attribute are shown right under the field control.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="required" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether the field is required or not. If the field is specified as required, code is automatically generated that will enforce this validation rule.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="read-only" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether the field is read-only or not. If the value is set to yes, then the field's value becomes a static text string (will not generate a real HTML control). If the value is set to browser then the appropriate HTML control is still created but the control is marked read-only so the browser will not allow the value to be changed.</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="no"/>
+					<xsd:enumeration value="yes"/>
+					<xsd:enumeration value="browser"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="hidden" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether the field is hidden or not. As a hidden field, the value of the field is still available to the programmer, but there will no field caption/label or input control available to the user.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="visible" type="yes-no" use="optional" default="yes">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether the field is visible or not. As an invisible field, there is no value available to the programmer nor is there a caption/label, or control available to the user. Setting a field to visible=no is almost like comment out the field because most dialog skins will not process invisible fields.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="create-adjacent-area" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether to create a &lt;span&gt; element in the HTML adjacent to this field. If set to yes, then a &lt;span&gt; is created with the complete name of this field plus the word _adjacent. For example, if the field name is customer_id then the adjacent area will have the id customer_id_adjacent. This attribute is very useful when used in conjunction with popups.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="col-break" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether a column break should be included before or after this field. The actual behavior of this attribute is determined by a skin, but typically if this field is a primary (top-level) field, the column break will create a dialog with multiple columns. If this field is a secondary field (child of composite), then a simple line break will be inserted between the composite siblings.</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="before"/>
+					<xsd:enumeration value="after"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="identifier" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not to treat the contents of this field as an identifier. An identifier is a field whose values may only contain uppercase letters, numbers, and an unscore.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="initial-focus" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether to set the initial focus of the dialog to ths field. The last field to have this value set to yes (in creation order) will have the focus when the dialog is first displayed.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="persist" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not to automatically remember the last contents of this field (as a browser cookie) for the next time the user loads the dialog. This can be used in the place of the default attribute when the user's last input value should be used as the default for the field.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="single-value-source">
+		<xsd:annotation>
+			<xsd:documentation>A string that references a SingleValueSource object</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\w+:.*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="single-value-source-rw">
+		<xsd:annotation>
+			<xsd:documentation>A string that references a SingleValueSource object that is read and writable</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="list-value-source">
+		<xsd:annotation>
+			<xsd:documentation>A string that references a ListValueSource object</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\w+:.*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="yes-no">
+		<xsd:annotation>
+			<xsd:documentation>A simple yes/no (boolean value)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="no"/>
+			<xsd:enumeration value="yes"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="dialog-field">
+		<xsd:annotation>
+			<xsd:documentation>The general attributes and child elements supported by all dialog fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="client-js" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Client-side JavaScript specification</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="event" use="required">
+						<xsd:annotation>
+							<xsd:documentation>The event that the client javascript should handle.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="is-valid"/>
+								<xsd:enumeration value="value-changed"/>
+								<xsd:enumeration value="click"/>
+								<xsd:enumeration value="key-press"/>
+								<xsd:enumeration value="get-focus"/>
+								<xsd:enumeration value="lose-focus"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="type" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Specify the type of client java-script being provide. The extends option will run the normal processing and then call your code. The overrides option only calls your code.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="extends"/>
+								<xsd:enumeration value="override"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="js-expr" type="javascript-expression" use="required">
+						<xsd:annotation>
+							<xsd:documentation>The actual JavaScript expression.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="conditional" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Conditional processing declaration</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="action" use="required">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="display-on-js-expr"/>
+								<xsd:enumeration value="display-when-partner-not-null"/>
+								<xsd:enumeration value="apply-flag"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="partner" type="dialog-field-name" use="required"/>
+					<xsd:attribute name="js-expr" type="javascript-expression" use="optional"/>
+					<xsd:attribute name="flag" use="optional">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="invisible"/>
+								<xsd:enumeration value="read-only"/>
+								<xsd:enumeration value="browser-read-only"/>
+								<xsd:enumeration value="hidden"/>
+								<xsd:enumeration value="required"/>
+								<xsd:enumeration value="initial-focus"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="data-cmd" type="dialog-data-cmd" use="optional"/>
+					<xsd:attributeGroup ref="conditional"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="popup" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Popup window and automatic fill-in of data specification</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="action" type="xsd:anyURI" use="required">
+						<xsd:annotation>
+							<xsd:documentation>The URL to send to the popup window.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="fill" type="dialog-field-names" use="required">
+						<xsd:annotation>
+							<xsd:documentation>A list of one or more fields that will be filled in using the hyperlinks generated by the page that displays in the popup window. If there is more than one field, separate them by commas but do not put whitespace between the commas. There are two options for filling in fields: appending data or replacing data. If a field name is preceded by a + then it means that the popup window should append data to the field, otherwise it will replace the data. Note that if you use the create-adjacent-area attribute of dialog field you can also fill in adjacent areas. Example: fill="text_field_00,+static_field_01,text_field_01_adjacent".</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="image-src" type="xsd:anyURI" use="optional">
+						<xsd:annotation>
+							<xsd:documentation>The icon used to specify the popup action (an automatic HREF is wrapped around this icon). The default image is a magnifying glass.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attributeGroup ref="dialog-field"/>
+	</xsd:complexType>
+	<xsd:simpleType name="dialog-field-name">
+		<xsd:annotation>
+			<xsd:documentation>A reference to another field in the current dialog</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="dialog-field-names">
+		<xsd:annotation>
+			<xsd:documentation>A comma-separated list of names that refer to other fields in the current dialog</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="javascript-expression">
+		<xsd:annotation>
+			<xsd:documentation>A JavaScript expression</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:group name="dialog-fields">
+		<xsd:annotation>
+			<xsd:documentation>A group of dialog fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="field.text" type="field.textType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A text field with optional regular expression validation.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.memo" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A memo or textarea field.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="rows" type="xsd:int" use="optional" default="3">
+								<xsd:annotation>
+									<xsd:documentation>The number of rows that should be displayed in the memo control.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="cols" type="xsd:int" use="optional" default="40">
+								<xsd:annotation>
+									<xsd:documentation>The number of columns that should be displayed in the memo control.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="wrap" use="optional" default="soft">
+								<xsd:annotation>
+									<xsd:documentation>The type of word wrap that should be performed by the memo control. Hard means that the control will automatically insert line breaks for word wrapping. Soft indicates that visual word wrapping should occur in the control but no line breaks should be entered into the text.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="hard"/>
+										<xsd:enumeration value="soft"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.composite" type="dialog-field" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that contains other fields that should be treated as a group. Any field that can be placed into a dialog can be made a child of this field.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.grid" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that contains a list of composite fields that are treated as grid rows and the fields inside the composites as grid columns.</xsd:documentation>
+					<xsd:documentation>This field requires at one or more composite fields that will represent the rows in the grid. Each composite becomes a row and the children of the composites become the columns. If no captions attribute is specified for the grid, then the captions of the fields in the first composite field become the column headings for the grid. A potential way of allowing many rows but only showing a few at a time is to use the conditional features for each composite.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:choice>
+								<xsd:element name="field.composite" type="dialog-field" maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation>Each composite field inside a grid field describes a single grid row. Any field that can be placed into a dialog can be made a child of this field and will appear as a column of the grid.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:choice>
+							<xsd:attributeGroup ref="dialog-field-container"/>
+							<xsd:attribute name="captions" type="list-value-source" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>Specifies a list value source that will provide the captions (column headings) for the grid.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.static" type="field.textType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A static or uneditable field that useful for displaying arbitrary text or labels.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.date" type="field.datetimeType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A date field.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.time" type="field.datetimeType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A time field.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.datetime" type="field.datetimeType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A combination date and time field.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.duration" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A special composite field that contains two datetime fields (a begin and end datetime).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="default-begin" type="xsd:dateTime" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The default value for the begin portion of the duration.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="default-end" type="xsd:dateTime" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The default value for the end portion of the duration.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="begin-min-value" type="xsd:dateTime" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The earliest date/time allowed for the begin portion of the duration.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="end-max-value" type="xsd:dateTime" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The latest date/time allowed for the end portion of the duration.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attributeGroup ref="dialog-field-container"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.boolean" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that allows various input styles but always stores a boolean value.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="style" type="boolean-field-style-enum" use="optional" default="checkbox">
+								<xsd:annotation>
+									<xsd:documentation>The style of control to use when getting the boolean value from the user.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="choices" use="optional" default="yesno">
+								<xsd:annotation>
+									<xsd:documentation>Specifies the pre-defined text to use for the true and false values.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="yesno"/>
+										<xsd:enumeration value="truefalse"/>
+										<xsd:enumeration value="onoff"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+							<xsd:attribute name="true" type="single-value-source" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>Specifies a single value source that will provide the value for the true label.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="false" type="single-value-source" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.integer" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A numeric field that validates integral values.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType">
+							<xsd:attribute name="min" type="xsd:int" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The minimum value allowed.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="max" type="xsd:int" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The maximum value allowed.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.float" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A numeric field that validates floating-point values.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType">
+							<xsd:attribute name="min" type="xsd:float" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The minimum value allowed.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="max" type="xsd:float" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The maximum value allowed.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.select" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that allows various input styles that allow choosing one or more of a set of choices</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="style" type="select-field-style-enum" use="optional" default="combo">
+								<xsd:annotation>
+									<xsd:documentation>The style of control to use when getting the select value from the user.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="choices" type="list-value-source" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>A list value source that provides the choices for this field. The value may also be a static string of the format "abc=def;ghi;jkl=mno" with semi-colons separating the choices and equal signs separating the caption from the value id. If the caption is the same as the value id, then no equal sign is required. Alternately, you can use the &lt;choices&gt;&lt;choice value="def"&gt;abd&lt;/choice&gt;&lt;choice&gt;ghi&lt;/choice&gt; ... &lt;/choices&gt; format to provide the static choices. The &lt;choices&gt; element would be a child of the select field and the &lt;choice&gt; elements would be children of the &lt;choice&gt; element.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="prepend-blank" type="yes-no" use="optional" default="no">
+								<xsd:annotation>
+									<xsd:documentation>Specifies whether or not to prepend the choices with a blank string.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="append-blank" type="yes-no" use="optional" default="no">
+								<xsd:annotation>
+									<xsd:documentation>Specifies whether or not to append the choices with a blank string.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="caption-left" type="xsd:string" use="optional" default="Available">
+								<xsd:annotation>
+									<xsd:documentation>If the style is a multidual (twin list boxes) this attribute specifies what the caption is of the first listbox (the one with all the choices).</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="caption-right" type="xsd:string" use="optional" default="Selected">
+								<xsd:annotation>
+									<xsd:documentation>If the style is a multidual (twin list boxes) this attribute specifies what the caption is of the second listbox (the one with the selected choices).</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="multi-width" type="xsd:int" use="optional" default="125">
+								<xsd:annotation>
+									<xsd:documentation>If the style is a multidual (twin list boxes) this attribute specifies the width, in pixels, of the two list boxes.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="control-separator" type="xsd:string" use="optional" default="&lt;br&gt;">
+								<xsd:annotation>
+									<xsd:documentation>If the style is radio or multicheck, this attribute specifies what HTML string should be used to separate each of the radio or checkbox items.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.separator" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that separates other fields from each for visual effectiveness.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="heading" type="xsd:string" use="optional">
+								<xsd:annotation>
+									<xsd:documentation>The heading to use for the separator.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.ssn" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A United States Social Security Number field.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="strip-dashes" type="yes-no" use="optional" default="yes">
+								<xsd:annotation>
+									<xsd:documentation>Specifies whether or not to stip the dashes from the SSN.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.phone" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A United States telephone number field.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:attribute name="strip-brackets" type="yes-no" use="optional" default="yes">
+								<xsd:annotation>
+									<xsd:documentation>Specifies whether or not to leave the brackets (for the area code) as part of the phone number.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.email" type="field.textType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that validates a properly formatted Internet e-mail address.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.zip" block="extension" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A United States ZIP+4 code field.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.debug" type="dialog-field" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A field that simply displays some debugging information about dialogs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.report" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that executes a SQL statement and displays the results on a single page with radio buttons or checkboxes next to the result set.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="dialog-field">
+							<xsd:choice>
+								<xsd:element name="statement" type="exec-statementType"/>
+							</xsd:choice>
+							<xsd:attribute name="style" use="optional" default="radio">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="radio"/>
+										<xsd:enumeration value="multicheck"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.uri" type="field.textType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that validates a properly formatted Internet URI.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="field.currency" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A numeric field that validates a properly formmated United States or UK currency field.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="field.textType">
+							<xsd:attribute name="type" use="optional" default="US">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="US"/>
+										<xsd:enumeration value="UK"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+							<xsd:attribute name="decimal" type="xsd:int" use="optional" default="2"/>
+							<xsd:attribute name="negative" use="optional" default="before">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="before"/>
+										<xsd:enumeration value="after"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="field.file" type="field.textType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A field that allows the selection of a file that will be downloaded (should be used in combination with miltipart MIME requests).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:complexType name="field.textType">
+		<xsd:annotation>
+			<xsd:documentation>The base complex type for all text fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="dialog-field">
+				<xsd:attribute name="size" type="xsd:int" use="optional" default="32">
+					<xsd:annotation>
+						<xsd:documentation>The size (usually the number of characters) of text that the control should display at any given time.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="max-length" type="xsd:int" use="optional" default="255">
+					<xsd:annotation>
+						<xsd:documentation>The maximum length of data that the control should allow.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="uppercase" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether the input should be uppercased or not.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="lowercase" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether the input should be lowercased or not.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="trim" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether the input should be trimmed (all leading and trailing whitespace removed).</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="mask-entry" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether the input should be masked when entered. This means that data entry will be allowed but the control will not show the input. This is useful when getting passwords and other private data.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="validate-pattern" type="xsd:string" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>Specifies a Perl5 regular expression that should be matched against the input data. This regular expression should be of the form [m]/pattern/[i][m][s][x]. Please see the Jakarta ORO API for more information about regular expressions.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="validate-msg" type="xsd:short" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>Specifies the error message to display if a validate-pattern is provided but the pattern does not match the input.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="format-pattern" type="xsd:string" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>Specifies a Perl5 regular expression that should be used to format the input for display on the screen. The pattern should be of the form s/pattern/replacement/[g][i][m][o][s][x]. Please see the Jakarta ORO API for more information about regular expressions.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="field.datetimeType">
+		<xsd:annotation>
+			<xsd:documentation>The base complex type for all datetime fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="field.textType">
+				<xsd:attribute name="min-value" type="xsd:dateTime" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>The minimum value allowed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="max-value" type="xsd:dateTime" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>The maximum value allowed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="future-only" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether only values in the future should be allowed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="past-only" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether only values in the past should be allowed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="strict-year" type="yes-no" use="optional" default="yes">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether strict years (4 digit) are required.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="strict-time" type="yes-no" use="optional" default="yes">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether strict time is required.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+				<xsd:attribute name="popup-calendar" type="yes-no" use="optional" default="no">
+					<xsd:annotation>
+						<xsd:documentation>Specifies whether or not to display an icon to right of the field that will allow a calendar window to be popped up and allow a date selection to be made that will fill in the control.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:attributeGroup name="report-column">
+		<xsd:annotation>
+			<xsd:documentation>Attributes that are common to all report columns</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="index" type="xsd:int" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The index of the column. If this attribute is not provided, the index number is either zero (for the first column) or one greater than the index of the previous column.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="type" type="report-column-type" use="optional" default="default">
+			<xsd:annotation>
+				<xsd:documentation>The type of data stored in a column. The value of this attribute should be an identifier that matches a registered column class (see com.xaf.report.ReportColumnFactory) or should be the name of a class that implements the com.xaf.report.ReportColumn interface.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="heading" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The heading of the column.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="url" type="report-column-expr" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>If the contents of this column should be hyperlinked in the report, this attribute provides the expression that will provide the href attribute of the anchor tag. The expression may be a simple string or may contain ${xx} macros where ${xx} will be replaced with the data contained in the column with index xx. The ${#} macro will be replaced with the current row number (starting with row 1). If a ${abc:xyz} macro is found, it will be treated as a single value source (abc:xyz). If %{..} is used in place of ${..} then the contents of the item inside the { and } brackets will be escaped using URL encoding rules.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="url-anchor-attrs" type="report-column-expr" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>If the contents of this column should be hyperlinked in the report, this attribute provides the expression that will provide additional attributes to the anchor tag. The most common usage of this attribute is to add a target="abc" attribute to allow an anchor to display a popup in a separate window. The complete range of column expression macros are allowed.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="align" use="optional" default="left">
+			<xsd:annotation>
+				<xsd:documentation>Specifies the column alignment.</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="left"/>
+					<xsd:enumeration value="center"/>
+					<xsd:enumeration value="right"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="width" type="xsd:int" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specifies the maximum width of the column. This attribute is used only by specific skins and is not used by the default HTML skin.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="display" type="yes-no" use="optional" default="yes">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not the column is displayed in the output. This attribute is used in conjunction with the ${xx} macros where you would like to place a column into the report for usage purposes (referring to it in a URL, for example) but don't want to display it as a normal column.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="calc" type="report-column-calc" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specifies how to summarize a column. The value of this attribute should be an identifier that matches a registered column data calculator class (see com.xaf.report.ColumnDataCalculatorFactory) or should be the name of a class that implements the com.xaf.report.ColumnDataCalculator interface.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="format" type="report-column-format" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specifies how to format the data of a column. The value of this attribute should be an identifier that matches a registered column data formatter class (see com.xaf.report.ReportColumnFactory) or can be any format that will be interpreted by the appropriate column type class. For example, if the field is a numeric or decimal column then the format can be any java.text.DecimalFormat type specification.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="output" type="report-column-expr" use="optional" default="${.}">
+			<xsd:annotation>
+				<xsd:documentation>Allows for generic data formatting. The expression may be a simple string or may contain ${xx} macros where ${xx} will be replaced with the data contained in the column with index xx, ${.} will be replaced with the value of the active column (the column being defined), and the ${#} macro will be replaced with the current row number (starting with row 1). If a ${abc:xyz} macro is found, it will be treated as a single value source (abc:xyz).</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="word-wrap" type="yes-no" use="optional" default="yes">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not a word wrapping should be allowed inside this column; the actual behavior of this attribute is dependent upon which skin is being used but in most cases (like HTML) a simple NOBR is added.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="allow-sort" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not a the column is allowed to be sorted when the heading is clicked (used by query definitions).</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="col-break" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not a column break should be added; the actual behavior of this attribute is dependent upon which skin is being used.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="report-column-type">
+		<xsd:annotation>
+			<xsd:documentation>Report column type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="default"/>
+			<xsd:enumeration value="numeric"/>
+			<xsd:enumeration value="decimal"/>
+			<xsd:enumeration value="checkbox"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-column-calc">
+		<xsd:annotation>
+			<xsd:documentation>Report column calculation command</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="sum"/>
+			<xsd:enumeration value="count"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-column-format">
+		<xsd:annotation>
+			<xsd:documentation>Report column formatting command</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="plain"/>
+			<xsd:enumeration value="general"/>
+			<xsd:enumeration value="decimal"/>
+			<xsd:enumeration value="currency"/>
+			<xsd:enumeration value="percentage"/>
+			<xsd:enumeration value="date"/>
+			<xsd:enumeration value="datetime"/>
+			<xsd:enumeration value="time"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-column-expr">
+		<xsd:annotation>
+			<xsd:documentation>Report column output pattern/expression</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="select-field-style-enum">
+		<xsd:annotation>
+			<xsd:documentation>The choices for the field.select style attribute</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="radio"/>
+			<xsd:enumeration value="list"/>
+			<xsd:enumeration value="multicheck"/>
+			<xsd:enumeration value="multilist"/>
+			<xsd:enumeration value="multidual"/>
+			<xsd:enumeration value="combo"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="boolean-field-style-enum">
+		<xsd:annotation>
+			<xsd:documentation>The choices for the field.boolean style attribute</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="radio"/>
+			<xsd:enumeration value="checkbox"/>
+			<xsd:enumeration value="checkalone"/>
+			<xsd:enumeration value="combo"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="reportType">
+		<xsd:annotation>
+			<xsd:documentation>Report definition type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="column" type="columnType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Declare the attributes for a single report column</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="banner" type="bannerItemsType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Describe the banner that should be displayed across the report</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="optional" default="default"/>
+		<xsd:attribute name="heading" type="single-value-source" use="optional"/>
+		<xsd:attribute name="first-row" type="report-first-row-enum" use="optional" default="data"/>
+		<xsd:attribute name="footing" type="single-value-source" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="report-columnType">
+		<xsd:annotation>
+			<xsd:documentation>Definition of a single report column</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attributeGroup ref="report-column"/>
+	</xsd:complexType>
+	<xsd:simpleType name="query-defn-join-id">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a join element in a query-defn</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="query-defn-join-ids">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a comma-separated list of join elements in a query-defn</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="query-defn-field-id">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a field element in a query-defn</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="query-defn-conditionType">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition condition type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="field" type="query-defn-field-id" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Specifies the field that should be compared to the value.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="comparison" type="query-defn-comparison-id" use="required">
+			<xsd:annotation>
+				<xsd:documentation>The comparison to perform on the given field and value.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="value" type="single-value-source" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Specifies the value to compare against the field.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>If more conditions follow this connection, specifies the connector to use for the subsquent condition.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="allow-null" type="yes-no" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Provides the ability dynamically exclude this condition from the generated where condition if the value attribute's final run-time value is null. Because the value attribute is a single value source (or in the case of the IN comparison it is a list value source), there is a chance that the value specified by the value source could be null. If the allow-null attribute is set to yes, then it means that a null will be included into the generated SQL statement as part of the condition. If thi If the allow-null attribute is set to no, then it means that whenever the value is null the entire condition should be removed from the generated SQL statement. </xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="bind-expr" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specifies a special bind expresison to use when generating the SQL statement. If the ? in the bind expression should be wrapped inside a SQL function like UPPER(?) or some other special situation, then this attribute provides the means to do so.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:simpleType name="query-defn-comparison-id">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a query definition comparison type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="equals"/>
+			<xsd:enumeration value="not-equals"/>
+			<xsd:enumeration value="in"/>
+			<xsd:enumeration value="starts-with"/>
+			<xsd:enumeration value="contains"/>
+			<xsd:enumeration value="contains-ignore-case"/>
+			<xsd:enumeration value="ends-with"/>
+			<xsd:enumeration value="greater-than"/>
+			<xsd:enumeration value="less-than"/>
+			<xsd:enumeration value="greater-than-equal"/>
+			<xsd:enumeration value="less-than-equal"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="query-defn-field-type">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition field element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="id" type="query-defn-field-id" use="required"/>
+		<xsd:attribute name="join" type="query-defn-join-id" use="required"/>
+		<xsd:attribute name="caption" type="xsd:string" use="optional"/>
+		<xsd:attribute name="column-expr" type="xsd:string" use="optional"/>
+		<xsd:attribute name="column" type="xsd:string" use="required"/>
+		<xsd:attribute name="where-expr" type="xsd:string" use="optional"/>
+		<xsd:attribute name="order-by-expr" type="xsd:string" use="optional"/>
+		<xsd:attribute name="allow-display" type="yes-no" use="optional" default="yes"/>
+	</xsd:complexType>
+	<xsd:simpleType name="query-defn-condition-connector-enum">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition condition connector enumeration</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="and"/>
+			<xsd:enumeration value="or"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="query-defn-selectType">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition select element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="banner" type="bannerItemsType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the banner that will appear above the SQL result set in the output.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="display" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies a query definition field that should be included in the select clause of the SQL select statement. Only the fields that appear in a display element will be included in the SQL statement. </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="field" type="query-defn-field-id" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Specifies a query definition field that should be included in the select clause of the SQL select statement. Only the fields that appear in a display element will be included in the SQL statement. By default, any field that is included in a display element will appear in the output unless the display attribute of the field is set to no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="order-by" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies one or more query definition fields that should be included in the order by clause of the SQL select statement.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="field" type="query-defn-field-id" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Specifies one or more query definition fields that should be included in the order by clause of the SQL select statement. The value of this attribute is a single value source that should provide on or more field names that are defined using the field element of query-defn.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="condition" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies one ore more dynamic conditions that should be applied to the SQL Statement. Together with the join conditions, the items in this element construct the where clause of the generated SQL statement. This element may be nested with child conditions.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="query-defn-conditionType"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="where-expr" type="query-defn-where-exprType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies a static SQL where condition expression that should be applied to the generated SQL statement as specified by the programmer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="id" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>The unique identifier to the select statement.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="heading" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The heading to display in a frame around the SQL statement.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="footing" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The footer to display in a frame around the SQL statement.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="distinct" type="yes-no" use="optional" default="yes">
+			<xsd:annotation>
+				<xsd:documentation>Specifies whether or not to include a DISTINCT modifier in the generated SQL statement.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="query-defn-where-exprType">
+		<xsd:annotation>
+			<xsd:documentation>Query Definition where expression element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="value" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>The where condition expression that will be placed into the generate SQL statement as-is.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional" default="and">
+			<xsd:annotation>
+				<xsd:documentation>If more conditions follow this connection, specifies the connector to use for the subsquent condition.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="statementType" mixed="true">
+		<xsd:annotation>
+			<xsd:documentation>Statement tag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="sql" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the SQL text, including bind parameters or dynamic replacements.</xsd:documentation>
+					<xsd:documentation>The SQL can be comprised of just static text, static text with JDBC-style bind parameters using ?, or dynamic text with JDBC-style bind parameters. When using the JDBC-style bind parameters, the actual values of the bind parameters are provided using the params element. If a SQL IN clause it needed, you can use the ${param-list:x} format where x is the parameter number of a list value source. If you would like to just replace some portion of the SQL based on environment values, you can use one or more ${abc:def} style replacement macros that will be replaced using single-value sources.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType mixed="true"/>
+			</xsd:element>
+			<xsd:element name="params" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the SQL bind parametes in the order that they are defined in the SQL.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="param" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="value" type="single-value-source" use="optional">
+									<xsd:annotation>
+										<xsd:documentation>Bind a single value source to a specific parameter in the SQL source.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="values" type="list-value-source" use="optional">
+									<xsd:annotation>
+										<xsd:documentation>Bind a list value source to a specific parameter in the SQL source. This is typically used with the ${param-list:x} formatting macro (useful for creating SQL IN clauses). For example, "select * from x where y in (${param-list:0})".</xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="type" type="statement-param-type-enum" use="optional">
+									<xsd:annotation>
+										<xsd:documentation>When the value (single value source) is specified, this type attribute can be provided to define the type of value to bind.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Specifies the different ways that the output for the statement may be viewed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>The name of the statement.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="data-src" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The data source to use.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="execute-tasksType">
+		<xsd:annotation>
+			<xsd:documentation>Execute tags</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="exec-statement" type="exec-statementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="exec-redirect" minOccurs="0">
+				<xsd:complexType>
+					<xsd:attribute name="url" type="xsd:anyURI" use="required"/>
+					<xsd:attributeGroup ref="basic-task-attrs"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="exec-dml" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="table" type="xsd:string" use="required"/>
+					<xsd:attribute name="command" type="exec-dml-command-enum" use="required"/>
+					<xsd:attribute name="data-src" type="xsd:string" use="optional"/>
+					<xsd:attribute name="transaction" type="xsd:string" use="optional"/>
+					<xsd:attribute name="where" type="xsd:string" use="optional"/>
+					<xsd:attribute name="fields" type="xsd:string" use="optional"/>
+					<xsd:attribute name="columns" type="xsd:string" use="optional"/>
+					<xsd:attribute name="dialog-context-attr" type="xsd:string" use="optional"/>
+					<xsd:attribute name="insert-check" type="single-value-source" use="optional"/>
+					<xsd:attribute name="update-check" type="single-value-source" use="optional"/>
+					<xsd:attributeGroup ref="basic-task-attrs"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attributeGroup ref="basic-task-attrs"/>
+	</xsd:complexType>
+	<xsd:simpleType name="exec-dml-command-enum">
+		<xsd:annotation>
+			<xsd:documentation>Commands allowed in exec-dml tag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="insert"/>
+			<xsd:enumeration value="update"/>
+			<xsd:enumeration value="remove"/>
+			<xsd:enumeration value="insert-or-update"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="report-first-row-enum">
+		<xsd:annotation>
+			<xsd:documentation>Values for the "first-row" attribute in report tag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="data"/>
+			<xsd:enumeration value="column-headings"/>
+			<xsd:enumeration value="none"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="statement-param-type-enum">
+		<xsd:annotation>
+			<xsd:documentation>Values for the param tag in sql statements</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="text"/>
+			<xsd:enumeration value="integer"/>
+			<xsd:enumeration value="double"/>
+			<xsd:enumeration value="varchar"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="propertyType">
+		<xsd:annotation>
+			<xsd:documentation>Property elements that appear in the configuration tag</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>The property name.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="value" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>A static string or an expression that contains ${xxx} macros within the expression. The ${xxx} may refer to another property name or any single value source like ${create-app-url:/abc}.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="final" type="yes-no" use="optional" default="no">
+			<xsd:annotation>
+				<xsd:documentation>If the property is marked as final, then the property will only be evaluated once during the lifetime of the property, even if the contents of the property are dynamic (like an expression). Basically, setting it to final="yes" is like a write-once constant.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="descr" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The description of the property.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="type" use="optional" default="text" form="qualified">
+			<xsd:annotation>
+				<xsd:documentation>The type of property.</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="text"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="bannerItemsType">
+		<xsd:annotation>
+			<xsd:documentation>Banner items</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="item" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="item" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attributeGroup ref="banner-item"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:attributeGroup ref="banner-items-parent"/>
+					<xsd:attributeGroup ref="banner-item"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attributeGroup ref="banner-items-parent"/>
+	</xsd:complexType>
+	<xsd:simpleType name="acl-permission">
+		<xsd:annotation>
+			<xsd:documentation>A single ACL permission</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="acl-permissions">
+		<xsd:annotation>
+			<xsd:documentation>List of ACL permissions (one or more)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="columnType">
+		<xsd:annotation>
+			<xsd:documentation>Report column</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="report-columnType">
+				<xsd:choice>
+					<xsd:element name="conditional" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:attribute name="flag" use="required">
+								<xsd:annotation>
+									<xsd:documentation>The report flag to conditionally apply.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="hidden"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+							<xsd:attributeGroup ref="conditional"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:attributeGroup name="banner-items-parent">
+		<xsd:annotation>
+			<xsd:documentation>Banner items parent attributes</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="style" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Specify how the child items should be positioned.</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="vertical"/>
+					<xsd:enumeration value="horizontal"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="separator" type="xsd:string" use="optional" default=", ">
+			<xsd:annotation>
+				<xsd:documentation>If the style is horizontal, specify the text that should be used to separate the child items.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	<xsd:attributeGroup name="banner-item">
+		<xsd:annotation>
+			<xsd:documentation>A single banner item's attributes</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="caption" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The caption of the banner item.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="url" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The HREF of the anchor that the item points to (creates a hyperlink for the given caption).</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="icon" type="single-value-source" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The SRC attribute for an image that should be displayed alongside the caption.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="dialog-data-cmd">
+		<xsd:annotation>
+			<xsd:documentation>Dialog data commands</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="add"/>
+			<xsd:enumeration value="edit"/>
+			<xsd:enumeration value="delete"/>
+			<xsd:enumeration value="confirm"/>
+			<xsd:enumeration value="print"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="dialog-data-cmds">
+		<xsd:annotation>
+			<xsd:documentation>List of comma-separated data commands</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:attributeGroup name="basic-task-attrs">
+		<xsd:annotation>
+			<xsd:documentation>Attributes defined by any basic task</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="data-cmd" type="dialog-data-cmds" use="optional"/>
+		<xsd:attribute name="debug" type="yes-no" use="optional" default="no"/>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="resultset-store-type-enum">
+		<xsd:annotation>
+			<xsd:documentation>The locations where a result-set can be stored</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="single-column"/>
+			<xsd:enumeration value="row-map"/>
+			<xsd:enumeration value="row-fields"/>
+			<xsd:enumeration value="rows-map"/>
+			<xsd:enumeration value="row-array"/>
+			<xsd:enumeration value="rows-matrix"/>
+			<xsd:enumeration value="result-set"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="exec-statementType">
+		<xsd:annotation>
+			<xsd:documentation>A SQL statement task</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="statementType">
+				<xsd:attribute name="stmt-src" type="xsd:string" use="optional"/>
+				<xsd:attribute name="report" type="xsd:string" use="optional"/>
+				<xsd:attribute name="skin" type="single-value-source" use="optional"/>
+				<xsd:attribute name="store" type="single-value-source-rw" use="optional"/>
+				<xsd:attribute name="store-type" type="resultset-store-type-enum" use="optional"/>
+				<xsd:attribute name="destination" type="xsd:string" use="optional"/>
+				<xsd:attributeGroup ref="basic-task-attrs"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="permissionType">
+		<xsd:annotation>
+			<xsd:documentation>An ACL permission</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="permission" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="generate-permissions" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="name" type="xsd:string" use="required"/>
+					<xsd:attribute name="class" type="java-class" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="grant" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="permission" type="acl-permission" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="revoke" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="permission" type="acl-permission" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>The name of the permission.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="inherit" type="acl-permission" use="optional"/>
+	</xsd:complexType>
+</xsd:schema>

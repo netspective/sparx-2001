@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<page name="xaf/configuration">
+	<summary>
+		The XAF favors XML storage of properties instead of using Java properties
+		files. The ConfigurationManager class allows multiple properties to be
+		defined in a single XML file, complete with variable replacements and the
+		ability to create single-property or multiple property (list) items. Optionally,
+		any property name could refer to <link page="xaf/value-sources">value sources</link>
+		as part of the definition of a property so that the value of a property can become
+		dynamic and be computed each time the property is used (in case the value of the
+		property is based on a servlet request or session variable or some other application-defined
+		business rule).
+	</summary>
+
+	<section heading="Examples">
+		<channel type="xml-source">
+			<property name="system.projects-root" value="C:/Projects"/>
+			<property name="framework.root-path" value="${system.projects-root}/Framework"/>
+			<property name="app.project-root" value="${system.projects-root}/web-cura"/>
+			<properties name="framework.ace.transform">
+				<property name="dml" value="${framework.ace.xslt-path}/article-transform.xsl"/>
+				<property name="tpml" value="${framework.ace.xslt-path}/test-plan-transform.xsl"/>
+			</properties>
+
+			<property name="app.root-url" value="${create-app-url:/}"/>
+			<property name="app.page.1" value="${create-app-url:/page1}"/>
+			<property name="app.page.2" value="${create-app-url:/page2}"/>
+		</channel>
+		<br/>
+		Basically, a property element has two portions -- a name and a value. A name is always
+		a static text string but the value can be one of the following:
+		<ul>
+			<li>
+				A static text or numeric value (one that does not change over time). In the
+				example above, the <i>system.projects-root</i> property is a static text property.
+			</li>
+			<li>
+				A text or numeric value that should be computed using other properties but as soon as the value
+				is evaluated for the first time, its value becomes static. In the
+				example above, the <i>framework.root-path</i> property is a text property whose
+				value depends upon the <i>system.projects-root</i> property.
+			</li>
+			<li>
+				A text or numeric value that should be computed using other properties or
+				<link page="xaf/value-sources">value sources</link>. These kinds of
+				properties will never have a static value and will be computed each time the
+				property is referenced. In the
+				example above, the <i>app.root-url</i> property is a dynamic property because
+				it refers to a single value source whose value depends upon the execution
+				environment of the servlet.
+			</li>
+		</ul>
+	</section>
+
+	<channel xsdn-element="/xaf/configuration" describe-children="/*"/>
+
+	<channel
+		heading="Extended examples (standard configuration.xml file)"
+		type="xml-source"
+		include="../../../web-cura/Site/WEB-INF/configuration.xml"/>
+</page>

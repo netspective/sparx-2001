@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<page name="xif/tabletypes">
+	<summary>
+		Tabletypes are created to help define generic tables and behaviors that can be
+		inherited by real tables.
+	</summary>
+
+	<section heading="Overview of Datatypes">
+	<ul>
+		<li>Tabletypes should be considered "table templates" that allow a programmer to specify a table type.</li>
+		<li>Tabletypes are completely schema dependent but may be reused across applications. This means that the basic templating system (SchemaDoc to XSLT generator) does not have any "built-in" tabletypes.</li>
+		<li>Tabletypes may be inherited from other tabletypes, allowing better reuse and object-orientation in relational databases.</li>
+		<li>Create tabletypes using the &lt;tabletype&gt; tag.</li>
+		<li>In a Java OR map, each &lt;tabletype&gt; tag becomes a very simple Java interface that can be implemented by Table classes so that the Java OR map matches the SchemaDoc.</li>
+	</ul>
+	</section>
+
+	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/tabletype" describe-children="/*"/>
+	<p/>
+	<channel heading="Sample Default Tabletype" type="xml-source" include="../../../web-cura/Database/schema-src/tabletypes.xml" element="/schema/tabletype[@name = 'Default']"/>
+	<p/>
+	<channel heading="Sample Enumeration Tabletype" type="xml-source" include="../../../web-cura/Database/schema-src/tabletypes.xml" element="/schema/tabletype[@name = 'Enumeration']"/>
+	<p/>
+	<channel heading="Sample Status Tabletype" type="xml-source" include="../../../web-cura/Database/schema-src/tabletypes.xml" element="/schema/tabletype[@name = 'Status']"/>
+</page>

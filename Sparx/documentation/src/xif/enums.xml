@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<page name="xif/enums">
+	<summary>
+		XIF provides a powerful mechanism for storing and accessing static lookup data that
+		reduces the overhead of making SQL calls and improves performance.
+	</summary>
+
+	<section>
+	<ul>
+		<li>XIF allows for generalizing all static lookup tables into what are called Enumeration tables.</li>
+		<li>All Enumeration tables share a common structure</li>
+		<li>All Enumeration tables have their data and structure closely bound in the SchemaDoc</li>
+		<li>All Enumeration tables have their data present in the XML which means that the data is available to the application at runtime simply by reading the SchemaDoc. This allows the runtime application to read static values without making any database calls.</li>
+		<li>Using the DAL, all Enumeration tables can generate real Enumerated Java classes with final and static modifiers to allow access to the enumerations without having access to the SchemaDoc (for instance, in EJBs).</li>
+	</ul>
+	</section>
+
+	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/table/enum" describe-children="/*"/>
+
+	<channel heading="Sample Enumeration Definition" type="xml-source">
+		<tabletype name="Enumeration" parent="Reference_Item">
+			<param name="capsize">64</param>
+			<param name="abbrevsize">32</param>
+
+			<column name="id" type="integer" primarykey="yes"/>
+			<column name="caption" type="text" size="$capsize$" required="yes"/>
+			<column name="abbrev" type="text" size="$abbrevsize$" unique="yes"/>
+		</tabletype>
+
+		<table name="My_Lookup_Table" abbrev="MyLkTb" type="Enumeration">
+			<enum>Item 1</enum>
+			<enum>Item 2</enum>
+			<enum id="100">Item 3</enum>
+		</table>
+	</channel>
+
+	<channel heading="Sample Enumeration Generated DDL"><pre>
+create table My_Lookup_Table
+(
+	id number(8),
+	caption varchar2(64),
+	abbrev varchar2(32)
+);
+create unique index MyLkTb_abbrev_unq on My_Lookup_Table(abbrev);
+alter table My_Lookup_Table modify (id constraint MyLkTb_id_REQ NOT NULL);
+alter table My_Lookup_Table modify (caption constraint MyLkTb_caption_REQ NOT NULL);
+alter table My_Lookup_Table add (constraint My_Lookup_Table_PK PRIMARY KEY (id));
+
+insert into My_Lookup_Table(id, caption) values (0, 'Item 1');
+insert into My_Lookup_Table(id, caption) values (1, 'Item 2');
+insert into My_Lookup_Table(id, caption) values (100, 'Item 3');
+	</pre>
+	</channel>
+</page>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<page name="resources">
+	<summary>
+	In addition to this website, there are few resources like a developer's guide, tag documentation,
+	datasheets, whitepaper, and a Flash overview that you may find useful while learning about Sparx.
+	</summary>
+	<section heading="Files Available for Review/Download">
+		<table>
+			<tr bgcolor="white"><td><image src="page-yellow.gif"/></td><td>Review the <a href="../../shared/users-guide/index.html" target="dev-guide">Sparx Developer's Guide</a></td></tr>
+			<tr bgcolor="white"><td><image src="page-yellow.gif"/></td><td>Review the <a href="../../shared/tagdoc/xaf.html" target="tagdoc">Sparx Tag Documentation</a></td></tr>
+			<tr bgcolor="white"><td><image src="power-point.gif"/></td><td>Download the <a href="../../shared/project/Introduction_to_Sparx.ppt" target="sparx-intro">Sparx Introduction</a> PowerPoint presentation.</td></tr>
+			<tr bgcolor="white"><td><image src="power-point.gif"/></td><td>Download the <a href="../../shared/project/Introduction_to_Sparx_XIF.ppt" target="sparx-intro-xif">Sparx XIF Introduction</a> PowerPoint presentation.</td></tr>
+			<tr bgcolor="white"><td><image src="pdf-logo-sm.gif"/></td><td>Download the <a href="../../shared/project/Sparx_Development_Patterns.pdf" target="sparx-dp">Sparx Development Patterns</a>.</td></tr>
+			<tr bgcolor="white"><td><image src="pdf-logo-sm.gif"/></td><td>Download the <link resource="documents/Sparx_Datasheet.pdf">Sparx Datasheet</link> (185 k)</td></tr>
+			<tr bgcolor="white"><td><image src="pdf-logo-sm.gif"/></td><td>Download the <link resource="documents/Sparx_Whitepaper.pdf">Sparx Whitepaper</link> (980 k)</td></tr>
+			<tr bgcolor="white"><td><image src="flash-logo-sm.gif"/></td><td>View the <link resource="flash/SparX.swf">Sparx Flash Overview</link></td></tr>
+			<tr bgcolor="white"><td><image src="excel.gif"/></td><td>Download the <a href="../../shared/project/web_dev_products.xls" target="web-products">General Web Frameworks and Products Catalog</a> Excel spreadsheet. This file is courtesy of <a href="mailto:DCancro@bridgespan.com">Dan Cancro</a></td></tr>
+		</table>
+	</section>
+</page>

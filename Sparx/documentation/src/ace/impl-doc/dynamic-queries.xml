@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc/dynamic-queries">
+	<summary>
+	The entire suite of fields, joins, rules, conditions, select dialogs,
+	and where expressions from <link page="xaf/dynamic-queries">Query Definitions</link> are
+	fully documented within
+	ACE.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-query-defns"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-query-defn"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-query-defn-test"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-query-defn-test-sql"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-query-defn-dialog-test"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-query-defn-dialog-test-sql"/></td>
+				<td>
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

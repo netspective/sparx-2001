@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<page name="ace/project-doc">
+	<summary>
+		ACE provides a centralized location for all project documentation for any
+		application. Instead of storing application code and programmer
+		documentation separately, ACE brings tag documentation, javadocs, MS
+		Office documents, and other project documents into a single easilyaccessible
+		place. Managers will no longer need to hunt for documents.
+	</summary>
+</page>

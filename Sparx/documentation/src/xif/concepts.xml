@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<page name="xif/concepts">
+	<summary>
+		XIF is comprised of Datatypes, Tabletypes, and Indextypes which form the basis
+		of an XML-based data dictionary and Tables, Columns, Indexes, and Data which form
+		the basis of the actual relational schema.
+	</summary>
+	<p/>
+	<channel xsdn-src="xif-xsdn" xsdn-element="/xif" describe-children="/*[name() = 'include' or name() = 'pre-process' or name() = 'templates']"/>
+	<p/>
+	<channel heading="Example of general SchemaDoc elements" type="xml-source">
+		<xaf>
+			<include file="file1.xml"/>
+			<include file="file2.xml"/>
+			<pre-process style-sheet="templates.xsl"/>
+		</xaf>
+	</channel>
+	<p/>
+	<channel heading="Datatypes examples" type="xml-source">
+		<datatype name="text">
+			<java-class package="java.lang">String</java-class>
+			<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
+			<size>32</size>
+		</datatype>
+
+		<datatype name="float">
+			<java-type default="0.0">float</java-type>
+			<java-class package="java.lang">Float</java-class>
+			<sqldefn dbms="ansi">float</sqldefn>
+			<sqldefn dbms="oracle">number(20,6)</sqldefn>
+		</datatype>
+
+		<datatype name="integer">
+			<java-type default="0">int</java-type>
+			<java-class package="java.lang">Integer</java-class>
+			<sqldefn dbms="ansi">integer</sqldefn>
+			<sqldefn dbms="oracle">number(8)</sqldefn>
+		</datatype>
+
+		<datatype name="duration">
+			<composite>
+				<column name="$name$_begin_date" type="date"/>
+				<column name="$name$_end_date" type="date"/>
+			</composite>
+		</datatype>
+	</channel>
+	<p/>
+	<channel heading="Tabletype example" type="xml-source">
+		<tabletype name="Default">
+			<column name="cr_stamp" type="stamp" required="dbms" default="sysdate" descr="Date/time record was created"/>
+			<column name="cr_person_id" lookupref="Person.person_id" descr="The user that created the record"/>
+			<column name="cr_org_id" lookupref="Org.org_id" descr="The org that created the record (the one the cr_user_id was logged-into)"/>
+			<column name="record_status_id" lookupref="$record-status-enum$" default="0" required="yes" descr="The status of a row in the table"/>
+
+			<!-- this is made as a parameter so that inheriting tables can override the status enumeration if needed -->
+			<param name="record-status-enum">Record_Status</param>
+		</tabletype>
+	</channel>
+	<p/>
+	<channel heading="Table and columns example" type="xml-source">
+		<table name="Person" abbrev="Per" type="Default">
+			<description>Any person (client, staff member, etc.)</description>
+			<column name="person_id" primarykey="yes" type="autoinc" descr="Auto-generated Unique ID for a person within the entire system"/>
+			<column name="name_prefix" type="text" size="16"/>
+			<column name="name_first" type="text" required="yes" size="32"/>
+			<column name="name_middle" type="text" size="32"/>
+			<column name="name_last" type="text" required="yes" size="32"/>
+			<column name="name_suffix" type="text" size="16"/>
+			<column name="short_name" type="text" required="dbms" size="42" descr="[first letter of name_first] [name_last]"/>
+			<column name="simple_name" type="text" required="dbms" size="96" descr="[name_first] [name_last]"/>
+			<column name="complete_name" type="text" required="dbms" size="128" descr="[name_prefix] [name_first] [name_middle] [name_last] [name_suffix]"/>
+			<column name="short_sortable_name" type="text" required="dbms" size="42" descr="[name_last], [first letter of name_first]"/>
+			<column name="complete_sortable_name" type="text" required="dbms" size="128" descr="[name_last], [name_first] [name_middle]"/>
+			<column name="ssn" indexed="yes" type="text" size="11" descr="Social Security number"/>
+			<column name="gender" lookupref="Gender" default="0" descr="Gender"/>
+			<column name="marital_status" lookupref="Marital_Status" default="0" descr="Marital status"/>
+			<column name="date_of_birth" type="date" descr="Date of Birth"/>
+			<column name="age" type="integer" descr="Actual age (only required if date_of_birth is NULL or not known)"/>
+		</table>
+	</channel>
+	<p/>
+	<channel heading="Enumeration example" type="xml-source">
+		<table name="Gender" type="Enumeration">
+			<enum>Male</enum>
+			<enum>Female</enum>
+			<enum>Not applicable</enum>
+		</table>
+	</channel>
+</page>

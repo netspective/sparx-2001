@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/xml">
+	<summary>
+	All XAF dialogs are externalized using a sophisticated set of XML tags and can be used
+	in both JSPs (through custom tags) and servlets (through a Java API).
+	</summary>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs" describe-children="/*[name() = 'register-field' or name() = 'dialog-skin']"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/client-js"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/director"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/execute-tasks"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/populate-tasks"/>
+</page>

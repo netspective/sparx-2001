@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ===================================================================
+
+Build file for Application - for use with the Jakarta Ant java build tool
+
+Setup instructions:
+    Before running an Ant build, you must
+     - set the JAVA_HOME environment variable to the JDK root directory
+     - set the ANT_HOME environment variable to the Ant root directory
+     - set the SPARX_HOME environment variable to the Sparx root directory
+     - set CLASSPATH with all required libraries:
+       * Sparx
+       * Apache Xerces 1.4 or above (http://xml.apache.org)
+       * Apache Xalan 2.1 or above (http://xml.apache.org)
+       * Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)
+       * Jakarta Log4J 1.1 or above (http://jakarta.apache.org)
+       * Java Servlet API 2.2 or above (http://java.sun.com)
+       * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
+-->
+
+<project name="app" default="generate-html">
+
+    <target name="init">
+    	<tstamp/>
+
+		<echo message="Basedir is '${basedir}'"/>
+		<property environment="env"/>
+		<property name="sparx-web-shared-path" value="${env.SPARX_HOME}/web-shared"/>
+
+		<property name="html-path" value="${basedir}/../"/>
+		<property name="resources-path" value="${basedir}/../resources"/>
+		<property name="default-style-sheet" value="default.xsl"/>
+
+		<property name="ftp-server" value="ftp.netspective.com"/>
+		<property name="ftp-user-id" value="2234d2cw3m"/>
+		<property name="ftp-password" value="nishej2s"/>
+		<property name="ftp-remote-root-path" value="web-netspective"/>
+
+		<property name="value-sources-inc-file" value="xaf/value-sources.inc"/>
+		<property name="normalized-xaf-xsd-file" value="xaf.xsdn"/>
+		<property name="normalized-xif-xsd-file" value="xif.xsdn"/>
+    </target>
+
+    <target name="clean" depends="init">
+    	<delete>
+    		<fileset dir="${html-path}" includes="*.html"/>
+    	</delete>
+		<delete dir="${html-path}/ace"/>
+		<delete dir="${html-path}/xaf"/>
+		<delete dir="${html-path}/xif"/>
+		<delete dir="${html-path}/dal"/>
+    </target>
+
+    <target name="generate-value-sources-html" depends="init">
+    	<delete file="${value-sources-inc-file}"/>
+		<taskdef name="gen-vs" classname="com.netspective.sparx.util.ant.GenerateValueSourcesDocumentation"/>
+		<gen-vs output="${value-sources-inc-file}"/>
+    </target>
+
+    <target name="generate-xsdn" depends="init">
+    	<delete file="${normalized-xif-xsd-file}"/>
+    	<delete file="${normalized-xaf-xsd-file}"/>
+		<style basedir="." destdir="." extension=".xsdn" style="xsd-normalize.xsl">
+			<include name="xif.xsd"/>
+			<include name="xaf.xsd"/>
+		</style>
+    </target>
+
+    <target name="generate-html" depends="init,clean">
+		<style basedir="." destdir="${html-path}" extension=".html" style="${default-style-sheet}" force="yes">
+			<include name="**/*.xml"/>
+			<exclude name="build.xml"/>
+			<exclude name="structure.xml"/>
+		</style>
+    </target>
+
+    <target name="generate-all" depends="init,clean,generate-value-sources-html,generate-xsdn,generate-html"/>
+
+    <target name="upload" depends="init">
+		<echo message="Uploading '${html-path}' into ${ftp-server}:${ftp-remote-root-path}"/>
+    	<ftp server="${ftp-server}" userid="${ftp-user-id}" password="${ftp-password}" remotedir="${ftp-remote-root-path}" verbose="yes">
+    		<fileset dir="${html-path}">
+    			<exclude name="src/**/*"/>
+    		</fileset>
+    	</ftp>
+    </target>
+
+    <target name="upload-docs" depends="init">
+    	<ftp server="${ftp-server}" userid="${ftp-user-id}" password="${ftp-password}" remotedir="${ftp-remote-root-path}/shared/project" verbose="yes">
+    		<fileset dir="${sparx-web-shared-path}/docs/project">
+				<include name="Introduction_to_Sparx.ppt"/>
+				<include name="Introduction_to_Sparx_XIF.ppt"/>
+				<include name="Sparx_Development_Patterns.pdf"/>
+				<include name="web_dev_products.xls"/>
+    		</fileset>
+    	</ftp>
+    </target>
+
+    <target name="upload-tagdoc" depends="init">
+    	<ftp server="${ftp-server}" userid="${ftp-user-id}" password="${ftp-password}" remotedir="${ftp-remote-root-path}/shared/tagdoc" verbose="yes">
+    		<fileset dir="${sparx-web-shared-path}/docs/tagdoc"/>
+    	</ftp>
+    </target>
+
+    <target name="generate-and-upload" depends="generate-all,upload,upload-docs,upload-tagdoc"/>
+
+    <target name="targets">
+        <echo message=""/>
+        <echo message="ANT build targets for Application"/>
+        <echo message=""/>
+        <echo message="The following targets are available:"/>
+        <echo message="  generate-xsdn                Generate the easy-to-use normalized xsd file"/>
+        <echo message="  generate-value-sources-html  Generate the value sources HTML from the source code"/>
+        <echo message="  generate-html                Generate the HTML from XML"/>
+        <echo message="  generate-all                 Generate all the items"/>
+        <echo message="  upload                       Upload the generated files to ftp.netspective.com"/>
+        <echo message="  upload-tagdoc                Upload the tag documentation to ftp.netspective.com"/>
+        <echo message="  generate-and-upload          Generate all the items and upload"/>
+    </target>
+</project>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/transactions">
+	<summary>
+		All XAF dialogs have unique identifiers at both development and run-time.
+		Features are provided to prevent duplicate data entry through the use of
+		Dialog Transactions (preventing users from hitting the "back" button and
+		re-running an older transaction).
+	</summary>
+</page>

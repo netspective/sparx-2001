@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<page name="xif/ddl">
+	<summary>
+		Using XSLT stylesheets, the XIF can generate complete SQL DDL for
+		almost any relational SQL database.
+	</summary>
+	<section>
+	<ul>
+		<li>Using ACE, a database-independent SchemaDoc XML file becomes a database-dependent SQL DDL file.</li>
+		<li>Regenerating SQL DDL is the preferred method to modifying DDL during the design and construction phases (pre-production).</li>
+		<li>In post-production usage, the entire SQL is regenerated for changed tables and relationships but a experienced DBA should be involved for the alteration of live schemas.</li>
+	</ul>
+	<p/>
+	<center><image name="ace-schema-doc-ddl"/></center>
+	</section>
+
+	<channel heading="Sample XIF Table" type="xml-source" include="../../../web-cura/Database/schema-src/person.xml" element="/schema/table[@name = 'Person']"/>
+
+	<channel heading="Sample Generated DDL"><pre>
+create table Person (
+	cr_stamp date DEFAULT sysdate,
+	cr_person_id number(16),
+	cr_org_id number(16),
+	person_id number(16),
+	name_prefix varchar2(16),
+	name_first varchar2(32),
+	name_middle varchar2(32),
+	name_last varchar2(32),
+	short_name varchar2(42),
+	simple_name varchar2(96),
+	complete_name varchar2(128),
+	short_sortable_name varchar2(42),
+	complete_sortable_name varchar2(128),
+	ssn varchar2(11),
+	gender number(8) DEFAULT 0,
+	marital_status number(8) DEFAULT 0,
+	date_of_birth date,
+	age number(8));
+create index Per_ssn on Person(ssn);
+alter table Person modify (person_id constraint Per_person_id_REQ NOT NULL);
+alter table Person modify (name_first constraint Per_name_first_REQ NOT NULL);
+alter table Person modify (name_last constraint Per_name_last_REQ NOT NULL);
+alter table Person add (constraint Person_PK PRIMARY KEY (person_id));
+alter table Person add (constraint Per_cr_person_id_FK FOREIGN KEY (cr_person_id) REFERENCES Person(person_id));
+alter table Person add (constraint Per_cr_org_id_FK FOREIGN KEY (cr_org_id) REFERENCES Org(org_id));
+alter table Person add (constraint Per_gender_FK FOREIGN KEY (gender) REFERENCES Gender(id));</pre>
+	</channel>
+</page>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<page name="index">
+	<summary>
+	Netspective's open-source Sparx framework allows enterprises to build and
+	deploy more e-business Java applications using fewer programmers, in less time, with higher-quality,
+	and better documentation than conventional application servers and Servlet engines alone.
+	Using Sparx, you can stop building applications from scratch each time and leverage your
+	existing talent and components. As a pure Java library, Sparx can be integrated into existing systems at any
+	development stage. Sparx will work with any Java2 JDK and Servlet engine and can work equally as well
+	as a JSP library (with advanced, pre-defined custom tags) or a Servlet library (providing MVC-based
+	page control). Some of our customers have been able to cut their
+	development budgets in half (in some cases by up to 75%) by reducing the number or qualifications of their
+	programmers. This is because Sparx allows junior and mid-level Java developers
+	to be as or more effective than senior and more experienced developers that do not use Sparx.
+	Unlike web site development tools which focus more on presentation and less on business logic, XAF helps
+	construct powerful data aggregation and interactive forms-based data-driven web applications.
+	</summary>
+
+	<section>
+		<center>
+		<b>Netspective Sparx Overview</b>
+		<p/>
+		<table width="100%">
+			<tr>
+				<td rowspan="3" colspan="2" align="center"><image name="sparx-overview-full"/></td>
+				<td align="center"><image name="sparx-callout-ace"/></td>
+			</tr>
+			<tr><td align="center"><image name="sparx-callout-dal"/></td></tr>
+			<tr><td align="center"><image name="sparx-callout-xaf"/></td></tr>
+			<tr>
+				<td align="center"><image name="sparx-callout-xif"/></td>
+				<td align="center"><image name="sparx-callout-db"/></td>
+				<td align="center"><image name="sparx-callout-ui"/></td>
+			</tr>
+		</table>
+		</center>
+	</section>
+
+	<section heading="Netspective Sparx Benefits">
+	<ul>
+		<li>Application developers spend time on real features significant to end-users instead of infrastructure issues that are important only to programmers.</li>
+		<li>Technical managers can better manage their application development projects by utilizing the built-in project management, application documentation, unit-testing, and artifact-generation tools.</li>
+		<li>Most of the user interface and database logic is coded in a declarative style using XML instead of programmatic style using Java. This significantly reduces the amount of code (as much as 50-75% of code can be eliminated), increases re-use, and increases code quality.</li>
+		<li>Analysts can use the declarative user interface features to create prototypes that can later be completed by programmers (no more throw-away prototypes).</li>
+		<li>Applications are built by assembling declared UI (forms/dialogs) and database (SQL) components combined with application-specific business logic using single or multiple distributed application tiers.</li>
+		<li>Sparx is not a templating system that simply generates HTML but a feature-rich framework that significantly reduces the time to produce high-quality data-intensive thin-client applications.</li>
+		<li>Sparx does not favor Servlets over JSPs or JSPs over servlets and can work in one, the other, or both evironments simultaneously with no loss of functionality in either evironment.</li>
+		<li>Although Sparx favors XML for specifications of forms and database components, programmers can choose to eliminate XML and use the Sparx APIs and program completely in Java.</li>
+		<li>Implements common design patterns like MVC and factories. Skins infrastructure allow identical business logic to be used acroos different user interfaces for a variety of browsers and platforms like hand-helds.</li>
+		<li>Netspective understands the rigors of methodologies like waterfall and the agilitity of methodologies like eXtreme Programmer (XP) and created Sparx to work equally well in various environments.</li>
+	</ul>
+	</section>
+
+	<section heading="Table of Contents">
+		<sitemap/>
+	</section>
+</page>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<page name="dal/columns">
+	<summary>
+	Each datatype becomes a Java class that extends the com.xaf.db.schema.AbstractColumn class and implements the
+	com.xaf.db.schema.Column interface. For example, the "text" datatype becomes a schema.column.TextColumn class;
+	the "integer" datatype becomes the schema.column.IntegerColumn class; etc.
+	</summary>
+	<section>
+		When a column is actually defined, it becomes an instance of a Column class. For example, when a text column
+		called "first_name" is defined as part of a table, it is defined as "schema.column.TextColumn firstName;"
+		<p/>
+		Each datatype's Column class instance has information like
+		<ul>
+			<li>Whether or not the column is a primary key (Natural or Sequenced)</li>
+			<li>Whether the column is required or not</li>
+			<li>Java class used to represent the column</li>
+			<li>The default column value (as an SQL expression or Java value)</li>
+			<li>The SQL Definition used to generate the column's DDL</li>
+			<li>If the column is a sequenced value, the name of the sequence</li>
+			<li>Foreign key information</li>
+			<li>Whether or not the column's value is unique</li>
+		</ul>
+	</section>
+</page>

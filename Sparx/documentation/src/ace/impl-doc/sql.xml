@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc/sql">
+	<summary>
+	Almost all components of a SQL statement are automatically captured and documented
+	within ACE. This includes a list of all the SQL statements used througout the
+	application, the parameters they require, and any views that may be attached to
+	them.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-sql"/></td>
+				<td>
+					All of the SQL statements that are externalized in XML files appear
+					in a single ACE page. Programmers and manager can use this view
+					to review all the SQL statements that are used in an application.
+					In addition to the actual SQL statements, performance metrics accompany
+					each SQL statement indicating the number of times each statement
+					is execute and the average/maximum time (in milliseconds) it took to
+					execute the statement.
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-sql-test"/></td>
+				<td>
+					Each SQL statement may be unit tested inside ACE to ensure that
+					user requirements are being met. As soon as the XML is completed,
+					the test harness is automatically created and may be executed by
+					anyone with access to ACE. The statement, along with any reports/views
+					can be tested without creating any additional code.
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

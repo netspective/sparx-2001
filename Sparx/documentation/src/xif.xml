@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<page name="xif">
+	<summary>
+	The eXtensible Information Framework (XIF) is Sparx's Java and XML
+	library consisting of dozens of reusable tables, columns, and indexes
+	that are useful for almost any e-business application.
+	</summary>
+
+	<section heading="Sparx XIF Benefits">
+		<ul>
+			<li>
+				Database Programmers spend time on essential tables and schema elements significant
+				to a specific application instead of rewriting common schema elements for each application.
+			</li>
+			<li>
+				Allows for re-use of Schemas across applications and produces and maintains Schema documentation.
+				XIF encourages the creation and re-use of a set of datatypes and tabletypes that define standard
+				behaviors for columns and tables. Datatypes and tabletypes comprise the SchemaDoc database
+				dictionary and can easily be inherited and extended.
+			</li>
+			<li>
+				Almost all schema objects like tables, columns, data types, etc. are managed in a database-independent XML SchemaDoc.
+				The entire schema is managed in XML as an XML document (a SchemaDoc) and SQL is generated through
+				XSLT style sheets (the templates). The same SchemaDoc can be used to generate database-specific SQL DDL allowing
+				a single XML source schema to work in a variety of SQL relational databases (like Oracle, SQL Server, MySQL, etc.).
+			</li>
+			<li>
+				Database-specific SQL DDL is created by applying XSLT style sheets to a SchemaDoc.
+				Experienced DBAs are not required to create consistent, high-quality SQL DDL during the
+				design and construction phases of an application. Database-dependent objects like triggers and stored
+				procedures are not managed by the XIF and are created using existing means.
+			</li>
+			<li>
+				Database-independent Java Object-relational classes are created by applying XSLT style sheets to a SchemaDoc.
+				This is a called the Application DAL (Data Access Layer). XIF can automatically generate a Java Object-relational
+				DAL (Data Access Layer) for an entire schema, automating the majority of SQL calls by providing strongly-typed Java
+				wrappers for all tables and columns.
+			</li>
+		</ul>
+		<p/>
+	</section>
+
+	<section>
+		<center>
+		<b>Netspective Sparx eXensible Information Framework (XIF) Overview</b>
+		<p/>
+		<table width="100%">
+			<tr>
+				<td rowspan="3" align="center"><image name="xif-overview"/></td>
+				<td align="center"><image name="xif-callout-xml"/></td>
+			</tr>
+			<tr><td align="center"><image name="xif-callout-tabletypes"/></td></tr>
+			<tr><td align="center"><image name="xif-callout-datatypes"/></td></tr>
+			<tr>
+				<td align="center" colspan="2"><image name="xif-callout-generate"/></td>
+			</tr>
+		</table>
+		</center>
+	</section>
+
+	<summarize-children heading="XIF Features"/>
+
+	<!--
+	<h2>XIF Limitations</h2>
+	<ul>
+		<li>
+			At present, XIF and SchemaDoc objects can manage single-column primary keys and will not generate appropriate DDL or DAL for primary keys with compound columns.
+		</li>
+		<li>
+			At present, XIF and SchemaDoc objects can manage foreign-key references to other tables based on a single column and will not generate appropriate DDL or DAL for foreign key references with compound columns.
+		</li>
+		<li>
+			In practice, these limitations are minor for all but the minority of cases. These two limitations allow for much cleaner and better performing DDL and DAL code.
+		</li>
+	</ul>
+	-->
+</page>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/popups">
+	<summary>
+	XAF Dialogs have the built-in capability to bind and display popup windows that can
+	elicit extra information from an end-user and populate a field. This type of functionality
+	becomes very useful when a combo box or list box is not appropriate for requesting data
+	from a list of choices when the the list of choices is very long. For example, when asking
+	for a patient ID from a medical database that might be large, a popup window can be implemented
+	that allows for searching in the popup window and then when a selection is made it is filled
+	into the calling window's control.
+	</summary>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/field.text/popup"/>
+	<p/>
+	<channel heading="Sample Dialog" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_07']"/>
+	<p/>
+	<channel heading="Sample Popup HTML" type="xml-source" include="../../../web-cura/Site/Tests/test-popup.html"/>
+</page>

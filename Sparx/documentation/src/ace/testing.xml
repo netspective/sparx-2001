@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<page name="ace/testing">
+	<summary>
+		While developers are working on forms and SQL statements, ACE
+		automatically provides browser-based testing of the forms and
+		statements. No servlets, or JSPs need to be written for basic testing of
+		forms, validations, and SQL statements. Once initial testing is completed
+		and requirements are solidified, then the forms and statements can be
+		aggregated to create interactive applications. End users can use the
+		interactive testing tools to see code as it is being developed (supporting
+		eXtreme Programming concepts).
+	</summary>
+</page>

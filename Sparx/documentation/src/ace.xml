@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<page name="ace">
+	<summary>
+		The Application Components Explorer (ACE) is a servlet that provides
+		a browser-based administrative interface to the myriad of Sparx dynamic components
+		and objects. ACE is automatically available to all Sparx-based applications
+		during development and can be optionally turned off in production (for security).
+	</summary>
+
+	<section heading="ACE Features">
+	<table>
+		<tr valign="top">
+			<td>
+				<summarize-children/>
+			</td>
+			<td align="center">
+				<image name="ace-home"/><br/>
+				<image name="ace-app-menu"/><br/>
+				<image name="ace-db-menu"/>
+			</td>
+		</tr>
+	</table>
+	</section>
+</page>

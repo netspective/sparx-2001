@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<page name="dal/domains">
+	<summary>
+	Each table generates three different Java files which represent the data stored in the table.
+	</summary>
+
+	<section>
+		Assuming a Person table,
+		<ul>
+			<li>
+				The <code>domain.Person</code> interface specifies the get and set methods that will allow access to the data stored in a single row. The reason this is an interface is so that it can easily be extended
+				by classes that may need to store data in something other than a database.
+			</li>
+			<li>
+				The <code>domain.row.PersonRow</code> class is a concrete class that represents an actual row in the Person table. All of the columns become member variables and have
+				<ul>
+					<li>Get/set methods for all column data</li>
+					<li>
+						For each child table, access to child rows that are represented by the &lt;column parent="X.Y"&gt; specification.
+						For example, if a <code>Person_Address</code> table exists and is a child of the <code>Person</code> table, then the
+						<code>PersonRow</code> class will have a corresponding <code>getPersonAddressRows()</code> method that will
+						retrieve all the addresses for a given <code>PersonRow</code> based on the primary key.
+					</li>
+				</ul>
+			</li>
+			<li>
+				The <code>domain.row.PersonRows</code> class represents a list of PersonRow objects and allows
+				<ul>
+					<li>Adding to the list</li>
+					<li>Getting a specific row by number</li>
+				</ul>
+			</li>
+		</ul>
+	</section>
+</page>

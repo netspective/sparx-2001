@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<page name="xaf/security">
+	<summary>
+		XML-based centralized Access Control Lists (ACLs) allow developers to restrict
+		access to forms, reports, pages, and other resources based on user names, types,
+		location, roles, capabilities, or other permissions. With security and other features,
+		all XAF applications support personalization features that allow applications
+		to respond differently to differnent users based on location, user type,
+		or user names.
+	</summary>
+</page>

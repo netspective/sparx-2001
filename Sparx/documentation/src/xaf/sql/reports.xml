@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql/reports">
+	<summary>
+	Each SQL statement may have one or more reports or views defined for the
+	statement. This allows both the specification of the database call as well
+	as the manner in which the SQL is displayed to the user to remain consistent
+	throughout the application.
+	</summary>
+</page>

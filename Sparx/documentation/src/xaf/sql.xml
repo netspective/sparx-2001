@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql">
+	<summary>
+		To encourage reusability and encapsulation and reduce the amount of time
+		spent creating "data beans", XAF allows all SQL statements and
+		dynamic parameters used in a project to be specified in one or more
+		SQL files. Once defined, a single or multiple SQL statements may be used
+		in reports, dialogs (forms), Servlets, or JSP-pages. In many cases, SQL
+		statement pooling completely replaces simple data-serving beans since
+		data objects are automatically created for all SQL statements.
+		Data can be easily aggregated from multiple data sources because each
+		SQL statement in the statement pool can be specified (either in XML or
+		JSP) to come from a variety of pre-defined or dynamic data sources.
+	</summary>
+	<p/>
+	<summarize-children heading="SQL Library Features"/>
+</page>

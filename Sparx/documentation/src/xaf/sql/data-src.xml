@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql/data-src">
+	<summary>
+	Within the XML, each SQL statement can specify either no data source (meaning the data
+	comes from the default data source), a static data source, or a dynamic data source (meaning
+	the data comes from a source that will be determined automatically based on some rule).
+	</summary>
+</page>

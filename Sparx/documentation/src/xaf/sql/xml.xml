@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql/xml">
+	<summary>
+	SQL statements, parameters, and views (reports) are externalized using a sophisticated set of XML tags and
+	can be used in both JSPs (through custom tags) and servlets (through a Java API).
+	</summary>
+	<p/>
+	<channel xsdn-element="/xaf/sql-statements" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/sql-statements/statement" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/sql-statements/statement/params" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/sql-statements/statement/report" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/sql-statements/statement/report/column/conditional" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/sql-statements/statement/report/banner" describe-children="/*"/>
+</page>

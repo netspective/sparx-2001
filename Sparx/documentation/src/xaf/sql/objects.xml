@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql/objects">
+	<summary>
+	Since each SQL Statement that is defined in the XML file becomes
+	an object, there are numerous API methods that may be called to
+	utilize the SQL statement in a servlet or JSP.
+	</summary>
+</page>

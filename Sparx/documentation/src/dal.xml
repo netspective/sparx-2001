@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<page name="dal">
+	<summary>
+		Using XSLT stylesheets, the XIF can generate a complete Java O-R map to
+		every table in the schema. This Java O-R map is called the Sparx <i>Data Access Layer</i>, or DAL.
+		The DAL requires a valid <link page="xif">XML-based SchemaDoc</link> be defined using the
+		<link page="xif">XIF</link> tool. Once you have a valid XML SchemaDoc, you can generate
+		the DAL using either a command-line based tool (recommended) or through ACE.
+	</summary>
+
+	<section>
+		<center>
+		<b>Netspective Sparx Data Access Layer (DAL) Overview</b>
+		<p/>
+		<table width="100%">
+			<tr>
+				<td rowspan="3" align="center"><image name="dal-overview"/></td>
+				<td align="center"><image name="dal-callout-tabletypes"/></td>
+			</tr>
+			<tr><td align="center"><image name="dal-callout-datatypes"/></td></tr>
+			<tr><td align="center"><image name="dal-callout-tabletypes2"/></td></tr>
+			<tr>
+				<td align="center"><image name="dal-callout-row"/></td>
+				<td align="center"><image name="dal-callout-table"/></td>
+			</tr>
+		</table>
+		</center>
+	</section>
+
+	<section heading="DAL Benefits">
+		<ul>
+			<li>The DAL allows strongly-typed Java classes to be generated for each datatype, tabletype, and table in the schema.</li>
+			<li>The entire schema becomes fully documented through the generation of JavaDoc documentation (the DAL generators generate JavaDoc comments automatically for all classes, members, and methods).</li>
+			<li>Each datatype becomes a Column Java Class (which an actual table's column becomes an instance of).</li>
+			<li>Each tabletype becomes a Table Type Java interface that each appropriate Table class implements.</li>
+			<li>Each table generates specific classes. Assuming a table called Person,</li>
+			<ul>
+				<li>A Person Interface is created</li>
+				<li>A PersonRow class that implements the PersonDomain is created</li>
+				<li>A PersonRows class that can hold a list of PersonRow objects is created</li>
+				<li>A PersonTable class that contains the column definitions (names, validation rules, foreign key constraints, etc) and SQL generation methods is created.</li>
+			</ul>
+		</ul>
+	</section>
+
+	<summarize-children heading="DAL Features"/>
+
+	<!--
+	<h2>DAL Limitations</h2>
+	<ul>
+		<li>
+			At present, XIF and SchemaDoc objects can manage single-column primary keys and will not generate appropriate DAL for primary keys with compound columns.
+		</li>
+		<li>
+			At present, XIF and SchemaDoc objects can manage foreign-key references to other tables based on a single column and will not generate appropriate DAL for foreign key references with compound columns.
+		</li>
+		<li>
+			In practice, these limitations are minor for all but the minority of cases. These two limitations allow for much cleaner and better performing DAL code.
+		</li>
+	</ul>
+	-->
+</page>

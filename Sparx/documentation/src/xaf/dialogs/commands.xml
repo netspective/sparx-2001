@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/commands">
+	<summary>
+	XAF dialogs automatically understand and process common dialog data commands
+	like add, edit, delete, print, and confirm. With these common commands and
+	the ability to have declarative conditionals, fields can appear/disappear
+	based on dialog data commands and population of fields can be made to happen on
+	only when specific commands are encountered. Data commands can be hard-coded in
+	the dialogs or may be specified in URLs for added flexibility. Using a single
+	dialog XML specification and appropriate use of data commands, significant amounts
+	of code can be reduced because the same dialogs code can handle all adding, updating,
+	and deleting of complex data.
+	</summary>
+	<p/>
+	<channel heading="Standard Dialog Commands">
+		<description heading="add">
+		The dialog should be processed for inserting records into a database.
+		</description>
+		<description heading="edit">
+		The dialog should be processed for updating records in a database. This mode
+		will automatically make any primary-keys read-only.
+		</description>
+		<description heading="delete">
+		The dialog should be processed for deleting records in a database. This mode
+		will automatically make all fields read-only (for confirmation) and allow submission.
+		</description>
+		<description heading="print">
+		The dialog should be processed for printing information on the screen. All the items
+		become read-only and a few tweaks are made so that the dialog looks more like a report
+		than a form.
+		</description>
+		<description heading="confirm">
+		This mode will automatically make all fields read-only (for confirmation) but does not
+		infer a further action.
+		</description>
+	</channel>
+
+	<section heading="How to use dialog commands">
+
+		<channel heading="As part of a URL">
+			Assuming a dialog is being called through a servlet or a JSP file, the <code>data_cmd</code>
+			parameter establishes the mode. Although this method is more flexible (allowing a single
+			servlet or JSP page to do many actions using the same XML declarations), it is less secure
+			because it gives the ability for the user to change the mode.
+			For example, <p/>
+			<code>http://myserver/sample-app/sample-page.jsp?<b>data_cmd=add</b></code><br/>
+			<code>http://myserver/sample-app/sample-servlet?<b>data_cmd=edit</b></code><br/>
+			<code>http://myserver/sample-app/sample-page2.jsp?<b>data_cmd=print</b></code><br/>
+		</channel>
+		<p/>
+		<channel heading="Inside a JSP or Servlet">
+			Assuming a dialog is being called through a servlet or a JSP file, the <code>data_cmd</code>
+			request attribute establishes the mode. This mode is more secure in the sense that the end user
+			may not override what the programmer wants to do. For example, <p/>
+			<code>request.setAttribute("data_cmd", "<b>add</b>");</code><br/>
+			<code>request.setAttribute("data_cmd", "<b>edit</b>");</code><br/>
+		</channel>
+		<p/>
+		<channel heading="Sample Dialog with Data Command Conditionals" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_10']"/>
+
+	</section>
+</page>

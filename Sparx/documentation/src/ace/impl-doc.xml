@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc">
+	<summary>
+	Instead of having to create functional specifications and other
+	implementation documentation manually, ACE automatically documents
+	(using the XML definitions and XSLT
+	stylesheets) all the forms (web dialogs), sql statements, schema objects,
+	and other programming artifacts in a centralized browser-based
+	interface. Developers concentrate on application creation while Sparx
+	automatically documents their work. Managers can use this
+	documentation in a real-time basis to track programmer work and
+	productivity.
+	</summary>
+
+	<section heading="Screenshots of Automatic Implementation Documentation">
+		<table>
+			<tr>
+				<td><image name="ace-dialogs"/></td>
+				<td><image name="ace-sql"/></td>
+				<td><image name="ace-configuration"/></td>
+			</tr>
+		</table>
+	</section>
+
+	<summarize-children heading="Types of Automated Documentation Available"/>
+</page>

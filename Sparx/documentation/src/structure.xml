@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+
+<!--
+  - Each page can have the following attributes:
+  -   level    - required
+  -   name     - required
+  -   caption  - required
+  -   heading  - optional, caption is used for page heading if heading is not provided
+  -   title    - optional, structure-aware page title is used if title is not provided
+  -->
+
+<structure>
+	<page level="0">
+		<page level="1" name="index" caption="Home" heading="Netspective Sparx Application Platform">
+			<quick-links>
+				<quick-link caption="Java Documentation (JavaDoc)" page="javadoc/index"/>
+				<quick-link caption="Work in Progress (WIP)" page="to-do"/>
+			</quick-links>
+		</page>
+
+		<page level="1" name="requirements" caption="Requirements" heading="Netspective Sparx Requirements"/>
+		<page level="1" name="ace" caption="ACE" heading="Netspective Sparx ACE">
+			<page level="2" name="ace/impl-doc" caption="Implementation Docs" heading="Automatic Implementation Documentation">
+				<page level="3" name="ace/impl-doc/dialogs" caption="Dialogs"/>
+				<page level="3" name="ace/impl-doc/configuration" caption="Configuration"/>
+				<page level="3" name="ace/impl-doc/sql" caption="SQL Statements"/>
+				<page level="3" name="ace/impl-doc/dynamic-queries" caption="Dynamic Queries"/>
+				<page level="3" name="ace/impl-doc/access-control" caption="Security and Access Control"/>
+				<page level="3" name="ace/impl-doc/schema-doc" caption="Database Schema"/>
+			</page>
+			<page level="2" name="ace/testing" caption="Unit Testing" heading="Application Unit Testing"/>
+			<page level="2" name="ace/metrics" caption="Metrics" heading="Project Metrics"/>
+			<page level="2" name="ace/performance" caption="Performance/Logs" heading="Application Performance Tracking and Logging"/>
+			<page level="2" name="ace/project-doc" caption="Project Docs" heading="Centralized Project Documentation"/>
+		</page>
+		<page level="1" name="xaf" caption="XAF" heading="Netspective Sparx XAF">
+			<page level="2" name="xaf/xml" caption="XML" heading="XML Resources"/>
+			<page level="2" name="xaf/exec-spec" caption="Exec Specs" heading="Executable Specifications"/>
+			<page level="2" name="xaf/value-sources" caption="Value Sources" heading="Value Sources"/>
+			<page level="2" name="xaf/configuration" caption="Configuration" heading="Centralized Configuration"/>
+			<page level="2" name="xaf/dialogs" caption="Dialogs" heading="Advanced forms/dialogs">
+				<page level="3" name="xaf/dialogs/xml" caption="XML" heading="XML Declarations"/>
+				<page level="3" name="xaf/dialogs/controls" caption="Controls"/>
+				<page level="3" name="xaf/dialogs/commands" caption="Commands" heading="Data Commands"/>
+				<page level="3" name="xaf/dialogs/conditionals" caption="Conditionals"/>
+				<page level="3" name="xaf/dialogs/client-js" caption="Javascript" heading="Client Javascript"/>
+				<page level="3" name="xaf/dialogs/popups" caption="Popups" heading="Popup Windows"/>
+				<page level="3" name="xaf/dialogs/persistence" caption="State" heading="Data Persistence"/>
+				<page level="3" name="xaf/dialogs/binding" caption="Binding" heading="Data Binding"/>
+				<page level="3" name="xaf/dialogs/validation" caption="Validation" heading="Automatic Validation"/>
+				<page level="3" name="xaf/dialogs/skins" caption="Skins"/>
+				<page level="3" name="xaf/dialogs/objects" caption="Objects" heading="Form Objects" />
+				<page level="3" name="xaf/dialogs/tasks" caption="Tasks" heading="Execute Tasks"/>
+				<page level="3" name="xaf/dialogs/auto-exec" caption="Auto-exec" heading="Auto-populate and Auto-execute"/>
+				<page level="3" name="xaf/dialogs/transactions" caption="Transactions" heading="Transaction Integrity"/>
+			</page>
+			<page level="2" name="xaf/db" caption="Datasources" heading="Datasources and Database Connectivity"/>
+			<page level="2" name="xaf/dml" caption="DML" heading="SQL DML Generation"/>
+			<page level="2" name="xaf/sql" caption="SQL" heading="SQL Statement Libraries">
+				<page level="3" name="xaf/sql/xml" caption="XML" heading="XML Declarations"/>
+				<page level="3" name="xaf/sql/data-src" caption="Data Sources" heading="Dynamic Data Sources"/>
+				<page level="3" name="xaf/sql/static" caption="Static" heading="Static SQL"/>
+				<page level="3" name="xaf/sql/dynamic" caption="Dynamic" heading="Quasi-Dynamic SQL"/>
+				<page level="3" name="xaf/sql/reports" caption="Reports" heading="SQL Reports/Views"/>
+				<page level="3" name="xaf/sql/objects" caption="Objects" heading="SQL Objects"/>
+			</page>
+			<page level="2" name="xaf/dynamic-queries" caption="Queries" heading="Dynamic Queries">
+				<page level="3" name="xaf/dynamic-queries/xml" caption="XML" heading="XML Declarations"/>
+				<page level="3" name="xaf/dynamic-queries/data-src" caption="Data Sources" heading="Dynamic Data Sources"/>
+				<page level="3" name="xaf/dynamic-queries/static" caption="Static" heading="Static Queries (Cached SQL)"/>
+				<page level="3" name="xaf/dynamic-queries/rules" caption="Fields/Joins" heading="Field/Column and Join/Table Rules"/>
+				<page level="3" name="xaf/dynamic-queries/dialogs" caption="Dialogs" heading="Query Select Dialogs"/>
+				<page level="3" name="xaf/dynamic-queries/reports" caption="Reports" heading="Query Reports/Views"/>
+				<page level="3" name="xaf/dynamic-queries/paging" caption="Paging" heading="Paging Output"/>
+				<page level="3" name="xaf/dynamic-queries/destinations" caption="Destinations" heading="Multiple Output Destinations"/>
+				<page level="3" name="xaf/dynamic-queries/objects" caption="Objects" heading="Query Objects"/>
+			</page>
+			<page level="2" name="xaf/reports" caption="Reports"/>
+			<page level="2" name="xaf/skins" caption="Skins" heading="Skins and Device Independence"/>
+			<page level="2" name="xaf/security" caption="Security" heading="Security and Personalization"/>
+			<page level="2" name="xaf/jsp" caption="JSP" heading="JSP Custom Tags"/>
+			<page level="2" name="xaf/navigation" caption="Navigation"/>
+			<page level="2" name="xaf/logs" caption="Logs"/>
+		</page>
+		<page level="1" name="xif" caption="XIF" heading="Netspective Sparx XIF">
+			<page level="2" name="xif/concepts" caption="Overview" heading="Overview of a SchemaDoc"/>
+			<page level="2" name="xif/datatypes" caption="Datatypes" heading="Datatypes (the Data Dictionary)"/>
+			<page level="2" name="xif/tabletypes" caption="Tabletypes" heading="Tabletypes (the Entity Dictionary)"/>
+			<page level="2" name="xif/indextypes" caption="Indextypes" heading="Indextypes"/>
+			<page level="2" name="xif/tables" caption="Tables/Columns" heading="Tables and Columns"/>
+			<page level="2" name="xif/relationships" caption="Relationships" heading="Foreign Key and other Relationships"/>
+			<page level="2" name="xif/enums" caption="Enumerations/Lookups" heading="Enumerations and Lookups"/>
+			<page level="2" name="xif/ddl" caption="DDL" heading="Generating SQL DDL"/>
+			<page level="2" name="xif/dal" caption="DAL" heading="Generating Java DAL"/>
+		</page>
+		<page level="1" name="dal" caption="DAL" heading="Netspective Sparx DAL">
+			<page level="2" name="dal/dal" caption="DAL Class" heading="DataAccessLayer Class"/>
+			<page level="2" name="dal/columns" caption="Column Classes"/>
+			<page level="2" name="dal/domains" caption="Domain Classes" heading="Domain, Row, and Rows Classes"/>
+			<page level="2" name="dal/tables" caption="Table Classes"/>
+		</page>
+		<page level="1" name="resources" caption="Resources" heading="Netspective Sparx Resources"/>
+	</page>
+
+	<images>
+		<image name="arrow-right-small-orange" src="arrow-right-orange.gif"/>
+		<image name="spacer" src="spacer.gif"/>
+
+		<group name="diagrams">
+			<image name="cats-cradle" src="design/cradle-home.gif"/>
+			<image name="eai-home" src="diagrams/eai-home.gif"/>
+			<image name="process-deliverables" src="diagrams/process/deliverables.gif"/>
+
+			<image name="sparx-overview-alone" src="diagrams/sparx/overview-alone.gif"/>
+			<image name="sparx-overview-full" src="diagrams/sparx/overview-full.jpg"/>
+			<image name="sparx-callout-ace" src="diagrams/sparx/callout-ace.jpg"/>
+			<image name="sparx-callout-dal" src="diagrams/sparx/callout-dal.jpg"/>
+			<image name="sparx-callout-xaf" src="diagrams/sparx/callout-xaf.jpg"/>
+			<image name="sparx-callout-xif" src="diagrams/sparx/callout-xif.jpg"/>
+			<image name="sparx-callout-db" src="diagrams/sparx/callout-databases.jpg"/>
+			<image name="sparx-callout-ui" src="diagrams/sparx/callout-presentation.jpg"/>
+
+			<image name="xaf-overview" src="diagrams/sparx/xaf/overview.jpg"/>
+			<image name="xaf-callout-forms" src="diagrams/sparx/xaf/callout-forms.jpg"/>
+			<image name="xaf-callout-data-tier" src="diagrams/sparx/xaf/callout-data-tier.jpg"/>
+			<image name="xaf-callout-dynamic-queries" src="diagrams/sparx/xaf/callout-dynamic-queries.jpg"/>
+
+			<image name="xif-overview" src="diagrams/sparx/xif/overview.jpg"/>
+			<image name="xif-callout-xml" src="diagrams/sparx/xif/callout-xml.jpg"/>
+			<image name="xif-callout-datatypes" src="diagrams/sparx/xif/callout-datatypes.jpg"/>
+			<image name="xif-callout-tabletypes" src="diagrams/sparx/xif/callout-tabletypes.jpg"/>
+			<image name="xif-callout-generate" src="diagrams/sparx/xif/callout-generate.jpg"/>
+
+			<image name="dal-overview" src="diagrams/sparx/dal/overview.jpg"/>
+			<image name="dal-callout-tabletypes" src="diagrams/sparx/dal/callout-tabletypes.jpg"/>
+			<image name="dal-callout-tabletypes2" src="diagrams/sparx/dal/callout-tabletypes2.jpg"/>
+			<image name="dal-callout-datatypes" src="diagrams/sparx/dal/callout-datatypes.jpg"/>
+			<image name="dal-callout-row" src="diagrams/sparx/dal/callout-row.jpg"/>
+			<image name="dal-callout-table" src="diagrams/sparx/dal/callout-table.jpg"/>
+		</group>
+
+		<group name="screen-shots">
+			<image name="ace-home" src="screen-shots/ace/home.jpg" preview="screen-shots/ace/preview/home.jpg"/>
+			<image name="ace-app-menu" src="screen-shots/ace/app-menu.jpg" preview="screen-shots/ace/preview/app-menu.jpg"/>
+			<image name="ace-db-menu" src="screen-shots/ace/db-menu.jpg" preview="screen-shots/ace/preview/db-menu.jpg"/>
+
+			<image name="ace-dialogs" src="screen-shots/ace/dialogs.jpg" preview="screen-shots/ace/preview/dialogs.jpg"/>
+			<image name="ace-dialog" src="screen-shots/ace/dialog.jpg" preview="screen-shots/ace/preview/dialog.jpg"/>
+			<image name="ace-dialog-test" src="screen-shots/ace/test-dialog.jpg" preview="screen-shots/ace/preview/test-dialog.jpg"/>
+
+			<image name="ace-configuration" src="screen-shots/ace/configuration.jpg" preview="screen-shots/ace/preview/configuration.jpg"/>
+			<image name="ace-servlet-context" src="screen-shots/ace/servlet-context.jpg" preview="screen-shots/ace/preview/servlet-context.jpg"/>
+
+			<image name="ace-metrics" src="screen-shots/ace/metrics.jpg" preview="screen-shots/ace/preview/metrics.jpg"/>
+
+			<image name="ace-access-control" src="screen-shots/ace/access-control.jpg" preview="screen-shots/ace/preview/access-control.jpg"/>
+
+			<image name="ace-sql" src="screen-shots/ace/sql.jpg" preview="screen-shots/ace/preview/sql.jpg"/>
+			<image name="ace-sql-test" src="screen-shots/ace/test-sql.jpg" preview="screen-shots/ace/preview/test-sql.jpg"/>
+
+			<image name="ace-query-defns" src="screen-shots/ace/query-defns.jpg" preview="screen-shots/ace/preview/query-defns.jpg"/>
+			<image name="ace-query-defn" src="screen-shots/ace/query-defn.jpg" preview="screen-shots/ace/preview/query-defn.jpg"/>
+			<image name="ace-query-defn-test" src="screen-shots/ace/test-query-defn.jpg" preview="screen-shots/ace/preview/test-query-defn.jpg"/>
+			<image name="ace-query-defn-test-sql" src="screen-shots/ace/test-query-defn-sql.jpg" preview="screen-shots/ace/preview/test-query-defn-sql.jpg"/>
+			<image name="ace-query-defn-dialog-test" src="screen-shots/ace/test-query-dialog-defn.jpg" preview="screen-shots/ace/preview/test-query-defn-dialog.jpg"/>
+			<image name="ace-query-defn-dialog-test-sql" src="screen-shots/ace/test-query-defn-dialog-sql.jpg" preview="screen-shots/ace/preview/test-query-defn-dialog-sql.jpg"/>
+
+			<image name="ace-schema-doc" src="screen-shots/ace/schema-doc.jpg" preview="screen-shots/ace/preview/schema-doc.jpg"/>
+			<image name="ace-schema-doc-table" src="screen-shots/ace/schema-doc-table.jpg" preview="screen-shots/ace/preview/schema-doc-table.jpg"/>
+			<image name="ace-schema-doc-column" src="screen-shots/ace/schema-doc-column.jpg" preview="screen-shots/ace/preview/schema-doc-column.jpg"/>
+			<image name="ace-schema-doc-ddl" src="screen-shots/ace/schema-doc-ddl.jpg" preview="screen-shots/ace/preview/schema-doc-ddl.jpg"/>
+			<image name="ace-schema-doc-dal" src="screen-shots/ace/schema-doc-dal.jpg" preview="screen-shots/ace/preview/schema-doc-dal.jpg"/>
+
+			<image name="ace-log-page" src="screen-shots/ace/log-page.jpg" preview="screen-shots/ace/preview/log-page.jpg"/>
+			<image name="ace-log-sql" src="screen-shots/ace/log-sql.jpg" preview="screen-shots/ace/preview/log-sql.jpg"/>
+			<image name="ace-log-security" src="screen-shots/ace/log-security.jpg" preview="screen-shots/ace/preview/log-security.jpg"/>
+
+			<image name="xaf-exec-spec-dialog-xml" src="screen-shots/xaf/exec-spec/dialog-xml.jpg" preview="screen-shots/xaf/exec-spec/preview/dialog-xml.jpg"/>
+			<image name="xaf-exec-spec-dialog-jsp" src="screen-shots/xaf/exec-spec/dialog-jsp.jpg" preview="screen-shots/xaf/exec-spec/preview/dialog-jsp.jpg"/>
+			<image name="xaf-exec-spec-dialog-app" src="screen-shots/xaf/exec-spec/dialog-app.jpg" preview="screen-shots/xaf/exec-spec/preview/dialog-app.jpg"/>
+			<image name="xaf-exec-spec-dialog-ace" src="screen-shots/xaf/exec-spec/dialog-ace.jpg" preview="screen-shots/xaf/exec-spec/preview/dialog-ace.jpg"/>
+
+			<image name="xaf-exec-spec-sql-xml" src="screen-shots/xaf/exec-spec/sql-xml.jpg" preview="screen-shots/xaf/exec-spec/preview/sql-xml.jpg"/>
+			<image name="xaf-exec-spec-sql-jsp" src="screen-shots/xaf/exec-spec/sql-jsp.jpg" preview="screen-shots/xaf/exec-spec/preview/sql-jsp.jpg"/>
+			<image name="xaf-exec-spec-sql-app" src="screen-shots/xaf/exec-spec/sql-app.jpg" preview="screen-shots/xaf/exec-spec/preview/sql-app.jpg"/>
+			<image name="xaf-exec-spec-sql-ace" src="screen-shots/xaf/exec-spec/sql-ace.jpg" preview="screen-shots/xaf/exec-spec/preview/sql-ace.jpg"/>
+
+			<image name="xaf-persistence-dialog-input" src="screen-shots/xaf/persistence/dialog-input.jpg"/>
+			<image name="xaf-persistence-dialog-val-error" src="screen-shots/xaf/persistence/dialog-val-error.jpg"/>
+
+			<image name="xaf-binding-dialog" src="screen-shots/xaf/binding/dialog.jpg"/>
+
+			<image name="xaf-skins-dialog-sample-a" src="screen-shots/xaf/skins/dialog-sample-a.jpg"/>
+			<image name="xaf-skins-dialog-sample-b" src="screen-shots/xaf/skins/dialog-sample-b.jpg"/>
+		</group>
+	</images>
+</structure>

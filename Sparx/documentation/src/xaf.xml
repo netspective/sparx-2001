@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<page name="xaf">
+	<summary>
+		The eXtensible Application Framework (XAF) is Sparx's Java
+		library consisting of over 250 re-usable classes that greatly simplify
+		the development and deployment of small-,
+		medium-, and large-scale thin client, browser-based, data-driven,
+		dynamic web applications. Based on Enterprise Java standards like
+		J2EE, XML, Servlets, JSPs, JDBC, and JNDI, XAF uses proven
+		re-use development methodologies that can be applied to produce
+		robust Java web applications in half the time. Using Sparx, small
+		development teams can produce and deploy significant applications
+		with higher quality code and automated implementation documentation.
+		Sparx promises that a small number of average programmers can create
+		great software that will delight end-users.
+	</summary>
+
+	<section>
+		<center>
+			<b>Netspective Sparx eXensible Application Framework (XAF) Overview</b>
+			<p/>
+			<table width="100%">
+				<tr><td align="center" colspan="3"><image name="xaf-overview"/></td></tr>
+				<tr>
+					<td align="center"><image name="xaf-callout-forms"/></td>
+					<td align="center"><image name="xaf-callout-data-tier"/></td>
+					<td align="center"><image name="xaf-callout-dynamic-queries"/></td>
+				</tr>
+			</table>
+		</center>
+	</section>
+
+	<summarize-children heading="XAF Features"/>
+</page>

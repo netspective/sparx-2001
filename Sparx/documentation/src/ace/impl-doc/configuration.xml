@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc/configuration">
+	<summary>
+	Most of the XAF configuration variables, servlet context variables,
+	classpaths, and other options may be viewed within ACE.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-configuration"/></td>
+				<td>
+					All of the Configuration variables are displayed in a single page.
+					This includes the variable name, the pre-evaluation variable value
+					(the original expression), and the post-evaluation variable value
+					(the final run-time value). In addition to serving as the configuration
+					documentation, the page serves as a unit test environment to ensure
+					that the variables are properly being initialized.
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-servlet-context"/></td>
+				<td>
+					Many servlet-context variables are also visible within ACE, including
+					the current execution mode (Production, Testing, or Development) and the
+					active classloader and classpath.
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

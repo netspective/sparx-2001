@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<page name="dal/tables">
+	<summary>
+	Each table generates its own Table class. For example, assuming a Person table in the database,
+	a table.PersonTable class is generated.
+	</summary>
+
+	<section heading="General Code Generated">
+	<ul>
+		<li>Methods like createPersonRow() and createPersonRows() to create row objects</li>
+		<li>Methods like insert(conn, personRow), update(conn, personRow), and delete(conn, personRow) to perform SQL DML tasks (with transaction protection if needed)</li>
+		<li>Method like getPersonByPersonId() that retrieves a row by primary key</li>
+		<li>If the table is a child table, it allows its parent to retrieve all child tables based on the foreign-key reference.</li>
+	</ul>
+	</section>
+</page>

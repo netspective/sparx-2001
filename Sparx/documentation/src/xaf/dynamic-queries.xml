@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dynamic-queries">
+	<summary>
+		A powerful XML-based tool called <i>Query Definitions</i> allows developers
+		to define tables, columns, joins, sort orders, and other important data
+		through the use of Meta Information about data relationships. Once a
+		a developer creates a query definition, XAF allows end-users to use simple
+		HTML-based forms to automatically generate SQL accurate and performance-tuned
+		statements to create paged reports or export data to external sources.
+	</summary>
+	<p/>
+	<summarize-children heading="Dynamic Query Features"/>
+</page>

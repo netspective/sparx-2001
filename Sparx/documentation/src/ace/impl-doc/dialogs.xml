@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc/dialogs">
+	<summary>
+	Almost all aspects of forms/dialogs are automatically captured and documented
+	within ACE. This includes a list of all the forms, any classes that are extended,
+	all fields, field types, labels, conditionals, and many other features.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-dialogs"/></td>
+				<td>
+					All of the dialogs that are externalized in XML files appear
+					in a single ACE page. Analysts or customers can use this view
+					to review all the dialogs that appear in an application.
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-dialog"/></td>
+				<td>
+					Each dialog may be further analyzed by reviewing a user-
+					friendly functional specification view. This view may be shared
+					with analysts or clients to ensure requirements completeness.
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-dialog-test"/></td>
+				<td>
+					Each dialog may be unit tested inside ACE to ensure that
+					user requirements are being met and allowing analysts or end users
+					to start reviewing a running application quickly and without
+					programmers writing test harnesses. As soon as the XML is completed,
+					the test harness is automatically created and may be executed by
+					anyone with access to ACE.
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<page name="xif/tables">
+	<summary>
+		Tables are the actual data structures that will hold data in a relational
+		database. Tables can inherit and extend content from tabletypes and contain
+		columns (which contain and extend content from datatypes).
+	</summary>
+
+	<section heading="Overview of Tables">
+	<ul>
+		<li>Each &lt;table&gt; can be based on one or more table types so that it can autoinclude columns.</li>
+		<li>A table type is a set of one or more column definitions. So when you create a table based on a table type, that table will include all the columns of the table type as well as its own.</li>
+		<li>Using table types, you can quickly and consistently create similar tables that are automatically updated whenever the tabletypes change.</li>
+	</ul>
+	</section>
+
+	<section heading="Overview of Table Columns">
+	<ul>
+		<li>The &lt;column&gt; element in the &lt;table&gt; elements creates actual columns derived from a particular &lt;datatype&gt;.</li>
+		<li>The &lt;column&gt; elements will automatically maintain all type definitions and links to foreign keys automatically. If you are referencing another column, the type attribute should not be specified.</li>
+		<li>The columns are arguably the most important definitions in the entire SchemaDoc. They take abstract representations of datatypes and instantiate actual columns in tables.</li>
+	</ul>
+	</section>
+
+	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/table" describe-children="/*"/>
+	<p/>
+	<channel heading="Sample Person Table" type="xml-source" include="../../../web-cura/Database/schema-src/person.xml" element="/schema/table[@name = 'Person']"/>
+	<p/>
+	<channel heading="Sample Org Table" type="xml-source" include="../../../web-cura/Database/schema-src/org.xml" element="/schema/table[@name = 'Org']"/>
+	<p/>
+	<channel heading="Sample Project Table" type="xml-source" include="../../../web-cura/Database/schema-src/schema.xml" element="/schema/table[@name = 'Project']"/>
+	<p/>
+	<channel heading="Sample Task Table" type="xml-source" include="../../../web-cura/Database/schema-src/schema.xml" element="/schema/table[@name = 'Task']"/>
+</page>

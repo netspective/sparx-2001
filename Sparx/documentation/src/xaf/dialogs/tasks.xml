@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/tasks">
+	<summary>
+	Common functionality like populating fields from SQL and executing tasks like
+	DML (SQL inserts, updates, deletes, etc) can be done within the dialog in a
+	declarative manner.
+	</summary>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/execute-tasks"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/populate-tasks"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/execute-tasks/exec-dml" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/execute-tasks/exec-statement" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/dialogs/dialog/execute-tasks/exec-redirect" describe-children="/*"/>
+</page>

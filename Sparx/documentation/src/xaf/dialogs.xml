@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs">
+	<summary>
+		The XAF refers to HTML forms as "Dialogs" because it handles the two-way
+		interaction between browsers and users completely; this includes data persistence,
+		data validation, a sophisticated client-side Javascript library and user interface
+		skins. Dialogs are can be defined completely in XML, completely in Java, or a combination
+		of the two. Even in XML, the entire Dialog including labels, captions, validation logic,
+		conditional displays, and other advanced UI features can be easily defined. By keeping the entire
+		definition in XML, non-programmers or junior engineers can create forms and
+		more experienced developers can attach business logic as appropriate.
+	</summary>
+	<p/>
+	<summarize-children heading="Dialog Features"/>
+	<p/>
+	<channel heading="Sample JSP calling a dialog" type="xml-source">
+		<!-- Setup the application and xaf custom tag libraries. -->
+		<jsp:directive.taglib prefix="app" uri="/WEB-INF/tld/page.tld"/>
+		<jsp:directive.taglib prefix="xaf" uri="/WEB-INF/tld/xaf.tld"/>
+
+		<!-- Now call the dialog that is defined in the XML sample below. -->
+		<app:page title="Test the dialog" heading="Test the dialog">
+			<!--
+				This custom tag will locate the registration dialog in the
+				org package, generate the HTML, populate any data necessary,
+				get user input, validate the user input, and execute the logic declared
+				in the XML dialog.
+			-->
+			<xaf:dialog name="org.registration"/>
+		</app:page>
+	</channel>
+	<p/>
+	<channel heading="Sample dialog (Site/WEB-INF/ui/dialogs.xml)" type="xml-source">
+		<xaf>
+		<dialogs package="org">
+			<!--
+				This single dialog element and its children will create a form, validate the contents,
+				bind fields to the database (where appropriate), populate data for the edit and delete
+				commands, and automatically insert, update, and delete data to/from the database.
+			-->
+			<!--
+				Start the dialog definition - the retain-params is specified to ensure that multiple
+				invocations of this dialog will make the org_id variable carry through to each page
+			-->
+			<dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
+				<field.text name="org_code" caption="Account Code" required="yes"/>
+				<field.text name="org_name" caption="Name" required="yes"/>
+				<field.text name="org_abbrev" caption="Abbreviation"/>
+				<field.select name="org_type" caption="Type" choices="schema-enum:Org_Type_Enum">
+					<conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+				</field.select>
+				<field.select name="org_industry" caption="Industry" choices="schema-enum:Org_Industry_Enum">
+					<conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+				</field.select>
+				<field.select name="ownership" caption="Ownership" choices="schema-enum:Org_Ownership"/>
+				<field.text name="ticker_symbol" caption="Ticker Symbol"/>
+				<field.integer name="employees" caption="Employees"/>
+				<field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
+
+				<!--
+					Define the tasks that will execute when the dialog field data population needs to occur.
+					In this case, we restrict the population only to the edit and delete modes.
+				-->
+				<populate-tasks data-cmd="edit,delete">
+					<exec-statement report="none" store-type="row-fields" store="form:*">
+						select * from org where org_id = ?
+						<params>
+							<param value="request:org_id"/>
+						</params>
+					</exec-statement>
+				</populate-tasks>
+
+				<!--
+					Define the tasks that will execute when the dialog needs to be executed. Dialogs are
+					executed only when all fields have been properly validated (otherwise, the user is not
+					allowed to continue). The next three execute-tasks sections are restricted by data-cmd
+					attributes so they will only execute when the dialog data commands
+					are properly matched.
+				-->
+				<!--
+					The tasks that will be executed when the dialog is called in add mode.
+				-->
+				<execute-tasks data-cmd="add">
+					<exec-transaction command="begin"/>
+					<exec-dml command="insert" table="org" auto-inc="org_id,org_org_id_seq" auto-inc-store="request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/>
+					<exec-dml command="insert" table="org_industry" columns="org_id=request-attr:org_id,system_id=custom-sql:oind_system_id_seq.nextval" fields="org_industry"/>
+					<exec-dml command="insert" table="org_type" columns="org_id=request-attr:org_id,system_id=custom-sql:otyp_system_id_seq.nextval" fields="org_type"/>
+					<exec-transaction command="end"/>
+					<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
+				</execute-tasks>
+
+				<!--
+					The tasks that will be executed when the dialog is called in edit mode.
+				-->
+				<execute-tasks data-cmd="edit">
+					<exec-dml command="update" table="org" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone" where="org_id = ?" where-bind="request:org_id"/>
+					<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request:org_id}"/>
+				</execute-tasks>
+
+				<!--
+					The tasks that will be executed when the dialog is called in delete mode.
+				-->
+				<execute-tasks data-cmd="delete">
+					<exec-transaction command="begin"/>
+					<exec-dml command="delete" table="org_industry" where="org_id = ?" where-bind="request:org_id"/>
+					<exec-dml command="delete" table="org_type" where="org_id = ?" where-bind="request:org_id"/>
+					<exec-dml command="delete" table="org" where="org_id = ?" where-bind="request:org_id"/>
+					<exec-transaction command="end"/>
+					<exec-redirect url="create-app-url:/account"/>
+				</execute-tasks>
+			</dialog>
+		</dialogs>
+		</xaf>
+	</channel>
+</page>

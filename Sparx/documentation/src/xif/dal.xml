@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<page name="xif/dal">
+	<summary>
+		Using XSLT stylesheets, the XIF can generate a complete Java O-R map to
+		every table in the schema. This Java O-R map is called the Sparx <i>Data Access Layer</i>, or <link page="dal">DAL</link>.
+		Please click <link page="dal">here</link> to get more details about the <link page="dal">DAL</link>.
+	</summary>
+	<section heading="DAL Benefits">
+		<ul>
+			<li>The DAL allows strongly-typed Java classes to be generated for each datatype, tabletype, and table in the schema.</li>
+			<li>The entire schema becomes fully documented through the generation of JavaDoc documentation (the DAL generators generate JavaDoc comments automatically for all classes, members, and methods).</li>
+			<li>Each datatype becomes a Column Java Class (which an actual table's column becomes an instance of).</li>
+			<li>Each tabletype becomes a Table Type Java interface that each appropriate Table class implements.</li>
+			<li>Each table generates specific classes. Assuming a table called Person,</li>
+			<ul>
+				<li>A Person Interface is created</li>
+				<li>A PersonRow class that implements the PersonDomain is created</li>
+				<li>A PersonRows class that can hold a list of PersonRow objects is created</li>
+				<li>A PersonTable class that contains the column definitions (names, validation rules, foreign key constraints, etc) and SQL generation methods is created.</li>
+			</ul>
+		</ul>
+
+		<p/>
+		<center><image name="xif-dal-diagram"/></center>
+		<p/>
+		<center><image name="ace-schema-doc-dal"/></center>
+
+	</section>
+</page>

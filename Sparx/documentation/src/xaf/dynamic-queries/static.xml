@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dynamic-queries/static">
+	<summary>
+	Once all the rules (fields, joins, conditions, etc) are defined then SQL
+	statements can be generated and cached at application startup. Instead of
+	creating static SQL statements in code or even the SQL Libraries feature
+	of XAF, programmers can create query definitions (rules) and let the XAF
+	generate the SQL. This allows much better data abstraction because when
+	the database columns, tables, or rules change only the query definition
+	needs to be updated (as opposed to potentially dozens of SQL statements).
+	</summary>
+</page>

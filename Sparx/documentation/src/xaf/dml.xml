@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dml">
+	<summary>
+		JSP custom tags and java classes are provided to automatically create
+		SQL insert/update/remove DML (Data Manipulation Language) commands. By
+		providing simple name/value pairs of data, XAF can automatically generate
+		complex DML statements.
+	</summary>
+</page>

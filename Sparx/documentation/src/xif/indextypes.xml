@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<page name="xif/indextypes">
+	<summary>
+		Indextypes are created to help maintain RDBMS-neutral column indexes.
+	</summary>
+	<p/>
+	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/indextype" describe-children="/*"/>
+</page>

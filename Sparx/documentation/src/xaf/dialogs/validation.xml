@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/validation">
+	<summary>
+		XAF provides detailed client- and server-side validation logic for text,
+		date, numeric, and other user-defined fields. All fields in XAF are object-
+		oriented and know how to draw themselves onto HTML and DHTML browsers.
+	</summary>
+	<p/>
+	<channel heading="Sample Dialog (text validation)" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_01_A']"/>
+	<p/>
+	<channel heading="Sample Dialog (numeric validation)" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_01_B']"/>
+	<p/>
+	<channel heading="Sample Dialog (other validations)" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_02']"/>
+	<p/>
+	<channel heading="Sample Dialog (select validations)" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_03']"/>
+</page>

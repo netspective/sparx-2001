@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql/static">
+	<summary>
+	The most common usage of the SQL Libraries feature is to create a library of static
+	SQL statements with parameters. Each SQL statement will be treated almost like stored
+	procedures in databases. Although the SQL statement is static, the parameters that may
+	be passed in are dynamic (using single-value and list-value sources).
+	</summary>
+</page>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<page name="xif/datatypes">
+	<summary>
+		Datatypes are created to help maintain a RDBMS-neutral and consistent data dictionary.
+	</summary>
+
+	<section heading="Overview of Datatypes">
+	<ul>
+		<li>Datatypes should be considered "column templates" that allow a programmer to specify a column type and are created using the &lt;datatype&gt; tag.</li>
+		<li>Datatypes are completely schema dependent but may be reused across applications. This means that the basic templating system (SchemaDoc to XSLT generator) does not have any "built-in" datatypes.</li>
+		<li>Datatypes may be inherited from other datatypes, allowing better reuse and object-orientation in relational databases.</li>
+		<li>Datatypes easily generate and maintains a database-independent data dictionary.</li>
+		<li>Datatypes provide their SQL DDL using the &lt;sqldefn&gt; tag (multiple &lt;sqldefn&gt; tags may be used to provide DDL specifications for a variety of databases).</li>
+		<li>Datatypes provide Java object-relational mapping (DAL) using the
+			<ul>
+				<li>&lt;java-type&gt; (for primitives) and </li>
+				<li>&lt;java-class&gt; (for normal classes) elements. The &lt;java-type&gt; element is optional, but the &lt;java-class&gt; element is required if a Java DAL will be generated for a schema.</li>
+				<li>&lt;java-date-format-instance&gt; element should also be provided if the datatype being defined will generate a date or datetime object</li>
+			</ul>
+			</li>
+		<li>Datatypes are usually simple types like "text", "integer", or "float".</li>
+		<li>More complex types like "duration" can be created by using the &lt;composite&gt; tag allowing a single datatype to automatically generate multiple columns in tables.</li>
+	</ul>
+	</section>
+
+	<channel xsdn-src="xif-xsdn" xsdn-element="/xif/datatype" describe-children="/*"/>
+	<p/>
+	<channel heading="Basic Text Datatype Definition" type="xml-source" include="../../../web-cura/Database/schema-src/datatypes.xml" element="/schema/datatype[@name = 'text']"/>
+	<p/>
+	<channel heading="Numeric Datatype Definition" type="xml-source" include="../../../web-cura/Database/schema-src/datatypes.xml" element="/schema/datatype[@name = 'integer']"/>
+	<p/>
+	<channel heading="Date Datatype Definition" type="xml-source" include="../../../web-cura/Database/schema-src/datatypes.xml" element="/schema/datatype[@name = 'date']"/>
+	<p/>
+	<channel heading="Composite Datatype Definition" type="xml-source" include="../../../web-cura/Database/schema-src/datatypes.xml" element="/schema/datatype[@name = 'duration']"/>
+</page>

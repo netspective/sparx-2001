@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<page name="requirements">
+	<summary>
+		Sparx in general and XAF in particular is completely application server
+		and platform neutral. All of the XAF's many features are available in any Java 2-
+		compliant application server like WebLogic, Websphere, Tomcat, and Resin.
+		No special services like EJBs are required but the XAF works very well
+		as a J2EE application framework.
+	</summary>
+
+	<section heading="General Requirements">
+	<ul>
+		<li><b>Language</b> - Java Development Kit (JDK) 1.2 or above.</li>
+		<li><b>Platforms</b> - Any platform that supports JDK 1.2 or above (e.g. NT, Windows 2000, Unix, Linux, Mac).</li>
+		<li><b>Databases</b> - Any relational or object database that has a JDBC 2.0 driver (e.g. Oracle, Sybase, SQL Server).</li>
+		<li><b>Application Server</b> - Any application server that supports the Java Servlet 2.2 or above specification (Weblogic, Websphere, Resin, Tomcat, etc).</li>
+		<li><b>Web Development</b> - Servlets, Java Server Pages (JSP), Taglibs, XML (using JAXP), XSLT.</li>
+		<li><b>Object Services Protocols</b> - Can utilize CORBA, EJB, RMI, SOAP, DCOM or other object services.</li>
+		<li><b>Process Models</b> - Supports a variety of process models like waterfall, RAD, JAD, XP (Extreme Programming), and other lightweight development processes.</li>
+		<li><b>MVC</b> - Uses the Model View Controller (MVC) design pattern to separate business logic, presentation, and data storage.</li>
+	</ul>
+	</section>
+
+	<section heading="Open-source (free) Library Dependencies">
+	Sparx requires all of the following libraries and components as prerequisites
+	<ul>
+		<li><link http="www.sun.com">Java2 JDK</link></li>
+		<li>Application Server (Weblogic, Websphere, Tomcat, Resin, etc) supporting Servlet 2.2 or above and JDBC 2.0 or above APIs</li>
+		<li><link http="jakarta.apache.org">Jakarta Ant 1.4.1</link> or above</li>
+		<li><link http="jakarta.apache.org">Jakarta Log4J 1.1</link> or above</li>
+		<li><link http="jakarta.apache.org">Jakarta ORO 2.0</link> or above</li>
+		<li><link http="xml.apache.org">Apache Xerces 1.4</link> or above</li>
+		<li><link http="xml.apache.org">Apache Xalan 2.1</link> or above</li>
+	</ul>
+	</section>
+</page>

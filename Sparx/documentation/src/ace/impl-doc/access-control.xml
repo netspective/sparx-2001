@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc/access-control">
+	<summary>
+	All of the application primary permissions, child permissions,
+	aliased permissions, and roles are documented in ACE.
+	</summary>
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-access-control"/></td>
+				<td>
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

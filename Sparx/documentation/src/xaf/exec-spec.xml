@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<page name="xaf/exec-spec">
+	<summary>
+		The majority of the XAF features including dialogs (UI),
+		SQL Statements, dynamic query rules, schema definitions,
+		etc are done using what are called <i>Executable Specifications</i>.
+		These executable specifications mean that most of the applications'
+		resources double as both specifications (which can be extracted and
+		automatically documented) and executable code. The same resource acts
+		as the documentation and the testable application.
+	</summary>
+
+	<section heading="Dialogs/Forms">
+	<table cellspacing="5">
+		<tr>
+			<td><b>XML Declarations</b></td>
+			<td><image name="arrow-right-small-orange"/></td>
+			<td><b>JSP and Application</b></td>
+			<td><image name="arrow-right-small-orange"/></td>
+			<td><b>ACE Documentation</b></td>
+		</tr>
+		<tr>
+			<td><image name="xaf-exec-spec-dialog-xml"/></td>
+			<td></td>
+			<td>
+				<image name="xaf-exec-spec-dialog-jsp"/><br/>
+				<image name="xaf-exec-spec-dialog-app"/>
+			</td>
+			<td></td>
+			<td><image name="xaf-exec-spec-dialog-ace"/></td>
+		</tr>
+		<tr valign="top">
+			<td>
+				In the case of simple add/update/delete forms that access the database directly,
+				almost the entire ui and business logic is externalized in an XML file which
+				automatically generates Java objects. If the forms are more complex and the business
+				rules and database access needs to be separated from the ui, then only the form
+				and validation declarations are made in the XML and the remainder is done in Java.
+			</td>
+			<td></td>
+			<td>
+				A simple JSP file renders the page headings and the actual dialog, including
+				all of the form's HTML, validation, submission, finite state management, and
+				data storage. The XML file creates the objects and the JSP calls the object(s).
+				Instead of the JSP, a servlet with just a few lines of Java code could execute the
+				same dialog (including all the HTML and state management just like in the JSP).
+			</td>
+			<td></td>
+			<td>
+				The same XML that is used to generate the Java objects and the HTML and business
+				logic is used to provide automated documentation and unit testing of the dialog.
+			</td>
+		</tr>
+	</table>
+	</section>
+
+	<section heading="SQL/Reports">
+	<table cellspacing="5">
+		<tr>
+			<td><b>XML Declarations</b></td>
+			<td><image name="arrow-right-small-orange"/></td>
+			<td><b>JSP and Application</b></td>
+			<td><image name="arrow-right-small-orange"/></td>
+			<td><b>ACE Documentation</b></td>
+		</tr>
+		<tr>
+			<td><image name="xaf-exec-spec-sql-xml"/></td>
+			<td></td>
+			<td>
+				<image name="xaf-exec-spec-sql-jsp"/><br/>
+				<image name="xaf-exec-spec-sql-app"/>
+			</td>
+			<td></td>
+			<td><image name="xaf-exec-spec-sql-ace"/></td>
+		</tr>
+		<tr valign="top">
+			<td>
+				All the static and quasi-dynamic SQL statements that are used in the application
+				may be externalized in an XML file (including all parameters and views). Each of
+				the SQL statements becomes a Java object that can be reused throughtout a single
+				or multiple applications.
+			</td>
+			<td></td>
+			<td>
+				A simple JSP file renders the page headings and executes the queries defined in the
+				XML, retrieves the results and applies the per-SQL statement report definitions to
+				do the HTML rendering. If more complicated functionality is required, the API calls
+				can be made to execute the SQL in the XML files and return a result set which may
+				be processed by the programmer.
+			</td>
+			<td></td>
+			<td>
+				The same XML that is used to generate the Java objects and execute the SQL
+				is used to provide automated documentation and unit testing of the statement(s).
+				Along with basic documentation and parameter information, an execution log is maintained
+				showing where a statement is being called and how long it took to execute its
+				component parts.
+			</td>
+		</tr>
+	</table>
+	</section>
+</page>

@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+
+<page name="xaf/xml">
+	<summary>
+		XAF specificiations are performed using XML -- all dialogs, fields,
+		validation rules, some conditional processing, all SQL statements,
+		dynamic queries, configuration files, and many other resources are stored
+		in XML files that are re-usable across applications. Although XML is the
+		preferred method for creating resource files, almost anything that can be
+		specified in XML can also be specified using the XAF Java APIs.
+	</summary>
+	<section heading="Common features of all XML Resource Files">
+	<ul>
+		<li>
+			Unless otherwise documented, all XML resource files have the &lt;<b>xaf</b>&gt; tag as their
+			root tag.
+		</li>
+		<li>
+			No specific DTD is enforced which means extra elements that need to be processed
+			by application-subclasses are legal.
+		</li>
+		<li>
+			An &lt;<b>include</b> file="abc.xml"&gt; element is provided to allow any XML
+			file to include other files before the framework processes the document. Include
+			files may be nested to any arbitrary depth.
+		</li>
+		<li>
+			A &lt;<b>pre-process</b> style-sheet="abc.xml"&gt; element is provided to allow any XML
+			file to pre-process its contents before the framework processes the document. Any number
+			of &lt;<b>pre-process</b>&gt; tags may be chained. The purpose of the &lt;<b>pre-process</b>
+			tag is to allow the contents of the XML resource file to be transformed for templates,
+			replacement variables, etc through an appropriate XSLT stylesheet before the framework
+			does anything with the document. The pre-processing feature allows for generating dialogs,
+			fields, configuration items, etc at run-time in case they can not be defined or are more
+			difficult to define earlier. The pre-process step happens after all the &lt;<b>include</b>&gt;
+			elements have already been merged into the main XML document.
+		</li>
+	</ul>
+	</section>
+
+	<channel xsdn-element="/xaf" describe-children="/*[name() = 'include' or name() = 'pre-process' or name() = 'templates']"/>
+
+	<channel heading="Example of common XML resource file structure" type="xml-source">
+		<xaf>
+			<include file="file1.xml"/>
+			<include file="file2.xml"/>
+			<pre-process style-sheet="templates.xsl"/>
+		</xaf>
+	</channel>
+
+	<channel heading="Example of configuration resource (code snippet)" type="xml-source">
+		<configuration>
+			<property name="system.projects-root" value="C:/Projects"/>
+			<property name="framework.root-path" value="${system.projects-root}/Framework"/>
+			<property name="app.project-root" value="${system.projects-root}/web-cura"/>
+			<properties name="framework.ace.transform">
+				<property name="dml" value="${framework.ace.xslt-path}/article-transform.xsl"/>
+				<property name="tpml" value="${framework.ace.xslt-path}/test-plan-transform.xsl"/>
+			</properties>
+		</configuration>
+	</channel>
+
+	<channel heading="Example of a dialog resource (code snippet)" type="xml-source">
+		<dialog name="reg" heading="create-data-cmd-heading:Account" retain-params="org_id" class="app.dialog.org.Registration">
+			<field.text name="org_code" caption="Account Code" required="yes"/>
+			<field.text name="org_name" caption="Name" required="yes"/>
+			<field.text name="org_abbrev" caption="Abbreviation"/>
+			<field.select name="org_type" caption="Type" choices="schema-enum:Org_Type_Enum">
+				<conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+			</field.select>
+			<field.select name="org_industry" caption="Industry" choices="schema-enum:Org_Industry_Enum">
+				<conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+			</field.select>
+			<field.select name="ownership" caption="Ownership" choices="schema-enum:Org_Ownership"/>
+			<field.text name="ticker_symbol" caption="Ticker Symbol"/>
+			<field.integer name="employees" caption="Employees"/>
+			<field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
+		</dialog>
+	</channel>
+
+	<channel heading="Example of a SQL resource (code snippet)" type="xml-source">
+		<statement name="registration">
+			select
+				org_code as "Code",
+				org_abbrev as "Abbrev",
+				org_ownership.caption as "Ownership",
+				ticker_symbol as "Ticker",
+				sic_code as "SIC",
+				employees as "Employees",
+				time_zone as "Time Zone"
+			from org, org_ownership
+			where org_id = ?
+			and org.ownership = org_ownership.id (+)
+			<params>
+				<param value="request:org_id"/>
+			</params>
+			<report heading="Overview">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                </banner>
+			</report>
+		</statement>
+	</channel>
+
+	<channel heading="Example of a dynamic query resource (code snippet)" type="xml-source">
+		<query-defn id="Organization">
+
+			<!-- Fields -->
+			<field id="org_id" caption="Account ID" join="org" column="org_id">
+				<report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}" url-anchor-attrs="target='another_win'" align="right"/>
+			</field>
+			<field id="org_code" caption="Account Code" join="org" column="org_code">
+				<report heading="Code">
+					<conditional flag="hidden" has-value="create-app-url:/abc"/>
+				</report>
+			</field>
+			<field id="org_name" caption="Account Name" join="org" column="org_name" where-expr="upper(org.org_name)">
+				<report heading="Name"/>
+			</field>
+			<field id="org_abbrev" caption="Account Abbreviation" join="org" column="org_abbrev" where-expr="upper(org.org_abbrev)">
+				<report heading="Abbrev"/>
+			</field>
+			<field id="org_industry" caption="Account Industry" join="org_industry" column="org_industry" column-expr="org_industry_enum.caption">
+				<report heading="Industry"/>
+			</field>
+
+			<!-- Joins -->
+			<join id="org" table="org" auto-include="yes"/>
+			<join id="org_industry" table="org_industry" condition="org.org_id = org_industry.org_id (+)" imply-join="org_industry_enum"/>
+			<join id="org_industry_enum" table="org_industry_enum" condition="org_industry.org_industry = org_industry_enum.id (+)" imply-join="org_industry_enum"/>
+
+			<select-dialog name="org_search" allow-debug="yes" show-output-dests="no" hide-readonly-hints="yes" heading="Search Accounts">
+				<field.text query-field="org_code"/>
+				<field.text query-field="org_name"/>
+				<field.text query-field="org_abbrev"/>
+				<field.select query-field="org_industry" choices="schema-enum:Org_Industry_Enum" prepend-blank="yes"/>
+				<field.select name="sort_order"
+						caption="Sort By"
+						style="combo"
+						choices="Name=org_name;Abbreviation=org_abbrev"/>
+				<select>
+					<display field="org_id"/>
+					<display field="org_code"/>
+					<display field="org_name"/>
+					<display field="org_abbrev"/>
+					<display field="org_industry"/>
+					<order-by field="form:sort_order"/>
+
+					<condition field="org_code" allow-null="no" comparison="starts-with" value="form:org_code" connector="and" bind-expr="upper(?)"/>
+					<condition field="org_name" allow-null="no" comparison="starts-with" value="form:org_name" connector="and" bind-expr="upper(?)"/>
+					<condition field="org_abbrev" allow-null="no" comparison="starts-with" value="form:org_abbrev" connector="and" bind-expr="upper(?)"/>
+					<condition field="org_industry" allow-null="no" comparison="equals" value="form:org_industry" connector="and"/>
+				</select>
+				<director cancel-url="index.jsp" submit-caption="Search"/>
+			</select-dialog>
+		</query-defn>
+	</channel>
+</page>

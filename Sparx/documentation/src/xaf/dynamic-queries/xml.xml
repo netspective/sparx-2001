@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dynamic-queries/xml">
+	<summary>
+	All of the rules for how to generate complex SQL statements is provided using externalized
+	XML files. All of the fields, joins, dialogs, conditions, where expressions and other SQL
+	clauses are described using XML elements.
+	</summary>
+	<p/>
+	<channel xsdn-element="/xaf/query-defn" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/query-defn/field/report" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/query-defn/select" describe-children="/*"/>
+	<p/>
+	<channel xsdn-element="/xaf/query-defn/select/banner" describe-children="/*"/>
+</page>

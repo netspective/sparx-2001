@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<page name="ace/metrics">
+	<summary>
+	As developers create forms, SQL statements, query definitions, JSP, servlets, and other
+	code, ACE automatically maintains basic application metrics. Metrics are an important
+	part of every sophisticated software development process and Sparx can not only capture
+	the metrics but store them in XML files so that they can be analyzed over time.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-metrics"/></td>
+				<td>
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

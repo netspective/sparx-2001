@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<page name="xaf/value-sources">
+	<summary>
+		Value sources provide dynamic access to common business logic and may be
+		considered a business rules library. Many of the
+		classes in the XAF use value sources, which are simply Java classes that
+		follow a specific interface, to provide values for captions, defaults,
+		comparisons, conditionals, and many other types of variables. Value sources
+		allow common business logic to be stored in reusable classes and then used
+		either in XML or Java files where necessary. Value sources can be either
+		single or multiple (list context) and are used in dialogs, fields, sql
+		statements, and many other places where dynamic data is required. The format of a value source
+		is similar to a URL (name:params).
+	</summary>
+
+	<section heading="Examples">
+		<channel type="xml-source">
+			<dialog heading="session:myHeading">
+			<field.text name="text-field" caption="staticCaption" default="request:varname"/>
+			<field.integer name="int-field" caption="request:myCaption" default="my-rule:some-value"/>
+			<field.select name="files" caption="Files" choices="filesystem-entries:/home/all"/>
+			</dialog>
+		</channel>
+		<br/>
+		In the preceding examples,
+		a dialog specification is defined to have a heading which will be dynamically
+		generated at run-time from the value of the 'myHeading' session attribute. The
+		text field will have a static caption, but its default value will come from
+		a request parameter called 'varname'. In the integer field example, the
+		caption and default will both be dynamic and the default value will actually come
+		from a class that has been registered as 'my-rule'.	In the select field example, this
+		select field fills its choices with the files contained in the directory /home/all.
+		<p/>
+		A <b>SingleValueSource (SVS)</b> is an object that returns a single value from a particular source
+		like a request parameter, text field, or session attribute. The idea is that a single instance with a
+		particular URL-style parameter string will be provided and then whenever the value is needed,
+		a ValueContext will be provided to allow either static content or dynamic content to be served.
+		Many Single Value Sources can double as List Value Sources (depending upon the context).
+		<p/>
+		A <b>ListValueSource (LVS)</b> is an object that returns a list of values from a particular source
+		(like a select field or SQL query). The idea is that a single instance with a
+		particular URL-style parameter string will be provided and then whenever the value is needed,
+		a ValueContext will be provided to allow either static content or dynamic content to be served.
+		Many List Value Sources can double as Single Value Sources (depending upon the context).
+		<p/>
+		The following table provides a list of all of the single and list value sources that are included
+		in Sparx. The name of the value source is the identifier by which the value source is initialized;
+		if the value source can be used as a Single Value Source, the SVS column is marked; if the value source
+		can be used as a List Value Source, the LVS column is marked; if the value source is read/write (as
+		opposed to read-only which is the default behavior) then the RW column is marked.
+		<p/>
+		<u>Note</u>: If a word or phrase is <u>underlined</u> in the usage column below, it means that
+		the text should be entered <i>as-is</i> and does not represent a variable parameter.
+	</section>
+
+	<channel heading="Pre-defined Value Sources">
+		<include file="xaf/value-sources.inc"/>
+	</channel>
+</page>

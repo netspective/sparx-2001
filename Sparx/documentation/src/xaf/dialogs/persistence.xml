@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/persistence">
+	<summary>
+		As a user enters data, values persist through pages because XAF dialogs
+		automatically contain a finite state machine that manages the complete state of
+		dialogs through multiple request/response cycles. This is especially
+		useful for HTTP stateless programming where reporting errors requires
+		pages to be redrawn. <i>Data Persistance</i> allows developers to refresh
+		pages and have data automatically filled into controls regardless of how many
+		times a page is re-displayed to get valid user data.
+	</summary>
+
+	<channel heading="Sample Dialog" type="xml-source" include="../../../web-cura/Site/WEB-INF/ui/test-dialogs.xml" element="/xaf/dialogs/dialog[@name='DialogTest_01_B']"/>
+
+	<section heading="How the Sample Dialog would Automatically Process Errors">
+		<table>
+			<tr valign="top">
+				<td><image name="xaf-persistence-dialog-input"/></td>
+				<td><image name="xaf-persistence-dialog-val-error"/></td>
+			</tr>
+		</table>
+	</section>
+</page>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<page name="xaf/skins">
+	<summary>
+		XAF separates form/report presentation from form/report design and logic by
+		automatically creating all HTML and DHTML in user-defined "skin" objects. The skins
+		perform all drawing operations while the report/form objects manage all of the
+		fields and validation. One immediate benefit of skins is the ability to
+		design and describe a dialog once and exectute it on mobile, small form-
+		factors (handhelds), notebooks, and desktops or to different formats like
+		PDFs, comma-separated, and tab-delimited.
+	</summary>
+</page>

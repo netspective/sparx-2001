@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<page name="xaf/dialogs/controls">
+	<summary>
+	XAF provides many built-in thin-client UI controls and the ability for
+	programmers to subclass and further refine or replace the existing
+	controls. Field type such as text, numeric, select (choices), boolean,
+	date, time, and many others come with the base classes. All of the base
+	classes already know how to validate themselves.
+	</summary>
+
+	<section heading="Available Controls">
+		<xaf-fields-table/>
+	</section>
+
+	<section heading="Field Attributes Types">
+		<xaf-fields-attr-types-table/>
+	</section>
+
+	<section>
+		<xaf-fields-attrs-tables/>
+	</section>
+</page>

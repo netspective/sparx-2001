@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<page name="xaf/sql/dynamic">
+	<summary>
+	In certain cases there are requirements that specify a SQL statement is
+	generally the same except in certain circumstances. For these situations,
+	the XAF allows for quasi-dynamic SQL statements that have the ability to
+	do macro replacements inside the SQL as well as parameters. The SQL statement
+	can have macros that are replaced each time the SQL is called and the parameters
+	that may be passed in are dynamic (using single-value and list-value sources).
+	The most common usage of this feature is to create an IN clause.
+	</summary>
+</page>

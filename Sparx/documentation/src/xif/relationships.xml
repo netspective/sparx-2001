@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<page name="xif/relationships">
+	<summary>
+		XIF suppors a variety of reference types (foreign key relationships).
+	</summary>
+
+	<section heading="Types of References and Relationships">
+	<ul>
+		<li>There are three types of references in a SchemaDoc that generate identical DDL but are treated differently by the DBDD (online documentation) and Java DAL</li>
+		<ul>
+			<li>&lt;column <b>lookupref</b>="X.Y"&gt; -- this creates a general foreign key relationship from the defining column which references the foreign column Y of table X (creates a 1:1 or 1:N relationship between defining column and the referenced column)</li>
+			<li>&lt;column <b>parentref</b>="X.Y"&gt; -- this creates a parent/child foreign key relationship which indicates that table X is a parent of the defining column using column Y's value (creates a 1:N relationship between X and the defining column)</li>
+			<li>&lt;column <b>selfpref</b>="X.Y"&gt; -- this creates a self-referential foreign key relationship which indicates that table X column Y is used to maintain an internal hierarchy (creates a 1:N relationship between itself)</li>
+		</ul>
+		<li>When using the SchemaDoc to create any reference type (lookup, parent, or self) the type definition from the referenced column is automatically maintained.</li>
+		<li>Another type of reference is the usetype reference which merely says to that one column is the same type as another column (datatype, size, etc) meaning that it contains similar data but should not really be a foreign-key reference.</li>
+		<ul>
+			<li>&lt;column <b>usetype</b>="X.Y"&gt; -- this looks up the type definition of column Y in Table X and copies the type definition to defining column (this is a weak reference since no foreign key reference is implied)</li>
+		</ul>
+	</ul>
+	</section>
+</page>

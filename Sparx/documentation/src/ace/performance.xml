@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<page name="ace/performance">
+	<summary>
+	All mission-critical and sophisticated web applications need to be tuned
+	for both database and application performance. XAF provides log output that
+	ACE tracks for maintaining data about execution statistics for SQL statements,
+	servlet and JSP pages, dialogs/forms, and security.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-log-page"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-sql"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-log-sql"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-log-security"/></td>
+				<td>
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>

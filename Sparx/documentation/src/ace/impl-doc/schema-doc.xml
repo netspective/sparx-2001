@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<page name="ace/impl-doc/schema-doc">
+	<summary>
+	Using the SchemaDoc (XML-based schema definition) feature, all the database
+	tables, columns, indexes, SQL DDL, and Java data access can be documented in
+	ACE.
+	</summary>
+
+	<section>
+		<table cellspacing="5">
+			<tr valign="top">
+				<td align="center"><image name="ace-schema-doc"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-schema-doc-table"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-schema-doc-column"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-schema-doc-ddl"/></td>
+				<td>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td align="center"><image name="ace-schema-doc-dal"/></td>
+				<td>
+				</td>
+			</tr>
+		</table>
+	</section>
+</page>
