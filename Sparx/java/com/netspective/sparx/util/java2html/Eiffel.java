@@ -324,7 +324,7 @@ public class Eiffel
 		public Error(String constructName, String message)
 		{
 			super(constructName + " : \"" + message + "\"");
-			stack = getStackTrace();
+			stack = Eiffel.getStackTrace();
 		}
 		/**
 			returns the message that was supplied for this error plus
