@@ -103,6 +103,7 @@
 
 	<datatype name="date">
 		<java-class package="java.util">Date</java-class>
+		<java-sql-class>java.sql.Date</java-sql-class>
 		<java-date-format-instance>java.text.DateFormat.getDateInstance()</java-date-format-instance>
 		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
@@ -113,7 +114,7 @@
 
 	<datatype name="stamp">
 		<java-class package="java.util">Date</java-class>
-		<java-timestamp-class>java.sql.Timestamp</java-timestamp-class>
+		<java-sql-class>java.sql.Timestamp</java-sql-class>
 		<java-date-format-instance>java.text.DateFormat.getDateTimeInstance()</java-date-format-instance>
 		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
@@ -126,10 +127,12 @@
 
 	<datatype name="time">
 		<java-class package="java.util">Date</java-class>
+		<java-sql-class>java.sql.Time</java-sql-class>
 		<java-date-format-instance>java.text.DateFormat.getTimeInstance()</java-date-format-instance>
 		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
+		<sqldefn dbms="postgres">time</sqldefn>
 
 		<field.time size="16" format="H:mm" min="00:00"/>
 	</datatype>

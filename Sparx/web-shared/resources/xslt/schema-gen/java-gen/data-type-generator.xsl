@@ -172,8 +172,7 @@ public class <xsl:value-of select="$data-type-name"/> extends AbstractColumn
 	public String format(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? dateFormat.format(value) : null; }
 	public String format(DialogContext dc, <xsl:value-of select="$java-class-spec"/> value) { return value != null ? dateFormat.format(value) : null; }
 	public Object getValueForSqlBindParam(Object value) { return getValueForSqlBindParam((<xsl:value-of select="$java-class-spec"/>) value); }
-<xsl:choose><xsl:when test="java-timestamp-class"><xsl:text>	</xsl:text>public Object getValueForSqlBindParam(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? new <xsl:value-of select="java-timestamp-class"/>(value.getTime()) : null; }</xsl:when>
-<xsl:otherwise><xsl:text>	</xsl:text>public Object getValueForSqlBindParam(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? new <xsl:value-of select="$java-class-spec"/>(value.getTime()) : null; }</xsl:otherwise></xsl:choose>
+  public Object getValueForSqlBindParam(<xsl:value-of select="$java-class-spec"/> value) { return value != null ? new <xsl:value-of select="java-sql-class"/>(value.getTime()) : null; }
 </xsl:when>
 <xsl:when test="java-type">
 	public <xsl:value-of select="$java-class-spec"/> parse(String text) { return new <xsl:value-of select="$java-class-spec"/>(text); }
