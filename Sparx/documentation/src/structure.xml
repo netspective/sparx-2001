@@ -82,6 +82,9 @@
 			<page level="2" name="xaf/jsp" caption="JSP" heading="JSP Custom Tags"/>
 			<page level="2" name="xaf/navigation" caption="Navigation"/>
 			<page level="2" name="xaf/logs" caption="Logs"/>
+			<quick-links>
+				<quick-link caption="Tag Documentation" page="tagdoc/xaf/xaf"/>
+			</quick-links>
 		</page>
 		<page level="1" name="xif" caption="XIF" heading="Netspective Sparx XIF">
 			<page level="2" name="xif/concepts" caption="Overview" heading="Overview of a SchemaDoc"/>
@@ -93,6 +96,9 @@
 			<page level="2" name="xif/enums" caption="Enumerations/Lookups" heading="Enumerations and Lookups"/>
 			<page level="2" name="xif/ddl" caption="DDL" heading="Generating SQL DDL"/>
 			<page level="2" name="xif/dal" caption="DAL" heading="Generating Java DAL"/>
+			<quick-links>
+				<quick-link caption="Tag Documentation" page="tagdoc/xif/xif"/>
+			</quick-links>
 		</page>
 		<page level="1" name="dal" caption="DAL" heading="Netspective Sparx DAL">
 			<page level="2" name="dal/dal" caption="DAL Class" heading="DataAccessLayer Class"/>
