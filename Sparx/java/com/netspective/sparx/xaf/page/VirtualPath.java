@@ -51,12 +51,11 @@
  */
 
 /**
- * $Id: VirtualPath.java,v 1.9 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: VirtualPath.java,v 1.10 2002-12-27 00:23:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,32 +64,27 @@ import java.util.StringTokenizer;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.netspective.sparx.util.log.LogManager;
-import com.netspective.sparx.util.xml.XmlSource;
 
 public class VirtualPath
 {
     static public final String PATH_SEPARATOR = "/";
+
     /**
      * A Class that describes the Results of matching the Http Request with the available Paths in VirtualPath.
      */
     public class FindResults
     {
-        private boolean matchedHome;
         private String searchForPath;
         private VirtualPath searched;
         private VirtualPath matchedPath;
         private String[] unmatchedItems;
+
         /**
          * Constructs a <code>FindResult</code> object that will contain the appropiate information regarding the matching up of
          * the path string in the search VirtualPath.
@@ -99,7 +93,7 @@ public class VirtualPath
          */
         public FindResults(VirtualPath search, String path)
         {
-            if(path == null || path.length() == 0)
+            if (path == null || path.length() == 0)
                 path = "/";
 
             searchForPath = path;
@@ -107,20 +101,20 @@ public class VirtualPath
 
             matchedPath = (VirtualPath) search.getAbsolutePathsMap().get(path);
 
-            if(matchedPath != null)
+            if (matchedPath != null)
                 return;
 
             List unmatchedItemsList = new ArrayList();
             Map absPathsMap = search.getAbsolutePathsMap();
             String partialPath = path;
             boolean finished = false;
-            while(matchedPath == null && !finished)
+            while (matchedPath == null && !finished)
             {
                 int partialItemIndex = partialPath.lastIndexOf(PATH_SEPARATOR);
-                if(partialItemIndex == -1)
+                if (partialItemIndex == -1)
                 {
                     matchedPath = (VirtualPath) absPathsMap.get(partialPath);
-                    if(matchedPath == null)
+                    if (matchedPath == null)
                         unmatchedItemsList.add(0, partialPath);
                     finished = true;
                 }
@@ -131,20 +125,11 @@ public class VirtualPath
                     matchedPath = (VirtualPath) absPathsMap.get(partialPath);
                 }
 
-                if(matchedPath != null && matchedPath.getPage() == null)
+                if (matchedPath != null && matchedPath.getPage() == null)
                     matchedPath = null;
             }
 
             unmatchedItems = (String[]) unmatchedItemsList.toArray(new String[unmatchedItemsList.size()]);
-        }
-
-        /**
-         * Determines if the requested path matched the HomePage.
-         * @return  boolean  <code>true</code> if the requested path matched the home page, <code>false</code> otherwise.
-         */
-        public boolean matchedHomePage()
-        {
-            return matchedHome;
         }
 
         /**
@@ -183,17 +168,18 @@ public class VirtualPath
         {
             return unmatchedItems;
         }
+
         /**
          * Returns a concatenatted String of all of the elements of unmatchedPathItems with a "/" as a path separator.
          * @return
          */
         public String getUnmatchedPath()
         {
-            if(unmatchedItems == null || unmatchedItems.length == 0)
+            if (unmatchedItems == null || unmatchedItems.length == 0)
                 return null;
 
             StringBuffer result = new StringBuffer();
-            for(int i = 0; i < unmatchedItems.length; i++)
+            for (int i = 0; i < unmatchedItems.length; i++)
             {
                 result.append(PATH_SEPARATOR);
                 result.append(unmatchedItems[i]);
@@ -279,7 +265,8 @@ public class VirtualPath
      * reference to the parent and then get a map of all of its children.
      * @return  Map  A map object containing VirtualPath objects that represent the sibilings of the current object.
      */
-    public Map getSibilingMap() {
+    public Map getSibilingMap()
+    {
         if (parent != null)
             return parent.getChildrenMap();
 
@@ -294,7 +281,8 @@ public class VirtualPath
      * reference to the parent and then get a list of all of its children.
      * @return  List  A list object containing VirtualPath objects that represent the sibilings of the current object.
      */
-    public List getSibilingList() {
+    public List getSibilingList()
+    {
         if (parent != null)
             return parent.getChildrenList();
 
@@ -337,14 +325,14 @@ public class VirtualPath
     public void importFromXml(Element elem, VirtualPath parent)
     {
         NodeList children = elem.getChildNodes();
-        for(int c = 0; c < children.getLength(); c++)
+        for (int c = 0; c < children.getLength(); c++)
         {
             Node child = children.item(c);
-            if(child.getNodeType() != Node.ELEMENT_NODE)
+            if (child.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
             Element childElem = (Element) child;
-            if(childElem.getNodeName().equals("page"))
+            if (childElem.getNodeName().equals("page"))
             {
                 VirtualPath childPath = getChildPathInstance();
                 childPath.setOwner(parent.getOwner());
@@ -359,7 +347,7 @@ public class VirtualPath
                 childPath.setCaption(caption);
 
                 String heading = childElem.getAttribute("heading");
-                if(heading.length() == 0)
+                if (heading.length() == 0)
                 {
                     heading = caption;
                     childElem.setAttribute("heading", caption);
@@ -367,7 +355,7 @@ public class VirtualPath
                 childPath.setHeading(heading);
 
                 String title = childElem.getAttribute("title");
-                if(title.length() == 0)
+                if (title.length() == 0)
                 {
                     title = heading;
                     childElem.setAttribute("title", heading);
@@ -375,8 +363,8 @@ public class VirtualPath
                 childPath.setTitle(title);
 
                 String pageClass = childElem.getAttribute("class");
-                if(pageClass.length() != 0)
-                {                    
+                if (pageClass.length() != 0)
+                {
                     try
                     {
                         Class cls = Class.forName(pageClass);
@@ -384,7 +372,7 @@ public class VirtualPath
                         childPath.setPage(page);
                     }
                     catch (Exception e)
-                    {                                      
+                    {
                         LogManager.recordException(VirtualPath.class, "importFromXml", "Unable to instantiate page class '" + pageClass + "'", e);
                         childPath.setCaption(caption + " (" + e.toString() + ")");
                     }
@@ -401,16 +389,16 @@ public class VirtualPath
 
     public String getAbsolutePath()
     {
-        if(id != null)
+        if (id != null)
             return id;
 
         StringBuffer path = name != null ? new StringBuffer(name) : new StringBuffer();
         VirtualPath active = getParent();
-        while(active != null)
+        while (active != null)
         {
             path.insert(0, PATH_SEPARATOR);
             String activeName = active.getName();
-            if(activeName != null)
+            if (activeName != null)
                 path.insert(0, activeName);
             active = active.getParent();
         }
@@ -420,7 +408,7 @@ public class VirtualPath
     public String getAbsolutePath(PageContext pc)
     {
         String absPath = getAbsolutePath();
-        if(pc == null)
+        if (pc == null)
             return absPath;
 
         HttpServletRequest request = (HttpServletRequest) pc.getRequest();
@@ -431,19 +419,19 @@ public class VirtualPath
     {
         String absolutePath = path.getAbsolutePath();
         absPathMap.put(absolutePath, path);
-        if(parent != null)
+        if (parent != null)
             parent.register(path);
-        if(owner != null)
+        if (owner != null)
             owner.register(path);
     }
 
     protected VirtualPath addChild(String path)
     {
-        if(path == null || path.length() == 0 || path.equals("/"))
+        if (path == null || path.length() == 0 || path.equals("/"))
         {
             absPathMap.put("/", this);
-            if(parent != null) parent.getAbsolutePathsMap().put("/", this);
-            if(owner != null) owner.getAbsolutePathsMap().put("/", this);
+            if (parent != null) parent.getAbsolutePathsMap().put("/", this);
+            if (owner != null) owner.getAbsolutePathsMap().put("/", this);
             return this;
         }
 
@@ -456,7 +444,7 @@ public class VirtualPath
         String childName = pathItems[startIndex];
 
         VirtualPath child = (VirtualPath) childrenMap.get(childName);
-        if(child == null)
+        if (child == null)
         {
             child = getChildPathInstance(childName);
             child.setOwner(owner);
@@ -467,7 +455,7 @@ public class VirtualPath
             register(child);
         }
 
-        if(startIndex < (pathItems.length - 1))
+        if (startIndex < (pathItems.length - 1))
             return child.addChild(pathItems, startIndex + 1);
         else
             return child;
@@ -487,7 +475,7 @@ public class VirtualPath
      */
     public VirtualPath getChildById(String id)
     {
-        return (VirtualPath)childrenMap.get(id);
+        return (VirtualPath) childrenMap.get(id);
     }
 
     public List getChildrenList()
@@ -507,18 +495,18 @@ public class VirtualPath
 
     static public String getDebugHtml(PageContext pc, VirtualPath parent)
     {
-        if(parent.childrenList == null || parent.childrenList.size() == 0)
+        if (parent.childrenList == null || parent.childrenList.size() == 0)
             return null;
 
         StringBuffer html = new StringBuffer("<ol>");
         Iterator i = parent.childrenList.iterator();
-        while(i.hasNext())
+        while (i.hasNext())
         {
             VirtualPath path = (VirtualPath) i.next();
             html.append("<li>");
             html.append(path.getAbsolutePath() + ": " + path.getCaption(pc) + ", " + path.getHeading(pc) + ", " + path.getTitle(pc));
             String children = getDebugHtml(pc, path);
-            if(children != null)
+            if (children != null)
                 html.append(children);
             html.append("</li>");
         }
@@ -530,7 +518,7 @@ public class VirtualPath
     static public String[] getPathItems(String path)
     {
         List items = new ArrayList();
-        for(StringTokenizer st = new StringTokenizer(path, PATH_SEPARATOR); st.hasMoreTokens();)
+        for (StringTokenizer st = new StringTokenizer(path, PATH_SEPARATOR); st.hasMoreTokens();)
             items.add(st.nextToken());
         return (String[]) items.toArray(new String[items.size()]);
     }
@@ -540,7 +528,8 @@ public class VirtualPath
      * This method can be overwritten to allow the placement of other objects of type <code>VirtualPath</code>.
      * @return
      */
-    public VirtualPath getChildPathInstance(){
+    public VirtualPath getChildPathInstance()
+    {
         return new VirtualPath();
     }
 
@@ -549,7 +538,8 @@ public class VirtualPath
      * This method can be overwritten to allow the placement of other objects of type <code>VirtualPath</code>.
      * @return
      */
-    public VirtualPath getChildPathInstance(String name){
+    public VirtualPath getChildPathInstance(String name)
+    {
         return new VirtualPath(name);
     }
 }
