@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportColumnFactory.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: ReportColumnFactory.java,v 1.2 2002-12-26 19:37:20 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -75,6 +75,7 @@ import com.netspective.sparx.xaf.report.column.CheckBoxFieldColumn;
 import com.netspective.sparx.xaf.report.column.DecimalColumn;
 import com.netspective.sparx.xaf.report.column.GeneralColumn;
 import com.netspective.sparx.xaf.report.column.NumericColumn;
+import com.netspective.sparx.xif.SchemaDocument;
 
 public class ReportColumnFactory implements Factory
 {
@@ -127,7 +128,7 @@ public class ReportColumnFactory implements Factory
 
             Element childElem = doc.createElement("report-column-format");
             childElem.setAttribute("name", (String) entry.getKey());
-            childElem.setAttribute("class", ((Format) entry.getValue()).getClass().getName());
+            childElem.setAttribute("class", (entry.getValue()).getClass().getName());
             factoryElem.appendChild(childElem);
         }
     }
@@ -197,11 +198,8 @@ public class ReportColumnFactory implements Factory
                 break;
         }
 
-        StringBuffer heading = new StringBuffer(rsmd.getColumnName(resultSetColIndex).replace('_', ' '));
-        heading.setCharAt(0, Character.toTitleCase(heading.charAt(0)));
-
         column.setColIndexInArray(resultSetColIndex - 1);
-        column.setHeading(heading.toString());
+        column.setHeading(SchemaDocument.sqlIdentifierToText(rsmd.getColumnName(resultSetColIndex), true));
         column.setDataType(dataType);
         column.setWidth(rsmd.getColumnDisplaySize(resultSetColIndex));
 
