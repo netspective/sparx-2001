@@ -71,11 +71,16 @@ public class DialogContext extends ServletValueContext
 	static public final char DIALOGMODE_VALIDATE = 'V';
 	static public final char DIALOGMODE_EXECUTE  = 'E';
 
+    /**
+     * The following constants are setup as flags but are most often used as enumerations. We use powers of two to
+     * allow them to be used either as enums or as flags.
+     */
 	static public final int DATA_CMD_NONE    = 0;
 	static public final int DATA_CMD_ADD     = 1;
-	static public final int DATA_CMD_EDIT    = 2;
-	static public final int DATA_CMD_DELETE  = 3;
-	static public final int DATA_CMD_CONFIRM = 4;
+	static public final int DATA_CMD_EDIT    = DATA_CMD_ADD * 2;
+	static public final int DATA_CMD_DELETE  = DATA_CMD_EDIT * 2;
+	static public final int DATA_CMD_CONFIRM = DATA_CMD_DELETE * 2;
+    static public final int DATA_CMD_CUSTOM_START = DATA_CMD_CONFIRM * 2;
 
 	static public final int VALSTAGE_NOT_PERFORMED       = 0;
 	static public final int VALSTAGE_PERFORMED_FAILED    = 1;
@@ -159,7 +164,9 @@ public class DialogContext extends ServletValueContext
 			{
 				transactionId = "No MessageDigest Algorithm found!";
 			}
-			dataCmdStr = aRequest.getParameter(Dialog.PARAMNAME_DATA_CMD_INITIAL);
+            dataCmdStr = (String) aRequest.getAttribute(Dialog.PARAMNAME_DATA_CMD_INITIAL);
+            if(dataCmdStr == null)
+                dataCmdStr = aRequest.getParameter(Dialog.PARAMNAME_DATA_CMD_INITIAL);
 		}
 		else
 		{
@@ -182,20 +189,88 @@ public class DialogContext extends ServletValueContext
 		LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
 	}
 
-    static public int getDataCmdIdForCmdText(String dataCmdStr)
+    /**
+     * Accept a single or multiple (comma-separated) data commands and return a bitmapped set of flags that
+     * represents the commands.
+     */
+
+    static public int getDataCmdIdForCmdText(String dataCmdText)
     {
-        if(dataCmdStr != null)
+        int result = DATA_CMD_NONE;
+        if(dataCmdText != null)
 		{
-			if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_ADD))
-				return DATA_CMD_ADD;
-			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_EDIT))
-				return DATA_CMD_EDIT;
-			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_DELETE))
-				return DATA_CMD_DELETE;
-			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_CONFIRM))
-				return DATA_CMD_CONFIRM;
+            StringTokenizer st = new StringTokenizer(dataCmdText, ",");
+            while(st.hasMoreTokens())
+            {
+                String dataCmdToken = st.nextToken();
+                if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_ADD))
+                    result |= DATA_CMD_ADD;
+                else if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_EDIT))
+                    result |= DATA_CMD_EDIT;
+                else if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_DELETE))
+                    result |= DATA_CMD_DELETE;
+                else if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_CONFIRM))
+                    result |= DATA_CMD_CONFIRM;
+            }
 		}
-        return DATA_CMD_NONE;
+        return result;
+    }
+
+    static public String getDataCmdTextForCmdId(int dataCmd)
+    {
+        if(dataCmd == DATA_CMD_NONE)
+            return null;
+
+        StringBuffer dataCmdText = new StringBuffer();
+        if((dataCmd & DATA_CMD_ADD) != 0)
+            dataCmdText.append(Dialog.PARAMVALUE_DATA_CMD_ADD);
+
+        if((dataCmd & DATA_CMD_EDIT) != 0)
+        {
+            if(dataCmdText.length() > 0) dataCmdText.append(",");
+            dataCmdText.append(Dialog.PARAMVALUE_DATA_CMD_EDIT);
+        }
+
+        if((dataCmd & DATA_CMD_DELETE) != 0)
+        {
+            if(dataCmdText.length() > 0) dataCmdText.append(",");
+            dataCmdText.append(Dialog.PARAMVALUE_DATA_CMD_DELETE);
+        }
+
+        if((dataCmd & DATA_CMD_CONFIRM) != 0)
+        {
+            if(dataCmdText.length() > 0) dataCmdText.append(",");
+            dataCmdText.append(Dialog.PARAMVALUE_DATA_CMD_CONFIRM);
+        }
+
+        return dataCmdText.toString();
+    }
+
+    public int getLastDataCmd()
+    {
+        return DATA_CMD_CONFIRM;
+    }
+
+    /**
+     * Check the dataCmdCondition against each available data command and see if it's set in the condition; if the
+     * data command is set in the condition, then check to see if our data command for that command id is set. If any
+     * of the data commands in dataCommandCondition match our current dataCmd, return true.
+     */
+    public boolean matchesDataCmdCondition(int dataCmdCondition)
+    {
+        if(dataCmdCondition == DATA_CMD_NONE || dataCmd == DATA_CMD_NONE)
+            return false;
+
+        int lastDataCmd = getLastDataCmd();
+        for(int i = 1; i <= lastDataCmd; i *= 2)
+        {
+            // if the dataCmdCondition's dataCmd i is set, it means we need to check our dataCmd to see if we're set
+            if((dataCmdCondition & i) != 0 && (dataCmd & i) != 0)
+                return true;
+        }
+
+        // if we get to here, nothing matched
+        return false;
     }
 
 	/**
@@ -212,6 +287,23 @@ public class DialogContext extends ServletValueContext
 	{
 		listeners.add(listener);
 	}
+
+    public void assignFieldValues(Map values)
+    {
+        for(Iterator i = values.keySet().iterator(); i.hasNext(); )
+        {
+            String keyName = (String) i.next();
+            DialogFieldState state = (DialogFieldState) fieldStates.get(keyName);
+            if(state != null)
+            {
+                Object keyObj = (Object) values.get(keyName);
+                if (keyObj != null)
+                    state.value =  values.get(keyName).toString();
+                else
+                    state.value = null;
+            }
+        }
+    }
 
 	public void createStateFields(List fields)
 	{
@@ -233,21 +325,7 @@ public class DialogContext extends ServletValueContext
 			if(values == null)
 				values = (Map) request.getAttribute(DIALOG_FIELD_VALUES_ATTR_NAME);
 			if(values != null)
-			{
-				for(Iterator i = values.keySet().iterator(); i.hasNext(); )
-				{
-					String keyName = (String) i.next();
-					DialogFieldState state = (DialogFieldState) fieldStates.get(keyName);
-					if(state != null)
-					{
-						Object keyObj = (Object) values.get(keyName);
-						if (keyObj != null)
-							state.value =  values.get(keyName).toString();
-						else
-							state.value = null;
-					}
-				}
-			}
+                assignFieldValues(values);
 		}
 	}
 
@@ -294,6 +372,9 @@ public class DialogContext extends ServletValueContext
 				nextMode = DIALOGMODE_INPUT;
 		}
 
+        if(dlgErrorMessages != null)
+            nextMode = DIALOGMODE_VALIDATE;
+
 		dialog.makeStateChanges(this, STATECALCSTAGE_FINAL);
 	}
 
@@ -315,10 +396,21 @@ public class DialogContext extends ServletValueContext
     public final int getErrorsCount() { return errorsCount; }
 
 	public final int getDataCommand() { return dataCmd; }
-    public final boolean addingData() { return dataCmd == DATA_CMD_ADD; }
-    public final boolean editingData() { return dataCmd == DATA_CMD_EDIT; }
-    public final boolean deletingData() { return dataCmd == DATA_CMD_DELETE; }
-    public final boolean confirmingData() { return dataCmd == DATA_CMD_CONFIRM; }
+    public final String getDataCommandText(boolean titleCase)
+    {
+        String dataCmdText = getDataCmdTextForCmdId(getDataCommand());
+        if(! titleCase)
+            return dataCmdText;
+
+        StringBuffer dataCmdSb = new StringBuffer(dataCmdText);
+        dataCmdSb.setCharAt(0, Character.toUpperCase(dataCmdSb.charAt(0)));
+        return dataCmdSb.toString();
+    }
+
+    public final boolean addingData() { return (dataCmd & DATA_CMD_ADD) == 0 ? false : true; }
+    public final boolean editingData() { return (dataCmd & DATA_CMD_EDIT) == 0 ? false : true; }
+    public final boolean deletingData() { return (dataCmd & DATA_CMD_DELETE) == 0 ? false : true; }
+    public final boolean confirmingData() { return (dataCmd & DATA_CMD_CONFIRM) == 0 ? false : true; }
 
 	public final DatabaseContext getDatabaseContext() { return dbContext; }
 	public final void setDatabaseContext(DatabaseContext value) { dbContext = value; }
@@ -639,7 +731,7 @@ public class DialogContext extends ServletValueContext
 			return field.getErrors();
 		else
 		{
-			ArrayList fieldErrors = state.field.getErrors();
+			List fieldErrors = state.field.getErrors();
 			if(fieldErrors != null)
 				return fieldErrors;
 			return state.errorMessages;
@@ -668,6 +760,7 @@ public class DialogContext extends ServletValueContext
 	public void addErrorMessage(DialogField field, String message)
 	{
 		addErrorMessage(field.getQualifiedName(), message);
+        errorsCount++;
 	}
 
 
@@ -800,12 +893,12 @@ public class DialogContext extends ServletValueContext
         task = null;
     }
 
-    public void executeSqlUpdate(String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    public void executeSqlUpdate(String table, String fields, String columns, String whereCond, String whereCondBindParams) throws TaskExecuteException
     {
-        executeSqlUpdate(null, table, fields, columns, whereCond);
+        executeSqlUpdate(null, table, fields, columns, whereCond, whereCondBindParams);
     }
 
-    public void executeSqlUpdate(String dataSourceId, String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    public void executeSqlUpdate(String dataSourceId, String table, String fields, String columns, String whereCond, String whereCondBindParams) throws TaskExecuteException
     {
         DmlTask task = new DmlTask();
         task.setCommand(DmlTask.DMLCMD_UPDATE);
@@ -813,18 +906,19 @@ public class DialogContext extends ServletValueContext
         task.setTable(table);
         task.setFields(fields);
         task.setColumns(columns);
-        task.setWhere(whereCond);
+        task.setWhereCond(whereCond);
+        task.setWhereCondBindParams(whereCondBindParams);
         task.execute(new TaskContext(this));
         task.reset();
         task = null;
     }
 
-    public void executeSqlRemove(String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    public void executeSqlRemove(String table, String fields, String columns, String whereCond, String whereCondBindParams) throws TaskExecuteException
     {
-        executeSqlRemove(null, table, fields, columns, whereCond);
+        executeSqlRemove(null, table, fields, columns, whereCond, whereCondBindParams);
     }
 
-    public void executeSqlRemove(String dataSourceId, String table, String fields, String columns, String whereCond) throws TaskExecuteException
+    public void executeSqlRemove(String dataSourceId, String table, String fields, String columns, String whereCond, String whereCondBindParams) throws TaskExecuteException
     {
         DmlTask task = new DmlTask();
         task.setCommand(DmlTask.DMLCMD_REMOVE);
@@ -832,7 +926,8 @@ public class DialogContext extends ServletValueContext
         task.setTable(table);
         task.setFields(fields);
         task.setColumns(columns);
-        task.setWhere(whereCond);
+        task.setWhereCond(whereCond);
+        task.setWhereCondBindParams(whereCondBindParams);
         task.execute(new TaskContext(this));
         task.reset();
         task = null;
@@ -859,11 +954,14 @@ public class DialogContext extends ServletValueContext
 			}
 		}
 
-		return "<table>"+
+		return "<table border=1 cellspacing=0 cellpadding=4>"+
 			    "<tr><td><b>Dialog</b></td><td>"+ dialog.getName() +"</td></tr>" +
 			    "<tr><td><b>Run Sequence</b></td><td>"+ runSequence +"</td></tr>" +
 			    "<tr><td><b>Active/Next Mode</b></td><td>"+ activeMode + " -> " + nextMode +"</td></tr>" +
 			    "<tr><td><b>Validation Stage</b></td><td>"+ validationStage +"</td></tr>" +
+                "<tr><td><b>Data Command</b></td><td>"+ getDataCmdTextForCmdId(this.getDataCommand()) +"</td></tr>" +
+                "<tr><td><b>Populate Tasks</b></td><td>"+ (dialog.getPopulateTasks() != null ? dialog.getPopulateTasks().getDebugHtml(this) : "none") +"</td></tr>" +
+                "<tr><td><b>Execute Tasks</b></td><td>"+ (dialog.getExecuteTasks() != null ? dialog.getExecuteTasks().getDebugHtml(this) : "none") +"</td></tr>" +
 			    values.toString()+
 				"</table>";
 	}

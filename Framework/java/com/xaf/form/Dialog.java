@@ -54,7 +54,8 @@ public class Dialog
 
 	private ArrayList fields = new ArrayList();
 	private int flags;
-    private Task[] executeTasks;
+    private Task populateTasks;
+    private Task executeTasks;
 	private DialogDirector director;
 	private String pkgName;
 	private String nameFromXml;
@@ -113,7 +114,8 @@ public class Dialog
 	public final String getValuesRequestAttrName() { return "dialog-" + name + "-field-values"; }
 	public final String getDataCmdParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_DATA_CMD; }
 
-	public final Task[] getExecuteTasks() { return executeTasks; }
+	public final Task getPopulateTasks() { return populateTasks; }
+    public final Task getExecuteTasks() { return executeTasks; }
 
 	public final List getFields() { return fields; }
 	public final boolean retainRequestParams() { return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS) || (retainRequestParams != null); }
@@ -249,29 +251,51 @@ public class Dialog
 					field = new SelectField("error", "Unable to create field of type '" + childName, SelectField.SELECTSTYLE_COMBO, ValueSourceFactory.getListValueSource("dialog-field-types:"));
 				addField(field);
 			}
-            else if(childName.equals("execute-tasks"))
+            else if(childName.equals("populate-tasks"))
             {
-                ArrayList tasksList = new ArrayList();
-        		NodeList eaChildren = node.getChildNodes();
-                for(int eac = 0; eac < eaChildren.getLength(); eac++)
+                if(populateTasks == null)
+                    populateTasks = new BasicTask();
+
+                try
                 {
-                    Node eaNode = eaChildren.item(eac);
-                    if(eaNode.getNodeType() == Node.ELEMENT_NODE)
+                    Task populateTask = new BasicTask();
+                    populateTask.initialize((Element) node);
+                    if(! populateTask.isValid())
                     {
-                        try
+                        for(Iterator i = populateTask.getInitErrors().iterator(); i.hasNext(); )
                         {
-                            Task task = TaskFactory.getTask((Element) eaNode, true);
-                            tasksList.add(task);
-                        }
-                        catch(Exception e)
-                        {
-                            addField(new StaticField("error", e.toString()));
+                            addField(new StaticField("error in populate-tasks", (String) i.next()));
                         }
                     }
+                    else
+                        populateTasks.addChildTask(populateTask);
                 }
-                if(tasksList.size() > 0)
+                catch(TaskInitializeException e)
                 {
-                    executeTasks = (Task[]) tasksList.toArray(new Task[tasksList.size()]);
+                    addField(new StaticField("exception in populate-tasks", e.toString()));
+                }
+            }
+            else if(childName.equals("execute-tasks"))
+            {
+                if(executeTasks == null)
+                    executeTasks = new BasicTask();
+                try
+                {
+                    Task executeTask = new BasicTask();
+                    executeTask.initialize((Element) node);
+                    if(! executeTask.isValid())
+                    {
+                        for(Iterator i = executeTask.getInitErrors().iterator(); i.hasNext(); )
+                        {
+                            addField(new StaticField("error in execute-tasks", (String) i.next()));
+                        }
+                    }
+                    else
+                        executeTasks.addChildTask(executeTask);
+                }
+                catch(TaskInitializeException e)
+                {
+                    addField(new StaticField("exception in execute-tasks", e.toString()));
                 }
             }
 			else if(childName.equals("director"))
@@ -337,6 +361,65 @@ public class Dialog
 		setFlag(DLGFLAG_CONTENTS_FINALIZED);
 	}
 
+    public void processPopulateTasks(DialogContext dc)
+    {
+        if(populateTasks != null && populateTasks.isValid())
+        {
+            TaskContext tc = new TaskContext(dc);
+
+            if(populateTasks.allowExecute(tc))
+            {
+                try
+                {
+                    populateTasks.execute(tc);
+                    if(tc.hasError())
+                        dc.addErrorMessage(tc.getErrorMessage());
+                }
+                catch(TaskExecuteException e)
+                {
+                    dc.addErrorMessage(e.getMessage());
+                }
+            }
+        }
+    }
+
+    public String processExecuteTasks(DialogContext dc)
+    {
+        if(executeTasks != null && executeTasks.isValid())
+        {
+			TaskContext tc = new TaskContext(dc);
+
+            int numTasksExecuted = 0;
+            if(executeTasks.allowExecute(tc))
+            {
+                try
+                {
+                    int tasksExecutedBefore = tc.getCountOfTasksExecuted();
+                    executeTasks.execute(tc);
+                    numTasksExecuted = tc.getCountOfTasksExecuted() - tasksExecutedBefore;
+                }
+                catch(TaskExecuteException e)
+                {
+                    dc.setExecuteStageHandled(true);
+                    return "<pre>" + e.getDetailedMessage() + "</pre>";
+                }
+            }
+
+            if(numTasksExecuted > 0)
+            {
+                dc.setExecuteStageHandled(true);
+                if(tc.hasError())
+                    return tc.getErrorMessage();
+                else if(tc.hasResultMessage())
+                    return tc.getResultMessage();
+                else
+                    return "";
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Populate the dialog with field values. If listeners are defined, execute them also.
      * This should be called everytime the dialog is loaded except when it is ready for
@@ -352,6 +435,9 @@ public class Dialog
 				field.populateValue(dc, formatType);
 		}
 
+        if(dc.isInitialEntry())
+            processPopulateTasks(dc);
+
 		List listeners = dc.getListeners();
 		for(int l = 0; l < listeners.size(); l++)
 			((DialogContextListener) listeners.get(l)).populateDialogData(dc);
@@ -359,38 +445,23 @@ public class Dialog
 
 	public void makeStateChanges(DialogContext dc, int stage)
 	{
+        Iterator i = fields.iterator();
+		while(i.hasNext())
+		{
+			DialogField field = (DialogField) i.next();
+            field.makeStateChanges(dc, stage);
+		}
+
 		List listeners = dc.getListeners();
-		for(int i = 0; i < listeners.size(); i++)
-			((DialogContextListener) listeners.get(i)).makeDialogContextChanges(dc, stage);
+		for(int l = 0; l < listeners.size(); l++)
+			((DialogContextListener) listeners.get(l)).makeDialogContextChanges(dc, stage);
 	}
 
 	public String execute(DialogContext dc)
 	{
-        if(executeTasks != null && executeTasks.length > 0)
-        {
-			dc.setExecuteStageHandled(true);
-			TaskContext tc = new TaskContext(dc);
-
-			try
-			{
-				for(int i = 0; i < executeTasks.length; i++)
-				{
-					executeTasks[i].execute(tc);
-					if(tc.haltProcessing())
-						break;
-				}
-				if(tc.hasError())
-					return tc.getErrorMessage();
-				else if(tc.hasResultMessage())
-					return tc.getResultMessage();
-				else
-					return "";
-			}
-			catch(TaskExecuteException e)
-			{
-				return e.getMessage();
-			}
-        }
+        String execResults = processExecuteTasks(dc);
+        if(execResults != null)
+            return execResults;
 
 		List listeners = dc.getListeners();
 		if(listeners.size() > 0)
@@ -405,7 +476,9 @@ public class Dialog
 			return result.toString();
 		}
 		else
-			return "Need to add Dialog actions, provide listener, or override Dialog.execute(DialogContext)." + dc.getDebugHtml();
+        {
+            return "Need to add Dialog actions, provide listener, or override Dialog.execute(DialogContext)." + dc.getDebugHtml();
+        }
 	}
 
 	public DialogContext createContext(ServletContext context, Servlet servlet, HttpServletRequest request, HttpServletResponse response, DialogSkin skin)
