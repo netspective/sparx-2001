@@ -87,7 +87,7 @@
 		<field.integer size="16" min="0" max="9999"/>
 	</datatype>
 
-	<datatype name="long-int">
+	<datatype name="long-integer">
 		<java-type default="0">long</java-type>
 		<java-class package="java.lang">Long</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
@@ -175,8 +175,8 @@
 		<field.time size="16" format="H:mm" min="00:00"/>
 	</datatype>
 
-	<datatype name="auto-inc" type="long-int">
-		<copytype>longint</copytype>
+	<datatype name="auto-inc" type="long-integer">
+		<copytype>long-integer</copytype>
 		<sqldefn dbms="mssql">integer IDENTITY</sqldefn>
 		<sqldefn dbms="hsqldb">integer IDENTITY</sqldefn>
 
