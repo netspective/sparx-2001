@@ -106,6 +106,7 @@ public class Dialog
 	public final boolean retainRequestParams() { return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS) || (retainRequestParams != null); }
 	public final String[] getRetainRequestParams() { return retainRequestParams; }
 	public final void setRetainRequestParams(String[] value) { retainRequestParams = value; }
+	public final void setRetainAllRequestParams(boolean value) { if(value) setFlag(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS); else clearFlag(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS); }
 	public final boolean retainAllRequestParams() { return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS); }
 
 	public final DialogDirector getDirector() { return director; }
