@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaImportHandler.java,v 1.1 2002-08-29 03:38:29 shahid.shah Exp $
+ * $Id: SchemaImportHandler.java,v 1.2 2002-08-30 00:30:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
@@ -119,8 +119,6 @@ public class SchemaImportHandler implements ContentHandler
                 table.insert(parseContext.getConnectionContext(), row);
                 TableImportStatistic tis = parseContext.getStatistics(table);
                 tis.incSuccessfulRows();
-                System.out.println("WROTE " + row.getClass().getName());
-                System.out.println(row);
             }
         }
     }
@@ -190,14 +188,18 @@ public class SchemaImportHandler implements ContentHandler
                 if(childTable == null)
                 {
                     nodeStack.push(new NodeStackEntry(qName, depth));
-                    parseContext.addSyntaxError("Table '"+ qName +"' not found in the schema.");
+                    parseContext.addError("Table '"+ qName +"' not found in the schema");
                 }
                 else
                 {
                     Row childRow = childTable.createRow();
                     nodeStack.push(new NodeStackEntry(qName, childRow, depth));
                     for (int i = 0; i < attributes.getLength(); i++)
-                        childRow.populateDataForXmlNodeName(attributes.getQName(i), attributes.getValue(i), false);
+                    {
+                        String attrName = attributes.getQName(i);
+                        if(! childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
+                            parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                    }
                 }
             }
             else
@@ -213,7 +215,11 @@ public class SchemaImportHandler implements ContentHandler
                         Row childRow = entry.row.createChildRowForXmlNodeName(qName);
                         nodeStack.push(new NodeStackEntry(qName, childRow, depth));
                         for (int i = 0; i < attributes.getLength(); i++)
-                            childRow.populateDataForXmlNodeName(attributes.getQName(i), attributes.getValue(i), false);
+                        {
+                            String attrName = attributes.getQName(i);
+                            if(!childRow.populateDataForXmlNodeName(attrName, attributes.getValue(i), false))
+                                parseContext.addError("Column '"+ attrName +"' not found for attribute in table '"+ childRow.getTable().getName() +"'");
+                        }
                     }
                     else
                     {
@@ -222,10 +228,12 @@ public class SchemaImportHandler implements ContentHandler
                         else
                         {
                             nodeStack.push(new NodeStackEntry(qName, depth));
-                            parseContext.addSyntaxError("Column '"+ qName +"' not found in table '"+ entry.row.getTable().getName() +"'.");
+                            parseContext.addError("Column '"+ qName +"' not found in table '"+ entry.row.getTable().getName() +"'");
                         }
                     }
                 }
+                else
+                    parseContext.addError("Don't know what to do with element '"+ qName +"'");
             }
         }
         catch (NamingException exc)
