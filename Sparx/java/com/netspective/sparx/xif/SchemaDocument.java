@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.10 2002-08-09 21:28:18 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.11 2002-08-18 21:01:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -668,7 +668,24 @@ public class SchemaDocument extends XmlSource
                 continue;
 
             String nodeName = node.getNodeName();
-            if(nodeName.equals("java-dal-accessor"))
+            if(nodeName.equals("column"))
+            {
+                Element columnElem = (Element) node;
+                NodeList javaClassElems = columnElem.getElementsByTagName("java-class");
+                if(javaClassElems.getLength() == 0)
+                {
+                    String dataTypeName = columnElem.getAttribute("type");
+                    errors.add("Column '"+ columnElem.getAttribute("name") +"' (type '"+ dataTypeName +"') in table '"+ tableName +"' has no DAL java-class specification");
+                    Element dataTypeElem = (Element) dataTypeNodes.get(dataTypeName);
+                    if(dataTypeElem != null)
+                        errors.add("Type '"+ dataTypeName +"' has "+ dataTypeElem.getElementsByTagName("java-class").getLength() +" DAL java-class elements");
+                    else
+                        errors.add("Type '"+ dataTypeName +"' not found.");
+                }
+                else if(javaClassElems.getLength() > 1)
+                    errors.add("Column '"+ columnElem.getAttribute("name") +"' (type '"+ columnElem.getAttribute("type") +"') in table '"+ tableName +"' has multiple DAL java-class specifications");
+            }
+            else if(nodeName.equals("java-dal-accessor"))
             {
                 Element accessor = (Element) node;
 
