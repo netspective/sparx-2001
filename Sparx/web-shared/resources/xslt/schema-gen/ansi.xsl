@@ -15,6 +15,8 @@
 <xsl:variable name="statement-terminator">;
 </xsl:variable>
 <xsl:variable name="system-date-function">sysdate</xsl:variable>
+<xsl:variable name="system-boolean-false">0</xsl:variable>
+<xsl:variable name="system-boolean-true">1</xsl:variable>
 
 <xsl:template match="schema">
 	<xsl:for-each select="table">
@@ -195,6 +197,14 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 		<xsl:when test="($column/@default = 'sysdate') and ($system-date-function)">
 			<xsl:value-of select="$system-date-function"/>
 		</xsl:when>
+		<!-- Added by Shahbaz Javeed for PostgreSQL's boolean defaults -->
+		<xsl:when test="($column/@default = '0') and ($column/@type = 'boolean')">
+			<xsl:value-of select="$system-boolean-false"/>
+		</xsl:when>
+		<xsl:when test="($column/@default = '1') and ($column/@type = 'boolean')">
+			<xsl:value-of select="$system-boolean-true"/>
+		</xsl:when>
+		<!-- End of Addition -->
 		<xsl:otherwise>
 			<xsl:value-of select="$column/@default"/>
 		</xsl:otherwise>
