@@ -57,6 +57,11 @@ public class SelectStmtGenerator
 		bindParams.add(bindParam);
 	}
 
+    public void addParam(ListValueSource bindParamList)
+    {
+        bindParams.add(bindParamList);
+    }
+
 	public String toString(ValueContext vc)
 	{
 		valid = false;
@@ -105,9 +110,19 @@ public class SelectStmtGenerator
 			QueryCondition cond = (QueryCondition) allConditions.get(c);
             if(cond.removeIfValueIsNull())
             {
-                String value = cond.getValue().getValue(vc);
-                if(value == null || value.length() == 0)
-                    continue;
+                SingleValueSource vs = cond.getValue();
+                if (vs instanceof ListValueSource)
+                {
+                    String[] values = ((ListValueSource)vs).getValues(vc);
+                    if (values == null || values.length == 0 || (values.length == 1 && (values[0] == null || values[0].length() == 0)))
+                        continue;
+                }
+                else
+                {
+                    String value = vs.getValue(vc);
+                    if(value == null || value.length() == 0)
+                        continue;
+                }
             }
 
             usedConditions.add(cond);
@@ -177,7 +192,7 @@ public class SelectStmtGenerator
 			{
 				QueryCondition cond = (QueryCondition) usedConditions.get(c);
 				addJoin(cond.getField());
-				sql.append("  (" + cond.getWhereCondExpr(this) + ")");
+				sql.append("  (" + cond.getWhereCondExpr(vc, select, this) + ")");
 				if(c != condsUsedLast)
 					sql.append(cond.getConnectorSql());
 				sql.append("\n");

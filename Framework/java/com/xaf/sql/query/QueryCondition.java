@@ -52,10 +52,9 @@ public class QueryCondition
 	public String getConnectorSql() { return QueryCondition.CONNECTOR_SQL[connector]; }
     public boolean removeIfValueIsNull() { return removeIfValueNull; }
 
-	public String getWhereCondExpr(SelectStmtGenerator stmt)
+	public String getWhereCondExpr(ValueContext vc, QuerySelect select, SelectStmtGenerator stmt)
 	{
-        System.out.println("getWhereCondExpr(): " + this);
-		return comparison.getWhereCondExpr(stmt, this);
+		return comparison.getWhereCondExpr(vc, select, stmt, this);
 	}
 
 	public void importFromXml(QueryDefinition queryDefn, Element elem)

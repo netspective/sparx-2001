@@ -44,6 +44,7 @@ public class QuerySelect
 		this.distinctRows = true;
     }
 
+    public void setAlwaysDirty(boolean flag) { alwaysDirty = flag; }
 	public String getName() { return name; }
 	public String getCaption() { return caption; }
 	public boolean distinctRowsOnly() { return distinctRows; }
@@ -84,12 +85,30 @@ public class QuerySelect
 		{
             for(int i = 0; i < bindCount; i++)
             {
-                SingleValueSource vs = (SingleValueSource) bindParams.get(i);
-                result.append("<li><code><b>");
-                result.append(vs.getId());
-                result.append("</b> = ");
-                result.append(vs.getValue(vc));
-                result.append("</code></li>");
+                Object bindObj = bindParams.get(i);
+                if (bindObj instanceof ListValueSource)
+                {
+                    ListValueSource vs = (ListValueSource) bindObj;
+                    String[] values = vs.getValues(vc);
+                    for (int j=0; j < values.length; j++)
+                    {
+                        result.append("<li><code><b>");
+                        result.append(vs.getId());
+                        result.append("</b> = ");
+                        result.append(values[j]);
+                        result.append("</code></li>");
+                    }
+                }
+                else
+                {
+                    SingleValueSource vs = (SingleValueSource) bindObj;
+                    result.append("<li><code><b>");
+                    result.append(vs.getId());
+                    result.append("</b> = ");
+                    result.append(vs.getValue(vc));
+                    result.append("</code></li>");
+                }
+
             }
 		}
 
@@ -239,9 +258,26 @@ public class QuerySelect
 		else
 		{
 			int paramsCount = bindParams.size();
-			for(int i = 0; i < paramsCount; i++)
+            int i=0;
+			while (i < paramsCount)
 			{
-				stmt.setString(i+1, ((SingleValueSource) bindParams.get(i)).getValue(vc));
+                Object bindObj = bindParams.get(i);
+                if (bindObj instanceof ListValueSource)
+                {
+
+                    // if its a ListValueSource, loop and get the values
+                    String[] values = ((ListValueSource) bindObj).getValues(vc);
+			        for(int q = 0; q < values.length; q++)
+			        {
+				        stmt.setString(i+q+1, values[q]);
+			        }
+                }
+                else
+                {
+    				stmt.setString(i+1, ((SingleValueSource) bindObj).getValue(vc));
+                }
+
+                i++;
 			}
 		}
 
