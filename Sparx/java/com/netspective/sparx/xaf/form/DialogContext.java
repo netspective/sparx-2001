@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.11 2002-04-12 12:34:35 snshah Exp $
+ * $Id: DialogContext.java,v 1.12 2002-07-03 06:16:55 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -109,6 +109,20 @@ import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
+/**
+ * A dialog context is a manager for handling the behavior of a dialog. While the <code>Dialog</code> object is more
+ * of a pure container for data, the <code>DialogContext</code> object provides the logic and functionality of the dialog.
+ * It provids a variety of dialog information such as the state a dialog is in and the value of a dialog field. It
+ * controls dialog behavior by keeping track of and guiding the dialog through the different
+ * stages. The dialog context also handles the population of values into the fields of a dialog from a SQL query and
+ * execution of insert or update SQL statements using the dialog field values.
+ * <p>
+ * A default <code>DialogContext</code> object is created when the dialog is displayed, resulting in a unique context object
+ * for each dialog object. For most occasions, the default <code>DialogContext</code> object should be sufficient but
+ * for special curcumstances when the behavior of a dialog needs to be modified, the <code>DialogContext</code> class
+ * can be extended (inherited) to create a customzied dialog context.
+ *
+ */
 public class DialogContext extends ServletValueContext
 {
     /* if dialog fields need to be pre-populated (before the context is created)
@@ -227,30 +241,75 @@ public class DialogContext extends ServletValueContext
             }
         }
     }
-
+    /**
+     * Unknown dialog stage
+     */
     static public final char DIALOGMODE_UNKNOWN = ' ';
+    /**
+     * Dialog is in input stage
+     */
     static public final char DIALOGMODE_INPUT = 'I';
+    /**
+     * Dialog is in validation stage
+     */
     static public final char DIALOGMODE_VALIDATE = 'V';
+    /**
+     * Dialog is in execution stage
+     */
     static public final char DIALOGMODE_EXECUTE = 'E';
 
     /**
      * The following constants are setup as flags but are most often used as enumerations. We use powers of two to
      * allow them to be used either as enums or as flags.
      */
+
+    /**
+     * No data command mode
+     */
     static public final int DATA_CMD_NONE = 0;
+    /**
+     * ADD Dialog data command
+     */
     static public final int DATA_CMD_ADD = 1;
+    /**
+     * EDIT Dialog data command
+     */
     static public final int DATA_CMD_EDIT = DATA_CMD_ADD * 2;
+    /**
+     * DELETE Dialog data command
+     */
     static public final int DATA_CMD_DELETE = DATA_CMD_EDIT * 2;
+    /**
+     * CONFIRM Dialog data command
+     */
     static public final int DATA_CMD_CONFIRM = DATA_CMD_DELETE * 2;
+    /**
+     * PRINT Dialog data command
+     */
     static public final int DATA_CMD_PRINT = DATA_CMD_CONFIRM * 2;
     static public final int DATA_CMD_CUSTOM_START = DATA_CMD_PRINT * 2;
 
+    /**
+     * Flag value indicating that the dialog validatation has not been performed
+     */
     static public final int VALSTAGE_NOT_PERFORMED = 0;
+    /**
+     * Flag value indicating that the dialog validation failed
+     */
     static public final int VALSTAGE_PERFORMED_FAILED = 1;
+    /**
+     * Flag value indicating that dialog validation succeeded
+     */
     static public final int VALSTAGE_PERFORMED_SUCCEEDED = 2;
     static public final int VALSTAGE_IGNORE = 3;
 
+    /**
+     * Used for indicating that the calculation of a dialog's stage is starting
+     */
     static public final int STATECALCSTAGE_INITIAL = 0;
+    /**
+     * Used for indicating that the calculation of a dialog's stage is ending
+     */
     static public final int STATECALCSTAGE_FINAL = 1;
 
     private Map fieldStates = new HashMap();
@@ -276,6 +335,16 @@ public class DialogContext extends ServletValueContext
     {
     }
 
+    /**
+     * Initializes the dialog context object. Called by the <code>Dialog</code> after creating the context.
+     *
+     * @param aContext servlet context
+     * @param aServlet servlet
+     * @param aRequest Http servlet request object
+     * @param aResponse Http servlet response object
+     * @param aDialog the Dialog object which this context is associated with
+     * @param aSkin the DialogSkin object of the dialog
+     */
     public void initialize(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
     {
         AppServerCategory monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
@@ -356,6 +425,9 @@ public class DialogContext extends ServletValueContext
     /**
      * Accept a single or multiple (comma-separated) data commands and return a bitmapped set of flags that
      * represents the commands.
+     *
+     * @param dataCmdText Comma seperated string containing data commands
+     * @return int bitmapped data command value
      */
 
     static public int getDataCmdIdForCmdText(String dataCmdText)
@@ -382,6 +454,12 @@ public class DialogContext extends ServletValueContext
         return result;
     }
 
+    /**
+     * Gets the comma seperated data command string based upon a bitmapped data command value
+     *
+     * @param dataCmd bitmapped data command value
+     * @return String comma seperated string containing data commands
+     */
     static public String getDataCmdTextForCmdId(int dataCmd)
     {
         if(dataCmd == DATA_CMD_NONE)
@@ -426,6 +504,9 @@ public class DialogContext extends ServletValueContext
      * Check the dataCmdCondition against each available data command and see if it's set in the condition; if the
      * data command is set in the condition, then check to see if our data command for that command id is set. If any
      * of the data commands in dataCommandCondition match our current dataCmd, return true.
+     *
+     * @param dataCmdCondition the data command condition
+     * @return boolean True if the data commands in the passes in condition matches the current dialog data command
      */
     public boolean matchesDataCmdCondition(int dataCmdCondition)
     {
@@ -447,6 +528,8 @@ public class DialogContext extends ServletValueContext
     /**
      * Returns a string useful for displaying a unique Id for this DialogContext
      * in a log or monitor file.
+     *
+     * @return String Log id
      */
     public String getLogId()
     {
@@ -456,6 +539,8 @@ public class DialogContext extends ServletValueContext
     /**
      * Using a Document or element that was serialized using the exportToXml method in this class,
      * reconstruct the DialogFieldStates hash map. This is basically a data deserialization method.
+     *
+     * @param parent dialog context element's parent
      */
     public void importFromXml(Element parent)
     {
@@ -479,6 +564,13 @@ public class DialogContext extends ServletValueContext
         }
     }
 
+    /**
+     * Attach <code>request-param</code> child elements to the passed in element.
+     *
+     * @param parent parent element
+     * @param name Name
+     * @param values values for the passed in name
+     */
     static public void exportParamToXml(Element parent, String name, String[] values)
     {
         Document doc = parent.getOwnerDocument();
@@ -510,6 +602,8 @@ public class DialogContext extends ServletValueContext
     /**
      * Export all the data in DialogFieldStates hash map into an XML document for later retrieval.
      * This is basically a data serialization method.
+     *
+     * @param parent dialog context element's parent
      */
     public void exportToXml(Element parent)
     {
@@ -571,6 +665,14 @@ public class DialogContext extends ServletValueContext
         parent.appendChild(dcElem);
     }
 
+    /**
+     * Retrieve dialog context information from a XML
+     *
+     * @param String XML file
+     * @throws ParserConfigurationException if an XML parsing exception occurred
+     * @throws SAXException SAX Exception
+     * @throws IOException if error occurred in reading the XML file
+     */
     public void setFromXml(String xml) throws ParserConfigurationException, SAXException, IOException
     {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -581,6 +683,9 @@ public class DialogContext extends ServletValueContext
         importFromXml(doc.getDocumentElement());
     }
 
+    /**
+     *
+     */
     public String getAsXml() throws ParserConfigurationException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
     {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -667,6 +772,9 @@ public class DialogContext extends ServletValueContext
         }
     }
 
+    /**
+     * Calculate what the next state or stage of the dialog should be.
+     */
     public void calcState()
     {
         activeMode = DIALOGMODE_INPUT;
@@ -730,16 +838,31 @@ public class DialogContext extends ServletValueContext
         return transactionId;
     }
 
+    /**
+     * Indicates whether or not the context was reset
+     *
+     * @return boolean True if context was reset
+     */
     public final boolean contextWasReset()
     {
         return resetContext;
     }
 
+    /**
+     * Gets the number of times the dialog has been ran
+     *
+     * @param int sequence number
+     */
     public final int getRunSequence()
     {
         return runSequence;
     }
 
+    /**
+     * Gets the number of times the dialog has been executed
+     *
+     * @param int execution count
+     */
     public final int getExecuteSequence()
     {
         return execSequence;
@@ -750,31 +873,61 @@ public class DialogContext extends ServletValueContext
         return runSequence == 1;
     }
 
+    /**
+     * Indicates whether or no if this is a first attempt at executing the dialog
+     *
+     * @return boolean True if the execution is for the first time
+     */
     public final boolean isInitialExecute()
     {
         return execSequence == 1;
     }
 
+    /**
+     * Indicates whether or not if the dialog has been executed already
+     *
+     * @return boolean True if current exectuion is a duplicate one
+     */
     public final boolean isDuplicateExecute()
     {
         return execSequence > 1;
     }
 
+    /**
+     * Returns the active mode of the dialog
+     *
+     * @param char Mode
+     */
     public final char getActiveMode()
     {
         return activeMode;
     }
 
+    /**
+     * Returns what the next mode of the dialog is
+     *
+     * @param char Mode
+     */
     public final char getNextMode()
     {
         return nextMode;
     }
 
+    /**
+     * Indicates whether or not the dialog is in input mode
+     *
+     * @return boolean True if the dialog is in input mode
+     */
     public final boolean inInputMode()
     {
         return activeMode == DIALOGMODE_INPUT;
     }
 
+    /**
+     * Indicates whether or not the dialog is in execution mode
+     *
+     * @return boolean True if the dialog is in execution mode
+     */
     public final boolean inExecuteMode()
     {
         return activeMode == DIALOGMODE_EXECUTE;
@@ -782,37 +935,65 @@ public class DialogContext extends ServletValueContext
 
     /**
      * Return true if the "pending" button was pressed in the dialog.
+     *
+     * @param boolean
      */
     public final boolean isPending()
     {
         return validationStage == VALSTAGE_IGNORE;
     }
 
+    /**
+     *
+     */
     public final String getOriginalReferer()
     {
         return originalReferer;
     }
 
+    /**
+     * Returns the <code>Dialog</code> object this context is associated with
+     *
+     * @return Dialog dialog object
+     */
     public final Dialog getDialog()
     {
         return dialog;
     }
 
+    /**
+     * Returns the <code>DialogSkin</code> object the dialog is using for its display
+     *
+     * @param DialogSkin dialog skin
+     */
     public final DialogSkin getSkin()
     {
         return skin;
     }
 
+    /**
+     * Returns the number of errors which occurred during validation
+     *
+     * @return int total error count
+     */
     public final int getErrorsCount()
     {
         return errorsCount;
     }
 
+    /**
+     * Returns the data command
+     *
+     * @return int data command
+     */
     public final int getDataCommand()
     {
         return dataCmd;
     }
 
+    /**
+     *
+     */
     public final String getDataCommandText(boolean titleCase)
     {
         String dataCmdText = getDataCmdTextForCmdId(getDataCommand());
@@ -849,26 +1030,51 @@ public class DialogContext extends ServletValueContext
         return (dataCmd & DATA_CMD_PRINT) == 0 ? false : true;
     }
 
+    /**
+     * Returns the <code>DatabaseContext</code> object
+     *
+     * @return DatabaseContext
+     */
     public final DatabaseContext getDatabaseContext()
     {
         return dbContext;
     }
 
+    /**
+     * Sets the database context object
+     *
+     * @param value DatabaseContext object
+     */
     public final void setDatabaseContext(DatabaseContext value)
     {
         dbContext = value;
     }
 
+    /**
+     * Indicates whether or not validation has been performed for the dialog
+     *
+     * @return boolean True if validation has been done
+     */
     public boolean validationPerformed()
     {
         return validationStage != VALSTAGE_NOT_PERFORMED ? true : false;
     }
 
+    /**
+     * Returns the validation stage
+     *
+     * @return int
+     */
     public int getValidationStage()
     {
         return validationStage;
     }
 
+    /**
+     * Sets the validation stage
+     *
+     * @param value stage
+     */
     public void setValidationStage(int value)
     {
         validationStage = value;
@@ -884,16 +1090,29 @@ public class DialogContext extends ServletValueContext
         executeHandled = value;
     }
 
+    /**
+     * Retrieves the HTTP request parameters that has been retained through the different dialog states
+     *
+     * @return String[] a string array of request parameters
+     */
     public String[] getRetainRequestParams()
     {
         return retainReqParams;
     }
 
+    /**
+     * Sets the HTTP request parameters to retain
+     *
+     * @param params HTTP request parameters
+     */
     public void setRetainRequestParams(String[] params)
     {
         retainReqParams = params;
     }
 
+    /**
+     * Returns a HTML string which contains hidden  form fields representing the dialog's information
+     */
     public String getStateHiddens()
     {
         StringBuffer hiddens = new StringBuffer();
@@ -970,6 +1189,13 @@ public class DialogContext extends ServletValueContext
         return hiddens.toString();
     }
 
+    /**
+     * Checks to see if a flag is set for a dialog field
+     *
+     * @param fieldQName
+     * @param flag
+     * @return boolean
+     */
     public boolean flagIsSet(String fieldQName, long flag)
     {
         DialogFieldState state = (DialogFieldState) fieldStates.get(fieldQName);
