@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.7 2002-12-30 15:50:05 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.8 2002-12-31 19:52:37 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -105,7 +105,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("<!-- Application Header Begins -->\n");
         writer.write("<html>\n");
         writer.write("<head>\n");
-        writer.write("<title>" + activePath.getTitle(nc) + "</title>\n");
+        writer.write("<title>" + (activePath != null ? activePath.getTitle(nc) : "") + "</title>\n");
         writer.write("	<link rel=\"stylesheet\" href=\"" + nc.getRootUrl() + cssFileName +"\" type=\"text/css\">\n");
         writer.write("</head>\n");
     }
@@ -220,6 +220,9 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
     public void renderPageHeader(Writer writer, NavigationPathContext nc) throws IOException
     {
+        if(nc.isPopup())
+            return;
+
         renderPageMasthead(writer, nc);
         renderPageMenusLevelOne(writer, nc);
         renderPageMenusLevelTwo(writer, nc);
@@ -255,6 +258,9 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
     public void renderPageFooter(Writer writer, NavigationPathContext nc) throws IOException
     {
+        if(nc.isPopup())
+            return;
+
         String sparxResourcesUrl = nc.getRootUrl() + "/sparx/resources";
 
         writer.write("   </TD></TR>");
