@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseImportDataDialog.java,v 1.2 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: DatabaseImportDataDialog.java,v 1.3 2002-12-23 04:27:51 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -104,7 +104,7 @@ public class DatabaseImportDataDialog extends Dialog
         srcFileNameOtherField.addConditionalAction(new DialogFieldConditionalDisplay(srcFileNameOtherField, "src_file", "control.selectedIndex == 0"));
 
         dalSchemaClassNameField = new TextField("dal_schema_class", "DAL Schema Class");
-        dalSchemaClassNameField.setDefaultValue(new StaticValue(DatabaseGenerateJavaDialog.DAL_SCHEMA_DEFAULT_CLASS_NAME));
+        dalSchemaClassNameField.setDefaultValue(new StaticValue("app.dal.DataAccessLayer"));
         dalSchemaClassNameField.setFlag(DialogField.FLDFLAG_REQUIRED | DialogField.FLDFLAG_PERSIST);
 
         dsIdField = new SelectField("ds_id", "JNDI Datasource", SelectField.SELECTSTYLE_COMBO, "data-source-entries:");
