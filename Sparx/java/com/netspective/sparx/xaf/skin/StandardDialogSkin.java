@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.8 2002-10-13 21:14:59 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.9 2002-10-14 14:24:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -105,7 +105,6 @@ public class StandardDialogSkin implements DialogSkin
     protected String gridRowCaptionFontAttrs;   // grid row font attributes
     protected String gridCaptionCellAttrs;      // grid column display attributes
     protected String gridTableAttrs;            // grid table display attribute
-    protected String gridHeadCellAttrs;
     protected String gridBodyCellAttrs;
     protected String captionCellAttrs;
     protected String captionFontAttrs;
@@ -140,7 +139,6 @@ public class StandardDialogSkin implements DialogSkin
         fieldRowErrorAttrs = "bgcolor='#DDDDDD' ";
         captionCellAttrs = "align='right' ";
         captionFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
-        gridHeadCellAttrs = "align='center'";
         gridBodyCellAttrs = "";
         gridTableAttrs = "cellpadding='2' cellspacing='0' border='0'";
         gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
@@ -211,8 +209,6 @@ public class StandardDialogSkin implements DialogSkin
                 gridRowCaptionFontAttrs = nodeText;
             else if(nodeName.equals("grid-caption-cell-attrs") && nodeText != null)
                 gridCaptionCellAttrs = nodeText;
-            else if(nodeName.equals("grid-head-attrs") && nodeText != null)
-                gridHeadCellAttrs = nodeText;
             else if(nodeName.equals("grid-cell-attrs") && nodeText != null)
                 gridBodyCellAttrs = nodeText;
             else if(nodeName.equals("control-area-font-attrs") && nodeText != null)
@@ -385,7 +381,7 @@ public class StandardDialogSkin implements DialogSkin
                     headerHtml.append("</font></td>");
 
 
-                    rowHtml.append("<td " + gridHeadCellAttrs + ">");
+                    rowHtml.append("<td " + gridBodyCellAttrs + ">");
                     appendGridControlBasics(dc, field, rowHtml);
                     rowHtml.append("</td>");
                 }
