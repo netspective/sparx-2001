@@ -477,7 +477,7 @@ public class StandardDialogSkin implements DialogSkin
 
 		StringBuffer messagesHtml = new StringBuffer();
         String hint = field.getHint();
-        if(hint != null)
+        if(hint != null && !(field.isReadOnly(dc) && dc.getDialog().flagIsSet(Dialog.DLGFLAG_HIDE_READONLY_HINTS)))
         {
             messagesHtml.append("<br><font "+hintFontAttrs+">");
             messagesHtml.append(hint);

@@ -19,6 +19,7 @@ public class Dialog
 	static public final int DLGFLAG_LOOP_DATA_ENTRY           = DLGFLAG_RETAIN_ALL_REQUEST_PARAMS * 2;
 	static public final int DLGFLAG_APPEND_WHEN_LOOPING       = DLGFLAG_LOOP_DATA_ENTRY * 2;
 	static public final int DLGFLAG_CUSTOM_START              = DLGFLAG_APPEND_WHEN_LOOPING * 2;
+	static public final int DLGFLAG_HIDE_READONLY_HINTS       = DLGFLAG_CUSTOM_START * 2;
 
 	static public final String PARAMNAME_AUTOEXECUTE   = "_d_exec";
 	static public final String PARAMNAME_DIALOGPREFIX  = "_d.";
@@ -137,6 +138,10 @@ public class Dialog
 		String loop = elem.getAttribute("loop");
 		if(loop.equals("no"))
 			clearFlag(DLGFLAG_LOOP_DATA_ENTRY);
+
+		String hideHints = elem.getAttribute("hide-readonly-hints");
+		if(hideHints.equals("yes"))
+			setFlag(DLGFLAG_HIDE_READONLY_HINTS);
 
 		if(director == null)
 			director = new DialogDirector();
