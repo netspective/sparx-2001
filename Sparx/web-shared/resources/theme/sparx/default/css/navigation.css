@@ -11,7 +11,7 @@
 .menu-table-end { border-right: 1px solid black }
 
 .menu-level-2-table      { color: #ffffff; font-weight: normal; font-size: 11px; font-family: Verdana; background: #6a5acd url(../images/level2/level2-backdrop.gif) repeat }
-.menu-level-2-active     { color: #ffffff; font-weight: normal; font-size: 11px; font-family: Verdana; background: #6a5acd url(../images/level2/level2-hover.gif) repeat bottom right; border-right: 1px solid #6a5acd }
+.menu-level-2-active     { color: #ffffff; font-weight: normal; font-size: 11px; font-family: Verdana; background: #6a5acd url(../images/level2/level2-hover.gif) no-repeat bottom right; border-right: 1px solid #6a5acd }
 .menu-level-2-separator  { color: #ffffff; font-weight: normal; font-size: 11px; font-family: Verdana; border-right: 1px solid #6a5acd }
 .menu-level-2            { color: #ffffff; font-weight: bold; font-size: 11px; font-family: Verdana; text-decoration: none;  }
 .menu-level-2:link       { color: #b195ec; font-weight: normal; font-size: 11px; font-family: Verdana; text-decoration: none }
@@ -23,7 +23,7 @@
 .menu-level-2-active:hover    { color: #ffffff; font-weight: bold; font-size: 11px; font-family: Verdana; text-decoration: none; background: url(../images/level2/level2-hover.gif) no-repeat }
 
 .menu-level-1-table   { background: url(../images/level1/level1tab.gif) no-repeat left bottom; padding-top: 2px; padding-bottom: 4px }
-.menu-level-1-table-active  { background: #6a5acd url(../images/level1/level1tab-active.gif) no-repeat left bottom; padding-top: 2px; padding-bottom: 4px }
+.menu-level-1-table-active  { background:  url(../images/level1/level1tab-active.gif) no-repeat left bottom; padding-top: 2px; padding-bottom: 4px }
 .menu-level-1-table-active-end  { background: url(../images/level1/level1tab-active-cap.gif) no-repeat right bottom; padding-top: 2px; padding-bottom: 4px }
 .menu-level-1-table-end    { background: url(../images/level1/level1tab-cap.gif) no-repeat left bottom }
 .menu-level-1-table-start { background: url(../images/level1/level1tab-open.gif) no-repeat left bottom }

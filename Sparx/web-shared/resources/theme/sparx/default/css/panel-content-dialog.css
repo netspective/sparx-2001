@@ -1,12 +1,17 @@
-.dialog-button:link { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none }
-.dialog-button:visited { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none }
-.dialog-button      { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none; background-color: #dcdcdc; text-transform: uppercase; padding: 1px 3px; border: solid 1px #009; width: auto }
-.dialog-button:hover     { color: white; font-size: 12px; font-family: Verdana; text-decoration: none; background-color: #009; padding: 1px 3px; border: solid 1px #a9a9a9; width: auto }
-.dialog-fields     { color: #333; font-weight: normal; font-size: 12px; font-family: Tahoma; background: url(../images/panel/input/content-separator.gif) no-repeat right center; text-align: right; vertical-align: middle; padding: 7px 7px 7px 5px }
-.dialog-button-table { text-align: left; padding: 7px 7px 7px 5px }
-.dialog-entry        { color: #333; font-weight: normal; font-size: 12px; font-family: Tahoma; padding-right: 7px; padding-left: 7px; width: auto }
-.dialog-fields-header   { color: #696969; font-variant: small-caps; font-weight: bold; font-size: 100%; font-family: "Trebuchet MS", Verdana; background-color: #f1eeee; text-align: left; vertical-align: bottom; padding: 15px 4px 1px 10px; border-style: solid; border-width: 1px; border-color: #c0c0c0 #808080 #808080 #c0c0c0; width: auto }
-.dialog-fields-separator   { color: #696969; font-variant: small-caps; font-weight: bold; font-size: 100%; font-family: "Trebuchet MS", Verdana; background-color: #f1eeee; text-align: left; vertical-align: bottom; padding: 5px 4px 1px 5px; border-style: solid; border-width: 1px; border-color: #c0c0c0 #808080 #808080 #c0c0c0; width: auto }
+.dialog-button:link    { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none; padding: 1px 3px; text-transform: uppercase; border: solid 1px #009; }
+.dialog-button:visited { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none;padding: 1px 3px; text-transform: uppercase; border: solid 1px #009; }
+.dialog-button:active  { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none;padding: 1px 3px; text-transform: uppercase; border: solid 1px #009; }
+.dialog-button         { color: #333; font-size: 12px; font-family: Verdana; text-decoration: none; background-color: #dcdcdc; text-transform: uppercase; padding: 1px 3px; border: solid 1px #009;    }
+.dialog-button:hover   { color: white; background-color: #009;}
+.dialog-button-table   { font-size: 12px; text-align: left; padding: 7px 7px 7px 5px }
+
+.dialog-fields           { color: #333; font-weight: normal; font-size: 12px; font-family: Tahoma; background: url(../images/panel/input/content-separator.gif) no-repeat right center; text-align: right; vertical-align: middle; padding: 7px 7px 7px 5px }
+.dialog-entry            { color: #333; font-weight: normal; font-size: 12px; font-family: Tahoma; padding-right: 7px; padding-left: 7px; width: auto }
+.dialog-fields-header    { color: #696969; font-variant: small-caps; font-weight: bold; font-size: 100%; font-family: "Trebuchet MS", Verdana; background-color: #f1eeee; text-align: left; vertical-align: bottom; padding: 15px 4px 1px 10px; border-style: solid; border-width: 1px; border-color: #c0c0c0 #808080 #808080 #c0c0c0; width: auto }
+.dialog-fields-separator { color: #696969; font-variant: small-caps; font-weight: bold; font-size: 100%; font-family: "Trebuchet MS", Verdana; background-color: #f1eeee; text-align: left; vertical-align: bottom; padding: 5px 4px 1px 5px; border-style: solid; border-width: 1px; border-color: #c0c0c0 #808080 #808080 #c0c0c0; width: auto }
+.dialog-fields-separator-link { color: #696969; font-variant: small-caps; font-weight: bold; font-size: 100%; font-family: "Trebuchet MS", Verdana; background-color: #f1eeee; text-align: left; vertical-align: bottom; padding: 5px 4px 1px 5px; }
+.dialog-fields-separator-link:hover   { color: #696969; font-variant: small-caps; font-weight: bold; font-size: 100%; font-family: "Trebuchet MS", Verdana; background-color: #f1eeee; text-align: left; vertical-align: bottom; padding: 5px 4px 1px 5px; }
+
 
 .dialog-input-required              { color: #000; font-family: Tahoma; background: white url(../images/panel/input/content-required.gif) no-repeat right top; padding-left: 3px; border: solid 1px #009; width: auto }
 .dialog-input          { color: #000; font-family: Tahoma; padding-left: 3px; border: solid 1px #009; width: auto }
