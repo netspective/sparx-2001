@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractNavigationPage.java,v 1.1 2002-12-04 14:24:39 roque.hernandez Exp $
+ * $Id: AbstractNavigationPage.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -59,7 +59,8 @@ package com.netspective.sparx.xaf.page;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-public class AbstractNavigationPage extends AbstractServletPage implements NavigationPage {
+public class AbstractNavigationPage extends AbstractServletPage implements NavigationPage
+{
 
     public static int BEFORE_BODY_FLAG = 1;
     public static int BODY_FLAG = BEFORE_BODY_FLAG * 2;
@@ -68,58 +69,70 @@ public class AbstractNavigationPage extends AbstractServletPage implements Navig
     private String title = "";
 
 
-    public void updateNavigationState(NavigationContext nc) {
+    public void updateNavigationState(NavigationContext nc)
+    {
     }
 
-    public void handlePageBeforeBody(NavigationContext nc) throws ServletException {
+    public void handlePageBeforeBody(NavigationContext nc) throws ServletException
+    {
         handlePage(nc, BEFORE_BODY_FLAG);
     }
 
-    public void handlePageAfterBody(NavigationContext nc) throws ServletException {
+    public void handlePageAfterBody(NavigationContext nc) throws ServletException
+    {
         handlePage(nc, AFTER_BODY_FLAG);
     }
 
-    public void handlePage(PageContext pc, int handlingFlag) throws ServletException {
+    public void handlePage(PageContext pc, int handlingFlag) throws ServletException
+    {
 
-        this.updateNavigationState((NavigationContext)pc);
+        this.updateNavigationState((NavigationContext) pc);
 
         try
         {
-            if ((handlingFlag & BEFORE_BODY_FLAG) != 0) {
+            if ((handlingFlag & BEFORE_BODY_FLAG) != 0)
+            {
                 handlePageMetaData(pc);
                 handlePageHeader(pc);
             }
-            if ((handlingFlag & BODY_FLAG) != 0) {
+            if ((handlingFlag & BODY_FLAG) != 0)
+            {
                 handlePageBody(pc);
             }
 
-            if ((handlingFlag & AFTER_BODY_FLAG) != 0) {
+            if ((handlingFlag & AFTER_BODY_FLAG) != 0)
+            {
                 handlePageFooter(pc);
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             throw new ServletException(e);
         }
     }
 
-    public void handlePage(PageContext pc) throws ServletException {
+    public void handlePage(PageContext pc) throws ServletException
+    {
         handlePage(pc, BEFORE_BODY_FLAG | BODY_FLAG | AFTER_BODY_FLAG);
     }
 
-    public void setHeading(String heading) {
+    public void setHeading(String heading)
+    {
         this.heading = heading;
     }
 
-    public String getHeading() {
+    public String getHeading()
+    {
         return this.heading;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return this.title;
     }
 }

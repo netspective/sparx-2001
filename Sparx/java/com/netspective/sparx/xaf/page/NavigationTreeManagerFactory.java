@@ -51,88 +51,77 @@
  */
 
 /**
- * $Id: NavigationContext.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationTreeManagerFactory.java,v 1.1 2002-12-26 19:35:40 shahid.shah Exp $
  */
+
 package com.netspective.sparx.xaf.page;
 
-import javax.servlet.Servlet;
+import com.netspective.sparx.util.factory.Factory;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.ServletValueContext;
+import com.netspective.sparx.util.config.Configuration;
+import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
 
-public class NavigationContext extends PageContext
+public class NavigationTreeManagerFactory implements Factory
 {
-    private NavigationTree owner = null;
-    private NavigationSkin skin = null;
-    private boolean popup;
-    private Map navigationStates = new HashMap();
+    static final String ATTRNAME_NAVTREEMGR = com.netspective.sparx.Globals.DEFAULT_CONFIGITEM_PREFIX + "nav-tree-mgr";
+    static private Map managers = new HashMap();
 
-    public NavigationContext(VirtualPath pagesPath, ServletContext aServletContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, String NavTreeId, NavigationSkin skin)
+    /**
+     * Method used for retrieving a <code>NavigationTreeManager</code> object representing a
+     * XML structure file. The factory first looks for the <code>NavigationTreeManager</code> object
+     * from a <code>Map</code> and if it doesn't exist, it creates a new one and adds it
+     * to the map of statement managers.
+     *
+     * @param file static structure XML file name
+     * @return NavigationTreeManager
+     */
+    public static NavigationTreeManager getManager(String file)
     {
-        super(pagesPath, aServletContext, aServlet, aRequest, aResponse, NavTreeId);
-        this.owner = (NavigationTree) pagesPath;
-        this.skin = skin;
+        NavigationTreeManager activeManager = (NavigationTreeManager) managers.get(file);
+        if(activeManager == null)
+        {
+            activeManager = new NavigationTreeManager(new File(file));
+            managers.put(file, activeManager);
+        }
+        return activeManager;
     }
 
-    public ServletPage getPage()
+    /**
+     * Method used for retrieving a <code>NavigationTreeManager</code> object within a web application context.
+     * The factory retrieves the structure XML file name from <code>app.ui.structure-file</code> configuraton entry
+     * defined in <code>WEB-INF/conf/sparx.xml</code> of the web application.
+     *
+     * @param context the servlet context
+     * @return NavigationTreeManager
+     */
+    public static NavigationTreeManager getManager(ServletContext context)
     {
-        return this.getActivePath().getMatchedPath().getPage();
+        NavigationTreeManager manager = (NavigationTreeManager) context.getAttribute(ATTRNAME_NAVTREEMGR);
+        if(manager != null)
+            return manager;
+
+        Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
+        ValueContext vc = new ServletValueContext(context, null, null, null);
+        manager = getManager(appConfig.getTextValue(vc, "app.ui.structure-file"));
+        manager.initializeForServlet(context);
+        context.setAttribute(ATTRNAME_NAVTREEMGR, manager);
+        return manager;
     }
 
-    public NavigationTree getOwner()
+    /**
+     * Method used to retrieve the default navigation tree.
+     * @param context ServletContext for web application requesting the navigation tree
+     * @return NavigationTree
+     */
+    public static NavigationTree getNavigationTree(ServletContext context)
     {
-        return owner;
-    }
-
-    public void setOwner(NavigationTree owner)
-    {
-        this.owner = owner;
-    }
-
-    public Map getNavigationStates()
-    {
-        return navigationStates;
-    }
-
-    public void setNavigationStates(Map navigationStates)
-    {
-        this.navigationStates = navigationStates;
-    }
-
-    public void setHiddenField(String id)
-    {
-        setHiddenField(id, false);
-    }
-
-    public void setHiddenField(String id, boolean flag)
-    {
-        this.navigationStates.put(id, new Boolean(flag));
-    }
-
-    public Boolean isNavVisible(String id)
-    {
-        return (Boolean) navigationStates.get(id);
-    }
-
-    public NavigationSkin getSkin()
-    {
-        return skin;
-    }
-
-    public void setSkin(NavigationSkin skin)
-    {
-        this.skin = skin;
-    }
-
-    public boolean isPopup()
-    {
-        return popup;
-    }
-
-    public void setPopup(boolean popup)
-    {
-        this.popup = popup;
+        NavigationTreeManager manager = getManager(context);
+        return manager != null ? manager.getTree(null) : null;
     }
 }

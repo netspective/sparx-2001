@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.8 2002-12-23 04:43:04 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.9 2002-12-26 19:35:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -66,20 +66,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.sql.SQLException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.Servlet;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletRequest;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.jsp.JspException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.naming.NamingException;
 
 import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
@@ -87,11 +80,8 @@ import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManager;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
-import com.netspective.sparx.xaf.form.DialogManagerFactory;
 import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
-import com.netspective.sparx.xaf.sql.StatementManagerFactory;
-import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -135,7 +125,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private LoginDialog loginDialog;
     private String loginDialogSkinName;
     private String logoutParamName;
-    private String logoutRedirect;
 
     private String rediscoverParamName;
     private VirtualPath pagesPath = new VirtualPath();
@@ -417,46 +406,6 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         }
 
         return false;
-    }
-
-    public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp) throws IOException, StatementNotFoundException, NamingException, SQLException
-    {
-        String pageCmdReqParam = req.getParameter(DialogManagerFactory.DialogCommands.PAGE_COMMAND_REQUEST_PARAM_NAME);
-        if(pageCmdReqParam == null)
-            return false;
-
-        String pageCmd = "unknown";
-        String pageCmdParam = null;
-        int cmdDelimPos = pageCmdReqParam.indexOf(",");
-        if(cmdDelimPos != -1)
-        {
-            pageCmd = pageCmdReqParam.substring(0, cmdDelimPos);
-            pageCmdParam = pageCmdReqParam.substring(cmdDelimPos+1);
-        }
-
-        // a "standard" page command needs to be handled
-        if(pageCmd.equals("dialog"))
-        {
-            DialogManagerFactory.DialogCommands dcmd = DialogManagerFactory.getCommands(pageCmdParam);
-            dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp), false);
-        }
-        else if(pageCmd.equals("qd-dialog"))
-        {
-            StatementManagerFactory.QuerySelectDialogCommands dcmd = StatementManagerFactory.getQuerySelectDialogCommands(pageCmdParam);
-            dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp));
-        }
-        else if(pageCmd.equals("statement"))
-        {
-            StatementManagerFactory.StatementCommands scmd = StatementManagerFactory.getStatementCommands(pageCmdParam);
-            scmd.handleStatement(new ServletValueContext(context, servlet, req, resp), false);
-        }
-        else
-        {
-            resp.getWriter().write("Page command '" + pageCmd + "' not recognized.");
-            return false;
-        }
-
-        return true;
     }
 
     /**

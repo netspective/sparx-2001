@@ -51,9 +51,8 @@
  */
 
 /**
- * $Id: NavigationTree.java,v 1.2 2002-12-12 13:23:02 roque.hernandez Exp $
+ * $Id: NavigationTree.java,v 1.3 2002-12-26 19:35:40 shahid.shah Exp $
  */
-
 
 package com.netspective.sparx.xaf.page;
 
@@ -63,6 +62,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -70,8 +72,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NavigationTree extends VirtualPath {
-
+public class NavigationTree extends VirtualPath
+{
     private String defaultChildId = null;
     private SingleValueSource url = null;
     private Map ancestorMap = new HashMap();
@@ -83,7 +85,8 @@ public class NavigationTree extends VirtualPath {
      * elements are part of the active path when the current element is not a leaf of the tree.
      * @return
      */
-    public String getDefaultChildId() {
+    public String getDefaultChildId()
+    {
         return defaultChildId;
     }
 
@@ -92,7 +95,8 @@ public class NavigationTree extends VirtualPath {
      * elements are part of the active path when the current element is not a leaf of the tree.
      * @param  defaultChildId  The String representing the Id of the child that should be the default.
      */
-    public void setDefaultChildId(String defaultChildId) {
+    public void setDefaultChildId(String defaultChildId)
+    {
         this.defaultChildId = defaultChildId;
     }
 
@@ -102,7 +106,8 @@ public class NavigationTree extends VirtualPath {
      * tree.  If a url is not provided, the id is used for the url.
      * @return
      */
-    public SingleValueSource getUrl() {
+    public SingleValueSource getUrl()
+    {
         return url;
     }
 
@@ -113,7 +118,8 @@ public class NavigationTree extends VirtualPath {
      * @param  pc  An object of type ValueContext to enable us to get the value from a ValueSource.
      * @return
      */
-    public String getUrl(PageContext pc) {
+    public String getUrl(PageContext pc)
+    {
         return url.getValue(pc);
     }
 
@@ -123,7 +129,8 @@ public class NavigationTree extends VirtualPath {
      * tree.  If a url is not provided, the id is used for the url.
      * @param  url  The ValueSource to be used.
      */
-    public void setUrl(SingleValueSource url) {
+    public void setUrl(SingleValueSource url)
+    {
         this.url = url;
     }
 
@@ -133,7 +140,8 @@ public class NavigationTree extends VirtualPath {
      * tree.  If a url is not provided, the id is used for the url.
      * @param  url  The String to obtain a reference to a ValueSource from the factory.
      */
-    public void setUrl(String url) {
+    public void setUrl(String url)
+    {
         this.url = ValueSourceFactory.getSingleOrStaticValueSource(url);
     }
 
@@ -143,7 +151,8 @@ public class NavigationTree extends VirtualPath {
      * elements to render on levels above the active path.
      * @return
      */
-    public List getAncestorsList() {
+    public List getAncestorsList()
+    {
         return ancestorsList;
     }
 
@@ -153,7 +162,8 @@ public class NavigationTree extends VirtualPath {
      * elements to render on levels above the active path.
      * @param  ancestorsList  The List that represents all of the parents of the current object.
      */
-    public void setAncestorsList(List ancestorsList) {
+    public void setAncestorsList(List ancestorsList)
+    {
         this.ancestorsList = ancestorsList;
     }
 
@@ -163,7 +173,8 @@ public class NavigationTree extends VirtualPath {
      * elements to render on levels above the active path.
      * @return
      */
-    public Map getAncestorMap() {
+    public Map getAncestorMap()
+    {
         return ancestorMap;
     }
 
@@ -173,7 +184,8 @@ public class NavigationTree extends VirtualPath {
      * elements to render on levels above the active path.
      * @param  ancestorMap  The Map that represents all of the parents of the current object.
      */
-    public void setAncestorMap(Map ancestorMap) {
+    public void setAncestorMap(Map ancestorMap)
+    {
         this.ancestorMap = ancestorMap;
     }
 
@@ -184,11 +196,15 @@ public class NavigationTree extends VirtualPath {
      *          does not have a value defined for it, it then looks at the variable defined in NavigationTree.  This variable
      *          is primarily driven by the importFromXml method.
      */
-    public boolean isVisible(NavigationContext nc) {
+    public boolean isVisible(NavigationContext nc)
+    {
         Boolean isVisible = nc.isNavVisible(this.getId());
-        if (isVisible != null) {            
+        if (isVisible != null)
+        {
             return isVisible.booleanValue();
-        } else {
+        }
+        else
+        {
             return visible;
         }
     }
@@ -198,7 +214,8 @@ public class NavigationTree extends VirtualPath {
      * not affect the runtime flag kept by the NavigationContext.
      * @param visible The boolean value.
      */
-    public void setVisible(boolean visible) {
+    public void setVisible(boolean visible)
+    {
         this.visible = visible;
     }
 
@@ -210,7 +227,8 @@ public class NavigationTree extends VirtualPath {
      *              2. In the ancestor list of the Active NavigationTree.
      *              3. One of the Default Children.
      */
-    public boolean isInActivePath(PageContext pc) {
+    public boolean isInActivePath(PageContext pc)
+    {
         //get the current NavigationTree
         NavigationTree currentNavTree = (NavigationTree) pc.getActivePath().getMatchedPath();
 
@@ -218,7 +236,8 @@ public class NavigationTree extends VirtualPath {
 
         //get the parents and for each set the property of current to true
         List ancestors = currentNavTree.getAncestorsList();
-        for (int i = 0; i < ancestors.size(); i++) {
+        for (int i = 0; i < ancestors.size(); i++)
+        {
             NavigationTree navTree = (NavigationTree) ancestors.get(i);
             if (this.getId().equals(navTree.getId())) return true;
         }
@@ -226,9 +245,11 @@ public class NavigationTree extends VirtualPath {
         //get the default children if any and set the property of current to true
         Map childrenMap = currentNavTree.getChildrenMap();
         List childrenList = currentNavTree.getChildrenList();
-        while (childrenMap != null && childrenList != null && !childrenMap.isEmpty() && !childrenList.isEmpty()) {
+        while (childrenMap != null && childrenList != null && !childrenMap.isEmpty() && !childrenList.isEmpty())
+        {
             NavigationTree defaultChildNavTree = (NavigationTree) childrenMap.get(currentNavTree.getDefaultChildId());
-            if (defaultChildNavTree == null) {
+            if (defaultChildNavTree == null)
+            {
                 defaultChildNavTree = (NavigationTree) childrenList.get(0);
             }
             if (this.getId().equals(defaultChildNavTree.getId())) return true;
@@ -246,21 +267,22 @@ public class NavigationTree extends VirtualPath {
      * @param  elem  The DOM element that contains the structure and values to be read.
      * @param  parent  The parent object.
      */
-    public void importFromXml(Element elem, VirtualPath parent) {
-
+    public void importFromXml(Element elem, VirtualPath parent)
+    {
         NavigationTree parentTree = (NavigationTree) parent;
 
         super.importFromXml(elem, parent);
 
         NodeList children = elem.getChildNodes();
-
-        for (int c = 0; c < children.getLength(); c++) {
+        for (int c = 0; c < children.getLength(); c++)
+        {
             Node child = children.item(c);
             if (child.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
             Element childElem = (Element) child;
-            if (childElem.getNodeName().equals("page")) {
+            if (childElem.getNodeName().equals("page"))
+            {
 
                 String id = childElem.getAttribute("id");
                 NavigationTree childPath = (NavigationTree) parent.getChildrenMap().get(id);
@@ -280,9 +302,11 @@ public class NavigationTree extends VirtualPath {
 
                 //if this is the first child then if there is no default defined for the parent set this id as the
                 //default.
-                if (c == 0) {
+                if (c == 0)
+                {
                     String parentDefaultChildId = parentTree.getDefaultChildId();
-                    if (parentDefaultChildId == null || parentDefaultChildId.length() == 0) {
+                    if (parentDefaultChildId == null || parentDefaultChildId.length() == 0)
+                    {
                         parentTree.setDefaultChildId(id);
                     }
                 }
@@ -295,20 +319,24 @@ public class NavigationTree extends VirtualPath {
      * It then keeps doing that, but now looking at its parent's parent until it returns null.  It then reverses the list
      * to maintain a 0=top structure.
      */
-    private void generateAncestorList() {
+    private void generateAncestorList()
+    {
         NavigationTree currentPath = (NavigationTree) this.getParent();
-        if (this.getParent() != null) {
+        if (this.getParent() != null)
+        {
             List ancestorListReversed = new ArrayList();
             Map ancestorMap = new HashMap();
-            while(currentPath != null){
+            while (currentPath != null)
+            {
                 ancestorMap.put(currentPath.getId(), currentPath);
                 ancestorListReversed.add(currentPath);
-                currentPath = (NavigationTree)currentPath.getParent();
+                currentPath = (NavigationTree) currentPath.getParent();
             }
             this.setAncestorMap(ancestorMap);
 
             List ancestorList = new ArrayList();
-            for (int i = ancestorListReversed.size() - 1; i >= 0; i--) {
+            for (int i = ancestorListReversed.size() - 1; i >= 0; i--)
+            {
                 NavigationTree navigationTree = (NavigationTree) ancestorListReversed.get(i);
                 ancestorList.add(navigationTree);
             }
@@ -321,7 +349,8 @@ public class NavigationTree extends VirtualPath {
      * Overrides the method from VirtualPath in order to place NavigationTree objects in the structure.
      * @return
      */
-    public VirtualPath getChildPathInstance() {
+    public VirtualPath getChildPathInstance()
+    {
         return new NavigationTree();
     }
 
@@ -332,32 +361,54 @@ public class NavigationTree extends VirtualPath {
      * @param nc
      * @param level
      */
-    public void renderNavigation(Writer writer, NavigationContext nc, int level) {
+    public void renderNavigation(Writer writer, NavigationContext nc, int level)
+    {
         NavigationTree activeNavTree = (NavigationTree) nc.getActivePath().getMatchedPath();
         List ancestorList = activeNavTree.getAncestorsList();
         NavigationTree currentNavTree = null;
 
-        if (level < ancestorList.size() ){
+        if (level < ancestorList.size())
+        {
             currentNavTree = (NavigationTree) ancestorList.get(level);
-        } else if (level == ancestorList.size()) {
+        }
+        else if (level == ancestorList.size())
+        {
             currentNavTree = activeNavTree;
-        } else {
+        }
+        else
+        {
             return;
         }
 
         TabbedNavigationSkin skin = (TabbedNavigationSkin) nc.getSkin();
         //at this point it will set the style for the level
-        try {
+        try
+        {
             skin.renderSingleNavigationLevel(writer, currentNavTree, nc);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();  //To change body of catch statement use Options | File Templates.
         }
     }
+
+    /**
+     * Creates a navigation context for the given JSP page and skin. Gives the NavigationTree the ability
+     * to control its own context.
+     * @param jspPageContext
+     * @param skin
+     * @param popup set to true if page is being called for a popup-window
+     * @return
+     */
+    public NavigationContext createContext(javax.servlet.jsp.PageContext jspPageContext, NavigationSkin skin, boolean popup)
+    {
+        NavigationContext result = new NavigationContext(this,
+                jspPageContext.getServletContext(),
+                (Servlet) jspPageContext.getPage(),
+                (HttpServletRequest) jspPageContext.getRequest(),
+                (HttpServletResponse) jspPageContext.getResponse(),
+                this.getId(), skin);
+        if(popup) result.setPopup(true);
+        return result;
+    }
 }
-
-
-
-
-
-
-

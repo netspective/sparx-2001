@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationSkin.java,v 1.1 2002-12-04 14:24:39 roque.hernandez Exp $
+ * $Id: NavigationSkin.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -59,8 +59,7 @@ package com.netspective.sparx.xaf.page;
 import java.io.IOException;
 import java.io.Writer;
 
-public interface NavigationSkin {
-
+public interface NavigationSkin
+{
     public void renderNavigation(Writer writer, NavigationTree currentNavTree, NavigationContext nc) throws IOException;
-
 }

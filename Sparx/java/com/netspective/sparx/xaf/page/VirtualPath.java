@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: VirtualPath.java,v 1.8 2002-12-12 13:23:02 roque.hernandez Exp $
+ * $Id: VirtualPath.java,v 1.9 2002-12-26 19:35:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -76,6 +76,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.util.xml.XmlSource;
 
 public class VirtualPath
 {
@@ -333,37 +334,6 @@ public class VirtualPath
         heading = value != null && value.length() > 0 ? value : null;
     }
 
-    public void importFromXml(String xmlFile) throws ParserConfigurationException, SAXException, IOException
-    {
-        importFromXml(xmlFile, this);
-    }
-
-    public VirtualPath importFromXml(String xmlFile, VirtualPath root) throws ParserConfigurationException, SAXException, IOException
-    {
-        Document doc = null;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder parser = factory.newDocumentBuilder();
-        doc = parser.parse(xmlFile);
-        doc.normalize();
-
-        Element rootElem = doc.getDocumentElement();
-        NodeList children = rootElem.getChildNodes();
-        for(int c = 0; c < children.getLength(); c++)
-        {
-            Node child = children.item(c);
-            if(child.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-
-            Element childElem = (Element) child;
-            if(childElem.getNodeName().equals("structure"))
-            {
-                importFromXml(childElem, root);
-            }
-        }
-
-        return root;
-    }
-
     public void importFromXml(Element elem, VirtualPath parent)
     {
         NodeList children = elem.getChildNodes();
@@ -389,11 +359,19 @@ public class VirtualPath
                 childPath.setCaption(caption);
 
                 String heading = childElem.getAttribute("heading");
-                if(heading.length() == 0) heading = caption;
+                if(heading.length() == 0)
+                {
+                    heading = caption;
+                    childElem.setAttribute("heading", caption);
+                }
                 childPath.setHeading(heading);
 
                 String title = childElem.getAttribute("title");
-                if(title.length() == 0) title = heading;
+                if(title.length() == 0)
+                {
+                    title = heading;
+                    childElem.setAttribute("title", heading);
+                }
                 childPath.setTitle(title);
 
                 String pageClass = childElem.getAttribute("class");

@@ -51,88 +51,77 @@
  */
 
 /**
- * $Id: NavigationContext.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
+ * $Id: NavigationTreeManager.java,v 1.1 2002-12-26 19:35:40 shahid.shah Exp $
  */
+
 package com.netspective.sparx.xaf.page;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
+import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.util.ClassPath;
+import com.netspective.sparx.xaf.skin.SkinFactory;
+
 import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
 
-public class NavigationContext extends PageContext
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+
+public class NavigationTreeManager extends XmlSource
 {
-    private NavigationTree owner = null;
-    private NavigationSkin skin = null;
-    private boolean popup;
-    private Map navigationStates = new HashMap();
+    public static final String NAME_DEFAULT = "default";
+    private Map structures = new HashMap();
 
-    public NavigationContext(VirtualPath pagesPath, ServletContext aServletContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, String NavTreeId, NavigationSkin skin)
+    public NavigationTreeManager(File file)
     {
-        super(pagesPath, aServletContext, aServlet, aRequest, aResponse, NavTreeId);
-        this.owner = (NavigationTree) pagesPath;
-        this.skin = skin;
+        loadDocument(file);
     }
 
-    public ServletPage getPage()
+    public NavigationTree getTree(String name)
     {
-        return this.getActivePath().getMatchedPath().getPage();
+        reload();
+        return (NavigationTree) structures.get(name == null ? NAME_DEFAULT : name);
     }
 
-    public NavigationTree getOwner()
+    public void catalogNodes()
     {
-        return owner;
-    }
+        structures.clear();
 
-    public void setOwner(NavigationTree owner)
-    {
-        this.owner = owner;
-    }
+        if(xmlDoc == null)
+            return;
 
-    public Map getNavigationStates()
-    {
-        return navigationStates;
-    }
+        NodeList children = xmlDoc.getDocumentElement().getChildNodes();
+        for(int c = 0; c < children.getLength(); c++)
+        {
+            Node child = children.item(c);
+            if(child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
 
-    public void setNavigationStates(Map navigationStates)
-    {
-        this.navigationStates = navigationStates;
-    }
+            Element childElem = (Element) child;
+            if(childElem.getNodeName().equals("structure"))
+            {
+                setAttrValueDefault(childElem, "name", NAME_DEFAULT);
+                ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationTree.class, true);
+                NavigationTree tree = (NavigationTree) instanceGen.getInstance();
+                tree.importFromXml(childElem, tree);
+                structures.put(childElem.getAttribute("name"), tree);
+            }
+            else if(childElem.getNodeName().equals("register-navigation-skin"))
+            {
+                String name = childElem.getAttribute("name");
+                String className = childElem.getAttribute("class");
+                try
+                {
+                    SkinFactory.addNavigationSkin(name, className);
+                }
+                catch (Exception e)
+                {
+                    addError("Error registering skin '"+ name +"': "+ e.getMessage());
+                }
+            }
+        }
 
-    public void setHiddenField(String id)
-    {
-        setHiddenField(id, false);
-    }
-
-    public void setHiddenField(String id, boolean flag)
-    {
-        this.navigationStates.put(id, new Boolean(flag));
-    }
-
-    public Boolean isNavVisible(String id)
-    {
-        return (Boolean) navigationStates.get(id);
-    }
-
-    public NavigationSkin getSkin()
-    {
-        return skin;
-    }
-
-    public void setSkin(NavigationSkin skin)
-    {
-        this.skin = skin;
-    }
-
-    public boolean isPopup()
-    {
-        return popup;
-    }
-
-    public void setPopup(boolean popup)
-    {
-        this.popup = popup;
+        addMetaInformation();
     }
 }

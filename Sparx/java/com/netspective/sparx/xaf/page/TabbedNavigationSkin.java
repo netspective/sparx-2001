@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TabbedNavigationSkin.java,v 1.1 2002-12-04 14:24:39 roque.hernandez Exp $
+ * $Id: TabbedNavigationSkin.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
  */
 
 
@@ -60,8 +60,8 @@ package com.netspective.sparx.xaf.page;
 import java.io.IOException;
 import java.io.Writer;
 
-public interface TabbedNavigationSkin extends NavigationSkin{
-
+public interface TabbedNavigationSkin extends NavigationSkin
+{
     public static String HORIZONTAL_CAPTION_STYLE = "HC";
     public static String HORIZONTAL_IMAGES_STYLE = "HI";
     public static String VERTICAL_CAPTION_STYLE = "VC";
@@ -70,6 +70,5 @@ public interface TabbedNavigationSkin extends NavigationSkin{
 
     public String getActiveStyleId();
 
-    public void setActiveStyleId(String activeStyleId) ;
-
+    public void setActiveStyleId(String activeStyleId);
 }

@@ -51,10 +51,13 @@
  */
  
 /**
- * $Id: AbstractServletPage.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: AbstractServletPage.java,v 1.2 2002-12-26 19:35:40 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
+
+import com.netspective.sparx.xaf.html.ComponentCommandException;
+import com.netspective.sparx.xaf.html.ComponentCommandFactory;
 
 import java.io.IOException;
 
@@ -138,27 +141,17 @@ public class AbstractServletPage implements ServletPage
         {
             handlePageMetaData(pc);
             handlePageHeader(pc);
-            handlePageBody(pc);
+            if(!ComponentCommandFactory.handleDefaultBodyItem(pc.getServletContext(), pc.getServlet(), pc.getRequest(), pc.getResponse()))
+                handlePageBody(pc);
             handlePageFooter(pc);
+        }
+        catch (ComponentCommandException e)
+        {
+            throw new ServletException(e);
         }
         catch(IOException e)
         {
             throw new ServletException(e);
         }
-        /*
-		try
-		{
-			PrintWriter out = pc.getResponse().getWriter();
-	    	out.print("This is "+ this.getClass() + ". ");
-
-			VirtualPath.FindResults results = pc.getActivePath();
-			String[] unmatchedItems = results.unmatchedPathItems();
-			out.print("Unmatched items: " + (unmatchedItems == null ? 0 : unmatchedItems.length));
-		}
-		catch(IOException e)
-		{
-			throw new ServletException(e);
-		}
-		*/
     }
 }
