@@ -16,6 +16,7 @@
 			</permission>
 		</permission>
 
+		<!-- roles -->
 		<permission name="role">
 			<permission name="super-user">
 				<grant permission="/app"/>
