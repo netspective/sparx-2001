@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.6 2002-12-30 14:08:25 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.7 2002-12-30 15:50:05 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -124,16 +124,16 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             writer.write("	<table class=\"app_header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">");
             writer.write("	    <tr>");
             writer.write("           <td class=\"app_header\" nowrap height=\"20\">");
-            writer.write("	            <img src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-marker.gif\">&nbsp;USER:&nbsp;<a class=\"app_header\" href=\"" + nc.getRootUrl() + "/person/summary.jsp?person_id=" + personId + "\">" + personName.toUpperCase() + "</a>");
+            writer.write("	            <img src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-marker.gif\">&nbsp;USER:&nbsp;<a class=\"app_header\" href=\"" + nc.getRootUrl() + "/person/summary.jsp?person_id=" + personId + "\">" + personName.toUpperCase() + "</a>");
             writer.write("           </td>");
             writer.write("           <td class=\"app_header\" nowrap>");
-            writer.write("               <img src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-marker.gif\">&nbsp;ORG:&nbsp;<a class=\"app_header\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" + orgId + "\">" + orgName.toUpperCase() + "</a>");
+            writer.write("               <img src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-marker.gif\">&nbsp;ORG:&nbsp;<a class=\"app_header\" href=\"" + nc.getRootUrl() + "/org/summary.jsp?org_id=" + orgId + "\">" + orgName.toUpperCase() + "</a>");
             writer.write("           </td>");
             writer.write("           <td width=\"100%\" class=\"app_header\" nowrap>");
-            writer.write("	            <img src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\">");
+            writer.write("	            <img src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\">");
             writer.write("           </td>");
             writer.write("           <td class=\"app_header\" nowrap>");
-            writer.write("           <img src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-marker.gif\"><a class=\"app_header\" href=\"" + nc.getRootUrl() + "?_logout=yes\">&nbsp;LOGOUT</a>");
+            writer.write("           <img src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-marker.gif\"><a class=\"app_header\" href=\"" + nc.getRootUrl() + "?_logout=yes\">&nbsp;LOGOUT</a>");
             writer.write("           </td>");
             writer.write("	    </tr>");
             writer.write("   </table>");
@@ -145,7 +145,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("   <TABLE class=\"mast_header\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
         writer.write("      <TR>");
         writer.write("	        <TD>&nbsp;<A class=\"app_name\" href=\"" + nc.getRootUrl() + "/index.jsp\">"+ nc.getApplicationName(nc) +"</A></TD>");
-        writer.write("	        <TD width=\"100%\"><IMG height=25 src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\" width=10 border=0></TD>");
+        writer.write("	        <TD width=\"100%\"><IMG height=25 src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\" width=10 border=0></TD>");
         writer.write("			<TD rowspan=\"2\"><!-- space for image on right --></TD>");
         writer.write("       </TR>");
 
@@ -165,7 +165,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("<!-- App Tabs Ends -->");
 
         writer.write("	        </TD>");
-        writer.write("         <TD><IMG height=15 alt=\"\" src=\"" + nc.getRootUrl() + "/resources/images/design/app-tabs/apptab_div.gif\" width=\"100%\" border=0></TD>");
+        writer.write("         <TD><IMG height=15 alt=\"\" src=\"" + nc.getRootUrl() + imagesBasePath + "/apptab_div.gif\" width=\"100%\" border=0></TD>");
         writer.write("      </TR>");
         writer.write("   </TABLE>");
     }
@@ -230,17 +230,17 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         writer.write("<TABLE class=\"page_header\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>");
         writer.write("<TR>");
 
-        String actionIcon = nc.getRootUrl() + imagesBasePath + activePath.getId() + "/action-icon.gif";
+        String actionIcon = nc.getRootUrl() + imagesBasePath + "/pages" + activePath.getId() + "/action-icon.gif";
         if (actionIcon != null && actionIcon.length() > 0)
             writer.write("<td>&nbsp;<img src=\"" + actionIcon + "\"></td>");
 
         //Page Heading
         writer.write("<TD nowrap class=page_header height=\"30\">" + activePath.getHeading(nc) + "</TD>");
-        writer.write("<td><img src=\"" + nc.getRootUrl() + "/resources/images/design/page-header/page-heading-middle.gif\"></td>");
-        writer.write("<TD width=\"100%\" background=\"" + nc.getRootUrl() + "/resources/images/design/page-header/page-heading-background.gif\"><IMG height=3 alt=\"\" src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\" width=10 border=0></TD>");
+        writer.write("<td><img src=\"" + nc.getRootUrl() + imagesBasePath + "/header/page-heading-middle.gif\"></td>");
+        writer.write("<TD width=\"100%\" background=\"" + nc.getRootUrl() + imagesBasePath + "/header/page-heading-background.gif\"><IMG height=3 alt=\"\" src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\" width=10 border=0></TD>");
 
         // Select the entity icon that goes on the right of the Page Heading.
-        String entityIcon = nc.getRootUrl() + imagesBasePath + activePath.getId() + "/entity-icon.gif";
+        String entityIcon = nc.getRootUrl() + imagesBasePath + "/pages" + activePath.getId() + "/entity-icon.gif";
         if (entityIcon != null && entityIcon.length() > 0)
             writer.write("<td><img src=\"" + entityIcon + "\"></td>");
 
@@ -402,7 +402,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
             if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
             {
-                writer.write("<TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\" ></TD>");
+                writer.write("<TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\" ></TD>");
             }
 
             writer.write("</TR>");
@@ -452,13 +452,13 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
             writer.write("   <table " + tableClass + " " + tableAttrs + ">");
             writer.write("       <tr>");
-            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
             writer.write("       </tr>");
             writer.write("       <tr" + containerClass + " " + containerAttrs + ">");
 
             if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_LEFT))
             {
-                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
             }
 
             for (int i = 0; i < tabElements.size(); i++)
@@ -466,7 +466,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
                 NavigationPath tabElement = (NavigationPath) tabElements.get(i);
                 if (tabElement.isVisible(nc))
                 {
-                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+                    writer.write("<TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
                     writer.write("<TD " + navAttrs + " " + navClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\">");
                     writer.write("<a " + navLinkAttrs + " " + navLinkClass + (tabElement.isInActivePath(nc) ? "on" : "off") + "\" href=\"" + tabElement.getUrl(nc) + "\">" + tabElement.getCaption(nc) + "</a></TD>");
                 }
@@ -474,12 +474,12 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
             if (flagIsSet(NavigationStyle.NAVFLAG_EXPAND_MARGIN_RIGHT))
             {
-                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+                writer.write("           <TD width=\"100%\"><IMG " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
             }
 
             writer.write("       </tr>");
             writer.write("       <tr>");
-            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+            writer.write("           <TD " + outerSeparatorClass + " " + outerSeparatorAttrs + "><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
             writer.write("       </tr>");
             writer.write("   </table>");
         }
@@ -516,27 +516,27 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
 
             writer.write("      <TABLE " + tableClass + " " + tableAttrs + ">");
             writer.write("        <TR " + outerSeparatorClass + " " + outerSeparatorAttrs + ">");
-            writer.write("          <TD><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+            writer.write("          <TD><IMG " + outerSeparatorImgClass + " " + outerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
             writer.write("        </TR>");
             writer.write("        <TR>");
-            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD></TR>");
+            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD></TR>");
             writer.write("        </TR>");
 
             for (int i = 0; i < sideBarElements.size(); i++)
             {
                 NavigationPath sideBarElement = (NavigationPath) sideBarElements.get(i);
                 writer.write("        <TR " + navAttrs + " " + navClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\">");
-                writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+                writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
                 writer.write("              <TD><A " + navLinkClass + (sideBarElement.isInActivePath(nc) ? "on" : "off") + "\" ");
                 writer.write("            href=\"" + sideBarElement.getUrl(nc) + "\"><nobr>" + sideBarElement.getCaption(nc) + "</nobr></A></TD>");
-                writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD>");
+                writer.write("          <TD border=0><IMG " + navImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD>");
                 writer.write("            </TR>");
                 writer.write("        <TR>");
-                writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD></TR>");
+                writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD></TR>");
             }
 
             writer.write("        <TR>");
-            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + "/resources/images/design/app-header/app-header-spacer.gif\"></TD></TR></TABLE>");
+            writer.write("          <TD " + innerSeparatorClass + " " + innerSeparatorAttrs + "><IMG " + innerSeparatorImgClass + " " + innerSeparatorImgAttrs + " src=\"" + nc.getRootUrl() + imagesBasePath + "/header/app-header-spacer.gif\"></TD></TR></TABLE>");
         }
     }
 }
