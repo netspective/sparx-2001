@@ -44,6 +44,17 @@ public class XmlSource
 	protected Hashtable sourceFiles = new Hashtable();
 	protected Document xmlDoc;
 
+    /**
+     * returns the boolean equivalent of a string, which is considered true
+     * if either "on", "true", or "yes" is found, ignoring case.
+     */
+    public static boolean toBoolean(String s)
+	{
+        return (s.equalsIgnoreCase("on") ||
+                s.equalsIgnoreCase("true") ||
+                s.equalsIgnoreCase("yes"));
+    }
+
 	public Document getDocument()
 	{
 		reload();
@@ -231,6 +242,39 @@ public class XmlSource
             }
         }
     }
+
+	public void addMetaInformation()
+	{
+		Element metaElem = xmlDoc.createElement("meta-info");
+		xmlDoc.getDocumentElement().appendChild(metaElem);
+
+		Element filesElem = xmlDoc.createElement("source-files");
+		metaElem.appendChild(filesElem);
+
+		for(Iterator sfi = sourceFiles.values().iterator(); sfi.hasNext(); )
+		{
+			SourceInfo si = (SourceInfo) sfi.next();
+			Element fileElem = xmlDoc.createElement("source-file");
+			fileElem.setAttribute("abs-path", si.getFile().getAbsolutePath());
+			if(si.getParent() != null)
+				fileElem.setAttribute("included-from", si.getParent().getFile().getName());
+			filesElem.appendChild(fileElem);
+		}
+
+		if(errors.size() > 0)
+		{
+			Element errorsElem = xmlDoc.createElement("errors");
+	    	metaElem.appendChild(errorsElem);
+
+			for(Iterator ei = errors.iterator(); ei.hasNext(); )
+			{
+				Element errorElem = xmlDoc.createElement("error");
+				Text errorText = xmlDoc.createTextNode((String) ei.next());
+				errorElem.appendChild(errorText);
+				errorsElem.appendChild(errorElem);
+			}
+		}
+	}
 
 	public void catalogNodes()
 	{
