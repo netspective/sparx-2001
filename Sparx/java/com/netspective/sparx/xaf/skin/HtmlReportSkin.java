@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.9 2002-11-25 14:49:41 aye.thu Exp $
+ * $Id: HtmlReportSkin.java,v 1.10 2002-12-26 19:22:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -223,7 +223,7 @@ public class HtmlReportSkin implements ReportSkin
 
         writer.write("<table " + innerTableAttrs + ">");
         int startDataRow = 0;
-        if(flagIsSet(HTMLFLAG_SHOW_HEAD_ROW))
+        if(flagIsSet(HTMLFLAG_SHOW_HEAD_ROW) && !rc.getReport().flagIsSet(StandardReport.REPORTFLAG_HIDE_HEADING))
         {
             if(!rc.getReport().flagIsSet(StandardReport.REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS))
             {
