@@ -3,6 +3,7 @@ var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
 var ALLOW_CLIENT_VALIDATION = true;
+var TRANSLATE_ENTER_KEY_TO_TAB_KEY = true;
 
 //****************************************************************************
 // FieldType class
@@ -43,9 +44,14 @@ function Dialog(name)
 
 function Dialog_registerField(field)
 {
-	this.fields[this.fields.length] = field;
+	field.fieldIndex = this.fields.length;
+	this.fields[field.fieldIndex] = field;
 	this.fieldsById[field.controlId] = field;
-	this.fieldsByQualName[field.qualifiedName] = field;
+	this.fieldsByQualName[field.qualifiedName] = field;	
+
+	if(field.fieldIndex > 0)
+		field.prevFieldIndex = field.fieldIndex-1;		
+	field.nextFieldIndex = field.fieldIndex+1;
 }
 
 function Dialog_finalizeContents()
@@ -125,12 +131,18 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
 	this.style = null;
 	this.requiresPreSubmit = false;
 	
+	this.fieldIndex = -1;
+	this.prevFieldIndex = -1;		
+	this.nextFieldIndex = -1;
+	
 	// the remaining are object-based methods
 	this.getControl = DialogField_getControl;
 	this.evaluateConditionals = DialogField_evaluateConditionals;
 	this.finalizeContents = DialogField_finalizeContents;
 	this.isValid = DialogField_isValid;
 	this.doPreSubmit = DialogField_doPreSubmit;
+	this.focusNext = DialogField_focusNext;
+	this.getFieldAreaElem = DialogField_getFieldAreaElem;
 }
 
 function DialogField_getControl()
@@ -205,6 +217,63 @@ function DialogField_doPreSubmit()
 			control.options[i].selected = true;
 		}		
 	}
+}
+
+function DialogField_focusNext(dialog)
+{
+	var dialogFieldsCount = dialog.fields.length;
+	var nextField = null;
+	var nextFieldControl = null;
+	var fieldIndex = this.nextFieldIndex;		
+	var foundEditable = false;
+	while((! foundEditable) && fieldIndex < dialogFieldsCount)
+	{
+		nextField = dialog.fields[fieldIndex];
+		nextFieldAreaElem = nextField.getFieldAreaElem();
+		nextFieldControl = document.all.item(nextField.controlId);
+		if(nextFieldControl != null && nextFieldControl.length > 0)
+			nextFieldControl = nextFieldControl[0];
+
+		if(	(nextFieldControl != null && nextFieldControl.style.display == 'none') ||
+			(nextFieldAreaElem != null && nextFieldAreaElem.style.display == 'none') ||
+			nextField.typeName == "com.xaf.form.field.SeparatorField" ||
+			nextField.typeName == "com.xaf.form.field.StaticField" ||
+			(nextField.flags & FLDFLAG_INVISIBLE) != 0 ||
+			(nextField.flags & FLDFLAG_READONLY) != 0 ||
+			(nextField.flags & FLDFLAG_INPUT_HIDDEN) != 0)
+			fieldIndex++;
+		else
+			foundEditable = true;
+	}
+
+	if(foundEditable)
+	{
+		//alert("found editable: " + nextField.controlId + " -- " + fieldIndex);
+		if(nextFieldControl != null)
+		{
+			nextFieldControl.focus();
+		}
+		else
+		{
+			alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ")")
+		}
+		return true;
+	}
+	
+	return false;
+}
+
+function DialogField_getFieldAreaElem()
+{
+	var fieldAreaId = FIELDROW_PREFIX + this.name;
+	var fieldAreaElem = document.all.item(fieldAreaId);
+	if(fieldAreaElem == null)
+	{
+		fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
+		fieldAreaElem = document.all.item(fieldAreaId);	
+	}
+	
+	return fieldAreaElem;
 }
 
 function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
@@ -414,5 +483,32 @@ function controlOnBlur(control)
 	control.style.backgroundColor = "";
 }
 
+function documentOnKeyDown(control)
+{
+	if(TRANSLATE_ENTER_KEY_TO_TAB_KEY && window.event.keyCode == 13)
+	{
+		var control = window.event.srcElement;
+		//alert(control.name);
+		
+		var field = activeDialog.fieldsById[control.name];
+		if(field == null)
+		{
+			alert("Control '"+ control.srcElement.name + "' was not found in activeDialog.fieldsById");
+			window.event.returnValue = false;
+			return false;
+		}
+
+		if(field.focusNext(activeDialog))
+		{
+			window.event.cancelBubble = true;
+			window.event.returnValue = false;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+document.onkeydown = documentOnKeyDown;
 
 dialogLibraryLoaded = true;
