@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectDialog.java,v 1.2 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: QuerySelectDialog.java,v 1.3 2003-01-21 04:11:32 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -140,6 +140,7 @@ public class QuerySelectDialog extends QueryBuilderDialog
         hiddenName.setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
         addField(hiddenName);
 
+        addReportSkinField();
         addOutputDestinationFields();
 
         if(flagIsSet(QBDLGFLAG_ALLOW_DEBUG))

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BuildConfiguration.java,v 1.103 2003-01-16 16:38:06 shahid.shah Exp $
+ * $Id: BuildConfiguration.java,v 1.104 2003-01-21 04:11:32 shahid.shah Exp $
  */
 
 package com.netspective.sparx;
@@ -63,7 +63,7 @@ public class BuildConfiguration
 
     public static final int releaseNumber = 2;
     public static final int versionMajor = 2;
-    public static final int versionMinor = 12;
+    public static final int versionMinor = 13;
 
     static public final int getReleaseNumber()
     {

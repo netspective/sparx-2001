@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.11 2003-01-16 16:38:06 shahid.shah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.12 2003-01-21 04:11:32 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -200,10 +200,7 @@ public class QueryBuilderDialog extends Dialog
 
     public void addInputFields()
     {
-        TextField reportSkin = new TextField("report_skin", "Report Skin");
-        reportSkin.setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
-        reportSkin.setDefaultValue(new StaticValue("report"));
-        addField(reportSkin);
+        addReportSkinField();
 
         int lastConditionNum = maxConditions - 1;
         QueryDefnFieldsListValue fieldsList = null;
@@ -224,6 +221,19 @@ public class QueryBuilderDialog extends Dialog
         {
             addField(new ConditionField(i, lastConditionNum, fieldsList, compList));
         }
+    }
+
+    protected void addReportSkinField()
+    {
+        List fields = getFields();
+        for(int i = 0; i < fields.size(); i++)
+            if(((DialogField) fields.get(i)).getQualifiedName().equals(QBDIALOG_REPORT_SKIN_FIELD_NAME))
+                return;
+
+        TextField reportSkin = new TextField(QBDIALOG_REPORT_SKIN_FIELD_NAME, "Report Skin");
+        reportSkin.setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
+        reportSkin.setDefaultValue(new StaticValue("report"));
+        addField(reportSkin);
     }
 
     public void addResultsSepatorField()
