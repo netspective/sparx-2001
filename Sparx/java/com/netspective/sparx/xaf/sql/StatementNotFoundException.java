@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementNotFoundException.java,v 1.2 2002-02-02 00:00:31 snshah Exp $
+ * $Id: StatementNotFoundException.java,v 1.3 2002-12-26 19:26:48 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -79,6 +79,6 @@ public class StatementNotFoundException extends Exception
 
     public String getMessage()
     {
-        return "Statement ID '" + stmtId + "' not found. Available: " + stmtManager.getStatements().keySet() + ". Errors: " + stmtManager.getErrors();
+        return "Statement ID '" + stmtId + "' not found. Errors: " + stmtManager.getErrors();
     }
 }
