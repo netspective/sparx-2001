@@ -124,7 +124,7 @@ public class XmlSource
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 
-	public void inheritNodes(Element element, Hashtable sourcePool, String attrName)
+	public void inheritNodes(Element element, Map sourcePool, String attrName)
 	{
 		String inheritAttr = element.getAttribute(attrName);
 		while(inheritAttr != null && inheritAttr.length() > 0)

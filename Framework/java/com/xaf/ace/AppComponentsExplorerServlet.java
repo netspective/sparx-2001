@@ -55,6 +55,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
 		pagesPath.registerPage("/application/dialogs", new AppDialogsPage());
 		pagesPath.registerPage("/application/servlet-context", new AppInitParamsPage());
 		pagesPath.registerPage("/application/config", new AppConfigurationPage());
+		pagesPath.registerPage("/application/acl", new AppAccessControlListPage());
 
 		pagesPath.registerPage("/application/factory", new AppFactoryPage());
 		pagesPath.registerPage("/application/factory/value-sources", new AppFactoryPage("value-sources", "Value Sources", AppFactoryPage.FACTORY_VALUESOURCE));

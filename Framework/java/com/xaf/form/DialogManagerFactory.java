@@ -15,7 +15,10 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.w3c.dom.*;
+
 import com.xaf.config.*;
+import com.xaf.security.*;
 import com.xaf.value.*;
 
 public class DialogManagerFactory
@@ -23,6 +26,21 @@ public class DialogManagerFactory
 	static final String ATTRNAME_DIALOGMGR = "framework.dialog-mgr";
 	static final String REQPARAMNAME_SOURCE = "dlgsrc";
 	static Hashtable managers = new Hashtable();
+
+	public static void generatePermissions(AccessControlList acl, Element parentElem, String name)
+	{
+		Element dialogsElem = acl.addPermissionElem(parentElem, name);
+		for(Iterator m = managers.values().iterator(); m.hasNext(); )
+		{
+			DialogManager manager = (DialogManager) m.next();
+			Map dialogs = manager.getDialogs();
+			for(Iterator d = dialogs.values().iterator(); d.hasNext(); )
+			{
+				DialogManager.DialogInfo info = (DialogManager.DialogInfo) d.next();
+				acl.addPermissionElem(dialogsElem, info.getLookupName());
+			}
+		}
+	}
 
 	public static DialogManager getManager(String file)
 	{
