@@ -148,6 +148,7 @@
 	<datatype name="date">
 		<java-class package="java.util">Date</java-class>
 		<java-date-format-instance>java.text.DateFormat.getDateInstance()</java-date-format-instance>
+		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
 
@@ -157,6 +158,7 @@
 	<datatype name="stamp">
 		<java-class package="java.util">Date</java-class>
 		<java-date-format-instance>java.text.DateFormat.getDateTimeInstance()</java-date-format-instance>
+		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
 
@@ -166,6 +168,7 @@
 	<datatype name="time">
 		<java-class package="java.util">Date</java-class>
 		<java-date-format-instance>java.text.DateFormat.getTimeInstance()</java-date-format-instance>
+		<java-default>new java.util.Date()</java-default>
 		<sqldefn dbms="ansi">date</sqldefn>
 		<sqldefn dbms="mssql">datetime</sqldefn>
 
