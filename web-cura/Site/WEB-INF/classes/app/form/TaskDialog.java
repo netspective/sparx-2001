@@ -108,9 +108,9 @@ public class TaskDialog extends Dialog
             TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
             TaskRow taskRow = taskTable.getTaskByTaskId(cc, rc.getTaskId());
             taskRow.setTaskDescr(rc.getTaskDescr());
-            taskRow.setPriorityId(rc.getPriorityId());
-            taskRow.setTaskStatus(rc.getTaskStatus());
-            taskRow.setTaskResolution(rc.getTaskResolution());
+            taskRow.setPriorityId(new Integer(rc.getPriorityId()));
+            taskRow.setTaskStatus(new Integer(rc.getTaskStatus()));
+            taskRow.setTaskResolution(new Integer(rc.getTaskResolution()));
             taskRow.setOwnerOrgId(new Long(rc.getOwnerOrgId()));
             //taskRow.setOwnerPersonId(new Long());
             taskTable.update(cc, taskRow);
