@@ -307,7 +307,7 @@ public class StatementManager extends XmlSource
 			if(stmt.execute())
 			{
 				logEntry.registerExecSqlEndSuccess();
-				logEntry.finalize(vc);
+				//logEntry.finalize(vc); -- this will be done in the "finally" block??
 				return new ResultInfo(si, stmt.getResultSet(), logEntry);
 			}
 			logEntry.registerExecSqlEndFailed();
