@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StylizedDialogSkin.java,v 1.1 2002-08-24 05:36:29 shahid.shah Exp $
+ * $Id: StylizedDialogSkin.java,v 1.2 2002-09-07 21:56:50 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -64,6 +64,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
@@ -135,7 +136,7 @@ public class StylizedDialogSkin extends StandardDialogSkin
                 "<table " + outerTableAttrs + ">\n" +
                 "<tr><td>");
 
-        if(heading != null)
+        if(heading != null && ! dc.getDialog().hideHeading(dc))
             renderTab(writer, dc, heading);
 
         writer.write(

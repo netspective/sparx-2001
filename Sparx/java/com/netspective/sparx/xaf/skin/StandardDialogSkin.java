@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.4 2002-08-30 00:28:29 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.5 2002-09-07 21:56:50 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -769,7 +769,7 @@ public class StandardDialogSkin implements DialogSkin
         writer.write(
                 "<table " + outerTableAttrs + ">\n" +
                 "<tr><td><table " + innerTableAttrs + ">" +
-                (heading == null ? "" :
+                (heading == null || dc.getDialog().hideHeading(dc) ? "" :
                 "<tr " + frameHdRowAttrs + "><td colspan='" + dlgTableColSpan + "' align='" + frameHdRowAlign + "'><font " + frameHdFontAttrs + "><b>" + heading + "</b></font></td></tr>\n"));
 
         if(summarizeErrors)
