@@ -500,7 +500,11 @@ public class SchemaDocument extends XmlSource
 			else if (nodeName.equals("enum"))
 			{
 				Element enumElem = (Element) node;
-                enumElem.setAttribute("java-constant-name", xmlTextToJavaConstant(enumElem.getFirstChild().getNodeValue()));
+                String constant_name = enumElem.getAttribute("java-constant");
+                if (constant_name != null && constant_name.length() > 0)
+                    enumElem.setAttribute("java-constant-name", constant_name);
+                else
+                    enumElem.setAttribute("java-constant-name", xmlTextToJavaConstant(enumElem.getFirstChild().getNodeValue()));
 				String enumId = enumElem.getAttribute("id");
 				if(enumId.length() == 0)
 				{
