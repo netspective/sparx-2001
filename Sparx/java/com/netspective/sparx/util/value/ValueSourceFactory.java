@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.7 2002-12-26 19:32:50 shahid.shah Exp $
+ * $Id: ValueSourceFactory.java,v 1.8 2002-12-27 00:22:50 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -113,6 +113,7 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("java", JavaExpressionValue.class);
         srcClasses.put("custom-sql", CustomSqlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
         srcClasses.put("image-src", ImageSourceValue.class); /* special-purpose ValueSource used only in DmlTask.java */
+        srcClasses.put("nav-id-url", NavigationIdUrlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
     }
 
     public static Map getValueSourceClasses()
