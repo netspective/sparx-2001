@@ -89,9 +89,10 @@
 		<enum>Client</enum>
 		<enum>Vendor</enum>
 		<enum>Partner</enum>
-		<enum id="1000">Parent of Org (parent_id is child, org_id is parent)</enum>
-		<enum id="1010">Sibling of Org (parent_id and org_id are siblings)</enum>
-		<enum id="1020">Child of Org (parent_id is parent, org_id is child)</enum>
+        <enum id="1000">Ancestor of Org (parent_id is decendent, rel_org_id is child)</enum>
+		<enum id="1010">Parent of Org (parent_id is child, rel_org_id is parent)</enum>
+		<enum id="1020">Sibling of Org (parent_id and rel_org_id are siblings)</enum>
+		<enum id="1030">Child of Org (parent_id is parent, rel_org_id is child)</enum>
 	</table>
 
 	<table name="Org_Relationship_Status" abbrev="ORelSt" type="Relationship_Status"/>
