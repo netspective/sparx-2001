@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.8 2002-11-30 16:44:24 shahid.shah Exp $
+ * $Id: StatementTask.java,v 1.9 2002-12-23 04:44:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -421,7 +421,6 @@ public class StatementTask extends BasicTask
                     statementInfo.executeAndStore(dbContext, tc, dataSourceId, storeValueSource, storeValueType);
                 else
                     stmtManager.executeAndStore(dbContext, tc, dataSourceId, stmtName, storeValueSource, storeValueType);
-               System.out.println(storeValueSource.getId() + " " + storeValueType);
             }
             else if(produceReport && storeValueSource != null)
             {
