@@ -16,6 +16,7 @@ public class TaskContext implements ValueContext
 	static public final long TCFLAG_HASRESULTMSG = TCFLAG_HASERROR * 2;
 
 	private static long taskContextNum = 0;
+	private Object canvas;
 	private Task task;
 	private String transactionId;
 	private ServletContext servletContext;
@@ -53,6 +54,9 @@ public class TaskContext implements ValueContext
 		this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse());
 		dialogContext = dc;
     }
+
+	public final Object getCanvas() { return canvas; }
+	public final void setCanvas(Object value) { canvas = value; }
 
 	public final String getTransactionId() { return transactionId; }
 
