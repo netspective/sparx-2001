@@ -96,9 +96,10 @@ public class StatementDialog extends Dialog
     private StatementInfo statementInfo;
     private String reportName;
     private String skinName;
+    private String[] urlFormats;
     private ResultSetNavigatorButtonsField navBtns;
 
-    public StatementDialog(StatementInfo si, String reportName, String skinName)
+    public StatementDialog(StatementInfo si, String reportName, String skinName, String[] urlFormats)
     {
         setName("statementDialog");
         setLoopEntries(true);
@@ -106,6 +107,7 @@ public class StatementDialog extends Dialog
         setStatementInfo(si);
         setSkinName(skinName);
         setReportName(reportName);
+        setUrlFormats(urlFormats);
         setFlag(Dialog.DLGFLAG_HIDE_HEADING_IN_EXEC_MODE);
         navBtns = new ResultSetNavigatorButtonsField();
         addField(navBtns);
@@ -165,6 +167,15 @@ public class StatementDialog extends Dialog
         return this.statementInfo;
     }
 
+    public String[] getUrlFormats()
+    {
+        return urlFormats;
+    }
+
+    public void setUrlFormats(String[] urlFormats)
+    {
+        this.urlFormats = urlFormats;
+    }
 
     public void makeStateChanges(DialogContext dc, int stage)
     {
@@ -283,7 +294,7 @@ public class StatementDialog extends Dialog
                 DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), dc.getServletContext());
                 String dataSourceId = statementInfo.getDataSource() != null ?statementInfo.getDataSource().getValue(dc) : null;
                 state = new StatementScrollState(statementInfo, dbContext, dc, dataSourceId, getReportName(), getSkinName(),
-                        rowsPerPage, ResultSetScrollState.SCROLLTYPE_USERESULTSET);
+                        urlFormats, rowsPerPage, ResultSetScrollState.SCROLLTYPE_USERESULTSET);
 
                 if(state.isValid())
                 {

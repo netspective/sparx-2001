@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.7 2002-12-03 15:30:48 aye.thu Exp $
+ * $Id: StatementInfo.java,v 1.8 2002-12-26 19:26:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -134,7 +134,7 @@ public class StatementInfo
             return logEntry;
         }
 
-        public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+        public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, Object[] params, String reportId, String[] urlFormats) throws StatementNotFoundException, NamingException, SQLException, IOException
         {
             ResultSet rs = getResultSet();
 
@@ -149,6 +149,13 @@ public class StatementInfo
             rd.initialize(rs, reportElem);
 
             ReportContext rc = new ReportContext(vc, rd, skin);
+            if(urlFormats != null)
+            {
+                ReportContext.ColumnState[] state = rc.getStates();
+                for(int i = 0; i < urlFormats.length; i++)
+                    state[i].setUrl(urlFormats[i]);
+            }
+
             rc.produceReport(writer, rs);
             close();
         }
@@ -344,7 +351,7 @@ public class StatementInfo
 
     public void createDefaultDialog()
     {
-        dialog = new StatementDialog(this, null, null);
+        dialog = new StatementDialog(this, null, null, null);
         dialog.setName("statement_" + XmlSource.xmlTextToJavaIdentifier(getId(), false));
         dialog.setHeading("Test " + getId());
 
@@ -483,6 +490,9 @@ public class StatementInfo
 
     public void importFromXml(XmlSource xs, Element stmtElem, String pkgName, String pkgDataSourceId)
     {
+        if(xs != null)
+            xs.processTemplates(stmtElem);
+
         this.pkgName = pkgName;
         this.stmtElem = stmtElem;
         stmtName = stmtElem.getAttribute("name");
@@ -555,6 +565,9 @@ public class StatementInfo
                 parameters[p].importFromXml(paramElem);
             }
         }
+
+        stmtElem.setAttribute("qualified-name", getId());
+        stmtElem.setAttribute("package", pkgName);
     }
 
     public String getDebugHtml(ValueContext vc, boolean showHeading, boolean showId, String exceptionMsg)
@@ -762,11 +775,11 @@ public class StatementInfo
         return ri;
     }
 
-    public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, Object[] params, String reportId) throws StatementNotFoundException, NamingException, SQLException, IOException
+    public void produceReport(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, Object[] params, String reportId, String[] urlFormats) throws StatementNotFoundException, NamingException, SQLException, IOException
     {
         StatementInfo.ResultInfo ri = execute(dc, vc, dataSourceId, params);
         if(ri != null)
-            ri.produceReport(writer, dc, vc, skin, params, reportId);
+            ri.produceReport(writer, dc, vc, skin, params, reportId, urlFormats);
     }
 
     public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
