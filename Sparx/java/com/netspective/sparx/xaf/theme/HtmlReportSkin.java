@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.4 2003-03-19 19:14:59 aye.thu Exp $
+ * $Id: HtmlReportSkin.java,v 1.5 2003-05-01 22:41:50 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -259,11 +259,10 @@ public class HtmlReportSkin implements ReportSkin
         if(flagIsSet(HTMLFLAG_FULL_WIDTH))
             writer.write("width='100%' ");
         writer.write(">\n");
-
+        String heading = null;
         boolean haveOuterTable = (frame.hasHeadingOrFooting() || banner != null);
         if(frame.hasHeadingOrFooting())
         {
-            String heading = null;
             SingleValueSource hvs = frame.getHeading();
             if(hvs != null)
                 heading = hvs.getValue(rc);
@@ -277,11 +276,11 @@ public class HtmlReportSkin implements ReportSkin
                 if (frame.allowCollapse())
                 {
                     if (frame.isCollapsed())
-                        writer.write("            <td class=\"panel-frame-heading-action-expand-output\"   align=\"left\" valign=\"middle\" nowrap width=\"17\">" +
-                            "<img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"17\" border=\"0\"></td>");
+                        writer.write("            <td id=\"" +  heading + "\" class=\"panel-frame-heading-action-expand-output\"   align=\"left\" valign=\"middle\" nowrap width=\"17\"" +
+                            " onclick=\"toggleDisplay('" + heading + "', 'panel-frame-heading-action-expand-output', 'panel-frame-heading-action-collapse-output')\"><img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"17\" border=\"0\"></td>");
                     else
-                        writer.write("            <td class=\"panel-frame-heading-action-collapse-output\"   align=\"left\" valign=\"middle\" nowrap width=\"17\">" +
-                            "<img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"17\" border=\"0\"></td>");
+                        writer.write("            <td id=\"" + heading + "\" class=\"panel-frame-heading-action-collapse-output\"   align=\"left\" valign=\"middle\" nowrap width=\"17\"" +
+                            " onclick=\"toggleDisplay('" + heading + "', 'panel-frame-heading-action-expand-output', 'panel-frame-heading-action-collapse-output')\"><img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"17\" border=\"0\"></td>");
                 }
                 else
                 {
@@ -310,6 +309,8 @@ public class HtmlReportSkin implements ReportSkin
 
         writer.write("<tr>\n" +
                 "    <td class=\"panel-content-output\">\n");
+        if (heading != null)
+            writer.write("<span " + (frame.isCollapsed() ? "style=\"display:none\"": "") + " id=\"" + heading + "-data\">");
         writer.write("    <table class=\"report\" width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\">\n");
         int startDataRow = 0;
         if(flagIsSet(HTMLFLAG_SHOW_HEAD_ROW) && !rc.getReport().flagIsSet(StandardReport.REPORTFLAG_HIDE_HEADING))
@@ -329,6 +330,7 @@ public class HtmlReportSkin implements ReportSkin
                 }
             }
         }
+
         if(rs != null)
         {
             produceDataRows(writer, rc, rs);
@@ -338,9 +340,12 @@ public class HtmlReportSkin implements ReportSkin
             produceDataRows(writer, rc, data, startDataRow);
         }
 
+
         if(flagIsSet(HTMLFLAG_SHOW_FOOT_ROW) && rc.getCalcsCount() > 0)
             produceFootRow(writer, rc);
         writer.write("    </table>\n");
+        if (heading != null)
+            writer.write("</span>");
         writer.write("    </td>\n");
         writer.write("</tr>\n");
         if(frame.hasHeadingOrFooting())
