@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseContextFactory.java,v 1.7 2002-12-05 18:24:48 shahid.shah Exp $
+ * $Id: DatabaseContextFactory.java,v 1.8 2003-02-05 15:33:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -142,6 +142,7 @@ public class DatabaseContextFactory implements Factory
         addDatabasePolicy("Oracle", new OracleDatabasePolicy());
         addDatabasePolicy("PostgreSQL", new PostgreSQLDatabasePolicy());
         addDatabasePolicy("mysql", new MySqlDatabasePolicy());
+        addDatabasePolicy("ACCESS", new MicrosoftAccessDatabasePolicy());
     }
 
     static public void addDatabasePolicy(String databaseProductName, DatabasePolicy policy)
