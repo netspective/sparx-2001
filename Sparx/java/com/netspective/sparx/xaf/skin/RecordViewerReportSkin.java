@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: RecordViewerReportSkin.java,v 1.1 2002-10-13 18:42:01 shahid.shah Exp $
+ * $Id: RecordViewerReportSkin.java,v 1.2 2002-10-14 14:38:03 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -71,6 +71,7 @@ public class RecordViewerReportSkin extends HtmlReportSkin
     {
         super(fullWidth);
         rowDecoratorPrependColsCount = 1;
+		clearFlag(HTMLFLAG_SHOW_HEAD_ROW | HTMLFLAG_ADD_ROW_SEPARATORS);
     }
 
     public void produceHeadingExtras(Writer writer, ReportContext rc, ReportFrame frame) throws IOException
