@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.6 2002-09-28 04:19:57 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.7 2002-10-13 18:35:43 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -307,6 +307,38 @@ public class XmlSource
             constant.append(Character.isLetterOrDigit(ch) ? Character.toLowerCase(ch) : '-');
         }
         return constant.toString();
+    }
+
+    /**
+     * Given a attribute or tag name, find the item or return the defaultText if there is none.
+     */
+    public static String getAttrValueOrTagText(Element parent, String name, String defaultText)
+    {
+        String attrValue = parent.getAttribute(name);
+        return attrValue.length() > 0 ? attrValue : getTagText(parent, name, defaultText);
+    }
+
+    /**
+     * Given a tag, find the tag in the parent element and return its text or the default String if there is none.
+     */
+    public static String getTagText(Element parent, String tag, String defaultText)
+    {
+        NodeList nl = parent.getElementsByTagName(tag);
+
+        if(nl.getLength() == 0)
+            return defaultText;
+
+        StringBuffer text = new StringBuffer();
+        for(int i = 0; i < nl.getLength(); i++)
+        {
+            Element tagElem = (Element) nl.item(i);
+            NodeList children = tagElem.getChildNodes();
+            for(int c = 0; c < children.getLength(); c++)
+            {
+                text.append(children.item(c).getNodeValue());
+            }
+        }
+        return text.toString();
     }
 
     public Document getDocument()
