@@ -283,6 +283,19 @@ public class StatementManager extends XmlSource
 					errors.add("ReportSkin class '"+className+"' instantiation exception: " + e.toString());
 				}
 			}
+            else if(nodeName.equals("register-column-data-calc"))
+			{
+				Element typeElem = (Element) node;
+				String className = typeElem.getAttribute("class");
+				try
+				{
+					ColumnDataCalculatorFactory.addColumnDataCalc(typeElem.getAttribute("name"), className);
+				}
+				catch(ClassNotFoundException e)
+				{
+					errors.add("ColumnDataCalculator class '"+className+"' not found: " + e.toString());
+				}
+			}
 		}
 
 		addMetaInformation();
