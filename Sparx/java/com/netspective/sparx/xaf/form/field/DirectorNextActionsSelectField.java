@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DirectorNextActionsSelectField.java,v 1.2 2002-11-11 15:12:44 roque.hernandez Exp $
+ * $Id: DirectorNextActionsSelectField.java,v 1.3 2002-11-28 21:11:07 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -62,8 +62,6 @@ import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalApplyFlag;
 import org.w3c.dom.Element;
-
-import java.util.Iterator;
 
 public class DirectorNextActionsSelectField extends SelectField
 {
@@ -76,31 +74,29 @@ public class DirectorNextActionsSelectField extends SelectField
     {
         super.importFromXml(elem);
 
-        if(getSimpleName() == null)
+        if (getSimpleName() == null)
             setSimpleName(DEFAULT_NAME);
 
         //if the current data-cmd does not match one listed in the XML definition, then the selected value (if initial entry
         // the first value) will be part of the dialog as hidden.
         String dataCmd = elem.getAttribute("data-cmd");
-        if(dataCmd.length() > 0) {
-
+        if (dataCmd.length() > 0)
+        {
             setDataCmdCondition(dataCmd);
-
             setFlag(DialogField.FLDFLAG_INPUT_HIDDEN);
-
-            //TODO: need to check if it has been set to hidden previously, and then not clear it.
-
             DialogFieldConditionalApplyFlag dataCmdAction = new DialogFieldConditionalApplyFlag(this, DialogField.FLDFLAG_INPUT_HIDDEN);
             dataCmdAction.setClearFlag(true);
             dataCmdAction.setDataCmd(dataCmdCondition);
             addConditionalAction(dataCmdAction);
         }
 
-
         String displayOnlyOne = elem.getAttribute("display-one");
-        if ("yes".equals(displayOnlyOne)) {
+        if ("yes".equals(displayOnlyOne))
             displayOneItemOnly = true;
-        }
+
+        String persist = elem.getAttribute("persist");
+        if (! "no".equals(persist))
+            setFlag(FLDFLAG_PERSIST);
     }
 
     /**
@@ -111,54 +107,24 @@ public class DirectorNextActionsSelectField extends SelectField
     public String getSelectedActionUrl(DialogContext dc)
     {
         String value = dc.getRequest().getParameter(getId());
-        if(value == null)
+        if (value == null)
             return null;
         SingleValueSource svs = ValueSourceFactory.getSingleOrStaticValueSource(value);
-        if(svs == null)
+        if (svs == null)
             return null;
         return svs.getValue(dc);
     }
 
-    public void makeStateChanges(DialogContext dc, int stage) {
-
+    public void makeStateChanges(DialogContext dc, int stage)
+    {
         super.makeStateChanges(dc, stage);
 
         int listSize = this.getListSource().getSelectChoices(dc).getValues().length;
-
-        if (listSize == 1 && !displayOneItemOnly) {
+        if (listSize == 1 && !displayOneItemOnly)
+        {
             dc.setFlag(this.getQualifiedName(), DialogField.FLDFLAG_INPUT_HIDDEN);
         }
-
-        //TODO: This code is a duplicate of the populateValue() method, because that method is not being called. Not sure why.
-        if(dc.isInitialEntry() && ( dc.getValue(this) == null || "".equals(dc.getValue(this)) ) ) {
-            SelectChoicesList choices = this.getListSource().getSelectChoices(dc);
-            if (choices != null) {
-               Iterator i = choices.getIterator();
-               if (i.hasNext()) {
-                    SelectChoice choice = (SelectChoice) i.next();
-                    dc.setValue(this, choice.getValue());
-               }
-            }
-        }
     }
-
-    public void populateValue(DialogContext dc, int formatType)
-    {
-        System.out.println("********populateValue()");
-        // if it's the first time and there is no current selection.
-        if(dc.isInitialEntry() && ( dc.getValue(this) == null || "".equals(dc.getValue(this)) ) ) {
-            SelectChoicesList choices = this.getListSource().getSelectChoices(dc);
-            if (choices != null) {
-               Iterator i = choices.getIterator();
-               if (i.hasNext()) {
-                    SelectChoice choice = (SelectChoice) i.next();
-                    dc.setValue(this, choice.getValue());
-               }
-            }
-        }
-        else
-            super.populateValue(dc, formatType);
-   }
 
     public int getDataCmdCondition()
     {
@@ -175,12 +141,14 @@ public class DirectorNextActionsSelectField extends SelectField
         dataCmdCondition = DialogContext.getDataCmdIdForCmdText(condition);
     }
 
-    public boolean isDisplayOneItemOnly() {
+    public boolean isDisplayOneItemOnly()
+    {
         return displayOneItemOnly;
     }
 
-    public void setDisplayOneItemOnly(boolean displayOneItemOnly) {
-        this.displayOneItemOnly = displayOneItemOnly;
+    public void setDisplayOneItemOnly(boolean displayOneItemOnly)
+    {
+        displayOneItemOnly = displayOneItemOnly;
     }
 
 
