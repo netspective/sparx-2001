@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetNavigatorButtonsField.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: ResultSetNavigatorButtonsField.java,v 1.2 2002-08-24 05:34:54 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -153,11 +153,11 @@ public class ResultSetNavigatorButtonsField extends DialogField
         if(lastPage > 0)
         {
             writer.write("<nobr>Page ");
-            writer.write(state.getActivePage());
+            writer.write(Integer.toString(activePage));
             if(isScrollable)
             {
                 writer.write(" of ");
-                writer.write(state.getTotalPages());
+                writer.write(Integer.toString(lastPage));
             }
             writer.write("</nobr>&nbsp;&nbsp;");
             if(activePage > 1)
