@@ -126,7 +126,7 @@ public class SelectStmtGenerator
 		for(int c = 0; c < allCondsCount; c++)
 		{
 			QueryCondition cond = (QueryCondition) allConditions.get(c);
-            if(cond.removeIfValueIsNull())
+            if(cond.removeIfValueIsNull() && cond.isNotNested())
             {
                 SingleValueSource vs = cond.getValue();
                 if (vs instanceof ListValueSource)
@@ -147,7 +147,7 @@ public class SelectStmtGenerator
 			QueryField field = cond.getField();
 			if(field != null)
 				addJoin(field);
-			else
+			else if(cond.isNotNested())
 				return "Condition '"+c+"' has no field.";
 		}
 
@@ -218,7 +218,7 @@ public class SelectStmtGenerator
 			for(int c = 0; c < usedCondsCount; c++)
 			{
 				QueryCondition cond = (QueryCondition) usedConditions.get(c);
-				addJoin(cond.getField());
+				if(cond.isNotNested()) addJoin(cond.getField());
 				sql.append("  (" + cond.getWhereCondExpr(vc, select, this) + ")");
 				if(c != condsUsedLast)
 					sql.append(cond.getConnectorSql());
