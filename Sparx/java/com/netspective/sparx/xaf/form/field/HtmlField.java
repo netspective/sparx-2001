@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlField.java,v 1.1 2002-06-30 17:24:23 shahid.shah Exp $
+ * $Id: HtmlField.java,v 1.2 2003-01-24 13:20:27 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -63,11 +63,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.value.ValueSourceFactory;
 
 public class HtmlField extends TextField
 {
     private static int fieldNumber = 0;
-    private String html;
+    private SingleValueSource html;
 
     public HtmlField()
     {
@@ -90,13 +92,13 @@ public class HtmlField extends TextField
         Node htmlElem = elem.getFirstChild();
         if(htmlElem != null)
         {
-            html = htmlElem.getNodeValue();
+            html = ValueSourceFactory.getSingleOrStaticValueSource(htmlElem.getNodeValue());
         }
     }
 
     public void renderControlHtml(Writer writer, DialogContext dc) throws IOException
     {
         if(html != null)
-            writer.write(html);
+            writer.write(html.getValue(dc));
     }
 }
