@@ -158,7 +158,7 @@ Setup instructions:
     -->
 
     <target name="compile" depends="init">
-	    <javac srcdir="${app.classes.dir}" classpath="${app.java.classpath}"/>
+	    <javac srcdir="${app.classes.dir}" classpath="${app.java.classpath}" deprecation="on"/>
     </target>
 
     <!--
