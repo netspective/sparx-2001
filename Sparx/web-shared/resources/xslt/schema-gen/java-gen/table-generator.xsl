@@ -173,10 +173,10 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 <xsl:for-each select="column">
 	<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
 <xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:if test="@type = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
+<xsl:if test="@_gen-create-id = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
 		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="@_gen-sequence-name"/>&quot;);
 </xsl:if>
-<xsl:if test="(@type != 'autoinc' or @type != 'guid32') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
+<xsl:if test="not(@_gen-create-id = 'autoinc') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
 </xsl:if>
 <xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsRequired(true);
 </xsl:if>

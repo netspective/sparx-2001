@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.16 2002-12-05 03:47:54 shahbaz.javeed Exp $
+ * $Id: SchemaDocument.java,v 1.17 2002-12-11 21:46:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -112,6 +112,7 @@ import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 public class SchemaDocument extends XmlSource
 {
     public static final String ATTRNAME_TYPE = "type";
+    public static final String ELEMNAME_GENERATE_ID = "generate-id";
 
     public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
@@ -150,6 +151,7 @@ public class SchemaDocument extends XmlSource
     private static Set replaceMacrosInIndexNodes = null;
     private static Set javaReservedWords = new HashSet();
     private static Set javaReservedTerms = new HashSet();
+    private static Set refColumnExcludeElementsFromInherit = new HashSet();
 
     private Map dataTypeNodes = new HashMap();
     private Map tableTypeNodes = new HashMap();
@@ -227,19 +229,18 @@ public class SchemaDocument extends XmlSource
                 case java.sql.Types.DATE:
                 case java.sql.Types.TIME:
                 case java.sql.Types.TIMESTAMP:
-                    Element dateFmtInstance = null;
                     switch (jdbcType.intValue())
                     {
                         case java.sql.Types.DATE:
-                            dateFmtInstance = createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getDateInstance()");
+                            createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getDateInstance()");
                             break;
 
                         case java.sql.Types.TIME:
-                            dateFmtInstance = createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getTimeInstance()");
+                            createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getTimeInstance()");
                             break;
 
                         case java.sql.Types.TIMESTAMP:
-                            dateFmtInstance = createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getDateTimeInstance()");
+                            createTextElem(dataTypeElem, "java-date-format-instance", "java.text.DateFormat.getDateTimeInstance()");
                             break;
 
                     }
@@ -324,6 +325,8 @@ public class SchemaDocument extends XmlSource
             javaReservedWords.add(JAVA_RESERVED_WORDS[i]);
         for (int i = 0; i < JAVA_RESERVED_TERMS.length; i++)
             javaReservedTerms.add(JAVA_RESERVED_TERMS[i]);
+
+        refColumnExcludeElementsFromInherit.add(ELEMNAME_GENERATE_ID);
     }
 
     public SchemaDocument()
@@ -426,11 +429,6 @@ public class SchemaDocument extends XmlSource
         return choices;
     }
 
-    public void inheritNodes(Element element, Map sourcePool)
-    {
-        inheritNodes(element, sourcePool, ATTRNAME_TYPE);
-    }
-
     public DocumentFragment getCompositeColumns(Element table, Element column, Element composite)
     {
         NodeList compNodes = composite.getChildNodes();
@@ -464,12 +462,13 @@ public class SchemaDocument extends XmlSource
         if (inRefColumn == false && isReferenceColumn(column))
             return;
 
-        inheritNodes(column, dataTypeNodes);
+        inheritNodes(column, dataTypeNodes, ATTRNAME_TYPE, inRefColumn ? refColumnExcludeElementsFromInherit : defaultExcludeElementsFromInherit);
 
         NodeList colInfo = column.getChildNodes();
         ArrayList sqlDefnElems = new ArrayList();
         String size = null;
         String decimals = null;
+        String generateId = null;
 
         size = column.getAttribute("size");
         if (size != null && size.length() == 0)
@@ -491,11 +490,12 @@ public class SchemaDocument extends XmlSource
             }
             else if (nodeName.equals("sqldefn"))
                 sqlDefnElems.add(childNode);
-            else if (size == null && nodeName.equals("size"))
+            else if (nodeName.equals("size")) // the last size element overrides all
                 size = childNode.getFirstChild().getNodeValue();
             else if (decimals == null && nodeName.equals("decimals"))
                 decimals = childNode.getFirstChild().getNodeValue();
-            ;
+            else if (generateId == null && nodeName.equals(ELEMNAME_GENERATE_ID))
+                generateId = childNode.getFirstChild().getNodeValue();
         }
 
         if (size != null && sqlDefnElems.size() > 0)
@@ -509,15 +509,21 @@ public class SchemaDocument extends XmlSource
                 replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "%decimals%", decimals);
         }
 
-
         String customSequence = column.getAttribute("sequence-name");
         String tableAbbrev = table.getAttribute("abbrev");
 
         if (0 == tableAbbrev.length()) tableAbbrev = table.getAttribute("name");
 
         // If we are given a custom sequence name, use it.  Otherwise generate it
-        if (0 == customSequence.length()) customSequence = tableAbbrev + "_" + column.getAttribute("name") + "_SEQ";
+        if (0 == customSequence.length()) customSequence = (tableAbbrev + "_" + column.getAttribute("name") + "_SEQ").toUpperCase();
         column.setAttribute("_gen-sequence-name", customSequence);
+
+        if("autoinc".equals(column.getAttribute("type")) || column.getAttribute("autoinc").equals("yes") || "autoinc".equals(generateId))
+            column.setAttribute("_gen-create-id", "autoinc");
+
+        if("guid".equals(column.getAttribute("type")) || column.getAttribute("guid").equals("yes") || "guid".equals(generateId) ||
+                "guid32".equals(column.getAttribute("type")) || column.getAttribute("guid32").equals("yes") || "guid32".equals(generateId))
+            column.setAttribute("_gen-create-id", "guid32");
     }
 
     public String getPrimaryKey(Element table)
@@ -622,7 +628,7 @@ public class SchemaDocument extends XmlSource
             else if (nodeName.equals("index"))
             {
                 Element index = (Element) node;
-                inheritNodes(index, indexTypeNodes);
+                inheritNodes(index, indexTypeNodes, ATTRNAME_TYPE, defaultExcludeElementsFromInherit);
 
                 String indexName = index.getAttribute("name");
                 NodeList columnElems = table.getElementsByTagName("column");
@@ -701,8 +707,6 @@ public class SchemaDocument extends XmlSource
                 Element accessor = (Element) node;
 
                 String methodName = accessor.getAttribute("name");
-                String type = accessor.getAttribute("type");
-                String connector = accessor.getAttribute("connector");
                 NodeList columnElems = table.getElementsByTagName("column");
                 int columnsCount = columnElems.getLength();
 
@@ -758,7 +762,7 @@ public class SchemaDocument extends XmlSource
         Hashtable params = new Hashtable();
         String tableName = table.getAttribute("name");
         tableParams.put(tableName, params);
-        inheritNodes(table, tableTypeNodes);
+        inheritNodes(table, tableTypeNodes, ATTRNAME_TYPE, defaultExcludeElementsFromInherit);
 
         NodeList columns = table.getChildNodes();
         for (int c = 0; c < columns.getLength(); c++)
@@ -825,7 +829,7 @@ public class SchemaDocument extends XmlSource
             params.put("parentcol_Short", parentColumn.getAttribute("abbrev"));
         }
 
-        replaceNodeMacros((Node) table, replaceMacrosInTableNodes, params);
+        replaceNodeMacros(table, replaceMacrosInTableNodes, params);
 
         boolean isEnum = false;
         boolean isLookup = false;
@@ -994,10 +998,6 @@ public class SchemaDocument extends XmlSource
                     else
                         column.setAttribute("type", refColumnElem.getAttribute("type"));
 
-                    String sizeAttr = findElementOrAttrValue(refColumnElem, "size");
-                    if (sizeAttr != null && sizeAttr.length() > 0)
-                        column.setAttribute("size", sizeAttr);
-
                     if (column.getAttribute("type").length() == 0)
                         errors.add("Column '" + refInfo.columnName + "' has no type in Table '" + refInfo.tableName + "' for " + REFTYPE_NAMES[refInfo.type] + " reference '" + refInfo.reference + "' (in table '" + tableElem.getAttribute("name") + "' column '" + column.getAttribute("name") + "')");
 
@@ -1162,7 +1162,7 @@ public class SchemaDocument extends XmlSource
         for (Iterator i = dataTypeNodes.values().iterator(); i.hasNext();)
         {
             Element elem = (Element) i.next();
-            inheritNodes(elem, dataTypeNodes);
+            inheritNodes(elem, dataTypeNodes, ATTRNAME_TYPE, defaultExcludeElementsFromInherit);
         }
 
         for (Iterator i = dataTypeNodes.values().iterator(); i.hasNext();)
@@ -1991,18 +1991,12 @@ public class SchemaDocument extends XmlSource
                 Element tableElem = (Element) i.next();
 
                 String tableName = tableElem.getAttribute("name");
-                String tableAbbrev = tableElem.getAttribute("abbrev");
                 String tableNameAsJavaIdentfier = XmlSource.xmlTextToJavaIdentifier(tableName, true);
                 String tableClassName = tableNameAsJavaIdentfier + "Table";
-                String tableFile = tablesDir.getAbsolutePath() + "/" + tableClassName + ".java";
                 String domainName = tableNameAsJavaIdentfier;
-                String domainFile = domainsDir.getAbsolutePath() + "/" + domainName + ".java";
                 String listenerName = tableNameAsJavaIdentfier + "Listener";
-                String listenerFile = domainsDir.getAbsolutePath() + "/" + listenerName + ".java";
                 String rowName = tableNameAsJavaIdentfier + "Row";
-                String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
                 String rowListName = tableNameAsJavaIdentfier + "Rows";
-                String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
                 StringBuffer tableTypesList = new StringBuffer();
 
                 /* Add default entries to the domain, row, rows and table Class Maps */

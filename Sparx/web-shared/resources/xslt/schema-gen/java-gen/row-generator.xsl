@@ -512,7 +512,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		dc.setValue(fieldName != null ? fieldName : COLNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">get<xsl:value-of select="@_gen-method-name"/>()</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().format(dc, get<xsl:value-of select="@_gen-method-name"/>())</xsl:otherwise></xsl:choose>);
 </xsl:for-each>	}
 
-<xsl:if test="column[@type = 'autoinc'] or column[@type = 'guid32']">
+<xsl:if test="column[@_gen-create-id]">
 	public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
 	{
 		if(! super.beforeInsert(cc, dml))
@@ -523,7 +523,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		String dbms = databasePolicy.getDBMSName();
 		Object value;
 
-<xsl:for-each select="column[@type = 'autoinc']">
+<xsl:for-each select="column[@_gen-create-id = 'autoinc']">
 		if (databasePolicy.retainAutoIncColInDml())
 		{
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
@@ -537,7 +537,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		}
 </xsl:for-each>
 
-<xsl:for-each select="column[@type = 'guid32']">
+<xsl:for-each select="column[@_gen-create-id = 'guid32']">
 		if (databasePolicy.retainGUIDColInDml())
 		{
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
@@ -561,14 +561,14 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
 		String dbms = databasePolicy.getDBMSName();
 
-<xsl:for-each select="column[@type = 'autoinc']">
+<xsl:for-each select="column[@_gen-create-id = 'autoinc']">
 		if (!databasePolicy.retainAutoIncColInDml())
 		{
 			dml.removeColumn("<xsl:value-of select="@name"/>");
 			dml.createSql(dbms);
 		}
 </xsl:for-each>
-<xsl:for-each select="column[@type = 'guid32']">
+<xsl:for-each select="column[@_gen-create-id = 'guid32']">
 		if (!databasePolicy.retainGUIDColInDml())
 		{
 			dml.removeColumn("<xsl:value-of select="@name"/>");
@@ -584,7 +584,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
 		Object value;
     String seqOrTableName = "";
-<xsl:for-each select="column[@type = 'autoinc']">
+<xsl:for-each select="column[@_gen-create-id = 'autoinc']">
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:text>	</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
 		if (databasePolicy.retainAutoIncColInDml())
@@ -597,7 +597,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:text>	</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 </xsl:for-each>
 
-<xsl:for-each select="column[@type = 'guid32']">
+<xsl:for-each select="column[@_gen-create-id = 'guid32']">
 <xsl:variable name="java-class-spec"><xsl:value-of select="java-class/@package"/>.<xsl:value-of select="java-class"/></xsl:variable>
 <xsl:text>	</xsl:text>Column <xsl:value-of select="@_gen-member-name"/>Col = table.get<xsl:value-of select="@_gen-method-name"/>Column();
 <xsl:text>	</xsl:text>value = databasePolicy.handleGUIDPostDmlExecute(cc.getConnection(), table.getName(), <xsl:value-of select="@_gen-member-name"/>Col.getName(), get<xsl:value-of select="@_gen-method-name"/>());

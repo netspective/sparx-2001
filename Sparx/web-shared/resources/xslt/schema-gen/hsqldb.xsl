@@ -97,10 +97,10 @@
 	<xsl:param name="column"/>
 
 	<xsl:if test="$generate-constraints != 'yes'">
-		<xsl:if test="@primarykey='yes' and @type='autoinc'">
+		<xsl:if test="@primarykey='yes' and @_gen-create-id = 'autoinc'">
 			<xsl:text> IDENTITY PRIMARY KEY</xsl:text>
 		</xsl:if>
-		<xsl:if test="@primarykey='yes' and @type='guid32'">
+		<xsl:if test="@primarykey='yes'">
 			<xsl:text>  PRIMARY KEY</xsl:text>
 		</xsl:if>
 		<xsl:if test="@required='yes'">
