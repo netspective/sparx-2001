@@ -8,7 +8,7 @@
 		<enum id="0" abbrev="I">Inactive</enum>
 		<enum id="1" abbrev="A">Active</enum>
 		<enum id="99" abbrev="U">Unknown</enum>
-	</tabletype>
+	</tabletype>    
 
 	<table name="Record_Status" type="Status">
 		<!-- nothing here yet, just a placeholder for later enhancements -->

@@ -15,4 +15,10 @@
 	<table name="Project_Event_Status" abbrev="PrjESt" type="Status">
 	</table>
 
+    <table name="Task_Dependency_Type" abbrev="TskDepTy" type="Relationship_Type">
+    </table>
+
+    <table name="Task_Type" abbrev="TskTy" type="Enumeration">
+    </table>
+
 </schema>

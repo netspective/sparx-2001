@@ -61,6 +61,12 @@
 		<column name="task_resolution" lookupref="Task_Resolution" descr="The resolution status of this task"/>
 		<column name="task_descr" type="text" size="4000" descr="Description of the task"/>
 	</table>
+    
+    <table name="Task_Priority" abbrev="TskPrt" type="Enumeration">
+        <enum id="0" abbrev="L">Low</enum>
+        <enum id="1" abbrev="M">Medium</enum>        
+        <enum id="2" abbrev="H">High</enum>        
+    </table>
 
 	<table name="Task_Relation" abbrev="TskRel" type="PersonOrg_Relationship">
 		<param name="parent-ref">Task.task_id</param>
@@ -68,6 +74,10 @@
 		<param name="relationship-type-enum">Task_Relationship_Type</param>
 		<column name="notify_email" type="email" descr="The e-mail address used to notify person of updates (used only if active)"/>
 	</table>
+
+    <table name="Task_Relationship_Type" abbrev="TskRelTy" type="Relationship_Type"/>    
+
+    <table name="Task_Relationship_Status" abbrev="TskRelSt" type="Relationship_Status"/>
 
 	<table name="Task_Dependency" abbrev="TskDep" type="Default">
 		<column name="system_id" type="autoinc" primarykey="yes" descr="Unique System ID for any given row"/>
@@ -82,10 +92,28 @@
 		<param name="event-type-enum">Task_Event_Type</param>
 	</table>
 
+    <table name="Task_Event_Type" abbrev="TskEvtTy" type="Event_Type"/>    
+
+    <table name="Task_Event_Status" abbrev="TskEvtSt" type="Event_Status"/>
+
 	<table name="Task_Flag" abbrev="TskFlg" type="Flag">
 		<param name="parent-ref">Task.task_id</param>
 		<param name="record-status-enum">Task_Flag_Status</param>
 		<param name="flag-type-enum">Task_Flag_Type</param>
 	</table>
 
+    <table name="Task_Flag_Type" abbrev="TskFlgTy" type="Flag_Type"/>    
+
+    <table name="Task_Flag_Status" abbrev="TskFlgSt" type="Flag_Status"/>
+    
+    <table name="Task_Impact" abbrev="TskImpt" type="Enumeration">
+        <enum id="0" abbrev="N">None</enum>
+        <enum id="1" abbrev="I">Important</enum>    
+    </table>
+    
+    <table name="Task_Status" abbrev="TskSt" type="Status"/>
+    <table name="Task_Resolution" abbrev="TskRes" type="Enumeration">
+        <enum id="0" abbrev="N">Incomplete</enum>
+        <enum id="1" abbrev="I">Complete</enum>        
+    </table>
 </schema>
