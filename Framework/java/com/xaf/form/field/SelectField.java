@@ -346,7 +346,10 @@ public class SelectField extends DialogField
 						SelectChoice choice = (SelectChoice) i.next();
 						if(options.length() > 0)
 							options.append("<br>");
-						options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                        if (this.isBrowserReadOnly(dc))
+                            options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' disabled value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                        else
+						    options.append("<input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
 						itemIndex++;
 					}
 				}
@@ -355,7 +358,10 @@ public class SelectField extends DialogField
 					while(i.hasNext())
 					{
 						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
+                        if (this.isBrowserReadOnly(dc))
+						    options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' disabled value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
+                        else
+						    options.append("<nobr><input type='radio' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
 						itemIndex++;
 					}
 				}
@@ -369,7 +375,10 @@ public class SelectField extends DialogField
 						SelectChoice choice = (SelectChoice) i.next();
 						if(options.length() > 0)
 							options.append("<br>");
-						options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                        if (this.isBrowserReadOnly(dc))
+                            options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' disabled value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
+                        else
+						    options.append("<input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label>");
 						itemIndex++;
 					}
 				}
@@ -378,7 +387,10 @@ public class SelectField extends DialogField
 					while(i.hasNext())
 					{
 						SelectChoice choice = (SelectChoice) i.next();
-						options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
+                        if (this.isBrowserReadOnly(dc))
+                            options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' disabled value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
+                        else
+						    options.append("<nobr><input type='checkbox' name='"+ id +"' id='"+ id + itemIndex +"' value='"+ choice.value +"' "+ (choice.selected ? "checked " : "") + defaultControlAttrs + "> <label for='"+ id + itemIndex +"'>" + choice.caption + "</label></nobr>&nbsp;&nbsp;");
 						itemIndex++;
 					}
 				}
@@ -428,13 +440,22 @@ public class SelectField extends DialogField
 					switch(style)
 					{
 						case SELECTSTYLE_COMBO:
-							return "<select name='"+ id +"' " + defaultControlAttrs + ">" + options + "</select>";
+                            if (this.isBrowserReadOnly(dc))
+                                return "<select name='"+ id +"' disabled " + defaultControlAttrs + ">" + options + "</select>";
+                            else
+							    return "<select name='"+ id +"' " + defaultControlAttrs + ">" + options + "</select>";
 
 						case SELECTSTYLE_LIST:
-							return "<select name='"+ id +"' size='"+ size +"' " + defaultControlAttrs + ">" + options + "</select>";
+                            if (this.isBrowserReadOnly(dc))
+                                return "<select name='"+ id +"' disabled size='"+ size +"' " + defaultControlAttrs + ">" + options + "</select>";
+                            else
+							    return "<select name='"+ id +"' size='"+ size +"' " + defaultControlAttrs + ">" + options + "</select>";
 
 						case SELECTSTYLE_MULTILIST:
-							return "<select name='"+ id +"' size='"+ size +"' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>";
+                            if (this.isBrowserReadOnly(dc))
+                                return "<select name='"+ id +"' disabled size='"+ size +"' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>";
+                            else
+							    return "<select name='"+ id +"' size='"+ size +"' multiple='yes' " + defaultControlAttrs + ">" + options + "</select>";
 					}
 				}
 
