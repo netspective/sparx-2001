@@ -51,13 +51,15 @@
  */
 
 /**
- * $Id: BasicDatabasePolicy.java,v 1.5 2002-11-14 02:57:15 shahbaz.javeed Exp $
+ * $Id: BasicDatabasePolicy.java,v 1.6 2002-12-05 18:25:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.policy;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.security.NoSuchAlgorithmException;
 import java.net.UnknownHostException;
@@ -68,6 +70,36 @@ import com.netspective.sparx.xif.db.DatabasePolicy;
 
 public class BasicDatabasePolicy implements DatabasePolicy
 {
+    public Object executeAndGetSingleValue(Connection conn, String sql) throws SQLException
+    {
+        Object value = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try
+        {
+            stmt = conn.createStatement();
+            try
+            {
+                rs = stmt.executeQuery(sql);
+                if (rs.next())
+                    value = rs.getObject(1);
+            }
+            finally
+            {
+                if (rs != null) rs.close();
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new SQLException(e.toString() + " [" + sql + "]");
+        }
+        finally
+        {
+            if (stmt != null) stmt.close();
+        }
+        return value;
+    }
+
     public Object handleAutoIncPreDmlExecute(Connection conn, String seqOrTableName, String autoIncColumnName) throws SQLException
     {
         return null;
@@ -149,11 +181,10 @@ public class BasicDatabasePolicy implements DatabasePolicy
     {
         return true;
     }
-	/**
-	 * @see com.netspective.sparx.xif.db.DatabasePolicy#getDBMSName()
-	 */
-	public String getDBMSName() {
-		return "0";
-	}
+
+    public String getDBMSName()
+    {
+        return "0";
+    }
 
 }
