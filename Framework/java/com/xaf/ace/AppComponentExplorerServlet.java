@@ -450,7 +450,7 @@ public class AppComponentExplorerServlet extends HttpServlet
 		out.write("<h1>SQL: "+stmtId+"</h1>");
 		try
 		{
-			StatementManager.StatementInfo si = manager.getStatement(stmtId);
+			StatementInfo si = manager.getStatement(stmtId);
 			out.write(si.getDebugHtml(vc));
 			manager.produceReport(out, dbc, vc, SkinFactory.getReportSkin("report"), stmtId, null, null);
 		}

@@ -21,7 +21,7 @@ public class StatementTask extends AbstractTask
 {
     static public final String DEFAULT_REPORTSKINID = "report";
 
-    private StatementManager.StatementInfo statementInfo;
+    private StatementInfo statementInfo;
 	private String stmtName;
 	private String stmtSourceId;
 	private String dataSourceId;
@@ -106,7 +106,7 @@ public class StatementTask extends AbstractTask
         {
             if(elem.getAttribute("name").length() == 0)
                 elem.setAttribute("name", "SqlExecuteAction-" + getTaskNum());
-            statementInfo = new StatementManager.StatementInfo();
+            statementInfo = new StatementInfo();
             statementInfo.importFromXml(elem, "Task", null);
         }
         else
@@ -162,7 +162,7 @@ public class StatementTask extends AbstractTask
         if(flagIsSet(TASKFLAG_DEBUG))
         {
             StringBuffer debugMessage = new StringBuffer();
-            StatementManager.StatementInfo si;
+            StatementInfo si;
             if(statementInfo != null)
                 si = statementInfo;
             else
@@ -233,7 +233,7 @@ public class StatementTask extends AbstractTask
         catch(SQLException e)
         {
 			StringBuffer errorMsg = new StringBuffer();
-            StatementManager.StatementInfo si = stmtManager.getStatement(stmtName);
+            StatementInfo si = stmtManager.getStatement(stmtName);
 
 			StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
