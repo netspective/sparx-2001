@@ -33,6 +33,9 @@ public class MemoField extends DialogField
 		wrap = WORDWRAP_SOFT;
 	}
 
+    public int getMaxLength() { return maxLength; }
+    public void setMaxLength(int maxLength) { this.maxLength = maxLength; }
+
 	public int getRows() { return rows; }
 	public void setRows(int newRows) { rows = newRows; }
 
@@ -41,6 +44,7 @@ public class MemoField extends DialogField
 
 	public int getWordWrap() { return wrap; }
 	public void setWordWrap(int value) { wrap = value; }
+
 
 	public void importFromXml(Element elem)
 	{
@@ -112,12 +116,17 @@ public class MemoField extends DialogField
 		else
 		{
 			return
-				"<textarea name=\""+ id +"\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
-					WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? " class='required'" : "") +
-                    dc.getSkin().getDefaultControlAttrs() +
-                    "onKeyUp='return MemoField_isValid(this, " + maxLength + ")' >" +
-                    (value != null ? value : "") + "</textarea>";
+            "<textarea maxlength=\"" + maxLength + "\" name=\""+ id +"\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
+        			WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? "class='required'" : "") + dc.getSkin().getDefaultControlAttrs() +
+                    ">" + (value != null ? value : "") + "</textarea>";
 		}
 	}
 
+    /**
+     *
+     */
+    public String getCustomJavaScriptDefn(DialogContext dc)
+    {
+        return (super.getCustomJavaScriptDefn(dc) + "field.maxLength = " + this.getMaxLength() + ";\n");
+    }
 }
