@@ -288,6 +288,40 @@ public class DialogManager extends XmlSource
 		addMetaInformation();
 	}
 
+    public long getFieldsCount(Metric fieldsMetric, Node parent)
+    {
+        long totalsCount = 0;
+
+        NodeList children = parent.getChildNodes();
+        if(children != null && children.getLength() > 0)
+        {
+            for(int c = 0; c < children.getLength(); c++)
+            {
+                Node child = children.item(c);
+                String nodeName = child.getNodeName();
+
+                if(nodeName.startsWith(DialogField.FIELDTAGPREFIX))
+                {
+                    totalsCount++;
+
+                    Metric fieldTypeMetric = fieldsMetric.getChild(nodeName);
+                    if(fieldTypeMetric == null)
+                    {
+                        fieldTypeMetric = fieldsMetric.createChildMetricSimple(nodeName);
+                        fieldTypeMetric.setFlag(Metric.METRICFLAG_SHOW_PCT_OF_PARENT);
+                    }
+
+                    fieldsMetric.incrementCount();
+                    fieldTypeMetric.incrementCount();
+                }
+
+                totalsCount += getFieldsCount(fieldsMetric, child);
+            }
+        }
+
+        return totalsCount;
+    }
+
 	public Metric getMetrics(Metric root)
 	{
 		reload();
@@ -311,36 +345,8 @@ public class DialogManager extends XmlSource
 			dialogsMetric.setSum(dialogsList.getLength());
 			for(int n = 0; n < dialogsList.getLength(); n++)
 			{
-				Element dialogElem = (Element) dialogsList.item(n);
-				NodeList dialogChildren = dialogElem.getChildNodes();
-
-				int fieldCount = 0;
-				for(int c = 0; c < dialogChildren.getLength(); c++)
-				{
-					Node dialogChild = dialogChildren.item(c);
-					if(dialogChild.getNodeName().startsWith(DialogField.FIELDTAGPREFIX))
-						fieldCount++;
-				}
+				long fieldCount = getFieldsCount(fieldsMetric, dialogsList.item(n));
 				fieldsPerDlgMetric.incrementAverage(fieldCount);
-			}
-
-			NodeList fieldsList = selectNodeList("//dialog/*");
-			for(int n = 0; n < fieldsList.getLength(); n++)
-			{
-				Node fieldNode = fieldsList.item(n);
-				String nodeName = fieldNode.getNodeName();
-				if(! nodeName.startsWith(DialogField.FIELDTAGPREFIX))
-					continue;
-
-				Metric fieldTypeMetric = fieldsMetric.getChild(nodeName);
-				if(fieldTypeMetric == null)
-				{
-					fieldTypeMetric = fieldsMetric.createChildMetricSimple(nodeName);
-					fieldTypeMetric.setFlag(Metric.METRICFLAG_SHOW_PCT_OF_PARENT);
-				}
-
-				fieldsMetric.incrementCount();
-				fieldTypeMetric.incrementCount();
 			}
 		}
 		catch(Exception e)
