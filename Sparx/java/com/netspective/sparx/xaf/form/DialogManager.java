@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogManager.java,v 1.10 2003-02-26 07:54:13 aye.thu Exp $
+ * $Id: DialogManager.java,v 1.11 2003-04-07 15:22:19 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -82,12 +82,94 @@ import com.netspective.sparx.xif.SchemaDocFactory;
  */
 public class DialogManager extends XmlSource
 {
+    public class DialogPackage
+    {
+        private String name;
+        private String description;
+        private String heading;
+        private Vector dialogs;
+
+        public DialogPackage(String packageName)
+        {
+            name = packageName;
+        }
+
+        public DialogPackage(String packageName, String desc)
+        {
+            name = packageName;
+            description = desc;
+            dialogs = new Vector();
+        }
+
+        public void setHeading(String str)
+        {
+            heading = str;
+        }
+
+        public String getHeading()
+        {
+            return heading;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public void setName(String packageName)
+        {
+            name = packageName;
+        }
+
+        public String getDescription()
+        {
+            return description;
+        }
+
+        public String[] getDialogs()
+        {
+            String[] list = new String[dialogs.size()];
+            for (int i=0; i < list.length; i++)
+            {
+                list[i] = new String((String) dialogs.get(i));
+            }
+            return list;
+        }
+
+        public void setDialogs(String[] dList)
+        {
+            dialogs = new Vector();
+            for (int i=0; i < dList.length; i++)
+            {
+                dialogs.add(dList[i]);
+            }
+        }
+
+        public void addDialog(String name)
+        {
+            dialogs.add(name);
+        }
+
+        public boolean isMemberDialog(String name)
+        {
+            for (int i=0; i < dialogs.size(); i++)
+            {
+                String dialog = (String) dialogs.get(i);
+                if (dialog.equals(name))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+
     public class DialogInfo
     {
         private boolean finalized;
         private Element defnElement;
         private String pkgName;
         private String lookupName;
+        private String name;
         private Dialog dialog;
         private Class dialogClass;
         private Class dialogContextClass;
@@ -107,7 +189,8 @@ public class DialogManager extends XmlSource
             this.pkgName = pkgName;
             this.defnElement = elem;
             this.dialog = null;
-            this.lookupName = pkgName != null ? (pkgName + "." + elem.getAttribute("name")) : elem.getAttribute("name");
+            this.name = elem.getAttribute("name");
+            this.lookupName = pkgName != null ? (pkgName + "." + name) : name;
 
             boolean autoFind = false;
             String dialogClassName = defnElement.getAttribute("class");
@@ -249,6 +332,11 @@ public class DialogManager extends XmlSource
             return pkgName;
         }
 
+        public String getSimpleName()
+        {
+            return name;
+        }
+
         public String getLookupName()
         {
             return lookupName;
@@ -387,6 +475,7 @@ public class DialogManager extends XmlSource
 
     static final String REQPARAMNAME_DIALOG = "dlg";
     private Map dialogs = new HashMap();  // all dialogs
+    private Map dialogPackages = new HashMap(); // all dialog package names and their descriptions
     private Set finalizeTableDialogs;
     private Set finalizeDialogsWithTableColFields;
     private Set dependentSchemaDocs;
@@ -467,6 +556,39 @@ public class DialogManager extends XmlSource
         return info.getDialog(context);
     }
 
+    /**
+     * Gets a list of dialogs belonging to a unique package
+     * @param context
+     * @param defaultSchemaDoc
+     * @param packageName
+     * @return  Dialog[] an array of dialogs
+     */
+    public Dialog[] getPackageDialogs(ServletContext context, SchemaDocument defaultSchemaDoc, String packageName)
+    {
+        DialogPackage dp = (DialogPackage) dialogPackages.get(packageName);
+        if (dp == null)
+            return null;
+        Dialog[] dlist = null;
+        String[] dialogNames = dp.getDialogs();
+        if (dialogNames != null && dialogNames.length > 0)
+        {
+            dlist = new Dialog[dialogNames.length];
+            for (int i=0; i < dialogNames.length; i++)
+            {
+                dlist[i] = getDialog(context, defaultSchemaDoc, packageName + "." + dialogNames[i]);
+            }
+        }
+        return dlist;
+    }
+
+    public String getPackageHeading(String packageName)
+    {
+        DialogPackage dp = (DialogPackage) dialogPackages.get(packageName);
+        if (dp == null)
+            return null;
+        return dp.getHeading();
+    }
+
     public String[] getCatalogedNodeIdentifiers()
     {
         return (String[]) dialogs.keySet().toArray(new String[dialogs.size()]);
@@ -494,9 +616,15 @@ public class DialogManager extends XmlSource
             {
                 Element dialogsElem = (Element) node;
                 String dialogsPkg = dialogsElem.getAttribute("package");
+                String packageDescription = XmlSource.getAttrValueOrTagText(dialogsElem, "description", "");
+                String packageHeading = XmlSource.getAttrValueOrTagText(dialogsElem, "heading", "");
                 String idClassName = dialogsElem.getAttribute("id-class");
                 if(idClassName.length() > 0)
                     catalogedNodeIdentifiersClassName = idClassName;
+
+                DialogPackage dp = new DialogPackage(dialogsPkg, packageDescription);
+                dp.setHeading(packageHeading);
+                dialogPackages.put(dialogsPkg, dp);
 
                 NodeList dialogsChildren = node.getChildNodes();
                 for(int c = 0; c < dialogsChildren.getLength(); c++)
@@ -512,6 +640,7 @@ public class DialogManager extends XmlSource
                         processTemplates(dialogElem);
                         DialogInfo di = new DialogInfo(dialogsPkg, dialogElem);
                         dialogs.put(di.getLookupName(), di);
+                        dp.addDialog(di.getSimpleName());
                     }
                     else if(scName.equals("table-dialog") || scName.equals("table-dialogs"))
                     {
