@@ -25,6 +25,7 @@
 			<name>User Interface Management</name>
 			<task><name>Field persistence through cookies still needs to be implemented.</name></task>
 			<task><name>Implement e-mail feature in output types for Query Builder and Query Select Dialogs.</name></task>
+			<task><name>Implement file compression in output types for Query Builder and Query Select Dialogs.</name></task>
 			<task><name>When the Done button is pressed in Query Builder and Query Select Dialogs, close statements and result sets.</name></task>
 			<task><name>Implement new field type &lt;field.schema&gt; to create fields directly from SchemaDoc.</name></task>
 			<task><name>Create non-cacheable dialogs so that certain dialogs will always be created when called (allows for dynamic dialogs).</name></task>
@@ -45,6 +46,7 @@
 			<task><name>Replace NULLs with blank or space in reports.</name></task>
 			<task><name>Remove all hard-coded instances of "/shared" in Framework code (use configuration instead).</name></task>
 			<task><name>Most of the &lt;field.*&gt; tags need client-side JavaScript validation (numeric, date/time, etc).</name></task>
+			<task><name>Add options to FileSystemNavigator and ACE to automatically ignored "CVS" directory when scanning files.</name></task>
 		</task>
 
 		<task>
@@ -59,12 +61,12 @@
 
 		<task>
 			<name>Architecture</name>
-			<task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of construction "source" references manually</name></task>
-			<task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE</name></task> 
-			<task><name>Integrate <a href="http://www.servlets.com/cos/index.html">O'Reilly Servlet Package</a> into XAF (for MultiPart parsing), ServletUtils, and ParameterParser</name></task>
 			<task><name>Add NDC for page logging in PageTag.java.</name></task>
 			<task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
 			<task><name>Add ability to turn off file-change scanning in XmlSource (production software shouldn't check for changed files).</name></task>
+			<task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of construction "source" references manually</name></task>
+			<task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE</name></task> 
+			<task><name>Integrate <a href="http://www.servlets.com/cos/index.html">O'Reilly Servlet Package</a> into XAF (for MultiPart parsing), ServletUtils, and ParameterParser</name></task>
 			<task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
 			<task><name>Add logging of SQL Query Definitions.</name></task>
 			<task><name>Add auditing of user actions in dialogs, pages, and SQL (as opposed to just system logging)</name></task>
