@@ -43,7 +43,7 @@ public class ValueSourceFactory
         defaultsAvailable = true;
     }
 
-    public void addValueSourceClass(String vsName, Class cls)
+    public static void addValueSourceClass(String vsName, Class cls)
     {
         srcClasses.put(vsName, cls);
     }
