@@ -93,7 +93,18 @@ public class ReportColumnFactory
 			if(rcClass != null)
 				return (ReportColumn) rcClass.newInstance();
 			else
-				return null;
+            {
+                try
+                {
+                    // see if the type is a class name instead
+                    rcClass = Class.forName(type);
+                    return (ReportColumn) rcClass.newInstance();
+                }
+                catch(ClassNotFoundException cnfe)
+                {
+                    return null;
+                }
+            }
 		}
 		catch(Exception e)
 		{
@@ -160,11 +171,6 @@ public class ReportColumnFactory
         if(! haveDefaultFormats)
             setupDefaultFormats();
 
-        Format format = (Format) formats.get(fmtSpec);
-        if(format == null)
-        {
-            format = new DecimalFormat(fmtSpec);
-        }
-        return format;
+        return (Format) formats.get(fmtSpec);
     }
 }
