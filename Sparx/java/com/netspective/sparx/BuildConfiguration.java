@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: BuildConfiguration.java,v 1.71 2002-10-20 15:58:45 shahid.shah Exp $
+ * $Id: BuildConfiguration.java,v 1.72 2002-10-20 19:28:08 shahid.shah Exp $
  */
 
 package com.netspective.sparx;
@@ -87,12 +87,12 @@ public class BuildConfiguration
 
     static public final String getBuildPathPrefix()
     {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor + "_" + BuildLog.BUILD_NUMBER;
+        return productId + "-" + releaseNumber + "." + versionMajor + "." + versionMinor + "_" + BuildLog.BUILD_NUMBER;
     }
 
     static public final String getBuildFilePrefix()
     {
-        return productId + "-" + releaseNumber + "-" + versionMajor + "-" + versionMinor;
+        return productId + "-" + releaseNumber + "." + versionMajor + "." + versionMinor;
     }
 
     static public final String getVersion()
