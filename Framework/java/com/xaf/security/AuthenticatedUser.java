@@ -17,6 +17,9 @@ public interface AuthenticatedUser extends Principal
 	public String[] getUserRoles();
 
 	public void setRoles(AccessControlList acl, String[] roles);
+    public void removeRoles(AccessControlList acl, String[] roles);
+    public void removeAllRoles(AccessControlList acl);
+
 	public boolean hasPermission(AccessControlList acl, int permissionId);
 	public boolean hasPermission(AccessControlList acl, String permissionName);
 	public boolean hasAnyPermission(AccessControlList acl, Integer[] permissionIds);

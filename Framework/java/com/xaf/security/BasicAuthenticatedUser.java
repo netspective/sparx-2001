@@ -81,6 +81,60 @@ public class BasicAuthenticatedUser implements AuthenticatedUser
 		}
 	}
 
+    public void removeRoles(AccessControlList acl, String[] roles)
+    {
+        if(userRoles == null || userPermissions == null)
+            return;
+
+        // clear all the permissions that the roles may have granted earlier
+        for(int i = 0; i < roles.length; i++)
+        {
+            String roleName = roles[i];
+			ComponentPermission role = acl.getPermission(roleName);
+			if(role == null)
+				throw new RuntimeException("Role '"+ roleName +"' does not exist in ACL.");
+			userPermissions.andNot(role.getChildPermissions());
+        }
+
+        if(roles == userRoles)
+        {
+            // if we're removing all the current user roles, it's a special case
+            // because we're probably coming from the removeAllRoles method
+            userRoles = null;
+        }
+        else
+        {
+            // loop through the current user roles and track the ones we're keeping
+            // so that we can hang on to them in userRoles
+            List keepRoles = new ArrayList();
+            for(int i = 0; i < userRoles.length; i++)
+            {
+                String checkRole = userRoles[i];
+                boolean removingRole = false;
+                for(int j = 0; j < roles.length; j++)
+                {
+                    if(checkRole.equals(roles[j]))
+                    {
+                        removingRole = true;
+                        break;
+                    }
+                }
+                if(! removingRole)
+                    keepRoles.add(checkRole);
+            }
+            if(keepRoles.size() > 0)
+                userRoles = (String[]) keepRoles.toArray(new String[keepRoles.size()]);
+            else
+                userRoles = null;
+        }
+    }
+
+    public void removeAllRoles(AccessControlList acl)
+    {
+        if(userRoles != null)
+            removeRoles(acl, userRoles);
+    }
+
 	public boolean hasPermission(AccessControlList acl, int permissionId)
 	{
 		ComponentPermission perm = acl.getPermission(permissionId);
