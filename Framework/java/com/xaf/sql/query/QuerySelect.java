@@ -221,23 +221,15 @@ public class QuerySelect
 		if(getSql(vc) == null)
 			return null;
 
-		int rsType = dc.getScrollableResultSetType();
         String dataSourceId = queryDefn.getDataSource();
+		Connection conn = dc.getConnection(vc, dataSourceId);
+		int rsType = dc.getScrollableResultSetType(conn);
+
         PreparedStatement stmt = null;
-        if(dataSourceId == null)
-        {
-            stmt =
-                rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
-                    dc.getConnection().prepareStatement(selectSql) :
-                    dc.getConnection().prepareStatement(selectSql, rsType, ResultSet.CONCUR_READ_ONLY);
-        }
-        else
-        {
-            stmt =
-                rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
-                    dc.getConnection(dataSourceId).prepareStatement(selectSql) :
-                    dc.getConnection(dataSourceId).prepareStatement(selectSql, rsType, ResultSet.CONCUR_READ_ONLY);
-        }
+        stmt =
+            rsType == DatabaseContext.RESULTSET_NOT_SCROLLABLE ?
+                dc.getConnection(vc, dataSourceId).prepareStatement(selectSql) :
+                dc.getConnection(vc, dataSourceId).prepareStatement(selectSql, rsType, ResultSet.CONCUR_READ_ONLY);
 
 		if(overrideParams != null)
 		{

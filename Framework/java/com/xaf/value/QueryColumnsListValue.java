@@ -45,12 +45,10 @@ public class QueryColumnsListValue extends ListSource
     public ResultSet getResultSet(ValueContext vc) throws NamingException, StatementNotFoundException, SQLException, StatementExecutionException
     {
         StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
-        DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), vc.getServletContext(), false);
-
+        DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), vc.getServletContext());
         StatementManager.ResultInfo ri = stmtMgr.execute(dbContext, vc, dataSourceId, stmtName);
         return ri.getResultSet();
     }
-
 
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {

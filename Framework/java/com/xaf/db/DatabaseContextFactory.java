@@ -20,20 +20,13 @@ import com.xaf.form.*;
 public class DatabaseContextFactory
 {
 	public static final String CONTEXTNAME_PROPNAME = "com.netspective.sparx.DatabaseContext.class";
-	static Map contexts = new Hashtable();
+	private static DatabaseContext useContext = null;
 
 	/**
-	 * If the DatabaseContex is stored in a ServletRequest attribute, then this is the
-	 * preferred name of the attribute.
-	 */
-	static public final String DBCONTEXT_REQUEST_ATTR_NAME = "DatabaseContext";
-
-	/**
-	 * If the DatabaseContex is stored in a ServletContext atttibute, then this is the
+	 * If the DatabaseContext is stored in a ServletContext atttibute, then this is the
 	 * preferred name of the attribute.
 	 */
 	static public final String DBCONTEXT_SERVLETCONTEXT_ATTR_NAME = "DatabaseContext";
-
 
 	public static void addText(Document doc, Element parent, String elemName, String text)
 	{
@@ -59,7 +52,7 @@ public class DatabaseContextFactory
      */
     public static void createCatalog(ServletContext servletContext, ServletRequest servletRequest, Element parent) throws NamingException
     {
-		DatabaseContext dc = getContext(servletRequest, servletContext, false);
+		DatabaseContext dc = getContext(servletRequest, servletContext);
 
         Document doc = parent.getOwnerDocument();
 		Element dataSourcesElem = doc.createElement("properties");
@@ -73,80 +66,53 @@ public class DatabaseContextFactory
 			addErrorProperty(doc, dataSourcesElem, "DatabaseContext could not be located. Check system property '"+CONTEXTNAME_PROPNAME+"'");
     }
 
-
-	public static DatabaseContext getContext(String contextId)
+	public static DatabaseContext getSystemContext()
 	{
-		return (DatabaseContext) contexts.get(contextId);
-	}
+		if(useContext != null)
+			return useContext;
 
-	public static DatabaseContext getContext(ServletRequest servletRequest, ServletContext servletContext, boolean throwExceptionIfDoesntExist)
-	{
-		DatabaseContext dc = (DatabaseContext) servletRequest.getAttribute(DBCONTEXT_REQUEST_ATTR_NAME);
-		if(dc != null)
-			return dc;
+        /**
+		 * if we haven't figured out our "default" connection manager,
+		 * try and figure it out now. Basically, we'll try and instantiate
+		 * the poolman context and if it's not found we'll use the Basic
+		 * one (which relies on JNDI and the web application server).
+		 */
 
-		dc = (DatabaseContext) servletContext.getAttribute(DBCONTEXT_SERVLETCONTEXT_ATTR_NAME);
-		if(dc != null)
-			return dc;
+		DatabaseContext dc = null;
+		try
+		{
+			String contextName = System.getProperty(CONTEXTNAME_PROPNAME, BasicDatabaseContext.class.getName());
+			dc = (DatabaseContext) Class.forName(contextName).newInstance();
+		}
+		catch(ClassNotFoundException e)
+		{
+			dc = new BasicDatabaseContext();
+			e.printStackTrace();
+		}
+		catch(IllegalAccessException e)
+		{
+			dc = new BasicDatabaseContext();
+			e.printStackTrace();
+		}
+		catch(InstantiationException e)
+		{
+			dc = new BasicDatabaseContext();
+			e.printStackTrace();
+		}
 
-		if(dc == null && throwExceptionIfDoesntExist)
-			throw new RuntimeException("DatabaseContext instance not found in ServletRequest attribute '"+DBCONTEXT_REQUEST_ATTR_NAME+"', or ServletContext attribute '"+DBCONTEXT_SERVLETCONTEXT_ATTR_NAME+"'");
-		else
-        {
-            // get user specified database context
-            String contextName = System.getProperty(CONTEXTNAME_PROPNAME);
-            boolean usePoolman = false;
-
-            if (contextName == null || contextName.equals("com.codestudio.sql.PoolMan"))
-            {
-                try
-                {
-                    Class.forName("com.codestudio.sql.PoolMan").newInstance();
-                    usePoolman = true;
-                }
-                catch (Exception e)
-                {
-                    usePoolman = false;
-                }
-            }
-
-            if (usePoolman)
-            {
-                dc = new PoolmanDatabaseContext(servletContext.getInitParameter("default-data-source"));
-            }
-            else
-            {
-			    dc = new BasicDatabaseContext(servletContext.getInitParameter("default-data-source"));
-            }
-        }
-
-		return dc;
+		useContext = dc;
+		return useContext;
 	}
 
 	public static DatabaseContext getContext(ServletRequest servletRequest, ServletContext servletContext)
 	{
-		return getContext(servletRequest, servletContext, false);
-	}
-
-	public static DatabaseContext getContext(DialogContext dialogContext, boolean throwExceptionIfDoesntExist)
-	{
-		DatabaseContext dc = dialogContext.getDatabaseContext();
-		if(dc == null)
-			dc = getContext(dialogContext.getRequest(), dialogContext.getServletContext(), false);
-
-		if(dc == null && throwExceptionIfDoesntExist)
-			throw new RuntimeException("DatabaseContext instance not found in DialogContext, ServletRequest attribute '"+DBCONTEXT_REQUEST_ATTR_NAME+"', or ServletContext attribute '"+DBCONTEXT_SERVLETCONTEXT_ATTR_NAME+"'");
-
-		return dc;
+		DatabaseContext dc = (DatabaseContext) servletContext.getAttribute(DBCONTEXT_SERVLETCONTEXT_ATTR_NAME);
+		return dc != null ? dc : getSystemContext();
 	}
 
 	public static DatabaseContext getContext(DialogContext dialogContext)
 	{
-		return getContext(dialogContext, false);
-	}
-
-	public static void addContext(String id, DatabaseContext dc)
-	{
-		contexts.put(id, dc);
+		DatabaseContext dc = dialogContext.getDatabaseContext();
+		return dc != null ? dc : getContext(dialogContext.getRequest(), dialogContext.getServletContext());
 	}
 }

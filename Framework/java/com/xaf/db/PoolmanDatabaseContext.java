@@ -9,59 +9,29 @@ import javax.sql.*;
 import javax.naming.*;
 
 import org.w3c.dom.*;
+import com.xaf.value.*;
 
-public class PoolmanDatabaseContext implements DatabaseContext
+public class PoolmanDatabaseContext extends AbstractDatabaseContext
 {
-    static private boolean forceNonScrollableRS;
-	private String jndiKey;
-    private Connection connection;
+	static public final String POOLMAN_CLASS_NAME = "com.codestudio.sql.PoolMan";
 
-    public PoolmanDatabaseContext(String aJndiKey)
+	public PoolmanDatabaseContext() throws SQLException
 	{
-		jndiKey = aJndiKey;
-    }
-
-	public final Connection getConnection() throws NamingException, SQLException
-	{
-		if(connection == null)
-			connection = getConnection(jndiKey);
-	    return connection;
-	}
-
-	public final Connection getConnection(String dataSourceId) throws NamingException, SQLException
-	{
-        try
-	    {
-		    // load the PoolMan JDBC Driver
-            Class.forName("com.codestudio.sql.PoolMan");
-	    }
+		try
+		{
+			// load the PoolMan JDBC Driver
+			Class.forName(POOLMAN_CLASS_NAME);
+		}
 		catch(ClassNotFoundException e)
 		{
-            throw new SQLException(e.toString());
+			throw new SQLException(e.toString());
 		}
-	    connection = DriverManager.getConnection("jdbc:poolman://" + dataSourceId);
-
-		return connection;
 	}
 
-    static public void setNonScrollableResultSet(boolean force) { forceNonScrollableRS = force; }
-
-	public final int getScrollableResultSetType() throws NamingException, SQLException
+	public final Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException
 	{
-        if(forceNonScrollableRS)
-            return RESULTSET_NOT_SCROLLABLE;
-
-		getConnection();
-
-		DatabaseMetaData dbmd = connection.getMetaData();
-
-		if(dbmd.supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE))
-			return ResultSet.TYPE_SCROLL_INSENSITIVE;
-
-		if(dbmd.supportsResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE))
-			return ResultSet.TYPE_SCROLL_SENSITIVE;
-
-		return RESULTSET_NOT_SCROLLABLE;
+		dataSourceId = translateDataSourceId(vc, dataSourceId);
+	    return DriverManager.getConnection("jdbc:poolman://" + dataSourceId);
 	}
 
     /**

@@ -320,7 +320,7 @@ public class DmlTask extends AbstractTask
         {
             ServletContext context = tc.getServletContext();
             DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
-            Connection conn = dataSourceId == null ? dbContext.getConnection() : dbContext.getConnection(dataSourceId);
+            Connection conn = dbContext.getConnection(tc, dataSourceId);
             PreparedStatement stmt = conn.prepareStatement(dml.sql);
 
             //out.write(dml.sql);

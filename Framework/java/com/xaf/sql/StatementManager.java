@@ -219,9 +219,7 @@ public class StatementManager extends XmlSource
 		if(dataSourceId == null)
 			dataSourceId = si.getDataSourceId();
 
-		Connection conn = dataSourceId == null ? dc.getConnection() : dc.getConnection(dataSourceId);
-        if (conn == null)
-            throw new RuntimeException("Your mama!" + dataSourceId);
+		Connection conn = dc.getConnection(vc, dataSourceId);
         PreparedStatement stmt = conn.prepareStatement(si.getSql(vc));
 
         if(params != null)
@@ -261,8 +259,9 @@ public class StatementManager extends XmlSource
 		vs.setValue(vc, rs, storeType);
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
         {
+            Connection conn = rs.getStatement().getConnection();
 			rs.close();
-            dc.getConnection().close();
+			conn.close();
         }
 		return ri;
 	}
@@ -274,8 +273,9 @@ public class StatementManager extends XmlSource
 		vs.setValue(vc, rs, storeType);
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
         {
+            Connection conn = rs.getStatement().getConnection();
 			rs.close();
-            dc.getConnection().close();
+			conn.close();
         }
 		return ri;
 	}
@@ -485,8 +485,9 @@ public class StatementManager extends XmlSource
 		ReportContext rc = new ReportContext(vc, rd, skin);
         rc.produceReport(writer, rs);
 
+        Connection conn = rs.getStatement().getConnection();
 		rs.close();
-        dc.getConnection().close();
+		conn.close();
 	}
 
 	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
@@ -528,7 +529,8 @@ public class StatementManager extends XmlSource
 		ReportContext rc = new ReportContext(vc, rd, skin);
         rc.produceReport(writer, data);
 
+        Connection conn = rs.getStatement().getConnection();
 		rs.close();
-        dc.getConnection().close();
+		conn.close();
 	}
 }
