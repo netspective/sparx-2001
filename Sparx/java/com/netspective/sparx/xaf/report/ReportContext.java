@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportContext.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
+ * $Id: ReportContext.java,v 1.3 2002-12-26 19:38:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -221,11 +221,27 @@ public class ReportContext extends ServletValueContext
         public final void setUrl(String value)
         {
             url = value;
+
+            if(value != null)
+            {
+                setFlag(ReportColumn.COLFLAG_WRAPURL);
+                url = column.resolvePattern(value);
+            }
+            else
+                url = null;
         }
 
         public final void setUrlAnchorAttrs(String value)
         {
             urlAnchorAttrs = value;
+            if(value != null)
+            {
+                setFlag(ReportColumn.COLFLAG_HAVEANCHORATTRS);
+                urlAnchorAttrs = column.resolvePattern(value);
+            }
+            else
+                urlAnchorAttrs = "";
+
         }
 
         public final void setFieldId(String value)
@@ -290,7 +306,6 @@ public class ReportContext extends ServletValueContext
     public ReportContext(QuerySelect select, DialogContext dc, Report reportDefn, ReportSkin skin)
     {
         this(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse(), reportDefn, skin);
-
     }
 
     /**

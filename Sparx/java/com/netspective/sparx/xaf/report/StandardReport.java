@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StandardReport.java,v 1.3 2002-10-16 18:32:26 shahid.shah Exp $
+ * $Id: StandardReport.java,v 1.4 2002-12-26 19:38:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -195,9 +195,12 @@ public class StandardReport implements Report
 
     public void initialize(ReportColumn[] cols, Element defnElem)
     {
+        if(flagIsSet(REPORTFLAG_INITIALIZED)) return;
+
+        columns.clear();
         if(cols != null)
         {
-            for(int c = 0; c <= cols.length; c++)
+            for(int c = 0; c < cols.length; c++)
                 columns.add(cols[c]);
         }
 
@@ -205,6 +208,7 @@ public class StandardReport implements Report
             importFromXml(defnElem);
 
         finalizeContents();
+        setFlag(REPORTFLAG_INITIALIZED);
     }
 
     public void finalizeContents()
