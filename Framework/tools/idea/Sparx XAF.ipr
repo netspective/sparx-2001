@@ -115,9 +115,9 @@
   </component>
   <component class="com.intellij.cvsSupport.CvsManager">
     <expanded_paths>
+      <path value="C:/Projects/Framework/java" />
       <path value="C:/Projects/Framework/java/com/xaf/ace" />
       <path value="C:/Projects/Framework/java/com" />
-      <path value="C:/Projects/Framework/java" />
       <path value="C:/Projects/Framework/java/com/xaf" />
     </expanded_paths>
   </component>
@@ -226,12 +226,12 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" column="27" line="16" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" column="41" line="12" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/navigate/FileSystemEntry.java" column="70" line="19" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/ant/BuildConfigurationTask.java" column="31" line="17" />
     </recent_files>
     <open_files>
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" column="27" line="16" />
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" column="41" line="12" />
       <active_file url="file://C:/Projects/Framework/java/com/xaf/ace/AceServletPage.java" />
     </open_files>
   </component>
@@ -273,7 +273,7 @@
   </component>
   <component class="com.intellij.projectRoots.ProjectRootContainer">
     <jdk name="java version &quot;1.3.1&quot;" />
-    <root file="file://$PROJECT_DIR$">
+    <root file="file://$PROJECT_DIR$/classes">
       <property name="type" value="outputPath" />
     </root>
     <root file="jar://C:/Utils/java/xerces-1_4_1/xerces.jar!/">
