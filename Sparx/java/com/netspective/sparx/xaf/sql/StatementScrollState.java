@@ -75,17 +75,19 @@ public class StatementScrollState extends ResultSetScrollState
     private ReportSkin skin;
     private boolean resultSetValid;
     private String datasourceId;
+    private String[] urlFormats;
 
     /**
      *
      */
-    public StatementScrollState(StatementInfo si, DatabaseContext dbContext, DialogContext dc, String datasourceId, String reportName, String skinName, int rowsPerPage, int scrollType)
+    public StatementScrollState(StatementInfo si, DatabaseContext dbContext, DialogContext dc, String datasourceId, String reportName, String skinName, String[] urlFormats, int rowsPerPage, int scrollType)
             throws NamingException, SQLException
     {
         super(si.execute(dbContext, dc, datasourceId, null, scrollType == ResultSetScrollState.SCROLLTYPE_USERESULTSET ? true : false), rowsPerPage, scrollType);
         this.skin = SkinFactory.getReportSkin(skinName == null ? "report" : skinName);
         this.stmtInfo = si;
         this.datasourceId = datasourceId;
+        this.urlFormats = urlFormats;
 
         this.dbContext = dbContext;
         ResultSet rs = getResultSet();
@@ -140,11 +142,15 @@ public class StatementScrollState extends ResultSetScrollState
 
         ReportContext rc = new ReportContext(dc.getServletContext(), dc.getServlet(), dc.getRequest(), dc.getResponse(),
                 reportDefn, this.skin);
+        if(urlFormats != null)
+        {
+            ReportContext.ColumnState[] state = rc.getStates();
+            for(int i = 0; i < urlFormats.length; i++)
+                state[i].setUrl(urlFormats[i]);
+        }
+
         rc.setResultsScrolling(this);
-        /*
-        if(primaryOrderByColIndex != -1)
-            rc.getState(primaryOrderByColIndex).setFlag(sortFieldInfo.isDescending() ? ReportColumn.COLFLAG_SORTED_DESCENDING : ReportColumn.COLFLAG_SORTED_ASCENDING);
-        */
+
         this.skin.produceReport(writer, rc, getResultSet());
 
     }

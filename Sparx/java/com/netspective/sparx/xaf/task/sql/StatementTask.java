@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.9 2002-12-23 04:44:12 shahid.shah Exp $
+ * $Id: StatementTask.java,v 1.10 2002-12-26 19:28:56 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -356,7 +356,7 @@ public class StatementTask extends BasicTask
             if(statementInfo != null)
                 si = statementInfo;
             else
-                si = stmtManager.getStatement(stmtName);
+                si = stmtManager.getStatement(tc.getServletContext(), null, stmtName);
 
             if(si == null)
                 debugMessage.append("SQL: statement '" + stmtName + "' doesn't exist");
@@ -399,7 +399,7 @@ public class StatementTask extends BasicTask
             if (produceReport && this.pageableReport)
             {
                 // Special Case: This static query must produce a report that is pageable
-                StatementDialog stmtDialog = new StatementDialog(stmtManager.getStatement(stmtName), getReport(), getSkin() != null ? getSkin().getValue(tc) : null);
+                StatementDialog stmtDialog = new StatementDialog(stmtManager.getStatement(tc.getServletContext(), null, stmtName), getReport(), getSkin() != null ? getSkin().getValue(tc) : null, null);
                 stmtDialog.setRowsPerPage(getRowsPerPage());
                 DialogSkin skin = com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin();
                 DialogContext dc = stmtDialog.createContext(context, tc.getServlet(),
@@ -411,9 +411,9 @@ public class StatementTask extends BasicTask
             else if(produceReport && storeValueSource == null)
             {
                 if(statementInfo != null)
-                    statementInfo.produceReport(out, dbContext, tc, dataSourceId, reportSkin, null, reportId);
+                    statementInfo.produceReport(out, dbContext, tc, dataSourceId, reportSkin, null, reportId, null);
                 else
-                    stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId);
+                    stmtManager.produceReport(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId, null);
             }
             else if(!produceReport && storeValueSource != null)
             {
@@ -447,7 +447,7 @@ public class StatementTask extends BasicTask
         catch(SQLException e)
         {
             StringBuffer errorMsg = new StringBuffer();
-            StatementInfo si = statementInfo != null ? statementInfo : stmtManager.getStatement(stmtName);
+            StatementInfo si = statementInfo != null ? statementInfo : stmtManager.getStatement(tc.getServletContext(), null, stmtName);
 
             StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
