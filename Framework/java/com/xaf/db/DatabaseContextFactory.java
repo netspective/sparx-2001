@@ -39,6 +39,7 @@ public class DatabaseContextFactory
     static public void setupDefaultPolicies()
     {
         addDatabasePolicy("Oracle", new OracleDatabasePolicy());
+        addDatabasePolicy("Microsoft SQL Server", new SqlServerDatabasePolicy());
         defaultPoliciesSetup = true;
     }
 
