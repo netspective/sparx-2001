@@ -68,16 +68,19 @@
 
 	<datatype name="date">
 		<java-class package="java.util">Date</java-class>
+		<java-date-format-instance>java.text.DateFormat.getDateInstance()</java-date-format-instance>
 		<sqldefn dbms="ansi">date</sqldefn>
 	</datatype>
 
 	<datatype name="stamp">
 		<java-class package="java.util">Date</java-class>
+		<java-date-format-instance>java.text.DateFormat.getDateTimeInstance()</java-date-format-instance>
 		<sqldefn dbms="ansi">date</sqldefn>
 	</datatype>
 
 	<datatype name="time">
 		<java-class package="java.util">Date</java-class>
+		<java-date-format-instance>java.text.DateFormat.getTimeInstance()</java-date-format-instance>
 		<sqldefn dbms="ansi">date</sqldefn>
 	</datatype>
 
