@@ -419,11 +419,34 @@ public class NewField extends com.xaf.form.DialogField
                 <para>
                 Aside from the <sgmltag class="attribute">action</sgmltag> attribute, there are other useful attributes
                 available such as <sgmltag class="attribute">apply-flag</sgmltag> and <sgmltag class="attribute">clear-flag</sgmltag>.
-                The more common values for these two attributes are <sgmltag class="attvalue">invisible</sgmltag>, 
-                <sgmltag class="attvalue">read-only</sgmltag>, and <sgmltag class="attvalue">browser-read-only</sgmltag>.
+                The following values are available for these two attributes:
+                <itemizedlist>
+                    <listitem>
+                    <sgmltag class="attvalue">invisible</sgmltag>: turns the field invisible or not.
+                    </listitem>
+                    <listitem>
+                    <sgmltag class="attvalue">read-only</sgmltag>: turns the field into a read only field.
+                    </listitem>
+                    <listitem>
+                    <sgmltag class="attvalue">browser-read-only</sgmltag>: turns the field into a read only field
+                    but it is still available as an input from scripts.
+                    </listitem>
+                    <listitem>
+                    <sgmltag class="attvalue">hidden</sgmltag>: turns the field into a hidden field.
+                    </listitem>
+                    <listitem>
+                    <sgmltag class="attvalue">required</sgmltag>: makes the field required.
+                    </listitem>                
+                </itemizedlist>
+                
                 For setting or removing these flags depend upon other attributes such as <sgmltag class="attribute">
                 data-cmd</sgmltag>, <sgmltag class="attribute">has-permission</sgmltag>, and <sgmltag class="attribute">
-                lack-permission</sgmltag>. 
+                lack-permission</sgmltag>. The <sgmltag class="attribute">data-cmd</sgmltag> is used to indicate the 
+                dialog data mode (add, edit, or delete) in which the defined flag should be cleared or set. The 
+                <sgmltag class="attribute">has-permission</sgmltag> and <sgmltag class="attribute">
+                lack-permission</sgmltag> attributes are used to modify the flag dependent upon the security access
+                level of the user. These two attributes can only be used when &framework-name;'s security access
+                control list is being used.
                 </para>
             </example>
 
@@ -576,6 +599,20 @@ public class NewField extends com.xaf.form.DialogField
             <sgmltag class="attvalue">org_industry</sgmltag> has conditions defined based upon the mode of the dialog.
             When the dialog is in edit or delete mode, the <emphasis>invisible</emphasis> flag is applied to
             the fields. For more information on conditional fields, go to <xref linkend="Dialogs-DataFields"/>.
+            As mentioned before, a data command can be passed to the dialog through a request parameter by appending
+            a query string after the URL, <literal>http:\\myapp\index.jsp?data_cmd=add</literal>. A request attribute can
+            also be used to pass the data command as shown in the JSP example below:
+            <example>
+            <programlisting>
+            <![CDATA[
+    <%
+        request.setAttribute("data_cmd", "add");
+    %>
+    <xaf:dialog name="registration" />
+            ]]>
+            </programlisting>
+            </example>
+            
             </para>
         </example>
         </para>
