@@ -112,6 +112,16 @@
 			</tr>
 		</xsl:for-each>
 	</table>
+	<h1>Configuration Properties</h1>
+	<table>
+		<xsl:for-each select="context/config-items/*">
+			<xsl:sort select="name"/>
+			<tr>
+				<td class="param_name"><xsl:value-of select="name"/>:</td>
+				<td class="param_value"><xsl:value-of select="value"/></td>
+			</tr>
+		</xsl:for-each>
+	</table>
 	<h1>Data Sources</h1>
 	<table>
 		<xsl:for-each select="context/data-sources/*">

@@ -11,6 +11,7 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
+import com.xaf.config.*;
 import com.xaf.db.*;
 import com.xaf.form.*;
 import com.xaf.skin.*;
@@ -107,6 +108,31 @@ public class AppComponentExplorerServlet extends HttpServlet
 			addText(paramElem, "name", paramName);
 			addText(paramElem, "value", context.getInitParameter(paramName));
 			contextParamsElem.appendChild(paramElem);
+		}
+
+		Element configItemsElem = appComponents.createElement("config-items");
+		contextElem.appendChild(configItemsElem);
+		ConfigurationManager manager = ConfigurationManagerFactory.getManager(context);
+		Element itemElem = appComponents.createElement("config-item");
+		addText(itemElem, "name", "source-file");
+		addText(itemElem, "value", manager.getSourceDocument().getFile().getAbsolutePath());
+		configItemsElem.appendChild(itemElem);
+
+		Configuration defaultConfig = manager.getDefaultConfiguration();
+		ValueContext vc = new ServletValueContext(null, null, context);
+		for(Iterator i = defaultConfig.entrySet().iterator(); i.hasNext(); )
+		{
+			itemElem = appComponents.createElement("config-item");
+			Map.Entry configEntry = (Map.Entry) i.next();
+			addText(itemElem, "name", (String) configEntry.getKey());
+			Property property = (Property) configEntry.getValue();
+			String expression = property.getExpression();
+			String value = defaultConfig.getValue(vc, property.getName());
+			if(expression.equals(value))
+				addText(itemElem, "value", value);
+			else
+				addText(itemElem, "value", value + " (" + expression + ")");
+			configItemsElem.appendChild(itemElem);
 		}
 
 		Element directoryParamsElem = appComponents.createElement("data-sources");
