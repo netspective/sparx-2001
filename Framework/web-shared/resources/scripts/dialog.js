@@ -73,13 +73,19 @@ function Dialog_isValid()
 	
 	if(! ALLOW_CLIENT_VALIDATION)
 		return true;
-		
+	
+	var isValid = true;
 	for(var i = 0; i < dialogFields.length; i++)
 	{
-		if(! dialogFields[i].isValid())
-			return false;
+		var field = dialogFields[i];
+		if(! field.isValid())
+		{
+			isValid = false;
+			break;
+		}
 	}
-	return true;
+
+	return isValid;
 }
 
 var activeDialog = null;
@@ -143,6 +149,13 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
 	this.doPreSubmit = DialogField_doPreSubmit;
 	this.focusNext = DialogField_focusNext;
 	this.getFieldAreaElem = DialogField_getFieldAreaElem;
+	this.alertRequired = DialogField_alertRequired;
+	this.isRequired = DialogField_isRequired;
+}
+
+function DialogField_isRequired()
+{
+	return (this.flags & FLDFLAG_REQUIRED) != 0;
 }
 
 function DialogField_getControl()
@@ -157,7 +170,7 @@ function DialogField_finalizeContents()
 		this.requiresPreSubmit = true;
 		
 	if(this.dependentConditions.length > 0)
-		this.evaluateConditionals();
+		this.evaluateConditionals(this);
 
 	if((this.flags & FLDFLAG_INITIAL_FOCUS) != 0)
 	{
@@ -169,7 +182,7 @@ function DialogField_finalizeContents()
 	}
 }
 
-function DialogField_evaluateConditionals()
+function DialogField_evaluateConditionals(dialog)
 {
 	var control = document.all.item(this.controlId);
 	if(control == null)
@@ -180,28 +193,40 @@ function DialogField_evaluateConditionals()
 	
 	var conditionalFields = this.dependentConditions;
 	for(var i = 0; i < conditionalFields.length; i++)
-		conditionalFields[i].evaluate(control);
+		conditionalFields[i].evaluate(dialog, control);
+}
+
+function DialogField_alertRequired(control)
+{
+	alert(this.caption + " is required.");
+	control.focus();
 }
 
 function DialogField_isValid()
 {
 	// perform default validation first
 	var control = document.all.item(this.controlId);
-	if(this.flags & FLDFLAG_REQUIRED)
-	{
-		if(control.value.length == 0)
-		{
-			alert(this.caption + " is required.");
-			control.focus();
-			return false;
-		}
-	}
 
 	// now see if there are any type-specific validations to perform
 	var fieldType = this.type;
 	if(fieldType != null && fieldType.isValid != null)
-		return fieldType.isValid(control);
+	{
+		return fieldType.isValid(this, control);
+	}
 
+	// no type-specific validation found so try and do a generic one
+	if(this.isRequired())
+	{
+		if(eval("typeof control.value") != "undefined")
+		{
+			if(control.value.length == 0)
+			{
+				this.alertRequired(control);
+				return false;
+			}
+		}
+	}
+	
 	return true;
 }
 
@@ -313,7 +338,7 @@ function DialogFieldConditionalDisplay(source, partner, expression)
 	this.evaluate = DialogFieldConditionalDisplay_evaluate;
 }
 
-function DialogFieldConditionalDisplay_evaluate(control)
+function DialogFieldConditionalDisplay_evaluate(dialog, control)
 {
 	// first find the field area that we need to hide/show
 	// -- if an ID with the entire field row is found (a primary field)
@@ -336,7 +361,7 @@ function DialogFieldConditionalDisplay_evaluate(control)
 	
 		if(fieldAreaElem == null)
 		{
-			var condSource = activeDialog.fieldsByQualName[this.source];
+			var condSource = dialog.fieldsByQualName[this.source];
 			fieldAreaElem = document.all.item(condSource.controlId);
 
 			if(fieldAreaElem == null)
@@ -464,7 +489,7 @@ function SimpleSort(objSelect)
 
 function controlOnFocus(control)
 {
-	control.style.backgroundColor = "lightyellow";
+	//control.style.backgroundColor = "lightyellow";
 }
 
 function controlOnChange(control)
@@ -479,14 +504,77 @@ function controlOnChange(control)
 	{
 		var conditionalFields = field.dependentConditions;
 		for(var i = 0; i < conditionalFields.length; i++)
-			conditionalFields[i].evaluate(control);
+			conditionalFields[i].evaluate(activeDialog, control);
 	}
 }
 
 function controlOnBlur(control)
 {
-	control.style.backgroundColor = "";
+	//control.style.backgroundColor = "";
 }
+
+//****************************************************************************
+// Field-specific functions
+//****************************************************************************
+
+function SelectField_isValid(field, control)
+{
+	var style = field.style;
+	if(field.isRequired())
+	{
+		if(style == SELECTSTYLE_RADIO)
+		{
+			var selectedCount = 0;
+			for(var r = 0; r < control.length; r++)
+			{
+				if(control[r].checked)
+					selectedCount++;
+			}
+			if(selectedCount == 0)
+			{
+				field.alertRequired(control[0]);
+				return false;
+			}
+		}
+		else if(style == SELECTSTYLE_COMBO || style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
+		{
+			var selectedCount = 0;
+			var options = control.options;
+			for(var o = 0; o < options.length; o++)
+			{
+				if(options[o].selected)
+					selectedCount++;
+			}
+			if(selectedCount == 0)
+			{
+				field.alertRequired(control);
+				return false;
+			}
+		}
+		else if(style == SELECTSTYLE_MULTICHECK)
+		{
+			var selectedCount = 0;
+			for(var c = 0; c < control.length; c++)
+			{
+				if(control[c].checked)
+					selectedCount++;
+			}
+			if(selectedCount == 0)
+			{
+				field.alertRequired(control[0]);
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
+addFieldType("com.xaf.form.field.SelectField", SelectField_isValid, controlOnChange, controlOnFocus, controlOnBlur);
+
+//****************************************************************************
+// Event handlers
+//****************************************************************************
 
 function documentOnKeyDown(control)
 {
