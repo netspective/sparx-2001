@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.11 2003-01-24 14:15:22 shahid.shah Exp $
+ * $Id: HtmlReportSkin.java,v 1.12 2003-03-05 22:59:42 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -75,6 +75,7 @@ import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.config.Configuration;
+
 
 public class HtmlReportSkin implements ReportSkin
 {
@@ -472,7 +473,7 @@ public class HtmlReportSkin implements ReportSkin
 
             isOddRow = ! isOddRow;
             int rowNum = rs.getRow();
-
+            handleDataRowValues(rsmd, rowData);
             writer.write("<tr "+ (isOddRow ? dataOddRowAttrs : dataEvenRowAttrs) +"><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
 
             produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
@@ -530,6 +531,17 @@ public class HtmlReportSkin implements ReportSkin
             if(rowsWritten < scrollState.getRowsPerPage())
                 scrollState.setNoMoreRows();
         }
+    }
+
+    /**
+     * This method is a place holder for child skin classes wishing to do extra "processing" using the row data
+     * while producing the standard report.
+     * @param rsmd Resultset metadata
+     * @param rowData array of data
+     */
+    protected void handleDataRowValues(ResultSetMetaData rsmd , Object[] rowData) throws SQLException
+    {
+
     }
 
     /*
