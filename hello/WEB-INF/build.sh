@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: build.sh,v 1.1 2002-08-09 15:58:53 shahid.shah Exp $
+# $Id: build.sh,v 1.2 2002-08-09 16:19:20 shahid.shah Exp $
 
 # **************************************************************************
 # ** This script should be be run from the APP_ROOT/WEB-INF directory.    **
@@ -49,8 +49,8 @@ LOG4J_JAR=$APP_LIB/log4j.jar
 BSF_JAR=$APP_LIB/bsf.jar
 BSF_JS_JAR=$APP_LIB/js.jar
 
-SERVLETAPI_JAR=%SPARX_REDIST_HOME%\servlet.jar
-JDBC2X_JAR=%SPARX_REDIST_HOME%\jdbc.jar
+SERVLETAPI_JAR=$SPARX_REDIST_HOME\servlet.jar
+JDBC2X_JAR=$SPARX_REDIST_HOME\jdbc.jar
 
 if [ -f $JAVA_HOME/lib/tools.jar ]; then
 	JAVACP=$JAVA_HOME/lib/tools.jar
