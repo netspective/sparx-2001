@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.10 2002-12-26 19:22:43 shahid.shah Exp $
+ * $Id: HtmlReportSkin.java,v 1.11 2003-01-24 14:15:22 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -116,8 +116,8 @@ public class HtmlReportSkin implements ReportSkin
     protected String rowSepImgSrc = "/shared/resources/images/design/bar.gif";
     protected String sortAscImgSrc = "/shared/resources/images/navigate/triangle-up-blue.gif";
     protected String sortDescImgSrc = "/shared/resources/images/navigate/triangle-down-lblue.gif";
-    protected int rowDecoratorPrependColsCount = 0;
-    protected int rowDecoratorAppendColsCount = 0;
+    private int rowDecoratorPrependColsCount = 0;
+    private int rowDecoratorAppendColsCount = 0;
     protected SingleValueSource addDataText = ValueSourceFactory.getSingleValueSource("create-record-add-text:Record");
     protected SingleValueSource editDataText = ValueSourceFactory.getSingleValueSource("config-expr:<img src='${sparx.shared.images-url}/design/action-edit-update.gif' border=0>");
     protected SingleValueSource deleteDataText = ValueSourceFactory.getSingleValueSource("config-expr:<img src='${sparx.shared.images-url}/design/action-edit-remove.gif' border=0>");
@@ -289,23 +289,17 @@ public class HtmlReportSkin implements ReportSkin
     private int getTableColumnsCount(ReportContext rc)
     {
         return (rc.getVisibleColsCount() * 2) +
-               (rowDecoratorPrependColsCount * 2) +
-               (rowDecoratorAppendColsCount * 2) +
+               (getRowDecoratorPrependColsCount(rc) * 2) +
+               (getRowDecoratorAppendColsCount(rc) * 2) +
                + 1; // each column has "spacer" in between, first column as spacer before too
     }
 
     public void produceHeadingRowDecoratorPrepend(Writer writer, ReportContext rc) throws IOException
     {
-        writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">");
-        writer.write("&nbsp;");
-        writer.write("</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
     }
 
     public void produceHeadingRowDecoratorAppend(Writer writer, ReportContext rc) throws IOException
     {
-        writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">");
-        writer.write("&nbsp;");
-        writer.write("</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
     }
 
     public void produceDataRowDecoratorPrepend(Writer writer, ReportContext rc, int rowNum, Object[] rowData, boolean isOddRow) throws IOException
@@ -321,17 +315,14 @@ public class HtmlReportSkin implements ReportSkin
         ReportColumnsList columns = rc.getColumns();
         ReportContext.ColumnState[] states = rc.getStates();
         int dataColsCount = columns.size();
-        int tableColsCount = getTableColumnsCount(rc);
 
         Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
-        String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
         String sortAscImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-ascending-img-src", getSortAscImgSrc()) + "\" border=0>";
         String sortDescImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
 
         writer.write("<tr " + dataHdRowAttrs + "><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
 
-        if(rowDecoratorPrependColsCount > 0)
-            produceHeadingRowDecoratorPrepend(writer, rc);
+        produceHeadingRowDecoratorPrepend(writer, rc);
 
         if(headings == null)
         {
@@ -382,8 +373,7 @@ public class HtmlReportSkin implements ReportSkin
             }
         }
 
-        if(rowDecoratorAppendColsCount > 0)
-            produceHeadingRowDecoratorAppend(writer, rc);
+        produceHeadingRowDecoratorAppend(writer, rc);
 
         writer.write("</tr>");
         /*
@@ -408,8 +398,7 @@ public class HtmlReportSkin implements ReportSkin
 
         writer.write("<tr " + dataHdRowAttrs + "><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
 
-        if(rowDecoratorPrependColsCount > 0)
-            produceHeadingRowDecoratorPrepend(writer, rc);
+        produceHeadingRowDecoratorPrepend(writer, rc);
 
         for(int i = 0; i < dataColsCount; i++)
         {
@@ -436,8 +425,7 @@ public class HtmlReportSkin implements ReportSkin
                 writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
 
-        if(rowDecoratorAppendColsCount > 0)
-            produceHeadingRowDecoratorAppend(writer, rc);
+        produceHeadingRowDecoratorAppend(writer, rc);
 
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='2' width='100%'></td></tr>");
@@ -487,8 +475,7 @@ public class HtmlReportSkin implements ReportSkin
 
             writer.write("<tr "+ (isOddRow ? dataOddRowAttrs : dataEvenRowAttrs) +"><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
 
-            if(rowDecoratorPrependColsCount > 0)
-                produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
+            produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
 
             for(int i = 0; i < dataColsCount; i++)
             {
@@ -519,8 +506,7 @@ public class HtmlReportSkin implements ReportSkin
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
             }
 
-            if(rowDecoratorAppendColsCount > 0)
-                produceDataRowDecoratorAppend(writer, rc, rowNum, rowData, isOddRow);
+            produceDataRowDecoratorAppend(writer, rc, rowNum, rowData, isOddRow);
 
             if(addRowSeps)
                 writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='1' width='100%'></td></tr>");
@@ -578,8 +564,7 @@ public class HtmlReportSkin implements ReportSkin
 
             writer.write("<tr "+ (isOddRow ? dataOddRowAttrs : dataEvenRowAttrs) +"><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
 
-            if(rowDecoratorPrependColsCount > 0)
-                produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
+            produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
 
             for(int i = 0; i < dataColsCount; i++)
             {
@@ -609,8 +594,7 @@ public class HtmlReportSkin implements ReportSkin
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
             }
 
-            if(rowDecoratorAppendColsCount > 0)
-                produceDataRowDecoratorAppend(writer, rc, rowNum, rowData, isOddRow);
+            produceDataRowDecoratorAppend(writer, rc, rowNum, rowData, isOddRow);
 
             if(addRowSeps)
                 writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='1' width='100%'></td></tr>");
@@ -918,5 +902,25 @@ public class HtmlReportSkin implements ReportSkin
     public void setSortDescImgSrc(String sortDescImgSrc)
     {
         this.sortDescImgSrc = sortDescImgSrc;
+    }
+
+    protected int getRowDecoratorPrependColsCount(ReportContext rc)
+    {
+        return rowDecoratorPrependColsCount;
+    }
+
+    protected void setRowDecoratorPrependColsCount(int rowDecoratorPrependColsCount)
+    {
+        this.rowDecoratorPrependColsCount = rowDecoratorPrependColsCount;
+    }
+
+    protected int getRowDecoratorAppendColsCount(ReportContext rc)
+    {
+        return rowDecoratorAppendColsCount;
+    }
+
+    protected void setRowDecoratorAppendColsCount(int rowDecoratorAppendColsCount)
+    {
+        this.rowDecoratorAppendColsCount = rowDecoratorAppendColsCount;
     }
 }

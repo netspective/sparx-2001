@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: RecordEditorReportSkin.java,v 1.1 2002-10-13 18:42:01 shahid.shah Exp $
+ * $Id: RecordEditorReportSkin.java,v 1.2 2003-01-24 14:15:22 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -62,7 +62,6 @@ import java.io.IOException;
 import com.netspective.sparx.xaf.report.ReportContext;
 import com.netspective.sparx.xaf.report.ReportFrame;
 import com.netspective.sparx.xaf.report.Report;
-import com.netspective.sparx.xaf.report.ReportBanner;
 import com.netspective.sparx.util.value.SingleValueSource;
 
 public class RecordEditorReportSkin extends HtmlReportSkin
@@ -70,47 +69,73 @@ public class RecordEditorReportSkin extends HtmlReportSkin
     public RecordEditorReportSkin(boolean fullWidth)
     {
         super(fullWidth);
-        rowDecoratorPrependColsCount = 1;
-        rowDecoratorAppendColsCount = 1;
+    }
+
+    protected int getRowDecoratorAppendColsCount(ReportContext rc)
+    {
+        return (rc.getFrameFlags() & ReportFrame.RPTFRAMEFLAG_HAS_DELETE) != 0 ? 1 : 0;
+    }
+
+    public void produceHeadingRowDecoratorAppend(Writer writer, ReportContext rc) throws IOException
+    {
+        if((rc.getFrameFlags() & ReportFrame.RPTFRAMEFLAG_HAS_DELETE) == 0)
+            return;
+
+        writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">");
+        writer.write("&nbsp;");
+        writer.write("</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
     }
 
     public void produceDataRowDecoratorAppend(Writer writer, ReportContext rc, int rowNum, Object[] rowData, boolean isOddRow) throws IOException
     {
-        ReportFrame frame = getReportFrame(rc);
-        if(frame != null)
+        if((rc.getFrameFlags() & ReportFrame.RPTFRAMEFLAG_HAS_DELETE) == 0)
+            return;
+
+        SingleValueSource deleteRecordUrl = getReportFrame(rc).getRecordDeleteUrlFormat();
+        if(deleteRecordUrl != null)
         {
-            SingleValueSource deleteRecordUrl = frame.getRecordDeleteUrlFormat();
-            if(deleteRecordUrl != null)
-            {
-                Report defn = rc.getReport();
-                writer.write("<td><font " + dataFontAttrs + ">");
-                writer.write("<a href='");
-                writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, deleteRecordUrl.getValue(rc)));
-                writer.write("'>");
-                writer.write(deleteDataText.getValue(rc));
-                writer.write("</a>");
-                writer.write("</font></td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</font></td>");
-            }
+            Report defn = rc.getReport();
+            writer.write("<td><font " + dataFontAttrs + ">");
+            writer.write("<a href='");
+            writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, deleteRecordUrl.getValue(rc)));
+            writer.write("'>");
+            writer.write(deleteDataText.getValue(rc));
+            writer.write("</a>");
+            writer.write("</font></td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
+    }
+
+    protected int getRowDecoratorPrependColsCount(ReportContext rc)
+    {
+        return (rc.getFrameFlags() & ReportFrame.RPTFRAMEFLAG_HAS_EDIT) != 0 ? 1 : 0;
+    }
+
+    public void produceHeadingRowDecoratorPrepend(Writer writer, ReportContext rc) throws IOException
+    {
+        if((rc.getFrameFlags() & ReportFrame.RPTFRAMEFLAG_HAS_EDIT) == 0)
+            return;
+
+        writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">");
+        writer.write("&nbsp;");
+        writer.write("</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
     }
 
     public void produceDataRowDecoratorPrepend(Writer writer, ReportContext rc, int rowNum, Object[] rowData, boolean isOddRow) throws IOException
     {
-        ReportFrame frame = getReportFrame(rc);
-        if(frame != null)
+        if((rc.getFrameFlags() & ReportFrame.RPTFRAMEFLAG_HAS_EDIT) == 0)
+            return;
+
+        SingleValueSource editRecordUrl = getReportFrame(rc).getRecordEditUrlFormat();
+        if(editRecordUrl != null)
         {
-            SingleValueSource editRecordUrl = frame.getRecordEditUrlFormat();
-            if(editRecordUrl != null)
-            {
-                Report defn = rc.getReport();
-                writer.write("<td><font " + dataFontAttrs + ">");
-                writer.write("<a href='");
-                writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, editRecordUrl.getValue(rc)));
-                writer.write("'>");
-                writer.write(editDataText.getValue(rc));
-                writer.write("</a>");
-                writer.write("</font></td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</font></td>");
-            }
+            Report defn = rc.getReport();
+            writer.write("<td><font " + dataFontAttrs + ">");
+            writer.write("<a href='");
+            writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, editRecordUrl.getValue(rc)));
+            writer.write("'>");
+            writer.write(editDataText.getValue(rc));
+            writer.write("</a>");
+            writer.write("</font></td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
     }
 }
