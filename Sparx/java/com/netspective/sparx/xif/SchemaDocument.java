@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.5 2002-03-31 14:05:00 snshah Exp $
+ * $Id: SchemaDocument.java,v 1.6 2002-03-31 21:15:29 snshah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -548,6 +548,25 @@ public class SchemaDocument extends XmlSource
                     errors.add("The 'indexgrp' attribute is no longer supported in table '" + tableName + "' column '" + indexColName + "' (use 'index' tag instead)");
                 if(column.getAttribute("uniquegrp").length() > 0)
                     errors.add("The 'uniquegrp' attribute is no longer supported in table '" + tableName + "' column '" + indexColName + "' (use 'index' tag instead)");
+
+                String dalAccessor = column.getAttribute("java-dal-accessor");
+                String columnName = column.getAttribute("name");
+                if("yes".equals(dalAccessor))
+                {
+                    Element accessorElem = tableDoc.createElement("java-dal-accessor");
+                    accessorElem.setAttribute("name", "get" + tableName + "By" + XmlSource.xmlTextToJavaIdentifier(columnName, true));
+                    accessorElem.setAttribute("columns", columnName);
+                    accessorElem.setAttribute("type", "equality");
+                    table.appendChild(accessorElem);
+                }
+                else if(dalAccessor.length() > 0)
+                {
+                    Element accessorElem = tableDoc.createElement("java-dal-accessor");
+                    accessorElem.setAttribute("name", dalAccessor);
+                    accessorElem.setAttribute("columns", columnName);
+                    accessorElem.setAttribute("type", "equality");
+                    table.appendChild(accessorElem);
+                }
             }
             else if(nodeName.equals("index"))
             {
@@ -584,45 +603,6 @@ public class SchemaDocument extends XmlSource
                     }
                 }
             }
-            else if(nodeName.equals("java-dal-accessor"))
-            {
-                Element accessor = (Element) node;
-                //inheritNodes(accessor, indexTypeNodes);
-
-                String methodName = accessor.getAttribute("name");
-                String type = accessor.getAttribute("type");
-                String connector = accessor.getAttribute("connector");
-                NodeList columnElems = table.getElementsByTagName("column");
-                int columnsCount = columnElems.getLength();
-
-                String columnsList = accessor.getAttribute("columns");
-                if(columnsList.length() > 0)
-                {
-                    StringTokenizer st = new StringTokenizer(accessor.getAttribute("columns"), ",");
-                    while(st.hasMoreTokens())
-                    {
-                        String accessorColName = st.nextToken().trim();
-                        boolean found = false;
-                        for(int ic = 0; ic < columnsCount; ic++)
-                        {
-                            Element columnElem = (Element) columnElems.item(ic);
-                            if(columnElem.getAttribute("name").equals(accessorColName))
-                            {
-                                found = true;
-                                colNameElem = tableDoc.createElement("column");
-                                colNameElem.setAttribute("name", accessorColName);
-                                accessor.appendChild(colNameElem);
-                                break;
-                            }
-                        }
-                        if(!found)
-                        {
-                            errors.add("Column '" + accessorColName + "' not found in table '" + tableName + "'");
-                        }
-                    }
-                }
-            }
-
         }
 
         if(columnIndexes.size() > 0)
@@ -630,6 +610,77 @@ public class SchemaDocument extends XmlSource
             for(Iterator i = columnIndexes.iterator(); i.hasNext();)
             {
                 table.appendChild((Element) i.next());
+            }
+        }
+    }
+
+    public void prepareForDataAccessLayer(Element table)
+    {
+        String tableName = table.getAttribute("name");
+        Document tableDoc = table.getOwnerDocument();
+
+        NodeList columns = table.getChildNodes();
+        Element colNameElem = null;
+        for(int c = 0; c < columns.getLength(); c++)
+        {
+            Node node = columns.item(c);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            String nodeName = node.getNodeName();
+            if(nodeName.equals("java-dal-accessor"))
+            {
+                Element accessor = (Element) node;
+
+                String methodName = accessor.getAttribute("name");
+                String type = accessor.getAttribute("type");
+                String connector = accessor.getAttribute("connector");
+                NodeList columnElems = table.getElementsByTagName("column");
+                int columnsCount = columnElems.getLength();
+
+                // if the convenient method <java-dal-accessor name="abc" columns="a,b,c"/> is used, expand to <column name="a">, etc
+                String columnsList = accessor.getAttribute("columns");
+                if(columnsList.length() > 0)
+                {
+                    StringTokenizer st = new StringTokenizer(accessor.getAttribute("columns"), ",");
+                    while(st.hasMoreTokens())
+                    {
+                        String accessorColName = st.nextToken().trim();
+                        colNameElem = tableDoc.createElement("column");
+                        colNameElem.setAttribute("name", accessorColName);
+                        accessor.appendChild(colNameElem);
+                    }
+                }
+
+                // the @columns is now expanded, check that each of the accessor <column> tags actually exists in the table
+                NodeList accessorColumnElems = accessor.getElementsByTagName("column");
+                int accessorColumnsCount = accessorColumnElems.getLength();
+                for(int ac = 0; ac < accessorColumnsCount; ac++)
+                {
+                    Element accessorColumnElem = (Element) accessorColumnElems.item(ac);
+                    String accessorColName = accessorColumnElem.getAttribute("name");
+                    System.out.print(accessorColName);
+                    boolean found = false;
+                    for(int ic = 0; ic < columnsCount; ic++)
+                    {
+                        Element columnElem = (Element) columnElems.item(ic);
+                        if(columnElem.getAttribute("name").equals(accessorColName))
+                        {
+                            found = true;
+                            String dataType = columnElem.getAttribute("type");
+                            Element dataTypeElem = (Element) dataTypeNodes.get(dataType);
+                            if(dataTypeElem.getElementsByTagName("java-type").getLength() > 0)
+                            {
+                                accessor.setAttribute("_gen-has-primitive-params", "yes");
+                            }
+                            break;
+                        }
+                    }
+                    if(!found)
+                    {
+                        errors.add("Accessor '"+ methodName +"' column '" + accessorColName + "' not found in table '" + tableName + "'");
+                    }
+                }
             }
         }
     }
@@ -1122,6 +1173,10 @@ public class SchemaDocument extends XmlSource
         // we do this at the very last so that duplicate inheritance doesn't occur in columns -- also,
         // we want to be sure to do it so that data types that are generating Java can be "extended"
         doDataTypeInheritance();
+
+        i = tableNodes.values().iterator();
+        while(i.hasNext())
+            prepareForDataAccessLayer((Element) i.next());
 
         addMetaInformation();
     }
