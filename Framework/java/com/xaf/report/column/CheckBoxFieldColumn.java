@@ -18,16 +18,29 @@ public class CheckBoxFieldColumn extends DialogFieldColumn
 
 	public void finalizeContents(Report report)
 	{
-		setHeading("<input type=checkbox onclick=\"setAllCheckboxes(this, '"+getFieldIdPrefix()+"')\">");
+		setHeading("<input type=checkbox onclick=\"setAllCheckboxes(this, '"+getFieldId()+"')\">");
 	}
 
 	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc)
 	{
 		int colIndex = getColIndexInArray();
-		String fieldTemplate = rc.getState(colIndex).getFieldIdTemplate();
-		String fieldName = rc.getReport().replaceOutputPatterns(rc, rowNum, rowData, fieldTemplate);
+		ReportContext.ColumnState state = rc.getState(colIndex);
+		String fieldName = state.getFieldId();
+		String fieldValue = rc.getReport().replaceOutputPatterns(rc, rowNum, rowData, state.getFieldValueTemplate());
 
-		boolean isChecked = rc.getRequest().getParameter(fieldName) != null;
+		boolean isChecked = false;
+		String[] values = rc.getRequest().getParameterValues(fieldName);
+		if(values != null)
+		{
+			for(int v = 0; v < values.length; v++)
+			{
+				if(values[v].equals(fieldValue))
+				{
+					isChecked = true;
+					break;
+				}
+			}
+		}
 		if(! isChecked)
 		{
 			Object oData = rowData[colIndex];
@@ -51,7 +64,7 @@ public class CheckBoxFieldColumn extends DialogFieldColumn
 			}
 		}
 
-		return "<input type='checkbox' name='"+ fieldName +"' "+ (isChecked ? "checked" : "") +">";
+		return "<input type='checkbox' name='"+ fieldName +"' value='"+ fieldValue +"' "+ (isChecked ? "checked" : "") +">";
 
 		/*
         if(doCalc)

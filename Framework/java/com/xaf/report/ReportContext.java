@@ -31,7 +31,8 @@ public class ReportContext implements ValueContext
 		protected ReportColumn column;
 		protected String heading;
 		protected ColumnDataCalculator calc;
-		protected String dialogFieldIdTemplate;
+		protected String dialogFieldId;
+		protected String dialogFieldValueTemplate;
 		protected long flags;
 		protected String outputFormat;
 		protected String url;
@@ -60,7 +61,8 @@ public class ReportContext implements ValueContext
 			if(column instanceof DialogFieldColumn)
 			{
 				DialogFieldColumn dfc = (DialogFieldColumn) column;
-				dialogFieldIdTemplate = dfc.getFieldIdPrefix() + dfc.getFieldIdRowSuffix();
+				dialogFieldId = dfc.getFieldId();
+				dialogFieldValueTemplate = dfc.getFieldValue();
 			}
 		}
 
@@ -78,7 +80,8 @@ public class ReportContext implements ValueContext
 		public final String getHeading() { return heading; }
 		public final String getOutputFormat() { return outputFormat; }
 		public final String getUrl() { return url; }
-		public final String getFieldIdTemplate() { return dialogFieldIdTemplate; }
+		public final String getFieldId() { return dialogFieldId; }
+		public final String getFieldValueTemplate() { return dialogFieldValueTemplate; }
 	}
 
 	private List listeners = new ArrayList();

@@ -14,13 +14,13 @@ public class DialogFieldColumn extends GeneralColumn
 {
 	private ReportField parent;
 	private String fieldName;
-	private String fieldIdRowSuffix;
+	private String fieldValue;
 	private int fieldFlags;
 
     public DialogFieldColumn()
     {
 		super();
-		fieldIdRowSuffix = "_${#}";
+		fieldValue = "row_${#}";
     }
 
 	public ReportField getParentField() { return parent; }
@@ -29,7 +29,7 @@ public class DialogFieldColumn extends GeneralColumn
 	public String getFieldName() { return fieldName; }
 	public void setFieldName(String value) { fieldName = value; }
 
-	public String getFieldIdPrefix()
+	public String getFieldId()
 	{
 		String fieldName = getFieldName();
 		if(fieldName == null)
@@ -43,8 +43,8 @@ public class DialogFieldColumn extends GeneralColumn
 			return parent.getId() + "." + fieldName;
 	}
 
-	public String getFieldIdRowSuffix() { return fieldIdRowSuffix; }
-	public void setFieldIdRowSuffix(String value) { fieldIdRowSuffix = value; }
+	public String getFieldValue() { return fieldValue; }
+	public void setFieldValue(String value) { fieldValue = value; }
 
 	public int getFieldFlags() { return fieldFlags; }
 	public void setFieldFlags(int value) { fieldFlags = value; }
@@ -65,9 +65,9 @@ public class DialogFieldColumn extends GeneralColumn
 		if(value.length() > 0)
 			setFieldName(value);
 
-		value = elem.getAttribute("field-name-row-suffix");
+		value = elem.getAttribute("field-value");
 		if(value.length() > 0)
-			setFieldIdRowSuffix(value);
+			setFieldValue(value);
 	}
 
 }
