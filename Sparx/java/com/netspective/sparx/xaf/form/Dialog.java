@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.6 2002-08-18 21:05:06 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.7 2002-09-07 21:56:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -114,7 +114,8 @@ public class Dialog
     static public final int DLGFLAG_APPEND_WHEN_LOOPING = DLGFLAG_LOOP_DATA_ENTRY * 2;
     static public final int DLGFLAG_HIDE_READONLY_HINTS = DLGFLAG_APPEND_WHEN_LOOPING * 2;
     static public final int DLGFLAG_ENCTYPE_MULTIPART_FORMDATA = DLGFLAG_HIDE_READONLY_HINTS * 2;
-    static public final int DLGFLAG_CUSTOM_START = DLGFLAG_ENCTYPE_MULTIPART_FORMDATA * 2;
+    static public final int DLGFLAG_HIDE_HEADING_IN_EXEC_MODE = DLGFLAG_ENCTYPE_MULTIPART_FORMDATA * 2;
+    static public final int DLGFLAG_CUSTOM_START = DLGFLAG_HIDE_HEADING_IN_EXEC_MODE * 2;
 
     /**
      * Request parameter which indicates whether or not the dialog should be automatically executed when it is being loaded
@@ -309,6 +310,17 @@ public class Dialog
     public void setHeading(SingleValueSource vs)
     {
         heading = vs;
+    }
+
+    /**
+     * Returns true if the heading should be hidden
+     */
+    public boolean hideHeading(DialogContext dc)
+    {
+        if(flagIsSet(DLGFLAG_HIDE_HEADING_IN_EXEC_MODE) && dc.inExecuteMode())
+            return true;
+        else
+            return false;
     }
 
     /**
