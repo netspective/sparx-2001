@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.16 2003-04-08 19:35:28 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.17 2003-04-12 00:27:14 aye.thu Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -1157,6 +1157,20 @@ function TextField_valueChanged(field, control)
 
 	if (control.value.length > 0)
 	{
+        if (field.choices != '')
+        {
+            var valid = false;
+            for (k in field.choices)
+            {
+                if (field.choices[k] == control.value)
+                    valid = true;
+            }
+            if (valid == false)
+            {
+                field.alertMessage(control, control.name + ": Entered field value '" + control.value + "' is not valid. ");
+                return false;
+            }
+        }
 		if (field.text_format_pattern != null && (typeof field.text_format_pattern != "undefined"))
 		{
 			var test = testText(field, control);
@@ -1178,7 +1192,7 @@ function TextField_onKeyPress(field, control, event)
 	}
 	return true;
 }
-
+/*
 function TextField_isValid(field, control)
 {
 	if(field.isRequired() && control.value.length == 0)
@@ -1186,6 +1200,24 @@ function TextField_isValid(field, control)
 		field.alertRequired(control);
 		return false;
 	}
+	if (control.value.length > 0)
+	{
+        if (field.validValues != '')
+        {
+            var valid = false;
+            for (k in field.validValues)
+            {
+                if (field.validValues[k] == control.value)
+                    valid = true;
+            }
+            if (valid == false)
+            {
+                field.alertMessage(control, control.name + ": Entered field value '" + control.value + "' is not valid. ");
+                return false;
+            }
+        }
+    }
+
 	if (control.value.length > 0 && field.text_format_pattern != '')
 	{
 		var test = testText(field, control);
@@ -1197,7 +1229,7 @@ function TextField_isValid(field, control)
 	}
 	return true;
 }
-
+*/
 function PhoneField_valueChanged(field, control)
 {
 	return formatPhone(field, control);
@@ -1470,7 +1502,7 @@ function SelectField_isValid(field, control)
 	return true;
 }
 
-addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, null, null, TextField_onFocus, TextField_valueChanged, null, null);
+addFieldType("com.netspective.sparx.xaf.form.field.TextField", null, null, TextField_valueChanged, TextField_onFocus, null, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, null);
 addFieldType("com.netspective.sparx.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.netspective.sparx.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);

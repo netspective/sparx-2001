@@ -51,25 +51,33 @@
  */
 
 /**
- * $Id: TextField.java,v 1.14 2003-03-06 20:57:22 aye.thu Exp $
+ * $Id: TextField.java,v 1.15 2003-04-12 00:26:25 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
 
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.value.SingleValueSource;
+import com.netspective.sparx.util.value.ListValueSource;
+import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.StringsListValue;
+import com.netspective.sparx.util.value.ValueSource;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.theme.Theme;
 import com.netspective.sparx.xaf.theme.ThemeStyle;
+import com.netspective.sparx.xaf.sql.StatementNotFoundException;
 import org.apache.oro.text.perl.MalformedPerl5PatternException;
 import org.apache.oro.text.perl.Perl5Util;
 import org.w3c.dom.Element;
 
+import javax.naming.NamingException;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.SQLException;
+import java.util.Iterator;
 
 public class TextField extends DialogField
 {
@@ -92,6 +100,7 @@ public class TextField extends DialogField
     private String regexMessage;
     /* substitution pattern to format the value when the value is ready to submitted */
     private String submitSubstitutionPattern;
+    private ListValueSource validValues;
 
     public TextField()
     {
@@ -177,6 +186,11 @@ public class TextField extends DialogField
         if(elem.getAttribute("mask-entry").equalsIgnoreCase("yes"))
             setFlag(FLDFLAG_MASKENTRY);
 
+        // extract validating values
+        value = elem.getAttribute("valid-values");
+        if (value != null && value.length() != 0)
+            setValidValues(value);
+
         // extract the regex pattern
         value = elem.getAttribute("validate-pattern");
         if(value != null && value.length() != 0)
@@ -195,6 +209,36 @@ public class TextField extends DialogField
         value = elem.getAttribute("format-pattern");
         if(value != null && value.length() != 0)
             setSubmitSubstitutePattern(value);
+    }
+
+    /**
+     * Sets the valid values for this field
+     * @param values
+     */
+    public void setValidValues(String values)
+    {
+        ListValueSource vs = null;
+        if(values != null)
+        {
+            vs = ValueSourceFactory.getListValueSource(values);
+            if(vs == null)
+            {
+                vs = new StringsListValue();
+                vs.initializeSource(values);
+            }
+        }
+
+        setListSource(vs);
+    }
+
+    public ListValueSource getValidValueList()
+    {
+        return validValues;
+    }
+
+    public void setListSource(ListValueSource vs)
+    {
+        validValues = vs;
     }
 
     /**
@@ -309,6 +353,28 @@ public class TextField extends DialogField
             {
                 invalidate(dc, getCaption(dc) + " should be at most "+ maxLength +" characters.");
                 return false;
+            }
+        }
+        // if valid values were defined for this field, check the current value
+        if (validValues != null)
+        {
+            String[] validList = validValues.getValues(dc);
+            if (validList != null && validList.length > 0)
+            {
+                boolean valid = false;
+                for (int i=0; validList != null && i < validList.length; i++)
+                {
+                    if (validList[i].equals(value))
+                    {
+                        valid = true;
+                        break;
+                    }
+                }
+                if (!valid)
+                {
+                    invalidate(dc, getCaption(dc) + " does not contain a valid value.");
+                    return false;
+                }
             }
         }
 
@@ -469,6 +535,22 @@ public class TextField extends DialogField
             buf.append("field.text_format_pattern = " + this.validatePattern + ";\n");
         if(this.regexMessage != null)
             buf.append("field.text_format_err_msg = '" + this.regexMessage + "';\n");
+
+        if (getValidValueList() != null)
+        {
+            String[] values = getValidValueList().getValues(dc);
+            buf.append("field.validValues = [");
+            for (int i=0; i < values.length; i++)
+            {
+                if (values[i] != null)
+                {
+                    if (i != 0)
+                        buf.append(", ");
+                    buf.append("\"" + values[i] + "\"");
+                }
+            }
+            buf.append("];\n");
+        }
 
         return buf.toString();
     }
