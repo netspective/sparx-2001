@@ -197,13 +197,17 @@
 	<h1>Execution Log</h1>
 	<table>
 		<tr>
-			<td>Conn</td>
-			<td>Bind</td>
-			<td>SQL</td>
-			<td>Total</td>
+			<th>Source</th>
+			<th>Run</th>
+			<th>Conn</th>
+			<th>Bind</th>
+			<th>SQL</th>
+			<th>Total</th>
 		</tr>
 		<xsl:for-each select="exec-log/*">
 		<tr>
+			<td><font color="green"><xsl:value-of select="@src"/></font></td>
+			<td><font color="red"><xsl:value-of select="@init-date"/></font></td>
 			<td align="right"><xsl:value-of select="@conn-time"/></td>
 			<td align="right"><xsl:value-of select="@bind-time"/></td>
 			<td align="right"><xsl:value-of select="@sql-time"/></td>

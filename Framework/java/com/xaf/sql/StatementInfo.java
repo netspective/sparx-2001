@@ -45,7 +45,7 @@ public class StatementInfo
 	public final String getDataSourceId() { return dataSourceId; }
     public final StatementParameter[] getParams() { return parameters; }
 	public final StatementExecutionLog getExecutionLog() { return execLog; }
-	public final StatementExecutionLogEntry createNewExecLogEntry(Object source) { return execLog.createNewEntry(source, this); }
+	public final StatementExecutionLogEntry createNewExecLogEntry(ValueContext vc) { return execLog.createNewEntry(vc, this); }
 
     public final String getSql(ValueContext vc)
 	{

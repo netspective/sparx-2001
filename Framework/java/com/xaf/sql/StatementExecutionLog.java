@@ -1,6 +1,7 @@
 package com.xaf.sql;
 
 import java.util.*;
+import com.xaf.value.*;
 
 public class StatementExecutionLog extends ArrayList
 {
@@ -34,9 +35,9 @@ public class StatementExecutionLog extends ArrayList
     {
     }
 
-	public StatementExecutionLogEntry createNewEntry(Object source, StatementInfo si)
+	public StatementExecutionLogEntry createNewEntry(ValueContext vc, StatementInfo si)
 	{
-		StatementExecutionLogEntry result = new StatementExecutionLogEntry(source, si);
+		StatementExecutionLogEntry result = new StatementExecutionLogEntry(vc, si);
 		add(result);
 		return result;
 	}

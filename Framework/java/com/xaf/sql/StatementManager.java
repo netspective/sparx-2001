@@ -12,6 +12,7 @@ package com.xaf.sql;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
+import java.text.*;
 import javax.naming.*;
 import javax.xml.parsers.*;
 
@@ -138,6 +139,8 @@ public class StatementManager extends XmlSource
 				execLogElem.getParentNode().removeChild(execLogElem);
 			}
 
+		    DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG);
+
 			Element execLogElem = xmlDoc.createElement("exec-log");
 			elem.appendChild(execLogElem);
 			for(Iterator l = execLog.iterator(); l.hasNext(); )
@@ -152,6 +155,8 @@ public class StatementManager extends XmlSource
 					continue;
 				}
 
+				execLogEntryElem.setAttribute("src", entry.getSource());
+				execLogEntryElem.setAttribute("init-date",   fmt.format(entry.getInitDate()));
 				execLogEntryElem.setAttribute("total-time", Long.toString(entry.getTotalExecutionTime()));
 				execLogEntryElem.setAttribute("conn-time", Long.toString(entry.getConnectionEstablishTime()));
 				execLogEntryElem.setAttribute("bind-time", Long.toString(entry.getBindParamsBindTime()));
@@ -274,7 +279,7 @@ public class StatementManager extends XmlSource
 		if(dataSourceId == null)
 			dataSourceId = si.getDataSourceId();
 
-		StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(null);
+		StatementExecutionLogEntry logEntry = si.createNewExecLogEntry(vc);
 
 		logEntry.registerGetConnectionBegin();
 		Connection conn = dc.getConnection(vc, dataSourceId);

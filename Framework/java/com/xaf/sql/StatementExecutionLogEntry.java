@@ -2,13 +2,17 @@ package com.xaf.sql;
 
 import java.io.*;
 import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.w3c.dom.*;
+
+import com.xaf.value.*;
 
 public class StatementExecutionLogEntry
 {
 	private boolean successful;
-	private Object source;
+	private String source;
 	private String statementName;
 	private Date initDate;
 	private Date getConnStartDate;
@@ -18,12 +22,20 @@ public class StatementExecutionLogEntry
 	private Date execSqlStartDate;
 	private Date execSqlEndDate;
 
-    public StatementExecutionLogEntry(Object source, StatementInfo si)
+    public StatementExecutionLogEntry(ValueContext vc, StatementInfo si)
     {
-		this.source = source;
+		ServletRequest req = vc.getRequest();
+		if(req instanceof HttpServletRequest)
+			source = ((HttpServletRequest) req).getRequestURI();
+
 		statementName = si.getId();
 		initDate = new Date();
     }
+
+	public String getSource()
+	{
+		return source;
+	}
 
 	/**
 	 * Success is defined when trackExecSql(false) is called.
@@ -69,9 +81,9 @@ public class StatementExecutionLogEntry
 		execSqlEndDate = new Date();
 	}
 
-	public long getInitTime()
+	public Date getInitDate()
 	{
-		return initDate.getTime();
+		return initDate;
 	}
 
 	public long getTotalExecutionTime()
