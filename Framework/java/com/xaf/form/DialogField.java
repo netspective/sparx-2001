@@ -693,4 +693,19 @@ public class DialogField
     {
         return "";
     }
+
+	/**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+		String fieldName = this.getSimpleName();
+		DialogContextMemberInfo mi = new DialogContextMemberInfo(this.getSimpleName(), "String");
+		String memberName = mi.getMemberName();
+
+		mi.setGetterMethodCode("\tpublic String get" + memberName + "() { return getValue(\""+ fieldName +"\"); }\n");
+		mi.setSetterMethodCode("\tpublic void set" + memberName + "(String value) { setValue(\""+ fieldName +"\", value); }\n");
+
+		return mi;
+	}
 }

@@ -169,7 +169,7 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
 
 		if(! loginDialog.accessAllowed(servletContext, req, resp))
 		{
-			DialogContext dc = new DialogContext(servletContext, this, req, resp, loginDialog, SkinFactory.getDialogSkin());
+			DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, SkinFactory.getDialogSkin());
 			loginDialog.prepareContext(dc);
 		    if(dc.inExecuteMode())
 			{

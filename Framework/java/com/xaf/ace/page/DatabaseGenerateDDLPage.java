@@ -38,7 +38,7 @@ public class DatabaseGenerateDDLPage extends AceServletPage
 		ServletContext context = pc.getServletContext();
 		SchemaDocument schema = getSchemaDocument(pc);
 
-		DialogContext dc = new DialogContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), dialog, SkinFactory.getDialogSkin());
+		DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
 		dialog.prepareContext(dc);
 		if(! dc.inExecuteMode())
 		{

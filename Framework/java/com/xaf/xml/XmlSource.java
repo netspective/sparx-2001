@@ -76,6 +76,27 @@ public class XmlSource
                 s.equalsIgnoreCase("yes"));
     }
 
+	public static String xmlTextToJavaIdentifier(String xml, boolean ucaseInitial)
+	{
+		if(xml == null || xml.length() == 0)
+			return xml;
+
+		boolean uCase = ucaseInitial;
+		StringBuffer identifier = new StringBuffer();
+		for(int i = 0; i < xml.length(); i++)
+		{
+			char ch = xml.charAt(i);
+			if(ch != '_' && Character.isJavaIdentifierPart(ch))
+			{
+				identifier.append(uCase ? Character.toUpperCase(ch) : Character.toLowerCase(ch));
+				uCase = false;
+			}
+			else
+				uCase = true;
+		}
+		return identifier.toString();
+	}
+
 	public Document getDocument()
 	{
 		reload();

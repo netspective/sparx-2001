@@ -66,7 +66,7 @@ public class QuerySelectDialogTag extends TagSupport
 				return SKIP_BODY;
 			}
 
-			DialogContext dc = new DialogContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), dialog, skin);
+			DialogContext dc = dialog.createContext(pageContext.getServletContext(), (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), skin);
 			dialog.prepareContext(dc);
 
 			out.write(dialog.getHtml(dc, true));

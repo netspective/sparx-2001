@@ -65,12 +65,12 @@ public class DialogManagerFactory
 		}
 	}
 
-	public static DialogManager getManager(String file)
+	public static DialogManager getManager(ServletContext context, String file)
 	{
 		DialogManager activeManager = (DialogManager) managers.get(file);
 		if(activeManager == null)
 		{
-			activeManager = new DialogManager(new File(file));
+			activeManager = new DialogManager(context, new File(file));
 			managers.put(file, activeManager);
 			contentsChanged();
 		}
@@ -85,7 +85,7 @@ public class DialogManagerFactory
 
 		Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(context);
 		ValueContext vc = new ServletValueContext(context, null, null, null);
-		manager = getManager(appConfig.getValue(vc, "app.ui.source-file"));
+		manager = getManager(context, appConfig.getValue(vc, "app.ui.source-file"));
 		manager.initializeForServlet(context);
 		context.setAttribute(ATTRNAME_DIALOGMGR, manager);
 		return manager;
@@ -97,6 +97,6 @@ public class DialogManagerFactory
 		if(dlgSource == null || dlgSource.length() == 0)
 			return getManager(context);
 		else
-			return getManager(dlgSource);
+			return getManager(context, dlgSource);
 	}
 }

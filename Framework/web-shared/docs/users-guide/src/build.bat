@@ -4,7 +4,7 @@ set SAVECP=%CLASSPATH%
 echo classpath at start is '%CLASSPATH%'
 
 set XML_SOURCE_FILE=documentation.xml
-set DOCBOOK_XSL_HOME=c:\Utils\docbook-xsl-1.44
+set DOCBOOK_XSL_HOME=c:\Utils\docbook-xsl-1.45
 set DOCBOOK_XSL_MAIN=%DOCBOOK_XSL_HOME%\html\chunk.xsl
 set JAVA_HOME=C:\utils\java\jdk1.3.1
 set XERCES_JAR=C:\utils\java\xerces-1_4_1\xerces.jar

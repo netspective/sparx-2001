@@ -2,15 +2,16 @@ package com.xaf.form;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.security.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.security.*;
 
 import com.xaf.db.*;
 import com.xaf.log.*;
+import com.xaf.sql.*;
 import com.xaf.value.*;
 
-public final class DialogContext extends Hashtable implements ValueContext
+public class DialogContext extends Hashtable implements ValueContext
 {
     /* if dialog fields need to be pre-populated (before the context is created)
      * then a java.util.Map can be created and stored in the request attribute
@@ -24,6 +25,8 @@ public final class DialogContext extends Hashtable implements ValueContext
      * request
      */
 	static public final String DIALOG_CONTEXT_ATTR_NAME = "dialog-context";
+
+	static public final SingleValueSource dialogFieldStoreValueSource = new com.xaf.value.DialogFieldValue();
 
 	public class DialogFieldState
 	{
@@ -96,8 +99,13 @@ public final class DialogContext extends Hashtable implements ValueContext
 	private boolean executeHandled;
 	private String dataCmdStr;
 	private int dataCmd;
+	private String[] retainReqParams;
 
-	public DialogContext(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
+	public DialogContext()
+	{
+	}
+
+	public void initialize(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
 	{
 		AppServerCategory monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
 		long startTime = 0;
@@ -316,6 +324,9 @@ public final class DialogContext extends Hashtable implements ValueContext
 	public boolean executeStageHandled() { return executeHandled; }
 	public void setExecuteStageHandled(boolean value) { executeHandled = value; }
 
+	public String[] getRetainRequestParams() { return retainReqParams; }
+	public void setRetainRequestParams(String[] params) { retainReqParams = params; }
+
 	public String getStateHiddens()
 	{
 		StringBuffer hiddens = new StringBuffer();
@@ -329,6 +340,27 @@ public final class DialogContext extends Hashtable implements ValueContext
 		if(dataCmdStr != null)
 			hiddens.append("<input type='hidden' name='"+ dialog.getDataCmdParamName() +"' value='"+ dataCmdStr + "'>\n");
 
+		Set retainedParams = null;
+		if(retainReqParams != null)
+		{
+			retainedParams = new HashSet();
+			for(int i = 0; i < retainReqParams.length; i++)
+			{
+				String paramName = retainReqParams[i];
+				Object paramValue = request.getParameter(paramName);
+				if(paramValue == null)
+					continue;
+
+				hiddens.append("<input type='hidden' name='");
+				hiddens.append(paramName);
+				hiddens.append("' value='");
+				hiddens.append(paramValue);
+				hiddens.append("'>\n");
+				retainedParams.add(paramName);
+			}
+		}
+		boolean retainedAnyParams = retainedParams != null;
+
 		if(dialog.retainRequestParams())
 		{
 			if(dialog.retainAllRequestParams())
@@ -337,7 +369,8 @@ public final class DialogContext extends Hashtable implements ValueContext
 				{
 					String paramName = (String) e.nextElement();
 					if( paramName.startsWith(Dialog.PARAMNAME_DIALOGPREFIX) ||
-						paramName.startsWith(Dialog.PARAMNAME_CONTROLPREFIX))
+						paramName.startsWith(Dialog.PARAMNAME_CONTROLPREFIX) ||
+						(retainedAnyParams && retainedParams.contains(paramName)))
 						continue;
 
 					hiddens.append("<input type='hidden' name='");
@@ -355,6 +388,9 @@ public final class DialogContext extends Hashtable implements ValueContext
 				for(int i = 0; i < retainParamsCount; i++)
 				{
 					String paramName = retainParams[i];
+					if(retainedAnyParams && retainedParams.contains(paramName))
+						continue;
+
 					hiddens.append("<input type='hidden' name='");
 					hiddens.append(paramName);
 					hiddens.append("' value='");
@@ -485,6 +521,30 @@ public final class DialogContext extends Hashtable implements ValueContext
 		state.values = values;
 	}
 
+	public int getIntValue(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		return state == null ? 0 : Integer.parseInt(state.value);
+	}
+
+	public double getDoubleValue(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		return state == null ? 0.0 : Double.parseDouble(state.value);
+	}
+
+	public float getFloatValue(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		return state == null ? (float) 0.0 : Float.parseFloat(state.value);
+	}
+
+	public boolean getBooleanValue(String qualifiedName)
+	{
+		DialogFieldState state = (DialogFieldState) get(qualifiedName);
+		return state == null ? false : (state.value.equals("1") ? true : false);
+	}
+
 	public ArrayList getErrorMessages(DialogField field)
 	{
 		DialogFieldState state = (DialogFieldState) get(field.getQualifiedName());
@@ -512,6 +572,33 @@ public final class DialogContext extends Hashtable implements ValueContext
 		}
 
 		state.errorMessages.add(message);
+	}
+
+	public void populateValuesFromStatement(String statementId)
+	{
+		populateValuesFromStatement(null, statementId, null);
+	}
+
+	public void populateValuesFromStatement(String statementId, Object[] params)
+	{
+		populateValuesFromStatement(null, statementId, params);
+	}
+
+	public void populateValuesFromStatement(String dataSourceId, String statementId, Object[] params)
+	{
+		try
+		{
+			ServletContext context = getServletContext();
+			StatementManager stmtMgr = StatementManagerFactory.getManager(context);
+			DatabaseContext dbContext = DatabaseContextFactory.getContext(getRequest(), context);
+			StatementManager.ResultInfo ri = stmtMgr.execute(dbContext, this, dataSourceId, statementId, params);
+			dialogFieldStoreValueSource.setValue(this, ri.getResultSet(), SingleValueSource.RESULTSET_STORETYPE_SINGLEROWFORMFLD);
+			ri.close();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e.toString());
+		}
 	}
 
 	public String getDebugHtml()

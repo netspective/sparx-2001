@@ -313,7 +313,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 		ServletContext servletContext = getServletContext();
 		if(! loginDialog.accessAllowed(servletContext, req, resp))
 		{
-			DialogContext dc = new DialogContext(servletContext, this, req, resp, loginDialog, loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getDialogSkin(loginDialogSkinName));
+			DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getDialogSkin(loginDialogSkinName));
 			loginDialog.prepareContext(dc);
 			if(dc.inExecuteMode())
 			{

@@ -59,7 +59,7 @@ public class DialogTag extends TagSupport
 			}
 			else
 			{
-				manager = DialogManagerFactory.getManager(source);
+				manager = DialogManagerFactory.getManager(context, source);
 				if(manager == null)
 				{
 					out.write("DialogManager '"+source+"' not found.");
@@ -81,7 +81,7 @@ public class DialogTag extends TagSupport
 				return SKIP_BODY;
 			}
 
-			DialogContext dc = new DialogContext(context, (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), dialog, skin);
+			DialogContext dc = dialog.createContext(context, (Servlet) pageContext.getPage(), (HttpServletRequest) pageContext.getRequest(), (HttpServletResponse) pageContext.getResponse(), skin);
 			ServletRequest req = pageContext.getRequest();
 			if(listenerAttrName != null)
 			{

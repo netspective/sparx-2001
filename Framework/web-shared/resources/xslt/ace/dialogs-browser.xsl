@@ -30,11 +30,13 @@
 					<th class="data_table" title="Retain Request Parameters">Retain</th>
 					<th class="data_table">Fields</th>
 					<th class="data_table">Tasks</th>
+					<th class="data_table">Class</th>
+					<th class="data_table">DC-Class</th>
 				</tr>
 				<xsl:apply-templates select="dialogs/dialog" mode="toc">
 					<xsl:sort select="@qualified-name"/>
 				</xsl:apply-templates>
-				</table>					
+				</table>
 
 				<div class="content_head">Options</div>
 				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
@@ -50,7 +52,7 @@
 						</tr>
 					</xsl:for-each>
 				</table>
-	
+
 				<div class="content_head">Source Files</div>
 				<table class="data_table" cellspacing="0" cellpadding="2" border="0">
 				<tr class="data_table_header">
@@ -125,6 +127,8 @@
 		<td class="data_table"><font color="red"><xsl:value-of select="@retain-params"/><xsl:if test="not(@retain-params)">&#160;</xsl:if></font></td>
 		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(*)"/></font></td>
 		<td class="data_table" align="right"><font color="red"><xsl:value-of select="count(execute-tasks/*)"/></font></td>
+		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_class-name"/></font></td>
+		<td class="data_table"><xsl:attribute name="title"><xsl:value-of select="@_dc-class-file-name"/></xsl:attribute><font color="navy"><xsl:value-of select="@_dc-class-name"/></font></td>
 	</tr>
 </xsl:template>
 
@@ -150,7 +154,7 @@
 			<xsl:for-each select="$field/@*">
 				<xsl:if test="name() != 'name' and name() != 'caption' and name() != 'default'">
 					<font color="green"><xsl:value-of select="name()"/></font>
-					= 
+					=
 					<font color="navy"><xsl:value-of select="."/></font><br/>
 				</xsl:if>
 			</xsl:for-each>
