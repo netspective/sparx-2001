@@ -331,6 +331,7 @@ public class DialogField
 	public SingleValueSource getCaptionSource() { return caption; }
 	public String getCaption(DialogContext dc) { return caption != null ? caption.getValue(dc) : null; }
 	public void setCaption(SingleValueSource value) { caption = value; }
+    public void setCaption(String value) { setCaption(value != null ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null); }
 
 	public final String getHint() { return hint; }
 	public void setHint(String value) { hint = value; }
