@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.10 2002-11-27 16:49:49 aye.thu Exp $
+ * $Id: StandardDialogSkin.java,v 1.11 2002-12-31 19:53:00 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -319,7 +319,10 @@ public class StandardDialogSkin implements DialogSkin
             controlHtml.write(popupHtml);
 
         if(field.flagIsSet(DialogField.FLDFLAG_CREATEADJACENTAREA))
-            controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'></span>");
+        {
+            String adjValue = dc.getAdjacentAreaValue(field);
+            controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'>"+ (adjValue != null ? adjValue : "") +"</span>");
+        }
 
         StringBuffer messagesHtml = new StringBuffer();
         String hint = field.getHint(dc);
@@ -540,7 +543,10 @@ public class StandardDialogSkin implements DialogSkin
             controlHtml.write(popupHtml);
 
         if(field.flagIsSet(DialogField.FLDFLAG_CREATEADJACENTAREA))
-            controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'></span>");
+        {
+            String adjValue = dc.getAdjacentAreaValue(field);
+            controlHtml.write("&nbsp;<span id='" + field.getQualifiedName() + "_adjacent'>"+ (adjValue != null ? adjValue : "") +"</span>");
+        }
 
         StringBuffer messagesHtml = new StringBuffer();
         String hint = field.getHint(dc);
