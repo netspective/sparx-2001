@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryDefinitionDialogComponentCommand.java,v 1.7 2003-03-05 23:32:11 aye.thu Exp $
+ * $Id: QueryDefinitionDialogComponentCommand.java,v 1.8 2003-04-07 15:32:31 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -199,27 +199,26 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
 
     public void handleCommand(ValueContext vc, Writer writer, boolean unitTest) throws ComponentCommandException, IOException
     {
-        PrintWriter out = vc.getResponse().getWriter();
         javax.servlet.ServletContext context = vc.getServletContext();
 
         com.netspective.sparx.xaf.sql.StatementManager manager = com.netspective.sparx.xaf.sql.StatementManagerFactory.getManager(context);
         if(manager == null)
         {
-            out.write("StatementManager not found in ServletContext");
+            writer.write("StatementManager not found in ServletContext");
             return;
         }
 
         com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(vc.getServletContext(), null, source);
         if(queryDefn == null)
         {
-            out.write("QueryDefinition '" + source + "' not found in StatementManager");
+            writer.write("QueryDefinition '" + source + "' not found in StatementManager");
             return;
         }
 
         com.netspective.sparx.xaf.querydefn.QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogName);
         if(dialog == null)
         {
-            out.write("QuerySelectDialog '" + dialogName + "' not found in QueryDefinition '" + source + "'");
+            writer.write("QuerySelectDialog '" + dialogName + "' not found in QueryDefinition '" + source + "'");
             return;
         }
         dialog.setReportId(reportName);
@@ -228,7 +227,7 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
                 dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc) : com.netspective.sparx.xaf.skin.SkinFactory.getInstance().getDialogSkin(vc, dialogSkinName);
         if(skin == null)
         {
-            out.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");
+            writer.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");
             return;
         }
 
@@ -239,6 +238,6 @@ public class QueryDefinitionDialogComponentCommand extends AbstractComponentComm
         if(reportSkinName != null)
             dc.setValue(QueryBuilderDialog.QBDIALOG_REPORT_SKIN_FIELD_NAME, reportSkinName);
 
-        dialog.renderHtml(out, dc, true);
+        dialog.renderHtml(writer, dc, true);
     }
 }
