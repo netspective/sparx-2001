@@ -47,6 +47,7 @@
 
 		<task>
 			<name>Database Management</name>
+			<task><name>Add Statement.close() in addition to ResultSet.close() and Connection.close().</name></task>
 			<task><name>Add transaction support features to &lt;xaf:query&gt; and &lt;xaf:dml&gt;.</name></task>
 			<task><name>Add sequences, composite forgeign keys to SchemaDoc.</name></task>
 			<task><name>Create cacheable ResultSets with configurable timeouts.</name></task>
@@ -55,6 +56,7 @@
 
 		<task>
 			<name>Architecture</name>
+			<task><name>Add NDC for page logging in PageTag.java.</name></task>
 			<task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
 			<task><name>Add ability to turn off file-change scanning in XmlSource (production software shouldn't check for changed files).</name></task>
 			<task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
