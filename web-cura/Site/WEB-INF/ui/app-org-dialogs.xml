@@ -35,9 +35,25 @@
 				<exec-dml command="insert" table="org_industry" columns="org_id=request-attr:org_id,system_id=custom-sql:oind_system_id_seq.nextval" fields="org_industry"/>
 				<exec-dml command="insert" table="org_type" columns="org_id=request-attr:org_id,system_id=custom-sql:otyp_system_id_seq.nextval" fields="org_type"/>
                 <exec-dml command="insert" table="org_relationship" auto-inc="system_id,OrgRel_system_id_SEQ"
-                    fields="parent_org_id=rel_org_id" columns="parent_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1000"/>
+                    fields="parent_org_id=rel_org_id"
+                    columns="parent_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1010">
+                    <conditional action="execute" has-value="form:parent_org_id"/>
+                </exec-dml>
+                <exec-dml command="insert" table="org_relationship" auto-inc="system_id,OrgRel_system_id_SEQ"
+                    fields="parent_org_id=parent_id"
+                    columns="rel_org_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1030">
+                    <conditional action="execute" has-value="form:parent_org_id"/>
+                </exec-dml>
+                <!-- get the ancestors of the parent and make them this org's ancestors also -->
+				<exec-statement stmt-src="org.ancestor-list" report="none" store-type="row-fields" store="request-attr:ancestor-list"/>
+                <!-- exec-dml command="insert" table="org_relationship" auto-inc="system_id,OrgRel_system_id_SEQ"
+                    fields="parent_org_id=rel_org_id"
+                    columns="parent_id=request-attr:org_id,cr_stamp=custom-sql:sysdate,cr_org_id=session:organization,cr_person_id=session:person_id,rel_begin=custom-sql:sysdate,rel_type=custom-sql:1010">
+                    <conditional action="execute" has-value="form:parent_org_id"/>
+                </exec-dml -->
+
 				<exec-transaction command="end"/>
-				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
+				<exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}&amp;org_name=${form:org_name}"/>
 			</execute-tasks>
 			<execute-tasks data-cmd="edit">
 				<exec-dml command="update" table="org" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone" where="org_id = ?" where-bind="request:org_id"/>
@@ -47,6 +63,8 @@
 				<exec-transaction command="begin"/>
 				<exec-dml command="delete" table="org_industry" where="org_id = ?" where-bind="request:org_id"/>
 				<exec-dml command="delete" table="org_type" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-dml command="delete" table="org_relationship" where="parent_id = ?" where-bind="request:org_id"/>
+                <exec-dml command="delete" table="org_relationship" where="rel_org_id = ?" where-bind="request:org_id"/>
 				<exec-dml command="delete" table="org" where="org_id = ?" where-bind="request:org_id"/>
 				<exec-transaction command="end"/>
 				<exec-redirect url="create-app-url:/account"/>

@@ -18,7 +18,7 @@
                 org
         </statement>
 
-        <statement name="parent-org">
+       <statement name="parent-org">
             select
                 org.org_name,
                 org.org_id
@@ -32,6 +32,46 @@
 			<params>
 				<param value="request:org_id"/>
 			</params>
+        </statement>
+
+        <statement name="relationship-report">
+            select
+                org.org_id,
+                org.org_name,
+                org_relationship_type.caption
+            from
+                org,org_relationship, org_relationship_type
+            where
+                org_relationship.parent_id = ? and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type = org_relationship_type.id
+			<params>
+				<param value="request:org_id"/>
+			</params>
+            <report heading="Account Relationships">
+                <column heading="Account ID"/>
+                <column heading="Account Name"/>
+                <column heading="Relationship"/>
+            </report>
+        </statement>
+
+        <statement name="ancestor-list">
+            select
+                org.org_id
+            from
+                org,org_relationship
+            where
+                org_relationship.parent_id = ? and
+                org_relationship.rel_org_id = org.org_id and
+                org_relationship.rel_type = 1000
+			<params>
+				<param value="request:org_id"/>
+			</params>
+            <report heading="Account Relationships">
+                <column heading="Account ID"/>
+                <column heading="Account Name"/>
+                <column heading="Relationship"/>
+            </report>
         </statement>
 
 		<statement name="registration">
@@ -96,7 +136,7 @@
             <params>
                 <param value="request:org_id"/>
             </params>
-            <report heading="Organization Members">
+            <report heading="Account Contacts">
                 <banner  style="horizontal">
                     <item caption="Import" url="config-expr:member.jsp?cmd=edit&amp;org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
                     <item caption="Edit" url="config-expr:member.jsp?org_id=${request:org_id}&amp;org_name=${request:org_name}"/>
@@ -104,7 +144,7 @@
                 <column heading="ID" align="left"/>
                 <column heading="Name" url="create-app-url:/contact/home.jsp?person_id=${0}&amp;person_name=%{2}"/>
                 <column display="no"/>
-                <column heading="Organization"/>
+                <column heading="Organization" display="no"/>
             </report>
 
         </statement>

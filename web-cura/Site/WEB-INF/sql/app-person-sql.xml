@@ -27,14 +27,18 @@
                 to_char(start_date, 'MM/DD/YYYY'),
                 to_char(target_end_date, 'MM/DD/YYYY')
             from
-                project, projectperson_relation, person, project_status
+                project, projectperson_relation, person,
+                project_status, projectorg_relation
             where
                 person.person_id = ? and
                 projectperson_relation.parent_id = project.project_id and
                 person.person_id = projectperson_relation.rel_person_id and
-                project.project_status = project_status.id
+                project.project_status = project_status.id and
+                projectorg_relation.parent_id = project.project_id and
+                projectorg_relation.rel_org_id = ?
             <params>
                 <param value="session:person_id"/>
+                <param value="session:organization"/>
             </params>
             <report heading="My Active Projects">
                 <column heading="ID" align="left"/>
