@@ -6,6 +6,7 @@ BUILDING SPARX
 2. Setup the environment variable JAVA_HOME 
 3. Add JAVA_HOME/bin to your path
 4. Run build.bat or build.sh
+5. Run SPARX_HOME/documentation/src/build.bat or build.sh to create docs
 
 ---------------
 COMMON PROBLEMS
