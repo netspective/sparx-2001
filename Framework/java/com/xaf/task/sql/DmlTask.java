@@ -297,8 +297,8 @@ public class DmlTask extends AbstractTask
 					break;
 
 				case DMLCMD_REMOVE:
-					throw new TaskExecuteException("DML Command 'remove' not implemented yet.");
-
+					dml = Generator.createDeleteStmt(tableName, whereCond, null);
+					break;
 				case DMLCMD_UNKNOWN:
 					throw new TaskExecuteException("No appropriate DML command provided.");
 			}
