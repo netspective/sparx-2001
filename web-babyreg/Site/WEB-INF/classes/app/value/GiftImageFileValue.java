@@ -45,7 +45,7 @@ public class GiftImageFileValue extends ListSource
             } catch (NamingException e) { return choices;
             } catch (SQLException e) { return choices;
             }
-            System.out.println("result.size: " + result.length);
+            
             if (result != null && result.length >=1){
                 if (result[0] != null && result[0].length >=2){
                     name = (String) result[0][0];
