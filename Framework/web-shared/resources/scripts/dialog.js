@@ -1,4 +1,4 @@
-
+var DIALOGFIELD_PREFIX = "_dc.";
 var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
@@ -7,11 +7,55 @@ var ALLOW_CLIENT_VALIDATION = true;
 var TRANSLATE_ENTER_KEY_TO_TAB_KEY = false;
 var ENABLE_KEYPRESS_FILTERS        = true;
 
+// **************************************************************************
+// BrowserCheck class
+// **************************************************************************
+function BrowserCheck()
+{ 
+    //Browsercheck (needed)
+    this.ver = navigator.appVersion; 
+    this.agent = navigator.userAgent;
+    this.dom = document.getElementById? true : false;
+    this.ie5 = (this.ver.indexOf("MSIE 5")>-1 && this.dom)? true : false;
+    this.ie6 = (this.ver.indexOf("MSIE 6")>-1 && this.dom)? true : false;
+    this.ie4 = (document.all && !this.dom)? true : false;
+    this.ie = this.ie4 || this.ie5 || this.ie6;
+    this.mac = this.agent.indexOf("Mac") > -1;
+    this.opera5 = this.agent.indexOf("Opera 5") > -1;
+    this.ns6 = (this.dom && parseInt(this.ver) >= 5) ? true : false; 
+    this.ns4 = (document.layers && !this.dom)? true : false;
+    this.browser = (this.ie6 || this.ie5 || this.ie4 || this.ns4 || this.ns6 || this.opera5 || this.dom);
+    return this
+}
+var browser = new BrowserCheck() //Making browsercheck object
+
+// Get the dialog field control for IE4
+function getControl(dialog, id)
+{    
+    return document.all.item(id);
+}
+
+// Get the dialog field control for DOM browsers such as IE5, IE6 and NS6
+function getControl_Dom(dialog, id)
+{            
+    if (id.charAt(0) == '_')
+        return document.getElementById(dialog.name).elements[id];
+    else
+        return document.getElementById(id);
+}
+
+// Get the dialog field control for Netscape 4
+function getControl_NS4(dialog, id)
+{  
+    // a dialog field because the ID starts with a PREFIX
+    return document.forms[dialog.name].elements[id];
+}
+
 //****************************************************************************
 // FieldType class
 //****************************************************************************
 
-function FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress)
+function FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress, onClick)
 {
     this.type = name;
     this.finalizeDefn = onFinalizeDefn;
@@ -20,13 +64,14 @@ function FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, 
     this.valueChanged = onChange;
     this.keyPress = onKeyPress;    
     this.loseFocus = onBlur;
+    this.click = onClick;
 }
 
 var FIELD_TYPES = new Array();
 
-function addFieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress)
+function addFieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress, onClick)
 {
-    FIELD_TYPES[name] = new FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress);
+    FIELD_TYPES[name] = new FieldType(name, onFinalizeDefn, onValidate, onChange, onFocus, onBlur, onKeyPress, onClick);
 }
 
 //****************************************************************************
@@ -136,6 +181,8 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
 {
     this.typeName = type;
     this.type = FIELD_TYPES[type];
+    if (typeof this.type == "undefined")
+        this.type = null;        
     this.controlId = id;
     this.name = name;
     this.qualifiedName = qualifiedName;
@@ -150,13 +197,30 @@ function DialogField(type, id, name, qualifiedName, caption, flags)
     this.nextFieldIndex = -1;
     
     // the remaining are object-based methods
-    this.getControl = DialogField_getControl;
+    if (browser.ie5 || browser.ie6 || browser.ns6)
+    {
+        this.getControl = DialogField_getControl_Dom; 
+        this.getControlByQualifiedName = DialogField_getControlByQualifiedName_Dom;
+        this.getFieldAreaElem = DialogField_getFieldAreaElem_Dom;
+    }
+    else if (browser.ns4)
+    {
+        this.getControl = DialogField_getControl_NS4;
+        this.getControlByQualifiedName = DialogField_getControlByQualifiedName_NS4;
+        this.getFieldAreaElem = DialogField_getFieldAreaElem_NS4;
+    }
+    else if (browser.ie4)
+    {        
+        this.getControl = DialogField_getControl;
+        this.getControlByQualifiedName = DialogField_getControlByQualifiedName;
+        this.getFieldAreaElem = DialogField_getFieldAreaElem;
+    }
+    
     this.evaluateConditionals = DialogField_evaluateConditionals;
     this.finalizeContents = DialogField_finalizeContents;
     this.isValid = DialogField_isValid;
     this.doPreSubmit = DialogField_doPreSubmit;
-    this.focusNext = DialogField_focusNext;
-    this.getFieldAreaElem = DialogField_getFieldAreaElem;
+    this.focusNext = DialogField_focusNext;    
     this.alertRequired = DialogField_alertRequired;
     this.isRequired = DialogField_isRequired;
     this.alertMessage = DialogField_alertMessage;
@@ -167,9 +231,52 @@ function DialogField_isRequired()
     return (this.flags & FLDFLAG_REQUIRED) != 0;
 }
 
-function DialogField_getControl()
+/**
+ * Get the dialog field control  using its ID for IE4
+ */
+function DialogField_getControl(dialog)
 {
-    return document.all.item(this.controlId);
+    return getControl(dialog, this.controlId);
+}
+
+/**
+ * Get the dialog field control  using its ID for DOM browsers such as IE5, IE6 and NS6
+ */
+function DialogField_getControl_Dom(dialog)
+{    
+    return getControl_Dom(dialog, this.controlId);
+}
+
+/**
+ * Get the dialog field control  using its ID for Netscape 4
+ */
+function DialogField_getControl_NS4(dialog)
+{      
+    return getControl_NS4(dialog, this.controlId);                
+}
+
+/**
+ * Get the dialog field control  using its qualified name for IE4
+ */
+function DialogField_getControlByQualifiedName(dialog)
+{    
+    return getControl(dialog, this.qualifiedName);
+}
+
+/**
+ * Get the dialog field control  using its qualified name for DOM browsers such as IE5, IE6 and NS6
+ */
+function DialogField_getControlByQualifiedName_Dom(dialog)
+{        
+    return getControl_Dom(dialog, this.qualifiedName);
+}
+
+/**
+ * Get the dialog field control using its qualified name for Netscape 4
+ */
+function DialogField_getControlByQualifiedName_NS4(dialog)
+{      
+    return getControl_NS4(dialog, this.qualifiedName);                
 }
 
 function DialogField_finalizeContents(dialog)
@@ -188,7 +295,7 @@ function DialogField_finalizeContents(dialog)
 
     if((this.flags & FLDFLAG_INITIAL_FOCUS) != 0)
     {
-        var control = document.all.item(this.controlId);
+        var control = this.getControl(dialog);
         if(control == null)
             alert("Unable to find control '"+this.controlId+"' in DialogField.finalizeContents() -- trying to set initial focus");
         else
@@ -197,8 +304,9 @@ function DialogField_finalizeContents(dialog)
 }
 
 function DialogField_evaluateConditionals(dialog)
-{
-    var control = document.all.item(this.controlId);
+{   
+
+    var control = this.getControl(dialog);
     if(control == null)
     {
         alert("Unable to find control '"+this.controlId+"' in DialogField.evaluateConditionals()");
@@ -225,7 +333,7 @@ function DialogField_alertRequired(control)
 function DialogField_isValid()
 {
     // perform default validation first
-    var control = document.all.item(this.controlId);
+    var control = this.getControl(dialog);
     if (control == null)
         return true;
         
@@ -257,8 +365,8 @@ function DialogField_doPreSubmit()
     if(this.style != null && this.style == SELECTSTYLE_MULTIDUAL)
     {
         // Select all items in multidual elements. If items aren't selected, 
-        // they won't be posted.
-        var control = document.all.item(this.controlId);
+        // they won't be posted.        
+        var control = this.getControl(dialog);        
         for (var i = 0; i < control.options.length; i++)
         {
             control.options[i].selected = true;
@@ -275,9 +383,10 @@ function DialogField_focusNext(dialog)
     var foundEditable = false;
     while((! foundEditable) && fieldIndex < dialogFieldsCount)
     {
-        nextField = dialog.fields[fieldIndex];
-        nextFieldAreaElem = nextField.getFieldAreaElem();
-        nextFieldControl = document.all.item(nextField.controlId);
+        nextField = dialog.fields[fieldIndex];        
+        nextFieldAreaElem = nextField.getFieldAreaElem(dialog);
+        nextFieldControl = nextField.getControl(dialog);
+        //nextFieldControl = document.all.item(nextField.controlId);
         if(nextFieldControl != null && nextFieldControl.length > 0)
             nextFieldControl = nextFieldControl[0];
             
@@ -315,16 +424,48 @@ function DialogField_focusNext(dialog)
     return false;
 }
 
-function DialogField_getFieldAreaElem()
+/**
+ * Get dialog field control by its name for IE
+ */
+function DialogField_getFieldAreaElem(dialog)
 {
     var fieldAreaId = FIELDROW_PREFIX + this.name;
-    var fieldAreaElem = document.all.item(fieldAreaId);
-    if(fieldAreaElem == null)
+    var fieldAreaElem = getControl(dialog, fieldAreaId);  
+    if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
     {
         fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
-        fieldAreaElem = document.all.item(fieldAreaId); 
-    }
-    
+        fieldAreaElem = getControl(dialog, fieldAreaId);
+    }    
+    return fieldAreaElem;
+}
+
+/**
+ * Get dialog field control by its name for Dom Browsers
+ */
+function DialogField_getFieldAreaElem_Dom(dialog)
+{    
+    var fieldAreaId = FIELDROW_PREFIX + this.name;
+    var fieldAreaElem = getControl_Dom(dialog, fieldAreaId);  
+    if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
+    {
+        fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
+        fieldAreaElem = getControl_Dom(dialog, fieldAreaId);   
+    }    
+    return fieldAreaElem;
+}
+
+/**
+ * Get dialog field control by its name for Netscape 4
+ */
+function DialogField_getFieldAreaElem_NS4(dialog)
+{
+    var fieldAreaId = FIELDROW_PREFIX + this.name;
+    var fieldAreaElem = getControl_NS4(dialog, fieldAreaId);  
+    if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
+    {
+        fieldAreaId = GRIDFIELDROW_PREFIX + this.name;
+        fieldAreaElem = getControl_NS4(dialog, fieldAreaId);
+    }    
     return fieldAreaElem;
 }
 
@@ -357,7 +498,7 @@ function DialogFieldConditionalDisplay(source, partner, expression)
     this.expression = expression;
     
     // the remaining are object-based methods
-    this.evaluate = DialogFieldConditionalDisplay_evaluate;
+    this.evaluate = DialogFieldConditionalDisplay_evaluate;    
 }
 
 function DialogFieldConditionalDisplay_evaluate(dialog, control)
@@ -371,44 +512,41 @@ function DialogFieldConditionalDisplay_evaluate(dialog, control)
     if(control == null)
     {
         alert("control is null in DialogFieldConditionalDisplay.evaluate(control)");
-        return;
+        return;    
     }
 
-    var fieldAreaId = FIELDROW_PREFIX + this.source;
-    var fieldAreaElem = document.all.item(fieldAreaId);
-    if(fieldAreaElem == null)
-    {
-        fieldAreaId = GRIDFIELDROW_PREFIX + this.source;
-        fieldAreaElem = document.all.item(fieldAreaId);
-    
-        if(fieldAreaElem == null)
+    var condSource = dialog.fieldsByQualName[this.source];       
+    var fieldAreaElem = condSource.getFieldAreaElem(dialog);
+    if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
+    {       
+        fieldAreaElem = condSource.getControl(dialog);
+        if(fieldAreaElem == null || (typeof fieldAreaElem == "undefined"))
         {
-            var condSource = dialog.fieldsByQualName[this.source];
-            fieldAreaElem = document.all.item(condSource.controlId);
-
-            if(fieldAreaElem == null)
-            {
-                alert ('Neither source element "' + fieldAreaId + '" or "'+ condSource.controlId +'" found in conditional partner.');
-                return;
-            }
+            alert ('Neither source element "' + fieldAreaId + '" or "'+ condSource.controlId +'" found in conditional partner.');
+            return;
         }
     }
-
+    
     // now that we have the fieldArea that we want to show/hide go ahead
     // and evaluate the js expression to see if the field should be shown
     // or hidden. remember, the expression is evaluted in the current context
     // which means the word "control" refers to the control that is the
-    // the conditional "partner" (not the source)
-
+    // the conditional "partner" (not the source)   
     if(eval(this.expression) == true)
     {
         //fieldAreaElem.className = 'section_field_area_conditional_expanded';
-        fieldAreaElem.style.display = '';
+        if (fieldAreaElem.style) 
+            fieldAreaElem.style.display = '';
+        else
+            fieldAreaElem.visibility = 'show';
     }
     else
     {
         //fieldAreaElem.className = 'section_field_area_conditional';
-        fieldAreaElem.style.display = 'none';
+        if (fieldAreaElem.style) 
+            fieldAreaElem.style.display = 'none'; 
+        else
+            fieldAreaElem.visibility = 'hide';
     }
 }
 
@@ -509,21 +647,11 @@ function SimpleSort(objSelect)
 // Event handlers
 //****************************************************************************
 function controlOnClick(control)
-{
-    
+{        
     field = activeDialog.fieldsById[control.name];
-    if(field == null) return;
-    if (control.type == 'checkbox' || control.type == 'radio')
-    {
-        if(field.dependentConditions.length > 0)    
-        {    
-            var conditionalFields = field.dependentConditions;
-            for(var i = 0; i < conditionalFields.length; i++)
-                conditionalFields[i].evaluate(activeDialog, control);
-        }    
-    }    
-    if (control.type.clicked != null)
-        return control.type.clicked(field, control);
+    if(typeof field == "undefined" || field == null || field.type == null) return;
+    if (field.type.click != null)
+        return field.type.click(field, control);
     else
         return true;
 }
@@ -531,7 +659,7 @@ function controlOnClick(control)
 function controlOnKeypress(control)
 {
     field = activeDialog.fieldsById[control.name];
-    if(field == null || field.type == null) return;
+    if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.type.keyPress != null)
         return field.type.keyPress(field, control);
     else
@@ -539,9 +667,9 @@ function controlOnKeypress(control)
 }
 
 function controlOnFocus(control)
-{
+{    
     field = activeDialog.fieldsById[control.name];
-    if(field == null || field.type == null) return;
+    if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.type.getFocus != null)
         return field.type.getFocus(field, control);
     else
@@ -551,7 +679,7 @@ function controlOnFocus(control)
 function controlOnChange(control)
 {
     field = activeDialog.fieldsById[control.name];
-    if(field == null) return;
+    if(typeof field == "undefined" || field == null) return;
     if(field.dependentConditions.length > 0)    
     {
         var conditionalFields = field.dependentConditions;
@@ -568,7 +696,7 @@ function controlOnChange(control)
 function controlOnBlur(control)
 {
     field = activeDialog.fieldsById[control.name];
-    if(field == null || field.type == null) return;
+    if(typeof field == "undefined" || field == null || field.type == null) return;
     if (field.type.loseFocus != null)
         return field.type.loseFocus(field, control);
     else
@@ -621,6 +749,27 @@ function keypressAcceptRanges(field, control, acceptKeyRanges)
 //****************************************************************************
 // Field-specific validation and keypress filtering functions
 //****************************************************************************
+function SelectField_onClick(field, control)
+{
+    if (control.type == 'checkbox' || control.type == 'radio')
+    {
+        if(field.dependentConditions.length > 0)    
+        {    
+            var conditionalFields = field.dependentConditions;
+            for(var i = 0; i < conditionalFields.length; i++)
+                conditionalFields[i].evaluate(activeDialog, control);
+        }    
+    }   
+    return true;
+}
+
+function TextField_onFocus(field, control)
+{        
+    if (field.readonly == 'yes')
+        control.blur();
+    
+    return true;
+}
 
 function IntegerField_onKeyPress(field, control)
 {
@@ -730,7 +879,7 @@ function DateField_isValid(field, control)
 function DateField_valueChanged(field, control)
 {
     if (field.dateDataType == DATE_DTTYPE_DATEONLY && field.dateFmtIsKnownFormat)
-    {
+    {        
         var result = formatDate(field, control, field.dateItemDelim, field.dateStrictYear);
         control.value = result[1];
         return result[0];
@@ -800,9 +949,10 @@ function SelectField_isValid(field, control)
     return true;
 }
 
-addFieldType("com.xaf.form.field.SelectField", null, SelectField_isValid);
+addFieldType("com.xaf.form.field.TextField", null, null, null, TextField_onFocus, null, null, null);
+addFieldType("com.xaf.form.field.SelectField", null, SelectField_isValid, null, null, null, null, SelectField_onClick);
 addFieldType("com.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
-addFieldType("com.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, DateField_valueChanged, null, null, DateField_onKeyPress);
+addFieldType("com.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, DateField_valueChanged, null, null, DateField_onKeyPress, null);
 addFieldType("com.xaf.form.field.IntegerField", null, IntegerField_isValid, null, null, null, IntegerField_onKeyPress);
 addFieldType("com.xaf.form.field.FloatField", null, FloatField_isValid, null, null, null, FloatField_onKeyPress);
 
@@ -855,7 +1005,7 @@ function formatDate(field, control, delim, strictYear)
     {
         if ((a[0].length == 6) || (a[0].length == 8))
         {
-            a[2] = a[0].substring(4);
+            a[2] = a[0].substring(4);            
             a[1] = a[0].substring(2,4);
             a[0] = a[0].substring(0,2);
         }
@@ -880,7 +1030,7 @@ function formatDate(field, control, delim, strictYear)
         else
             a[2] = currentYear;
     }
-
+    
     if (strictYear != true)
     {        
         if (a[2] < 100 && a[2] > 10)
@@ -942,7 +1092,7 @@ function splitNotInArray(strString, arrArray)
         {
             if (strString.charAt(i) == arrArray[k])
             {
-                if (a[field] == null)
+                if (a[field] == null || typeof a[field] == "undefined")
                     a[field] = strString.charAt(i);
                 else
                     a[field] += strString.charAt(i);
