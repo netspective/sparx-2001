@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: app-build.xml,v 1.30 2002-12-26 21:25:19 shahbaz.javeed Exp $
+$Id: app-build.xml,v 1.31 2002-12-27 00:31:45 shahid.shah Exp $
 -->
 
 <project name="app" default="all-but-docs">
@@ -191,12 +191,12 @@ $Id: app-build.xml,v 1.30 2002-12-26 21:25:19 shahbaz.javeed Exp $
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml" todir="${app.WEB-INF.dir}/conf"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" todir="${app.WEB-INF.dir}/conf"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/schema.xml" todir="${app.WEB-INF.dir}/schema"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="${app.WEB-INF.dir}/sql"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="${app.WEB-INF.dir}/security"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
+        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/structure.xml" todir="${app.WEB-INF.dir}/ui"/>
     </target>
 
     <target name="copy-sparx-libs" depends="global">
@@ -422,6 +422,9 @@ $Id: app-build.xml,v 1.30 2002-12-26 21:25:19 shahbaz.javeed Exp $
              windowtitle="Application Dialog Context Beans API"
              doctitle="Application Dialog Context Beans API Documentation"
              bottom="Copyright &#169; 2001 Netspective. All Rights Reserved.">
+            <classpath>
+            	<pathelement location="${app.lib.dir}/${app.java.dal.jar.name}"/>
+            </classpath>
             <sourcepath>
                 <pathelement path="${app.java.dcb.dir}"/>
             </sourcepath>
