@@ -30,12 +30,16 @@ public class DebugField extends DialogField
 		{
 			report = new StandardReport();
 			ReportColumnsList columns = report.getColumns();
-			columns.add(new GeneralColumn(0, "Class"));
-			columns.add(new GeneralColumn(1, "Skin"));
-			columns.add(new GeneralColumn(2, "Trans ID"));
-			columns.add(new GeneralColumn(3, "Seq"));
-			columns.add(new GeneralColumn(4, "Mode"));
-			columns.add(new GeneralColumn(5, "Referer", "{.}"));
+			columns.add(new GeneralColumn(0, "Dialog Class"));
+            columns.add(new GeneralColumn(1, "Context Class"));
+			columns.add(new GeneralColumn(2, "Skin Class"));
+			columns.add(new GeneralColumn(3, "Trans ID"));
+			columns.add(new GeneralColumn(4, "Seq"));
+			columns.add(new GeneralColumn(5, "Mode"));
+			columns.add(new GeneralColumn(6, "Referer", "${.}"));
+            columns.add(new GeneralColumn(7, "Data command"));
+            columns.add(new GeneralColumn(8, "Populate tasks"));
+            columns.add(new GeneralColumn(9, "Execute tasks"));
 
 			reportSkin = SkinFactory.getReportSkin("detail");
 		}
@@ -44,11 +48,15 @@ public class DebugField extends DialogField
 		{
 			{
 				dc.getDialog().getClass().getName(),
+                dc.getClass().getName(),
 				dc.getSkin().getClass().getName(),
 				dc.getTransactionId(),
 				new String("Run: " + dc.getRunSequence() + ", Exec: " + dc.getExecuteSequence()),
 				new String("Active: " + dc.getActiveMode() + ", Next: " + dc.getNextMode()),
-				dc.getOriginalReferer()
+				dc.getOriginalReferer(),
+                DialogContext.getDataCmdTextForCmdId(dc.getDataCommand()),
+                dc.getDialog().getPopulateTasks() == null ? "none" : dc.getDialog().getPopulateTasks().getDebugHtml(dc),
+                dc.getDialog().getExecuteTasks() == null ? "none" : dc.getDialog().getExecuteTasks().getDebugHtml(dc),
 			}
 		};
 
