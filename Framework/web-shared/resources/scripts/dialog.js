@@ -324,7 +324,14 @@ function DialogField_evaluateConditionals(dialog)
 
 function DialogField_alertMessage(control, message)
 {
-    alert(this.caption + ": " + message);
+    if (this.caption == "null")
+    {
+        alert(message);
+    }
+    else
+    {
+        alert(this.caption + ": " + message);
+    }
     control.focus();
 }
 
@@ -1128,11 +1135,11 @@ function SelectField_isValid(field, control)
         }
         else if(style == SELECTSTYLE_COMBO)
         {
-					if(field.isRequired() && control.value.length == 0)
-					{
-						field.alertRequired(control);
-						return false;
-					}
+        	if(field.isRequired() && control.options[control.selectedIndex].value.length == 0)
+		{
+			field.alertRequired(control);
+			return false;
+		}
         }
         else if(style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
         {
