@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HandHeldDialogSkin.java,v 1.4 2002-10-13 19:54:56 shahid.shah Exp $
+ * $Id: HandHeldDialogSkin.java,v 1.5 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -119,6 +119,16 @@ public class HandHeldDialogSkin implements DialogSkin
     public void importFromXml(Element elem)
     {
         throw new RuntimeException("Not implemented yet.");
+    }
+
+    public String getControlAreaClass()
+    {
+        return null;
+    }
+
+    public String getRequiredControlAreaClass()
+    {
+        return null;
     }
 
     public final String getControlAreaFontAttrs()

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.12 2003-01-01 19:24:02 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.13 2003-02-24 03:48:44 aye.thu Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -84,6 +84,9 @@ import com.netspective.sparx.xaf.navigate.NavigationPage;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.xaf.navigate.NavigationPageException;
+import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.theme.Theme;
+import com.netspective.sparx.xaf.theme.ThemeStyle;
 
 public class AceServletPage extends NavigationPage
 {
@@ -256,6 +259,22 @@ public class AceServletPage extends NavigationPage
         out.print("</title>\n");
         out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
         out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
+
+        ThemeFactory tf = ThemeFactory.getInstance(nc);
+        Theme theme = tf.getCurrentTheme();
+        if (theme != null)
+        {
+            // get all the CSS files associated with this theme/style combination
+            ThemeStyle style = theme.getCurrentStyle();
+            Map cssResources = style.getCssResources();
+            Iterator it = cssResources.values().iterator();
+            HttpServletRequest req = (HttpServletRequest)nc.getRequest();
+            while (it.hasNext())
+            {
+                String css = (String) it.next();
+                out.println("		<link rel=\"stylesheet\" href=\"" + req.getContextPath() + css + "\" type=\"text/css\">");
+            }
+        }
 
         if(getTestCommandItem(nc) == null)
         {

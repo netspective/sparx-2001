@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportFrame.java,v 1.4 2003-01-24 14:12:33 shahid.shah Exp $
+ * $Id: ReportFrame.java,v 1.5 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -59,6 +59,8 @@ package com.netspective.sparx.xaf.report;
 import java.util.ArrayList;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
@@ -82,11 +84,32 @@ public class ReportFrame
     private SingleValueSource recordDeleteUrlFormat;
     private long flags;
     private ArrayList items;
+    private boolean collapseable;
+    private boolean collapsed;
 
     public ReportFrame()
     {
         heading = null;
         footing = null;
+    }
+
+    /**
+     * Whther or not the report frame is collapseable
+     * @return
+     */
+    public boolean allowCollapse()
+    {
+        return collapseable;
+    }
+
+    /**
+     * Whether or not the report frame is minimized/maximized. This flag is only valid when the report is allowed
+     * to be collapse (minimized).
+     * @return
+     */
+    public boolean isCollapsed()
+    {
+        return collapsed;
     }
 
     public long getFlags()
@@ -255,45 +278,111 @@ public class ReportFrame
         setRecordAddUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-add-url", null));
         setRecordEditUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-edit-url", null));
         setRecordDeleteUrlFormat(XmlSource.getAttrValueOrTagText(elem, "record-delete-url", null));
+
+        String collapseableFlag = XmlSource.getAttrValueOrTagText(elem, "allow-minimize", null);
+        if (collapseableFlag != null && collapseableFlag.equalsIgnoreCase("yes"))
+        {
+            collapseable = true;
+            String minimized = XmlSource.getAttrValueOrTagText(elem, "minimized", null);
+            if (minimized != null && minimized.equalsIgnoreCase("yes"))
+                collapsed = true;
+            else
+                collapsed = false;
+        }
+        else
+        {
+            collapseable = false;
+        }
+    }
+
+    /**
+     * Import report heading actions from XML
+     * @param elem
+     */
+    public void importHeadingActions(Element elem)
+    {
+        NodeList children = elem.getChildNodes();
+
+        for(int n = 0; n < children.getLength(); n++)
+        {
+            Node node = children.item(n);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            String childName = node.getNodeName();
+            if(childName.equals("item"))
+            {
+                String caption = ((Element)node).getAttribute("caption");
+                if (caption == null || caption.length() == 0)
+                    continue;
+
+                ReportFrame.Item item = new ReportFrame.Item(caption);
+                item.setUrl(((Element)node).getAttribute("url"));
+                item.setIcon(((Element)node).getAttribute("icon"));
+                addItem(item);
+            }
+        }
     }
 
     static public class Item
     {
-        private String icon;
-        private String caption;
-        private String url;
+       private SingleValueSource icon;
+        private SingleValueSource caption;
+        private SingleValueSource url;
 
         public Item(String caption, String url)
         {
-            this.caption = caption;
-            this.url = url;
+            this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
+            this.url = ValueSourceFactory.getSingleOrStaticValueSource(url);
         }
 
         public Item(String caption, String url, String icon)
+        {
+            this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
+            this.url = ValueSourceFactory.getSingleOrStaticValueSource(url);
+            this.icon = ValueSourceFactory.getSingleOrStaticValueSource(icon);
+        }
+
+        public Item(String caption)
+        {
+            this.caption = ValueSourceFactory.getSingleOrStaticValueSource(caption);
+        }
+
+        public Item(SingleValueSource caption, SingleValueSource url, SingleValueSource icon)
         {
             this.caption = caption;
             this.url = url;
             this.icon = icon;
         }
 
-        public Item(String caption)
-        {
-            this.caption = caption;
-        }
-
-        public String getCaption()
+        public SingleValueSource getCaption()
         {
             return caption;
         }
 
-        public String getUrl()
+        public void setCaption(String value)
+        {
+            caption = (value != null && value.length() > 0 ? (ValueSourceFactory.getSingleOrStaticValueSource(value)) : null);
+        }
+
+        public SingleValueSource getUrl()
         {
             return url;
         }
 
-        public String getIcon()
+        public void setUrl(String value)
+        {
+            url = (value != null && value.length() > 0 ? (ValueSourceFactory.getSingleOrStaticValueSource(value)) : null);
+        }
+
+        public SingleValueSource getIcon()
         {
             return icon;
+        }
+
+        public void setIcon(String value)
+        {
+            icon = (value != null && value.length() > 0 ? (ValueSourceFactory.getSingleOrStaticValueSource(value)) : null);
         }
     }
 }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.11 2003-01-31 06:16:25 aye.thu Exp $
+ * $Id: StatementTask.java,v 1.12 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -403,7 +403,7 @@ public class StatementTask extends BasicTask
 
         Writer out = null;
         ReportDestination reportDest = null;
-        ReportSkin reportSkin = SkinFactory.getReportSkin(skinValueSource.getValue(tc));
+        ReportSkin reportSkin = SkinFactory.getReportSkin(context, skinValueSource.getValue(tc));
         if(reportSkin == null)
         {
             tc.addErrorMessage("ReportSkin '" + skinValueSource.getId() + "' not found.", false);

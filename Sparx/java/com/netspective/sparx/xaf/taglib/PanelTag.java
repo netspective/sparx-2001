@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PanelTag.java,v 1.1 2002-08-25 20:38:17 shahid.shah Exp $
+ * $Id: PanelTag.java,v 1.2 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -61,12 +61,15 @@ import java.io.IOException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.JspException;
 import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletRequest;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.xaf.report.ReportFrame;
 import com.netspective.sparx.xaf.report.ReportBanner;
+import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.theme.Theme;
 
 public class PanelTag extends TagSupport
 {
@@ -87,6 +90,7 @@ public class PanelTag extends TagSupport
     private String heading;
     private String headingExtra;
     private String bodyColor = "white";
+    private Theme theme;
 
     public void release()
     {
@@ -160,15 +164,52 @@ public class PanelTag extends TagSupport
             String frameHdTabImgSrc = frameHdTabImgSrcValueSource.getValue(svc);
             String frameHdSpacerImgSrc = frameHdSpacerImgSrcValueSource.getValue(svc);
 
-            out.println("<table "+ containerTableAttrs +"><tr><td>");
+            ThemeFactory tf = ThemeFactory.getInstance(svc);
+            theme = tf.getCurrentTheme();
 
-            out.println("<table "+ frameHdTableAttrs +">");
-            out.println("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdInfoFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
-            out.println("<tr " + frameHdRowSpacerAttrs +"><td colspan=3><img src='"+ frameHdSpacerImgSrc +"' height=2></td></tr>");
-            out.println("</table>");
+            if (theme != null)
+            {
+                // THEME based
+                String imgPath = ((HttpServletRequest)pageContext.getRequest()).getContextPath() + theme.getCurrentStyle().getImagePath();
 
-            out.println("<table " + innerTableAttrs + ">");
-            out.println("<tr><td bgcolor='"+ bodyColor +"'>" + bodyStartHtml);
+                out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" nowrap>");
+                out.println("    <tr>");
+                out.println("        <td class=\"panel-output\">");
+                out.println("            <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" nowrap>");
+                out.println("                <tr>");
+                out.println("                    <td class=\"panel-frame-heading-action-left-blank-output\" align=\"left\" valign=\"middle\" nowrap width=\"17\">" +
+                        "<img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"17\" border=\"0\"></td>");
+                out.println("                    <td class=\"panel-frame-heading-output\" align=\"left\" valign=\"middle\" nowrap>" + heading +
+                        "</td>");
+                out.println("                    <td class=\"panel-frame-heading-action-right-blank-output\" align=\"center\" valign=\"middle\" nowrap width=\"17\">" +
+                        "<img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"17\" border=\"0\"></td>");
+                out.println("                    <td class=\"panel-frame-mid-output\" align=\"right\" valign=\"top\" nowrap width=\"100%\">" +
+                        "<img src=\"" + imgPath + "/panel/output/spacer.gif\" alt=\"\" height=\"5\" width=\"100%\" border=\"0\"></td>");
+                out.println("                    <td class=\"panel-frame-end-cap-output\" align=\"right\" valign=\"top\" nowrap width=\"2\"></td>");
+                out.println("                </tr>");
+                out.println("            </table>");
+                out.println("        </td>");
+                out.println("    </tr>");
+                out.println("    <tr>");
+                out.println("        <td class=\"panel-content-output\">");
+                out.println("            <table class=\"report\" width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\">");
+                out.println("                <tr>");
+                out.println("                    <td class=\"text-field\">");
+
+            }
+            else
+            {
+                // THE OLD DEFAULT SKIN
+                out.println("<table "+ containerTableAttrs +"><tr><td>");
+
+                out.println("<table "+ frameHdTableAttrs +">");
+                out.println("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdInfoFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
+                out.println("<tr " + frameHdRowSpacerAttrs +"><td colspan=3><img src='"+ frameHdSpacerImgSrc +"' height=2></td></tr>");
+                out.println("</table>");
+
+                out.println("<table " + innerTableAttrs + ">");
+                out.println("<tr><td bgcolor='"+ bodyColor +"'>" + bodyStartHtml);
+            }
         }
         catch(IOException e)
         {
@@ -183,7 +224,19 @@ public class PanelTag extends TagSupport
 
         try
         {
-            out.println(bodyEndHtml + "</td></tr></table></td></tr></table>");
+            if (theme != null)
+            {
+                out.println("                    </td>");
+                out.println("                </tr>");
+                out.println("            </table>");
+                out.println("        </td>");
+                out.println("    </tr>");
+                out.println("</table>");
+            }
+            else
+            {
+                out.println(bodyEndHtml + "</td></tr></table></td></tr></table>");
+            }
         }
         catch(IOException e)
         {

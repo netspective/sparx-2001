@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.6 2003-01-26 21:32:18 roque.hernandez Exp $
+ * $Id: NavigationTreeManager.java,v 1.7 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -62,16 +62,20 @@ import com.netspective.sparx.xaf.skin.SkinFactory;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.io.File;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
+import javax.servlet.ServletContext;
+
 public class NavigationTreeManager extends XmlSource
 {
     public static final String NAME_DEFAULT = "default";
     static Map conditionalsClasses = new HashMap();
+    private static Map navigationSkinClasses = new HashMap();
 
     static
     {
@@ -118,6 +122,41 @@ public class NavigationTreeManager extends XmlSource
         reload();
         return (NavigationTree) structures.get(name == null ? NAME_DEFAULT : name);
     }
+
+    /**
+     * Calls the super class' method and then registers the navigation skins defined in the XML file
+     * @param servletContext
+     */
+    public void initializeForServlet(ServletContext servletContext)
+    {
+        super.initializeForServlet(servletContext);
+        Iterator it = navigationSkinClasses.keySet().iterator();
+        String str = null;
+        try
+        {
+            while (it.hasNext())
+            {
+                str = (String) it.next();
+                SkinFactory.addNavigationSkin(servletContext, str, (String)navigationSkinClasses.get(str));
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            addError("Error registering skin '"+ str +"': "+ e.toString());
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            addError("Error registering skin '"+ str +"': "+ e.toString());
+            e.printStackTrace();
+        }
+        catch (InstantiationException e)
+        {
+            addError("Error registering skin '"+ str +"': "+ e.toString());
+            e.printStackTrace();
+        }
+    }
+
 
     public void catalogNodes()
     {
@@ -168,14 +207,8 @@ public class NavigationTreeManager extends XmlSource
             {
                 String name = childElem.getAttribute("name");
                 String className = childElem.getAttribute("class");
-                try
-                {
-                    SkinFactory.addNavigationSkin(name, className);
-                }
-                catch (Exception e)
-                {
-                    addError("Error registering skin '"+ name +"': "+ e.toString());
-                }
+                // save the navigation registration information
+                navigationSkinClasses.put(name, className);
             }
         }
 

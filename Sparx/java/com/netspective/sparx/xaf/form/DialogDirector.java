@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogDirector.java,v 1.5 2002-11-11 15:02:23 roque.hernandez Exp $
+ * $Id: DialogDirector.java,v 1.6 2003-02-24 03:46:03 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -255,7 +255,7 @@ public class DialogDirector extends DialogField
                 writer.write("&nbsp;&nbsp;");
         }
 
-        writer.write("<input type='submit' value='");
+        writer.write("<input type='submit' class=\"dialog-button\" value='");
         writer.write(submitCaption);
         writer.write("' ");
         writer.write(attrs);
@@ -263,14 +263,14 @@ public class DialogDirector extends DialogField
 
         if(pendingCaption != null)
         {
-            writer.write("<input type='submit' name='"+Dialog.PARAMNAME_IGNORE_VALIDATION+"' value='");
+            writer.write("<input type='submit' class=\"dialog-button\" name='"+Dialog.PARAMNAME_IGNORE_VALIDATION+"' value='");
             writer.write(pendingCaption.getValue(dc));
             writer.write("' ");
             writer.write(attrs);
             writer.write(">&nbsp;&nbsp;");
         }
 
-        writer.write("<input type='button' value='");
+        writer.write("<input type='button' class=\"dialog-button\" value='");
         writer.write(cancelCaption);
         writer.write("' ");
         if(cancelActionUrl == null)

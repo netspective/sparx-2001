@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.34 2003-02-04 20:34:48 aye.thu Exp $
+ * $Id: DialogContext.java,v 1.35 2003-02-24 03:46:03 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -400,10 +400,11 @@ public class DialogContext extends ServletValueContext
 
         String overrideSkin = aRequest.getParameter(Dialog.PARAMNAME_OVERRIDE_SKIN);
         if(overrideSkin != null)
-            aSkin = SkinFactory.getDialogSkin(overrideSkin);
+            aSkin = SkinFactory.getDialogSkin(this.getServletContext(), overrideSkin);
 
         dialog = aDialog;
         skin = aSkin == null ? SkinFactory.getDialogSkin() : aSkin;
+
         activeMode = DIALOGMODE_UNKNOWN;
         nextMode = DIALOGMODE_UNKNOWN;
         validationStage = VALSTAGE_NOT_PERFORMED;

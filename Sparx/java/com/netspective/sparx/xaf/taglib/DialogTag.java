@@ -51,10 +51,13 @@
  */
  
 /**
- * $Id: DialogTag.java,v 1.3 2002-12-23 04:44:00 shahid.shah Exp $
+ * $Id: DialogTag.java,v 1.4 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
+
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.ServletValueContext;
 
 public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
 {
@@ -106,6 +109,7 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
         {
             javax.servlet.jsp.JspWriter out = pageContext.getOut();
             javax.servlet.ServletContext context = pageContext.getServletContext();
+
             com.netspective.sparx.xaf.form.DialogManager manager;
             if(source == null)
             {
@@ -132,8 +136,10 @@ public class DialogTag extends javax.servlet.jsp.tagext.TagSupport
                 out.write("Dialog '" + name + "' not found in manager '" + manager + "'.");
                 return SKIP_BODY;
             }
-
-            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
+            ValueContext vc = new ServletValueContext(context, (javax.servlet.Servlet) pageContext.getPage(),
+                    pageContext.getRequest(), pageContext.getResponse());
+            com.netspective.sparx.xaf.form.DialogSkin skin =
+                    skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context) : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context, skinName);
             if(skin == null)
             {
                 out.write("DialogSkin '" + skinName + "' not found in skin factory.");

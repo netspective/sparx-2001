@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DurationField.java,v 1.4 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: DurationField.java,v 1.5 2003-02-24 03:46:03 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -114,6 +114,7 @@ public class DurationField extends DialogField
         String name = getSimpleName();
         beginField = new DateTimeField(name + "_begin", "Begin", type);
         endField = new DateTimeField(name + "_end", "End", type);
+
 
         // see if the default value attributes are set
         String value = elem.getAttribute("default-begin");

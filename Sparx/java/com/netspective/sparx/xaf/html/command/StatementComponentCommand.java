@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementComponentCommand.java,v 1.5 2003-02-10 16:46:55 aye.thu Exp $
+ * $Id: StatementComponentCommand.java,v 1.6 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.html.command;
@@ -259,7 +259,7 @@ public class StatementComponentCommand extends AbstractComponentCommand
         }
         else
         {
-            ReportSkin skin = skinName != null ? SkinFactory.getReportSkin(skinName) : SkinFactory.getDefaultReportSkin();
+            ReportSkin skin = skinName != null ? SkinFactory.getReportSkin(context, skinName) : SkinFactory.getDefaultReportSkin(context);
             DatabaseContext dbContext = DatabaseContextFactory.getContext(vc.getRequest(), context);
             try
             {

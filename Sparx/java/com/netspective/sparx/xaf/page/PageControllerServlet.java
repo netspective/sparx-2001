@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.14 2003-01-08 05:23:15 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.15 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -310,11 +310,10 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     {
         if(loginDialog == null)
             return false;
-
+        ValueContext vc = new ServletValueContext(getServletContext(), this, req, resp);
         String logout = req.getParameter(logoutParamName);
         if(logout != null)
         {
-            ValueContext vc = new ServletValueContext(getServletContext(), this, req, resp);
             loginDialog.logout(vc);
 
             /** If the logout parameter included a non-zero length value, then
@@ -341,7 +340,7 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
         ServletContext servletContext = getServletContext();
         if(!loginDialog.accessAllowed(servletContext, req, resp))
         {
-            DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getDialogSkin(loginDialogSkinName));
+            DialogContext dc = loginDialog.createContext(servletContext, this, req, resp, loginDialogSkinName == null ? loginDialog.getSkin() : SkinFactory.getDialogSkin(servletContext, loginDialogSkinName));
             loginDialog.prepareContext(dc);
             if(dc.inExecuteMode())
             {

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ReportBanner.java,v 1.2 2002-10-13 18:39:45 shahid.shah Exp $
+ * $Id: ReportBanner.java,v 1.3 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.report;
@@ -168,6 +168,11 @@ public class ReportBanner
             style = value;
         }
 
+        public short getStyle()
+        {
+            return style;
+        }
+
         public boolean isHorizontalStyle()
         {
             return style == LAYOUTSTYLE_HORIZONTAL;
@@ -218,8 +223,11 @@ public class ReportBanner
         {
             int itemsCount = size();
             if(itemsCount == 0) return;
-            String bannerItemFontAttrs = ((HtmlReportSkin) rc.getSkin()).getBannerItemFontAttrs();
+            String bannerItemFontAttrs = "";
 
+            ReportSkin skin = rc.getSkin();
+            if (skin instanceof com.netspective.sparx.xaf.skin.HtmlReportSkin)
+                bannerItemFontAttrs = ((HtmlReportSkin) skin).getBannerItemFontAttrs();
             if(style == LAYOUTSTYLE_HORIZONTAL)
             {
                 for(int i = 0; i < itemsCount; i++)

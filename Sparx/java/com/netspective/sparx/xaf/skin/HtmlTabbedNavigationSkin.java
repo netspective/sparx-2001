@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.18 2003-02-05 04:51:39 roque.hernandez Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.19 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -653,7 +653,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         {
             flags = NavigationStyle.NAVFLAG_VERTICAL_DISPLAY;
             tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
-            tableClass = "";
+            tableClass = "class='level3_tabs'";
             outerSeparatorAttrs = "";
             outerSeparatorClass = "class=\"level3_tabs_off\"";
             outerSeparatorImgAttrs = "height=34 width=1 border=0 alt=\"\"";
@@ -712,12 +712,12 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
         {
             flags = NAVFLAG_USE_IMAGES | NAVFLAG_EXPAND_MARGIN_LEFT;
             tableAttrs = "cellspacing=\"0\" cellpadding=\"0\" border=\"0\"";
-            tableClass = "";
-            innerSeparatorImgAttrs = "height=15 width=10 border=0 alt=\"\"";
+            tableClass = "class='lvl1_table'";
+            innerSeparatorImgAttrs = "border=0 alt=\"\"";
             innerSeparatorImgClass = "";
             navAttrs = "width=75";
             navClass = "class=\"function_tab_";
-            navImgAttrs = "height=15 width=75 border=0 alt=\"\"";
+            navImgAttrs = " border=0 alt=\"\"";
         }
 
         public void renderHtml(Writer writer, NavigationPath currentNavTree, NavigationPathContext nc) throws IOException

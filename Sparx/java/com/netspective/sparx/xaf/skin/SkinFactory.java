@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.9 2003-01-01 19:30:42 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.10 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -64,15 +64,27 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.factory.Factory;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.xaf.form.DialogSkin;
 import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.navigate.NavigationPathSkin;
+import com.netspective.sparx.xaf.theme.ThemeDialogSkin;
+import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.theme.Theme;
+
+import javax.servlet.ServletContext;
+import javax.servlet.Servlet;
 
 public class SkinFactory implements Factory
 {
     private static Map reportSkins = new HashMap();
     private static Map dialogSkins = new HashMap();
     private static Map navigationSkins = new HashMap();
+
+    private static Map contextReportSkins = new HashMap();
+    private static Map contextDialogSkins = new HashMap();
+    private static Map contextNavigationSkins = new HashMap();
 
     public static String DEFAULT_DIALOG_SKIN_NAME = "default";
     public static String DEFAULT_REPORT_SKIN_NAME = "report-compressed";
@@ -104,14 +116,97 @@ public class SkinFactory implements Factory
         addDialogSkin("default", new StylizedDialogSkin());
         addDialogSkin("standard", new StandardDialogSkin());
         addDialogSkin("hand-held", new HandHeldDialogSkin());
+        addDialogSkin("theme", new ThemeDialogSkin());
 
         addNavigationSkin("default", new HtmlTabbedNavigationSkin());
+    }
+
+    /**
+     * Register navigation skins for this servlet context
+     * @param sc
+     */
+    public static void registerContextNavigationSkins(ServletContext sc)
+    {
+        ServletValueContext svc = new ServletValueContext(sc, null, null, null);
+        ThemeFactory tf = ThemeFactory.getInstance(svc);
+        Theme theme = tf.getCurrentTheme();
+        if (theme != null)
+        {
+            addNavigationSkin(sc, "default", new com.netspective.sparx.xaf.theme.HtmlTabbedNavigationSkin());
+        }
+        else
+        {
+            addNavigationSkin(sc, "default", new com.netspective.sparx.xaf.skin.HtmlTabbedNavigationSkin());
+        }
+    }
+
+    /**
+     * Registers the dialog skins available for this servlet context
+     * @param sc
+     */
+    public static void registerContextDialogSkins(ServletContext sc)
+    {
+        ServletValueContext svc = new ServletValueContext(sc, null, null, null);
+        ThemeFactory tf = ThemeFactory.getInstance(svc);
+        Theme theme = tf.getCurrentTheme();
+        if (theme != null)
+        {
+            addDialogSkin(sc, "default", new com.netspective.sparx.xaf.theme.ThemeDialogSkin());
+            addDialogSkin(sc, "stylized", new com.netspective.sparx.xaf.skin.StylizedDialogSkin());
+            addDialogSkin(sc, "standard", new com.netspective.sparx.xaf.skin.StandardDialogSkin());
+            addDialogSkin(sc, "hand-held", new com.netspective.sparx.xaf.skin.HandHeldDialogSkin());
+            addDialogSkin(sc, "login", new com.netspective.sparx.xaf.theme.LoginDialogSkin());
+        }
+        else
+        {
+            addDialogSkin(sc, "default", new com.netspective.sparx.xaf.skin.StylizedDialogSkin());
+            addDialogSkin(sc, "standard", new com.netspective.sparx.xaf.skin.StandardDialogSkin());
+            addDialogSkin(sc, "hand-held", new com.netspective.sparx.xaf.skin.HandHeldDialogSkin());
+            addDialogSkin(sc, "login", new com.netspective.sparx.xaf.skin.StylizedDialogSkin());
+        }
+    }
+
+    /**
+     * Registers the report skins available for this context
+     * @param sc
+     */
+    public static void registerContextReportSkins(ServletContext sc)
+    {
+        ServletValueContext svc = new ServletValueContext(sc, null, null, null);
+        ThemeFactory tf = ThemeFactory.getInstance(svc);
+        Theme theme = tf.getCurrentTheme();
+        if (theme != null)
+        {
+            addReportSkin(sc, "report", new com.netspective.sparx.xaf.theme.HtmlReportSkin(true));
+            addReportSkin(sc, "report-compressed", new com.netspective.sparx.xaf.theme.HtmlReportSkin(false));
+            addReportSkin(sc, "record-viewer", new com.netspective.sparx.xaf.theme.RecordViewerReportSkin(true));
+            addReportSkin(sc, "record-viewer-compressed", new com.netspective.sparx.xaf.theme.RecordViewerReportSkin(false));
+            addReportSkin(sc, "record-editor", new com.netspective.sparx.xaf.theme.RecordEditorReportSkin(true));
+            addReportSkin(sc, "record-editor-compressed", new com.netspective.sparx.xaf.theme.RecordEditorReportSkin(false));
+            addReportSkin(sc, "detail", new com.netspective.sparx.xaf.theme.HtmlSingleRowReportSkin(true, 1, true));
+            addReportSkin(sc, "detail-compressed", new com.netspective.sparx.xaf.theme.HtmlSingleRowReportSkin(false, 1, true));
+            addReportSkin(sc, "detail-2col", new com.netspective.sparx.xaf.theme.HtmlSingleRowReportSkin(true, 2, true));
+            addReportSkin(sc, "detail-2col-compressed", new com.netspective.sparx.xaf.theme.HtmlSingleRowReportSkin(false, 2, true));
+            addReportSkin(sc, "data-only", new com.netspective.sparx.xaf.theme.HtmlSingleRowReportNoCaptionSkin(true, 1, true));
+            addReportSkin(sc, "data-only-compressed", new com.netspective.sparx.xaf.theme.HtmlSingleRowReportNoCaptionSkin(false, 1, true));
+            addReportSkin(sc, "text-csv", new com.netspective.sparx.xaf.skin.TextReportSkin(".csv", ",", "\"", true));
+            addReportSkin(sc, "text-tab", new com.netspective.sparx.xaf.skin.TextReportSkin(".txt", "  ", null, true));
+        }
+
     }
 
     public static Map getDialogSkins()
     {
         return dialogSkins;
     }
+
+    public static Map getDialogSkins(ServletContext sc)
+    {
+        if (contextDialogSkins == null)
+            registerContextDialogSkins(sc);
+        return dialogSkins;
+    }
+
 
     public static Map getNavigationSkins()
     {
@@ -123,10 +218,30 @@ public class SkinFactory implements Factory
         return reportSkins;
     }
 
+    /**
+     *
+     * @param id
+     * @param skin
+     */
     public static void addReportSkin(String id, ReportSkin skin)
     {
-        reportSkins.put(id, skin);
+        addReportSkin(null, id, skin);
     }
+
+    /**
+     *
+     * @param sc
+     * @param id
+     * @param skin
+     */
+    public static void addReportSkin(ServletContext sc, String id, ReportSkin skin)
+    {
+        if (sc != null)
+            contextReportSkins.put(id, skin);
+        else
+            reportSkins.put(id, skin);
+    }
+
 
     public static void addReportSkin(String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
@@ -134,9 +249,21 @@ public class SkinFactory implements Factory
         addReportSkin(id, (ReportSkin) skinClass.newInstance());
     }
 
+    public static ReportSkin getReportSkin(ServletContext sc, String id)
+    {
+        if (sc != null)
+        {
+            if (contextReportSkins == null || contextReportSkins.size() == 0)
+                registerContextReportSkins(sc);
+            return (ReportSkin) contextReportSkins.get(id);
+        }
+        else
+            return (ReportSkin) reportSkins.get(id);
+    }
+
     public static ReportSkin getReportSkin(String id)
     {
-        return (ReportSkin) reportSkins.get(id);
+        return getReportSkin(null, id);
     }
 
     public static ReportSkin getDefaultReportSkin()
@@ -144,43 +271,213 @@ public class SkinFactory implements Factory
         return getReportSkin(DEFAULT_REPORT_SKIN_NAME);
     }
 
+    public static ReportSkin getDefaultReportSkin(ServletContext sc)
+    {
+        return getReportSkin(sc, DEFAULT_REPORT_SKIN_NAME);
+    }
+
+
+    /**
+     * Add a dialog skin without a servlet context
+     * @param id
+     * @param skin
+     */
     public static void addDialogSkin(String id, DialogSkin skin)
     {
-        dialogSkins.put(id, skin);
+        addDialogSkin(null, id, skin);
     }
 
+    /**
+     * Add a dialog skin for this context
+     * @param id
+     * @param skin
+     */
+    public static void addDialogSkin(ServletContext sc, String id, DialogSkin skin)
+    {
+        if (sc != null)
+            contextDialogSkins.put(id, skin);
+        else
+            dialogSkins.put(id, skin);
+
+    }
+
+    /**
+     * Add a dialog skin without a servlet context
+     * @param id
+     * @param className
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
     public static void addDialogSkin(String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
-        Class skinClass = Class.forName(className);
-        addDialogSkin(id, (DialogSkin) skinClass.newInstance());
+        addDialogSkin(null, id, className);
     }
 
+    /**
+     * Add a dialog skin with a servlet context
+     * @param sc
+     * @param id
+     * @param className
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public static void addDialogSkin(ServletContext sc, String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
+    {
+        Class skinClass = Class.forName(className);
+        addDialogSkin(sc, id, (DialogSkin) skinClass.newInstance());
+    }
+
+    /**
+     * Get a dialog skin with respect to the current context
+     * @param id
+     * @return
+     */
+    public static DialogSkin getDialogSkin(ServletContext sc, String id)
+    {
+        if (sc == null)
+        {
+            // get dialog skins  registered without a context
+            return (DialogSkin) dialogSkins.get(id);
+        }
+        else
+        {
+            if (contextDialogSkins == null || contextDialogSkins.size() == 0)
+                registerContextDialogSkins(sc);
+            return (DialogSkin) contextDialogSkins.get(id);
+        }
+    }
+
+    /**
+     * Get a dialog skin without a context
+     * @param id
+     * @return
+     */
     public static DialogSkin getDialogSkin(String id)
     {
-        return (DialogSkin) dialogSkins.get(id);
+        return getDialogSkin(null, id);
     }
 
+    /**
+     * Get the default dialog skin for this servlet context
+     * @return
+     */
+    public static DialogSkin getDialogSkin(ServletContext vc)
+    {
+        return getDialogSkin(vc, DEFAULT_DIALOG_SKIN_NAME);
+    }
+
+    /**
+     * Get the default dialog skin
+     * @return
+     */
     public static DialogSkin getDialogSkin()
     {
         return getDialogSkin(DEFAULT_DIALOG_SKIN_NAME);
     }
 
+    /**
+     * Add a navigation skin without a servlet context
+     * @param id
+     * @param skin
+     */
     public static void addNavigationSkin(String id, NavigationPathSkin skin)
     {
-        navigationSkins.put(id, skin);
+        addNavigationSkin(null, id, skin);
     }
 
+    /**
+     * Add a navigation skin for this servlet context
+     * @param sc servlet context
+     * @param id
+     * @param skin
+     */
+    public static void addNavigationSkin(ServletContext sc, String id, NavigationPathSkin skin)
+    {
+        if (sc != null)
+        {
+            contextNavigationSkins.put(id, skin);
+        }
+        else
+        {
+            navigationSkins.put(id, skin);
+        }
+    }
+
+    /**
+     *Add a navigation context for this servlet context
+     * @param sc servlet context
+     * @param id
+     * @param className
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public static void addNavigationSkin(ServletContext sc, String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
+    {
+        Class skinClass = Class.forName(className);
+        addNavigationSkin(sc, id, (NavigationPathSkin) skinClass.newInstance());
+    }
+
+    /**
+     * Add a navigation skin
+     * @param id
+     * @param className
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
     public static void addNavigationSkin(String id, String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         Class skinClass = Class.forName(className);
         addNavigationSkin(id, (NavigationPathSkin) skinClass.newInstance());
     }
 
+    /**
+     * Get a navigation skin
+     * @param id
+     * @return
+     */
     public static NavigationPathSkin getNavigationSkin(String id)
     {
-        return (NavigationPathSkin) navigationSkins.get(id);
+        return getNavigationSkin(null, id);
     }
 
+    /**
+     * Get a navigation skin for this servlet context
+     * @param vc
+     * @param id
+     * @return
+     */
+    public static NavigationPathSkin getNavigationSkin(ServletContext vc, String id)
+    {
+        if (vc == null)
+        {
+            return (NavigationPathSkin) navigationSkins.get(id);
+        }
+        else
+        {
+            if (contextNavigationSkins == null || contextNavigationSkins.size() == 0)
+                registerContextNavigationSkins(vc);
+            return (NavigationPathSkin) contextNavigationSkins.get(id);
+        }
+    }
+
+    /**
+     * Get the default navigation skin for this servlet context
+     * @param vc
+     * @return
+     */
+    public static NavigationPathSkin getNavigationSkin(ServletContext vc)
+    {
+        return getNavigationSkin(vc, DEFAULT_NAVIGATION_SKIN_NAME);
+    }
+
+    /**
+     * Get the default navigation skin
+     * @return
+     */
     public static NavigationPathSkin getNavigationSkin()
     {
         return getNavigationSkin(DEFAULT_NAVIGATION_SKIN_NAME);

@@ -51,12 +51,14 @@
  */
  
 /**
- * $Id: QuerySelectDialogTag.java,v 1.3 2003-01-16 16:38:07 shahid.shah Exp $
+ * $Id: QuerySelectDialogTag.java,v 1.4 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
 
 import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
+import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.util.value.ServletValueContext;
 
 public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
 {
@@ -129,8 +131,11 @@ public class QuerySelectDialogTag extends javax.servlet.jsp.tagext.TagSupport
                 out.write("QuerySelectDialog '" + name + "' not found in QueryDefinition '" + source + "'");
                 return SKIP_BODY;
             }
+            ValueContext vc = new ServletValueContext(context, (javax.servlet.Servlet) pageContext.getPage(),
+                    pageContext.getRequest(), pageContext.getResponse());
 
-            com.netspective.sparx.xaf.form.DialogSkin skin = dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(dialogSkinName);
+            com.netspective.sparx.xaf.form.DialogSkin skin =
+                    dialogSkinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(context, dialogSkinName);
             if(skin == null)
             {
                 out.write("DialogSkin '" + dialogSkinName + "' not found in skin factory.");

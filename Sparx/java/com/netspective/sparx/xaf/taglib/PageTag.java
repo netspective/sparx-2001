@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageTag.java,v 1.14 2003-02-03 04:26:37 roque.hernandez Exp $
+ * $Id: PageTag.java,v 1.15 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -59,6 +59,10 @@ package com.netspective.sparx.xaf.taglib;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Collection;
+import java.util.Set;
+import java.util.Iterator;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -77,10 +81,14 @@ import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.skin.HtmlTabbedNavigationSkin;
 import com.netspective.sparx.xaf.navigate.*;
+import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.theme.Theme;
+import com.netspective.sparx.xaf.theme.ThemeStyle;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
+import com.netspective.sparx.util.config.ConfigurationManager;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.Globals;
 import com.netspective.sparx.BuildConfiguration;
@@ -185,7 +193,7 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 
     public String getLoginDialogSkinName()
     {
-        return null; // the "default" skin
+        return "login"; // the "default" skin
     }
 
     protected boolean doLogin(javax.servlet.ServletContext servletContext, javax.servlet.Servlet page, javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse resp) throws java.io.IOException, JspException
@@ -235,7 +243,8 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         if(!loginDialog.accessAllowed(servletContext, req, resp))
         {
             String skinName = getLoginDialogSkinName();
-            DialogContext dc = loginDialog.createContext(servletContext, page, req, resp, skinName == null ? SkinFactory.getDialogSkin() : SkinFactory.getDialogSkin(skinName));
+            DialogContext dc =
+                    loginDialog.createContext(servletContext, page, req, resp, skinName == null ? SkinFactory.getDialogSkin(servletContext) : SkinFactory.getDialogSkin(servletContext, skinName));
             loginDialog.prepareContext(dc);
             if(dc.inExecuteMode())
             {
@@ -336,12 +345,38 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
                 return SKIP_BODY;
             }
 
+            ServletValueContext svc = new ServletValueContext(servletContext, (Servlet) pageContext.getPage(),
+                    req, resp);
+            ThemeFactory tf = ThemeFactory.getInstance(svc);
+            Theme theme = tf.getCurrentTheme();
+            /*
+            System.out.println(" " + tf.getThemes());
+            Map themeList = tf.getThemes();
+            if (themeList != null)
+            {
+                Iterator it = themeList.values().iterator();
+                while (it.hasNext())
+                {
+                    Theme theme = (Theme) it.next();
+                    System.out.println("THEME: " + theme.getName());
+                    Map styles = theme.getStyles();
+                    Iterator it2 = styles.values().iterator();
+                    while (it2.hasNext())
+                    {
+                        Theme.ThemeStyle style = (Theme.ThemeStyle) it2.next();
+                        System.out.println(style.getCssResources());
+                        System.out.println(style.getImageResources());
+                    }
+                }
+            }
+            */
             NavigationTree appNavigationTree = NavigationTreeManagerFactory.getNavigationTree(servletContext);
             if(appNavigationTree != null)
             {
                 if(navSkin == null)
                 {
-                    navSkin = navSkinName != null ? SkinFactory.getNavigationSkin(navSkinName) : SkinFactory.getNavigationSkin();
+                    System.out.println("WANTED " + navSkinName);
+                    navSkin = navSkinName != null ? SkinFactory.getNavigationSkin(servletContext, navSkinName) : SkinFactory.getNavigationSkin(servletContext);
                     if(navSkin == null)
                     {
                         out.print("<i><b>Navigation skin '"+ navSkinName +"' not found, please pass a valid navigation skin name using 'navSkin' attribute.</b></i><p>");
@@ -447,6 +482,23 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         out.println("		<meta http-equiv='content-type' content='text/html;charset=ISO-8859-1'>");
         if(styleSheet != null)
             out.println("		<link rel='stylesheet' href='"+ styleSheet +"'>");
+
+        ThemeFactory tf = ThemeFactory.getInstance(svc);
+        Theme theme = tf.getCurrentTheme();
+        if (theme != null)
+        {
+            // get all the CSS files associated with this theme/style combination
+            ThemeStyle style = theme.getCurrentStyle();
+            Map cssResources = style.getCssResources();
+            Iterator it = cssResources.values().iterator();
+            HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+            while (it.hasNext())
+            {
+                String css = (String) it.next();
+                out.println("		<link rel=\"stylesheet\" href=\"" + req.getContextPath() + css + "\" type=\"text/css\">");
+            }
+        }
+
         out.println("	</head>");
         out.println("");
         out.println("	<body bgcolor='#cccccc' leftmargin='5' marginheight='5' marginwidth='5' topmargin='5'>");

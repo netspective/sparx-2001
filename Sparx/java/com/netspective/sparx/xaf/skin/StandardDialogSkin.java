@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.14 2003-02-03 00:49:49 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.15 2003-02-24 03:46:05 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -154,7 +154,7 @@ public class StandardDialogSkin implements DialogSkin
         separatorHtml = "<hr size=1 color=#555555>";
         hintFontAttrs = "color='navy'";
         errorMsgFontAttrs = "color='red'";
-        captionSuffix = ": ";
+        captionSuffix = " ";
         includePreScripts = null;
         includePostScripts = null;
         includePreStyleSheets = null;

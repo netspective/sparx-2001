@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LoginDialog.java,v 1.5 2003-01-01 18:27:56 shahid.shah Exp $
+ * $Id: LoginDialog.java,v 1.6 2003-02-24 03:46:04 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -59,6 +59,8 @@ package com.netspective.sparx.xaf.security;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
+import java.util.Map;
+import java.util.Iterator;
 import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
@@ -78,6 +80,9 @@ import com.netspective.sparx.xaf.form.field.TextField;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.querydefn.QuerySelectScrollState;
 import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
+import com.netspective.sparx.xaf.theme.ThemeFactory;
+import com.netspective.sparx.xaf.theme.Theme;
+import com.netspective.sparx.xaf.theme.ThemeStyle;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class LoginDialog extends Dialog
@@ -90,6 +95,7 @@ public class LoginDialog extends Dialog
     private String loginImageSrc;
     private String userNameCookieName;
     private String userInfoSessionAttrName;
+    private Theme theme;
 
     public LoginDialog()
     {
@@ -214,11 +220,53 @@ public class LoginDialog extends Dialog
 
     public void producePage(Writer writer, DialogContext dc) throws IOException
     {
-        writer.write("&nbsp;<p>&nbsp;<p><center>");
-        if(loginImageSrc != null)
-            writer.write("<img src='" + loginImageSrc + "'><p>");
-        renderHtml(writer, dc, true);
-        writer.write("</center>");
+        // associate a theme with this context
+        ThemeFactory tf = ThemeFactory.getInstance(dc);
+        theme = tf.getCurrentTheme();
+        if (theme != null)
+        {
+            // get all the CSS files associated with this theme/style combination
+            ThemeStyle style = theme.getCurrentStyle();
+            String imgPath = style.getImagePath();
+            Map cssResources = style.getCssResources();
+            Iterator it = cssResources.values().iterator();
+            writer.write("<html>\n");
+            writer.write("<head>\n");
+            while (it.hasNext())
+            {
+                String css = (String) it.next();
+                writer.write("	<link rel=\"stylesheet\" href=\"" + ((HttpServletRequest)dc.getRequest()).getContextPath() +
+                        css + "\" type=\"text/css\">\n");
+            }
+            writer.write("</head>\n");
+            writer.write("<body bgcolor=\"#ffffff\" marginheight=\"100\" topmargin=\"100\">");
+            writer.write("    <div align=\"center\">");
+            renderHtml(writer, dc, true);
+                    /*
+            writer.write("                                            <table class=\"dialog-pattern\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+            writer.write("                                                <tr height=\"30\">");
+            writer.write("                                                    <td class=\"dialog-fields\" valign=\"middle\" nowrap width=\"50%\" height=\"30\">");
+            writer.write("                                                        <div align=\"right\">");
+            writer.write("                                                            <span class=\"report-fields\"><b>User Name</b></span></div>");
+            writer.write("                                                    </td>");
+            writer.write("                                                    <td class=\"dialog-entry\" align=\"left\" nowrap width=\"50%\" height=\"30\"><input class=\"dialog-input-required\" type=\"text\" name=\"textfieldName\" size=\"24\" border=\"0\"></td>");
+            writer.write("                                                </tr>");
+            writer.write("                                                <tr height=\"30\">");
+            writer.write("                                                    <td class=\"dialog-fields\" valign=\"middle\" nowrap width=\"50%\" height=\"30\">");
+            writer.write("                                                        <div align=\"right\">");
+            writer.write("                                                            <span class=\"report-fields\"><b>Password</b></span></div>");
+            writer.write("                                                    </td>");
+            writer.write("                                                    <td class=\"dialog-entry\" align=\"left\" nowrap width=\"50%\" height=\"30\"><input class=\"dialog-input-required\" type=\"text\" name=\"textfieldName\" size=\"24\" border=\"0\"></td>");
+            writer.write("                                                </tr>");
+            writer.write("                                                <tr>");
+            writer.write("                                                    <td nowrap></td>");
+            writer.write("                                                    <td class=\"dialog-button-table\" width=\"100%\" nowrap><a class=\"dialog-button\" href=\"#\">Enter</a>&nbsp;&nbsp;<a class=\"dialog-button\" href=\"#\">Reset</a></td>");
+            writer.write("                                                </tr>");
+            writer.write("                                            </table>");
+            */
+            writer.write("    </div>");
+            writer.write("</body>");
+        }
     }
 
     public AuthenticatedUser getActiveUser(ValueContext vc)
