@@ -47,7 +47,8 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
                         state.getOutputFormat() :
                         column.getFormattedData(rc, 1, rowData, true);
 
-				dataTable.append("<td align='right'><font "+dataHdFontAttrs+">"+column.getHeading()+":</font></td>");
+				dataTable.append("<td align='right'><font "+dataHdFontAttrs+">"+
+                        column.getHeading().getValue(rc)+  ":</font></td>");
 				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data)+"</font></td>");
 
 				colCount++;

@@ -164,7 +164,7 @@ public class HtmlReportSkin implements ReportSkin
 				if(states[i].isHidden())
 					continue;
 
-				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rcd.getHeading() +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rcd.getHeading().getValue(rc) +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
 			}
 		}
 		else
