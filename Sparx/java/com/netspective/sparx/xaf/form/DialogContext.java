@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.18 2002-10-03 14:54:54 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.19 2002-10-10 22:38:57 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1340,11 +1340,7 @@ public class DialogContext extends ServletValueContext
 
     public boolean hasValue(DialogField field)
     {
-        DialogFieldState state = (DialogFieldState) fieldStates.get(field.getQualifiedName());
-        if(state == null)
-            return false;
-        else
-            return state.field.getValueAsObject(state.value) != null;
+        return hasValue(field.getQualifiedName());
     }
 
     public boolean hasValue(String qualifiedName)
@@ -1352,8 +1348,22 @@ public class DialogContext extends ServletValueContext
         DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
         if(state == null)
             return false;
+
+        Object value = state.field.getValueAsObject(state.value);
+        if(value instanceof String)
+        {
+            if(value == null)
+                return false;
+            else
+            {
+                if(((String) value).length() == 0)
+                    return false;
+                else
+                    return true;
+            }
+        }
         else
-            return state.field.getValueAsObject(state.value) != null;
+            return value != null;
     }
 
     public String getValue(DialogField field)
