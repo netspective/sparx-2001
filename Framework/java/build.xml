@@ -37,7 +37,7 @@ Authors:
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${lib.dir}"/>
-        
+
 	    <property name="ant.home" value="${env.ANT_HOME}"/>
 	    <property name="ant.lib.dir" value="${ant.home}/lib"/>
 	    <property name="ant.jar" value="${ant.lib.dir}/ant.jar"/>
@@ -56,12 +56,23 @@ Authors:
 	    <property name="jndi" value="${resin.lib.dir}/jndi.jar"/>
 	    <property name="jdbc-ext" value="${resin.lib.dir}/jdbc2_0-stdext.jar"/>
 
-	    <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi};${ant.jar}"/> 
+        <!-- poolman settings -->
+        <property name="poolman.lib.dir" value="${env.POOLMAN_HOME}/lib"/>
+        <property name="poolman.jar" value="${poolman.lib.dir}/poolman.jar"/>
+        <property name="jta.jar" value="${poolman.lib.dir}/jta.jar"/>
+        <property name="jmxri.jar" value="${poolman.lib.dir}/jmxri.jar"/>
+        <property name="jmxtools.jar" value="${poolman.lib.dir}/jmxtools.jar"/>
+
+        <property name="oromatcher.lib.dir" value="${env.OROMATCHER_HOME}"/>
+        <property name="jakarta-oro-2.0.3.jar" value="${oromatcher.lib.dir}/jakarta-oro-2.0.3.jar"/>
+
+	    <property name="xaf_classpath"
+         value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi};${ant.jar};${poolman.jar};${jta.jar};${jmxri.jar};${jmxtools.jar};${jakarta-oro-2.0.3.jar}"/>
 
 	    <!-- Compile the BuildConfiguration class -->
 	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"
 			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java"
-			classpath="${classpath}"
+            classpath="${xaf_classpath}"
 			debug="${debug}"
 			optimize="${optimize}"
 			deprecation="off"/>
@@ -82,14 +93,14 @@ Authors:
 	    <property name="src.jar" value="${jar.prefix}_src.jar"/>
 	    <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
 	    <property name="web-shared.zip" value="${jar.prefix}_web-shared.zip"/>
-    </target>	   
-    
+    </target>
+
     <!-- ============================= Build XAF ========================= -->
     <target name="compile">
 
         <!-- Compile XAF components -->
         <javac srcdir="." destdir="${build.classes.dir}"
-            classpath="${classpath}"
+            classpath="${xaf_classpath}"
             debug="${debug}"
             optimize="${optimize}"
             deprecation="off" >
@@ -100,18 +111,18 @@ Authors:
     <!-- ============================= Jar XAF ========================= -->
     <target name="jar" depends="compile">
 
-        <!-- Create XAF BINARIES JAR file -->        
+        <!-- Create XAF BINARIES JAR file -->
         <jar jarfile="${lib-ext.dir}/${lib.jar}" basedir="${build.classes.dir}">
             <include name="com/xaf/**"/>
         </jar>
-        
+
         <copy file="${lib-ext.dir}/${lib.jar}" tofile="${lib.dir}/${lib.jar}"/>
 
         <!-- Create XAF SOURCE JAR file -->
         <jar jarfile="${lib-ext.dir}/${src.jar}" basedir=".">
             <include name="**" />
         </jar>
-        
+
         <copy file="${lib-ext.dir}/${src.jar}" tofile="${lib.dir}/${src.jar}"/>
     </target>
 
@@ -120,7 +131,7 @@ Authors:
     <target name="javadoc">
         <mkdir dir="${javadoc.dir}" />
         <javadoc packagenames="com.xaf.*"
-             classpath="${classpath}"
+             classpath="${xaf_classpath}"
              sourcepath="."
              destdir="${javadoc.dir}"
              author="true"
@@ -135,16 +146,16 @@ Authors:
         </jar>
 
         <copy file="${lib-ext.dir}/${doc.jar}" tofile="${lib.dir}/${doc.jar}"/>
-        
+
     </target>
 
     <!-- ============================= JavaDoc XAF ========================= -->
-    
+
     <target name="web-shared">
     	<zip zipfile="${lib-ext.dir}/${web-shared.zip}" basedir="${web-shared.dir}"/>
         <copy file="${lib-ext.dir}/${web-shared.zip}" tofile="${lib.dir}/${web-shared.zip}"/>
     </target>
-    
+
     <!-- ==================== Administrative targets  ======================= -->
     <target name="clean">
         <delete dir="${build.dir}"/>
