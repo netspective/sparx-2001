@@ -910,6 +910,36 @@ public class DialogContext extends ServletValueContext
         task = null;
     }
 
+    public void executeSqlInsert(String table, String fields, String columns, String autoinc, String autoincStore) throws TaskExecuteException
+    {
+        executeSqlInsert(null, table, fields, columns, autoinc, autoincStore);
+    }
+
+    /**
+     * Inserts a new row into the database
+     *
+     * @params dataSourceId JNDI Data Source ID
+     * @params table Database table name
+     * @params fields String containing mapping of dialog fields to database columns
+     * @params columns String containing mapping of database columns to literal values
+     * @params autoinc String containing the column name and its sequence table name
+     * @params autoincStore SVS variable to store the autoincremented value
+     */
+    public void executeSqlInsert(String dataSourceId, String table, String fields, String columns, String autoinc, String autoincStore) throws TaskExecuteException
+    {
+        DmlTask task = new DmlTask();
+        task.setCommand(DmlTask.DMLCMD_INSERT);
+        task.setDataSource(dataSourceId);
+        task.setTable(table);
+        task.setFields(fields);
+        task.setColumns(columns);
+        task.setAutoInc(autoinc);
+        task.setAutoIncStore(autoincStore);
+        task.execute(new TaskContext(this));
+        task.reset();
+        task = null;
+    }
+
     public void executeSqlUpdate(String table, String fields, String columns, String whereCond, String whereCondBindParams) throws TaskExecuteException
     {
         executeSqlUpdate(null, table, fields, columns, whereCond, whereCondBindParams);
