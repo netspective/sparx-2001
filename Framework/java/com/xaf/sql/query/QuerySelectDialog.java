@@ -18,8 +18,6 @@ public class QuerySelectDialog extends QueryBuilderDialog
 	static public final String QSDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
 	static public final String QSDIALOG_DIALOG_NAME_PASSTHRU_FIELDNAME = "queryDefnSelectDialogName";
 
-	//private QueryDefinition queryDefn;
-	//private String fixedCondId;
 	private QuerySelect select;
 
     public QuerySelectDialog(QueryDefinition queryDefn)
@@ -27,6 +25,11 @@ public class QuerySelectDialog extends QueryBuilderDialog
 		setQueryDefn(queryDefn);
 		setLoopEntries(true);
     }
+
+    public QuerySelect createSelect(DialogContext dc)
+	{
+        return this.select;
+	}
 
 	public void importFromXml(String packageName, Element elem)
 	{
