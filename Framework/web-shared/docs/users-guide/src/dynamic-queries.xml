@@ -28,8 +28,7 @@
             <!-- Fields -->
             <field id="org_id" caption="Account ID" join="org" column="org_id">
                 <report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}"/>
-            </field>
-            ...
+            </field>            
             ...
             <field id="org_code" caption="Account Code" join="org" column="org_code">
                 <report heading="Code"/>
@@ -89,6 +88,33 @@
                     </listitem>
                 </varlistentry>
                 <varlistentry>
+                    <term> <sgmltag class="element">report</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the result column formatting. Child node element for the <sgmltag class="element">field</sgmltag>. 
+                        The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                            <para>
+                            <sgmltag class="attribute">type</sgmltag>:&nbsp; The values available
+                            are <sgmltag class="attvalue">default</sgmltag>, <sgmltag class="attvalue">numeric</sgmltag>,
+                            <sgmltag class="attvalue">decimal</sgmltag>,  and <sgmltag class="attvalue">checkbox</sgmltag>.
+                            </para>
+                            </listitem>
+                            <listitem>
+                            <para>
+                            <sgmltag class="attribute">format</sgmltag>:&nbsp; The values available
+                            are <sgmltag class="attvalue">plain</sgmltag>, <sgmltag class="attvalue">general</sgmltag>,
+                            <sgmltag class="attvalue">decimal</sgmltag>, <sgmltag class="attvalue">currency</sgmltag>,
+                            <sgmltag class="attvalue">percentage</sgmltag>, <sgmltag class="attvalue">date</sgmltag>,
+                            <sgmltag class="attvalue">datetime</sgmltag>, and <sgmltag class="attvalue">time</sgmltag>.
+                            </para>
+                            </listitem>
+                        </itemizedlist>
+                        </para>
+                    </listitem>
+                </varlistentry>                
+                <varlistentry>
                     <term><sgmltag class="element">join</sgmltag></term>
                     <listitem>
                         <para>
@@ -137,10 +163,28 @@
                     <term><sgmltag class="element">select</sgmltag></term>
                     <listitem>
                         <para>
-                        Represents the SQL query which is being generated. It contains entries for
-                        the report columns (<sgmltag class="element">display</sgmltag>),
-                        order-by selections (<sgmltag class="element">order-by</sgmltag>), and
-                        condition statements (<sgmltag class="element">condition</sgmltag>).
+                        Represents the SQL query which is being generated. It is a parent node for
+                        the report columns (<sgmltag class="starttag">display</sgmltag>),
+                        order-by selections (<sgmltag class="starttag">order-by</sgmltag>), and
+                        condition statements (<sgmltag class="starttag">condition</sgmltag>). The following
+                        attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">heading</sgmltag>:&nbsp;
+                                The heading of the resulting query
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">distinct</sgmltag>: &nbsp; 
+                                Indicates whether or not the SELECT statement is distinct
+                                (values are <sgmltag class="attvalue">yes</sgmltag> and <sgmltag class="attvalue">no</sgmltag>). 
+                                <important>Setting this attribute will insert a <emphasis>distinct</emphasis>
+                                string into the SQL and it will effect all columns!</important>
+                                </para>
+                            </listitem>
+                        </itemizedlist>                        
                         </para>
                     </listitem>
                 </varlistentry>
@@ -148,7 +192,31 @@
                     <term><sgmltag class="element">display</sgmltag></term>
                     <listitem>
                         <para>
-                        Represents the SQL columns that are retrieved from the database.
+                        Represents the SQL columns that are retrieved from the database. The following attribute
+                        is available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">field</sgmltag>:&nbsp;
+                                The value for this attribute must correspond to one of the fields defined by
+                                the <sgmltag class="starttag">field</sgmltag>. For example,
+                                <programlisting>
+                                <![CDATA[
+<field id="org_id" caption="Account ID" join="org" column="org_id"/>                                
+...
+<select-dialog ..>    
+    ...
+    ...
+    <select>
+        <display field="org_id"/>
+        ...
+    </select>
+</select-dialog>
+                                ]]>
+                                </programlisting>
+                                </para>
+                            </listitem>  
+                        </itemizedlist>      
                         </para>
                     </listitem>
                 </varlistentry>
@@ -156,7 +224,36 @@
                     <term><sgmltag class="element">order-by</sgmltag></term>
                     <listitem>
                         <para>
-                        Represents the sort criteria.
+                        Represents the sort criteria. The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">field</sgmltag>:&nbsp;
+                                The value for this attribute must correspond to one of the fields defined by
+                                the <sgmltag class="starttag">field</sgmltag>. For example,
+                                <programlisting>
+                                <![CDATA[
+<field id="org_id" caption="Account ID" join="org" column="org_id"/>                                
+...
+<select-dialog ..>    
+    ...
+    ...
+    <select>
+        <order-by field="org_id"/>
+        ...
+    </select>
+</select-dialog>
+                                ]]>
+                                </programlisting>
+                                </para>
+                            </listitem>  
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">descending</sgmltag>:&nbsp;   
+                                Indicates whether or not the sort order should be descending or ascending.
+                                </para>
+                            </listitem>                                  
+                        </itemizedlist>                              
                         </para>
                     </listitem>
                 </varlistentry>
@@ -164,16 +261,86 @@
                     <term><sgmltag class="element">condition</sgmltag></term>
                     <listitem>
                         <para>
-                        Represents the selection criteria.
+                        Represents the selection criteria. The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">field</sgmltag>:&nbsp;
+                                The value for this attribute must correspond to one of the fields defined by
+                                the <sgmltag class="starttag">field</sgmltag>.
+                                </para>                                
+                            </listitem>                                  
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">allow-null</sgmltag>:&nbsp;
+                                Whether or not to allow a NULL value as a valid bind parameter value.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">comparison</sgmltag>:&nbsp;
+                                Describes what kind of relational operator to use. The following values are available:
+                                <sgmltag class="attvalue">starts-with</sgmltag>, <sgmltag class="attvalue">in</sgmltag>,
+                                <sgmltag class="attvalue">greater-than-equal</sgmltag>,<sgmltag class="attvalue">greater-than</sgmltag>,
+                                <sgmltag class="attvalue">less-than-equal</sgmltag>, <sgmltag class="attvalue">less-than</sgmltag>, 
+                                <sgmltag class="attvalue">equals</sgmltag>, <sgmltag class="attvalue">contains</sgmltag>, 
+                                <sgmltag class="attvalue">is-defined</sgmltag>, <sgmltag class="attvalue">starts-with</sgmltag>, 
+                                <sgmltag class="attvalue">ends-with</sgmltag>, and
+                                <sgmltag class="attvalue">not-equals</sgmltag>.
+                                </para>
+                            </listitem>                            
+                        </itemizedlist>                                     
                         </para>
                     </listitem>
+                    For example,
+                    <programlisting>
+                    <![CDATA[
+<field id="org_id" caption="Account ID" join="org" column="org_id"/>                                
+...
+<select-dialog ..>    
+...
+...
+<select>
+<condition field="org_id" allow-null="no" comparison="starts-with" 
+bind-expr="upper(?)" value="form:customer_id" connector="and"/>
+...
+</select>
+</select-dialog>
+                    ]]>
+                    </programlisting>                    
                 </varlistentry>
                 <varlistentry>
                     <term><sgmltag class="element">director</sgmltag></term>
                     <listitem>
                         <para>
                         Represents the dialog director object which can be used to change
-                        the text of the action buttons and their respective URLs.
+                        the text of the action buttons and their respective URLs. The following attributes
+                        are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">cancel-url</sgmltag>:&nbps; Defines what the
+                                URL is for the Cancel button.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">cancel-caption</sgmltag>:&nbps; Defines what the
+                                Cancel button should be called.
+                                </para>
+                            </listitem>                            
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">submit-caption</sgmltag>:&nbps; Defines what Submit
+                                button should be called.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        <programlisting>
+                        <![CDATA[
+<director submit-caption="Submit" cancel-caption="Cancel" cancel-url="/go"/>   
+                        ]]>
+                        </programlisting>       
                         </para>
                     </listitem>
                 </varlistentry>
