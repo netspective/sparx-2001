@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.8 2002-12-03 15:30:48 aye.thu Exp $
+ * $Id: QuerySelect.java,v 1.9 2002-12-11 14:05:53 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -86,7 +86,7 @@ public class QuerySelect
     private QueryDefinition queryDefn;
     private String name;
     private String caption;
-    private ReportFrame frame;
+    private ReportFrame frame = new ReportFrame();
     private ReportBanner banner;
     private boolean distinctRows;
     private boolean isDirty;
