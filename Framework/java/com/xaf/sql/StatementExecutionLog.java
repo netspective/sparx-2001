@@ -1,12 +1,14 @@
 package com.xaf.sql;
 
 import java.util.*;
+import com.xaf.config.*;
 import com.xaf.value.*;
 
 public class StatementExecutionLog extends ArrayList
 {
 	public final class StatementExecutionStatistics
 	{
+		public int resetAfterCount;
 		public int totalExecutions;
 		public int totalFailed;
 
@@ -31,12 +33,70 @@ public class StatementExecutionLog extends ArrayList
 		}
 	}
 
+	/* resetLogAfterCount
+	     value -1 means unknown (find out at first call)
+		 value 0 means never reset
+		 value > 0 means reset after this many entries
+	*/
+	private int resetLogAfterCount = -1;
+
     public StatementExecutionLog()
     {
     }
 
+	public int getResetLogAfterCount()
+	{
+		return resetLogAfterCount;
+	}
+
 	public StatementExecutionLogEntry createNewEntry(ValueContext vc, StatementInfo si)
 	{
+		if(resetLogAfterCount == -1)
+		{
+			Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(vc.getServletContext());
+			if(appConfig == null)
+				throw new RuntimeException("Unable to obtain default configuration");
+			Collection logs = appConfig.getValues(vc, "com.xaf.sql.StatementManager.ExecutionLog.ResetCount." + si.getId());
+			if(logs == null)
+				logs = appConfig.getValues(vc, "com.xaf.sql.StatementManager.ExecutionLog.ResetCount");
+			if(logs == null)
+				resetLogAfterCount = 0;
+			else
+			{
+				String envName = ConfigurationManagerFactory.getExecutionEvironmentName(vc.getServletContext());
+				for(Iterator i = logs.iterator(); i.hasNext(); )
+				{
+					Object entry = i.next();
+					if(entry instanceof Property)
+					{
+						Property logProperty = (Property) entry;
+						String logEnvName = logProperty.getName();
+
+						if(envName.equalsIgnoreCase(logEnvName))
+						{
+							String resetCountStr = appConfig.getValue(vc, logProperty, null);
+							try
+							{
+								int resetCount = Integer.parseInt(resetCountStr);
+								resetLogAfterCount = resetCount;
+							}
+							catch(Exception e)
+							{
+								resetLogAfterCount = 0;
+							}
+						}
+					}
+				}
+
+				// if no value specified, then default to no reset
+				if(resetLogAfterCount == -1)
+					resetLogAfterCount = 0;
+			}
+		}
+
+		if(resetLogAfterCount > 0 && size() >= resetLogAfterCount)
+			clear();
+
 		StatementExecutionLogEntry result = new StatementExecutionLogEntry(vc, si);
 		add(result);
 		return result;
@@ -82,6 +142,7 @@ public class StatementExecutionLog extends ArrayList
 			successful++;
 		}
 
+		stats.resetAfterCount = resetLogAfterCount;
 		stats.totalExecutions = items;
 		stats.totalFailed = failed;
 

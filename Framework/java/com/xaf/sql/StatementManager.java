@@ -127,6 +127,7 @@ public class StatementManager extends XmlSource
 			StatementExecutionLog.StatementExecutionStatistics stats = execLog.getStatistics();
 			Element elem = si.getStatementElement();
 
+			elem.setAttribute("stat-reset-log-after", stats.resetAfterCount == 0 ? "never reset (0)" : (stats.resetAfterCount == -1 ? "unknown (-1)" : Long.toString(stats.resetAfterCount)));
 			elem.setAttribute("stat-total-executions", Long.toString(stats.totalExecutions));
 			elem.setAttribute("stat-total-failed", Long.toString(stats.totalFailed));
 			elem.setAttribute("stat-total-avg-time", Long.toString(stats.averageTotalExecTime));
