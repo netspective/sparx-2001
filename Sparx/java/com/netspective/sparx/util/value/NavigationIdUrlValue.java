@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationIdUrlValue.java,v 1.3 2002-12-30 21:23:59 shahid.shah Exp $
+ * $Id: NavigationIdUrlValue.java,v 1.4 2003-01-22 06:26:31 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -83,7 +83,7 @@ public class NavigationIdUrlValue extends ValueSource
     public void initializeSource(String srcParams)
     {
         int delimPos = srcParams.indexOf('/');
-        if(delimPos >= 0)
+        if(delimPos > 0)
         {
             source = srcParams.substring(0, delimPos);
             valueKey = srcParams.substring(delimPos + 1);
@@ -95,7 +95,7 @@ public class NavigationIdUrlValue extends ValueSource
     public String getValue(ValueContext vc)
     {
         NavigationPath navTree = null;
-        if(source == null)
+        if(source == null || source.length() == 0)
         {
             navTree = NavigationTreeManagerFactory.getNavigationTree(vc.getServletContext());
             if(navTree == null)

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.9 2002-12-31 19:34:22 shahid.shah Exp $
+ * $Id: ValueSourceFactory.java,v 1.10 2003-01-22 06:26:31 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -115,6 +115,8 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("image-src", ImageSourceValue.class);
         srcClasses.put("nav-id-url", NavigationIdUrlValue.class);
         srcClasses.put("popup-url", PopupUrlValue.class);
+        srcClasses.put("nav-url-cmd",NavigationPageUrlCmdValue.class);
+        srcClasses.put("nav-url",NavigationPageUrlValue.class);
     }
 
     public static Map getValueSourceClasses()
