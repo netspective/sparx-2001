@@ -413,8 +413,14 @@ public class QueryBuilderDialog extends Dialog
             return "<p><pre><code>SQL:<p>" + sql + (sql == null ? "<p>" + select.getErrorSql() : select.getBindParamsDebugHtml(dc)) + "</code></pre>";
 		}
 
-		String outputStyleStr = dc.getValue("output.style");
-		String outputDestStr = dc.getValue("output.destination");
+        // check to see if the user has created field(s) called 'output_style' and 'output_destination'.
+        // If they are not defined, check for their counterparts defined through the 'show-output-dests' attribute,
+        String outputStyleStr = dc.getValue("output_style");
+        if (outputStyleStr == null || outputStyleStr.length() == 0)
+            outputStyleStr = dc.getValue("output.style");
+        String outputDestStr = dc.getValue("output_destination");
+        if (outputDestStr == null || outputDestStr.length() == 0)
+            outputDestStr = dc.getValue("output.destination");
 
 		int outputStyle = outputStyleStr != null ? Integer.parseInt(outputStyleStr) : OUTPUTSTYLE_HTML;
 		int outputDest = outputDestStr != null ? Integer.parseInt(outputDestStr) : ReportDestination.DEST_BROWSER_MULTI_PAGE;
