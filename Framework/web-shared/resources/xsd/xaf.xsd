@@ -496,6 +496,7 @@
 		<xsd:attribute name="comparison" type="query-defn-comparison-id" use="required"/>
 		<xsd:attribute name="value" type="single-value-source" use="required"/>
 		<xsd:attribute name="connector" type="query-defn-condition-connector-enum" use="optional"/>
+		<xsd:attribute name="allow-null" type="yes-no-enum" use="optional"/>
 	</xsd:complexType>
 	<xsd:simpleType name="query-defn-comparison-id">
 		<xsd:annotation>
