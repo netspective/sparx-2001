@@ -229,18 +229,30 @@ public abstract class AbstractTable implements Table
         }
     }
 
+    /**
+     * Retrieve multiple rows  based on column name and value pairs.
+     * Columns with NULL values are not allowed.
+     *
+     */
     protected Rows getRecordsByEquality(ConnectionContext cc, String[] colNames, Object[] colValues, Rows rows) throws NamingException, SQLException
     {
+        return getRecordsByEquality(cc, colNames, colValues, rows, false);
+    }
+
+    /**
+     * Retrieve multiple rows  based on column name and value pairs.
+     * Columns with NULL values are allowed based on the 'allowNull' parameter.
+     */
+    protected Rows getRecordsByEquality(ConnectionContext cc, String[] colNames, Object[] colValues, Rows rows, boolean allowNull) throws NamingException, SQLException
+    {
         Rows result = rows;
-        String selectSql = this.createPreparedStatementString(colNames);
         Connection conn = cc.getConnection();
         try
         {
             PreparedStatement stmt = null;
             try
             {
-                stmt = conn.prepareStatement(selectSql);
-                ResultSet rs = this.getResultSetByStatement(stmt, colValues);
+                ResultSet rs = this.getResultset(conn, stmt, colNames, colValues, allowNull);
                 if(rs != null)
                 {
                     if(result == null) result = createRows();
@@ -251,7 +263,11 @@ public abstract class AbstractTable implements Table
             catch(SQLException e)
             {
                 // rethrow the exception with the select SQL and bind parameter information added
-                throw this.generateSQLException(selectSql, colValues, e);
+                e.printStackTrace();
+                if (stmt != null)
+                    throw new SQLException(e.toString() + stmt.toString());
+                else
+                    throw e;
             }
             finally
             {
@@ -265,20 +281,19 @@ public abstract class AbstractTable implements Table
     }
 
     /**
-     * Retrieve Row object based on unique column name and value pairs
+     * Retrieve Row object based on unique column name and value pairs.
+     * Column values cannot be NULL.
      */
     protected Row getRecordByEquality(ConnectionContext cc, String[] colNames, Object[] colValues, Row row) throws NamingException, SQLException
     {
         Row result = row;
-        String selectSql = this.createPreparedStatementString(colNames);
         Connection conn = cc.getConnection();
         try
         {
             PreparedStatement stmt = null;
             try
             {
-                stmt = conn.prepareStatement(selectSql);
-                ResultSet rs = this.getResultSetByStatement(stmt, colValues);
+                ResultSet rs = this.getResultset(conn, stmt, colNames, colValues);
                 if(rs != null)
                 {
                     if(result == null) result = createRow();
@@ -289,7 +304,11 @@ public abstract class AbstractTable implements Table
             catch(SQLException e)
             {
                 // rethrow the exception with the select SQL and bind parameter information added
-                throw this.generateSQLException(selectSql, colValues, e);
+                e.printStackTrace();
+                if (stmt != null)
+                    throw new SQLException(e.toString() + stmt.toString());
+                else
+                    throw e;
             }
             finally
             {
@@ -303,28 +322,67 @@ public abstract class AbstractTable implements Table
     }
 
     /**
-     * Rethrows an exception as a SQLException with additional data with regard to SQL statement
-     * and bind parameters.
+     * Retrieve Row object based on unique column name and value pairs.
+     * Column values may contain nulls.
      */
-    private SQLException generateSQLException(String selectSql, Object[] colValues, Exception e)
+    protected Row getRecordByEquality(ConnectionContext cc, String[] colNames, Object[] colValues, Row row, boolean allowNull) throws NamingException, SQLException
     {
-        StringBuffer sb = new StringBuffer();
-        for (int k = 0; k < colValues.length; k++)
+        Row result = row;
+        Connection conn = cc.getConnection();
+        try
         {
-            sb.append(colValues[k] != null ? "'" + colValues[k] + "' {"+ colValues[k].getClass().getName() + "}" : "none");
+            PreparedStatement stmt = null;
+            try
+            {
+                ResultSet rs = this.getResultset(conn, stmt, colNames, colValues, allowNull);
+                if(rs != null)
+                {
+                    if(result == null) result = createRow();
+                    result.populateDataByIndexes(rs);
+                }
+                return result;
+            }
+            catch(SQLException e)
+            {
+                // rethrow the exception with the select SQL and bind parameter information added
+                e.printStackTrace();
+                if (stmt != null)
+                    throw new SQLException(e.toString() + stmt.toString());
+                else
+                    throw e;
+            }
+            finally
+            {
+                if(stmt != null) stmt.close();
+            }
         }
-        return new SQLException(e.toString() + " ["+ selectSql +" (bind = "+ sb.toString() +")]");
+        finally
+        {
+            cc.returnConnection();
+        }
     }
 
+
     /**
-     * Retrieves ResultSet based on passed in SQL and bind values.
+     * Creates a PreparedStatement from the passed in column names and values
+     * and retrieve a ResultSet
      *
-     * @param conn DB Connection object
-     * @param selectSql SQL statement
-     * @param colValues bind parameters
+     * @param colNames name of columns for the WHERE clause
+     * @param colValues column values
+     * @param allowNull Flag to indicate whether or not NULL values are allowed
+     * @returns ResultSet
      */
-    private ResultSet getResultSetByStatement(PreparedStatement stmt, Object[] colValues) throws SQLException
+    protected ResultSet getResultset(Connection conn, PreparedStatement stmt, String[] colNames, Object[] colValues, boolean allowNull) throws SQLException, NamingException
     {
+        if (colNames == null || colNames.length == 0)
+            return null;
+        String sqlString = "";
+
+        if (allowNull)
+            sqlString = this.createPreparedStatmentString(colNames, colValues);
+        else
+            sqlString = this.createPreparedStatmentString(colNames);
+        stmt = conn.prepareStatement(sqlString);
         for (int k = 0; k < colValues.length; k++)
         {
             stmt.setObject(k+1, colValues[k]);
@@ -338,14 +396,53 @@ public abstract class AbstractTable implements Table
     }
 
     /**
-     * Creates a SQL string used for a PreparedStatement
+     * Calls getResultset(Connection conn, PreparedStatement stmt, String[] colNames, Object[] colValues, boolean allowNull)
+     * with FALSE passed in for allowNull parameter.
      *
-     * @param colNames name of columns for the WHERE clause
      */
-    private String createPreparedStatementString(String[] colNames)
+    protected ResultSet getResultset(Connection conn, PreparedStatement stmt, String[] colNames, Object[] colValues) throws SQLException, NamingException
     {
-        if (colNames == null || colNames.length == 0)
-            return null;
+        return this.getResultset(conn, stmt, colNames, colValues, false);
+    }
+
+    /**
+     * Generates SQL string for a PreparedStatement and if any of the columns have NULL values,
+     * the string 'is NULL' is added instead of ' = NULL'.
+     */
+    protected String createPreparedStatmentString(String[] colNames, Object[] colValues)
+    {
+        Object[] bindValues = new Object[colValues.length];
+        StringBuffer selectSqlBuffer = new StringBuffer("select " + getColumnNamesForSelect() + " from " + getName() + " where ");
+
+        int newIndex = 0;
+        for (int i=0; i < colNames.length; i++)
+        {
+            if (colValues[i] != null)
+            {
+                selectSqlBuffer.append(colNames[i] + " = ? ");
+                // Need this column value as a bind parameter
+                bindValues[newIndex] = colValues[i];
+                newIndex++;
+            }
+            else
+            {
+                // the NULL column value is not included in the column values list
+                // since it is not needed as a bind parameter anymore
+                selectSqlBuffer.append(colNames[i] + " is null ");
+            }
+            if (i != colNames.length - 1)
+                selectSqlBuffer.append("and ");
+        }
+        colValues = bindValues;
+        return selectSqlBuffer.toString();
+    }
+
+    /**
+     * Generates SQL string for a PreparedStatement.Assumes all the column values bound to the
+     * staement later on will not have any NULLs
+     */
+    protected String createPreparedStatmentString(String[] colNames)
+    {
         StringBuffer selectSqlBuffer = new StringBuffer("select " + getColumnNamesForSelect() + " from " + getName() + " where ");
         for (int i=0; i < colNames.length; i++)
         {
@@ -355,7 +452,6 @@ public abstract class AbstractTable implements Table
         }
         return selectSqlBuffer.toString();
     }
-
 
     protected void deleteRecordsByEquality(ConnectionContext cc, String colName, Object colValue) throws NamingException, SQLException
     {
