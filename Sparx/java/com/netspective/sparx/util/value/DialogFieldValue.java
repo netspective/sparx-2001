@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldValue.java,v 1.2 2002-02-05 00:00:41 thua Exp $
+ * $Id: DialogFieldValue.java,v 1.3 2002-08-17 15:16:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -173,7 +173,7 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
         {
             Map rsMap = StatementManager.getResultSetSingleRowAsMap(rs);
             DialogContext dc = (DialogContext) vc.getRequest().getAttribute(DialogContext.DIALOG_CONTEXT_ATTR_NAME);
-            if(dc != null)
+            if(dc != null && rsMap != null)
             {
                 // dialog context has already been created and is available in the request
                 dc.assignFieldValues(rsMap);
