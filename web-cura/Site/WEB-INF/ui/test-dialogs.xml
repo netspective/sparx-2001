@@ -167,5 +167,13 @@
 		<dialog name="DialogTest_13" heading="Test Request, Request Attribute , and Form Value Sources" retain-params="*">
 			<field.text name="text_field" caption="Text Field (formOrRequestAttr)"/>
 		</dialog>
+
+		<dialog name="DialogTest_14" heading="Test Data Binding" retain-params="*">
+			<field.text name="text_field" caption="Text Field" default="query:org.name-only?request:org_id" hint="The parameter is being provided in the value source"/>
+			<field.select name="select_field_01" caption="Combo Field showing Query Columns" style="combo" choices="query-cols:org.registration" hint="The parameters are specified inside the SQL XML"/>
+			<field.select name="select_field_02" caption="Radio Field showing Query Rows" style="radio" choices="query:org.classification" hint="The parameters are specified inside the SQL XML"/>
+			<field.select name="select_field_03" caption="Checkbox Field showing Query Rows" style="multicheck" choices="query:org.classification"/>
+			<field.select name="select_field_04" caption="Listbox Field showing Query Rows" style="multilist" choices="query:org.classification"/>
+		</dialog>
 	</dialogs>
 </xaf>
