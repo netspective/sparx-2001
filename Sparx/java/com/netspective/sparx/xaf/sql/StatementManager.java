@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StatementManager.java,v 1.6 2002-07-03 21:12:47 shahid.shah Exp $
+ * $Id: StatementManager.java,v 1.7 2002-07-05 17:37:08 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -94,6 +94,15 @@ import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.xml.XmlSource;
 
+/**
+ * <code>StatementManager</code> class contains methods for executing static queries and generating
+ * various types of reports from the returned data. It reads and caches static SQL queries with
+ * dynamic bind parameter variables from a XML file and at execution time binds the variables with
+ * the passed in values.
+ * <p>
+ * When used in a web application context, the <code>StatementManager</code> object is created and stored by
+ * <code>StatementManagerFactory.getManager(ServletContext context)</code> static method.
+ */
 public class StatementManager extends XmlSource
 {
     static public final Object[] SQL_TYPES_ARRAY =

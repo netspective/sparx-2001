@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementManagerFactory.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: StatementManagerFactory.java,v 1.2 2002-07-05 17:37:08 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -73,6 +73,15 @@ public class StatementManagerFactory implements Factory
     static final String ATTRNAME_STATEMENTMGR = com.netspective.sparx.Globals.DEFAULT_CONFIGITEM_PREFIX + "statement-mgr";
     private static Map managers = new HashMap();
 
+    /**
+     * Method used for retrieving a <code>StatementManager</code> object representing a
+     * SQL XML file. The factory first looks for the <code>StatementManager</code> object
+     * from a <code>Map</code> and if it doesn't exist, it creates a new one and adds it
+     * to the map of statement managers.
+     *
+     * @param file static SQL XML file name
+     * @return StatementManager
+     */
     public static StatementManager getManager(String file)
     {
         StatementManager activeManager = (StatementManager) managers.get(file);
@@ -84,6 +93,14 @@ public class StatementManagerFactory implements Factory
         return activeManager;
     }
 
+    /**
+     * Method used for retrieving a <code>StatementManager</code> object within a web application context.
+     * The factory retrieves the static SQL XML file name from <code>app.sql.source-file</code> configuraton entry
+     * defined in <code>configuration.xml</code> of the web application.
+     *
+     * @param context the servlet context
+     * @return StatementManager
+     */
     public static StatementManager getManager(ServletContext context)
     {
         StatementManager manager = (StatementManager) context.getAttribute(ATTRNAME_STATEMENTMGR);
