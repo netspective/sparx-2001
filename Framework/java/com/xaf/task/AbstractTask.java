@@ -16,6 +16,12 @@ abstract public class AbstractTask implements Task
 		taskNum++;
     }
 
+	public void reset()
+	{
+		flags = 0;
+		children = null;
+	}
+
 	public long getTaskNum() { return taskNum; }
 
 	public final long getFlags() { return flags; }
