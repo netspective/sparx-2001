@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPageUrlValue.java,v 1.2 2003-01-24 12:59:13 roque.hernandez Exp $
+ * $Id: NavigationPageUrlValue.java,v 1.3 2003-02-03 00:30:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -173,7 +173,8 @@ public class NavigationPageUrlValue extends ValueSource
 
         while (origTokens.hasMoreTokens()) {
             String token = origTokens.nextToken();
-            String tokenName = token.substring(0, token.indexOf('='));
+            int equalIndex = token.indexOf('=');
+            String tokenName = equalIndex != -1 ? token.substring(0, equalIndex) : token;
             int tokenIndexInSecondParams = secondParams.indexOf(tokenName);
 
             if ( tokenIndexInSecondParams >= 0) {
