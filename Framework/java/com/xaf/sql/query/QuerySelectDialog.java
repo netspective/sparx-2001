@@ -84,7 +84,10 @@ public class QuerySelectDialog extends Dialog
 		DialogField options = new DialogField();
 		options.setSimpleName("options");
 		options.setFlag(DialogField.FLDFLAG_SHOWCAPTIONASCHILD);
-		options.addChildField(new SelectField("rows_per_page", "Rows Per Page", SelectField.SELECTSTYLE_COMBO, "10 rows=10;20 rows=20;30 rows=30"));
+
+		SelectField rowsPerPage = new SelectField("rows_per_page", "Rows Per Page", SelectField.SELECTSTYLE_COMBO, "10 rows=10;20 rows=20;30 rows=30");
+		rowsPerPage.setDefaultValue(new StaticValue("10"));
+		options.addChildField(rowsPerPage);
 		options.addChildField(new BooleanField("debug", "Debug", BooleanField.BOOLSTYLE_CHECK, 0));
 
 		addField(options);
@@ -171,7 +174,7 @@ public class QuerySelectDialog extends Dialog
             StringWriter stack = new StringWriter();
             e.printStackTrace(new PrintWriter(stack));
 
-            String sql = select.getSql(dc);
+            String sql = select.getSql(dc) + "<p><br>" + select.getBindParamsDebugHtml(dc);
 			return e.toString() + "<p><pre><code>" + (sql + (sql == null ? "<p>" + select.getErrorSql() : "")) + "\n" + stack.toString() + "</code></pre>";
 		}
 	}
