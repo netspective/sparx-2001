@@ -15,6 +15,7 @@ public class DateTimeField extends TextField
    	static public final long FLDFLAG_MAX_LIMIT  = FLDFLAG_PASTONLY * 2;
     static public final long FLDFLAG_MIN_LIMIT  = FLDFLAG_MAX_LIMIT * 2;
     static public final long FLDFLAG_STRICT_YEAR = FLDFLAG_MIN_LIMIT * 2;
+    static public final long FLDFLAG_STRICT_TIME = FLDFLAG_STRICT_YEAR * 2;
 
 	static public final int DTTYPE_DATEONLY = 0;
 	static public final int DTTYPE_TIMEONLY = 1;
@@ -149,6 +150,11 @@ public class DateTimeField extends TextField
             clearFlag(FLDFLAG_STRICT_YEAR);
         else
             setFlag(FLDFLAG_STRICT_YEAR);
+        String strictTimeFlag = elem.getAttribute("strict-time");
+        if (strictTimeFlag != null && strictTimeFlag.equals("no"))
+            clearFlag(FLDFLAG_STRICT_TIME);
+        else
+            setFlag(FLDFLAG_STRICT_TIME);
 	}
 
 	public boolean isValid(DialogContext dc)
@@ -238,6 +244,15 @@ public class DateTimeField extends TextField
             buf.append("field.dateStrictYear = true;\n");
         else
             buf.append("field.dateStrictYear = false;\n");
+
+        if (this.getDataType() == DTTYPE_TIMEONLY)
+        {
+            if (this.flagIsSet(DateTimeField.FLDFLAG_STRICT_TIME))
+                buf.append("field.timeStrict = true;\n");
+            else
+                buf.append("field.timeStrict = false;\n");
+        }
+
 
         return buf.toString();
     }
