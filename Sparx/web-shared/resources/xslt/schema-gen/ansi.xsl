@@ -206,7 +206,7 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="index"/>
 
 	<xsl:text>create </xsl:text>
-	<xsl:if test="$index/@type"><xsl:value-of select="$index/@type"/><xsl:text> </xsl:text></xsl:if>
+	<xsl:if test="$index/@type"><xsl:value-of select="$index/@type"/><xsl:value-of select="' '"/></xsl:if>
 	<xsl:text>index </xsl:text>
 	<xsl:value-of select="$table/@abbrev"/>
 	<xsl:text>_</xsl:text>
