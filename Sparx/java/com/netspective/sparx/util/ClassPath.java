@@ -51,12 +51,10 @@
  */
 
 /**
- * $Id: ClassPath.java,v 1.3 2002-11-30 16:36:47 shahid.shah Exp $
+ * $Id: ClassPath.java,v 1.4 2002-12-02 15:59:47 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util;
-
-import com.netspective.sparx.util.log.LogManager;
 
 import java.io.File;
 import java.util.List;
@@ -138,7 +136,7 @@ public class ClassPath
 
             if(validate && error != null)
             {
-                LogManager.recordException(this.getClass(), "constructor", "class = '"+ className +"', default = '"+ defaultClass +"'", error);
+                //LogManager.recordException(this.getClass(), "constructor", "class = '"+ className +"', default = '"+ defaultClass +"'", error);
                 throw getException();
             }
         }
