@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.13 2002-07-12 21:19:59 aye.thu Exp $
+ * $Id: DialogContext.java,v 1.14 2002-08-18 21:05:22 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -94,7 +94,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.SingleValueSource;
@@ -345,7 +345,7 @@ public class DialogContext extends ServletValueContext
      */
     public void initialize(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
     {
-        AppServerCategory monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
+        AppServerLogger monitorLog = (AppServerLogger) AppServerLogger.getLogger(LogManager.MONITOR_PAGE);
         long startTime = 0;
         if(monitorLog.isInfoEnabled())
             startTime = new Date().getTime();

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.util.value.ValueContext;
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 
 public class ResultInfo
@@ -59,7 +59,7 @@ public class ResultInfo
         {
             if(conn.getAutoCommit() == true)
             {
-                AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " closing connection: " + conn);
+                AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " closing connection: " + conn);
                 conn.close();
                 conn = null;
             }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DmlTask.java,v 1.4 2002-08-17 15:11:24 shahid.shah Exp $
+ * $Id: DmlTask.java,v 1.5 2002-08-18 21:08:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -92,7 +92,7 @@ import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.util.value.CustomSqlValue;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 
 public class DmlTask extends BasicTask
@@ -665,7 +665,7 @@ public class DmlTask extends BasicTask
                 if(conn != null && ! connIsShared)
                 {
                         conn.close();
-                        AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) tc.getRequest()).getServletPath() + " closing connection: " + conn);
+                        AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) tc.getRequest()).getServletPath() + " closing connection: " + conn);
                 }
             }
             catch(SQLException e)

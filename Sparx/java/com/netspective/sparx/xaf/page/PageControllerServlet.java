@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
+ * $Id: PageControllerServlet.java,v 1.3 2002-08-18 21:05:44 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -74,7 +74,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManager;
@@ -130,8 +130,8 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     private String rediscoverParamName;
     private VirtualPath pagesPath = new VirtualPath();
 
-    protected AppServerCategory debugLog;
-    protected AppServerCategory monitorLog;
+    protected AppServerLogger debugLog;
+    protected AppServerLogger monitorLog;
 
     protected boolean firstRequest = true;
     protected ConfigurationManager manager;
@@ -140,20 +140,20 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
     protected String sharedScriptsRootURL;
     protected String sharedCssRootURL;
 
-    public AppServerCategory getDebugLog()
+    public AppServerLogger getDebugLog()
     {
         return debugLog;
     }
 
-    public AppServerCategory getMonitorLog()
+    public AppServerLogger getMonitorLog()
     {
         return monitorLog;
     }
 
     public void createLogs()
     {
-        debugLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_PAGE);
-        monitorLog = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_PAGE);
+        debugLog = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_PAGE);
+        monitorLog = (AppServerLogger) AppServerLogger.getLogger(LogManager.MONITOR_PAGE);
     }
 
     public String getConfigItemsPrefix()

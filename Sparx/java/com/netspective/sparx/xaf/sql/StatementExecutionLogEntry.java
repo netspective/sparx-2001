@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementExecutionLogEntry.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: StatementExecutionLogEntry.java,v 1.2 2002-08-18 21:08:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -61,7 +61,7 @@ import java.util.Date;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
@@ -93,10 +93,10 @@ public class StatementExecutionLogEntry
         statementName = si.getId();
         initDate = new Date();
 
-        AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SQL);
-        if(cat.isDebugEnabled())
+        AppServerLogger logger = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_SQL);
+        if(logger.isDebugEnabled())
         {
-            cat.debug(statementName + LogManager.MONITOR_ENTRY_FIELD_SEPARATOR + source + LogManager.MONITOR_ENTRY_FIELD_SEPARATOR + si.getSql(vc));
+            logger.debug(statementName + LogManager.MONITOR_ENTRY_FIELD_SEPARATOR + source + LogManager.MONITOR_ENTRY_FIELD_SEPARATOR + si.getSql(vc));
             StatementParameter[] params = si.getParams();
             if(params != null)
             {
@@ -109,18 +109,18 @@ public class StatementExecutionLogEntry
                         if(values != null)
                         {
                             for(int v = 0; v < values.length; v++)
-                                cat.debug("Bind " + statementName + " [" + i + "][" + v + "] {string}: " + values[v] + " (list)");
+                                logger.debug("Bind " + statementName + " [" + i + "][" + v + "] {string}: " + values[v] + " (list)");
                         }
                         else
                         {
-                            cat.debug("Bind " + statementName + " [" + i + "]: NULL (list)");
+                            logger.debug("Bind " + statementName + " [" + i + "]: NULL (list)");
                         }
                     }
                     else
                     {
                         String type = StatementManager.getTypeNameForId(param.getParamType());
                         SingleValueSource vs = param.getValueSource();
-                        cat.debug("Bind " + statementName + " [" + i + "] {" + vs.getId() + "}: " + vs.getValue(vc) + " (" + type + ")");
+                        logger.debug("Bind " + statementName + " [" + i + "] {" + vs.getId() + "}: " + vs.getValue(vc) + " (" + type + ")");
                     }
                 }
             }
@@ -175,7 +175,7 @@ public class StatementExecutionLogEntry
 
     public void finalize(ValueContext vc)
     {
-        AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_SQL);
+        AppServerLogger cat = (AppServerLogger) AppServerLogger.getLogger(LogManager.MONITOR_SQL);
         if(!cat.isInfoEnabled())
             return;
 

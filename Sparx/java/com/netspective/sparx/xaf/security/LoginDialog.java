@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: LoginDialog.java,v 1.3 2002-03-23 21:43:36 snshah Exp $
+ * $Id: LoginDialog.java,v 1.4 2002-08-18 21:07:16 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.security;
@@ -67,7 +67,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.AppServerLogger;
 import com.netspective.sparx.util.log.LogManager;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
@@ -246,7 +246,7 @@ public class LoginDialog extends Dialog
         cookie.setPath("/");
         ((HttpServletResponse) dc.getResponse()).addCookie(cookie);
 
-        AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_SECURITY);
+        AppServerLogger cat = (AppServerLogger) AppServerLogger.getLogger(LogManager.MONITOR_SECURITY);
         if(cat.isInfoEnabled())
         {
             String userId = user.getUserId();
@@ -279,7 +279,7 @@ public class LoginDialog extends Dialog
             cat.info(info);
         }
 
-        cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.DEBUG_SECURITY);
+        cat = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_SECURITY);
         if(cat.isDebugEnabled())
         {
             String userId = user.getUserId();
@@ -308,7 +308,7 @@ public class LoginDialog extends Dialog
         HttpSession session = req.getSession();
         AuthenticatedUser user = (AuthenticatedUser) req.getSession(true).getAttribute(userInfoSessionAttrName);
 
-        AppServerCategory cat = (AppServerCategory) AppServerCategory.getInstance(LogManager.MONITOR_SECURITY);
+        AppServerLogger cat = (AppServerLogger) AppServerLogger.getLogger(LogManager.MONITOR_SECURITY);
         if(user != null && cat.isInfoEnabled())
         {
             String userId = user.getUserId();
