@@ -11,7 +11,7 @@ package com.xaf.form.field;
 
 public class ZipField extends TextField
 {
-    static public final String PATTERN_MATCHZIP  = "^([\\d]{5})((-)([\\d]{4}))?";
+    static public final String PATTERN_MATCHZIP  = "^([\\d]{5})([-][\\d]{4})?$";
     public ZipField()
     {
         super();
