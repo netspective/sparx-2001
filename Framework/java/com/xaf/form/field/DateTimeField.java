@@ -41,6 +41,7 @@ public class DateTimeField extends TextField
 	{
 		dataType = value;
 		format = new SimpleDateFormat(formats[dataType]);
+        format.setLenient(false);
         sqlFormat = new SimpleDateFormat(formats[0]);
 		setSize(formats[dataType].length());
 		setMaxLength(getSize());
