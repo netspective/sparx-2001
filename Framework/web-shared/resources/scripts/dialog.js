@@ -1,4 +1,4 @@
-var DIALOGFIELD_PREFIX = "_dc.";
+var DIALOGFIELD_PREFIX = '_dc';
 var FIELDROW_PREFIX = "_dfr.";
 var GRIDFIELDROW_PREFIX = "_dgfr.";
 var GRIDHEADROW_PREFIX = "_dghr.";
