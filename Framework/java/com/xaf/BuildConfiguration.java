@@ -8,7 +8,7 @@ public class BuildConfiguration
 	public static final int releaseNumber = 1;
 	public static final int versionMajor = 2;
 	public static final int versionMinor = 7;
-	public static final int buildNumber = 76;
+	public static final int buildNumber = 77;
 
 	static public final String getBuildPathPrefix()
 	{

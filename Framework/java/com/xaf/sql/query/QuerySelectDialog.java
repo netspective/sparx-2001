@@ -106,8 +106,9 @@ public class QuerySelectDialog extends QueryBuilderDialog
 		if(dc.inExecuteMode() && stage == DialogContext.STATECALCSTAGE_FINAL)
 		{
 			List fields = this.getFields();
+			int flag = flagIsSet(QBDLGFLAG_HIDE_CRITERIA) ? DialogField.FLDFLAG_INVISIBLE : DialogField.FLDFLAG_READONLY;
 			for(int i = 0; i < fields.size(); i++)
-				dc.setFlag(((DialogField) fields.get(i)).getQualifiedName(), DialogField.FLDFLAG_READONLY);
+				dc.setFlag(((DialogField) fields.get(i)).getQualifiedName(), flag);
 
 			dc.setFlag("output", DialogField.FLDFLAG_INVISIBLE);
 			if(flagIsSet(QBDLGFLAG_ALLOW_DEBUG))
@@ -118,9 +119,11 @@ public class QuerySelectDialog extends QueryBuilderDialog
 		}
 		else
 		{
+			/*
 			List fields = this.getFields();
 			for(int i = 0; i < fields.size(); i++)
 				dc.clearFlag(((DialogField) fields.get(i)).getQualifiedName(), DialogField.FLDFLAG_READONLY);
+			*/
 
 			if(flagIsSet(QBDLGFLAG_HIDE_OUTPUT_DESTS))
 				dc.setFlag("output", DialogField.FLDFLAG_INVISIBLE);

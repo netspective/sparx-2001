@@ -17,8 +17,9 @@ import com.xaf.value.*;
 
 public class QueryBuilderDialog extends Dialog
 {
-	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS    = DLGFLAG_CUSTOM_START;
-	static public final int QBDLGFLAG_ALLOW_DEBUG          = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
+	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS = DLGFLAG_CUSTOM_START;
+	static public final int QBDLGFLAG_ALLOW_DEBUG       = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
+	static public final int QBDLGFLAG_HIDE_CRITERIA     = QBDLGFLAG_ALLOW_DEBUG * 2;
 
 	static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
 
@@ -54,6 +55,9 @@ public class QueryBuilderDialog extends Dialog
 
 		if(elem.getAttribute("allow-debug").equals("yes"))
 			setFlag(QBDLGFLAG_ALLOW_DEBUG);
+
+		if(elem.getAttribute("show-criteria").equals("no"))
+			setFlag(QBDLGFLAG_HIDE_CRITERIA);
 	}
 
 	public void addInputFields()
@@ -213,9 +217,10 @@ public class QueryBuilderDialog extends Dialog
 			dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
 
 			int lastCondition = maxConditions-1;
+			int flag = flagIsSet(QBDLGFLAG_HIDE_CRITERIA) ? DialogField.FLDFLAG_INVISIBLE : DialogField.FLDFLAG_READONLY;
 			for(int i = 0; i < maxConditions; i++)
 			{
-				dc.setFlag("condition_"+i, DialogField.FLDFLAG_READONLY);
+				dc.setFlag("condition_"+i, flag);
 			}
 		}
 		else
