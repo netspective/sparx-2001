@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogManager.java,v 1.2 2002-07-08 13:13:50 aye.thu Exp $
+ * $Id: DialogManager.java,v 1.3 2002-08-25 17:34:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -61,6 +61,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Hashtable;
 import java.util.Map;
+import java.net.URL;
 
 import javax.servlet.ServletRequest;
 
@@ -101,7 +102,7 @@ public class DialogManager extends XmlSource
             String dialogClassName = defnElement.getAttribute("class");
             if(dialogClassName == null || dialogClassName.length() == 0)
             {
-                dialogClassName = "dialog.";
+                dialogClassName = "form.";
                 if(pkgName != null)
                     dialogClassName += pkgName + ".";
                 dialogClassName += com.netspective.sparx.util.xml.XmlSource.xmlTextToJavaIdentifier(elem.getAttribute("name"), true);
@@ -115,8 +116,7 @@ public class DialogManager extends XmlSource
             try
             {
                 dialogClass = Class.forName(dialogClassName);
-                defnElement.setAttribute("_class-name", dialogClass.getName());
-                defnElement.setAttribute("_class-file-name", com.netspective.sparx.BuildConfiguration.getClassFileName(dialogClass.getName()));
+                defineClassAttributes(defnElement, dialogClass, "_");
             }
             catch(ClassNotFoundException e)
             {
@@ -131,8 +131,7 @@ public class DialogManager extends XmlSource
                 try
                 {
                     directorClass = Class.forName(directorClassName);
-                    elem.setAttribute("_director-class-name", directorClassName);
-                    elem.setAttribute("_director-class-file-name", com.netspective.sparx.BuildConfiguration.getClassFileName(directorClassName));
+                    defineClassAttributes(defnElement, directorClass, "_director-");
                 }
                 catch(Exception e)
                 {
@@ -180,10 +179,7 @@ public class DialogManager extends XmlSource
             {
                 dialogContextClass = Dialog.findDialogContextClass(pkgName, defnElement);
                 if(dialogContextClass != DialogContext.class)
-                {
-                    defnElement.setAttribute("_dc-class-name", dialogContextClass.getName());
-                    defnElement.setAttribute("_dc-class-file-name", com.netspective.sparx.BuildConfiguration.getClassFileName(dialogContextClass.getName()));
-                }
+                    defineClassAttributes(defnElement, dialogContextClass, "_dc-");
             }
             catch(ClassNotFoundException e)
             {

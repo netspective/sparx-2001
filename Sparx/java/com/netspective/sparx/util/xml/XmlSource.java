@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.3 2002-08-18 20:59:53 shahid.shah Exp $
+ * $Id: XmlSource.java,v 1.4 2002-08-25 17:34:09 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -157,6 +157,22 @@ public class XmlSource
     protected Element metaInfoOptionsElem;
     protected Set inheritanceHistorySet = new HashSet();
     protected Map templates = new HashMap();
+
+    public static void defineClassAttributes(Element defnElement, Class cls, String attrPrefix)
+    {
+        if(cls == null)
+            return;
+
+        String className = cls.getName();
+        String classFileName = com.netspective.sparx.BuildConfiguration.getClassFileName(className);
+
+        defnElement.setAttribute(attrPrefix + "class-name", className);
+        defnElement.setAttribute(attrPrefix + "class-file-name", classFileName);
+
+        String classSrcName = classFileName.substring(0, classFileName.lastIndexOf('.')) + ".java";
+        if(new File(classSrcName).exists())
+            defnElement.setAttribute(attrPrefix + "class-src-name", classSrcName);
+    }
 
     public boolean getAllowReload()
     {
