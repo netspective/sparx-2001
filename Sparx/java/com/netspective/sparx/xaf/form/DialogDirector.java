@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogDirector.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogDirector.java,v 1.2 2002-02-08 21:50:20 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -68,8 +68,10 @@ public class DialogDirector extends DialogField
 {
     private SingleValueSource submitCaption;
     private SingleValueSource cancelCaption;
+    private SingleValueSource pendingCaption;
     private SingleValueSource submitActionUrl;
     private SingleValueSource cancelActionUrl;
+    private SingleValueSource pendingActionUrl;
 
     public DialogDirector()
     {
@@ -103,6 +105,16 @@ public class DialogDirector extends DialogField
         cancelCaption = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
     }
 
+    public SingleValueSource getPendingCaption()
+    {
+        return pendingCaption;
+    }
+
+    public void setPendingCaption(String value)
+    {
+        this.pendingCaption = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
+
     public SingleValueSource getSubmitActionUrl()
     {
         return submitActionUrl;
@@ -121,6 +133,16 @@ public class DialogDirector extends DialogField
     public void setCancelActionUrl(String value)
     {
         cancelActionUrl = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
+
+    public SingleValueSource getPendingActionUrl()
+    {
+        return pendingActionUrl;
+    }
+
+    public void setPendingActionUrl(String value)
+    {
+        this.pendingActionUrl = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
     }
 
     public void importFromXml(Element elem)
@@ -143,6 +165,15 @@ public class DialogDirector extends DialogField
         value = elem.getAttribute("cancel-caption");
         if(value != null && value.length() > 0)
             cancelCaption = ValueSourceFactory.getSingleOrStaticValueSource(value);
+
+        value = elem.getAttribute("pending-caption");
+        if(value != null && value.length() > 0)
+        {
+            pendingCaption = ValueSourceFactory.getSingleOrStaticValueSource(value);
+            value = elem.getAttribute("pending-url");
+            if(value.length() != 0)
+                this.setPendingActionUrl(value);
+        }
 
         value = elem.getAttribute("submit-url");
         if(value.length() != 0)
@@ -183,6 +214,16 @@ public class DialogDirector extends DialogField
         writer.write("' ");
         writer.write(attrs);
         writer.write(">&nbsp;&nbsp;");
+
+        if(pendingCaption != null)
+        {
+            writer.write("<input type='submit' name='"+Dialog.PARAMNAME_IGNORE_VALIDATION+"' value='");
+            writer.write(pendingCaption.getValue(dc));
+            writer.write("' ");
+            writer.write(attrs);
+            writer.write(">&nbsp;&nbsp;");
+        }
+
         writer.write("<input type='button' value='");
         writer.write(cancelCaption);
         writer.write("' ");
