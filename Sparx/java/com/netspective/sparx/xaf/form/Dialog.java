@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: Dialog.java,v 1.2 2002-02-08 21:44:39 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -104,6 +104,7 @@ public class Dialog
     static public final String PARAMNAME_DIALOGPREFIX = "_d.";
     static public final String PARAMNAME_CONTROLPREFIX = "_dc.";
     static public final String PARAMNAME_DIALOGQNAME = "_d.dialog_qname";
+    static public final String PARAMNAME_IGNORE_VALIDATION = PARAMNAME_CONTROLPREFIX + "ignore_val";
 
     static public final String PARAMNAME_ACTIVEMODE = ".active_mode";
     static public final String PARAMNAME_NEXTMODE = ".next_mode";
@@ -819,7 +820,7 @@ public class Dialog
     public boolean isValid(DialogContext dc)
     {
         int valStage = dc.getValidationStage();
-        if(valStage == DialogContext.VALSTAGE_PERFORMED_SUCCEEDED)
+        if(valStage == DialogContext.VALSTAGE_PERFORMED_SUCCEEDED || valStage == DialogContext.VALSTAGE_IGNORE)
             return true;
         if(valStage == DialogContext.VALSTAGE_PERFORMED_FAILED)
             return false;
