@@ -288,7 +288,7 @@ public class DialogManager extends XmlSource
 		addMetaInformation();
 	}
 
-    public long getFieldsCount(Metric fieldsMetric, Node parent)
+    static public long getFieldsCount(Metric fieldsMetric, Node parent)
     {
         long totalsCount = 0;
 
