@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<schema name="db">
+<schema name="requirement">
 
     <indextype name="unique"/>
 
@@ -19,12 +19,12 @@
 
     <table name="Requirement_Detail" abbrev="ReqDtl" type="Default">
         <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="requirement_id" lookupref="Requirement.id"/>
+        <column name="requirement_id" parentref="Requirement.id"/>
         <column name="entry_date" type="date"/>
         <column name="status" lookupref="Requirement_Status"/>
         <column name="initiated_by" type="text"/>
-        <column name="assigned_to" lookupref="Member.id"/>
-        <column name="assigned_by" lookupref="Member.id"/>
+        <column name="assigned_to" lookupref="Person.id"/>
+        <column name="assigned_by" lookupref="Person.id"/>
         <column name="description" type="text"/>
         <column name="assessment"  type="text"/>
         <column name="previous_detail_id" selfref="Requirement_Detail.id"/>
@@ -32,7 +32,7 @@
 
     <table name="Req_Determined_By" abbrev="ReqDetBy" type="Default">
         <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="requirement_id" lookupref="Requirement.id"/>
+        <column name="requirement_id" parentref="Requirement.id"/>
         <column name="determinant_id" lookupref="Requirement.id"/>
 
         <index name="$tbl_abbrev$_unq" type="unique" columns="requirement_id,determinant_id"/>
@@ -40,7 +40,7 @@
 
     <table name="Req_Depends_On" abbrev="ReqDepOn" type="Default">
         <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="requirement_id" lookupref="Requirement.id"/>
+        <column name="requirement_id" parentref="Requirement.id"/>
         <column name="dependent_id" lookupref="Requirement.id"/>
 
         <index name="$tbl_abbrev$_unq" type="unique" columns="requirement_id,dependent_id"/>
@@ -58,17 +58,17 @@
 
     <table name="Req_Detail_Work" abbrev="ReqDtlWrk" type="Default">
         <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="detail_id" lookupref="Requirement_Detail.id"/>
+        <column name="detail_id" parentref="Requirement_Detail.id"/>
         <column name="entry_date" type="date"/>
         <column name="hours" type="integer"/>
-        <column name="by_whom" lookupref="Member.id"/>
+        <column name="by_whom" lookupref="Person.id"/>
     </table>
 
     <table name="Req_Comment" abbrev="ReqCom" type="Default">
         <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="detail_id" lookupref="Requirement_Detail.id"/>
+        <column name="detail_id" parentref="Requirement_Detail.id"/>
         <column name="comments" type="text" size="50"/>
-        <column name="by_whom" lookupref="Member.id"/>
+        <column name="by_whom" lookupref="Person.id"/>
         <column name="entry_date" type="date"/>
     </table>
 

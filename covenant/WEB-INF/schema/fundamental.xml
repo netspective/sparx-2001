@@ -1,31 +1,30 @@
 <?xml version="1.0"?>
 
-<schema name="db">
+<schema name="fundamental">
 
-    <table name="Project" abbrev="Prj" type="Default">
-        <column name="id" type="auto-inc" size="10" primarykey="yes" descr="Unique id for Project"/>
-        <column name="name" type="text"/>
-        <column name="code" type="text"/>
-        <column name="is_active" type="boolean" />
+    <table name="Project" abbrev="Prj" type="Main_Entities">
+        <column name="account_id" parentref="Account.id"/>
+        <column name="project_code" type="text"/>
+        <column name="start_date" type="date"/>
+        <column name="end_date" type="date"/>
+        <param name="type">Project_Type</param>
+        <param name="status">Project_Status</param>
     </table>
 
-    <table name="Member" abbrev="Mem" type="Default">
-        <column name="id" type="text"  primarykey="yes" descr="Unique id for Member"/>
+    <table name="Person" abbrev="Per" type="Main_Entities">
         <column name="password" type="text"/>
-        <column name="name" type="text"/>
-        <column name="is_administrator" type="boolean" />
-        <column name="inactive_date" type="date" />
-        <column name="project_manager" type="text"/>
+        <param name="type">Person_Type</param>
+        <param name="status">Person_Status</param>
     </table>
 
-    <table name="Account" abbrev="Acc" type="Default">
-        <column name="id" type="auto-inc"  primarykey="yes"/>
-        <column name="name" type="text" />
+    <table name="Account" abbrev="Acc" type="Main_Entities">
+        <param name="type">Account_Type</param>
+        <param name="status">Account_Status</param>
     </table>
 
     <table name="Version" abbrev="Ver" type="Default">
         <column name="id" type="auto-inc" primarykey="yes" />
-        <column name="project_id" lookupref="Project.id"/>
+        <column name="project_id" parentref="Project.id"/>
         <column name="version_number" type="text" />
         <column name="start_date" type="date" />
         <column name="end_date" type="date" />
@@ -33,7 +32,7 @@
 
     <table name="Module" abbrev="Mod" type="Default">
         <column name="id" type="auto-inc" primarykey="yes" />
-        <column name="project_id" lookupref="Project.id"/>
+        <column name="project_id" parentref="Project.id"/>
         <column name="description" type="text" />
         <column name="name" type="text" />
     </table>
