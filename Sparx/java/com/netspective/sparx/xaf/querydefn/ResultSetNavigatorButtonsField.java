@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ResultSetNavigatorButtonsField.java,v 1.4 2002-10-03 14:54:55 shahid.shah Exp $
+ * $Id: ResultSetNavigatorButtonsField.java,v 1.5 2003-03-05 23:29:21 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -224,7 +224,8 @@ public class ResultSetNavigatorButtonsField extends DialogField
             if(doneUrl == null)
                 writer.write("&nbsp;&nbsp;<input type='submit' name='" + dc.getDialog().getResetContextParamName() + "' value='" + doneCaption.getValue(dc) + "' " + attrs + "> ");
             else
-                writer.write("&nbsp;&nbsp;<input type='button' name='jump' value='" + doneCaption.getValue(dc) + "' onclick='location.href=\"" + doneUrl.getValue(dc) + "\"'" + attrs + "> ");
+                writer.write("&nbsp;&nbsp;<input type='button' name='jump' value='" + doneCaption.getValue(dc) +
+                        "' onclick='this.form.action=\"" + doneUrl.getValue(dc) + "\";this.form.submit();'" + attrs + "> ");
         }
         writer.write("</center>");
     }
