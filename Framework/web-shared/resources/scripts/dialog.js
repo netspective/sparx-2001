@@ -51,8 +51,6 @@ function getControl_NS4(dialog, id)
     // a dialog field because the ID starts with a PREFIX
     if (id.substring(0,3) == DIALOGFIELD_PREFIX)
         return document.forms[dialog.name].elements[id];
-    else
-        return document.
 }
 
 //****************************************************************************
