@@ -12,6 +12,7 @@
 
 		<task>
 			<name>ACE</name>
+			<task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
 			<task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
 			<task><name>SchemaDoc (XML) area of ACE needs to be color-coordinated with remainder of ACE.</name></task>
 			<task><name>Allow dialog testing/execution to specify/select a skin.</name></task>
