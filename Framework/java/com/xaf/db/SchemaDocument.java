@@ -677,6 +677,16 @@ public class SchemaDocument extends XmlSource
 		    if(childTable.getAttribute("parent").equals(tableName))
 			{
 				addTableStructure(tableStruct, childTable, level+1);
+
+                Element childTableElem = xmlDoc.createElement("child-table");
+                childTableElem.setAttribute("name", childTable.getAttribute("name"));
+                connector = getParentConnectorColumn(childTable);
+                if(connector != null)
+                {
+                    childTableElem.setAttribute("parent-col", connector.getAttribute("refcol"));
+                    childTableElem.setAttribute("child-col", connector.getAttribute("name"));
+                }
+                table.appendChild(childTableElem);
 			}
 		}
 	}
@@ -929,6 +939,48 @@ public class SchemaDocument extends XmlSource
 		tables.close();
 	}
 
+    static public class SqlDdlGenerator
+    {
+        private String ddlGeneratorStyleSheet;
+        private String destFile;
+
+        public SqlDdlGenerator(String styleSheet, String destFile)
+        {
+            setDdlGeneratorStyleSheet(styleSheet);
+            setDestFile(destFile);
+        }
+
+        public String getDdlGeneratorStyleSheet()
+        {
+            return ddlGeneratorStyleSheet;
+        }
+
+        public void setDdlGeneratorStyleSheet(String ddlGeneratorStyleSheet)
+        {
+            this.ddlGeneratorStyleSheet = ddlGeneratorStyleSheet;
+        }
+
+        public String getDestFile()
+        {
+            return destFile;
+        }
+
+        public void setDestFile(String destFile)
+        {
+            this.destFile = destFile;
+        }
+
+        public void generate(SchemaDocument schemaDoc) throws TransformerConfigurationException, TransformerException
+        {
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer(new StreamSource(ddlGeneratorStyleSheet));
+
+			transformer.transform
+				(new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()),
+				 new javax.xml.transform.stream.StreamResult(destFile));
+        }
+    }
+
     static public class ObjectRelationalGenerator
     {
         private String destRoot;
@@ -1126,16 +1178,20 @@ public class SchemaDocument extends XmlSource
             File rowsListDir = new File(destRoot + "/" + rowsListPkgDirName);
             rowsListDir.mkdirs();
 
+            String completeSchemaClassName = schemaPkg + "." + schemaClassName;
+
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer tablesTransformer = tFactory.newTransformer(new StreamSource(tablesGeneratorStyleSheet));
-            tablesTransformer.setParameter("entire-schema", schemaDoc.getDocument());
+            tablesTransformer.setParameter("schema-class-name", completeSchemaClassName);
             tablesTransformer.setParameter("package-name", tablesPkg);
             Transformer domainsTransformer = tFactory.newTransformer(new StreamSource(domainsGeneratorStyleSheet));
+            domainsTransformer.setParameter("schema-class-name", completeSchemaClassName);
             domainsTransformer.setParameter("package-name", domainsPkg);
             Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsGeneratorStyleSheet));
-            rowsTransformer.setParameter("entire-schema", schemaDoc.getDocument());
+            rowsTransformer.setParameter("schema-class-name", completeSchemaClassName);
             rowsTransformer.setParameter("package-name", rowsPkg);
             Transformer rowsListTransformer = tFactory.newTransformer(new StreamSource(rowsListGeneratorStyleSheet));
+            rowsListTransformer.setParameter("schema-class-name", completeSchemaClassName);
             rowsListTransformer.setParameter("package-name", rowsListPkg);
 
             Map tables = schemaDoc.getTables();
@@ -1164,14 +1220,16 @@ public class SchemaDocument extends XmlSource
                     if("column".equals(childName))
                     {
                         Element columnElem = (Element) child;
-                        columnElem.setAttribute("_gen-member-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), false));
-                        columnElem.setAttribute("_gen-method-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), true));
-                        columnElem.setAttribute("_gen-constant-name", columnElem.getAttribute("name").toUpperCase());
+                        String columnName = columnElem.getAttribute("name");
+                        columnElem.setAttribute("_gen-member-name", xmlTextToJavaIdentifier(columnName, false));
+                        columnElem.setAttribute("_gen-method-name", xmlTextToJavaIdentifier(columnName, true));
+                        columnElem.setAttribute("_gen-constant-name", columnName.toUpperCase());
+                        columnElem.setAttribute("_gen-node-name", xmlTextToNodeName(columnName));
                         columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
 
                         NodeList jtnl = columnElem.getElementsByTagName("java-type");
                         if(jtnl.getLength() > 0)
-                            columnElem.setAttribute("_gen-java-type-init-cap", XmlSource.xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
+                            columnElem.setAttribute("_gen-java-type-init-cap", xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
                     }
                     else if("extends".equals(childName))
                     {
@@ -1194,6 +1252,7 @@ public class SchemaDocument extends XmlSource
                 tableElem.setAttribute("_gen-row-name", rowName);
                 tableElem.setAttribute("_gen-row-class-name", rowsPkg + "." + rowName);
                 tableElem.setAttribute("_gen-rows-name", rowListName);
+                tableElem.setAttribute("_gen-rows-member-name", xmlTextToJavaIdentifier(rowListName, false));
                 tableElem.setAttribute("_gen-rows-class-name", rowsListPkg + "." + rowListName);
             }
 
@@ -1222,6 +1281,39 @@ public class SchemaDocument extends XmlSource
                                     columnElem.setAttribute("_gen-ref-table-is-enum", "yes");
                                 columnElem.setAttribute("_gen-ref-table-name", refTableElem.getAttribute("_gen-table-name"));
                                 columnElem.setAttribute("_gen-ref-table-class-name", refTableElem.getAttribute("_gen-table-class-name"));
+                            }
+                        }
+                    }
+                    else if("child-table".equals(childName))
+                    {
+                        Element childTableRefElem = (Element) child;
+                        Element childTableElem = (Element) schemaDoc.getTables().get(childTableRefElem.getAttribute("name").toUpperCase());
+                        if(childTableElem != null)
+                        {
+                            NamedNodeMap attrs = childTableElem.getAttributes();
+                            for(int a = 0; a < attrs.getLength(); a++)
+                            {
+                                // copy all the "generated" names/values for each child table so searches don't have
+                                // to be performed later
+                                Node attr = attrs.item(a);
+                                String attrName = attr.getNodeName();
+                                if(attrName.startsWith("_gen"))
+                                    childTableRefElem.setAttribute(attrName, attr.getNodeValue());
+                            }
+
+                            Element connector = schemaDoc.getParentConnectorColumn(childTableElem);
+                            if(connector != null)
+                            {
+                                attrs = connector.getAttributes();
+                                for(int a = 0; a < attrs.getLength(); a++)
+                                {
+                                    // copy all the "generated" names/values for each child column so searches don't have
+                                    // to be performed later
+                                    Node attr = attrs.item(a);
+                                    String attrName = attr.getNodeName();
+                                    if(attrName.startsWith("_gen"))
+                                        childTableRefElem.setAttribute("child-col-" + attrName, attr.getNodeValue());
+                                }
                             }
                         }
                     }

@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import com.xaf.sql.query.*;
 import com.xaf.sql.DmlStatement;
 import com.xaf.db.ConnectionContext;
+import com.xaf.xml.XmlSource;
 
 import javax.naming.NamingException;
 
@@ -28,6 +29,7 @@ public abstract class AbstractTable implements Table
 {
     private Schema schema;
     private String name;
+    private String xmlNodeName;
     private String description;
     private List columnsList = new ArrayList();
     private Map columnsMap = new HashMap();
@@ -50,6 +52,7 @@ public abstract class AbstractTable implements Table
     {
         setName(name);
         setParentSchema(schema);
+        setNameForXmlNode(XmlSource.xmlTextToNodeName(name));
         initializeDefn();
         schema.addTable(this);
     }
@@ -89,6 +92,9 @@ public abstract class AbstractTable implements Table
     public String getName() { return name; }
     public String getNameForMapKey() { return name.toUpperCase(); }
     public void setName(String value) { name = value; }
+
+    public String getNameForXmlNode() { return xmlNodeName; }
+    public void setNameForXmlNode(String value) { xmlNodeName = value; }
 
     public String getDescription() { return description; }
     public void setDescription(String value) { description = value; }
@@ -211,6 +217,35 @@ public abstract class AbstractTable implements Table
             catch(SQLException e)
             {
                 throw new SQLException(e.toString() + " ["+ selectSql +" (bind = "+ (colValue != null ? "'" + colValue + "' {"+ colValue.getClass().getName() + "}" : "none") +")]");
+            }
+            finally
+            {
+                if(stmt != null) stmt.close();
+            }
+        }
+        finally
+        {
+            cc.returnConnection();
+        }
+    }
+
+    protected void deleteRecordsByEquality(ConnectionContext cc, String colName, Object colValue) throws NamingException, SQLException
+    {
+        String deleteSql = "delete from " + getName() + " where " + colName + " = ?";
+
+        Connection conn = cc.getConnection();
+        try
+        {
+            PreparedStatement stmt = null;
+            try
+            {
+                stmt = conn.prepareStatement(deleteSql);
+                stmt.setObject(1, colValue);
+                stmt.execute();
+            }
+            catch(SQLException e)
+            {
+                throw new SQLException(e.toString() + " ["+ deleteSql +" (bind = "+ (colValue != null ? "'" + colValue + "' {"+ colValue.getClass().getName() + "}" : "none") +")]");
             }
             finally
             {
@@ -366,7 +401,7 @@ public abstract class AbstractTable implements Table
 
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object[] whereCondBindParams) throws NamingException, SQLException
     {
-        DmlStatement dml = row.createUpdateDml(this, whereCond);
+        DmlStatement dml = row.createDeleteDml(this, whereCond);
         if(! row.beforeDelete(cc, dml))
             return false;
 

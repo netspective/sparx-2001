@@ -28,6 +28,9 @@ public interface Table
     public String getNameForMapKey();
     public void setName(String value);
 
+    public String getNameForXmlNode();
+    public void setNameForXmlNode(String value);
+
     public String getDescription();
     public void setDescription(String value);
 

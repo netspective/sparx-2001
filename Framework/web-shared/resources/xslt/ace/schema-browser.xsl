@@ -263,9 +263,9 @@
 			<td class="table_info_caption">Children:</td>
 			<td class="table_info_value">
 				<ol>
-				<xsl:for-each select="../table[@parent = $table-name or parent = $table-name]">
+				<xsl:for-each select="child-table">
 					<xsl:sort select="@name"/>
-					<li><a class="column_references"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/table/', @name)"/></xsl:attribute><xsl:value-of select="@name"/></a></li>
+					<li><a class="column_references"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/table/', @name)"/></xsl:attribute><xsl:value-of select="@name"/></a><xsl:text> </xsl:text><span style="font-weight: normal">(<xsl:value-of select="$table-name"/>.<xsl:value-of select="@parent-col"/> = <xsl:value-of select="@name"/>.<xsl:value-of select="@child-col"/>)</span></li>
 				</xsl:for-each>
 				</ol>
 			</td>

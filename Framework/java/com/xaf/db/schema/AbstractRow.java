@@ -22,6 +22,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
+import java.text.ParseException;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.DOMException;
 
 public abstract class AbstractRow implements Row
 {
@@ -89,6 +93,7 @@ public abstract class AbstractRow implements Row
 
     abstract public void populateDataByIndexes(ResultSet resultSet) throws SQLException;
     abstract public void populateDataByNames(ResultSet resultSet, Map colNameIndexMap) throws SQLException;
+    abstract public void populateDataByNames(Element element) throws ParseException, DOMException;
     abstract public void populateDataByNames(DialogContext dc);
     abstract public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap);
 
@@ -145,6 +150,15 @@ public abstract class AbstractRow implements Row
     }
 
     public void afterDelete(ConnectionContext cc) throws NamingException, SQLException
+    {
+    }
+
+    public boolean isParentRow()
+    {
+        return false;
+    }
+
+    public void retrieveChildren(ConnectionContext cc) throws NamingException, SQLException
     {
     }
 }

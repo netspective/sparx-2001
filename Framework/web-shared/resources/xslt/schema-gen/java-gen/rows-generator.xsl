@@ -15,7 +15,13 @@ package <xsl:value-of select="$package-name"/>;
 import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.*;
+
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.xaf.db.*;
 import com.xaf.db.schema.*;
@@ -51,6 +57,25 @@ public class <xsl:value-of select="$rows-name"/> extends AbstractRows
 		{
 			row = table.create<xsl:value-of select="$row-name"/>();
 			row.populateDataByNames(resultSet, colNameIndexMap);
+			add(row);
+		}
+	}
+
+	public void populateDataByNames(Element element) throws ParseException, DOMException
+	{
+		super.populateDataByNames(element);
+		<xsl:value-of select="@_gen-row-class-name"/> row = null;
+		NodeList dataChildren = element.getChildNodes();
+		int dataChildrenCount = dataChildren.getLength();
+		String rowNodeName = table.getNameForXmlNode();
+		for(int i = 0; i &lt; dataChildrenCount; i++)
+		{
+			Node dataChildNode = dataChildren.item(i);
+			if(! dataChildNode.getNodeName().equals(rowNodeName))
+				continue;
+
+			row = table.create<xsl:value-of select="$row-name"/>();
+			row.populateDataByNames((Element) dataChildNode);
 			add(row);
 		}
 	}

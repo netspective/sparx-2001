@@ -16,7 +16,7 @@ import com.xaf.db.schema.*;
 
 public class <xsl:value-of select="$class-name"/> extends AbstractSchema
 {
-	public static <xsl:value-of select="$class-name"/> instance = new <xsl:value-of select="$class-name"/>();
+	public final static <xsl:value-of select="$class-name"/> instance = new <xsl:value-of select="$class-name"/>();
 
 <xsl:for-each select="table">	protected <xsl:value-of select="@_gen-table-class-name"/><xsl:text> </xsl:text><xsl:value-of select="@_gen-table-member-name"/>;
 </xsl:for-each>

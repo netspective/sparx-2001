@@ -3,7 +3,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="text"/>
 
-<xsl:param name="entire-schema"/>
 <xsl:param name="package-name"/>
 <xsl:param name="table-name"/>
 <xsl:variable name="default-text-size">32</xsl:variable>
@@ -190,7 +189,20 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 </xsl:if><xsl:if test="@primarykey = 'yes'">
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
 	{ 
-		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null); 
+		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
+	}
+</xsl:if>
+<xsl:if test="java-type and (@primarykey = 'yes') and ../child-table">
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value, boolean retrieveChildren) throws NamingException, SQLException 
+	{ 
+		return get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value), retrieveChildren); 
+	}
+</xsl:if><xsl:if test="@primarykey = 'yes' and ../child-table">
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value, boolean retrieveChildren) throws NamingException, SQLException
+	{
+		<xsl:value-of select="$_gen-table-row-class-name"/> row = (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
+		if(retrieveChildren) row.retrieveChildren(cc);
+		return row;	
 	}
 </xsl:if>
 <xsl:if test="@reftype = 'parent'">
@@ -199,10 +211,20 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 		return get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
 	}
+
+	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value) throws NamingException, SQLException
+	{ 
+		delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(cc, new <xsl:value-of select="$java-class-spec"/>(value));
+	}
 </xsl:if>
 	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
 	{ 
-		return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, &quot;<xsl:value-of select="@refcol"/>&quot;, value, null); 
+		return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value, null); 
+	}
+
+	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="$java-class-spec"/> value) throws NamingException, SQLException
+	{ 
+		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value); 
 	}
 </xsl:if>
 </xsl:for-each>

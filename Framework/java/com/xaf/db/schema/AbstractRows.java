@@ -8,9 +8,13 @@
  */
 package com.xaf.db.schema;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.DOMException;
+
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 public abstract class AbstractRows extends ArrayList implements Rows
 {
@@ -20,6 +24,11 @@ public abstract class AbstractRows extends ArrayList implements Rows
     }
 
     public void populateDataByNames(ResultSet resultSet) throws SQLException
+    {
+        clear();
+    }
+
+    public void populateDataByNames(Element element) throws ParseException, DOMException
     {
         clear();
     }

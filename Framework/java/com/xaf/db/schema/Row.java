@@ -19,6 +19,10 @@ import java.util.Map;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.text.ParseException;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.DOMException;
 
 public interface Row
 {
@@ -85,6 +89,18 @@ public interface Row
     public void populateDataByNames(DialogContext dc, Map colNameFieldNameMap);
 
     /**
+     * Given an XML element that contains column data, extract each column and
+     * assign it to the appropriate data variable. The main element must follow this DTD (the
+     * element parameter in the method call is considered the "row" element):
+     * <pre>
+     *     <!ELEMENT row (col)*>
+     *          <!ELEMENT col %DATATYPE.TEXT;>
+     *              <!ATTLIST col name CDATA #REQUIRED>
+     * </pre>
+     */
+    public void populateDataByNames(Element element) throws ParseException, DOMException;
+
+    /**
      * Given a DialogContext, populate the DialogContext's field values with the Row's column values
      * that match the names of the columns. If no matching field is found for any given column, that column's
      * value is ignored.
@@ -101,15 +117,64 @@ public interface Row
      */
     public void setData(DialogContext dc, Map colNameFieldNameMap);
 
+    /**
+     * Create the DML that can be used to insert this row into the database.
+     */
     public DmlStatement createInsertDml(Table table);
+
+    /**
+     * Create the DML that can be used to update this row in the database.
+     */
     public DmlStatement createUpdateDml(Table table, String whereCond);
+
+    /**
+     * Create the DML that can be used to delete this row from the database.
+     */
     public DmlStatement createDeleteDml(Table table, String whereCond);
 
+    /**
+     * This method is executed immediately prior to an insert action on this row.
+     * @returns true if the insert that is about to be performed on this row should be allowed.
+     */
     public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
+
+    /**
+     * This method is executed immediately prior to an update action on this row.
+     * @returns true if the insert that is about to be performed on this row should be allowed.
+     */
     public boolean beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
+
+    /**
+     * This method is executed immediately prior to a delete action on this row.
+     * @returns true if the insert that is about to be performed on this row should be allowed.
+     */
     public boolean beforeDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException;
 
+    /**
+     * This method is executed immediately after a successful insert action on this row.
+     */
     public void afterInsert(ConnectionContext cc) throws NamingException, SQLException;
+
+    /**
+     * This method is executed immediately after a successful update action on this row.
+     */
     public void afterUpdate(ConnectionContext cc) throws NamingException, SQLException;
+
+    /**
+     * This method is executed immediately after a successful delete action on this row.
+     */
     public void afterDelete(ConnectionContext cc) throws NamingException, SQLException;
+
+    /**
+     * Return true if this row has the ability to contain children. This method only returns
+     * true if the row <i>can</i> contain children, not necessarily that the child rows
+     * of this row have already been loaded.
+     */
+    public boolean isParentRow();
+
+    /**
+     * If this row has the ability to contain children, use the given ConnectionContext to
+     * retrieve all of them now.
+     */
+    public void retrieveChildren(ConnectionContext cc)  throws NamingException, SQLException;
 }
