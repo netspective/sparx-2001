@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TextField.java,v 1.5 2002-04-22 09:47:32 jruss Exp $
+ * $Id: TextField.java,v 1.6 2002-08-17 15:15:29 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -79,6 +79,7 @@ public class TextField extends DialogField
     static public Perl5Util perlUtil = new Perl5Util();
 
     private int size;
+    private int minLength;
     private int maxLength;
     /* regular expression pattern for validating the value */
     private String validatePattern;
@@ -93,6 +94,7 @@ public class TextField extends DialogField
     {
         super();
         size = 32;
+        minLength = 0;
         maxLength = 255;
     }
 
@@ -100,6 +102,7 @@ public class TextField extends DialogField
     {
         super(aName, aCaption);
         size = 32;
+        minLength = 0;
         maxLength = 255;
     }
 
@@ -123,6 +126,16 @@ public class TextField extends DialogField
         size = value;
     }
 
+    public int getMinLength()
+    {
+        return minLength;
+    }
+
+    public void setMinLength(int minLength)
+    {
+        this.minLength = minLength;
+    }
+
     public final int getMaxLength()
     {
         return maxLength;
@@ -140,6 +153,10 @@ public class TextField extends DialogField
         String value = elem.getAttribute("size");
         if(value.length() != 0)
             size = Integer.parseInt(value);
+
+        value = elem.getAttribute("min-length");
+        if(value.length() != 0)
+            minLength = Integer.parseInt(value);
 
         value = elem.getAttribute("max-length");
         if(value.length() != 0)
@@ -266,7 +283,8 @@ public class TextField extends DialogField
     public boolean isValid(DialogContext dc)
     {
         String value = dc.getValue(this);
-        if(isRequired(dc) && (value == null || value.length() == 0))
+        int valueLen = value == null ? 0 : value.length();
+        if(isRequired(dc) && valueLen == 0)
         {
             invalidate(dc, getCaption(dc) + " is required.");
             return false;
@@ -276,6 +294,20 @@ public class TextField extends DialogField
         boolean result = super.isValid(dc);
         if(!result)
             return false;
+
+        if(value != null)
+        {
+            if(valueLen < minLength)
+            {
+                invalidate(dc, getCaption(dc) + " should be at least "+ minLength +" characters.");
+                return false;
+            }
+            if(valueLen > maxLength)
+            {
+                invalidate(dc, getCaption(dc) + " should be at most "+ maxLength +" characters.");
+                return false;
+            }
+        }
 
         // if we're doing a regular expression pattern match, try it now
         if(validatePattern != null && value != null && value.length() > 0)
