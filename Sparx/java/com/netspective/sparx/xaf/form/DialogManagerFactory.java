@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogManagerFactory.java,v 1.5 2002-12-15 17:50:55 shahid.shah Exp $
+ * $Id: DialogManagerFactory.java,v 1.6 2002-12-23 04:41:14 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -81,6 +81,7 @@ import com.netspective.sparx.xaf.security.AccessControlList;
 import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xif.dal.TableDialog;
 
 public class DialogManagerFactory implements Factory
 {
@@ -116,6 +117,7 @@ public class DialogManagerFactory implements Factory
         }
     }
 
+    /*
     public static void generatePermissions(AccessControlList acl, Element parentElem)
     {
         for(Iterator m = managers.values().iterator(); m.hasNext();)
@@ -129,6 +131,7 @@ public class DialogManagerFactory implements Factory
             }
         }
     }
+    */
 
     public static DialogManager getManager(String file)
     {
@@ -285,9 +288,8 @@ public class DialogManagerFactory implements Factory
             return sb.toString();
         }
 
-        public void handleDialog(ValueContext vc) throws IOException
+        public void handleDialog(ValueContext vc, boolean unitTest) throws IOException
         {
-
             if(dataCmd != null)
                 vc.getRequest().setAttribute(com.netspective.sparx.xaf.form.Dialog.PARAMNAME_DATA_CMD_INITIAL, dataCmd);
 
@@ -300,7 +302,7 @@ public class DialogManagerFactory implements Factory
                 return;
             }
 
-            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(vc.getServletContext(), dialogName);
+            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(vc.getServletContext(), null, dialogName);
             if(dialog == null)
             {
                 out.write("Dialog '" + dialogName + "' not found in manager '" + manager + "'.");
@@ -319,6 +321,8 @@ public class DialogManagerFactory implements Factory
                 dc.setDebugFlags(debugFlagsSpec);
             dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
             dialog.prepareContext(dc);
+            if(unitTest)
+                dc.setRedirectDisabled(true);
 
             if(dc.inExecuteMode())
             {
@@ -331,6 +335,10 @@ public class DialogManagerFactory implements Factory
                 else
                 {
                     dialog.execute(out, dc);
+
+                    if(unitTest && dialog instanceof TableDialog)
+                        out.write("<pre>Last row processed: "+ dc.getLastRowManipulated() +"</pre>");
+
                     if(! dc.executeStageHandled())
                     {
                         out.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");

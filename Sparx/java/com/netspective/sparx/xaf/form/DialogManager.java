@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogManager.java,v 1.6 2002-12-15 20:27:34 shahid.shah Exp $
+ * $Id: DialogManager.java,v 1.7 2002-12-23 04:41:14 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -161,7 +161,12 @@ public class DialogManager extends XmlSource
             }
         }
 
-        private void finalizeDefinition(ServletContext context)
+        public boolean isFinalized()
+        {
+            return finalized;
+        }
+
+        private void finalizeDefinition(ServletContext context, SchemaDocument defaultSchemaDoc)
         {
             // resolve all the table-column fields using the default schema
             NodeList tableColumnElements = defnElement.getElementsByTagName(Dialog.FIELDNAME_SCHEMA_TABLECOL);
@@ -170,7 +175,7 @@ public class DialogManager extends XmlSource
             while(tableColumnElements.getLength() > 0)
             {
                 Element tableColumnPlaceholderElem = (Element) tableColumnElements.item(0);
-                resolveTableColumnField(context, tableColumnPlaceholderElem);
+                resolveTableColumnField(context, defaultSchemaDoc, tableColumnPlaceholderElem);
                 tableColumnElements = defnElement.getElementsByTagName(Dialog.FIELDNAME_SCHEMA_TABLECOL);
             }
 
@@ -187,11 +192,10 @@ public class DialogManager extends XmlSource
             return result;
         }
 
-        private void resolveTableColumnField(ServletContext context, Element tableColumnPlaceholderElem)
+        private void resolveTableColumnField(ServletContext context, SchemaDocument defaultSchemaDoc, Element tableColumnPlaceholderElem)
         {
             final String schemaFileName = tableColumnPlaceholderElem.getAttribute("schema");
-
-            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? SchemaDocFactory.getDoc(context) : SchemaDocFactory.getDoc(schemaFileName);
+            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? (defaultSchemaDoc != null ? defaultSchemaDoc : SchemaDocFactory.getDoc(context)) : SchemaDocFactory.getDoc(schemaFileName);
             if(schemaDoc == null)
                 defnElement.replaceChild(createErrorField(tableColumnPlaceholderElem, "Schema '"+ schemaFileName +"' not found", tableColumnPlaceholderElem.getAttribute("column")), tableColumnPlaceholderElem);
             else
@@ -287,7 +291,7 @@ public class DialogManager extends XmlSource
         public Dialog getDialog(ServletContext context)
         {
             if(! finalized)
-                finalizeDefinition(context);
+                finalizeDefinition(context, null);
 
             if(dialog == null)
             {
@@ -340,11 +344,11 @@ public class DialogManager extends XmlSource
             this.defnElem = defnElem;
         }
 
-        public void resolveTableDialog(ServletContext context)
+        public void resolveTableDialog(ServletContext context, SchemaDocument defaultSchemaDoc)
         {
             final String schemaFileName = defnElem.getAttribute("schema");
 
-            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? SchemaDocFactory.getDoc(context) : SchemaDocFactory.getDoc(schemaFileName);
+            SchemaDocument schemaDoc = schemaFileName.length() == 0 ? (defaultSchemaDoc != null ? defaultSchemaDoc : SchemaDocFactory.getDoc(context)) : SchemaDocFactory.getDoc(schemaFileName);
             if(schemaDoc == null)
                 addError("Schema '"+ schemaFileName +"' not found");
             else
@@ -410,16 +414,22 @@ public class DialogManager extends XmlSource
         return false;
     }
 
-    public Document getDocument(ServletContext context)
+    public Document getDocument(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         Document result = getDocument();
+        finalizeDialogs(context, defaultSchemaDoc);
+        return result;
+    }
+
+    private void finalizeDialogs(ServletContext context, SchemaDocument defaultSchemaDoc)
+    {
         if(finalizeTableDialogs != null)
         {
             Iterator i = finalizeTableDialogs.iterator();
             while (i.hasNext())
             {
                 TableDialogReference tableDialogReference = (TableDialogReference) i.next();
-                tableDialogReference.resolveTableDialog(context);
+                tableDialogReference.resolveTableDialog(context, defaultSchemaDoc);
             }
             finalizeTableDialogs = null;
             addMetaInformation();
@@ -430,23 +440,24 @@ public class DialogManager extends XmlSource
             while (i.hasNext())
             {
                 DialogInfo dialogInfo = (DialogInfo) i.next();
-                if(! dialogInfo.finalized) dialogInfo.finalizeDefinition(context);
+                if(! dialogInfo.finalized) dialogInfo.finalizeDefinition(context, defaultSchemaDoc);
             }
             finalizeDialogsWithTableColFields = null;
             addMetaInformation();
         }
-        return result;
     }
 
-    public Map getDialogs()
+    public Map getDialogs(ServletContext context, SchemaDocument defaultSchemaDoc)
     {
         reload();
+        finalizeDialogs(context, defaultSchemaDoc);
         return dialogs;
     }
 
-    public Dialog getDialog(ServletContext context, String name)
+    public Dialog getDialog(ServletContext context, SchemaDocument defaultSchemaDoc, String name)
     {
         reload();
+        finalizeDialogs(context, defaultSchemaDoc);
 
         DialogInfo info = (DialogInfo) dialogs.get(name);
         if(info == null)
