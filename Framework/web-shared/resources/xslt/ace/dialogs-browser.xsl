@@ -157,6 +157,43 @@
 	</option>
 </xsl:template>
 
+<xsl:template name="field-detail">
+	<xsl:param name="field"/>
+	<xsl:param name="indent"/>
+	<xsl:param name="no-separator"/>
+	<tr valign="top">
+		<td></td>
+		<td><xsl:value-of select="$indent"/><font color="green"><xsl:value-of select="$field/@name"/></font></td>
+		<td><xsl:value-of select="$indent"/><font color="navy"><xsl:value-of select="$field/@caption"/></font></td>
+		<td><xsl:value-of select="$field/name()"/></td>
+		<td><font color="navy"><xsl:value-of select="$field/@default"/></font></td>
+		<td>
+			<xsl:for-each select="$field/@*">
+				<xsl:if test="name() != 'name' and name() != 'caption' and name() != 'default'">
+					<font color="green"><xsl:value-of select="name()"/></font>
+					= 
+					<font color="navy"><xsl:value-of select="."/></font><br/>
+				</xsl:if>
+			</xsl:for-each>
+		</td>
+	</tr>
+	<xsl:for-each select="*[not(starts-with(name(), 'field.'))]">
+		<xsl:call-template name="field-detail">
+			<xsl:with-param name="field" select="."/>
+			<xsl:with-param name="no-separator" select="'yes'"/>
+		</xsl:call-template>
+	</xsl:for-each>
+	<xsl:if test="not($no-separator)">
+		<tr><td colspan="10"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	</xsl:if>
+	<xsl:for-each select="*[starts-with(name(), 'field.')]">
+		<xsl:call-template name="field-detail">
+			<xsl:with-param name="field" select="."/>
+			<xsl:with-param name="indent" select="concat($indent, '&#160;&#160;&#160;&#160;')"/>
+		</xsl:call-template>
+	</xsl:for-each>
+</xsl:template>
+
 <xsl:template match="dialog" mode="detail">
 	<table class="heading" border="0" cellspacing="0" cellpadding='5'>
 	<tr class="heading">
@@ -197,24 +234,15 @@
 			<th>Options</th>
 		</tr>
 		<tr><td colspan="10"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
-	<xsl:for-each select="*">
-		<tr valign="top">
-			<td></td>
-			<td><font color="green"><xsl:value-of select="@name"/></font></td>
-			<td><font color="navy"><xsl:value-of select="@caption"/></font></td>
-			<td><xsl:value-of select="name()"/></td>
-			<td><font color="navy"><xsl:value-of select="@default"/></font></td>
-			<td>
-				<xsl:for-each select="@*">
-					<xsl:if test="name() != 'name' and name() != 'caption' and name() != 'default'">
-						<font color="green"><xsl:value-of select="name()"/></font>
-						= 
-						<font color="navy"><xsl:value-of select="."/></font><br/>
-					</xsl:if>
-				</xsl:for-each>
-			</td>
-		</tr>
-		<tr><td colspan="10"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<xsl:for-each select="*[starts-with(name(), 'field.')]">
+		<xsl:call-template name="field-detail">
+			<xsl:with-param name="field" select="."/>
+		</xsl:call-template>
+	</xsl:for-each>
+	<xsl:for-each select="*[not(starts-with(name(), 'field.'))]">
+		<xsl:call-template name="field-detail">
+			<xsl:with-param name="field" select="."/>
+		</xsl:call-template>
 	</xsl:for-each>
 	</table>
 	</td></tr>
