@@ -4,7 +4,7 @@
     <section id="Query">
         <title>Overview</title>
         <para>
-            XAF provides a centralized location to create and store all static SQL statements
+            &framework-name; provides a centralized location to create and store all static SQL statements
             with bind parameters in a single repository:
             <filename class="conf">web-app/Site/WEB-INF/ui/statement.xml</filename>.
             The XML file also provides the flexibility of defining sql statements for
@@ -176,27 +176,41 @@
 
     <section id="Using-Query">
         <title>Using the static query</title>
-        <para>
-            Static queries can be used in different ways inside a JSP file: to display reports,
-            to fill in HTML dialogs, or to save the data in arrays inside of displaying them.
-        </para>            
-            <section>
+
+        <section id="Using-Query-Tag">
+                <para>
+                Static queries can be executed inside a JSP using the custom tag <sgmltag class="starttag">
+                xaf:query</sgmltag>. The execution of the query can also be configured in different ways: 
+                to display reports, to fill in HTML dialogs, or to save the data in arrays inside of displaying them.                
+                </para>            
+
+                <section>
                 <title> Used as a report </title>
                 <para> 
-                The resulting static query report can be displayed by default within a JSP
-                or as a result of a submit action of a dialog. For example, by listing the 
-                query inside the dialog start and end tags, <emphasis role="bold">&lt;xaf:dialog&gt;</emphasis>
-                and <emphasis role="bold">&lt;/xaf:dialog&gt;</emphasis>, one can ensure that
-                the query will only be executed when the dialog is submitted:
+                By default a static query report can be created by including the query within a JSP and describing 
+                the report type.
                 <programlisting>
-&lt;xaf:dialog name="test.test1"&gt;                
-    &lt;xaf:query name="user.info" skin="report" debug="no"/&gt;
-&lt;/xaf:dialog&gt;    
+                <![CDATA[
+<xaf:query name="user.info" skin="report" debug="no"/>
+                ]]>
                 </programlisting>                
-                The <emphasis>skin</emphasis> attribute determines how the report is displayed
+                The <sgmltag class="attribute">skin</sgmltag> attribute determines how the report is displayed
                 on the screen. For example, the <programlisting> skin="report" </programlisting> will 
-                display the retrieved data in a report format while <programlisting> skin="text-csv" </programlisting>
-                displays the retrieved data as comma seperated variables.
+                display the retrieved data in a report format (multiple rows with column names as the first row)
+                while <programlisting> skin="text-csv" </programlisting>
+                displays the retrieved data as comma seperated variables.                
+                
+                A static query report can also be created a result of a submit action of a dialog. For example, by listing the 
+                static query customt tag inside the custom dialog tag node, <sgmltag class="starttag">xaf:dialog</sgmltag>
+                , one can ensure that the query will only be executed when the dialog is submitted:
+                <programlisting>
+                <![CDATA[
+<xaf:dialog name="test.test1">
+    <xaf:query name="user.info" skin="report" debug="no"/>
+</xaf:dialog>
+                ]]>
+                </programlisting>                
+                
                 </para>
             </section>
             <section>
@@ -234,6 +248,78 @@ Map user = (Map)request.getAttribute("userInfo");
                 
                 </para>
             </section>
+        </section>            
+ 
+        <section id="Using-Query-Java">
+            <title>Using Java objects</title>
+            <para>                
+            &framework-name; provides an alternative way to execute queries within a JSP document
+            rather then using a <sgmltag class="starttag">xaf:query</sgmltag> custom tag. There are 
+            convience methods provided within <classname>com.xaf.sql.StatementManager</classname> class
+            to execute SQL queries. These methods can execute queries in the following ways:
+            <itemizedlist>
+                <listitem>
+                Executing a static query defined in <filename class="conf">statement.xml</filename>
+                by using the query id passed to the method as a parameter
+                </listitem>
+                <listitem>
+                Executing a static query which is directly passed to the method as a parameter
+                </listitem>
+            </itemizedlist>
+            <example>
+                <title>Defined Query</title>
+                <para>
+                The following is an example of using the <classname>com.xaf.sql.StatementManager</classname> class
+                within a JSP to execute a query defined in <filename class="conf">statement.xml</filename>:
+                <programlisting>
+                <![CDATA[                
+    <%
+    DatabaseContext dbContext = DatabaseContextFactory.getSystemContext();
+    Map result = StatementManager.executeStmtGetValuesMap(dbContext, pageContext, 
+        "jdbc/cura", "org.name-only", new Object[new String("123")]);
+    %>
+                ]]>                      
+                </programlisting>
+                The above example is doing exactly the same as the following JSP snippet using the query custom 
+                tag (assuming the query is expecting the bind parameter from a request attribute called <literal>org_id</literal>):
+                <programlisting>                
+                <![CDATA[                
+    <%
+    request.setAttribute("org_id", "123");
+    %>
+    <xaf:query name="org.name-only" dataSource="jdbc/cura" report="none" 
+    store="request-attr:result"  storeType="row-map"/>
+    <%
+    Map result = (Map)request.getAttribute("result");
+    %>
+                ]]>                      
+                </programlisting>                
+                </para>
+            </example>
+            
+            <example>
+                <title>Passed In Query</title>
+                <para>
+                The following is an example of using the <classname>com.xaf.sql.StatementManager</classname> class
+                within a JSP to execute a query which is passed in (not defined in <filename class="conf">statement.xml</filename>):
+                <programlisting>
+                <![CDATA[                
+    <%
+    DatabaseContext dbContext = DatabaseContextFactory.getSystemContext();
+    Map result = StatementManager.executeSqlGetValuesMap(dbContext, pageContext, 
+        "jdbc/cura", "select org_name from org where org_id = ?", new Object[new String("123")]);
+    %>
+                ]]>                      
+                </programlisting>
+                <note>
+                It is recommended that all static queries be defined in <filename class="conf">statement.xml</filename>
+                and this way of exeuting queries should be only used for debugging or development purposes.
+                </note>
+                </para>
+            </example>
+            
+            </para>
+        </section>
   
     </section>
 
