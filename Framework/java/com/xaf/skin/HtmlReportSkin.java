@@ -30,7 +30,7 @@ public class HtmlReportSkin implements ReportSkin
     protected int flags;
 	protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
 	protected String innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
-	protected String frameHdRowAttrs = "bgcolor='#6699CC''";
+	protected String frameHdRowAttrs = "bgcolor='#6699CC'";
 	protected String frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color=white";
     protected String frameHdTableRowBgcolorAttrs = "#FFFFCC";
     protected String frameFtRowAttrs = "bgcolor='lightyellow'";
@@ -47,7 +47,7 @@ public class HtmlReportSkin implements ReportSkin
         setFlag(HTMLFLAG_SHOW_BANNER | HTMLFLAG_SHOW_HEAD_ROW | HTMLFLAG_SHOW_FOOT_ROW | HTMLFLAG_ADD_ROW_SEPARATORS);
     }
 
-	public String getFileExtension()
+    public String getFileExtension()
 	{
 		return ".html";
 	}
@@ -76,7 +76,7 @@ public class HtmlReportSkin implements ReportSkin
 				if(hvs != null)
 					heading = hvs.getValue(rc);
 
-				writer.write("<tr "+ frameHdRowAttrs +"><td><font "+ frameHdFontAttrs + "><b>" + heading + "</b></font></td></tr>");
+				writer.write("<tr "+ frameHdRowAttrs +"><td " + frameHdRowAttrs + "><font "+ frameHdFontAttrs + "><b>" + heading + "</b></font></td></tr>");
 			}
 
 			if(banner != null)
