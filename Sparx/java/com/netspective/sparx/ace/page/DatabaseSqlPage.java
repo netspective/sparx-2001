@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.2 2002-09-03 22:29:19 aye.thu Exp $
+ * $Id: DatabaseSqlPage.java,v 1.3 2002-09-07 21:54:10 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -63,6 +63,8 @@ import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xif.db.DatabaseContext;
@@ -72,9 +74,13 @@ import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.sql.StatementInfo;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
+import com.netspective.sparx.xaf.sql.StatementDialog;
 import com.netspective.sparx.xaf.task.sql.StatementTask;
 import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
+import com.netspective.sparx.xaf.form.DialogSkin;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.Dialog;
 
 public class DatabaseSqlPage extends AceServletPage
 {
@@ -102,7 +108,12 @@ public class DatabaseSqlPage extends AceServletPage
     {
         String testItem = getTestCommandItem(pc);
         if(testItem != null)
-            handleTestStatement(pc, testItem);
+        {
+            if ("no".equals(pc.getRequest().getParameter("ui")))
+                handleTestStatementNoUI(pc, testItem);
+            else
+                handleTestStatementWithUI(pc, testItem);
+        }
         else
         {
             ServletContext context = pc.getServletContext();
@@ -113,7 +124,38 @@ public class DatabaseSqlPage extends AceServletPage
         }
     }
 
-    public void handleTestStatementPageable(PageContext pc, String stmtId) throws ServletException, IOException, TaskExecuteException
+    public void handleTestStatementWithUI(PageContext pc, String stmtId) throws IOException
+    {
+        ServletContext context = pc.getServletContext();
+        StatementManager manager = StatementManagerFactory.getManager(context);
+
+        PrintWriter out = pc.getResponse().getWriter();
+        DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
+
+        StatementInfo si = manager.getStatement(stmtId);
+        if(si != null)
+        {
+            out.write("<h1>SQL Unit Test: " + stmtId + "</h1>");
+            StatementDialog dialog = si.getDialog();
+            if(dialog != null)
+            {
+                DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
+                dialog.prepareContext(dc);
+                out.write("<center>");
+                dialog.renderHtml(out, dc, true);
+                out.write("</center><p>");
+                out.write(si.getDebugHtml(pc));
+
+            }
+            else
+                out.write("Statement '"+ stmtId +"' produced a NULL dialog.");
+
+        }
+        else
+            out.write("Statement '"+ stmtId +"' not found in default context.");
+    }
+
+    public void handleTestStatementNoUIPageable(PageContext pc, String stmtId) throws ServletException, IOException, TaskExecuteException
     {
         StatementTask task = new StatementTask();
         task.setPageableReport(true);
@@ -136,7 +178,7 @@ public class DatabaseSqlPage extends AceServletPage
 
     }
 
-    public void handleTestStatement(PageContext pc, String stmtId) throws ServletException, IOException
+    public void handleTestStatementNoUI(PageContext pc, String stmtId) throws ServletException, IOException
     {
         ServletContext context = pc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
@@ -149,7 +191,7 @@ public class DatabaseSqlPage extends AceServletPage
         {
             try
             {
-                this.handleTestStatementPageable(pc, stmtId);
+                handleTestStatementNoUIPageable(pc, stmtId);
             }
             catch (TaskExecuteException e)
             {
