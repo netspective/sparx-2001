@@ -16,6 +16,8 @@ public class RequestAttributeValue extends ValueSource implements ListValueSourc
     public String getValue(ValueContext vc)
     {
 		Object o = vc.getRequest().getAttribute(valueKey);
+		if(o == null) return null;
+
 		if(o instanceof String)
 		{
 			return (String) o;
@@ -30,7 +32,10 @@ public class RequestAttributeValue extends ValueSource implements ListValueSourc
 			List list = (List) o;
 			return list.size() > 0 ? (String) list.get(0) : null;
 		}
-		return null;
+		else
+		{
+			return o.toString();
+		}
     }
 
 	public Object getObjectValue(ValueContext vc)
@@ -63,11 +68,9 @@ public class RequestAttributeValue extends ValueSource implements ListValueSourc
     public String[] getValues(ValueContext vc)
     {
 		Object o = vc.getRequest().getAttribute(valueKey);
-		if(o instanceof String)
-		{
-			return new String[] { (String) o };
-		}
-		else if(o instanceof String[])
+		if(o == null) return null;
+
+		if(o instanceof String[])
 		{
 			return (String[]) o;
 		}
@@ -77,7 +80,10 @@ public class RequestAttributeValue extends ValueSource implements ListValueSourc
 			String[] result = new String[list.size()];
 			return (String[]) list.toArray(result);
 		}
-		return null;
+		else
+		{
+			return new String[] { o.toString() };
+		}
 	}
 
 	public boolean supportsSetValue()
