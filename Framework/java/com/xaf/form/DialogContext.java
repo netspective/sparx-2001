@@ -219,7 +219,7 @@ public class DialogContext extends ServletValueContext
     static public String getDataCmdTextForCmdId(int dataCmd)
     {
         if(dataCmd == DATA_CMD_NONE)
-            return null;
+            return "[none]";
 
         StringBuffer dataCmdText = new StringBuffer();
         if((dataCmd & DATA_CMD_ADD) != 0)
