@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.17 2003-01-29 15:48:12 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.18 2003-02-03 00:49:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -76,7 +76,8 @@ import com.netspective.sparx.util.ClassPath;
 public class NavigationPath
 {
     static public final long NAVGPATHFLAG_ISROOT = 1;
-    static public final long NAVGPATHFLAG_INVISIBLE = NAVGPATHFLAG_ISROOT * 2;
+    static public final long NAVGPATHFLAG_REJECT_FOCUS = NAVGPATHFLAG_ISROOT * 2;
+    static public final long NAVGPATHFLAG_INVISIBLE = NAVGPATHFLAG_REJECT_FOCUS * 2;
     static public final long NAVGPATHFLAG_HIDDEN = NAVGPATHFLAG_INVISIBLE * 2;
     static public final long NAVGPATHFLAG_READONLY = NAVGPATHFLAG_HIDDEN * 2;
     static public final long NAVGPATHFLAG_INITIAL_FOCUS = NAVGPATHFLAG_READONLY * 2;
@@ -530,6 +531,9 @@ public class NavigationPath
                     String[] pathItems = getPathItems(id);
                     childPath.setName(pathItems[pathItems.length - 1]);
                 }
+
+                if("no".equals(childElem.getAttribute("allow-focus")))
+                    childPath.setFlag(NAVGPATHFLAG_REJECT_FOCUS);
 
                 String caption = childElem.getAttribute("caption");
                 childPath.setCaption(caption);
@@ -1203,6 +1207,79 @@ public class NavigationPath
 
         if (action != null)
             conditionalActions.add(action);
+    }
+
+    /**
+     *  if we have children, get the first child that does not have focus rejected
+     */
+    public NavigationPath getFirstFocusableChild()
+    {
+        if(childrenList.size() > 0)
+        {
+            for(int i = 0; i < childrenList.size(); i++)
+            {
+                NavigationPath child = (NavigationPath) childrenList.get(i);
+                if(! child.flagIsSet(NAVGPATHFLAG_REJECT_FOCUS))
+                    return child;
+                else
+                    return child.getNextPath();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the next sibling that can be focused
+     */
+    public NavigationPath getNextFocusableSibling()
+    {
+        // if we get to here we either have no children or all our children don't allow focus
+        NavigationPath parent = getParent();
+        if(parent != null)
+        {
+            List siblings = parent.getChildrenList();
+            int thisIndex = siblings.indexOf(this);
+            if(thisIndex == -1)
+                throw new RuntimeException("Unable to find " + this + " in siblings list.");
+
+            // find the first sibling that allows focus
+            for(int i = thisIndex + 1; i < siblings.size(); i++)
+            {
+                NavigationPath sibling = (NavigationPath) siblings.get(i);
+                if(! sibling.flagIsSet(NAVGPATHFLAG_REJECT_FOCUS))
+                    return sibling;
+                else
+                    return sibling.getNextPath();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the "next" path (the one immediately following this one). This method will try to obtain the parent node
+     * of the given NavigationPath and find itself in the parent's list (its siblings).
+     */
+    public NavigationPath getNextPath(boolean checkChildren)
+    {
+        NavigationPath nextPath = checkChildren ? getFirstFocusableChild() : null;
+        if(nextPath == null)
+        {
+            nextPath = getNextFocusableSibling();
+            if(nextPath == null && parent != null)
+                nextPath = parent.getNextPath(false);
+        }
+        return nextPath;
+    }
+
+    /**
+     * Return the "next" path (the one immediately following this one). This method will try to obtain the parent node
+     * of the given NavigationPath and find itself in the parent's list (its siblings).
+     */
+    public NavigationPath getNextPath()
+    {
+        return getNextPath(true);
     }
 }
 
