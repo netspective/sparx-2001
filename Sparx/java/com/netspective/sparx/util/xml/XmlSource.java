@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: XmlSource.java,v 1.2 2002-01-29 11:21:53 snshah Exp $
+ * $Id: XmlSource.java,v 1.3 2002-08-18 20:59:53 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -474,7 +474,10 @@ public class XmlSource
                 /* don't inherit the same objects more than once */
                 String inheritanceId = Integer.toString(element.hashCode()) + '.' + Integer.toString(inheritFromElem.hashCode());
                 if(inheritanceHistorySet.contains(inheritanceId))
-                    continue;
+                {
+                    errors.add("Attempting to copy duplicate node: "+ inheritanceId + ", " + element.getTagName() + ", " + element.getAttribute("name") + ", "+ inheritFromElem.getTagName());
+                    //continue;
+                }
                 inheritanceHistorySet.add(inheritanceId);
 
                 Element extendsElem = xmlDoc.createElement("extends");
