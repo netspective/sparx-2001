@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigateFileSystemServlet.java,v 1.2 2002-05-19 23:31:28 snshah Exp $
+ * $Id: NavigateFileSystemServlet.java,v 1.3 2002-08-26 14:29:52 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -112,7 +112,6 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
             throw new ServletException("Unable to obtain the default Configuration");
 
         ValueContext vc = new ServletValueContext(context, this, null, null);
-        sharedImagesUrl = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url");
         skinJspPageName = appConfig.getTextValue(vc, "app.navigate.skin-jsp", null);
         rootURL = appConfig.getTextValue(vc, "app.navigate.root-url");
         rootPath = appConfig.getTextValue(vc, "app.navigate.root-path");
@@ -225,6 +224,12 @@ public class NavigateFileSystemServlet extends HttpServlet implements FilenameFi
     {
         ServletContext servletContext = getServletContext();
         resp.setContentType(CONTENT_TYPE);
+
+        if(sharedImagesUrl == null)
+        {
+            ValueContext vc = new ServletValueContext(servletContext, this, req, resp);
+            sharedImagesUrl = appConfig.getTextValue(vc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "images-url");
+        }
 
         if(req.getParameter("_logout") != null)
         {
