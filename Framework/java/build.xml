@@ -26,7 +26,7 @@ Authors:
 
 
 -->
-<project name="SparX" default="xaf" basedir=".">
+<project name="Sparx" default="xaf" basedir=".">
 
     <target name="init">
 	    <property name="build.dir" value="../build"/>
@@ -62,12 +62,10 @@ Authors:
         <property name="jta.jar" value="${poolman.lib.dir}/jta.jar"/>
         <property name="jmxri.jar" value="${poolman.lib.dir}/jmxri.jar"/>
         <property name="jmxtools.jar" value="${poolman.lib.dir}/jmxtools.jar"/>
+        <property name="jakarta-oro.jar" value="${env.OROMATCHER_JAR}"/>
+        <property name="jakarta-log4j.jar" value="${env.LOG4J_JAR}"/>
 
-        <property name="oromatcher.lib.dir" value="${env.OROMATCHER_HOME}"/>
-        <property name="jakarta-oro-2.0.3.jar" value="${oromatcher.lib.dir}/jakarta-oro-2.0.3.jar"/>
-
-	    <property name="xaf_classpath"
-         value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi};${ant.jar};${poolman.jar};${jta.jar};${jmxri.jar};${jmxtools.jar};${jakarta-oro-2.0.3.jar}"/>
+	    <property name="xaf_classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi};${ant.jar};${poolman.jar};${jta.jar};${jmxri.jar};${jmxtools.jar};${jakarta-oro.jar};${jakarta-log4j.jar}"/>
 
 	    <!-- Compile the BuildConfiguration class -->
 	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"

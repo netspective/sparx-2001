@@ -11,7 +11,8 @@ if "%POOLMAN_HOME%" == "" set POOLMAN_HOME=C:\utils\java\Poolman-2.0.3
 if "%JAVA_HOME%" == "" set JAVA_HOME=C:\utils\java\jdk1.3
 if "%ANT_HOME%" == "" set ANT_HOME=C:\utils\java\jakarta-ant-1.3
 if "%RESIN_HOME%" == "" set RESIN_HOME=c:\utils\resin-1.2.5
-if "%OROMATCHER_HOME%" == "" set OROMATCHER_HOME=C:\utils\java\jakarta-oro-2.0.3
+if "%OROMATCHER_JAR%" == "" set OROMATCHER_JAR=C:\utils\java\jakarta-oro-2.0.3\jakarta-oro-2.0.3.jar
+if "%LOG4J_JAR%" == "" set LOG4J_JAR=C:\utils\java\jakarta-log4j-1.1.2\dist\lib\log4j.jar
 
 REM === This automatically adds system classes to CLASSPATH ===
 if exist "%JAVA_HOME%\lib\tools.jar" set CLASSPATH=%JAVA_HOME%\lib\tools.jar
