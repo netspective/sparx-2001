@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.21 2002-10-13 19:54:55 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.22 2002-10-13 20:44:15 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -459,9 +459,6 @@ public class DialogContext extends ServletValueContext
 
     public void performDefaultRedirect(Writer writer) throws IOException
     {
-        if(redirectDisabled)
-            return;
-
         String redirect = request.getParameter(DEFAULT_REDIRECT_PARAM_NAME);
         if(redirect == null)
         {
@@ -470,10 +467,17 @@ public class DialogContext extends ServletValueContext
                 redirect = getNextActionUrl(getOriginalReferer());
         }
         HttpServletResponse response = (HttpServletResponse) getResponse();
+
+        if(redirectDisabled)
+        {
+            writer.write("<p><b>Redirect is disabled</b>. Would have redirected to <code>"+ redirect +"</code>.</p>");
+            return;
+        }
+
         if(response.isCommitted())
             skin.renderRedirectHtml(writer, this, redirect);
         else
-            response.sendRedirect(redirect);
+            ((HttpServletResponse) response).sendRedirect(redirect);
     }
 
     /**
