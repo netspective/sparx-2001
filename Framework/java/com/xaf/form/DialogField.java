@@ -8,6 +8,7 @@ import com.xaf.form.field.*;
 
 public class DialogField
 {
+    // all these values are also defined in dialog.js (make sure they are always in sync)
 	static public final int FLDFLAG_REQUIRED             = 1;
 	static public final int FLDFLAG_PRIMARYKEY           = FLDFLAG_REQUIRED * 2;
 	static public final int FLDFLAG_INVISIBLE            = FLDFLAG_PRIMARYKEY * 2;
@@ -21,7 +22,8 @@ public class DialogField
 	static public final int FLDFLAG_COLUMN_BREAK_BEFORE  = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
 	static public final int FLDFLAG_COLUMN_BREAK_AFTER   = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
     static public final int FLDFLAG_BROWSER_READONLY     = FLDFLAG_COLUMN_BREAK_AFTER * 2;
-	static public final int FLDFLAG_STARTCUSTOM          = FLDFLAG_BROWSER_READONLY * 2; // all DialogField "children" will use this
+    public static final int FLDFLAG_IDENTIFIER           = FLDFLAG_BROWSER_READONLY * 2;
+	static public final int FLDFLAG_STARTCUSTOM          = FLDFLAG_IDENTIFIER * 2; // all DialogField "children" will use this
 
     // flags used to describe what kind of formatting needs to be done to the dialog field
     public static final int DISPLAY_FORMAT = 1;
@@ -130,6 +132,9 @@ public class DialogField
 
 		if(elem.getAttribute("create-adjacent-area").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_CREATEADJACENTAREA);
+
+        if(elem.getAttribute("identifier").equalsIgnoreCase("yes"))
+			setFlag(DialogField.FLDFLAG_IDENTIFIER);
 
 		String colBreak = elem.getAttribute("col-break");
 		if(colBreak.length() > 0)

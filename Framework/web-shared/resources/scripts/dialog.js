@@ -164,8 +164,9 @@ var FLDFLAG_INPUT_HIDDEN         = FLDFLAG_SHOWCAPTIONASCHILD * 2;
 var FLDFLAG_HAS_CONDITIONAL_DATA = FLDFLAG_INPUT_HIDDEN * 2;
 var FLDFLAG_COLUMN_BREAK_BEFORE  = FLDFLAG_HAS_CONDITIONAL_DATA * 2;
 var FLDFLAG_COLUMN_BREAK_AFTER   = FLDFLAG_COLUMN_BREAK_BEFORE * 2;
-var FLDFLAG_STARTCUSTOM          = FLDFLAG_COLUMN_BREAK_AFTER * 2; // all DialogField "children" will use this
-
+var FLDFLAG_BROWSER_READONLY     = FLDFLAG_COLUMN_BREAK_AFTER * 2;
+var FLDFLAG_IDENTIFIER           = FLDFLAG_BROWSER_READONLY * 2;
+var FLDFLAG_STARTCUSTOM          = FLDFLAG_IDENTIFIER * 2;// all DialogField "children" will use this
 // These constants MUST be kept identical to what is in com.xaf.form.field.SelectField
 
 var SELECTSTYLE_RADIO      = 0;
@@ -908,6 +909,15 @@ function TextField_valueChanged(field, control)
     return true;
 }
 
+function TextField_onKeyPress(field, control, event)
+{
+    if (field.identifier == 'yes')
+    {
+        return keypressAcceptRanges(field, control, [NUM_KEYS_RANGE, UPPER_ALPHA_KEYS_RANGE, UNDERSCORE_KEY_RANGE], event);
+    }
+    return true;
+}
+
 function PhoneField_valueChanged(field, control)
 {    
     return formatPhone(field, control);
@@ -1203,13 +1213,17 @@ function formatCurrency(field, control)
                 if (field.negative_pos == "after")
                 {
                     if (match[1] == "")
-                        match[1] = field.currency_symbol;
+                        match[1] = field.currency_symbol;                    
+                    if (typeof match[3] == "undefined")
+                        match[3] = ".00";
                     control.value = match[1] + match[2] + match[3];
                 }
                 else if (field.negative_pos == "before")
                 {
                     if (match[2] == "")
                         match[2] = field.currency_symbol;
+                    if (typeof match[4] == "undefined")
+                        match[4] = ".00";                        
                     control.value = match[1] + match[2] + match[3] + match[4]; 
                 }
             }

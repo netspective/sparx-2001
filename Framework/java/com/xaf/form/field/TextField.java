@@ -322,6 +322,11 @@ public class TextField extends DialogField
         else
             buf.append("field.uppercase = 'no';\n");
 
+        if (this.flagIsSet(TextField.FLDFLAG_IDENTIFIER))
+            buf.append("field.identifier = 'yes';\n");
+        else
+            buf.append("field.identifier = 'no';\n");
+
         if (this.validatePattern != null)
             buf.append("field.text_format_pattern = " + this.validatePattern + ";\n");
         if (this.regexMessage != null)
