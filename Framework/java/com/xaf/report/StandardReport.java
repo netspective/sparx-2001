@@ -19,6 +19,7 @@ public class StandardReport implements Report
 {
     static public final int REPORTFLAG_INITIALIZED      = 1;
     static public final int REPORTFLAG_HASPLACEHOLDERS = REPORTFLAG_INITIALIZED * 2;
+	static public final int REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS = REPORTFLAG_HASPLACEHOLDERS * 2;
 
     private String name;
 	private ReportColumnsList columns = new ReportColumnsList();
@@ -105,6 +106,9 @@ public class StandardReport implements Report
 			if(frame == null) frame = new ReportFrame();
 			frame.setHeading(heading);
 		}
+
+		if(elem.getAttribute("first-row").equals("column-headings"))
+			setFlag(REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS);
 
 		NodeList children = elem.getChildNodes();
 		int columnIndex = 0;

@@ -83,16 +83,33 @@ public class HtmlReportSkin implements ReportSkin
         }
 
 		writer.write("<table "+innerTableAttrs+">");
+		int startDataRow = 0;
 		if(flagIsSet(HTMLFLAG_SHOW_HEAD_ROW))
-			produceHeadingRow(writer, rc);
+		{
+			if(! rc.getReport().flagIsSet(StandardReport.REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS))
+	    	{
+		    	produceHeadingRow(writer, rc, (Object[]) null);
+			}
+			else
+			{
+			    if(rs != null)
+					produceHeadingRow(writer, rc, rs);
+				else if(data.length > 0)
+				{
+					produceHeadingRow(writer, rc, data[0]);
+					startDataRow = 1;
+				}
+			}
+		}
         if(rs != null)
         {
             produceDataRows(writer, rc, rs);
         }
         else
         {
-            produceDataRows(writer, rc, data);
+            produceDataRows(writer, rc, data, startDataRow);
         }
+
         if(flagIsSet(HTMLFLAG_SHOW_FOOT_ROW) && rc.getCalcsCount() > 0)
             produceFootRow(writer, rc);
         writer.write("</table>");
@@ -120,11 +137,46 @@ public class HtmlReportSkin implements ReportSkin
         }
     }
 
-	public void produceHeadingRow(Writer writer, ReportContext rc) throws IOException
+	public void produceHeadingRow(Writer writer, ReportContext rc, Object[] headings) throws IOException
 	{
 		ReportColumnsList columns = rc.getColumns();
 		int dataColsCount = columns.size();
 		int tableColsCount = (rc.getReport().getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+
+		writer.write("<tr bgcolor="+frameHdTableRowBgcolorAttrs+"><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+		if(headings == null)
+		{
+			for(int i = 0; i < dataColsCount; i++)
+			{
+				ReportColumn rcd = columns.getColumn(i);
+				if(rcd.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+					continue;
+
+				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rcd.getHeading() +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+			}
+		}
+		else
+		{
+			for(int i = 0; i < dataColsCount; i++)
+			{
+				ReportColumn rcd = columns.getColumn(i);
+				if(rcd.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
+					continue;
+
+				writer.write("<td><font "+dataHdFontAttrs+"><b>"+ headings[rcd.getColIndexInArray()] +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+			}
+		}
+		if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
+			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='2' width='100%'></td></tr>");
+	}
+
+	public void produceHeadingRow(Writer writer, ReportContext rc, ResultSet rs) throws IOException, SQLException
+	{
+		ReportColumnsList columns = rc.getColumns();
+		int dataColsCount = columns.size();
+		int tableColsCount = (rc.getReport().getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+
+		if(! rs.next()) return;
 
 		writer.write("<tr bgcolor="+frameHdTableRowBgcolorAttrs+"><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
 		for(int i = 0; i < dataColsCount; i++)
@@ -133,10 +185,10 @@ public class HtmlReportSkin implements ReportSkin
 			if(rcd.flagIsSet(ReportColumn.COLFLAG_INVISIBLE))
 				continue;
 
-			writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rcd.getHeading() +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
+			writer.write("<td><font "+dataHdFontAttrs+"><b>"+ rs.getString(rcd.getColIndexInResultSet()) +"</b></font></td><td><font "+dataHdFontAttrs+">&nbsp;&nbsp;</font></td>");
 		}
-        if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
-    		writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='2' width='100%'></td></tr>");
+		if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
+			writer.write("</tr><tr><td colspan='"+ tableColsCount +"'><img src='/shared/resources/images/design/bar.gif' height='2' width='100%'></td></tr>");
 	}
 
 	/*
@@ -225,7 +277,7 @@ public class HtmlReportSkin implements ReportSkin
 	  modify that method when this method changes, too.
 	*/
 
-	public void produceDataRows(Writer writer, ReportContext rc, Object[][] data) throws IOException
+	public void produceDataRows(Writer writer, ReportContext rc, Object[][] data, int startDataRow) throws IOException
 	{
         Report defn = rc.getReport();
 		ReportColumnsList columns = rc.getColumns();
@@ -251,7 +303,7 @@ public class HtmlReportSkin implements ReportSkin
 				urls[i] = column.resolvePattern(column.getUrl());
         }
 
-        for(int row = 0; row < data.length; row++)
+        for(int row = startDataRow; row < data.length; row++)
         {
             Object[] rowData = data[row];
 
