@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: app-build.xml,v 1.27 2002-12-04 17:58:15 shahbaz.javeed Exp $
+$Id: app-build.xml,v 1.28 2002-12-05 19:08:48 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -121,11 +121,18 @@ $Id: app-build.xml,v 1.27 2002-12-04 17:58:15 shahbaz.javeed Exp $
         <property name="app.java.identifiers.config-props.class-name" value="${app.java.identifiers.pkg-name}.Config"/>
 
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
+        <available file="${config.app.customdal.src.path}" property="app.customdal.src.path-exists"/>
         <property name="app.java.dal.jar.name" value="${app.name}-dal.jar"/>
         <property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
-        <property name="app.java.customdal.dir" value="${config.app.customdal.src.path}"/>
         <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.java.dal.jar.name}"/>
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
+
+        <condition property="app.java.dal.src.path" value="${app.java.dal.dir}">
+            <isfalse value="${app.customdal.src.path-exists}"/>
+        </condition>
+        <condition property="app.java.dal.src.path" value="${app.java.dal.dir}:${config.app.customdal.src.path}">
+            <istrue value="${app.customdal.src.path-exists}"/>
+        </condition>
 
         <available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
         <property name="app.java.dcb.jar.name" value="${app.name}-dcb.jar"/>
@@ -143,11 +150,14 @@ $Id: app-build.xml,v 1.27 2002-12-04 17:58:15 shahbaz.javeed Exp $
 
         <available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
 
+        <!--
         <echo message="app.classes.dir-exists = ${app.classes.dir-exists}"/>
         <echo message="app.schema.source-file-exists = ${app.schema.source-file-exists}"/>
+        <echo message="app.customdal.src.path-exists = ${app.customdal.src.path-exists}"/>
         <echo message="app.ui.source-file-exists = ${app.ui.source-file-exists}"/>
         <echo message="app.sql.source-file-exists = ${app.sql.source-file-exists}"/>
         <echo message="app.security.acl-file-exists = ${app.security.acl-file-exists}"/>
+        -->
     </target>
 
     <!--
@@ -339,7 +349,8 @@ $Id: app-build.xml,v 1.27 2002-12-04 17:58:15 shahbaz.javeed Exp $
         <dal schema="${config.app.schema.source-file}" dest="${app.java.dal.dir}" stylesheetroot="${java.dal.stylesheet.root.dir}"/>
         <property name="dal.temp.build.dir" value="${app.java.dal.dir}/classes"/>
         <mkdir dir="${dal.temp.build.dir}"/>
-        <javac srcdir="${app.java.dal.dir}:${app.java.customdal.dir}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
+        <echo message="DAL source path is ${app.java.dal.src.path}"/>
+        <javac srcdir="${app.java.dal.src.path}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
         <jar jarfile="${app.java.dal.jar}" basedir="${dal.temp.build.dir}">
             <include name="**"/>
         </jar>
