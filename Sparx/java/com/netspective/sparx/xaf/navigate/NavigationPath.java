@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.10 2003-01-26 21:32:18 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.11 2003-01-28 02:03:22 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -79,7 +79,8 @@ public class NavigationPath
     static public final long NAVGPATHFLAG_HIDDEN = NAVGPATHFLAG_INVISIBLE * 2;
     static public final long NAVGPATHFLAG_READONLY = NAVGPATHFLAG_HIDDEN * 2;
     static public final long NAVGPATHFLAG_INITIAL_FOCUS = NAVGPATHFLAG_READONLY * 2;
-    static public final long FLDFLAG_STARTCUSTOM = NAVGPATHFLAG_INITIAL_FOCUS * 2;
+    static public final long NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS = NAVGPATHFLAG_INITIAL_FOCUS * 2;
+    static public final long FLDFLAG_STARTCUSTOM = NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS * 2;
 
     static public final String PATH_SEPARATOR = "/";
     static private int pathNumber = 0;
@@ -552,15 +553,14 @@ public class NavigationPath
                 {
                     controller = childPath.getOwner().getControllerByName(controllerName);
 
-                } else {
-                    controllerName = childPath.getParent().getControllerName();
-                    controller =  childPath.getParent().getController();
                 }
 
-                if (controller == null){
+                if (childPath.getParent().getController() != null) {
+                    controllerName = childPath.getParent().getControllerName();
+                    controller =  childPath.getParent().getController();
+                } else {
                     controllerName = "default";
                     controller = childPath.getOwner().getControllerByName(controllerName);
-                    //TODO: see if it would be usefull to try the parent's controllerName before going to the default.
                 }
 
                 childPath.setControllerName(controllerName);
@@ -590,8 +590,6 @@ public class NavigationPath
                 }
 
                 //TODO: It would simplfy the XML definition if we add a url-params if you want to have the defual URL but only define some params, which is in most cases what you want to do.
-
-                //TODO: Make sure that there is flag for wheather there are any conditionals at all.
 
                 //TODO: develop a value source that will do the page hiding depending on entity.
 
@@ -969,7 +967,6 @@ public class NavigationPath
         hasRetainParams = true;
     }
 
-
     /**
      * Determines whether the NavigationPath is part of the active path.
      * @param  nc  A context primarily to obtain the Active NavigationPath.
@@ -1049,30 +1046,35 @@ public class NavigationPath
     }
 
     public void makeStateChanges(NavigationPathContext nc) {
-        //The make state changes should affect the ancestors and its sibilings and the children of the current navPath
-        List ancestors = this.getAncestorsList();
-        applyConditionals(conditionalActions, nc);
+        //The make state changes should affect the current navPath, its sibilings, its ancestors and the ancestor's sibilings and its children
+        if (flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
+            applyConditionals(conditionalActions, nc);
 
         List sibilings = this.getSibilingList();
         for (int i = 0; sibilings!= null && i < sibilings.size(); i++) {
             NavigationPath sibiling = (NavigationPath) sibilings.get(i);
-            applyConditionals(sibiling.getConditionalActions(), nc);
+            if (sibiling.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
+                applyConditionals(sibiling.getConditionalActions(), nc);
         }
 
+        List ancestors = this.getAncestorsList();
         for (int i = 0; ancestors!= null && i < ancestors.size(); i++) {
             NavigationPath ancestor = (NavigationPath) ancestors.get(i);
-            applyConditionals(ancestor.getConditionalActions(), nc);
+            if (ancestor.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
+                applyConditionals(ancestor.getConditionalActions(), nc);
             List ancestorSibilings = ancestor.getSibilingList();
             for (int j = 0; ancestorSibilings != null && j < ancestorSibilings.size(); j++) {
                 NavigationPath ancestorSibiling = (NavigationPath) ancestorSibilings.get(j);
-                applyConditionals(ancestorSibiling.getConditionalActions(), nc);
+                if (ancestorSibiling.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
+                    applyConditionals(ancestorSibiling.getConditionalActions(), nc);
             }
         }
 
         List children = this.getChildrenList();
         for (int i = 0; children!= null && i < children.size(); i++) {
             NavigationPath child = (NavigationPath) children.get(i);
-            applyConditionals(child.getConditionalActions(), nc);
+            if (child.flagIsSet(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS))
+                applyConditionals(child.getConditionalActions(), nc);
         }
     }
 
@@ -1140,8 +1142,13 @@ public class NavigationPath
      */
     public void addConditionalAction(NavigationConditionalAction action)
     {
-        if(conditionalActions == null) conditionalActions = new ArrayList();
+        if (conditionalActions == null) {
+            conditionalActions = new ArrayList();
+            setFlag(NAVGPATHFLAG_HAS_CONDITIONAL_ACTIONS);
+        }
 
+        if (action != null)
+            conditionalActions.add(action);
     }
 }
 
