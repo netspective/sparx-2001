@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationPath.java,v 1.2 2002-12-28 15:48:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -76,8 +76,12 @@ import com.netspective.sparx.util.ClassPath;
 
 public class NavigationPath
 {
+    static public final long NAVGPATHFLAG_ISROOT    = 1;
+    static public final long NAVGPATHFLAG_INVISIBLE = NAVGPATHFLAG_ISROOT * 2;
+    static public final long FLDFLAG_STARTCUSTOM = NAVGPATHFLAG_INVISIBLE * 2;
+
     static public final String PATH_SEPARATOR = "/";
-    private static int pathNumber = 0;
+    static private int pathNumber = 0;
 
     /**
      * A Class that describes the Results of matching the Http Request with the available Paths in NavigationPath.
@@ -191,6 +195,7 @@ public class NavigationPath
 
     private NavigationPath owner;
     private NavigationPath parent;
+    private long flags;
     private String id;
     private String name;
     private String caption;
@@ -203,7 +208,8 @@ public class NavigationPath
     private SingleValueSource url = null;
     private Map ancestorMap = new HashMap();
     private List ancestorsList = new ArrayList();
-    private boolean visible = true;
+    private int level = 0;
+    private int maxLevel = 0;
 
     public NavigationPath()
     {
@@ -215,6 +221,21 @@ public class NavigationPath
     {
         this();
         setName(name);
+    }
+
+    public boolean isRoot()
+    {
+        return flagIsSet(NAVGPATHFLAG_ISROOT);
+    }
+
+    public void setRoot(boolean root)
+    {
+        if(root) setFlag(NAVGPATHFLAG_ISROOT); else clearFlag(NAVGPATHFLAG_ISROOT);
+        if(root)
+        {
+            setName(null);
+            setParent(null);
+        }
     }
 
     public void setName(String name)
@@ -245,7 +266,11 @@ public class NavigationPath
     public void setParent(NavigationPath value)
     {
         if(value != this)
+        {
             parent = value;
+            if(parent != null)
+                setLevel(parent.getLevel()+1);
+        }
         else
             parent = null;
     }
@@ -260,9 +285,79 @@ public class NavigationPath
         id = value;
     }
 
+    public int getLevel()
+    {
+        return level;
+    }
+
+    public void setLevel(int level)
+    {
+        this.level = level;
+        setMaxLevel(level);
+        for(NavigationPath activeParent = getParent(); activeParent != null; )
+        {
+            activeParent.setMaxLevel(level);
+            activeParent = activeParent.getParent();
+        }
+        if(owner != null) owner.setMaxLevel(level);
+    }
+
+    public int getMaxLevel()
+    {
+        return maxLevel;
+    }
+
+    public void setMaxLevel(int maxLevel)
+    {
+        if(maxLevel > this.maxLevel)
+            this.maxLevel = maxLevel;
+    }
+
     public Map getAbsolutePathsMap()
     {
         return absPathMap;
+    }
+
+    public final long getFlags()
+    {
+        return flags;
+    }
+
+    public boolean flagIsSet(long flag)
+    {
+        return (flags & flag) == 0 ? false : true;
+    }
+
+    public void setFlag(long flag)
+    {
+        flags |= flag;
+    }
+
+    public void clearFlag(long flag)
+    {
+        flags &= ~flag;
+    }
+
+    public void setFlagRecursively(long flag)
+    {
+        flags |= flag;
+        if(childrenList.size() > 0)
+        {
+            Iterator i = childrenList.iterator();
+            while(i.hasNext())
+                ((NavigationPath) i.next()).setFlag(flag);
+        }
+    }
+
+    public void clearFlagRecursively(long flag)
+    {
+        flags &= ~flag;
+        if(childrenList.size() > 0)
+        {
+            Iterator i = childrenList.iterator();
+            while(i.hasNext())
+                ((NavigationPath) i.next()).clearFlag(flag);
+        }
     }
 
     /**
@@ -478,6 +573,7 @@ public class NavigationPath
             childrenMap.put(childName, child);
             childrenList.add(child);
             register(child);
+            child.generateAncestorList();
         }
 
         if (startIndex < (pathItems.length - 1))
@@ -508,7 +604,34 @@ public class NavigationPath
 
     public String getDebugHtml(ValueContext vc)
     {
-        return getDebugHtml(vc, this);
+        StringBuffer html = new StringBuffer();
+        html.append(getAbsolutePath() + ": level " + getLevel() + " (max "+ getMaxLevel() +"), " + getClass().getName() + ", " + getCaption(vc) + ", " + getHeading(vc) + ", " + getTitle(vc));
+
+        if(childrenList != null && childrenList.size() > 0)
+        {
+            html.append("<ol>Children");
+            Iterator i = childrenList.iterator();
+            while (i.hasNext())
+            {
+                NavigationPath path = (NavigationPath) i.next();
+                html.append("<li>" + path.getDebugHtml(vc) + "</li>");
+            }
+            html.append("</ol>");
+        }
+
+        if(ancestorsList != null && ancestorsList.size() > 0)
+        {
+            html.append("<ol>Ancestors");
+            Iterator i = ancestorsList.iterator();
+            while (i.hasNext())
+            {
+                NavigationPath path = (NavigationPath) i.next();
+                html.append("<li>" + path.getAbsolutePath(vc) + "</li>");
+            }
+            html.append("</ol>");
+        }
+
+        return html.toString();
     }
 
     static public String getDebugHtml(ValueContext vc, NavigationPath parent)
@@ -522,7 +645,7 @@ public class NavigationPath
         {
             NavigationPath path = (NavigationPath) i.next();
             html.append("<li>");
-            html.append(path.getAbsolutePath() + ": " + path.getClass().getName() + ", " + path.getCaption(vc) + ", " + path.getHeading(vc) + ", " + path.getTitle(vc));
+            html.append(path.getAbsolutePath() + ": level " + path.getLevel() + " (max "+ path.getMaxLevel() +", "+ path.getAncestorsCount() +" ancestors), " +path.getClass().getName() + ", " + path.getCaption(vc) + ", " + path.getHeading(vc) + ", " + path.getTitle(vc));
             String children = getDebugHtml(vc, path);
             if (children != null)
                 html.append(children);
@@ -638,6 +761,15 @@ public class NavigationPath
     }
 
     /**
+     * Get the number of ancestors (parents) we have
+     * @return
+     */
+    public int getAncestorsCount()
+    {
+        return ancestorsList.size();
+    }
+
+    /**
      * A List that represents all of the ancestors of the current object.  This list is initialized by getting a
      * reference to the parents until the method getParent() returns null.  This List is relevant when determining what
      * elements to render on levels above the active path.
@@ -686,7 +818,7 @@ public class NavigationPath
         }
         else
         {
-            return visible;
+            return ! flagIsSet(NAVGPATHFLAG_INVISIBLE);
         }
     }
 
@@ -697,7 +829,7 @@ public class NavigationPath
      */
     public void setVisible(boolean visible)
     {
-        this.visible = visible;
+        if(visible) setFlagRecursively(NAVGPATHFLAG_INVISIBLE); else clearFlagRecursively(NAVGPATHFLAG_INVISIBLE);
     }
 
     /**

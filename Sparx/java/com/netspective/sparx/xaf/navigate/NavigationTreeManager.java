@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationTreeManager.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationTreeManager.java,v 1.2 2002-12-28 15:48:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -105,6 +105,7 @@ public class NavigationTreeManager extends XmlSource
                 setAttrValueDefault(childElem, "name", NAME_DEFAULT);
                 ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(childElem.getAttribute("class"), NavigationPath.class, true);
                 NavigationPath tree = (NavigationPath) instanceGen.getInstance();
+                tree.setRoot(true);
                 tree.importFromXml(childElem, tree);
                 structures.put(childElem.getAttribute("name"), tree);
             }

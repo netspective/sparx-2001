@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppComponentsExplorerServlet.java,v 1.5 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppComponentsExplorerServlet.java,v 1.6 2002-12-28 15:48:32 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -127,7 +127,7 @@ public class AppComponentsExplorerServlet extends PageControllerServlet
     public void registerPages(ServletConfig config) throws ServletException
     {
         NavigationPage pagesPath = new NavigationPage();
-        pagesPath.setName(null);
+        pagesPath.setRoot(true);
         setPagesPath(pagesPath);
 
         homePage = new HomePage();

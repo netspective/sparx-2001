@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPathContext.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationPathContext.java,v 1.2 2002-12-28 15:48:33 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -84,6 +84,7 @@ public class NavigationPathContext extends ServletValueContext
     private long flags;
     private boolean popup;
     private Map navigationStates = new HashMap();
+    private int maxLevel = 0;
 
     public NavigationPathContext(NavigationPath ownerTree, ServletContext aContext, Servlet aServlet, ServletRequest aRequest, ServletResponse aResponse, String activePathId)
     {
@@ -93,6 +94,7 @@ public class NavigationPathContext extends ServletValueContext
         this.ownerTree = ownerTree;
         activePathFindResults = ownerTree.findPath(activePathId);
         activeTree = activePathFindResults.getMatchedPath();
+        maxLevel = ownerTree.getMaxLevel();
 
         try
         {
@@ -120,6 +122,11 @@ public class NavigationPathContext extends ServletValueContext
     public NavigationPath getOwnerTree()
     {
         return ownerTree;
+    }
+
+    public int getMaxLevel()
+    {
+        return maxLevel;
     }
 
     public final String getTransactionId()
