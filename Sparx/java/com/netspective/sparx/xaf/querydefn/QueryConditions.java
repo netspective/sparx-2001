@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryConditions.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QueryConditions.java,v 1.2 2002-11-18 16:15:27 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -126,30 +126,52 @@ public class QueryConditions extends ArrayList
         return usedConditions;
     }
 
-    public void createSql(SelectStmtGenerator stmtGen, ValueContext vc, QueryConditions usedConditions, StringBuffer sql)
+    /**
+     * Create the SQL string for the list of Query conditions
+     * @param stmtGen
+     * @param vc
+     * @param usedConditions
+     * @return String
+     */
+    public String createSql(SelectStmtGenerator stmtGen, ValueContext vc, QueryConditions usedConditions)
     {
+        StringBuffer sb = new StringBuffer();
         QuerySelect select = stmtGen.getQuerySelect();
         int usedCondsCount = usedConditions.size();
         int condsUsedLast = usedCondsCount - 1;
+
         for(int c = 0; c < usedCondsCount; c++)
         {
+            boolean conditionAdded  = false;
             Object condObj = usedConditions.get(c);
-            if(condObj instanceof QueryConditions)
+            if (condObj instanceof QueryConditions)
             {
-                sql.append(" (");
-                createSql(stmtGen, vc, (QueryConditions) condObj, sql);
-                sql.append(" )");
+                String sql = createSql(stmtGen, vc, (QueryConditions) condObj);
+                if (sql != null && sql.length() > 0)
+                {
+                    sb.append("(" + sql + ")");
+                    conditionAdded = true;
+                }
                 if(c != condsUsedLast)
-                    sql.append(parentCondition.getConnectorSql());
+                    sb.append(parentCondition.getConnectorSql());
             }
             else
             {
+                // single query condition. not a list.
                 QueryCondition cond = (QueryCondition) usedConditions.get(c);
-                sql.append(" (" + cond.getWhereCondExpr(vc, select, stmtGen) + ")");
-                if(c != condsUsedLast)
-                    sql.append(cond.getConnectorSql());
+                if (!cond.isJoinOnly())
+                {
+                    // create and add the where condition string only if this condition has a valid comparison
+                    // (meaning the Select Condition was not inluded only for the sake of including the Join Condition of the table)
+                    sb.append(" (" + cond.getWhereCondExpr(vc, select, stmtGen) + ")");
+                    conditionAdded = true;
+                }
+                if (c != condsUsedLast && !((QueryCondition) usedConditions.get(c+1)).isJoinOnly())
+                        sb.append(cond.getConnectorSql());
             }
-            sql.append("\n");
+            if (conditionAdded)
+                sb.append("\n");
         }
+        return sb.toString();
     }
 }

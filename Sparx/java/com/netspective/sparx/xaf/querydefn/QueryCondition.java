@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QueryCondition.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: QueryCondition.java,v 1.2 2002-11-18 16:15:27 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -76,6 +76,7 @@ public class QueryCondition
     private int connector = CONNECT_AND;
     private boolean removeIfValueNull;
     private boolean removeIfValueNullChildren;
+    private boolean joinOnly; // use only the join condition from the field
     private String bindExpression;
     private QueryConditions nestedConditions;
 
@@ -120,6 +121,16 @@ public class QueryCondition
     public String getConnectorSql()
     {
         return QueryCondition.CONNECTOR_SQL[connector];
+    }
+
+    public boolean isJoinOnly()
+    {
+        return joinOnly;
+    }
+
+    public void setJoinOnly(boolean joinOnly)
+    {
+        this.joinOnly = joinOnly;
     }
 
     public boolean isNested()
@@ -221,15 +232,22 @@ public class QueryCondition
         }
 
         String compName = elem.getAttribute("comparison");
-        comparison = SqlComparisonFactory.getComparison(compName);
-        if(comparison == null)
+        if (compName.length() == 0)
         {
-            if(parentCond != null)
-                comparison = parentCond.getComparison();
-            else if(!haveNested)
-                queryDefn.addError("condition-comparison", "comparison id '" + compName + "' not found");
+            setJoinOnly(true);
         }
-
+        else
+        {
+            comparison = SqlComparisonFactory.getComparison(compName);
+            if(comparison == null)
+            {
+                if(parentCond != null)
+                    comparison = parentCond.getComparison();
+                else if(!haveNested)
+                    queryDefn.addError("condition-comparison", "comparison id '" + compName + "' not found");
+            }
+            setJoinOnly(false);
+        }
         String valStr = elem.getAttribute("value");
         if(valStr != null && valStr.length() > 0)
             value = ValueSourceFactory.getSingleOrStaticValueSource(valStr);

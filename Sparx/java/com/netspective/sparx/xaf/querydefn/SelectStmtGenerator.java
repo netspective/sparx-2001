@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectStmtGenerator.java,v 1.2 2002-02-10 16:31:24 snshah Exp $
+ * $Id: SelectStmtGenerator.java,v 1.3 2002-11-18 16:15:27 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -249,12 +249,19 @@ public class SelectStmtGenerator
         int usedCondsCount = usedSelectConditions.size();
         if(usedCondsCount > 0)
         {
-            if(haveJoinWheres)
-                sql.append(" and (\n");
-            else
-                sql.append("where\n  (\n");
-            usedSelectConditions.createSql(this, vc, usedSelectConditions, sql);
-            sql.append("  )\n");
+            String conditionSql = usedSelectConditions.createSql(this, vc, usedSelectConditions);
+            if (conditionSql != null && conditionSql.length() > 0)
+            {
+                if (haveJoinWheres)
+                {
+                    sql.append(" and (\n");
+                }
+                else
+                {
+                    sql.append("where\n  (\n");
+                }
+                sql.append(conditionSql + "  )\n");
+            }
             haveCondWheres = true;
         }
 
