@@ -5,6 +5,15 @@
 <!ENTITY introduction.xml SYSTEM "introduction.xml">
 <!ENTITY getting-started.xml SYSTEM "getting-started.xml">
 <!ENTITY ace.xml SYSTEM "ace.xml">
+<!ENTITY key-concepts.xml SYSTEM "key-concepts.xml">
+<!ENTITY dialogs.xml SYSTEM "dialogs.xml">
+<!ENTITY static-queries.xml SYSTEM "static-queries.xml">
+<!ENTITY dynamic-queries.xml SYSTEM "dynamic-queries.xml">
+<!ENTITY webapp.xml SYSTEM "webapp.xml">
+<!ENTITY dml.xml SYSTEM "dml.xml">
+<!ENTITY db-schema.xml SYSTEM "db-schema.xml">
+<!ENTITY security.xml SYSTEM "security.xml">
+
 
 <!ENTITY xaf-version "1.2.8">
 <!ENTITY xaf-jar "<literal>xaf-1_2_8.jar</literal>">
@@ -37,6 +46,11 @@
 			<othername role="mi">N</othername>
 			<surname>Shah</surname>
 		</author>
+        <author>
+            <firstname>Aye</firstname>
+            <othername role="mi">K</othername>
+            <surname>Thu</surname>
+        </author>
 
 		<copyright>
 			<year>2000</year>
@@ -48,6 +62,14 @@
 	&introduction.xml;
 	&getting-started.xml;
 	&ace.xml;
+    &key-concepts.xml;
+    &dialogs.xml;
+    &static-queries.xml;
+    &dynamic-queries.xml;
+    &webapp.xml;
+    &dml.xml;
+    &db-schema.xml;
+    &security.xml;
 
 </book>
 

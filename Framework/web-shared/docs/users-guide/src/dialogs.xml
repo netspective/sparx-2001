@@ -1,0 +1,93 @@
+<chapter>
+    <title>The User Interface: Dialogs</title>
+
+    <section>
+        <title>Overview</title>
+        <para>
+        The first step in developing a web application is giving the user the ability to
+        enter data and retrieve data. Sparx's answer to this is the <emphasis>Dialog</emphasis> object; it is through the
+        Dialogs that a user can create new data, edit existing data, and remove data. A dialog
+        object provides a multitude of features that are built in: client-side/server-side
+        data verifications and validations, dialog state tracking, and skin association.
+        </para>
+
+        <para>
+        Defining the dialog in the  <filename class="conf">WEB-INF/ui/dialog.xml</filename>  is
+        the first step towards creating a dialog. Dialogs are defined with the <emphasis>&lt;dialog&gt;</emphasis> tag
+        and each dialog must belong to a package of dialogs represented by <emphasis>&lt;dialogs&gt;</emphasis> tag.
+        The following is a sample dialog entry from the <emphasis>web-cura</emphasis> sample application:
+        <programlisting>
+            &lt;dialogs package="train"&gt;
+                &lt;dialog name="test" heading="Add Account"&gt;
+                    &lt;field.text name="org_code" caption="Account Code" required="yes" default="request:myval"/&gt;
+                    &lt;field.select name="org_type" caption="Type" style="multidual" choices="query:org.enum-types-all"/&gt;
+                    &lt;field.integer name="employees" caption="Employees" min="10" max="20"/&gt;
+                &lt;/dialog&gt;
+            &lt;/dialogs>
+        </programlisting>
+
+        </para>
+    </section>
+
+    <section>
+        <title>Data Fields</title>
+        <para>
+        One can think of a dialog as a container/manager object consisting of data field objects which have their own
+        behaviors and properties. With these data fields XAF provides the flexibility to create customized forms for
+        data processing and it also provides the ability to create new fields or modify existing ones. Currently the
+        following built-in general fields are available:
+        <itemizedlist>
+            <listitem>Text</listitem>
+            <listitem>Integer</listitem>
+            <listitem>Float</listitem>
+            <listitem>Date and Time</listitem>
+            <listitem>List</listitem>
+            <listitem>Checkbox</listitem>
+            <listitem>Radio Buttons</listitem>
+        </itemizedlist>
+
+        Based on the fields listed above, there are fields which serve a more specific role also:
+        <itemizedlist>
+            <listitem>Blood Pressure</listitem>
+            <listitem>Social Security Number</listitem>
+            <listitem>Phone Number</listitem>
+        </itemizedlist>
+
+        Every type of field available has its own both client-side and server-side validation
+        features.
+        </para>
+    </section>
+
+    <section>
+        <title>Dialog Manager</title>
+
+    </section>
+
+    <section>
+        <title>Look &amp; Feel: Skins</title>
+        <para>
+        Skins provide consistency look and feel and allows the same code to run on a variety of
+        browsers and platforms (e.g. hand-helds).
+        </para>
+    </section>
+
+
+    <section>
+        <title>Testing the dialog</title>
+        <section>
+            <title>Unit Testing</title>
+
+        </section>
+        <section>
+            <title>Integration Testing</title>
+
+        </section>
+
+    </section>
+
+    <section>
+        <title>Using the dialog</title>
+
+    </section>
+
+</chapter>

@@ -1,0 +1,17 @@
+<chapter>
+	<title>Application Security</title>
+
+    <section>
+        <title>Overview</title>
+        <para>
+            Sparx provides a built-in fine-grained security through the use of hierarchical
+            access control lists (ACLs). Personalization features allow specific components
+            to be shown based on user names, locations, etc.
+
+
+        </para>
+    </section>
+
+
+
+</chapter>

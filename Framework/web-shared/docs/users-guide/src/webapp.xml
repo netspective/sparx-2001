@@ -1,0 +1,13 @@
+<chapter>
+	<title>Creating the Web Application</title>
+    <para>
+    Both servlets and JSPs can be used by the developer using Sparx.
+    </para>
+
+    <section>
+        <title>JSPs</title>
+    </section>
+    <section>
+        <title>Servlet</title>
+    </section>
+</chapter>

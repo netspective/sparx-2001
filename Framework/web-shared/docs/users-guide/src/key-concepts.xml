@@ -1,0 +1,63 @@
+<chapter>
+	<title>Key concepts</title>
+
+
+    <section>
+        <title>Centralized Configuration</title>
+        <para>
+        All Sparx applications use a single XML-based repository for all configuration items.
+        </para>
+
+       <section>
+            <title>Data Sources</title>
+            <para>
+
+            </para>
+        </section>
+    </section>
+
+    <section>
+        <title>Value Sources</title>
+        <para>
+        A Value Source is the source of a single value, or a collection of values (a data object),
+        for use in many places throughout Sparx. The format of a value source is similar to a URL (name:params).
+        For example:
+        <itemizedlist>
+            <listitem>request:abc</listitem>
+            <listitem>session-attr:abc</listitem>
+            <listitem>form:abc</listitem>
+        </itemizedlist>
+        </para>
+        <section>
+            <title>Single Value Sources</title>
+            <para>
+
+            </para>
+        </section>
+        <section>
+            <title>List Value Sources</title>
+
+        </section>
+    </section>
+
+    <section>
+        <title>XML Task Tags and JSP Tags</title>
+        <para>
+
+        </para>
+
+       <section>
+            <title>XML Task Tags</title>
+            <para>
+
+            </para>
+        </section>
+       <section>
+            <title>JSP Tags</title>
+            <para>
+
+            </para>
+        </section>
+    </section>
+
+</chapter>

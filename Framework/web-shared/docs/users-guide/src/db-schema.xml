@@ -1,0 +1,40 @@
+<chapter>
+	<title>Database Schema Generation</title>
+
+    <section>
+        <title>Overview</title>
+        <para>
+		Database Programmers spend time on essential tables and schema elements significant to a specific
+		application instead of rewriting common schema elements for each application. Sparx allows
+        for re-use of Schemas across applications and produces and maintains Schema documentation.
+        The entire schema is managed in XML as an XML document (a SchemaDoc) and SQL is generated
+        through XSLT style sheets (the templates). The same SchemaDoc can be used to generate database-specific
+        SQL DDL.
+
+        </para>
+    </section>
+
+    <section>
+        <title>Creating Data Types</title>
+        <para>
+        ...
+        </para>
+
+    </section>
+
+
+    <section>
+        <title>Creating Table Types</title>
+        <para>
+        ...
+        </para>
+    </section>
+
+    <section>
+        <title>Generating  SQL DDL File</title>
+        <para>
+        ...
+        </para>
+    </section>
+
+</chapter>

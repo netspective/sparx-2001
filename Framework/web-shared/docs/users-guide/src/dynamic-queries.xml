@@ -1,0 +1,55 @@
+<chapter>
+	<title>Querying Relational Data: Dynamic Queries</title>
+    <section>
+        <title>Overview</title>
+        <para>
+            XAF provides a centralized location to create and store all dynamic SQL statements
+            with bind parameters in a single repository:
+            <filename class="conf">WEB-INF/ui/statement.xml</filename>.
+            The XML file also provides the flexibility of defining sql statements for
+            multiple data sources in one centralized location.
+
+        </para>
+    </section>
+
+    <section>
+        <title>Creating a dynamic query</title>
+        <para>
+        ...
+        </para>
+        <section>
+            <title>Defining the query</title>
+            <para>
+            ...
+            </para>
+        </section>
+
+        <section>
+            <title>Defining the report</title>
+            <para>
+            ...
+            </para>
+        </section>
+
+    </section>
+
+    <section>
+        <title>Testing the static query</title>
+        <section>
+            <title>Unit Testing</title>
+
+        </section>
+        <section>
+            <title>Integration Testing</title>
+
+        </section>
+
+    </section>
+    <section>
+        <title>Using the dynamic query</title>
+        <para>
+        ...
+        </para>
+    </section>
+
+</chapter>
