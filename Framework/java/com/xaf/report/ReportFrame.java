@@ -11,6 +11,7 @@ package com.xaf.report;
 
 import java.util.*;
 import com.xaf.value.*;
+import org.w3c.dom.Element;
 
 public class ReportFrame
 {
@@ -54,21 +55,19 @@ public class ReportFrame
     }
 
 	public SingleValueSource getHeading() { return heading; }
-	public void setHeading(String value) { heading = ValueSourceFactory.getSingleOrStaticValueSource(value); }
+	public void setHeading(String value) { heading = value != null && value.length() > 0 ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null; }
 	public void setHeading(SingleValueSource vs) { heading = vs; }
 
-    public SingleValueSource getFooting()
-    {
-        return footing;
-    }
-
-    public void setFooting(String value)
-    {
-        if (value != null && value.length() != 0)
-            this.footing = ValueSourceFactory.getSingleOrStaticValueSource(value);
-    }
+    public SingleValueSource getFooting() { return footing; }
+    public void setFooting(String value) { footing = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null; }
 
     public ArrayList getItems() { return items; }
     public Item getItem(int n) { return (Item) items.get(n); }
     public void addItem(Item item) { if(items == null) items = new ArrayList(); items.add(item); }
+
+    public void importFromXml(Element elem)
+    {
+        setHeading(elem.getAttribute("heading"));
+        setFooting(elem.getAttribute("footing"));
+    }
 }

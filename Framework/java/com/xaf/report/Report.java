@@ -21,6 +21,7 @@ public interface Report
 	public ReportFrame getFrame();
     public void setFrame(ReportFrame rf);
 	public ReportBanner getBanner();
+    public void setBanner(ReportBanner value);
 
 	public Object getCanvas();
 	public void setCanvas(Object value);

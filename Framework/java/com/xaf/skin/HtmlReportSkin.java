@@ -81,20 +81,9 @@ public class HtmlReportSkin implements ReportSkin
 
 			if(banner != null)
 			{
-				writer.write("<tr "+ bannerRowAttrs +"><td><table border=0 cellspacing=0>");
-				ArrayList bannerItems = banner.getItems();
-				for(int i = 0; i < bannerItems.size(); i++)
-				{
-					ReportBanner.Item item = (ReportBanner.Item) bannerItems.get(i);
-                    SingleValueSource itemUrl = item.getUrl();
-                    SingleValueSource itemCaption = item.getCaption();
-
-                    if(itemUrl != null && itemCaption != null)
-                        writer.write("<tr><td>-</td><td><font "+bannerItemFontAttrs+"><a href='"+ itemUrl.getValue(rc) +"'>"+ itemCaption.getValue(rc) +"</a></font></td></tr>");
-                    else if(itemCaption != null)
-                        writer.write("<tr><td>-</td><td><font "+bannerItemFontAttrs+">" + itemCaption.getValue(rc) +"</font></td></tr>");
-				}
-				writer.write("</table></td></tr>");
+				writer.write("<tr "+ bannerRowAttrs +"><td>");
+                banner.produceHtml(writer, rc);
+				writer.write("</td></tr>");
 			}
 			writer.write("<tr><td bgcolor='white'>");
         }
@@ -380,7 +369,7 @@ public class HtmlReportSkin implements ReportSkin
 		}
     }
 
-	public void produceFootRow(Writer writer, ReportContext rc) throws SQLException, IOException
+    public void produceFootRow(Writer writer, ReportContext rc) throws SQLException, IOException
 	{
         int calcsCount = rc.getCalcsCount();
         if(calcsCount == 0)
@@ -405,4 +394,133 @@ public class HtmlReportSkin implements ReportSkin
 		writer.write("</tr>");
     }
 
+    public String getOuterTableAttrs()
+    {
+        return outerTableAttrs;
+    }
+
+    public void setOuterTableAttrs(String outerTableAttrs)
+    {
+        this.outerTableAttrs = outerTableAttrs;
+    }
+
+    public String getInnerTableAttrs()
+    {
+        return innerTableAttrs;
+    }
+
+    public void setInnerTableAttrs(String innerTableAttrs)
+    {
+        this.innerTableAttrs = innerTableAttrs;
+    }
+
+    public String getFrameHdRowAttrs()
+    {
+        return frameHdRowAttrs;
+    }
+
+    public void setFrameHdRowAttrs(String frameHdRowAttrs)
+    {
+        this.frameHdRowAttrs = frameHdRowAttrs;
+    }
+
+    public String getFrameHdFontAttrs()
+    {
+        return frameHdFontAttrs;
+    }
+
+    public void setFrameHdFontAttrs(String frameHdFontAttrs)
+    {
+        this.frameHdFontAttrs = frameHdFontAttrs;
+    }
+
+    public String getFrameHdTableRowBgcolorAttrs()
+    {
+        return frameHdTableRowBgcolorAttrs;
+    }
+
+    public void setFrameHdTableRowBgcolorAttrs(String frameHdTableRowBgcolorAttrs)
+    {
+        this.frameHdTableRowBgcolorAttrs = frameHdTableRowBgcolorAttrs;
+    }
+
+    public String getFrameFtRowAttrs()
+    {
+        return frameFtRowAttrs;
+    }
+
+    public void setFrameFtRowAttrs(String frameFtRowAttrs)
+    {
+        this.frameFtRowAttrs = frameFtRowAttrs;
+    }
+
+    public String getFrameFtFontAttrs()
+    {
+        return frameFtFontAttrs;
+    }
+
+    public void setFrameFtFontAttrs(String frameFtFontAttrs)
+    {
+        this.frameFtFontAttrs = frameFtFontAttrs;
+    }
+
+    public String getBannerRowAttrs()
+    {
+        return bannerRowAttrs;
+    }
+
+    public void setBannerRowAttrs(String bannerRowAttrs)
+    {
+        this.bannerRowAttrs = bannerRowAttrs;
+    }
+
+    public String getBannerItemFontAttrs()
+    {
+        return bannerItemFontAttrs;
+    }
+
+    public void setBannerItemFontAttrs(String bannerItemFontAttrs)
+    {
+        this.bannerItemFontAttrs = bannerItemFontAttrs;
+    }
+
+    public String getDataHdFontAttrs()
+    {
+        return dataHdFontAttrs;
+    }
+
+    public void setDataHdFontAttrs(String dataHdFontAttrs)
+    {
+        this.dataHdFontAttrs = dataHdFontAttrs;
+    }
+
+    public String getDataFontAttrs()
+    {
+        return dataFontAttrs;
+    }
+
+    public void setDataFontAttrs(String dataFontAttrs)
+    {
+        this.dataFontAttrs = dataFontAttrs;
+    }
+
+    public String getDataFtFontAttrs()
+    {
+        return dataFtFontAttrs;
+    }
+
+    public void setDataFtFontAttrs(String dataFtFontAttrs)
+    {
+        this.dataFtFontAttrs = dataFtFontAttrs;
+    }
+
+    public String getRowSepImgSrc()
+    {
+        return rowSepImgSrc;
+    }
+
+    public void setRowSepImgSrc(String rowSepImgSrc)
+    {
+        this.rowSepImgSrc = rowSepImgSrc;
+    }
 }

@@ -25,6 +25,8 @@ public class QuerySelect
 	private QueryDefinition queryDefn;
 	private String name;
 	private String caption;
+    private ReportFrame frame;
+    private ReportBanner banner;
 	private boolean distinctRows;
 	private boolean isDirty;
     private boolean alwaysDirty;
@@ -50,6 +52,8 @@ public class QuerySelect
 	public String getCaption() { return caption; }
 	public boolean distinctRowsOnly() { return distinctRows; }
 	public QueryDefinition getQueryDefn() { return queryDefn; }
+    public ReportFrame getFrame() { return frame; }
+    public ReportBanner getBanner() { return banner; }
 	public List getReportFields() { return reportFields; }
 	public List getConditions() { return conditions; }
 	public List getWhereExpressions() { return whereExprs; }
@@ -349,9 +353,12 @@ public class QuerySelect
 		inherit(conditions, queryDefn.getDefaultConditions());
 		inherit(conditions, select.getConditions());
 		inherit(orderBy, select.getOrderBy());
+        inherit(groupByFields, select.getGroupBy());
+
+        frame = select.getFrame();
+        banner = select.getBanner();
 
 		// whereExprs and errors can be null, so treat them special
-
 		whereExprs = inherit(whereExprs, select.getWhereExpressions());
 		whereExprs = inherit(whereExprs, queryDefn.getWhereExprs());
 		errors = inherit(errors, select.getErrors());
@@ -366,6 +373,14 @@ public class QuerySelect
 		String value = elem.getAttribute("distinct");
 		if(value != null && value.equals("no"))
 			distinctRows = false;
+
+        String heading = elem.getAttribute("heading");
+        String footing = elem.getAttribute("footing");
+		if(heading.length() > 0 || footing.length() > 0)
+		{
+			if(frame == null) frame = new ReportFrame();
+			frame.importFromXml(elem);
+		}
 
 		NodeList children = elem.getChildNodes();
 		for(int n = 0; n < children.getLength(); n++)
@@ -400,6 +415,11 @@ public class QuerySelect
 				SqlWhereExpression expr = new SqlWhereExpression();
 				expr.importFromXml((Element) node);
 				addWhereExpr(expr);
+			}
+            else if(childName.equals("banner"))
+			{
+                banner = new ReportBanner();
+                banner.importFromXml((Element) node);
 			}
 		}
 	}

@@ -43,9 +43,12 @@ public class StandardReport implements Report
 	public void setCanvas(Object value) { canvas = value; }
 
     public String getName() { return name; }
-	public ReportFrame getFrame() { return frame; }
+
+    public ReportFrame getFrame() { return frame; }
     public void setFrame(ReportFrame rf) { frame = rf; }
+
 	public ReportBanner getBanner() { return banner; }
+    public void setBanner(ReportBanner value) { banner = value; }
 
 	public ReportColumnsList getColumns() { return columns; }
 	public ReportColumn getColumn(int i) { return columns.getColumn(i); }
@@ -110,19 +113,12 @@ public class StandardReport implements Report
 			name = "default";
 
 		String heading = elem.getAttribute("heading");
-		if(heading.length() > 0)
-		{
-			if(frame == null) frame = new ReportFrame();
-			frame.setHeading(heading);
-		}
-
         String footing = elem.getAttribute("footing");
-		if(footing.length() > 0)
+		if(heading.length() > 0 || footing.length() > 0)
 		{
 			if(frame == null) frame = new ReportFrame();
-			frame.setFooting(footing);
+			frame.importFromXml(elem);
 		}
-
 
 		if(elem.getAttribute("first-row").equals("column-headings"))
 			setFlag(REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS);
@@ -176,18 +172,13 @@ public class StandardReport implements Report
 
 				columnIndex++;
 			}
-            else if(childName.equals("banner-item"))
+            else if(childName.equals("banner"))
             {
-				Element bannerItemElem = (Element) node;
-
-				String caption = bannerItemElem.getAttribute("caption");
-				String url = bannerItemElem.getAttribute("url");
-
-                if(banner == null)
-                    banner = new ReportBanner();
-
-                banner.addItem(new ReportBanner.Item(caption, url));
+                banner = new ReportBanner();
+                banner.importFromXml((Element) node);
             }
+            else if(childName.equals("banner-item"))
+                throw new RuntimeException("The <banner-item> element is now called <item> and must be placed inside a <banner> element (since Version 1.2.8 Build 51)");
 		}
 	}
 
