@@ -9,7 +9,7 @@ insert into Person(person_id, name_first, name_last, short_name, simple_name, co
 
 /* make SNSHAH a member of COMSYS */
 insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
-	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
+    values(PeORel_system_id_SEQ.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 
 /* allow SNSHAH to log in */
 
@@ -22,7 +22,7 @@ insert into Org (org_id, org_code, org_name)
 
 /* make SNSHAH a member of ACME Corp */
 insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
-	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
+    values(PeORel_system_id_SEQ.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 insert into Person_Address(cr_stamp, cr_person_id, cr_org_id, record_status_id, system_id, parent_id, address_name, mailing, line1, line2, city, county, state, zip, country)  values(sysdate, 1, org_org_id_seq.currval, null, PerAddr_system_id_SEQ.nextval, Per_person_id_seq.currval, 'WORK', null, '123 ACME ROAD', null, 'ACME CITY', null, 'AC', '99999', 'USA');
 
 /* create Bugs Bunny personal record */
@@ -32,7 +32,7 @@ insert into Person(person_id, name_first, name_last, short_name, simple_name, co
 insert into Person_Address(cr_stamp, cr_person_id, cr_org_id, record_status_id, system_id, parent_id, address_name, mailing, line1, line2, city, county, state, zip, country)  values(sysdate, 1, org_org_id_seq.currval, null, PerAddr_system_id_SEQ.nextval, Per_person_id_seq.currval, 'WORK', null, '123 ACME ROAD', null, 'ACME CITY', null, 'AC', '99999', 'USA');
 /* make Bugs Bunny a member of ACME Corp */
 insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
-	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
+    values(PeORel_system_id_SEQ.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 
 /* create Road Runner personal record */
 insert into Person(person_id, name_first, name_last, short_name, simple_name, complete_name, short_sortable_name, complete_sortable_name)
@@ -40,7 +40,7 @@ insert into Person(person_id, name_first, name_last, short_name, simple_name, co
 insert into Person_Address(cr_stamp, cr_person_id, cr_org_id, record_status_id, system_id, parent_id, address_name, mailing, line1, line2, city, county, state, zip, country)  values(sysdate, 1, org_org_id_seq.currval, null, PerAddr_system_id_SEQ.nextval, Per_person_id_seq.currval, 'WORK', null, '123 ACME ROAD', null, 'ACME CITY', null, 'AC', '99999', 'USA');
 /* make Road Runner a member of ACME Corp */
 insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
-	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
+    values(PeORel_system_id_SEQ.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 
 /* create Wily Coyote personal record */
 insert into Person(person_id, name_first, name_last, short_name, simple_name, complete_name, short_sortable_name, complete_sortable_name)
@@ -48,7 +48,7 @@ insert into Person(person_id, name_first, name_last, short_name, simple_name, co
 insert into Person_Address(cr_stamp, cr_person_id, cr_org_id, record_status_id, system_id, parent_id, address_name, mailing, line1, line2, city, county, state, zip, country)  values(sysdate, 1, org_org_id_seq.currval, null, PerAddr_system_id_SEQ.nextval, Per_person_id_seq.currval, 'WORK', null, '123 ACME ROAD', null, 'ACME CITY', null, 'AC', '99999', 'USA');
 /* make Bus Bunny a member of ACME Corp */
 insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
-	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
+    values(PeORel_system_id_SEQ.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 
 /* create Taz personal record */
 insert into Person(person_id, name_first, name_last, short_name, simple_name, complete_name, short_sortable_name, complete_sortable_name)
@@ -56,6 +56,6 @@ insert into Person(person_id, name_first, name_last, short_name, simple_name, co
 insert into Person_Address(cr_stamp, cr_person_id, cr_org_id, record_status_id, system_id, parent_id, address_name, mailing, line1, line2, city, county, state, zip, country) values(sysdate, 1, org_org_id_seq.currval, null, PerAddr_system_id_SEQ.nextval, Per_person_id_seq.currval, 'WORK', null, '123 ACME ROAD', null, 'ACME CITY', null, 'AC', '99999', 'USA');
 /* make Bus Bunny a member of ACME Corp */
 insert into PersonOrg_Relationship(system_id, parent_id, rel_type, record_status_id, rel_org_id)
-	values(PerRel_system_id_seq.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
+    values(PeORel_system_id_SEQ.nextval, Per_person_id_seq.currval, 0, 1, org_org_id_seq.currval);
 
 commit;	
