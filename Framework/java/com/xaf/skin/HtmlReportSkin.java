@@ -280,7 +280,7 @@ public class HtmlReportSkin implements ReportSkin
                         column.getFormattedData(rc, rowNum, rowData, true);
 
                 String singleRow = "<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+
-                    (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data) +
+                    (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"' "+ state.getUrlAnchorAttrs() +">"+ data +"</a>" : data) +
                     "</font></td><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>";
 
 				//writer.write(MessageFormat.format(singleRow, rowData));
@@ -350,7 +350,7 @@ public class HtmlReportSkin implements ReportSkin
                         column.getFormattedData(rc, rowNum, rowData, true);
 
                 String singleRow = "<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+
-                    (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ colData +"</a>" : colData) +
+                    (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'"+ state.getUrlAnchorAttrs() +">"+ colData +"</a>" : colData) +
                     "</font></td><td><font "+dataFontAttrs+">&nbsp;&nbsp;</td>";
 
 				//writer.write(MessageFormat.format(singleRow, rowData));

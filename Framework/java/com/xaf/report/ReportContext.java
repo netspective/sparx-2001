@@ -37,6 +37,7 @@ public class ReportContext extends ServletValueContext
 		protected long flags;
 		protected String outputFormat;
 		protected String url;
+        protected String urlAnchorAttrs;
 
 		ColumnState(ReportColumn column)
 		{
@@ -55,6 +56,11 @@ public class ReportContext extends ServletValueContext
 
 				if(flagIsSet(ReportColumn.COLFLAG_WRAPURL))
 					url = column.resolvePattern(column.getUrl().getValue(ReportContext.this));
+
+                if(flagIsSet(ReportColumn.COLFLAG_HAVEANCHORATTRS))
+					urlAnchorAttrs = column.resolvePattern(column.getUrlAnchorAttrs().getValue(ReportContext.this));
+                else
+                    urlAnchorAttrs = "";
 			}
 
 			heading = column.getHeading().getValue(ReportContext.this);
@@ -65,6 +71,13 @@ public class ReportContext extends ServletValueContext
 				dialogFieldId = dfc.getFieldId();
 				dialogFieldValueTemplate = dfc.getFieldValue();
 			}
+
+            if(flagIsSet(ReportColumn.COLFLAG_HAVECONDITIONALS))
+            {
+                ReportColumnConditionalState[] conditionals = column.getConditionalStates();
+                for(int i = 0; i < conditionals.length; i++)
+                    conditionals[i].makeStateChanges(ReportContext.this, this);
+            }
 		}
 
 		public final boolean isVisible() { return (flags & ReportColumn.COLFLAG_HIDDEN) == 0 ? true : false; }
@@ -81,8 +94,16 @@ public class ReportContext extends ServletValueContext
 		public final String getHeading() { return heading; }
 		public final String getOutputFormat() { return outputFormat; }
 		public final String getUrl() { return url; }
+        public final String getUrlAnchorAttrs() { return urlAnchorAttrs; }
 		public final String getFieldId() { return dialogFieldId; }
 		public final String getFieldValueTemplate() { return dialogFieldValueTemplate; }
+
+        public final void setHeading(String value) { heading = value; }
+		public final void setOutputFormat(String value) { outputFormat = value; }
+		public final void setUrl(String value) { url = value; }
+        public final void setUrlAnchorAttrs(String value) { urlAnchorAttrs = value; }
+		public final void setFieldId(String value) { dialogFieldId = value; }
+		public final void setFieldValueTemplate(String value) { dialogFieldValueTemplate = value; }
 	}
 
 	private List listeners = new ArrayList();

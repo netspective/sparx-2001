@@ -37,11 +37,13 @@ public class GeneralColumn implements ReportColumn
     private int colIndexInResultSet;
 	private SingleValueSource headingValueSource;
 	private SingleValueSource urlValueSource;
+    private SingleValueSource urlAnchorAttrsValueSource;
     private String calcCmd;
     private Format formatter;
     private String outputPattern;
 	private int width;
 	private long flags;
+    private ReportColumnConditionalState[] conditionalStates;
 
     public GeneralColumn()
     {
@@ -89,6 +91,16 @@ public class GeneralColumn implements ReportColumn
             setFlag(COLFLAG_WRAPURL);
         else
             clearFlag(COLFLAG_WRAPURL);
+    }
+
+    public SingleValueSource getUrlAnchorAttrs() { return urlAnchorAttrsValueSource; }
+	public void setUrlAnchorAttrs(String value)
+    {
+        urlAnchorAttrsValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+        if(urlAnchorAttrsValueSource != null)
+            setFlag(COLFLAG_HAVEANCHORATTRS);
+        else
+            clearFlag(COLFLAG_HAVEANCHORATTRS);
     }
 
 	public final int getWidth() { return width; }
@@ -171,12 +183,19 @@ public class GeneralColumn implements ReportColumn
             return "";
 	}
 
+    public ReportColumnConditionalState[] getConditionalStates()
+    {
+        return conditionalStates;
+    }
+
 	public void importFromColumn(ReportColumn rc)
 	{
 		flags = rc.getFlags();
 
 		this.headingValueSource = rc.getHeading();
 		this.urlValueSource = rc.getUrl();
+        this.urlAnchorAttrsValueSource = rc.getUrlAnchorAttrs();
+        this.conditionalStates = rc.getConditionalStates();
 		setAlignStyle(rc.getAlignStyle());
 		setWidth(rc.getWidth());
 		setCalcCmd(rc.getCalcCmd());
@@ -184,6 +203,33 @@ public class GeneralColumn implements ReportColumn
         if (fmt != null)
             setFormatter(fmt);
 		setOutput(rc.getOutput());
+	}
+
+    public void importChildrenFromXml(Element elem)
+	{
+        List conditionals = null;
+		NodeList children = elem.getChildNodes();
+		for(int n = 0; n < children.getLength(); n++)
+		{
+			Node node = children.item(n);
+			if(node.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+
+			String childName = node.getNodeName();
+			if(childName.equals("conditional"))
+			{
+                if(conditionals == null) conditionals = new ArrayList();
+                ReportColumnConditionalState conditional = new ReportColumnConditionalApplyFlag();
+                conditional.importFromXml(this, (Element) node, conditionals.size());
+                conditionals.add(conditional);
+			}
+		}
+
+        if(conditionals != null)
+        {
+            conditionalStates = (ReportColumnConditionalState[]) conditionals.toArray(new ReportColumnConditionalState[conditionals.size()]);
+            setFlag(COLFLAG_HAVECONDITIONALS);
+        }
 	}
 
 	public void importFromXml(Element elem)
@@ -195,6 +241,10 @@ public class GeneralColumn implements ReportColumn
 		value = elem.getAttribute("url");
 		if(value.length() > 0)
 			setUrl(value);
+
+        value = elem.getAttribute("url-anchor-attrs");
+		if(value.length() > 0)
+			setUrlAnchorAttrs(value);
 
 		value = elem.getAttribute("align");
 		if(value.length() > 0)
@@ -226,6 +276,8 @@ public class GeneralColumn implements ReportColumn
 		value = elem.getAttribute("output");
 		if(value.length() > 0)
 			setOutput(value);
+
+        importChildrenFromXml(elem);
 	}
 
 	public void finalizeContents(Report report)

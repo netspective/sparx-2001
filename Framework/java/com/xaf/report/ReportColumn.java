@@ -23,7 +23,9 @@ public interface ReportColumn
     static public final long COLFLAG_HASPLACEHOLDERS = COLFLAG_HIDDEN * 2;
     static public final long COLFLAG_HASOUTPUTPATTERN = COLFLAG_HASPLACEHOLDERS * 2;
 	static public final long COLFLAG_WRAPURL = COLFLAG_HASOUTPUTPATTERN * 2;
-	static public final long COLFLAG_CUSTOMSTART = COLFLAG_WRAPURL * 2;
+    static public final long COLFLAG_HAVEANCHORATTRS = COLFLAG_WRAPURL * 2;
+    static public final long COLFLAG_HAVECONDITIONALS = COLFLAG_HAVEANCHORATTRS * 2;
+	static public final long COLFLAG_CUSTOMSTART = COLFLAG_HAVECONDITIONALS * 2;
 
 	static public final int ALIGN_LEFT   = 0;
 	static public final int ALIGN_CENTER = 1;
@@ -45,6 +47,9 @@ public interface ReportColumn
 
 	public SingleValueSource getUrl();
 	public void setUrl(String value);
+
+    public SingleValueSource getUrlAnchorAttrs();
+	public void setUrlAnchorAttrs(String value);
 
 	public int getWidth();
 	public void setWidth(int value);
@@ -72,6 +77,8 @@ public interface ReportColumn
 
 	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc);
 	public String getFormattedData(ReportContext rc, ColumnDataCalculator calc);
+
+    public ReportColumnConditionalState[] getConditionalStates();
 
 	public void importFromColumn(ReportColumn rc);
 	public void importFromXml(Element elem);

@@ -49,7 +49,7 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
 
 				dataTable.append("<td align='right'><font "+dataHdFontAttrs+">"+
                         column.getHeading().getValue(rc)+  ":</font></td>");
-				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data)+"</font></td>");
+				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'"+ state.getUrlAnchorAttrs() +">"+ data +"</a>" : data)+"</font></td>");
 
 				colCount++;
 				if(colCount >= tableCols)
