@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseContext.java,v 1.3 2002-08-30 00:26:35 shahid.shah Exp $
+ * $Id: DatabaseContext.java,v 1.4 2002-09-02 22:57:53 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -60,6 +60,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import org.w3c.dom.Element;
 
@@ -88,9 +89,17 @@ public interface DatabaseContext
      * Given a data source identifier, translate the name to a suitable name for
      * the given ValueContext. For example, if the dataSourceId is null, return
      * the <i>default</i> dataSource. If any per-user or per-request dataSourceId
-     * name changes are needed, override this method.
+     * name changes are needed, override this method. ValueContext can be null when
+     * not running within a servlet environment.
      */
     public String translateDataSourceId(ValueContext vc, String dataSourceId);
+
+    /**
+     * Given a data source, perform any special runtime translation of the data source parameters (like URL, user name,
+     * etc). vc can be null when not running within a servlet environment. dataSource can also be null if no
+     * dataSource was found by a given dataSourceId.
+     */
+    public DataSource translateDataSource(ValueContext vc, String dataSourceId, DataSource dataSource);
 
     /**
      * Returns a connection (with appropriate pooling) for the given dataSourceId (no datasource translation performed)

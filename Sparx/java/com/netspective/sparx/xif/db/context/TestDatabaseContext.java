@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TestDatabaseContext.java,v 1.1 2002-08-18 21:02:07 shahid.shah Exp $
+ * $Id: TestDatabaseContext.java,v 1.2 2002-09-02 22:58:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -175,12 +175,7 @@ public class TestDatabaseContext extends AbstractDatabaseContext
         // within a transaction
         Connection conn = vc != null ? getSharedConnection(vc, dataSourceId) : null;
         if(conn == null)
-        {
             conn = getConnection(dataSourceId);
-            AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got new connection for " + dataSourceId + ": " + conn);
-        }
-        else
-            AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got shared connection for " + dataSourceId + ": " + conn);
         return conn;
     }
 }

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractDatabaseContext.java,v 1.5 2002-08-30 00:26:36 shahid.shah Exp $
+ * $Id: AbstractDatabaseContext.java,v 1.6 2002-09-02 22:58:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -64,6 +64,7 @@ import java.sql.SQLException;
 import javax.naming.NamingException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 
 import org.w3c.dom.Element;
 
@@ -97,24 +98,23 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
         return dataSourceId != null ? dataSourceId : vc.getServletContext().getInitParameter("default-data-source");
     }
 
+    public DataSource translateDataSource(ValueContext vc, String dataSourceId, DataSource dataSource)
+    {
+        // do nothing by default
+        return dataSource;
+    }
+
     public abstract Connection getConnection(ValueContext vc, String dataSourceId) throws NamingException, SQLException;
 
     public Connection beginConnectionSharing(ValueContext vc, String dataSourceId) throws NamingException, SQLException
     {
         Connection sharedConn = getSharedConnection(vc, dataSourceId);
-        AppServerLogger log = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_SQL);
         if(sharedConn != null)
-        {
-            if(log.isDebugEnabled())
-                log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " starting shared connection " + dataSourceId + ": " + sharedConn);
             return sharedConn;
-        }
 
         Connection conn = getConnection(vc, dataSourceId);
         conn.setAutoCommit(false);
         vc.getRequest().setAttribute(SHARED_CONN_ATTR_PREFIX + dataSourceId, conn);
-        if(log.isDebugEnabled())
-            log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " starting shared connection " + dataSourceId + ": " + conn);
         return conn;
     }
 
@@ -122,9 +122,6 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
     {
         String attrName = SHARED_CONN_ATTR_PREFIX + dataSourceId;
         Connection conn = (Connection) vc.getRequest().getAttribute(attrName);
-        AppServerLogger log = (AppServerLogger) AppServerLogger.getLogger(LogManager.DEBUG_SQL);
-        if(log.isDebugEnabled())
-            log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " ending shared connection" + dataSourceId + ": " + conn);
         if(conn != null)
         {
             vc.getRequest().removeAttribute(attrName);
@@ -132,8 +129,6 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
                 conn.commit();
             else
                 conn.rollback();
-            if(log.isDebugEnabled())
-                log.debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " closing shared connection " + dataSourceId + ": "+ conn.toString());
             conn.close();
             conn = null;
         }
@@ -172,11 +167,11 @@ public abstract class AbstractDatabaseContext implements DatabaseContext
 
     public void createCatalog(ValueContext vc, Element parent) throws NamingException
     {
-        throw new RuntimeException("Not implemented");
+        throw new RuntimeException("createCatalog() is not implemented in "+ getClass().getName());
     }
 
     public void populateDataSources(ValueContext vc, SelectChoicesList scl, DataSourceEntriesListValue dselv)
     {
-        throw new RuntimeException("Not implemented");
+        throw new RuntimeException("popuplateDataSources() is not implemented in "+ getClass().getName());
     }
 }

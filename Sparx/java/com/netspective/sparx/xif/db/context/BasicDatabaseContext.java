@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: BasicDatabaseContext.java,v 1.4 2002-08-30 00:26:36 shahid.shah Exp $
+ * $Id: BasicDatabaseContext.java,v 1.5 2002-09-02 22:58:59 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db.context;
@@ -100,7 +100,7 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
         if(env == null)
             env = (Context) new InitialContext().lookup("java:comp/env");
 
-        DataSource source = (DataSource) env.lookup(dataSourceId);
+        DataSource source = translateDataSource(null, dataSourceId, (DataSource) env.lookup(dataSourceId));
         if(source == null)
             throw new NamingException("Data source '" + dataSourceId + "' not found");
 
@@ -120,14 +120,12 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
         Connection conn = vc != null ? getSharedConnection(vc, dataSourceId) : null;
         if(conn == null)
         {
-            DataSource source = (DataSource) env.lookup(dataSourceId);
+            DataSource source = translateDataSource(vc, dataSourceId, (DataSource) env.lookup(dataSourceId));
             if(source == null)
                 throw new NamingException("Data source '" + dataSourceId + "' not found");
+
             conn = source.getConnection();
-            AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got new connection for " + dataSourceId + ": " + conn);
         }
-        else
-            AppServerLogger.getLogger(LogManager.DEBUG_SQL).debug(((HttpServletRequest) vc.getRequest()).getServletPath() + " got shared connection for " + dataSourceId + ": " + conn);
         return conn;
     }
 
@@ -141,11 +139,12 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
             Element propertyElem = doc.createElement("property");
 
             NameClassPair entry = (NameClassPair) e.nextElement();
+            String dataSourceId = "jdbc/" + entry.getName();
             DatabaseContextFactory.addText(doc, propertyElem, "name", "jdbc/" + entry.getName());
 
             try
             {
-                DataSource source = (DataSource) env.lookup(entry.getName());
+                DataSource source = translateDataSource(vc, dataSourceId, (DataSource) env.lookup(entry.getName()));
                 Connection conn = source.getConnection();
                 DatabaseMetaData dbmd = conn.getMetaData();
                 String databasePolicyClass = null;
@@ -160,6 +159,7 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
                 }
 
                 DatabaseContextFactory.addText(doc, propertyElem, "value", dbmd.getDriverName());
+                DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "DataSource Class: " + source.getClass().getName());
                 DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Product: " + dbmd.getDatabaseProductName());
                 DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Product Version: " + dbmd.getDatabaseProductVersion());
                 DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Driver Version: " + dbmd.getDriverVersion());
