@@ -51,15 +51,15 @@
  */
 
 /**
- * $Id: TableImportStatistic.java,v 1.1 2002-08-29 03:38:29 shahid.shah Exp $
+ * $Id: TableImportStatistic.java,v 1.2 2002-12-04 17:51:56 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import org.xml.sax.Locator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableImportStatistic
 {

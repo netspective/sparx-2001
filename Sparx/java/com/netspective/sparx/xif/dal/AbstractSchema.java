@@ -51,38 +51,28 @@
  */
 
 /**
- * $Id: AbstractSchema.java,v 1.4 2002-10-20 15:58:11 shahid.shah Exp $
+ * $Id: AbstractSchema.java,v 1.5 2002-12-04 17:51:27 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import com.netspective.sparx.xif.dal.xml.ImportException;
+import com.netspective.sparx.xif.dal.xml.ParseContext;
+import com.netspective.sparx.xif.dal.xml.SchemaImportHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Writer;
-
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-
-import org.xml.sax.XMLReader;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Attributes;
-import org.w3c.dom.Document;
-
-import com.netspective.sparx.xif.dal.xml.ImportException;
-import com.netspective.sparx.xif.dal.xml.ParseContext;
-import com.netspective.sparx.xif.dal.xml.SchemaImportHandler;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractSchema implements Schema
 {
@@ -111,13 +101,13 @@ public abstract class AbstractSchema implements Schema
 
     public AbstractSchema(List tables)
     {
-        for(int i = 0; i < tables.size(); i++)
+        for (int i = 0; i < tables.size(); i++)
             addTable((Table) tables.get(i));
     }
 
     public AbstractSchema(Table[] tables)
     {
-        for(int i = 0; i < tables.length; i++)
+        for (int i = 0; i < tables.length; i++)
             addTable(tables[i]);
     }
 
@@ -125,7 +115,7 @@ public abstract class AbstractSchema implements Schema
 
     public void finalizeDefn()
     {
-        for(Iterator i = tablesByNameMap.values().iterator(); i.hasNext();)
+        for (Iterator i = tablesByNameMap.values().iterator(); i.hasNext();)
         {
             Table table = (Table) i.next();
             table.finalizeDefn();
@@ -156,7 +146,7 @@ public abstract class AbstractSchema implements Schema
     public Table getTableForXmlNode(String nodeName)
     {
         Table table = getTable(nodeName);
-        if(table != null)
+        if (table != null)
             return table;
         else
             return (Table) tablesByXmlNodeNameMap.get(nodeName);
@@ -165,7 +155,7 @@ public abstract class AbstractSchema implements Schema
     public Column getColumn(String tableName, String tableColumn)
     {
         Table table = getTable(tableName);
-        if(table == null)
+        if (table == null)
             return null;
         return table.getColumn(tableColumn);
     }
@@ -176,7 +166,7 @@ public abstract class AbstractSchema implements Schema
         String refColumnName = null;
 
         int delimPos = ref.indexOf(".");
-        if(delimPos == -1)
+        if (delimPos == -1)
         {
             refTableName = ref;
             refColumnName = "id";
@@ -188,14 +178,14 @@ public abstract class AbstractSchema implements Schema
         }
 
         Table table = getTable(refTableName);
-        if(table == null)
+        if (table == null)
             return null;
 
         Column refColumn = table.getColumn(refColumnName);
-        if(refColumn == null)
+        if (refColumn == null)
             return null;
 
-        switch(type)
+        switch (type)
         {
             case ForeignKey.FKEYTYPE_LOOKUP:
                 return new BasicForeignKey(srcColumn, refColumn);

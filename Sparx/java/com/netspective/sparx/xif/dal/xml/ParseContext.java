@@ -51,29 +51,27 @@
  */
 
 /**
- * $Id: ParseContext.java,v 1.3 2002-10-20 15:58:11 shahid.shah Exp $
+ * $Id: ParseContext.java,v 1.4 2002-12-04 17:56:21 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
 
-import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-
-import org.xml.sax.XMLReader;
+import com.netspective.sparx.xif.dal.ConnectionContext;
+import com.netspective.sparx.xif.dal.Schema;
+import com.netspective.sparx.xif.dal.Table;
+import com.netspective.sparx.xif.dal.TableImportStatistic;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
-import com.netspective.sparx.xif.dal.Schema;
-import com.netspective.sparx.xif.dal.ConnectionContext;
-import com.netspective.sparx.xif.dal.TableImportStatistic;
-import com.netspective.sparx.xif.dal.Table;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ParseContext
 {
@@ -112,7 +110,7 @@ public class ParseContext
     {
         String tableName = table.getNameForMapKey();
         TableImportStatistic stat = (TableImportStatistic) statistics.get(tableName);
-        if(stat == null)
+        if (stat == null)
         {
             stat = new TableImportStatistic(tableName);
             statistics.put(tableName, stat);

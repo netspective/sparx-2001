@@ -51,29 +51,24 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.9 2002-11-14 02:57:14 shahbaz.javeed Exp $
+ * $Id: AbstractTable.java,v 1.10 2002-12-04 17:51:27 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
 
+import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.xaf.querydefn.QueryDefinition;
+import com.netspective.sparx.xaf.querydefn.QueryField;
+import com.netspective.sparx.xaf.querydefn.QueryJoin;
+import com.netspective.sparx.xaf.sql.DmlStatement;
+import com.netspective.sparx.xif.db.DatabasePolicy;
+
+import javax.naming.NamingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.naming.NamingException;
-
-import com.netspective.sparx.xaf.sql.DmlStatement;
-import com.netspective.sparx.xif.db.DatabasePolicy;
-import com.netspective.sparx.xaf.querydefn.QueryDefinition;
-import com.netspective.sparx.xaf.querydefn.QueryField;
-import com.netspective.sparx.xaf.querydefn.QueryJoin;
-import com.netspective.sparx.util.xml.XmlSource;
+import java.util.*;
 
 /**
  * NOTE: SUPPORTS ONLY TABLES WITH SINGLE-COLUMN FOREIGN AND PRIMARY KEYS (NO COMPOUND PRIMARY OR FOREIGN KEYS)
@@ -130,25 +125,25 @@ public abstract class AbstractTable implements Table
         List sequencedCols = new ArrayList();
         List requiredCols = new ArrayList();
 
-        for(Iterator i = getColumnsList().iterator(); i.hasNext();)
+        for (Iterator i = getColumnsList().iterator(); i.hasNext();)
         {
             Column column = (Column) i.next();
             column.finalizeDefn();
-            if(column.isPrimaryKey())
+            if (column.isPrimaryKey())
                 primaryKeyBindSql = column.getName() + " = ?";
-            if(column.getSequenceName() != null)
+            if (column.getSequenceName() != null)
                 sequencedCols.add(column);
-            if(column.isRequired() && !column.isSequencedPrimaryKey())
+            if (column.isRequired() && !column.isSequencedPrimaryKey())
                 requiredCols.add(column);
         }
 
-        if(allColumns == null)
+        if (allColumns == null)
             allColumns = (Column[]) columnsList.toArray(new Column[columnsList.size()]);
 
-        if(sequencedCols.size() > 0)
+        if (sequencedCols.size() > 0)
             sequencedColumns = (Column[]) sequencedCols.toArray(new Column[sequencedCols.size()]);
 
-        if(requiredCols.size() > 0)
+        if (requiredCols.size() > 0)
             requiredColumns = (Column[]) requiredCols.toArray(new Column[requiredCols.size()]);
 
         generateQueryDefn();
@@ -246,7 +241,7 @@ public abstract class AbstractTable implements Table
 
     public void addColumn(Column column)
     {
-        if(columnsMap.containsKey(column.getNameForMapKey()))
+        if (columnsMap.containsKey(column.getNameForMapKey()))
             return;
 
         columnNames.add(column.getName());
@@ -256,12 +251,12 @@ public abstract class AbstractTable implements Table
 
     public String getColumnNamesForSelect()
     {
-        if(columNamesForSelect == null)
+        if (columNamesForSelect == null)
         {
             StringBuffer str = new StringBuffer();
-            for(int c = 0; c < columnsList.size(); c++)
+            for (int c = 0; c < columnsList.size(); c++)
             {
-                if(str.length() > 0)
+                if (str.length() > 0)
                     str.append(", ");
                 str.append(((Column) columnsList.get(c)).getName());
             }
@@ -272,7 +267,7 @@ public abstract class AbstractTable implements Table
 
     public void registerChildTable(Table table)
     {
-        if(childTablesByName == null)
+        if (childTablesByName == null)
         {
             childTablesByName = new HashMap();
             childTablesByXmlNodeName = new HashMap();
@@ -315,7 +310,7 @@ public abstract class AbstractTable implements Table
     {
         Row result = row;
 
-        if(selectByPrimaryKeySql == null)
+        if (selectByPrimaryKeySql == null)
             selectByPrimaryKeySql = "select " + getColumnNamesForSelect() + " from " + getName() + " where " + primaryKeyBindSql;
 
         Connection conn = cc.getConnection();
@@ -326,24 +321,24 @@ public abstract class AbstractTable implements Table
             {
                 stmt = conn.prepareStatement(selectByPrimaryKeySql);
                 stmt.setObject(1, pkValue);
-                if(stmt.execute())
+                if (stmt.execute())
                 {
                     ResultSet rs = stmt.getResultSet();
-                    if(rs.next())
+                    if (rs.next())
                     {
-                        if(result == null) result = createRow();
+                        if (result == null) result = createRow();
                         result.populateDataByIndexes(rs);
                     }
                 }
                 return result;
             }
-            catch(SQLException e)
+            catch (SQLException e)
             {
                 throw new SQLException(e.toString() + " [" + selectByPrimaryKeySql + " (bind = " + (pkValue != null ? "'" + pkValue + "' {" + pkValue.getClass().getName() + "}" : "none") + ")]");
             }
             finally
             {
-                if(stmt != null) stmt.close();
+                if (stmt != null) stmt.close();
             }
         }
         finally
@@ -365,21 +360,21 @@ public abstract class AbstractTable implements Table
             {
                 stmt = conn.prepareStatement(selectSql);
                 stmt.setObject(1, colValue);
-                if(stmt.execute())
+                if (stmt.execute())
                 {
                     ResultSet rs = stmt.getResultSet();
-                    if(result == null) result = createRows();
+                    if (result == null) result = createRows();
                     result.populateDataByIndexes(rs);
                 }
                 return result;
             }
-            catch(SQLException e)
+            catch (SQLException e)
             {
                 throw new SQLException(e.toString() + " [" + selectSql + " (bind = " + (colValue != null ? "'" + colValue + "' {" + colValue.getClass().getName() + "}" : "none") + ")]");
             }
             finally
             {
-                if(stmt != null) stmt.close();
+                if (stmt != null) stmt.close();
             }
         }
         finally
@@ -412,25 +407,25 @@ public abstract class AbstractTable implements Table
             try
             {
                 rs = this.getResultSet(conn, colNames, colValues, allowNull);
-                if(rs != null)
+                if (rs != null)
                 {
-                    if(result == null) result = createRows();
+                    if (result == null) result = createRows();
                     result.populateDataByIndexes(rs);
                 }
                 return result;
             }
-            catch(SQLException e)
+            catch (SQLException e)
             {
                 // rethrow the exception with the select SQL and bind parameter information added
                 e.printStackTrace();
-                if(rs != null)
+                if (rs != null)
                     throw new SQLException(e.toString() + rs.getStatement().toString());
                 else
                     throw e;
             }
             finally
             {
-                if(rs != null)
+                if (rs != null)
                 {
                     rs.getStatement().close();
                     rs.close();
@@ -457,25 +452,25 @@ public abstract class AbstractTable implements Table
             try
             {
                 rs = this.getResultSet(conn, colNames, colValues);
-                if(rs != null)
+                if (rs != null)
                 {
-                    if(result == null) result = createRow();
+                    if (result == null) result = createRow();
                     result.populateDataByIndexes(rs);
                 }
                 return result;
             }
-            catch(SQLException e)
+            catch (SQLException e)
             {
                 // rethrow the exception with the select SQL and bind parameter information added
                 e.printStackTrace();
-                if(rs != null)
+                if (rs != null)
                     throw new SQLException(e.toString() + rs.getStatement().toString());
                 else
                     throw e;
             }
             finally
             {
-                if(rs != null)
+                if (rs != null)
                 {
                     rs.getStatement().close();
                     rs.close();
@@ -502,25 +497,25 @@ public abstract class AbstractTable implements Table
             try
             {
                 rs = this.getResultSet(conn, colNames, colValues, allowNull);
-                if(rs != null)
+                if (rs != null)
                 {
-                    if(result == null) result = createRow();
+                    if (result == null) result = createRow();
                     result.populateDataByIndexes(rs);
                 }
                 return result;
             }
-            catch(SQLException e)
+            catch (SQLException e)
             {
                 // rethrow the exception with the select SQL and bind parameter information added
                 e.printStackTrace();
-                if(rs != null)
+                if (rs != null)
                     throw new SQLException(e.toString() + rs.getStatement().toString());
                 else
                     throw e;
             }
             finally
             {
-                if(rs != null)
+                if (rs != null)
                 {
                     rs.getStatement().close();
                     rs.close();
@@ -545,23 +540,23 @@ public abstract class AbstractTable implements Table
      */
     protected ResultSet getResultSet(Connection conn, String[] colNames, Object[] colValues, boolean allowNull) throws SQLException, NamingException
     {
-        if(colNames == null || colNames.length == 0)
+        if (colNames == null || colNames.length == 0)
             return null;
         String sqlString = "";
 
-        if(allowNull)
+        if (allowNull)
             sqlString = this.createPreparedStatmentString(colNames, colValues);
         else
             sqlString = this.createPreparedStatmentString(colNames);
         PreparedStatement stmt = conn.prepareStatement(sqlString);
-        for(int k = 0; k < colValues.length; k++)
+        for (int k = 0; k < colValues.length; k++)
         {
             // NULL values are never bound so if they are in the list, its probably because
             // the list has empty entries at the end
-            if(colValues[k] != null)
+            if (colValues[k] != null)
                 stmt.setObject(k + 1, colValues[k]);
         }
-        if(stmt.execute())
+        if (stmt.execute())
         {
             ResultSet rs = stmt.getResultSet();
             return rs;
@@ -592,9 +587,9 @@ public abstract class AbstractTable implements Table
         StringBuffer selectSqlBuffer = new StringBuffer("select " + getColumnNamesForSelect() + " from " + getName() + " where ");
 
         int newIndex = 0;
-        for(int i = 0; i < colNames.length; i++)
+        for (int i = 0; i < colNames.length; i++)
         {
-            if(colValues[i] != null)
+            if (colValues[i] != null)
             {
                 selectSqlBuffer.append(colNames[i] + " = ? ");
                 // Need this column value as a bind parameter
@@ -608,7 +603,7 @@ public abstract class AbstractTable implements Table
                 // since it is not needed as a bind parameter anymore
                 selectSqlBuffer.append(colNames[i] + " is null ");
             }
-            if(i != colNames.length - 1)
+            if (i != colNames.length - 1)
                 selectSqlBuffer.append("and ");
         }
         colValues = bindValues;
@@ -624,10 +619,10 @@ public abstract class AbstractTable implements Table
     protected String createPreparedStatmentString(String[] colNames)
     {
         StringBuffer selectSqlBuffer = new StringBuffer("select " + getColumnNamesForSelect() + " from " + getName() + " where ");
-        for(int i = 0; i < colNames.length; i++)
+        for (int i = 0; i < colNames.length; i++)
         {
             selectSqlBuffer.append(colNames[i] + " = ? ");
-            if(i != colNames.length - 1)
+            if (i != colNames.length - 1)
                 selectSqlBuffer.append("and ");
         }
         return selectSqlBuffer.toString();
@@ -647,13 +642,13 @@ public abstract class AbstractTable implements Table
                 stmt.setObject(1, colValue);
                 stmt.execute();
             }
-            catch(SQLException e)
+            catch (SQLException e)
             {
                 throw new SQLException(e.toString() + " [" + deleteSql + " (bind = " + (colValue != null ? "'" + colValue + "' {" + colValue.getClass().getName() + "}" : "none") + ")]");
             }
             finally
             {
-                if(stmt != null) stmt.close();
+                if (stmt != null) stmt.close();
             }
         }
         finally
@@ -665,7 +660,7 @@ public abstract class AbstractTable implements Table
     public void registerForeignKeyDependency(ForeignKey fKey)
     {
         // if we are the "referenced" foreign key, then the source is a child of ours
-        if(fKey.getType() == ForeignKey.FKEYTYPE_PARENT)
+        if (fKey.getType() == ForeignKey.FKEYTYPE_PARENT)
         {
             Table childTable = fKey.getSourceColumn().getParentTable();
             registerChildTable(childTable);
@@ -675,10 +670,10 @@ public abstract class AbstractTable implements Table
     public void validateDmlValues(DmlStatement dml) throws SQLException
     {
         List columnValues = dml.getColumnValues();
-        for(int i = 0; i < allColumns.length; i++)
+        for (int i = 0; i < allColumns.length; i++)
         {
             Column col = allColumns[i];
-            if((col.isRequired() && !col.isSequencedPrimaryKey()) && columnValues.get(i) == null)
+            if ((col.isRequired() && !col.isSequencedPrimaryKey()) && columnValues.get(i) == null)
                 throw new SQLException("Required column '" + col.getName() + "' does not have a value in table '" + col.getParentTable().getName() + "'");
         }
     }
@@ -688,25 +683,25 @@ public abstract class AbstractTable implements Table
         boolean result = false;
         PreparedStatement stmt = null;
         String dbms = cc.getDatabasePolicy().getDBMSName();
-        
+
         try
         {
-        	String sqlString = dml.getSql(dbms);
+            String sqlString = dml.getSql(dbms);
 
             stmt = cc.getConnection().prepareStatement(sqlString);
-        	
+
             // stmt = cc.getConnection().prepareStatement(dml.getSql(dbms));
 
             int columnNum = 1;
             boolean[] bindValues = dml.getBindValues();
             List columnValues = dml.getColumnValues();
-            if(bindValues != null)
+            if (bindValues != null)
             {
-				// Need to use columnValues.size() since the dml may have removed
-				// columns if autoinc columns are not included in the SQL
-                for(int c = 0; c < columnValues.size(); c++)
+                // Need to use columnValues.size() since the dml may have removed
+                // columns if autoinc columns are not included in the SQL
+                for (int c = 0; c < columnValues.size(); c++)
                 {
-                    if(bindValues[c])
+                    if (bindValues[c])
                     {
                         stmt.setObject(columnNum, columnValues.get(c));
                         columnNum++;
@@ -714,9 +709,9 @@ public abstract class AbstractTable implements Table
                 }
             }
 
-            if(additionalBindParams != null)
+            if (additionalBindParams != null)
             {
-                for(int i = 0; i < additionalBindParams.length; i++)
+                for (int i = 0; i < additionalBindParams.length; i++)
                 {
                     stmt.setObject(columnNum, additionalBindParams[i]);
                     columnNum++;
@@ -725,20 +720,20 @@ public abstract class AbstractTable implements Table
 
             return stmt.execute();
         }
-        catch(SQLException e)
+        catch (SQLException e)
         {
             StringBuffer bindParams = new StringBuffer();
             int columnNum = 1;
             boolean[] bindValues = dml.getBindValues();
             List columnValues = dml.getColumnValues();
-            if(bindValues != null)
+            if (bindValues != null)
             {
-                for(int c = 0; c < columnValues.size(); c++)
+                for (int c = 0; c < columnValues.size(); c++)
                 {
-                    if(bindValues[c])
+                    if (bindValues[c])
                     {
                         Object value = columnValues.get(c);
-                        if(columnNum > 1)
+                        if (columnNum > 1)
                             bindParams.append(", ");
                         bindParams.append(columnNum);
                         bindParams.append(": ");
@@ -748,12 +743,12 @@ public abstract class AbstractTable implements Table
                 }
             }
 
-            if(additionalBindParams != null)
+            if (additionalBindParams != null)
             {
-                for(int i = 0; i < additionalBindParams.length; i++)
+                for (int i = 0; i < additionalBindParams.length; i++)
                 {
                     Object value = additionalBindParams[i];
-                    if(columnNum > 1)
+                    if (columnNum > 1)
                         bindParams.append(", ");
                     bindParams.append(columnNum);
                     bindParams.append(": ");
@@ -766,19 +761,19 @@ public abstract class AbstractTable implements Table
         }
         finally
         {
-            if(stmt != null) stmt.close();
+            if (stmt != null) stmt.close();
         }
     }
 
     public boolean insert(ConnectionContext cc, Row row) throws NamingException, SQLException
     {
-		DatabasePolicy dbPolicy = cc.getDatabasePolicy();
+        DatabasePolicy dbPolicy = cc.getDatabasePolicy();
         DmlStatement dml = row.createInsertDml(this, dbPolicy);
-        if (null == dml) throw new NullPointerException ("dml is null in AbstractTable.insert()");
-        
+        if (null == dml) throw new NullPointerException("dml is null in AbstractTable.insert()");
+
         validateDmlValues(dml);
 
-        if(!row.beforeInsert(cc, dml))
+        if (!row.beforeInsert(cc, dml))
             return false;
 
         boolean successful = executeDml(cc, row, dml, null);
@@ -795,11 +790,11 @@ public abstract class AbstractTable implements Table
 
     public boolean update(ConnectionContext cc, Row row, String whereCond, Object[] whereCondBindParams) throws NamingException, SQLException
     {
-		DatabasePolicy dbPolicy = cc.getDatabasePolicy();
+        DatabasePolicy dbPolicy = cc.getDatabasePolicy();
         DmlStatement dml = row.createUpdateDml(this, dbPolicy, whereCond);
         validateDmlValues(dml);
 
-        if(!row.beforeUpdate(cc, dml))
+        if (!row.beforeUpdate(cc, dml))
             return false;
 
         boolean successful = executeDml(cc, row, dml, whereCondBindParams);
@@ -816,9 +811,9 @@ public abstract class AbstractTable implements Table
 
     public boolean delete(ConnectionContext cc, Row row, String whereCond, Object[] whereCondBindParams) throws NamingException, SQLException
     {
-		DatabasePolicy dbPolicy = cc.getDatabasePolicy();
+        DatabasePolicy dbPolicy = cc.getDatabasePolicy();
         DmlStatement dml = row.createDeleteDml(this, dbPolicy, whereCond);
-        if(!row.beforeDelete(cc, dml))
+        if (!row.beforeDelete(cc, dml))
             return false;
 
         boolean successful = executeDml(cc, row, dml, whereCondBindParams);
@@ -866,7 +861,7 @@ public abstract class AbstractTable implements Table
     {
         queryDefn = new QueryDefinition(true);
         queryDefn.setName(getClass().getName());
-        for(Iterator i = getColumnsList().iterator(); i.hasNext();)
+        for (Iterator i = getColumnsList().iterator(); i.hasNext();)
         {
             Column column = (Column) i.next();
             QueryField field = generateQueryDefnField(queryDefn, column);

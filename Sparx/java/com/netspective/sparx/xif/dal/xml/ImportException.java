@@ -51,15 +51,15 @@
  */
 
 /**
- * $Id: ImportException.java,v 1.1 2002-08-29 03:38:29 shahid.shah Exp $
+ * $Id: ImportException.java,v 1.2 2002-12-04 17:56:21 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal.xml;
 
+import org.xml.sax.Locator;
+
 import java.io.PrintStream;
 import java.io.PrintWriter;
-
-import org.xml.sax.Locator;
 
 public class ImportException extends RuntimeException
 {
@@ -146,7 +146,7 @@ public class ImportException extends RuntimeException
             if (cause != null)
             {
                 ps.println("--- Nested Exception ---");
-                if(locator != null)
+                if (locator != null)
                     ps.println(locator.getSystemId() + " line " + locator.getLineNumber());
                 cause.printStackTrace(ps);
             }
@@ -161,7 +161,7 @@ public class ImportException extends RuntimeException
             if (cause != null)
             {
                 pw.println("--- Nested Exception ---");
-                if(locator != null)
+                if (locator != null)
                     pw.println(locator.getSystemId() + " line " + locator.getLineNumber());
                 cause.printStackTrace(pw);
             }
