@@ -78,6 +78,7 @@
                     <task><name>Add options to FileSystemNavigator and ACE to automatically ignore "CVS" directory when scanning files.</name></task>
                     <task><name>Add ability to automatically figure out if CVS is being used and show version and log information from FileSystemNavigator and ACE.</name></task>
                     <task><name>Integrate some of the features from <a href="http://www.servidium.com/site/logfactor5/index.html">LogFactor5</a> into ACE.</name></task>
+                    <task><name>Integrate JSP documentation features from <a href=" http://opensource.yourdecor.ca/jspdoc">JSPDoc</a> into ACE.</name></task>
                     <task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
                     <task><name>Allow multiple SchemaDoc files to be viewed in ACE without requiring changes to configuration.xml.</name></task>
                     <task><name>Automatically generate dialogs that will test SQL statements and parameters.</name></task>
