@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ClassPath.java,v 1.4 2002-12-02 15:59:47 shahid.shah Exp $
+ * $Id: ClassPath.java,v 1.5 2002-12-03 15:30:48 aye.thu Exp $
  */
 
 package com.netspective.sparx.util;
@@ -114,11 +114,23 @@ public class ClassPath
                     error = e;
                     return;
                 }
+                finally
+                {
+                    if(validate && error != null)
+                    {
+                        //LogManager.recordException(this.getClass(), "constructor", "class = '"+ className +"', default = '"+ defaultClass +"'", error);
+                        error.printStackTrace();
+                        throw getException();
+                    }
+
+                }
             }
 
             try
             {
                 instance = activeClass.newInstance();
+                if(! defaultClass.isInstance(instance))
+                    error = new ClassCastException("class "+ className +" must extend class "+ defaultClass.getName() +".");
             }
             catch (InstantiationException e)
             {
@@ -130,14 +142,14 @@ public class ClassPath
                 error = e;
                 return;
             }
-
-            if(! defaultClass.isInstance(instance))
-                error = new ClassCastException("class "+ className +" must extend class "+ defaultClass.getName() +".");
-
-            if(validate && error != null)
+            finally
             {
-                //LogManager.recordException(this.getClass(), "constructor", "class = '"+ className +"', default = '"+ defaultClass +"'", error);
-                throw getException();
+                if(validate && error != null)
+                {
+                    //LogManager.recordException(this.getClass(), "constructor", "class = '"+ className +"', default = '"+ defaultClass +"'", error);
+                    error.printStackTrace();
+                    throw getException();
+                }
             }
         }
 

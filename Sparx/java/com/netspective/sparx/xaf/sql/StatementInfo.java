@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.6 2002-11-30 17:14:34 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.7 2002-12-03 15:30:48 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -293,7 +293,7 @@ public class StatementInfo
 
     public Report createReport(Element reportElem)
     {
-        if(defaultReportElem == reportElem)
+        if(reportElem != null && defaultReportElem == reportElem)
             return defaultReport;
 
         if(reportElem == null)

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.7 2002-11-30 17:14:34 shahid.shah Exp $
+ * $Id: QuerySelect.java,v 1.8 2002-12-03 15:30:48 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -101,6 +101,12 @@ public class QuerySelect
     private String selectSql;
     private List bindParams;
     private String reportClassName;
+
+    public QuerySelect()
+    {
+        this.isDirty = true;
+        this.distinctRows = true;
+    }
 
     public QuerySelect(QueryDefinition queryDefn)
     {
