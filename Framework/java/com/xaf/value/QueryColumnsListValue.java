@@ -51,6 +51,7 @@ public class QueryColumnsListValue extends ListSource
         return ri.getResultSet();
     }
 
+
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
 		SelectChoicesList choices = new SelectChoicesList();
@@ -79,7 +80,10 @@ public class QueryColumnsListValue extends ListSource
 			try
 			{
 				if(rs != null)
+                {
 					rs.close();
+                    rs.getStatement().getConnection().close();
+                }
 			}
 			catch(Exception e)
 			{
@@ -110,7 +114,11 @@ public class QueryColumnsListValue extends ListSource
 			try
 			{
 				if(rs != null)
+                {
 					rs.close();
+                    rs.getStatement().getConnection().close();
+                }
+
 			}
 			catch(Exception e)
 			{

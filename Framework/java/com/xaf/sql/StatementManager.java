@@ -254,7 +254,10 @@ public class StatementManager extends XmlSource
 		ResultSet rs = ri.getResultSet();
 		vs.setValue(vc, rs, storeType);
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
+        {
 			rs.close();
+            dc.getConnection().close();
+        }
 		return ri;
 	}
 
@@ -264,7 +267,10 @@ public class StatementManager extends XmlSource
 		ResultSet rs = ri.getResultSet();
 		vs.setValue(vc, rs, storeType);
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
+        {
 			rs.close();
+            dc.getConnection().close();
+        }
 		return ri;
 	}
 
@@ -471,6 +477,7 @@ public class StatementManager extends XmlSource
         rc.produceReport(writer, rs);
 
 		rs.close();
+        dc.getConnection().close();
 	}
 
 	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
@@ -510,5 +517,6 @@ public class StatementManager extends XmlSource
         rc.produceReport(writer, data);
 
 		rs.close();
+        dc.getConnection().close();
 	}
 }
