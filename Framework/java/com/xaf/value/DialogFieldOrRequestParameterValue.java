@@ -21,6 +21,15 @@ public class DialogFieldOrRequestParameterValue extends ValueSource implements L
         super();
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides access to a specific field of a dialog. If the field-name refers to a dialog field whose value "+
+            "is null, then this value source will return the value of a request parameter named field-name.",
+            "field-name"
+        );
+    }
+
     public String getValue(ValueContext vc)
     {
         String value = null;

@@ -28,6 +28,11 @@ public class ListSource implements ListValueSource
 		return getClass().getName() + ":" + valueKey;
 	}
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return null;
+    }
+
     public SelectChoicesList getSelectChoices(ValueContext vc)
 	{
 		return choices;

@@ -23,6 +23,14 @@ public class DialogsListValue extends ListSource
     {
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Returns a list of all the dialogs in the default dialogs file that match the Perl5 reg-ex provided.",
+            "filter-reg-ex"
+        );
+    }
+
     public void initializeSource(String srcParams)
     {
 		super.initializeSource(srcParams);

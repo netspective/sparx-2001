@@ -29,6 +29,18 @@ public class QueryColumnsListValue extends ListSource
 		this.stmtName = queryName;
 	}
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Executes a query and returns the results of the query as columns. If just a statement-name is provided, then "+
+            "the statement must exist in the default statement manager. If a statement manager file name is provided "+
+            "then the statement must exist in the provided file. If the query is being used to supply a select field with choices, then "+
+            "the column name becomes the caption to display and the ResultSet's first row's column's value becomes the "+
+            "id column.",
+            new String[] { "statement-name", "stmt-mgr-file/statement-name" }
+        );
+    }
+
     public void initializeSource(String srcParams)
     {
 		super.initializeSource(srcParams);

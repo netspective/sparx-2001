@@ -6,11 +6,23 @@ import com.xaf.db.*;
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 
+/**
+ * Provides access to ServletRequest attributes; intelligently handles object of type String, String[], List, and Map.
+ */
+
 public class RequestAttributeValue extends ValueSource implements ListValueSource
 {
     public RequestAttributeValue()
     {
 		super();
+    }
+
+    public Documentation getDocumentation()
+    {
+        return new Documentation(
+            "Provides access to ServletRequest attributes; intelligently handles object of types String, String[], List, and Map.",
+            "attribute-name"
+        );
     }
 
     public String getValue(ValueContext vc)

@@ -33,6 +33,11 @@ public class ConcatValueSource implements SingleValueSource
 		return getClass().getName() + ":" + prependValue + ":" + valueSource.getId() + ":" + appendValue;
 	}
 
+    public Documentation getDocumentation()
+    {
+        return null;
+    }
+
     public void initializeSource(String srcParams)
     {
 		throw new RuntimeException("ConcatValueSource does not allow initializeSource: " + srcParams);

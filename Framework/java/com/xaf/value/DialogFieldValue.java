@@ -24,6 +24,14 @@ public class DialogFieldValue extends ValueSource implements ListValueSource
     {
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides access to a specific field of a dialog.",
+            "field-name"
+        );
+    }
+
     public String getValue(ValueContext vc)
     {
         if (vc instanceof DialogContext)

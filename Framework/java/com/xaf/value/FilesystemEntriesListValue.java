@@ -30,6 +30,17 @@ public class FilesystemEntriesListValue extends ListSource implements FilenameFi
         filter = ALL_FILES_FILTER;
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides list of files contained in a directory (either all files or by filter). If only a path is "+
+            "provided then this LVS returns a list of all the files in the given path. If a regular expression is " +
+            "provided (filter-reg-ex) then it must be a Perl5 regular expression that will be used to match the " +
+            "files that should be included in the list.",
+            new String[] { "path", "path,filter-reg-ex" }
+        );
+    }
+
     public boolean isPathInSelection()
     {
         return includePathInCaption;

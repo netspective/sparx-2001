@@ -9,6 +9,12 @@ public class ValueSourceFactory
 	private static Hashtable srcInstances = new Hashtable();
 	private static boolean defaultsAvailable = false;
 
+    public static Map getValueSourceClasses()
+    {
+        if(! defaultsAvailable) setupDefaults();
+        return srcClasses;
+    }
+
     public static void setupDefaults()
     {
         srcClasses.put("form", DialogFieldValue.class);

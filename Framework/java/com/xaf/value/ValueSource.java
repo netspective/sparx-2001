@@ -19,12 +19,18 @@ import com.xaf.sql.*;
 abstract public class ValueSource implements SingleValueSource
 {
 	static public final String BLANK_STRING = "";
+
 	protected String valueKey;
 
 	public String getId()
 	{
 		return getClass().getName() + ":" + valueKey;
 	}
+
+    public Documentation getDocumentation()
+    {
+        return null;
+    }
 
     public void initializeSource(String srcParams)
     {

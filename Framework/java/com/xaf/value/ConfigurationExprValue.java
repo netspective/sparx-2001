@@ -12,6 +12,18 @@ public class ConfigurationExprValue extends ValueSource
 		super();
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Evaluates the given expression as a property value that would be created had the given expression been " +
+            "specified in the default configuration file (configuration.xml). If "+
+            "no source-name is provided the expr requested is evaluted based on the the default configuration element "+
+            "of the default configuration file. If a source-name is provided, then the expr is evaluated based on the "+
+            "configuration named source-name in the default configuration file.",
+            new String[] { "expr", "source-name/expr" }
+        );
+    }
+
     public void initializeSource(String srcParams)
     {
         int delimPos = srcParams.indexOf("//");

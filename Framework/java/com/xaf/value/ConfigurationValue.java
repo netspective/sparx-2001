@@ -11,6 +11,17 @@ public class ConfigurationValue extends ValueSource
 		super();
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Provides access to configuration variables in the default configuration file (configuration.xml). If "+
+            "no source-name is provided the property-name requested is read from the default configuration element "+
+            "of the default configuration file. If a source-name is provided, then the property-name is read from the "+
+            "configuration named source-name in the default configuration file.",
+            new String[] { "property-name", "source-name/property-name" }
+        );
+    }
+
     public void initializeSource(String srcParams)
     {
         int delimPos = srcParams.indexOf('/');

@@ -39,6 +39,20 @@ public class QueryResultsListValue extends ListSource implements SingleValueSour
 		this.stmtName = queryName;
 	}
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Executes a query and returns the results of the query as rows. If just a statement-name is provided, then "+
+            "the statement must exist in the default statement manager. If a statement manager file name is provided "+
+            "then the statement must exist in the provided file. Optionally, a list of bind parameters may be supplied "+
+            "as single value source specification of the form <code><u>vs:params</u></code>. Basically, any value source "+
+            "may be used in the bind parameters. If the query is being used to supply a select field with choices, then "+
+            "the first column is expected to be the caption to display and the second column, if any, will be used as the "+
+            "id column.",
+            new String[] { "statement-name", "stmt-mgr-file/statement-name", "statement-name?bindVS1,2,..." }
+        );
+    }
+
     public void initializeSource(String srcParams)
     {
 		super.initializeSource(srcParams);

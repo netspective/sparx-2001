@@ -19,6 +19,14 @@ public class DialogFieldFactoryListValue extends ListSource
     {
     }
 
+    public SingleValueSource.Documentation getDocumentation()
+    {
+        return new SingleValueSource.Documentation(
+            "Returns a list of all the dialog field types (&lt;field.*&gt;) that can be used in dialogs. ",
+            "*"
+        );
+    }
+
     public SelectChoicesList getSelectChoices(ValueContext vc)
     {
 		SelectChoicesList choices = new SelectChoicesList();
