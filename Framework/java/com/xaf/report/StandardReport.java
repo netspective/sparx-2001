@@ -236,8 +236,7 @@ public class StandardReport implements Report
             }
             else if (row.charAt( pos + 1 ) != '{')
 			{
-                // if the '$' is not associated with a '{', shouldn't we
-                // throw an error??
+                sb.append(row.charAt(pos));
                 sb.append(row.charAt(pos + 1));
                 prev=pos+2;
             }
