@@ -41,8 +41,19 @@ public class SelectStmtGenerator
 		if(field == null)
 			throw new RuntimeException("Null field");
 
-		QueryJoin join = field.getJoin();
-		if(join != null && ! joins.contains(join))
+        QueryJoin join = field.getJoin();
+        this.addJoin(join);
+	}
+
+    /**
+     * Adds the "from" and "where" clauses related to the QueryJoin field
+     *
+     * @param join Query join field
+     * @since [Version 1.2.8 Build 23]
+     */
+    public void addJoin(QueryJoin join)
+    {
+        if(join != null && ! joins.contains(join))
 		{
 			fromClause.add(join.getFromClauseExpr());
 			String whereCriteria = join.getCriteria();
@@ -50,7 +61,7 @@ public class SelectStmtGenerator
 				whereJoinClause.add(whereCriteria);
 			joins.add(join);
 		}
-	}
+    }
 
 	public void addParam(SingleValueSource bindParam)
 	{
@@ -132,6 +143,15 @@ public class SelectStmtGenerator
 			else
 				return "Condition '"+c+"' has no field.";
 		}
+
+        // add join tables which have the auto-include flag set and their respective conditions to the
+        // from and where clause lists. If the join is already in the 'joins' list, no need to add it in.
+        List autoIncJoinList  = this.queryDefn.getAutoIncJoins();
+        for (Iterator it = autoIncJoinList.iterator(); it.hasNext();)
+        {
+            this.addJoin((QueryJoin) it.next());
+        }
+
 
 		StringBuffer sql = new StringBuffer();
 
@@ -227,6 +247,24 @@ public class SelectStmtGenerator
 				sql.append("  )\n");
 			}
 		}
+        List groupBys = select.getGroupBy();
+        int groupBysCount = groupBys.size();
+        if (groupBysCount > 0)
+        {
+            int groupByLast =  groupBysCount - 1;
+            sql.append("group by\n");
+            for (int gb = 0; gb < groupBysCount; gb++)
+            {
+                QueryField field =  (QueryField) groupBys.get(gb);
+                sql.append("  " + field.getQualifiedColName());
+                if (gb != groupByLast)
+                {
+                    sql.append(", ");
+                }
+                sql.append("\n");
+            }
+
+        }
 
 		List orderBys = select.getOrderBy();
 		int orderBysCount = orderBys.size();

@@ -31,6 +31,7 @@ public class QuerySelect
 	private List reportFields = new ArrayList();
 	private List orderBy = new ArrayList();
 	private List conditions = new ArrayList();
+    private List groupByFields = new ArrayList();
 	private List whereExprs;
 	private List errors;
 
@@ -53,6 +54,7 @@ public class QuerySelect
 	public List getConditions() { return conditions; }
 	public List getWhereExpressions() { return whereExprs; }
 	public List getOrderBy() { return orderBy; }
+    public List getGroupBy() { return groupByFields; }
 	public List getErrors() { return errors; }
 
 	public List getBindParams() { return bindParams; }
@@ -152,6 +154,33 @@ public class QuerySelect
 		for(int i = 0; i < fieldNames.length; i++)
 			addReportField(fieldNames[i]);
 	}
+
+    /**
+     * Adds a group by field to the "group by" list
+     *
+     * @param fieldName field Name  string
+     * @since [Version 1.2.8 Build 23]
+     */
+    public void addGroupBy(String fieldName)
+    {
+        QueryField field = queryDefn.getField(fieldName);
+        if(field == null)
+            addError("query-select-addGroupBy", "field '"+ fieldName +"' not found");
+        else
+            addGroupBy(field);
+    }
+
+    /**
+     * Adds a group by field to the "group by" list
+     *
+     * @param field query field object
+     * @since [Version 1.2.8 Build 23]
+     */
+    public void addGroupBy(QueryField field)
+    {
+		groupByFields.add(field);
+		isDirty = true;
+    }
 
 	public void addOrderBy(QuerySortFieldRef field)
 	{
@@ -354,6 +383,11 @@ public class QuerySelect
 			{
 				Element obElem = (Element) node;
 				addOrderBy(obElem.getAttribute("field"), obElem.getAttribute("descending").equals("yes") ? true : false);
+			}
+			else if(childName.equals("group-by"))
+			{
+				Element obElem = (Element) node;
+				addGroupBy(obElem.getAttribute("field"));
 			}
 			else if(childName.equals("condition"))
 			{
