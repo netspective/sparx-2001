@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.7 2002-02-10 11:27:13 snshah Exp $
+ * $Id: DialogContext.java,v 1.8 2002-03-17 13:11:38 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -479,6 +479,34 @@ public class DialogContext extends ServletValueContext
         }
     }
 
+    static public void exportParamToXml(Element parent, String name, String[] values)
+    {
+        Document doc = parent.getOwnerDocument();
+        Element fieldElem = doc.createElement("request-param");
+        fieldElem.setAttribute("name", name);
+        if(values != null && values.length > 1)
+        {
+            fieldElem.setAttribute("value-type", "strings");
+            Element valuesElem = doc.createElement("values");
+            for(int i = 0; i < values.length; i++)
+            {
+                Element valueElem = doc.createElement("value");
+                valueElem.appendChild(doc.createTextNode(values[i]));
+                valuesElem.appendChild(valueElem);
+            }
+            fieldElem.appendChild(valuesElem);
+            parent.appendChild(fieldElem);
+        }
+        else if(values != null)
+        {
+            fieldElem.setAttribute("value-type", "string");
+            Element valueElem = doc.createElement("value");
+            valueElem.appendChild(doc.createTextNode(values[0]));
+            fieldElem.appendChild(valueElem);
+            parent.appendChild(fieldElem);
+        }
+    }
+
     /**
      * Export all the data in DialogFieldStates hash map into an XML document for later retrieval.
      * This is basically a data serialization method.
@@ -493,6 +521,53 @@ public class DialogContext extends ServletValueContext
             DialogFieldState state = (DialogFieldState) i.next();
             state.exportToXml(dcElem);
         }
+
+        Set retainedParams = null;
+        if(retainReqParams != null)
+        {
+            retainedParams = new HashSet();
+            for(int i = 0; i < retainReqParams.length; i++)
+            {
+                String paramName = retainReqParams[i];
+                String[] paramValues = request.getParameterValues(paramName);
+                if(paramValues != null)
+                    exportParamToXml(dcElem, paramName, paramValues);
+                retainedParams.add(paramName);
+            }
+        }
+        boolean retainedAnyParams = retainedParams != null;
+
+        if(dialog.retainRequestParams())
+        {
+            if(dialog.retainAllRequestParams())
+            {
+                for(Enumeration e = request.getParameterNames(); e.hasMoreElements();)
+                {
+                    String paramName = (String) e.nextElement();
+                    if(paramName.startsWith(Dialog.PARAMNAME_DIALOGPREFIX) ||
+                            paramName.startsWith(Dialog.PARAMNAME_CONTROLPREFIX) ||
+                            (retainedAnyParams && retainedParams.contains(paramName)))
+                        continue;
+
+                    exportParamToXml(dcElem, paramName, request.getParameterValues(paramName));
+                }
+            }
+            else
+            {
+                String[] retainParams = dialog.getRetainRequestParams();
+                int retainParamsCount = retainParams.length;
+
+                for(int i = 0; i < retainParamsCount; i++)
+                {
+                    String paramName = retainParams[i];
+                    if(retainedAnyParams && retainedParams.contains(paramName))
+                        continue;
+
+                    exportParamToXml(dcElem, paramName, request.getParameterValues(paramName));
+                }
+            }
+        }
+
         parent.appendChild(dcElem);
     }
 
