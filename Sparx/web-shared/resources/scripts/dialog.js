@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.15 2003-04-04 21:25:37 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.16 2003-04-08 19:35:28 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -1003,24 +1003,47 @@ function controlOnBlur(control, event)
 {
 	field = activeDialog.fieldsById[control.name];
 	if(typeof field == "undefined" || field == null || field.type == null) return;
+
+	var retval = true;
 	if (field.customHandlers.loseFocus != null)
 	{
-		var retval = true;
 		if (field.customHandlers.loseFocusType == 'extends')
 		{
 			if (field.type.loseFocus != null)
-			    retval = field.type.loseFocus(field, control);
+		    retval = field.type.loseFocus(field, control);
 		}
 		if (retval)
 			retval =  field.customHandlers.loseFocus(field, control);
-		return retval;
 	}
 	else
 	{
 		if (field.type.loseFocus != null)
-			return field.type.loseFocus(field, control);
-		else
-			return true;
+			retval = field.type.loseFocus(field, control);
+	}
+
+	if(retval && control.value != "" && field.submitOnBlur)
+	{
+		submitOnblur(field, control);
+	}
+	return retval;
+}
+
+function submitOnblur(field, control)
+{
+	var okToSubmit = true;
+	if(field.submitOnBlurPartnerField != "")
+	{
+		var partnerField = dialog.fieldsByQualName[field.submitOnBlurPartnerField];
+		var partnerControl = partnerField.getControl(dialog);
+
+		okToSubmit = (partnerControl.value == "") ? true : false;
+	}
+
+	if(okToSubmit)
+	{
+		setAllowValidation(false);
+		SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE = false;
+		document.forms[0].submit();
 	}
 }
 
@@ -1814,13 +1837,7 @@ function getDoubleEntries(field, control)
 
 function doubleEntry(field, control)
 {
-	var validEntry = getDoubleEntries(field, control);
-
-	if(validEntry && control.value != "")
-	{
-		if(field.submitOnBlur) alert("Submitting on Blur ...");
-	}
-	return validEntry;
+	return getDoubleEntries(field, control);
 }
 
 // --------------------------------------------
@@ -1834,9 +1851,9 @@ function scanField_changeDisplayValue(field, control)
 
 	field.isScanned = (beginPattern.test(control.value) && endPattern.test(control.value)) ? true : false;
 
-	if(field.scanPartner != "")
+	if(field.scanPartnerField != "")
 	{
-		var partnerField = dialog.fieldsByQualName[field.scanPartner];
+		var partnerField = dialog.fieldsByQualName[field.scanPartnerField];
 		var partnerControl = partnerField.getControl(dialog);
 		partnerControl.value = (field.isScanned) ? 'yes' : 'no';
 	}

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.20 2003-04-04 21:25:37 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.21 2003-04-08 19:33:18 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -151,6 +151,7 @@ public class DialogField
 		private String scanPartnerField;
 		private int autoBlurLength;
 		private String autoBlurExcludeRegExp;
+		private String submitOnBlurPartnerField;
 
     /**
      * Creates a dialog field
@@ -314,9 +315,6 @@ public class DialogField
 				if(elem.getAttribute("double-entry").equalsIgnoreCase("yes"))
 					setFlag(DialogField.FLDFLAG_DOUBLEENTRY);
 
-				if(elem.getAttribute("submit-onblur").equalsIgnoreCase("yes"))
-					setFlag(DialogField.FLDFLAG_SUBMIT_ONBLUR);
-
         importChildrenFromXml(elem);
     }
 
@@ -367,8 +365,19 @@ public class DialogField
 								setFlag(DialogField.FLDFLAG_AUTOBLUR);
 								importAutoBlurFromXml((Element) node);
 						}
+						else if(childName.equals("submit-onblur"))
+						{
+								setFlag(DialogField.FLDFLAG_SUBMIT_ONBLUR);
+								importSubmitOnBlurFromXml((Element) node);
+						}
         }
     }
+
+	public void importSubmitOnBlurFromXml(Element elem)
+	{
+		String partnerField = elem.getAttribute("partner");
+		submitOnBlurPartnerField = (partnerField == null || partnerField.length() == 0) ? "" : partnerField;
+	}
 
 	public void importAutoBlurFromXml(Element elem)
 	{
@@ -1594,7 +1603,7 @@ public class DialogField
 				sb.append("field.scanStartCode = '" + scanStartCode + "';\n");
 				sb.append("field.scanStopCode = '" + scanStopCode + "';\n");
 				sb.append("field.isScanned = false;\n");
-				sb.append("field.scanPartner = '" + scanPartnerField + "';\n");
+				sb.append("field.scanPartnerField = '" + scanPartnerField + "';\n");
 			}
 
 			if(flagIsSet(FLDFLAG_AUTOBLUR))
@@ -1608,6 +1617,7 @@ public class DialogField
 			if(flagIsSet(DialogField.FLDFLAG_SUBMIT_ONBLUR))
 			{
 				sb.append("field.submitOnBlur = true;\n");
+				sb.append("field.submitOnBlurPartnerField ='" + submitOnBlurPartnerField + "';\n");
 			}
 
 			return sb.toString();

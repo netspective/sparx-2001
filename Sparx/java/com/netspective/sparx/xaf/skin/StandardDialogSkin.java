@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.17 2003-04-04 21:25:37 thai.nguyen Exp $
+ * $Id: StandardDialogSkin.java,v 1.18 2003-04-08 19:33:18 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -144,7 +144,7 @@ public class StandardDialogSkin implements DialogSkin
         captionCellAttrs = "align='right' ";
         captionFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
         gridBodyCellAttrs = "";
-        gridTableAttrs = "cellpadding='2' cellspacing='0' border='0'";
+        gridTableAttrs = "cellpadding='02' cellspacing='0' border='0' style='margin-top:0; margin-bottom:0'";
         gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:8pt' ";
         gridCaptionCellAttrs = "align='center'";
