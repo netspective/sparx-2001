@@ -67,6 +67,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.report", ReportField.class);
         fieldClasses.put("field.zip", ZipField.class);
         fieldClasses.put("field.email", EmailField.class);
+        fieldClasses.put("field.uri", UriField.class);
         fieldClasses.put("field.currency", CurrencyField.class);
         fieldClasses.put("field.rs-navigator", ResultSetNavigatorButtonsField.class);
 
