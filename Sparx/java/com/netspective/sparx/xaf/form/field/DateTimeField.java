@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DateTimeField.java,v 1.3 2002-02-17 13:58:13 snshah Exp $
+ * $Id: DateTimeField.java,v 1.4 2002-03-26 17:57:52 eoliphan Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -215,7 +215,7 @@ public class DateTimeField extends TextField
      * DateTime field contains only time.
      *
      * @param value Time field string
-     * @returns String formatted Time string
+     * @return String formatted Time string
      */
     private String formatTimeValue(String value)
     {
@@ -418,7 +418,7 @@ public class DateTimeField extends TextField
      * Translates a reserved date word such as "today" or "now" into the actual time
      *
      * @param str reserved string
-     * @returns String actual time string
+     * @return String actual time string
      */
     public String translateTimeString(String str)
     {
@@ -436,7 +436,7 @@ public class DateTimeField extends TextField
      * Translates a reserved date word such as "today" or "now" into the actual date
      *
      * @param str reserved string
-     * @returns String actual date string
+     * @return String actual date string
      */
     public String translateDateString(String str)
     {

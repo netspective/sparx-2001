@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.8 2002-03-17 13:11:38 snshah Exp $
+ * $Id: DialogContext.java,v 1.9 2002-03-26 17:57:52 eoliphan Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -1422,12 +1422,12 @@ public class DialogContext extends ServletValueContext
     /**
      * Inserts a new row into the database
      *
-     * @params dataSourceId JNDI Data Source ID
-     * @params table Database table name
-     * @params fields String containing mapping of dialog fields to database columns
-     * @params columns String containing mapping of database columns to literal values
-     * @params autoinc String containing the column name and its sequence table name
-     * @params autoincStore SVS variable to store the autoincremented value
+     * @param dataSourceId JNDI Data Source ID
+     * @param table Database table name
+     * @param fields String containing mapping of dialog fields to database columns
+     * @param columns String containing mapping of database columns to literal values
+     * @param autoinc String containing the column name and its sequence table name
+     * @param autoincStore SVS variable to store the autoincremented value
      */
     public void executeSqlInsert(String dataSourceId, String table, String fields, String columns, String autoinc, String autoincStore) throws TaskExecuteException
     {
@@ -1536,7 +1536,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Retrieves a connection context for the default data source
      *
-     * @returns ConnectionContext
+     * @return ConnectionContext
      */
     public ConnectionContext getConnectionContext() throws NamingException, SQLException
     {
@@ -1547,7 +1547,7 @@ public class DialogContext extends ServletValueContext
      * Retrieves a connection context
      *
      * @param dataSource data source name
-     * @returns ConnectionContext
+     * @return ConnectionContext
      */
     public ConnectionContext getConnectionContext(String dataSource) throws NamingException, SQLException
     {
@@ -1558,7 +1558,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Prints out all the field names and their respective values contained within the Dialog context
      *
-     * @returns String dialog context values string
+     * @return String dialog context values string
      */
     public String toString()
     {
