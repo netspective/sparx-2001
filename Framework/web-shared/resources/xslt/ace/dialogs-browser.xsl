@@ -119,7 +119,7 @@
 		<td></td>
 		<td><xsl:value-of select="$indent"/><font color="green"><xsl:value-of select="$field/@name"/></font></td>
 		<td><xsl:value-of select="$indent"/><font color="navy"><xsl:value-of select="$field/@caption"/></font></td>
-		<td><xsl:value-of select="$indent"/><xsl:value-of select="$field/name()"/></td>
+		<td><xsl:value-of select="$indent"/><xsl:value-of select="$field[name()]"/></td>
 		<td><font color="navy"><xsl:value-of select="$field/@default"/></font></td>
 		<td>
 			<xsl:for-each select="$field/@*">

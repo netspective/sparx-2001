@@ -112,13 +112,13 @@
 </xsl:template>
 
 <xsl:template match="statement" mode="toc">
+	<xsl:param name="pcount"><xsl:value-of select="count(params/*)"/></xsl:param>
 	<tr>
 		<td><a><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/', 'statement', '/', @qualified-name)"/></xsl:attribute><xsl:value-of select="@qualified-name"/></a></td>
 		<td><xsl:value-of select="@package"/></td>
 		<td><a target="ace-sql-test"><xsl:attribute name="href"><xsl:value-of select="concat($root-url, '/test/statement/', @qualified-name)"/></xsl:attribute><xsl:value-of select="@name"/></a></td>
 		<td align="right">
 			<font color="red">
-			<xsl:param name="pcount"><xsl:value-of select="count(params/*)"/></xsl:param>
 			<xsl:if test="$pcount > 0">
 				<font color="green">
 				<xsl:value-of select="$pcount"/>

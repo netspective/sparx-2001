@@ -6,6 +6,8 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
 
 import org.w3c.dom.*;
 
@@ -16,7 +18,6 @@ import com.xaf.html.component.*;
 import com.xaf.page.*;
 import com.xaf.security.*;
 import com.xaf.skin.*;
-import com.xaf.transform.*;
 import com.xaf.value.*;
 
 public class AceServletPage extends AbstractServletPage
@@ -87,7 +88,36 @@ public class AceServletPage extends AbstractServletPage
 
 		String styleSheet = servlet.getAppConfig().getValue(pc, styleSheetConfigName);
         PrintWriter out = pc.getResponse().getWriter();
-		out.write(Transform.nodeToString(styleSheet, doc, styleSheetParams));
+
+		try
+		{
+			TransformerFactory tFactory = TransformerFactory.newInstance();
+			Transformer transformer = tFactory.newTransformer(new StreamSource(styleSheet));
+
+			for(Iterator i = styleSheetParams.entrySet().iterator(); i.hasNext(); )
+			{
+				Map.Entry entry = (Map.Entry) i.next();
+				transformer.setParameter((String) entry.getKey(), entry.getValue());
+			}
+
+			transformer.transform
+				(new javax.xml.transform.dom.DOMSource(doc),
+				 new javax.xml.transform.stream.StreamResult(out));
+		}
+		catch(TransformerConfigurationException e)
+		{
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
+		}
+		catch(TransformerException e)
+		{
+            StringWriter stack = new StringWriter();
+            e.printStackTrace(new PrintWriter(stack));
+			out.write("<pre>" + e.toString() + stack.toString() + "</pre>");
+		}
+
+		//out.write(Transform.nodeToString(styleSheet, doc, styleSheetParams));
 	}
 
 	public void handlePageMetaData(PageContext pc) throws ServletException, IOException
