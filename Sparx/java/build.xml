@@ -59,11 +59,13 @@ Build targets:
         <property name="build.dir" value="../build"/>
         <property name="build.classes.dir" value="${build.dir}/classes"/>
         <property name="lib.dir" value="../lib"/>
+        <property name="kit.dir" value="../kit"/>
 
         <delete dir="${build.dir}"/>
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${kit.dir}"/>
 
         <!-- set the build.number property -->
         <buildnumber file="build.number"/>
@@ -182,22 +184,117 @@ Build targets:
     </target>
 
     <!-- ==================== Deployment/kitting targets  =================== -->
+       
     <target name="kit-eval" depends="init">
-        <property name="eval.kit.name" value="../${build.libitem.file.prefix}-eval.zip"/>
-        <delete file="${eval.kit.name}"/>
-        <zip destfile="${eval.kit.name}">
-            <!--
-            <zipfileset dir="../documentation" prefix="Sparx/documentation">
-                <exclude name="*.doc"/>
-                <exclude name="**/src/*"/>
-                <exclude name="**/resources/documents/*"/>
-            </zipfileset>
-            -->
-            <zipfileset dir="../lib" includes="sparx.jar" prefix="Sparx/lib"/>
-            <zipfileset dir="../lib/redist" prefix="Sparx/lib/redist"/>
-            <zipfileset dir="../tools" includes="app-build.*,new-sparx-app*" prefix="Sparx/tools"/>
-            <zipfileset dir="../web-shared" prefix="Sparx/web-shared"/>
+        <property name="kit.full-name" value="${kit.dir}/${kit.base-dir-name}.zip"/>
+        <property name="kit.base-dir-name" value="${build.libitem.file.prefix}"/>
+
+        <delete file="${kit.full-name}"/>
+        <zip destfile="${kit.full-name}">
+            <zipfileset dir="../lib" includes="sparx.jar" prefix="${kit.base-dir-name}/lib"/>
+            <zipfileset dir="../lib/redist" prefix="${kit.base-dir-name}/lib/redist"/>
+            <zipfileset dir="../tools" includes="app-build.*,new-sparx-app*" prefix="${kit.base-dir-name}/tools"/>
+            <zipfileset dir="../web-shared" prefix="${kit.base-dir-name}/web-shared"/>
         </zip>
+    </target>
+
+    <target name="kit-eval-full" depends="init">        
+    	<property name="kit.build.dir" value="${kit.dir}/kit-eval-build"/>    	
+        <property name="kit.full-name" value="${kit.dir}/${build.libitem.file.prefix}-eval"/>
+        <property name="kit.base-dir-name" value="Netspective"/>
+        <property name="kit.sparx-dir-name" value="${kit.base-dir-name}/${build.libitem.file.prefix}"/>
+        <property name="kit.resin-version" value="2.1.5"/>
+        <property name="kit.resin-dir-name" value="${kit.base-dir-name}/resin-${kit.resin-version}"/>
+        <property name="kit.samples.stage.dir" value="${kit.build.dir}/samples"/>
+        <property name="sparx.samples.dir" value="../.."/>
+
+        <delete dir="${kit.build.dir}"/>
+        
+        <copy todir="${kit.build.dir}/${kit.base-dir-name}">
+            <fileset dir="../documentation">
+                <include name="*.pdf"/>
+            </fileset>
+        </copy>
+        <copy todir="${kit.build.dir}/${kit.sparx-dir-name}/lib">
+            <fileset dir="../lib" includes="sparx.jar"/>
+        </copy>
+        <copy todir="${kit.build.dir}/${kit.sparx-dir-name}/lib/redist">
+            <fileset dir="../lib/redist"/>
+        </copy>
+        <copy todir="${kit.build.dir}/${kit.sparx-dir-name}/tools">
+            <fileset dir="../tools" includes="app-build.*,new-sparx-app*"/>
+        </copy>
+        <copy todir="${kit.build.dir}/${kit.sparx-dir-name}/web-shared">
+            <fileset dir="../web-shared"/>
+        </copy>
+        		
+		<property name="sparx.cvs.root" value=":pserver:shahid.shah@cvs.netspective.com:/home/netspective/cvs/Sparx"/>
+		<property name="sparx.cvs.passfile" value="../../.cvspass"/>
+		
+		<cvs command="checkout" package="hello" dest="${kit.samples.stage.dir}" 
+				cvsRoot="${sparx.cvs.root}"
+				compressionlevel="9" failonerror="yes" quiet="yes"
+				passfile="${sparx.cvs.passfile}"/>
+				
+		<cvs command="checkout" package="library" dest="${kit.samples.stage.dir}" 
+				cvsRoot="${sparx.cvs.root}"
+				compressionlevel="9" failonerror="yes" quiet="yes"
+				passfile="${sparx.cvs.passfile}"/>
+
+		<cvs command="checkout" package="cura" dest="${kit.samples.stage.dir}" 
+				cvsRoot="${sparx.cvs.root}"
+				compressionlevel="9" failonerror="yes" quiet="yes"
+				passfile="${sparx.cvs.passfile}"/>
+
+		<property name="sparx.home.replace.file.bat" value="WEB-INF/build.bat"/>
+		<property name="sparx.home.replace.token.bat" value="SPARX_HOME=..\..\Sparx"/>
+		<property name="sparx.home.replace.value.bat" value="SPARX_HOME=..\..\..\..\${build.libitem.file.prefix}"/>
+
+		<property name="sparx.home.replace.file.sh" value="WEB-INF/build.sh"/>
+		<property name="sparx.home.replace.token.sh" value="SPARX_HOME=$BASEDIR/../../Sparx"/>
+		<property name="sparx.home.replace.value.sh" value="SPARX_HOME=$BASEDIR/../../../../${build.libitem.file.prefix}"/>
+
+		<replace file="${kit.samples.stage.dir}/hello/${sparx.home.replace.file.bat}" token="${sparx.home.replace.token.bat}" value="${sparx.home.replace.value.bat}" summary="yes"/>
+		<replace file="${kit.samples.stage.dir}/hello/${sparx.home.replace.file.sh}" token="${sparx.home.replace.token.sh}" value="${sparx.home.replace.value.sh}" summary="yes"/>
+
+		<replace file="${kit.samples.stage.dir}/library/${sparx.home.replace.file.bat}" token="${sparx.home.replace.token.bat}" value="${sparx.home.replace.value.bat}" summary="yes"/>
+		<replace file="${kit.samples.stage.dir}/library/${sparx.home.replace.file.sh}" token="${sparx.home.replace.token.sh}" value="${sparx.home.replace.value.sh}" summary="yes"/>
+		<replace file="${kit.samples.stage.dir}/library/WEB-INF/web.xml" token="&lt;init-param url=&quot;jdbc:hsqldb:c:\Projects\library\WEB-INF\database\library.hsqldb&quot;/&gt;" value="&lt;init-param url=&quot;jdbc:hsqldb:c:\${kit.resin-dir-name}\webapps\library\WEB-INF\database\library.hsqldb&quot;/&gt;" summary="yes"/>
+
+		<replace file="${kit.samples.stage.dir}/cura/${sparx.home.replace.file.bat}" token="${sparx.home.replace.token.bat}" value="${sparx.home.replace.value.bat}" summary="yes"/>
+		<replace file="${kit.samples.stage.dir}/cura/${sparx.home.replace.file.sh}" token="${sparx.home.replace.token.sh}" value="${sparx.home.replace.value.sh}" summary="yes"/>
+
+		<!-- 
+			Now we have the complete Sparx build and samples from CVS so build resin.
+			1) Unzip the ZIP file and copy samples and create a eval.zip file.
+			2) Delete the ZIP file contents unzipped in (1).
+			3) Untar the tar.gz file and copy samples and create a eva.tar.gz file.
+		-->
+				
+        <!-- remember, resin's zip file already has resin-x.y.z as the base dir -->
+		<unzip src="${kit.dir}/resin-${kit.resin-version}.zip" dest="${kit.build.dir}/${kit.base-dir-name}"/>
+
+        <copy todir="${kit.build.dir}/${kit.base-dir-name}/resin-${kit.resin-version}/webapps">
+            <fileset dir="${kit.samples.stage.dir}"/>
+        </copy>
+		
+        <delete file="${kit.full-name}.zip"/>
+        <zip destfile="${kit.full-name}.zip">
+            <zipfileset dir="${kit.build.dir}/${kit.base-dir-name}" prefix="${kit.base-dir-name}"/>
+        </zip>
+        
+        <delete dir="${kit.build.dir}/${kit.base-dir-name}/resin-${kit.resin-version}"/>
+
+		<untar src="${kit.dir}/resin-${kit.resin-version}.tar.gz" dest="${kit.build.dir}/${kit.base-dir-name}" compression="gzip"/>
+
+        <copy todir="${kit.build.dir}/${kit.base-dir-name}/resin-${kit.resin-version}/webapps">
+            <fileset dir="${kit.samples.stage.dir}"/>
+        </copy>
+		
+        <delete file="${kit.full-name}.tar.gz"/>
+        <tar destfile="${kit.full-name}.tar.gz" compression="gzip">
+            <tarfileset dir="${kit.build.dir}/${kit.base-dir-name}" prefix="${kit.base-dir-name}"/>
+        </tar>
     </target>
 
     <!-- ==================== Administrative targets  ======================= -->
@@ -213,12 +310,13 @@ Build targets:
         <echo message="ANT build targets for Sparx"/>
         <echo message=""/>
         <echo message="The following targets are available:"/>
-        <echo message="  sparx       Clean, compile and then create JAR"/>
-        <echo message="  clean       Clean build and jar directories"/>
-        <echo message="  jar         Create JAR"/>
-        <echo message="  javadoc     Create JavaDoc for Classes"/>
-        <echo message="  compile     Compile Sparx"/>
-        <echo message="  web-shared  Create a ZIP file of the web-shared directory"/>
-        <echo message="  kit-eval    Create a ZIP file of the Sparx Evaluation Kit"/>
+        <echo message="  sparx         Clean, compile and then create JAR"/>
+        <echo message="  clean         Clean build and jar directories"/>
+        <echo message="  jar           Create JAR"/>
+        <echo message="  javadoc       Create JavaDoc for Classes"/>
+        <echo message="  compile       Compile Sparx"/>
+        <echo message="  web-shared    Create a ZIP file of the web-shared directory"/>
+        <echo message="  kit-eval      Create a ZIP file of the Sparx Evaluation Kit with only binaries and no samples"/>
+        <echo message="  kit-eval-full Create a ZIP file of the Sparx Evaluation Kit"/>
     </target>
 </project>
