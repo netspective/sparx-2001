@@ -1,0 +1,38 @@
+body { font-family: verdana; font-size: 9pt; }
+h1 { font-family: arial; font-size: 12pt; font-weight: bold; color: darkred; }
+th { font-family: verdana; font-size: 9pt; font-weight: bold; color: darkred; }
+td { font-family: tahoma; font-size: 8pt; }
+
+table.heading { width: 100%; }
+tr.heading { background-color: #389cce; }
+tr.heading_rule { background-color: black; }
+td.heading { color: lightyellow; font-size: 14pt; font-weight: bold; font-family: arial,helvetica; }
+
+td.param_name { font-weight: bold; text-align:right; }
+td.param_value { color: green; }
+
+a.column_name { text-decoration: none; color: navy; }
+a.column_name:hover { text-decoration: underline; }
+a.column_references { text-decoration: none; color: red; }
+a.column_references:hover { text-decoration: underline; }
+td.column_name { font-weight: bold; }
+td.column_domain { color: green; }
+td.column_default { color: #AAAAAA; font-family: lucida console, courier; }
+td.column_descr { color: #AAAAFF; }
+td.column_references { color: red }
+td.table_info_caption { text-align: right; }
+td.table_info_value { font-weight: bold; color: navy}
+td.table_description { font-size: 9pt; font-family: verdana; }
+td.column_attr_caption { text-align: right; font-style: italic; }
+td.column_attr_value { color: navy}
+td.column_elem_caption { text-align: right; }
+td.column_elem_value { color: navy}
+select { font-family: tahoma; font-size: 8pt; }
+p.description { font-family: verdana; font-size: 9pt; background-color: lightyellow; padding: 5;}
+div.table_struct_closed { font-family: tahoma; font-size: 8pt; display: 'none'; padding-left: 5pt; padding-top: 2pt; cursor: hand; }
+div.table_struct_open { font-family: tahoma; font-size: 8pt; display: ''; padding-left: 5pt; padding-top: 2pt; }
+div.table_struct { font-family: tahoma; font-size: 8pt; display: ''; padding-left: 5pt; padding-top: 2pt; }
+span.table_struct_name { cursor: hand; }
+span.table_struct_menu { cursor: hand; font-family: webdings; font-size: 8pt; color: navy; }
+a.table_struct { text-decoration: none; color: navy; }
+a.table_struct:hover { text-decoration: underline; }
