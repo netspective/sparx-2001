@@ -26,7 +26,8 @@ public class DateTimeField extends TextField
     private SimpleDateFormat sqlFormat;
 	private Date preDate = null;
 	private Date postDate = null;
-    private String maxDateStr = null;
+    private String maxDateStr = null;   /* maximum date String */
+    private String minDateStr = null;   /* minimum date string */
 
 	public DateTimeField()
 	{
@@ -124,6 +125,12 @@ public class DateTimeField extends TextField
             this.maxDateStr = maxDateTime;
            	setFlag(FLDFLAG_MAX_LIMIT);
         }
+        String minDateTime = elem.getAttribute("min-value");
+        if (minDateTime != null && minDateTime.length() > 0)
+        {
+            this.minDateStr = minDateTime;
+           	setFlag(FLDFLAG_MIN_LIMIT);
+        }
 
 		if(elem.getAttribute("future-only").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_REQUIRED);
@@ -163,10 +170,19 @@ public class DateTimeField extends TextField
                     return false;
                 }
             }
+            if (flagIsSet(FLDFLAG_MIN_LIMIT))
+            {
+                Date minDate = format.parse(this.minDateStr);
+                if (value.before(minDate))
+                {
+                    invalidate(dc, getCaption(dc) + " must not be less than " + minDateStr + ".");
+                    return false;
+                }
+            }
         }
         catch (Exception e)
         {
-            invalidate(dc, "Maximum date '" + this.maxDateStr + "' is not valid (format is "+ formats[dataType] +").");
+            invalidate(dc, "Maximum or minimum date '" + this.maxDateStr + "' is not valid (format is "+ formats[dataType] +").");
             e.printStackTrace();
         }
 
