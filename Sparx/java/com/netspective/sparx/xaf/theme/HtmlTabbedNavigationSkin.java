@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlTabbedNavigationSkin.java,v 1.8 2003-04-08 19:44:05 aye.thu Exp $
+ * $Id: HtmlTabbedNavigationSkin.java,v 1.9 2003-05-01 22:42:42 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.theme;
@@ -234,6 +234,7 @@ public class HtmlTabbedNavigationSkin implements NavigationPathSkin
             }
         }
         //writer.write("	<link rel=\"stylesheet\" href=\"" + nc.getRootUrl() + cssFileName + "\" type=\"text/css\">\n");
+        writer.write("   <script src=\"" + nc.getRootUrl() + "/sparx/resources/scripts/report.js\" language='JavaScript1.2'></script>\n");
         writer.write("</head>\n");
     }
 
