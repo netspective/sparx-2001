@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.6 2002-03-31 21:15:29 snshah Exp $
+ * $Id: SchemaDocument.java,v 1.7 2002-04-05 12:19:12 snshah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -118,15 +118,38 @@ public class SchemaDocument extends XmlSource
     public static final String[] MACROSIN_INDEXNODES = {"name"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
 
+    public static final String[] JAVA_RESERVED_WORDS = {"abstract", "boolean", "break", "byte",
+                                                        "byvalue", "case", "cast", "catch",
+                                                        "char", "class", "const", "continue",
+                                                        "default", "do", "double", "else",
+                                                        "extends", "false", "final", "finally",
+                                                        "float", "for", "future", "generic",
+                                                        "goto", "if", "implements", "import",
+                                                        "inner", "instanceof", "int", "interface",
+                                                        "long", "native", "new", "null", "operator",
+                                                        "outer", "package", "private", "protected",
+                                                        "public", "rest", "return", "short",
+                                                        "static", "super", "switch", "synchronised",
+                                                        "this", "throw", "throws", "transient",
+                                                        "true", "try", "var", "void", "volatile",
+                                                        "while" };
+
+    public static final String[] JAVA_RESERVED_TERMS = {"append", "clone", "equals", "finalize", "getClass", "hashCode",
+                                                        "insert", "interrupt", "length", "notify", "print", "println",
+                                                        "read", "resume", "run", "sleep", "start", "stop", "suspend",
+                                                        "toString", "wait", "write", "valueOf", "yield" };
+
     public static final int REFTYPE_NONE = 0;
     public static final int REFTYPE_PARENT = 1;
     public static final int REFTYPE_LOOKUP = 2;
     public static final int REFTYPE_SELF = 3;
     public static final int REFTYPE_USETYPE = 4;
 
-    static Set replaceMacrosInColumnNodes = null;
-    static Set replaceMacrosInTableNodes = null;
-    static Set replaceMacrosInIndexNodes = null;
+    private static Set replaceMacrosInColumnNodes = null;
+    private static Set replaceMacrosInTableNodes = null;
+    private static Set replaceMacrosInIndexNodes = null;
+    private static Set javaReservedWords = new HashSet();
+    private static Set javaReservedTerms = new HashSet();
 
     private Map dataTypeNodes = new HashMap();
     private Map tableTypeNodes = new HashMap();
@@ -296,6 +319,11 @@ public class SchemaDocument extends XmlSource
             replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
         for(int i = 0; i < MACROSIN_INDEXNODES.length; i++)
             replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
+
+        for(int i = 0; i < JAVA_RESERVED_WORDS.length; i++)
+            javaReservedWords.add(JAVA_RESERVED_WORDS[i]);
+        for(int i = 0; i < JAVA_RESERVED_TERMS.length; i++)
+            javaReservedTerms.add(JAVA_RESERVED_TERMS[i]);
     }
 
     public SchemaDocument()
@@ -1742,13 +1770,15 @@ public class SchemaDocument extends XmlSource
             {
                 Element tableElem = (Element) i.next();
 
-                String tableClassName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Table";
+                String tableName = tableElem.getAttribute("name");
+                String tableNameAsJavaIdentfier = XmlSource.xmlTextToJavaIdentifier(tableName, true);
+                String tableClassName = tableNameAsJavaIdentfier + "Table";
                 String tableFile = tablesDir.getAbsolutePath() + "/" + tableClassName + ".java";
-                String domainName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true);
+                String domainName = tableNameAsJavaIdentfier;
                 String domainFile = domainsDir.getAbsolutePath() + "/" + domainName + ".java";
-                String rowName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Row";
+                String rowName = tableNameAsJavaIdentfier + "Row";
                 String rowFile = rowsDir.getAbsolutePath() + "/" + rowName + ".java";
-                String rowListName = XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true) + "Rows";
+                String rowListName = tableNameAsJavaIdentfier + "Rows";
                 String rowListFile = rowsListDir.getAbsolutePath() + "/" + rowListName + ".java";
                 StringBuffer tableTypesList = new StringBuffer();
 
@@ -1764,9 +1794,23 @@ public class SchemaDocument extends XmlSource
                     {
                         Element columnElem = (Element) child;
                         String columnName = columnElem.getAttribute("name");
-                        columnElem.setAttribute("_gen-member-name", xmlTextToJavaIdentifier(columnName, false));
-                        columnElem.setAttribute("_gen-method-name", xmlTextToJavaIdentifier(columnName, true));
-                        columnElem.setAttribute("_gen-constant-name", columnName.toUpperCase());
+                        String dalColumnMemberName = columnElem.getAttribute("dal-member-name");
+                        String dalColumnMethodName = columnElem.getAttribute("dal-method-name");
+                        String dalColumnConstantName = columnElem.getAttribute("dal-constant-name");
+
+                        // if we are given a member name, use it otherwise generate it and check to make sure it's not a reserved word
+                        String columnMemberName = dalColumnMemberName.length() > 0 ? dalColumnMemberName : xmlTextToJavaIdentifier(columnName, false);
+                        if(dalColumnMemberName.length() == 0 && (javaReservedWords.contains(columnMemberName) || javaReservedTerms.contains(columnMemberName)))
+                            columnMemberName = "_" + columnMemberName;
+
+                        // if we are given a method name, use it otherwise generate it and check to make sure it's not called "class" 'cause we shouldn't generate "getClass()"
+                        String columnMethodName = dalColumnMethodName.length() > 0 ? dalColumnMethodName : xmlTextToJavaIdentifier(columnName, true);
+                        if(dalColumnMethodName.length() == 0 && "class".equals(columnName))
+                            columnMethodName = "_Class";
+
+                        columnElem.setAttribute("_gen-member-name", columnMemberName);
+                        columnElem.setAttribute("_gen-method-name", columnMethodName);
+                        columnElem.setAttribute("_gen-constant-name", dalColumnConstantName.length() > 0 ? dalColumnConstantName : columnName.toUpperCase());
                         columnElem.setAttribute("_gen-node-name", xmlTextToNodeName(columnName));
                         columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
 
@@ -1786,12 +1830,12 @@ public class SchemaDocument extends XmlSource
                     tableElem.setAttribute("_implements-table-types", tableTypesList.toString());
                 tableElem.setAttribute("_gen-domain-name", domainName);
                 tableElem.setAttribute("_gen-domain-class-name", domainsPkg + "." + domainName);
-                tableElem.setAttribute("_gen-domain-member-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), false));
-                tableElem.setAttribute("_gen-domain-method-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true));
+                tableElem.setAttribute("_gen-domain-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
+                tableElem.setAttribute("_gen-domain-method-name", tableNameAsJavaIdentfier);
                 tableElem.setAttribute("_gen-table-name", tableClassName);
                 tableElem.setAttribute("_gen-table-class-name", tablesPkg + "." + tableClassName);
-                tableElem.setAttribute("_gen-table-member-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), false));
-                tableElem.setAttribute("_gen-table-method-name", XmlSource.xmlTextToJavaIdentifier(tableElem.getAttribute("name"), true));
+                tableElem.setAttribute("_gen-table-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
+                tableElem.setAttribute("_gen-table-method-name", tableNameAsJavaIdentfier);
                 tableElem.setAttribute("_gen-row-name", rowName);
                 tableElem.setAttribute("_gen-row-class-name", rowsPkg + "." + rowName);
                 tableElem.setAttribute("_gen-rows-name", rowListName);
