@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.16 2002-09-05 20:49:37 shahid.shah Exp $
+$Id: app-build.xml,v 1.17 2002-09-06 19:58:55 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -208,7 +208,7 @@ $Id: app-build.xml,v 1.16 2002-09-05 20:49:37 shahid.shah Exp $
         <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
         <replace file="${app.root.dir}/sparx/resources/css/dialog.css" token="background-image: url(/shared/resources/images/dialog/required-field.gif)" value="background-image: url(/${app.name}/sparx/resources/images/dialog/required-field.gif)" summary="yes"/>
 
-        <available property="app.config.exists" file="${app.WEB-INF.dir}/conf"/>
+        <available property="app.config.exists" file="${app.WEB-INF.dir}/conf/app-config.xml"/>
         <fail message="Please copy ${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml to conf/app-config.xml and run upgrade-sparx again." unless="app.config.exists"/>
     </target>    
 
