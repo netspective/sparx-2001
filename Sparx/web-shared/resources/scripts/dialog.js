@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.13 2003-03-11 16:19:23 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.14 2003-03-19 21:16:10 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -67,7 +67,6 @@ var SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE = false;
 
 var anyControlChangedEventCalled = false;
 var submittedDialogValid = false;
-var documentOnKeyDownResult; // So we don't execute documentOnKeyDown() again.
 
 function setAllowValidation(value)
 {
@@ -284,7 +283,8 @@ var FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA    = FLDFLAG_IDENTIFIER * 2;
 var FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA = FLDFLAG_READONLY_HIDDEN_UNLESS_HAS_DATA * 2;
 var FLDFLAG_DOUBLEENTRY                        = FLDFLAG_READONLY_INVISIBLE_UNLESS_HAS_DATA * 2;
 var FLDFLAG_SCANNABLE                          = FLDFLAG_DOUBLEENTRY * 2;
-var FLDFLAG_STARTCUSTOM                        = FLDFLAG_SCANNABLE * 2; // all DialogField "children" will use this
+var FLDFLAG_AUTOBLUR                           = FLDFLAG_SCANNABLE * 2;
+var FLDFLAG_STARTCUSTOM                        = FLDFLAG_AUTOBLUR * 2; // all DialogField "children" will use this
 
 // These constants MUST be kept identical to what is in com.netspective.sparx.form.field.SelectField
 var SELECTSTYLE_RADIO      = 0;
@@ -572,49 +572,50 @@ function DialogField_focusNext(dialog)
     var foundEditable = false;
     while((! foundEditable) && fieldIndex < dialogFieldsCount)
     {
-        nextField = dialog.fields[fieldIndex];
-        nextFieldAreaElem = nextField.getFieldAreaElem(dialog);
-        nextFieldControl = nextField.getControl(dialog);
+			nextField = dialog.fields[fieldIndex];
+			nextFieldAreaElem = nextField.getFieldAreaElem(dialog);
+			nextFieldControl = nextField.getControl(dialog);
 
-        //nextFieldControl = document.all.item(nextField.controlId);
-        if(nextFieldControl != null && nextFieldControl.length > 0)
-            nextFieldControl = nextFieldControl[0];
+			//nextFieldControl = document.all.item(nextField.controlId);
+			if(nextFieldControl != null && nextFieldControl.length > 0)
+					nextFieldControl = nextFieldControl[0];
 
-        if(nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector")
-        {
-					if (nextFieldControl != null) nextFieldControl.setActive();
-					return false;
-				}
+			if(nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector")
+			{
+				document.forms[0].form_submit.focus();
+			}
 
-        if( (nextFieldControl != null && nextFieldControl.style.display == 'none') ||
-            (nextFieldAreaElem != null && nextFieldAreaElem.style.display == 'none') ||
-            nextField.typeName == "com.netspective.sparx.xaf.form.field.SeparatorField" ||
-            nextField.typeName == "com.netspective.sparx.xaf.form.field.StaticField" ||
-            nextField.typeName == "com.netspective.sparx.xaf.form.field.DurationField" || // duration is a composite
-            nextField.typeName == "com.netspective.sparx.xaf.form.DialogField" || // composites are of this type
-            nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector" || // composites are of this type
-            (nextField.flags & FLDFLAG_INVISIBLE) != 0 ||
-            (nextField.flags & FLDFLAG_READONLY) != 0 ||
-            (nextField.flags & FLDFLAG_INPUT_HIDDEN) != 0)
-            fieldIndex++;
-        else
-            foundEditable = true;
+			if( (nextFieldControl != null && nextFieldControl.style.display == 'none') ||
+				(nextFieldAreaElem != null && nextFieldAreaElem.style.display == 'none') ||
+				nextField.typeName == "com.netspective.sparx.xaf.form.field.SeparatorField" ||
+				nextField.typeName == "com.netspective.sparx.xaf.form.field.StaticField" ||
+				nextField.typeName == "com.netspective.sparx.xaf.form.field.DurationField" || // duration is a composite
+				nextField.typeName == "com.netspective.sparx.xaf.form.DialogField" || // composites are of this type
+				nextField.typeName == "com.netspective.sparx.xaf.form.DialogDirector" ||
+				(nextField.flags & FLDFLAG_INVISIBLE) != 0 ||
+				(nextField.flags & FLDFLAG_READONLY) != 0 ||
+				(nextField.flags & FLDFLAG_INPUT_HIDDEN) != 0)
+				fieldIndex++;
+			else
+			 foundEditable = true;
     }
 
     if(foundEditable)
     {
-			//alert("Found " + nextField.typeName);
-
-        if(nextFieldControl != null)
-        {
-        	nextFieldControl.focus();
-        }
-        else
-        {
-        	alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ") ["+ nextField.typeName +"]")
-        }
-        return true;
+			if(nextFieldControl != null)
+			{
+				nextFieldControl.focus();
+			}
+			else
+			{
+				alert("No control found for '"+ nextField.controlId + "' (field " + this.nextFieldIndex + ") ["+ nextField.typeName +"]")
+			}
+			return true;
     }
+    else
+    {
+			document.forms[0].form_submit.focus();
+		}
 
     return false;
 }
@@ -904,6 +905,7 @@ function controlOnKeypress(control, event)
             if (field.type.keyPress != null)
                 retval =  field.type.keyPress(field, control);
         }
+
         if (retval)
             retval =  field.customHandlers.keyPress(field, control);
         return retval;
@@ -1012,6 +1014,9 @@ function controlOnBlur(control, event)
 //****************************************************************************
 
 var KEYCODE_ENTER          = 13;
+var KEYCODE_TAB            = 9;
+var KEYCODE_BS             = 8;
+
 var NUM_KEYS_RANGE         = [48,  57];
 var PERIOD_KEY_RANGE       = [46,  46];
 var SLASH_KEY_RANGE        = [47,  47];
@@ -1027,10 +1032,6 @@ function keypressAcceptRanges(field, control, acceptKeyRanges, event)
     if(! ENABLE_KEYPRESS_FILTERS)
         return true;
 
-    // if the default document keypress handler handled the event,
-    // it returns "FALSE" so we don't want to bother with the event
-    if(! documentOnKeyDownResult)
-        return true;
     // the event should have been passed in here but for some reason
     // its null, look for it in the window object (works only in IE)
     if (event == null || typeof event == "undefined")
@@ -1756,6 +1757,7 @@ function splitNotInArray(strString, arrArray)
     return a;
 }
 
+// --------------------------------------------
 function validateDoubleEntry(field, control)
 {
 	if (field.successfulEntry) return true;
@@ -1791,6 +1793,7 @@ function validateDoubleEntry(field, control)
 	}
 }
 
+// --------------------------------------------
 function scanField_changeDisplayValue(field, control)
 {
 	var beginPattern = new RegExp("^" + field.scanStartCode);
@@ -1815,7 +1818,7 @@ function scanField_changeDisplayValue(field, control)
 // Event handlers
 //****************************************************************************
 
-function documentOnKeyDown()
+function _documentOnKeyDown()
 {
 	var control = window.event.srcElement;
 	var field = activeDialog.fieldsById[control.name];
@@ -1828,7 +1831,6 @@ function documentOnKeyDown()
 			{
 				window.event.cancelBubble = true;
 				window.event.returnValue = false;
-				documentOnKeyDownResult = false;
 				return false;
 			}
 		}
@@ -1840,7 +1842,6 @@ function documentOnKeyDown()
 		{
 			alert("Control '"+ control.srcElement.name + "' was not found in activeDialog.fieldsById");
 			window.event.returnValue = false;
-			documentOnKeyDownResult = false;
 			return false;
 		}
 
@@ -1848,22 +1849,81 @@ function documentOnKeyDown()
 		{
 			window.event.cancelBubble = true;
 			window.event.returnValue = false;
-			documentOnKeyDownResult = false;
 			return false;
 		}
 	}
 
-	documentOnKeyDownResult = true;
 	return true;
 }
 
+// --------------------------------------------
 function documentOnLeave()
 {
 	if(SHOW_DATA_CHANGED_MESSAGE_ON_LEAVE && anyControlChangedEventCalled && ! submittedDialogValid)
 		return "You have changed data on this page. If you leave, you will lose the data.";
 }
 
+// --------------------------------------------
+function documentOnKeyDown()
+{
+	var control = window.event.srcElement;
+	var field = activeDialog.fieldsById[control.name];
+
+	if(window.event.keyCode == KEYCODE_ENTER)
+	{
+		if(TRANSLATE_ENTER_KEY_TO_TAB_KEY)
+		{
+			if(control.type == "submit")
+			{
+				control.click();
+				return true;
+			}
+			window.event.keyCode = KEYCODE_TAB;
+		}
+		else if(field != null && field.doubleEntry == "yes")
+		{
+			window.event.keyCode = KEYCODE_TAB;
+		}
+	}
+
+	return true;
+}
+
+// --------------------------------------------
+function documentOnKeyUp()
+{
+	var control = window.event.srcElement;
+	var field = activeDialog.fieldsById[control.name];
+
+	if(field != null && field.autoBlur == "yes")
+	{
+		field.numCharsEntered++;
+		var excRegExp = new RegExp(field.autoBlurExcRegExp, "g");
+		var adjustedVal = control.value.replace(excRegExp, "");
+
+		var beginPattern = new RegExp("^" + field.scanStartCode);
+		if(control.value.search(beginPattern) != -1)
+		{
+			if(adjustedVal.length == field.autoBlurLength + field.scanStartCode.length +
+				field.scanStopCode.length && field.numCharsEntered >= field.autoBlurLength -1)
+			{
+				field.numCharsEntered = 0;
+				field.focusNext(activeDialog);
+			}
+		}
+		else
+		{
+			if(adjustedVal.length == field.autoBlurLength && field.numCharsEntered >= field.autoBlurLength -1)
+			{
+				field.numCharsEntered = 0;
+				field.focusNext(activeDialog);
+			}
+		}
+	}
+}
+
 document.onkeydown = documentOnKeyDown;
+document.onkeyup   = documentOnKeyUp;
 window.onbeforeunload = documentOnLeave;
 
 dialogLibraryLoaded = true;
