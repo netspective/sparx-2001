@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: QueryBuilderDialog.java,v 1.9 2002-10-10 22:39:29 shahid.shah Exp $
+ * $Id: QueryBuilderDialog.java,v 1.10 2002-11-30 17:14:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -561,7 +561,7 @@ public class QueryBuilderDialog extends Dialog
 
             if(rs != null)
             {
-                Report reportDefn = new StandardReport();
+                Report reportDefn = select.createReport();
                 reportDefn.initialize(rs, null);
 
                 ReportColumnsList rcl = reportDefn.getColumns();

@@ -65,6 +65,7 @@ import com.netspective.sparx.xaf.report.ReportSkin;
 import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xif.db.DatabaseContext;
+import org.w3c.dom.Element;
 
 public class StatementScrollState extends ResultSetScrollState
 {
@@ -90,8 +91,9 @@ public class StatementScrollState extends ResultSetScrollState
         ResultSet rs = getResultSet();
         if (rs != null)
         {
-            this.reportDefn = new StandardReport();
-            this.reportDefn.initialize(rs, si.getReportElement(reportName));
+            Element reportElem = si.getReportElement(reportName);
+            this.reportDefn = si.createReport(reportElem);
+            this.reportDefn.initialize(rs, reportElem);
             this.resultSetValid = true;
         }
         else

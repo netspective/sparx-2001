@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelectScrollState.java,v 1.3 2002-03-23 21:43:36 snshah Exp $
+ * $Id: QuerySelectScrollState.java,v 1.4 2002-11-30 17:14:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -114,7 +114,7 @@ public class QuerySelectScrollState extends ResultSetScrollState
         ResultSet rs = getResultSet();
         if(rs != null)
         {
-            this.reportDefn = new StandardReport();
+            this.reportDefn = select.createReport();
             this.reportDefn.initialize(rs, null);
 
             String heading = select.getCaption();

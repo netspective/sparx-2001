@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.5 2002-11-30 16:44:23 shahid.shah Exp $
+ * $Id: StatementInfo.java,v 1.6 2002-11-30 17:14:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -81,6 +81,7 @@ import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.xml.XmlSource;
 import com.netspective.sparx.util.log.LogManager;
+import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.xaf.html.SyntaxHighlight;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.DialogDirector;
@@ -137,13 +138,13 @@ public class StatementInfo
         {
             ResultSet rs = getResultSet();
 
-            Report rd = new StandardReport();
-            if(vc instanceof TaskContext)
-                rd.setCanvas(((TaskContext) vc).getCanvas());
-
             Element reportElem = si.getReportElement(reportId);
             if(reportElem == null && reportId != null)
                 writer.write("Report id '" + reportId + "' not found for statement '" + si.getId() + "'");
+
+            Report rd = si.createReport(reportElem);
+            if(vc instanceof TaskContext)
+                rd.setCanvas(((TaskContext) vc).getCanvas());
 
             rd.initialize(rs, reportElem);
 
@@ -162,13 +163,13 @@ public class StatementInfo
             Object[][] data = StatementManager.getResultSetRowsAsMatrix(rs);
             vs.setValue(vc, rs.getMetaData(), data, storeType);
 
-            Report rd = new StandardReport();
-            if(vc instanceof TaskContext)
-                rd.setCanvas(((TaskContext) vc).getCanvas());
-
             Element reportElem = si.getReportElement(reportId);
             if(reportElem == null && reportId != null)
                 writer.write("Report id '" + reportId + "' not found for statement '" + si.getId() + "'");
+
+            Report rd = si.createReport(reportElem);
+            if(vc instanceof TaskContext)
+                rd.setCanvas(((TaskContext) vc).getCanvas());
 
             rd.initialize(rs, reportElem);
 
@@ -176,7 +177,6 @@ public class StatementInfo
             rc.produceReport(writer, data);
             close();
         }
-
     }
 
     private String pkgName;
@@ -188,7 +188,9 @@ public class StatementInfo
     private int sqlMaxLineSize;
     private StatementParameter[] parameters;
     private Element defaultReportElem;
+    private Report defaultReport;
     private Map reportElems;
+    private Map reports;
     private StatementExecutionLog execLog = new StatementExecutionLog();
     private StatementDialog dialog;
 
@@ -259,62 +261,80 @@ public class StatementInfo
         }
     }
 
-    public final String getPkgName()
+    public String getPkgName()
     {
         return pkgName;
     }
 
-    public final String getStmtName()
+    public String getStmtName()
     {
         return stmtName;
     }
 
-    public final String getId()
+    public String getId()
     {
         return pkgName != null ? (pkgName + "." + stmtName) : stmtName;
     }
 
-    public final Element getStatementElement()
+    public Element getStatementElement()
     {
         return stmtElem;
     }
 
-    public final Map getReportElems()
+    public Map getReportElems()
     {
         return reportElems;
     }
 
-    public final Element getReportElement(String name)
+    public Element getReportElement(String name)
     {
         return name == null ? defaultReportElem : (Element) reportElems.get(name);
     }
 
-    public final SingleValueSource getDataSource()
+    public Report createReport(Element reportElem)
+    {
+        if(defaultReportElem == reportElem)
+            return defaultReport;
+
+        if(reportElem == null)
+            return new StandardReport();
+
+        Report result = (Report) reports.get(reportElem);
+        if(result == null)
+        {
+            ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(reportElem.getAttribute("class"), StandardReport.class, true);
+            result = (Report) instanceGen.getInstance();
+            reports.put(reportElem, result);
+        }
+        return result;
+    }
+
+    public SingleValueSource getDataSource()
     {
         return dataSourceValueSource;
     }
 
-    public final void setDataSource(String value)
+    public void setDataSource(String value)
     {
         dataSourceValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
     }
 
-    public final StatementParameter[] getParams()
+    public StatementParameter[] getParams()
     {
         return parameters;
     }
 
-    public final StatementExecutionLog getExecutionLog()
+    public StatementExecutionLog getExecutionLog()
     {
         return execLog;
     }
 
-    public final StatementExecutionLogEntry createNewExecLogEntry(ValueContext vc)
+    public StatementExecutionLogEntry createNewExecLogEntry(ValueContext vc)
     {
         return execLog.createNewEntry(vc, this);
     }
 
-    public final String getSql(ValueContext vc)
+    public String getSql(ValueContext vc)
     {
         if(!sqlIsDynamic)
             return sql;
@@ -493,10 +513,18 @@ public class StatementInfo
                 if(xs != null) xs.processTemplates(reportElem);
                 String reportName = reportElem.getAttribute("name");
                 if(reportName.length() == 0)
+                {
                     defaultReportElem = reportElem;
+                    ClassPath.InstanceGenerator instanceGen = new ClassPath.InstanceGenerator(reportElem.getAttribute("class"), StandardReport.class, true);
+                    defaultReport = (Report) instanceGen.getInstance();
+                }
                 else
                 {
-                    if(reportElems == null) reportElems = new HashMap();
+                    if(reportElems == null)
+                    {
+                        reportElems = new HashMap();
+                        reports = new HashMap();
+                    }
                     reportElems.put(reportName, reportElem);
                 }
             }

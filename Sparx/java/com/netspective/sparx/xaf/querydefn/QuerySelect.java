@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: QuerySelect.java,v 1.6 2002-11-30 16:38:43 shahid.shah Exp $
+ * $Id: QuerySelect.java,v 1.7 2002-11-30 17:14:34 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.querydefn;
@@ -73,6 +73,8 @@ import org.w3c.dom.NodeList;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xaf.report.ReportBanner;
 import com.netspective.sparx.xaf.report.ReportFrame;
+import com.netspective.sparx.xaf.report.Report;
+import com.netspective.sparx.xaf.report.StandardReport;
 import com.netspective.sparx.xaf.sql.ResultInfo;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.SingleValueSource;
@@ -98,6 +100,7 @@ public class QuerySelect
 
     private String selectSql;
     private List bindParams;
+    private String reportClassName;
 
     public QuerySelect(QueryDefinition queryDefn)
     {
@@ -466,6 +469,27 @@ public class QuerySelect
         return dest;
     }
 
+    public String getReportClassName()
+    {
+        return reportClassName;
+    }
+
+    public void setReportClassName(String reportClassName)
+    {
+        this.reportClassName = reportClassName;
+    }
+
+    public Report createReport()
+    {
+        if(reportClassName != null)
+        {
+            ClassPath.InstanceGenerator instGen = new ClassPath.InstanceGenerator(reportClassName, StandardReport.class, true);
+            return (Report) instGen.getInstance();
+        }
+        else
+            return new StandardReport();
+    }
+
     public void importFromSelect(QuerySelect select)
     {
         distinctRows = select.distinctRowsOnly();
@@ -493,6 +517,10 @@ public class QuerySelect
         String value = elem.getAttribute("distinct");
         if(value != null && value.equals("no"))
             distinctRows = false;
+
+        String customReportClassName = elem.getAttribute("report-class");
+        if(customReportClassName.length() > 0)
+            reportClassName = customReportClassName;
 
         String heading = elem.getAttribute("heading");
         String footing = elem.getAttribute("footing");
