@@ -45,6 +45,7 @@
 									<xsd:attribute name="name" type="xsd:string" use="required"/>
 									<xsd:attribute name="heading" type="single-value-source" use="optional"/>
 									<xsd:attribute name="loop" type="xsd:boolean" use="optional"/>
+									<xsd:attribute name="retain-params" type="xsd:string" use="optional"/>
 								</xsd:complexType>
 							</xsd:element>
 							<xsd:element name="register-field" minOccurs="0" maxOccurs="unbounded">

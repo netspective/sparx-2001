@@ -74,9 +74,10 @@
 						<th>Heading</th>
 						<th>Package</th>
 						<th>Name</th>
+						<th title="Retain Request Parameters">Retain</th>
 						<th>Fields</th>
 					</tr>
-					<tr><td colspan="5"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+					<tr><td colspan="6"><img width="100%" height="2"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 					<xsl:apply-templates select="dialogs/dialog" mode="toc">
 						<xsl:sort select="@qualified-name"/>
 					</xsl:apply-templates>
@@ -128,9 +129,10 @@
 		<td><font color="green"><xsl:value-of select="@heading"/></font></td>
 		<td><xsl:value-of select="@package"/></td>
 		<td><a title="Click here to see dialog sample" target="ace-dialog-test"><xsl:attribute name="href"><xsl:value-of select="concat($test-url,'/dialog/',@qualified-name)"/></xsl:attribute><xsl:value-of select="@name"/></a></td>
+		<td><font color="red"><xsl:value-of select="@retain-params"/></font></td>
 		<td align="right"><font color="red"><xsl:value-of select="count(*)"/></font></td>
 	</tr>
-	<tr><td colspan="5"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="6"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$framework.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 </xsl:template>
 
 <xsl:template match="dialog" mode="toc-select">
