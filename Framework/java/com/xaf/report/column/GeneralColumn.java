@@ -43,6 +43,7 @@ public class GeneralColumn implements ReportColumn
     private String outputPattern;
 	private int width;
 	private long flags;
+	private String breakHeader;
     private ReportColumnConditionalState[] conditionalStates;
 
     public GeneralColumn()
@@ -68,6 +69,9 @@ public class GeneralColumn implements ReportColumn
 
 	public final int getDataType() { return dataType; }
 	public final void setDataType(int value) { dataType = value; }
+
+	public final String getBreak() { return breakHeader; }
+	public final void setBreak(String header) { breakHeader = header; }
 
 	public final int getColIndexInResultSet() { return colIndexInResultSet; }
 	public final int getColIndexInArray() { return colIndexInArray; }

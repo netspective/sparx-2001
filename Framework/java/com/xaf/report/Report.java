@@ -26,6 +26,9 @@ public interface Report
 	public Object getCanvas();
 	public void setCanvas(Object value);
 
+	public boolean getHeadingDisplayFlag ();
+	public void setHeadingDisplayFlag (boolean value);
+
 	public ReportColumnsList getColumns();
 	public ReportColumn getColumn(int i);
 

@@ -75,6 +75,9 @@ public interface ReportColumn
 
     public String resolvePattern(String srcStr);
 
+	public String getBreak();
+	public void setBreak(String header);
+
 	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc);
 	public String getFormattedData(ReportContext rc, ColumnDataCalculator calc);
 

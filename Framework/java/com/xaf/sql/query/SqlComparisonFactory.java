@@ -38,13 +38,18 @@ public class SqlComparisonFactory
 		addComparison(new BinaryOpComparison("not-equals", "does not equal", "general", "!="), new String[] { "is-not", "!=" });
 		addComparison(new StartsWithComparison(), null);
 		addComparison(new ContainsComparison(), null);
+		addComparison(new ContainsComparisonIgnoreCase(), null);
 		addComparison(new EndsWithComparison(), null);
-   		addComparison(new InComparison(), null);
+   	addComparison(new InComparison(), null);
 		addComparison(new IsDefinedComparison(), null);
 		addComparison(new BinaryOpComparison("greater-than", "greater than", "general", ">"), new String[] { "gt", ">" });
 		addComparison(new BinaryOpComparison("greater-than-equal", "greater than or equal to", "general", ">="), new String[] { "gte", ">=" });
 		addComparison(new BinaryOpComparison("less-than", "less than", "general", "<"), new String[] { "lt", "<" });
 		addComparison(new BinaryOpComparison("less-than-equal", "less than or equal to", "general", "<="), new String[] { "lte", "<=" });
+		addComparison(new DateComparison("lte-date", "<="), new String[] { "lte-date","less-than-equal-date"});
+		addComparison(new DateComparison("lt-date", "<"), new String[] { "lt-date","less-than-date"});
+		addComparison(new DateComparison("gte-date", ">="), new String[] { "gte-date","greater-than-equal-date"});
+		addComparison(new DateComparison("gt-date", ">"), new String[] { "gt-date","greater-than-date"});
 		defaultsAvailable = true;
 	}
 

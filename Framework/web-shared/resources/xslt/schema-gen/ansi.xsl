@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<xsl:output method="text"/>
-
+<xsl:preserve-space elements="text"/>
+<xsl:output method="text" />
 <xsl:param name="generate-drop-table"/>
 <xsl:param name="generate-drop-seq"/>
 
@@ -123,12 +123,14 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
-	<xsl:text>	</xsl:text>
+	<xsl:text>&#32;</xsl:text>
 	<xsl:value-of select="$column/@name"/>
+	<xsl:text>&#32;</xsl:text>
 	<xsl:call-template name="column-sql-defn">
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="$column"/>
 	</xsl:call-template>
+	<xsl:text>&#32;</xsl:text>
 	<xsl:call-template name="column-sql-modifiers">
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="$column"/>
@@ -149,7 +151,6 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
 
-	<xsl:text> </xsl:text>
 	<xsl:choose>
 		<xsl:when test="$column/sqldefn[@dbms = $dbms-id]">
 			<xsl:value-of select="$column/sqldefn[@dbms = $dbms-id]"/>
@@ -161,13 +162,15 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 			<xsl:value-of select="$column/sqldefn"/>
 		</xsl:otherwise>
 	</xsl:choose>
+	<xsl:text> </xsl:text>
 </xsl:template>
 
 <xsl:template name="column-sql-modifiers">
 	<xsl:param name="table"/>
 	<xsl:param name="column"/>
+	<xsl:text> </xsl:text>
 
-	<xsl:if test="$generate-constraints != 'yes'">		
+	<xsl:if test="$generate-constraints != 'yes'">
 		<xsl:if test="@primarykey='yes'">
 			<xsl:text> PRIMARY KEY</xsl:text>
 		</xsl:if>

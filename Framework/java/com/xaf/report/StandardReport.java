@@ -25,6 +25,7 @@ public class StandardReport implements Report
     static public final int REPORTFLAG_INITIALIZED      = 1;
     static public final int REPORTFLAG_HASPLACEHOLDERS = REPORTFLAG_INITIALIZED * 2;
 	static public final int REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS = REPORTFLAG_HASPLACEHOLDERS * 2;
+	static public final int REPORTFLAG_HIDE_HEADING = REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS * 2;
 
 	private Object canvas;
     private String name;
@@ -34,6 +35,9 @@ public class StandardReport implements Report
     private ReportBanner banner = null;
 	private int visibleColsCount = -1;
     private int flags;
+		private boolean showHead = true;
+		public boolean getHeadingDisplayFlag () { return showHead; }
+		public void setHeadingDisplayFlag (boolean value) { showHead = value; }
 
     public StandardReport()
     {
@@ -43,10 +47,8 @@ public class StandardReport implements Report
 	public void setCanvas(Object value) { canvas = value; }
 
     public String getName() { return name; }
-
-    public ReportFrame getFrame() { return frame; }
+	public ReportFrame getFrame() { return frame; }
     public void setFrame(ReportFrame rf) { frame = rf; }
-
 	public ReportBanner getBanner() { return banner; }
     public void setBanner(ReportBanner value) { banner = value; }
 
@@ -123,6 +125,10 @@ public class StandardReport implements Report
 		if(elem.getAttribute("first-row").equals("column-headings"))
 			setFlag(REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS);
 
+		if(elem.getAttribute("first-row").equals("none")) {
+			setHeadingDisplayFlag(false);
+		}
+
 		NodeList children = elem.getChildNodes();
 		int columnIndex = 0;
 
@@ -138,6 +144,9 @@ public class StandardReport implements Report
 				Element columnElem = (Element) node;
 
 				String value = columnElem.getAttribute("index");
+		 		String colBreak = columnElem.getAttribute("column-break");
+				if(colBreak.length() == 0)
+					colBreak = null;
 				if(value.length() > 0)
 					columnIndex = Integer.parseInt(value);
 
@@ -150,22 +159,25 @@ public class StandardReport implements Report
                     ReportColumn column = ReportColumnFactory.createReportColumn(colType);
                     column.importFromXml(columnElem);
                     column.setColIndexInArray(columnIndex);
-					if(column instanceof DialogFieldColumn)
-						((DialogFieldColumn) column).setParentField((ReportField) canvas);
-                    columns.add(column);
+										if(column instanceof DialogFieldColumn)
+											((DialogFieldColumn) column).setParentField((ReportField) canvas);
+										column.setBreak(colBreak);
+										columns.add(column);
                 }
                 else
                 {
     				ReportColumn column = null;
-					if(colType == null)
+					if(colType == null) {
 						column = columns.getColumn(columnIndex);
-					else
+		                column.setBreak(colBreak);
+					} else
 					{
 						column = ReportColumnFactory.createReportColumn(colType);
 	                    column.setColIndexInArray(columnIndex);
 						if(column instanceof DialogFieldColumn)
 							((DialogFieldColumn) column).setParentField((ReportField) canvas);
-						columns.set(columnIndex, column);
+							column.setBreak(colBreak);
+							columns.set(columnIndex, column);
 					}
 	    			column.importFromXml(columnElem);
                 }

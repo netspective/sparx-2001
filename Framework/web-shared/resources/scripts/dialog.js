@@ -330,7 +330,14 @@ function DialogField_alertMessage(control, message)
 
 function DialogField_alertRequired(control)
 {
-    alert(this.caption + " is required.");
+    if (this.caption == "null")
+    {
+	alert("This field is required.");
+    }
+    else
+    {
+    	alert(this.caption + " is required.");
+    }
     control.focus();
 }
 
@@ -1119,7 +1126,15 @@ function SelectField_isValid(field, control)
                 return false;
             }
         }
-        else if(style == SELECTSTYLE_COMBO || style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
+        else if(style == SELECTSTYLE_COMBO)
+        {
+					if(field.isRequired() && control.value.length == 0)
+					{
+						field.alertRequired(control);
+						return false;
+					}
+        }
+        else if(style == SELECTSTYLE_LIST || style == SELECTSTYLE_MULTILIST)
         {
             var selectedCount = 0;
             var options = control.options;

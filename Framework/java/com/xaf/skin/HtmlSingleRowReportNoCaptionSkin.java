@@ -7,12 +7,12 @@ import java.text.*;
 
 import com.xaf.report.*;
 
-public class HtmlSingleRowReportSkin extends HtmlReportSkin
+public class HtmlSingleRowReportNoCaptionSkin extends HtmlReportSkin
 {
 	protected int tableCols;
 	protected boolean horizontalLayout;
 
-    public HtmlSingleRowReportSkin(int tableCols, boolean horizontalLayout)
+    public HtmlSingleRowReportNoCaptionSkin(int tableCols, boolean horizontalLayout)
     {
 		super();
 		this.tableCols = tableCols;
@@ -33,18 +33,10 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
 		{
 			int colCount = 0;
 
-			dataTable.append("<tr>");
+			dataTable.append("<tr width='100'>");
 			for(int i = 0; i < dataColsCount; i++)
 			{
                 ReportColumn column = columns.getColumn(i);
-
-			if (column.getBreak()!=null)
-			{
-				dataTable.append("<td height='10'></td></tr><tr><td align='left' bgcolor='#FFFBA5' colspan='2'><table border=0 cellspacing=0>");
-				dataTable.append("<tr><td align='left'><font "+breakFontAttrs+">"+ column.getBreak() +"</a></font></td></tr>");
-				dataTable.append("</table></td></tr><tr height='2' bgcolor='#ABA61B'><td colspan='2'></td><tr>");
-			}
-
 				ReportContext.ColumnState state = states[i];
 
                 if(state.isHidden())
@@ -56,8 +48,8 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
                         column.getFormattedData(rc, 1, rowData, true);
 
 				dataTable.append("<td align='right'><font "+dataHdFontAttrs+">"+
-                        column.getHeading().getValue(rc)+  ":</font></td>");
-				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'"+ state.getUrlAnchorAttrs() +">"+ data +"</a>" : data)+"</font></td>");
+                        column.getHeading().getValue(rc)+  "</font></td>");
+				dataTable.append("<td align='"+ ALIGN_ATTRS[column.getAlignStyle()] +"'><font "+dataFontAttrs+">"+(state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='"+ state.getUrl() +"'>"+ data +"</a>" : data)+"</font></td>");
 
 				colCount++;
 				if(colCount >= tableCols)
