@@ -1,0 +1,420 @@
+<chapter>
+	<title>Creating the Web Application</title>
+    
+    <section id="WebApp">
+        <title>Overview</title>
+        <para>
+        A Web application is a collection of HTML/XML documents, Web components (servlets and JSP pages), and 
+        other resources such as images and scripts in a directory structure.         
+        &framework-name; libraries support using different methodologies based on different
+        building blocks such as JSP pages, custom tags, JavaBeans components, 
+        and servlets to produce a web application that delivers dynamically generated content. &framework-name;.
+        
+        Based on application requirements, developers can pursue a design which is purely
+        servlet based or they can pursue a design which is a combination of JSPs and servlets (also
+        known as the <quote>Model 2</quote> design). &framework-name; also provides a more XML-centric 
+        approach where most business logic can be defined with the forms themselves so that the JSPs 
+        can purely concentrate on the presentation.
+        </para>
+        
+        <para>
+        This chapter describes the different approaches described above so that developers can choose
+        dependent upon application specific requirements. The different approaches have their own
+        benefits and failings and it is up to the developer to decide which is the best way to
+        use to create and deliver a web application. 
+        
+        
+        </para>
+
+    </section>
+    <section id="Servlet">
+        <title>Servlets</title>
+        <para>       
+        Although JSP pages can be used for  most presentation purposes, there are some circumstances  
+        such as low-level application functions that don't require frequent modification
+        where servlets are more appropriate. Thus &framework-name; does not restrict the use of Servlets 
+        and fully supports both servlets and JSPs.
+        
+        Following the common web application atchitecture, all custom servlet Java classes must exist 
+        under <filename class="directory">web-app/Site/WEB-INF/classes</filename> (if JAR files are used,
+        they must exist under <filename class="directory">web-app/Site/WEB-INF/lib</filename> 
+        directory). 
+        
+        Servlets are named and mapped in  <filename class="conf">Site/WEB-INF/web.xml</filename> 
+        as shown below:
+        <programlisting>
+        <![CDATA[
+    <servlet>
+        <servlet-name>Navigator</servlet-name>
+        <servlet-class>com.xaf.navigate.NavigateFileSystemServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Navigator</servlet-name>
+        <url-pattern>/navigate/*</url-pattern>
+    </servlet-mapping>        
+        ]]>
+        </programlisting>
+        The above example is a built-in navigation servlet provided by &framework-name; and can be used
+        to display directory listings.
+        </para>
+        
+        <para>
+        &framework-name; provides an interface called <classname>com.xaf.page.ServletPage</classname>
+        and an implementing class called <classname>com.xaf.page.AbstractServletPage</classname>
+        to create web pages purely in Java. The <classname>AbstractServletPage</classname> class should be 
+        extended since it does not define any behavior (the methods are empty).         
+        For example, &explorer-name; 
+        uses a class called <classname>com.xaf.ace.AceServletPage</classname> which overwrites
+        the methods defined in <classname>AbstractServletPage</classname> such as <methodname>handlePageHeader</methodname>
+        and <methodname>handlePageMetaData</methodname>. It also defines other methods such as 
+        <methodname>transform</methodname> which can be used by other subclasses.
+        
+        Developers should create classes extending <classname>com.xaf.page.AbstractServletPage</classname>
+        and then overwrite the various methods to define the  functionality of each page. 
+        The following is an example of the dialogs listing page in &explorer-name;:
+        <example>
+            <title> <classname>com.xaf.ace.AppDialogsPage </classname> class</title>
+            <para>
+            <programlisting>
+            <![CDATA[
+    public class AppDialogsPage extends AceServletPage
+    {
+        ...
+
+        public void handlePageBody(PageContext pc) throws ServletException, IOException
+        {
+            ServletContext context = pc.getServletContext();
+            DialogManager manager = DialogManagerFactory.getManager(context);
+            manager.addMetaInfoOptions();
+
+            String testItem = getTestCommandItem(pc);
+            if(testItem != null)
+            {
+                ...
+            }
+            else
+            {
+                ...
+            }
+        }
+    }
+            ]]>
+            </programlisting>
+            
+            The example above describes how a web page can be created by overwriting the various methods 
+            available in <classname>com.xaf.ace.AceServletPage</classname> which extends the 
+            <classname>com.xaf.page.AbstractServletPage</classname>.  The <classname>com.xaf.ace.AceServletPage</classname>
+            defines the functionality common to all pages in &explorer-name; and the <classname>AppDialogsPage</classname> base 
+            class extending this class can define content specific to the page itself.
+            </para>
+        </example>
+        </para>
+        <para>
+        All pages created using <classname>com.xaf.page.AbstractServletPage</classname> as a super class
+        must be registered so that they can be navigated to through a servlet. &framework-name; provides a servlet class called
+        <classname>com.xaf.page.PageControllerServlet</classname>. This servlet class contains a method
+        called <methodname>registerPages</methodname> which is used to register the Java defined web pages.
+        For example, &explorer-name; registers its pages through a servlet called <classname>com.xaf.ace.AppComponentsExplorerServlet</classname>
+        and the servlet is registered in <filename class="conf">web.xml</filename>:
+        <programlisting>
+        <![CDATA[
+    <servlet>
+        <servlet-name>AppComponentsExplorer</servlet-name>
+        <servlet-class>com.xaf.ace.AppComponentsExplorerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AppComponentsExplorer</servlet-name>
+        <url-pattern>/ace/*</url-pattern>
+    </servlet-mapping>        
+        ]]>
+        </programlisting>
+        
+        </para>
+    </section>
+    
+    <section id="JSP">
+        <title>Java Server Pages (JSP)</title>
+        <para>
+        All JSP files (or the directories in which they reside) must exist under 
+        <filename class="directory">web-app/Site</filename> 
+        directory. &product-name; provides several custom tags for use and they are defined
+        in <filename class="conf">web-app/Site/WEB-INF/tld/xaf.tld</filename>:
+            <variablelist>
+                <title>Custom Tags</title>
+                <varlistentry>
+                    <term> <sgmltag class="starttag">xaf:dialog</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents a dialog defined in <filename class="conf">/WEB-INF/ui/dialogs.xml</filename>.
+                        The following attributes are available: 
+                        <itemizedlist>    
+                            <listitem>
+                                <para>                          
+                                <sgmltag class="attribute">name</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>                         
+                                <sgmltag class="attribute">source</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para> 
+                                <sgmltag class="attribute">skin</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para> 
+                                <sgmltag class="attribute">listener</sgmltag>
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        Refer to <xref linkend="Using-Dialog"/> for details on how to use this custom tag.
+                        
+                        </para>
+                    </listitem>
+                </varlistentry>    
+                <varlistentry>
+                    <term> <sgmltag class="starttag">xaf:query</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents a static query defined in <filename class="conf">/WEB-INF/sql/statements.xml</filename>.
+                        The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>                        
+                                <sgmltag class="attribute">name</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>                        
+                                <sgmltag class="attribute">dataSource</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">stmtSource</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">report</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">skin</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">store</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">storeType</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">debug</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">listener</sgmltag>. 
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        Refer to <xref linkend="Using-Query"/>
+                        for details on how to use this custom tag.
+                        
+                        </para>
+                    </listitem>
+                </varlistentry>          
+                <varlistentry>
+                    <term> <sgmltag class="starttag">xaf:dml</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents a data manipulating action such as inserts, deletes, and modifications.
+                        The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>                        
+                                <sgmltag class="attribute">name</sgmltag>
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">dataSource</sgmltag>
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">debug</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>                                
+                                <sgmltag class="attribute">command</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">table</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">fields</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">columns</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">where</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>                        
+                                <sgmltag class="attribute">context</sgmltag>, 
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>                                
+                                <sgmltag class="attribute">insertchk</sgmltag>,
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">updatechk</sgmltag>.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        Refer to <xref  linkend="DML"/> for details on how to use this custom tag.
+                        </para>
+                    </listitem>
+                </varlistentry>                      
+               <varlistentry>
+                    <term> <sgmltag class="starttag">xaf:transaction</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents a database transaction. The following attributes are available:
+                        <sgmltag class="attribute">dataSource</sgmltag>.
+                        </para>
+                    </listitem>
+                </varlistentry>     
+               <varlistentry>
+                    <term> <sgmltag class="starttag">xaf:query-select-dialog</sgmltag></term>                    
+                    <listitem>
+                        <para>
+                        Represents a dynamic query definition dialog.
+                        The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">name</sgmltag>:&nbsp;
+                                Name of the <sgmltag class="starttag">select-dialog</sgmltag> defined in the 
+                                <filename class="conf">web-app/Site/WEB-INF/sql/statement.xml</filename>
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">source</sgmltag>:&nbsp;
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <sgmltag class="attribute">skin</sgmltag>:&nbsp;
+                                Name of the skin defined in the <filename class="conf">web-app/Site/WEB-INF/ui/dialog.xml</filename>
+                            </listitem>
+                        </itemizedlist>
+                        Refer to <xref linkend="Using-Dynamic-Query"/> for details on how to use this custom tag.
+                        </para>
+                    </listitem>
+                </varlistentry>   
+            </variablelist>
+        </para>
+        
+        <section>
+            <title>Defining custom behavior of dialogs within XML </title>
+            <para>
+            Custom tags within JSP files allow for a more organized and controlled desgin but &product-name; provides
+            an even more object-oriented way of defining custom action and tasks with custom dialogs. Each dialog can have
+            its execution tasks and actions defined at the same time with its component fields. This way, the whole
+            functionality of a dialog (its' properties and behavior) is defined in one place. The following is an example of
+            a dialog definition which consists of all its field components and its execution tasks:
+            <example>
+                <para>
+                <programlisting>
+                <![CDATA[
+    <dialogs package="org">
+        <dialog name="registration" heading="create-data-cmd-heading:Account" retain-params="org_id">
+            <field.debug visible="no"/>
+            <field.text name="org_code" caption="Account Code" required="yes"/>
+            <field.text name="org_name" caption="Name" required="yes"/>
+            <field.text name="org_abbrev" caption="Abbreviation"/>
+            <field.select name="org_type" caption="Type" choices="schema-enum:Org_Type_Enum">
+                <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+            </field.select>
+            <field.select name="org_industry" caption="Industry" choices="schema-enum:Org_Industry_Enum">
+                <conditional action="apply-flag" flag="invisible" data-cmd="edit,delete"/>
+            </field.select>
+            <field.select name="ownership" caption="Ownership" choices="schema-enum:Org_Ownership"/>
+            <field.text name="ticker_symbol" caption="Ticker Symbol"/>
+            <field.integer name="employees" caption="Employees"/>
+            <field.select name="time_zone" caption="Time Zone" choices="Central;Eastern;Mountain;Pacific"/>
+
+            <populate-tasks data-cmd="edit,delete">
+                <exec-statement report="none" store-type="row-fields" store="form:*">
+                    select * from org where org_id = ?
+                    <params>
+                        <param value="request:org_id"/>
+                    </params>
+                </exec-statement>
+            </populate-tasks>
+            
+            <execute-tasks data-cmd="add">
+                <exec-transaction command="begin"/>
+                <exec-dml command="insert" table="org" auto-inc="org_id,org_org_id_seq" auto-inc-store="request-attr:org_id" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone"/>
+                <exec-dml command="insert" table="org_industry" columns="org_id=request-attr:org_id,system_id=custom-sql:oind_system_id_seq.nextval" fields="org_industry"/>
+                <exec-dml command="insert" table="org_type" columns="org_id=request-attr:org_id,system_id=custom-sql:otyp_system_id_seq.nextval" fields="org_type"/>
+                <exec-transaction command="end"/>
+                <exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request-attr:org_id}"/>
+            </execute-tasks>
+
+            <execute-tasks data-cmd="edit">
+                <exec-dml command="update" table="org" fields="org_code,org_name,org_abbrev,ownership,ticker_symbol,employees,time_zone" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-redirect url="config-expr:${create-app-url:/account/home.jsp}?org_id=${request:org_id}"/>
+            </execute-tasks>
+
+            <execute-tasks data-cmd="delete">
+                <exec-transaction command="begin"/>
+                <exec-dml command="delete" table="org_industry" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-dml command="delete" table="org_type" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-dml command="delete" table="org" where="org_id = ?" where-bind="request:org_id"/>
+                <exec-transaction command="end"/>
+                <exec-redirect url="create-app-url:/account"/>
+            </execute-tasks>
+        </dialog>
+    </dialogs>                
+                ]]>
+                </programlisting>
+                
+                In the above example, the dialog <literal>registration</literal> is defined with the usual field components
+                but there are extra elements: <sgmltag class="starttag">populate-tasks</sgmltag> and
+                <sgmltag class="starttag">execute-tasks</sgmltag>. These elements are dependent upon the mode the dialog is in
+                through their attribute, <sgmltag class="attribute">data-cmd</sgmltag>.
+                For a detailed description of these elements and their respective attributes, go to <xref linkend="xmltags-tasks"/>.
+                
+                </para>
+            </example>
+            </para>
+        </section>
+    </section>
+
+</chapter>

@@ -1,0 +1,426 @@
+<chapter>
+	<title>Querying Relational Data: Dynamic Queries</title>
+    <section id="Dynamic-Query" xreflabel="Querying Relational Data">
+        <title>Overview</title>
+        <para>
+            One of &product-name;'s powerful features is to generate dynamic SQL statements
+            based upon user input. The dynamic SQL generator can also generate different output formats
+            such as pageable HTML reports with configurable rows per page or comma separated
+            value (CSV) reports. The main component of the dynamic queries is the <emphasis>query definition
+            dialog</emphasis> which is used to define bind parameters of the dynamic SQL statement. Thus,
+            the dynamic query generator can be thought of as a combination of <emphasis>Dialog</emphasis>
+            and <emphasis>Static Query</emphasis> features.
+        </para>
+    </section>
+
+    <section id="Creating-Dynamic-Query">
+        <title>Creating a dynamic query</title>
+        <para>
+            All dynamic query configurations are stored in the same repository as the static queries
+            : <filename class="conf">WEB-INF/ui/statement.xml</filename>.
+            A dynamic query in &product-name; is defined with the <sgmltag class="element">query-defn</sgmltag>
+            XML tag. Within this XML element,  other XML element representations of column data fields,
+            join tables and conditions, query definition dialog, conditions, and order fields are defined.
+            The following is a sample dynamic query definition:
+            <programlisting>
+            <![CDATA[
+        <query-defn id="Organization">
+            <!-- Fields -->
+            <field id="org_id" caption="Account ID" join="org" column="org_id">
+                <report heading="ID" url="create-app-url:/account/home.jsp?org_id=${.}"/>
+            </field>            
+            ...
+            <field id="org_code" caption="Account Code" join="org" column="org_code">
+                <report heading="Code"/>
+            </field>
+
+            <!-- Joins -->
+            <join id="org" table="org" auto-include="yes"/>
+            <join id="org_industry" table="org_industry"
+                condition="org.org_id = org_industry.org_id (+)"/>
+
+            <select-dialog name="org_search" allow-debug="yes" show-output-dests="no"
+                hide-readonly-hints="yes" heading="Search Accounts">
+                <field.text query-field="org_code"/>
+                ...
+                ...
+                <select>
+                    <display field="org_id"/>
+                    <display field="org_code"/>
+                    ...
+                    ...
+                    <order-by field="form:sort_order"/>
+
+                    <condition field="org_name" allow-null="no" comparison="starts-with"
+                        value="form:org_name"
+                        connector="and" bind-expr="upper(?)"/>
+                    <condition field="org_abbrev" allow-null="no" comparison="starts-with"
+                        value="form:org_abbrev"
+                        connector="and" bind-expr="upper(?)"/>
+                    <condition field="org_industry" allow-null="no" comparison="equals"
+                        value="form:org_industry"
+                        connector="and"/>
+                </select>
+                <director cancel-url="index.jsp" submit-caption="Search"/>
+            </select-dialog>
+
+        </query-defn>
+                ]]>
+            </programlisting>
+        </para>
+        <para>
+            The dynamic query definition show above contains various XML tags which are summarized
+            below:
+            <variablelist>
+                <title>XML Tag Definitions</title>
+                <varlistentry>
+                    <term> <sgmltag class="element">field</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents database column names and column expressions used for generating the SQL.
+                        It is available for setting the report columns (represented by the
+                        <sgmltag class="element">display</sgmltag> tag) and setting the
+                        condition strings (represented by the <sgmltag class="element">condition</sgmltag> tag).
+                        The displayed report column value can be formatted using the
+                        <sgmltag class="element">report</sgmltag> tag which can be used as a child node
+                        definition.
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term> <sgmltag class="element">report</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the result column formatting. Child node element for the <sgmltag class="element">field</sgmltag>. 
+                        The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                            <para>
+                            <sgmltag class="attribute">type</sgmltag>:&nbsp; The values available
+                            are <sgmltag class="attvalue">default</sgmltag>, <sgmltag class="attvalue">numeric</sgmltag>,
+                            <sgmltag class="attvalue">decimal</sgmltag>,  and <sgmltag class="attvalue">checkbox</sgmltag>.
+                            </para>
+                            </listitem>
+                            <listitem>
+                            <para>
+                            <sgmltag class="attribute">format</sgmltag>:&nbsp; The values available
+                            are <sgmltag class="attvalue">plain</sgmltag>, <sgmltag class="attvalue">general</sgmltag>,
+                            <sgmltag class="attvalue">decimal</sgmltag>, <sgmltag class="attvalue">currency</sgmltag>,
+                            <sgmltag class="attvalue">percentage</sgmltag>, <sgmltag class="attvalue">date</sgmltag>,
+                            <sgmltag class="attvalue">datetime</sgmltag>, and <sgmltag class="attvalue">time</sgmltag>.
+                            </para>
+                            </listitem>
+                        </itemizedlist>
+                        </para>
+                    </listitem>
+                </varlistentry>                
+                <varlistentry>
+                    <term><sgmltag class="element">join</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents database tables that are included for the JOIN part of the SQL statement.
+                        Each element is only included as a join if the corresponding
+                        <sgmltag class="element">field</sgmltag> element is being used or the attribute
+                        <sgmltag class="attribute">auto-include</sgmltag> is set to "yes".
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">select-dialog</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents a query definition dialog object containing fields for entering values of the
+                        bind parameters. The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">allow-debug</sgmltag>:&nbsp;
+                                when attribute is set to <quote>yes</quote>, the dialog object displays a debug check box. 
+                                When  this checkbox is checked and the dialog is submitted, the generated SQL
+                                with its bind parameters will be displayed for debugging purposes
+                                instead of execution of the generated SQL.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">show-output-dests</sgmltag>: &nbsp; 
+                                The attribute is used to give the user
+                                several output options: HTML output (pageable report and row count per page), CSV output format,
+                                tab delimited format.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">heading</sgmltag>: &nbsp; The title of the query definition                                
+                                dialog.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">select</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the SQL query which is being generated. It is a parent node for
+                        the report columns (<sgmltag class="starttag">display</sgmltag>),
+                        order-by selections (<sgmltag class="starttag">order-by</sgmltag>), and
+                        condition statements (<sgmltag class="starttag">condition</sgmltag>). The following
+                        attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">heading</sgmltag>:&nbsp;
+                                The heading of the resulting query
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">distinct</sgmltag>: &nbsp; 
+                                Indicates whether or not the SELECT statement is distinct
+                                (values are <sgmltag class="attvalue">yes</sgmltag> and <sgmltag class="attvalue">no</sgmltag>). 
+                                <important>Setting this attribute will insert a <emphasis>distinct</emphasis>
+                                string into the SQL and it will effect all columns!</important>
+                                </para>
+                            </listitem>
+                        </itemizedlist>                        
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">display</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the SQL columns that are retrieved from the database. The following attribute
+                        is available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">field</sgmltag>:&nbsp;
+                                The value for this attribute must correspond to one of the fields defined by
+                                the <sgmltag class="starttag">field</sgmltag>. For example,
+                                <programlisting>
+                                <![CDATA[
+<field id="org_id" caption="Account ID" join="org" column="org_id"/>                                
+...
+<select-dialog ..>    
+    ...
+    ...
+    <select>
+        <display field="org_id"/>
+        ...
+    </select>
+</select-dialog>
+                                ]]>
+                                </programlisting>
+                                </para>
+                            </listitem>  
+                        </itemizedlist>      
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">order-by</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the sort criteria. The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">field</sgmltag>:&nbsp;
+                                The value for this attribute must correspond to one of the fields defined by
+                                the <sgmltag class="starttag">field</sgmltag>. For example,
+                                <programlisting>
+                                <![CDATA[
+<field id="org_id" caption="Account ID" join="org" column="org_id"/>                                
+...
+<select-dialog ..>    
+    ...
+    ...
+    <select>
+        <order-by field="org_id"/>
+        ...
+    </select>
+</select-dialog>
+                                ]]>
+                                </programlisting>
+                                </para>
+                            </listitem>  
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">descending</sgmltag>:&nbsp;   
+                                Indicates whether or not the sort order should be descending or ascending.
+                                </para>
+                            </listitem>                                  
+                        </itemizedlist>                              
+                        </para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">condition</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the selection criteria. The following attributes are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">field</sgmltag>:&nbsp;
+                                The value for this attribute must correspond to one of the fields defined by
+                                the <sgmltag class="starttag">field</sgmltag>.
+                                </para>                                
+                            </listitem>                                  
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">allow-null</sgmltag>:&nbsp;
+                                Whether or not to allow a NULL value as a valid bind parameter value.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">comparison</sgmltag>:&nbsp;
+                                Describes what kind of relational operator to use. The following values are available:
+                                <sgmltag class="attvalue">starts-with</sgmltag>, <sgmltag class="attvalue">in</sgmltag>,
+                                <sgmltag class="attvalue">greater-than-equal</sgmltag>,<sgmltag class="attvalue">greater-than</sgmltag>,
+                                <sgmltag class="attvalue">less-than-equal</sgmltag>, <sgmltag class="attvalue">less-than</sgmltag>, 
+                                <sgmltag class="attvalue">equals</sgmltag>, <sgmltag class="attvalue">contains</sgmltag>, 
+                                <sgmltag class="attvalue">is-defined</sgmltag>, <sgmltag class="attvalue">starts-with</sgmltag>, 
+                                <sgmltag class="attvalue">ends-with</sgmltag>, and
+                                <sgmltag class="attvalue">not-equals</sgmltag>.
+                                </para>
+                            </listitem>                            
+                        </itemizedlist>                                     
+                        </para>
+                    </listitem>
+                    For example,
+                    <programlisting>
+                    <![CDATA[
+<field id="org_id" caption="Account ID" join="org" column="org_id"/>                                
+...
+<select-dialog ..>    
+...
+...
+<select>
+<condition field="org_id" allow-null="no" comparison="starts-with" 
+bind-expr="upper(?)" value="form:customer_id" connector="and"/>
+...
+</select>
+</select-dialog>
+                    ]]>
+                    </programlisting>                    
+                </varlistentry>
+                <varlistentry>
+                    <term><sgmltag class="element">director</sgmltag></term>
+                    <listitem>
+                        <para>
+                        Represents the dialog director object which can be used to change
+                        the text of the action buttons and their respective URLs. The following attributes
+                        are available:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">cancel-url</sgmltag>:&nbps; Defines what the
+                                URL is for the Cancel button.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">cancel-caption</sgmltag>:&nbps; Defines what the
+                                Cancel button should be called.
+                                </para>
+                            </listitem>                            
+                            <listitem>
+                                <para>
+                                <sgmltag class="attribute">submit-caption</sgmltag>:&nbps; Defines what Submit
+                                button should be called.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                        <programlisting>
+                        <![CDATA[
+<director submit-caption="Submit" cancel-caption="Cancel" cancel-url="/go"/>   
+                        ]]>
+                        </programlisting>       
+                        </para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </para>
+    </section>
+
+    <section id="Testing-Dynamic-Query">
+        <title>Testing the dynamic query</title>
+        <section>
+            <title>Unit Testing</title>
+            <para>
+            All available dynamic query definitions can be viewed in &explorer-name; under the
+            <menuchoice role="bold">
+                <guimenu>Database</guimenu>
+                <guimenuitem>
+                    SQL Query Definitions
+                </guimenuitem>
+            </menuchoice>
+            menu item:
+            </para>
+            
+            <para>            
+                <screenshot><graphic fileref="./resources/images/statements/ace-querydefs.jpg"></graphic></screenshot>            
+            </para>
+            
+            <para>
+            By clicking on the name of the query definition, all the entries of the query
+            definition can be viewed:
+            </para>
+            
+            <para>            
+                <screenshot><graphic fileref="./resources/images/statements/ace-querydefs2.jpg"/></screenshot> 
+            </para>
+            
+            <para>
+            Clicking on the Action(<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_dialog.gif" format="GIF"/>
+            </imageobject>) icon in the Select Table shown above displays the query
+            definition dialog represented by the <sgmltag class="element">select-dialog</sgmltag> tag.
+            </para>
+            
+            <para>
+                <screenshot><graphic fileref="./resources/images/statements/ace-querydefs3.jpg"/></screenshot> 
+            </para>
+            
+            <para>
+            The debug checkbox is very useful to debug the dynamic query which is being generated
+            according to the user's configuration.
+            </para>
+        </section>
+        <section>
+            <title>Integration Testing</title>
+            <para>
+            The query definition dialog can be used in a JSP using the custom tag
+            <emphasis role="bold">&lt;xaf:query-select-dialog&gt;</emphasis>.
+            For example, the following entry displays a query definition dialog inside a JSP :
+            <programlisting>
+            <![CDATA[
+<xaf:query-select-dialog source="Order" name="region_order_search"/>
+            ]]>
+            </programlisting>
+            </para>
+        </section>
+
+    </section>
+    <section id="Using-Dynamic-Query">
+        <title>Using the dynamic query</title>
+        <para>
+            A dynamic query statement is generated from the query definition dialog and the resulting report
+            can be configured in different ways.
+            <programlisting>
+            <![CDATA[
+<xaf:query-select-dialog source="Order" name="region_order_search"/>
+            ]]>
+            </programlisting>        
+
+
+
+
+        </para>
+    </section>
+
+</chapter>

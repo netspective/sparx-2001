@@ -1,0 +1,356 @@
+<chapter>
+	<title>Getting Started</title>
+
+	<section>
+  		<title>System Requirements</title>
+  		<para>
+  			Sparx is a Pure Java application and therefore should work on any platform that
+  			supports Java2. Sparx has been tested on and requires one of the following platforms:
+  		</para>
+		<itemizedlist>
+			<listitem><para>Microsoft Windows NT 4.0 Workstation/Server</para></listitem>
+			<listitem><para>Microsoft Windows 2000 Professional/Server (primary development occurs on this platform)</para></listitem>
+			<listitem><para>SUN Solaris 7</para></listitem>
+			<listitem><para>Red Hat Linux</para></listitem>
+			<listitem><para>Slackware Linux</para></listitem>
+		</itemizedlist>
+		<para>
+  			Sparx has been tested on and requires one of the following Java Development Kits (JDKs):
+  		</para>
+		<itemizedlist>
+			<listitem><para>Java JDK 1.2 or above</para></listitem>
+			<listitem><para>Java JDK 1.3 or above (recommended).</para></listitem>
+		</itemizedlist>
+		<para>
+  			Sparx has been tested on and requires one of the following Java Application Servers:
+  		</para>
+		<itemizedlist>
+			<listitem><para><ulink url="http://jakarta.apache.org/tomcat/index.html">Apache Tomcat</ulink> 3.3 or above</para></listitem>
+			<listitem><para><ulink url="http://www.caucho.com">Caucho Resin</ulink> 1.2.8 or above (recommended)</para></listitem>
+		</itemizedlist>
+	</section>
+
+	<section>
+  		<title>Prerequisites</title>
+  		<para>
+  			Sparx has been tested with and requires all of the following Java libraries:
+  		</para>
+		<itemizedlist>
+			<listitem><para><ulink url="http://java.sun.com">Java J2EE Servlet API</ulink> 2.2 or above</para></listitem>
+			<listitem><para><ulink url="http://java.sun.com">Java JDBC API</ulink> 2.0 or above</para></listitem>
+			<listitem><para><ulink url="http://xml.apache.org/xalan-j/index.html">Apache Xalan</ulink> 2.1 or above</para></listitem>
+			<listitem><para><ulink url="http://xml.apache.org/xerces-j/index.html">Apache Xerces</ulink> 1.4.1 or above</para></listitem>
+			<listitem><para><ulink url="http://jakarta.apache.org/log4j/docs/index.html">Jakarta Log4J</ulink> 1.1.2 or above</para></listitem>
+			<listitem><para><ulink url="http://jakarta.apache.org/oro/index.html">Jakarta ORO</ulink> 2.0.3 or above</para></listitem>
+		</itemizedlist>
+  		<para>
+  			In order to build Sparx from sources, the following additional components are required:
+  		</para>
+		<itemizedlist>
+			<listitem><para><ulink url="http://jakarta.apache.org/ant/index.html">Jakarta Ant</ulink> 1.3 or above</para></listitem>
+			<listitem><para>A <ulink url="http://www.cvs.org">CVS</ulink> client for your platform</para></listitem>
+		</itemizedlist>
+	</section>
+
+	<section>
+  		<title>Suggested locations for application server, libraries, and JDK for Win32</title>
+  		<para>
+  			Sparx is developed and used by multiple programmers in multiple
+  			environments but a few standards have been adopted for use in
+  			the Win32 environment. Of course, these standards are all optional
+  			but using the standards make building the classes and using the
+  			sample applications easier (because file and library locations are
+  			"defaulted" to the following standards and the remainder of this
+  			guide refers to the suggested locations).
+  		</para>
+		<itemizedlist>
+			<listitem><para>
+				The XAF, shared directories, and projects are kept in <filename class="directory">&projects-dir-lit;</filename> (this will now be referred to as the &projects-dir-ref;)
+				<itemizedlist>
+					<listitem><para>The XAF Framework is installed in <filename class="directory">&framework-dir-lit;</filename> (this will now be referred to as the &framework-dir-ref;)</para></listitem>
+					<listitem><para>The XAF Framework shared directory is installed in <filename class="directory">&web-shared-dir-lit;</filename> (this will now be referred to as the &web-shared-dir-ref;)</para></listitem>
+					<listitem><para>
+						Specific user projects (your applications) are called <filename class="directory">web-xxx</filename>
+						where xxx is the application id and are installed in <filename class="directory">&projects-dir-lit;\web-xxx</filename>
+					</para></listitem>
+				</itemizedlist>
+			</para></listitem>
+			<listitem><para>The JDK is installed in <filename class="directory">&java-dir-lit;\JDK1.3.1</filename> (this will now be referred to as the &jdk-dir-ref;)</para></listitem>
+			<listitem><para>
+				The application servers (like Resin, Tomcat) are installed in <filename class="directory">&appservers-dir-lit;</filename> (this will now be referred to as the &appservers-dir-ref;)
+				<itemizedlist>
+					<listitem><para><ulink url="http://www.caucho.com">Caucho Resin</ulink> is installed in <filename class="directory">&appservers-dir-lit;\resin-1.2.8</filename> (this will now be referred to as the &resin-dir-ref;)</para></listitem>
+					<listitem><para><ulink url="http://www.caucho.com">Apache Tomcat</ulink> is installed in <filename class="directory">&appservers-dir-lit;\tomcat-4.0</filename></para></listitem>
+				</itemizedlist>
+			</para></listitem>
+			<listitem><para>
+				The Java libraries are all installed in <filename class="directory">&java-dir-lit;</filename> (this will now be referred to as the &java-dir-ref;)
+				<itemizedlist>
+					<listitem><para><ulink url="http://xml.apache.org/xalan-j/index.html">Jakarta Ant</ulink> is installed in <filename class="directory">&java-dir-lit;\jakarta-ant-1.3</filename></para></listitem>
+					<listitem><para><ulink url="http://xml.apache.org/xalan-j/index.html">Apache Xalan</ulink> is installed in <filename class="directory">&java-dir-lit;\xalan-j_2_1_0</filename></para></listitem>
+					<listitem><para><ulink url="http://xml.apache.org/xerces-j/index.html">Apache Xerces</ulink> is installed in <filename class="directory">&java-dir-lit;\xerces-1_4_1</filename></para></listitem>
+					<listitem><para><ulink url="http://jakarta.apache.org/log4j/docs/index.html">Jakarta Log4J</ulink> is installed in <filename class="directory">&java-dir-lit;\jakarta-log4j-1.1.2</filename></para></listitem>
+					<listitem><para><ulink url="http://jakarta.apache.org/oro/index.html">Jakarta ORO</ulink> is installed in <filename class="directory">&java-dir-lit;\jakarta-oro-2.0.3</filename></para></listitem>
+				</itemizedlist>
+			</para></listitem>
+		</itemizedlist>
+	</section>
+
+	<section>
+  		<title>Obtaining and building the Library on Win32</title>
+  		<para>
+  			If you are planning to work with the sources (recommended), then you will follow the steps
+  			outlined below.
+  		</para>
+
+  		<section>
+	  		<title>For the first time only</title>
+			<orderedlist>
+				<listitem><para>Obtain a CVS account on sde.netspective.com by sending an e-mail to <ulink url="mailto:snshah@netspective.com">Netspective Sales</ulink>.</para></listitem>
+				<listitem><para>Set the CVSROOT to <literal>username@sde.netspective.com:/home/netspective/cvs/Sparx</literal>.</para></listitem>
+				<listitem><para>Using your CVS client, checkout the <filename class="directory">Framework</filename> module which should create the &framework-dir-ref; (<filename class="directory">&framework-dir-lit;</filename>).</para></listitem>
+				<listitem><para>Using your CVS client, checkout the <filename class="directory">web-cura</filename> module which should create the <emphasis>Sample Application</emphasis> directory (<filename class="directory">&projects-dir-lit;\web-cura</filename>).</para></listitem>
+				<listitem><para>Change the directory to <filename class="directory">&framework-java-dir-lit;</filename> (this will now be referred to as the &framework-java-dir-ref;).</para></listitem>
+				<listitem><para>
+					Edit the <filename class="directory">build.bat</filename> script and make sure all of the library locations
+					are valid (directories, versions, etc).	The <filename class="directory">build.bat</filename> script does not
+					actually perform the build, it merely sets up the environment and then calls Ant to do
+					the compiling. Because this file is specific to your platform (locations and libraries)
+					please be careful to <emphasis>never</emphasis> commit this	file to the CVS repository.
+				</para></listitem>
+				<listitem><para>Run the build.bat script to build the software and note any errors.</para></listitem>
+				<listitem><para>
+					If the build had no errors, Ant will have created the &framework-lib-dir-ref; (<filename class="directory">&framework-lib-dir-lit;</filename>).
+					The root of the &framework-lib-dir-ref; will contain the <emphasis>Active</emphasis> library files.
+					The most important file in the &framework-lib-dir-ref; will be the version-specific JAR file
+					&xaf-jar; that you will point to in your own web applications. There are also subdirectories in the
+					&framework-lib-dir-ref; that contain the <emphasis>Archived Build</emphasis> library files. These
+					archived versions can be used to refer to older versions of the library (very useful if you do
+					nightly builds or other regular automated builds).
+				</para></listitem>
+			</orderedlist>
+		</section>
+
+  		<section>
+	  		<title>On a regular basis</title>
+	  		<para>
+				If you are given access to the CVS Source Repository, you will receive regular emails
+				that will indicate changed, updated, or enhanced files along with summaries of the
+				specific enhancements. If you would like to update to the latest release, simply do the
+				following:
+			</para>
+			<orderedlist>
+				<listitem><para>
+					Using your CVS client, use the CVS Update feature to update the <filename class="directory">Framework</filename>
+					module which will get the latest files in the &framework-dir-ref;.
+				</para></listitem>
+				<listitem><para>CD to the &framework-java-dir-ref; (<filename class="directory">&framework-java-dir-lit;</filename>).</para></listitem>
+				<listitem><para>Run the build.bat script to build the software and note any errors.</para></listitem>
+				<listitem><para>
+					If the build had no errors, Ant will have updated the <emphasis>Active</emphasis> library files
+					in the &framework-lib-dir-ref; (<filename class="directory">&framework-lib-dir-lit;</filename>) and left the previous
+					versions archived.
+				</para></listitem>
+			</orderedlist>
+		</section>
+	</section>
+
+	<section>
+  		<title>Setting up the sample application</title>
+  		<section>
+	  		<title>Overview</title>
+			<para>
+				As mentioned earlier, user applications (and in this case, the <emphasis>Sample Application</emphasis>)
+				are stored in the &projects-dir-ref; (<filename class="directory">&projects-dir-lit;</filename>).
+				The <emphasis>Sample Application</emphasis> is called web-cura and is a small
+				project-management application. <emphasis>Cura</emphasis> is latin for "manage" and
+				so web-cura is a web-based project management application.
+			</para>
+			<para>
+				This section assumes that <ulink url="http://www.caucho.com">Caucho Resin</ulink>
+				is being used as the Application Server and that it is installed in the standard location
+				mentioned above. This section also assumes that the Caucho Resin Web server has been
+				started and is accessible via port 8080 (the default). Please ensure that Resin is installed
+				and running on port 8080 before continuing with the sample application setup.
+			</para>
+			<para>
+				The following actions are required, regardless of the application server being used:
+			</para>
+			<itemizedlist>
+				<listitem><para>
+					The &web-shared-dir-ref; must be URL-addressable as <filename class="directory">/shared</filename>
+					(this URL prefix is configurable by each application in case different groups of applications
+					need access to different versions of shared libraries).
+					This means that when the web server sees a URL as "/shared/xxx" it must
+					point to the xxx object in the &web-shared-dir-ref; (<filename class="directory">&web-shared-dir-lit;</filename>).
+				</para></listitem>
+				<listitem><para>
+					The web-cura application must be URL-addressable as <filename class="directory">/cura</filename>.
+					This means that when the application server sees a URL as "/cura" it must
+					point to <filename class="directory">&projects-dir-lit;\web-cura\Site</filename>.
+				</para></listitem>
+			</itemizedlist>
+		</section>
+		<section>
+	  		<title>Structure of the sample application</title>
+	  		<para>
+				Although this section describes the structure of the sample application, almost all user applications
+				(your own projects) will look either identical or very similar to the structure outlined below.
+			</para>
+			<para>
+				The <filename class="directory">&projects-dir-lit;\web-cura</filename> directory is the application root.
+			</para>
+			<itemizedlist>
+				<listitem><para>
+					The <filename class="directory">Database</filename> directory is the database schema, test data, etc directory
+					<itemizedlist>
+						<listitem><para>
+							The <filename class="directory">schema</filename> directory is the physical database schema directory
+							and contains schema files that are generated by Sparx.
+						</para></listitem>
+						<listitem><para>
+							The <filename class="directory">schema-src</filename> directory is the SchemaDoc (XML-based schema) directory
+							and is considered the <emphasis>source</emphasis> of the database
+							schema.
+						</para></listitem>
+					</itemizedlist>
+				</para></listitem>
+				<listitem><para>
+					The <filename class="directory">Site</filename> directory is the document root (web application) directory that
+					is exposed to web browsers via a URL (meaning all files in this directory (except WEB-INF)
+					will be	executable by the web server.
+					<itemizedlist>
+						<listitem><para>
+							This root of the <filename class="directory">Site</filename> contains all the jsp, html, graphics,
+							and other files necessary for executing your application.
+						</para></listitem>
+						<listitem><para>
+							The <filename class="directory">WEB-INF</filename> directory contains all resources related to the application
+							that are not in the document root of the application. This is where your web
+							application deployment descriptor is located. Note that the WEB-INF directory
+							is not part of the public document. No files contained in this directory
+							can be served directly to a client.
+							<para>Important files</para>
+							<itemizedlist>
+								<listitem><para>
+									<filename class="directory">configuration.xml</filename> is the central Sparx configuration
+									file for a particular application. Almost all Sparx-related entries
+									including file locations, constants, resources, etc are contained in this
+									file.
+								</para></listitem>
+								<listitem><para>
+									<filename class="directory">web.xml</filename> is the standard deployment descriptor
+									for Java servlets. This is where you will specify library locations (JAR
+									files), JNDI resources, etc.
+								</para></listitem>
+							</itemizedlist>
+							<para>Important directories</para>
+							<itemizedlist>
+								<listitem><para>
+									The <filename class="directory">classes</filename> directory is where servlet and utility classes
+									are located. This directory is managed by the application server
+									and the directory name can not be changed.
+								</para></listitem>
+								<listitem><para>
+									The <filename class="directory">lib</filename> directory contains Java Archive files that the web application
+									depends upon. For example, this is where you would place a JAR file that
+									contained a JDBC driver. This directory is managed by the application server
+									and the directory name can not be changed.
+								</para></listitem>
+								<listitem><para>
+									The <filename class="directory">security</filename> directory contains XML files that specify
+									access control lists for the Sparx security classes. This directory is managed by Sparx and the directory name is
+									configured in configuration.xml.
+								</para></listitem>
+								<listitem><para>
+									The <filename class="directory">sql</filename> directory contains XML files that specify
+									SQL statements and query definitions for the Sparx SQL classes. This directory is managed by Sparx and the directory name is
+									configured in configuration.xml.
+								</para></listitem>
+								<listitem><para>
+									The <filename class="directory">ui</filename> directory contains XML files that specify
+									form definitions, dialogs, and other user interfact actions for the Sparx
+									Dialog classes. This directory is managed by Sparx and the directory name is
+									configured in configuration.xml.
+								</para></listitem>
+							</itemizedlist>
+						</para></listitem>
+					</itemizedlist>
+				</para></listitem>
+			</itemizedlist>
+		</section>
+		<section>
+	  		<title>Starting up the sample application using Resin</title>
+			<orderedlist>
+				<listitem><para>
+					From the &resin-dir-ref; open the <filename class="conf">conf/resin.conf</filename> file.
+					<orderedlist>
+						<listitem><para>
+							In the root application context, add the following line for access to the
+							&web-shared-dir-ref;:
+							<programlisting>&lt;!-- SHARED FILES for XAF --&gt;
+&lt;path-mapping url-pattern='/shared/*' real-path='&web-shared-dir-lit;'/&gt;</programlisting>
+						</para></listitem>
+						<listitem><para>
+							Add the sample application ServletContext:
+							<programlisting>&lt;web-app id="/cura" app-dir="&projects-dir-lit;\web-cura\Site"/&gt;</programlisting>
+						</para></listitem>
+					</orderedlist>
+				</para></listitem>
+				<listitem><para>
+					In the &resin-dir-ref; create a new subdirectory called <filename class="directory">log/web-cura</filename>.
+					All of the application-specific Sparx logs will be stored here.
+				</para></listitem>
+
+				<listitem><para>
+					From the <filename class="directory">&projects-dir-lit;\web-cura\Site </filename> directory open the
+					<filename class="conf">WEB-INF/web.xml</filename> file. In this file,
+					review the <markup>&lt;classpath&gt;</markup> elements to ensure that they
+					are pointing to the proper locations of all the libraries. Also,
+					review the database definitions to ensure they are pointing to
+					appropriate database entries.
+				</para></listitem>
+				<listitem><para>
+					From the <filename class="directory">&projects-dir-lit;\web-cura\Site </filename> directory open the
+					<filename class="conf">WEB-INF/configuration.xml</filename> file.
+					Try to become intimately familiar with this file and the entries
+					contained within it; much of the way Sparx works and locates the
+					files it needs comes from this file.
+
+					Review all the lines of the file to ensure that the directories
+					and locations are valid (anything that looks like ${xxx} is a reference
+					to an existing configuration variable that will be replaced
+					<emphasis>inline</emphasis> at application startup. In general, try
+					to make any new variables you create refer to existing variables.
+
+					Pay special attention
+					to the <emphasis>first</emphasis> configuration variable, which
+					controls the remaining ones:
+					<programlisting>&lt;property name="system.projects-root" value="&projects-dir-lit;"/&gt;</programlisting>
+				</para></listitem>
+				<listitem><para>
+					From the <filename class="directory">&projects-dir-lit;\web-cura\Site </filename> directory open the
+					<filename class="conf">WEB-INF/classes/log4j.properties</filename> file. This file is fully
+					documented in the <ulink url="http://jakarta.apache.org/log4j/docs/index.html">Jakarta Log4J</ulink>
+					package. Most of the settings should be ok; pay special attention to the entries that specify
+					<filename class="directory">log/web-cura</filename> as the location (you can change where the
+					logs are stored and what gets logged or doesn't).
+				</para></listitem>
+				<listitem><para>
+					At this time the application should be setup. Restart Resin, open your
+					browser, and go to <ulink url="http://localhost:8080/cura/ace">http://localhost:8080/cura/ace</ulink>.
+					If everything works, the ACE login page should now appear. If something
+					didn't work, review the following before contacting support:
+					<orderedlist>
+						<listitem><para>That your application server (Resin) works.</para></listitem>
+						<listitem><para>That your application server (Resin) can run sample applications not related to Sparx.</para></listitem>
+						<listitem><para>That you have reviewed the WEB-INF/web.xml file and all of the classpaths are valid.</para></listitem>
+						<listitem><para>That you have reviewed the WEB-INF/configuration.xml file and all of the configuration variables are valid.</para></listitem>
+						<listitem><para>That you tried to restart your application server after making changes to configuration files.</para></listitem>
+					</orderedlist>
+				</para></listitem>
+			</orderedlist>
+		</section>
+	</section>
+
+</chapter>

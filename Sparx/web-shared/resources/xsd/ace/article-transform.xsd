@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Shahid N. Shah (Netspective Corporation) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="article">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="project">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="summary">
+								<xs:complexType mixed="true">
+									<xs:choice>
+										<xs:any namespace="html"/>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="project-attribute" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType mixed="true">
+									<xs:choice>
+										<xs:any namespace="html"/>
+									</xs:choice>
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>Can be any text string. If it is set to 'Resources' then the stylesheet will find all the resource elements inside the task elements and place them into the project-attributes area (comma-separated). If it is set to 'Last Update' then the update date of the file will be provided.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="task" type="task-type" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:choice>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="task-type">
+		<xs:choice>
+			<xs:element name="name">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="priority" minOccurs="0">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="resource" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="completed" minOccurs="0">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="duration" minOccurs="0">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="start" minOccurs="0">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="finish" minOccurs="0">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="remarks" minOccurs="0">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="needinfo" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType mixed="true">
+					<xs:choice>
+						<xs:any namespace="html"/>
+					</xs:choice>
+					<xs:attribute name="urgency" type="xs:string" use="required"/>
+					<xs:attribute name="source" type="xs:string" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="task" type="task-type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+</xs:schema>

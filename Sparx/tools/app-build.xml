@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ===================================================================
+
+Build file for Application - for use with the Jakarta Ant java build tool
+
+Setup instructions:
+    Before running an Ant build, you must
+     - set the SPARX_HOME environment variable to the Sparx root directory
+     - set the JAVA_HOME environment variable to the JDK root directory
+     - set the ANT_HOME environment variable to the Ant root directory
+     - set CLASSPATH with all required libraries:
+       * Sparx
+       * Apache Xerces 1.4 or above (http://xml.apache.org)
+       * Apache Xalan 2.1 or above (http://xml.apache.org)
+       * Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)
+       * Jakarta Log4J 1.1 or above (http://jakarta.apache.org)
+       * Java Servlet API 2.2 or above (http://java.sun.com)
+       * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
+-->
+
+<project name="app" default="all" basedir="${basedir}">
+
+	<target name="global">
+		<property environment="env"/>
+		<property name="sparx.home" value="${env.SPARX_HOME}"/>
+		<property name="sparx.lib.dir" value="${sparx.home}/lib"/>
+		<property name="sparx.java.dir" value="${sparx.home}/java"/>
+		<property name="sparx.shared.dir" value="${sparx.home}/web-shared"/>
+		<property name="app.WEB-INF" value="${basedir}/Site/WEB-INF"/>
+		<property name="app.config.file" value="${app.WEB-INF}/configuration.xml"/>
+
+		<!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
+		<taskdef name="sparx" classname="com.netspective.sparx.util.ant.BuildConfigurationTask"/>
+		<sparx/>
+	</target>
+
+    <target name="init" depends="global">
+    	<tstamp/>
+
+    	<echo message="Running build in ${basedir}"/>
+		<echo message="Sparx source is in ${sparx.java.dir}"/>
+
+		<!-- define all the tasks that will be used in this file -->
+		<taskdef name="config" classname="com.netspective.sparx.util.ant.ImportConfigurationTask"/>
+		<taskdef name="dal" classname="com.netspective.sparx.util.ant.GenerateJavaDALTask"/>
+		<taskdef name="dcb" classname="com.netspective.sparx.util.ant.GenerateDialogBeansTask"/>
+		<taskdef name="cp" classname="com.netspective.sparx.util.ant.ClassPathTask"/>
+
+		<!-- read all of the configuration.xml entries into config.* entries -->
+		<config file="${app.config.file}" prefix="config." debug="no"/>
+
+
+		<property name="app.classes.dir" value="${config.app.web-inf-root-path}/classes"/>
+		<property name="app.lib.dir" value="${config.app.web-inf-root-path}/lib"/>
+		<property name="resin.work.dir" value="${config.app.web-inf-root-path}/work"/>
+		<property name="java.dal.stylesheet.root.dir" value="${config.sparx.shared.xslt-path}/schema-gen/java-gen"/>
+
+		<property name="app.documents.root.dir" value="${config.app.project-root}/Documents"/>
+		<property name="app.javadoc.root.dir" value="${app.documents.root.dir}/javadoc"/>
+
+		<property name="app.java.dal.dir" value="${config.app.database-root-path}/java"/>
+		<property name="app.java.dal.jar" value="${config.app.database-root-path}/dal.jar"/>
+		<property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
+
+		<property name="app.java.dcb.package" value="dialog.context"/>
+		<property name="app.java.dcb.dir" value="${config.app.ui.root-path}/classes"/>
+		<property name="app.java.dcb.jar" value="${app.java.dcb.dir}/dcb.jar"/>
+		<property name="app.java.dcb.doc.dir" value="${app.javadoc.root.dir}/dcb"/>
+
+		<property name="app.java.classpath" value="${app.classes.dir}:${app.lib.dir}/dal.jar:${app.lib.dir}/dcb.jar"/>
+
+		<!-- show all the active classpaths -->
+		<cp listall="yes"/>
+    </target>
+    
+    <!-- 
+    ============================= Setup Sparx stuff for app ======================= 
+    -->
+    
+    <target name="setup-sparx" depends="global">		
+    	<!-- Setup Sparx TagLib Descriptor File (sparx.tld) -->
+		<property name="sparx.default.taglib-descriptor.file" value="${sparx.shared.dir}/resources/templates/config/sparx.tld"/>
+		<property name="app.taglib-descriptor.file" value="${app.WEB-INF}/tld/sparx.tld"/>
+		
+		<echo message="Copying Sparx default taglib descriptor file ${sparx.default.taglib-descriptor.file} to ${app.taglib-descriptor.file}"/>
+		<copy file="${sparx.default.taglib-descriptor.file}" tofile="${app.taglib-descriptor.file}" overwrite="yes"/>
+
+    	<!-- Setup Sparx Log4J Properties file (backup current, copy default, replace variables)  -->
+		<property name="sparx.default.log4j.properties.file" value="${sparx.shared.dir}/resources/templates/config/log4j.properties"/>
+		<property name="app.log4j.properties.file" value="${app.WEB-INF}/classes/log4j.properties"/>
+		<property name="app.log.dir" value="${app.WEB-INF}/log"/>
+
+		<echo message="Backing up ${app.log4j.properties.file} to ${app.log4j.properties.file}.orig"/>
+		<copy file="${app.log4j.properties.file}" tofile="${app.log4j.properties.file}.orig" overwrite="yes"/>
+
+		<echo message="Copying Sparx default Log4J properties file ${sparx.default.log4j.properties.file} to ${app.log4j.properties.file}"/>
+		<copy file="${sparx.default.log4j.properties.file}" tofile="${app.log4j.properties.file}" overwrite="yes"/>
+		<replace file="${app.log4j.properties.file}" token="{APP_LOG_PATH}" value="${app.log.dir}"/>
+		<mkdir dir="${app.log.dir}"/>
+
+    	<!-- Setup Sparx Configuration file (backup current, copy default, replace variables) -->
+		<property name="sparx.default.config.file" value="${sparx.shared.dir}/resources/templates/config/configuration.xml"/>
+
+		<echo message="Backing up ${app.config.file} to ${app.config.file}.orig"/>
+		<copy file="${app.config.file}" tofile="${app.config.file}.orig" overwrite="yes"/>
+
+		<echo message="Copying Sparx default configuration file ${sparx.default.config.file} to ${app.config.file}"/>
+		<copy file="${sparx.default.config.file}" tofile="${app.config.file}" overwrite="yes"/>
+		
+		<echo message="Setting 'sparx.home' property in ${app.config.file} to ${sparx.home}"/>
+		<replace file="${app.config.file}" token="name=&quot;sparx.home&quot; value=&quot;{SPARX_HOME}&quot;" value="name=&quot;sparx.home&quot; value=&quot;${sparx.home}&quot;"/>
+
+		<echo message="Setting 'app.project-root' property in ${app.config.file} to ${basedir}"/>
+		<replace file="${app.config.file}" token="name=&quot;app.project-root&quot; value=&quot;{APP_HOME}&quot;" value="name=&quot;app.project-root&quot; value=&quot;${basedir}&quot;"/>
+    </target>
+
+    <target name="migrate-xaf12-sparx20" depends="global,setup-sparx">
+    	<echo message="Replacing references to 'xaf.tld' with 'sparx.tld'."/>
+    	<replace dir="${basedir}" token="xaf.tld" value="sparx.tld" summary="yes"/>
+		<delete file="${app.WEB-INF}/tld/xaf.tld" quiet="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.log' with 'com.netspective.sparx.util.log'."/>
+    	<replace dir="${basedir}" token="com.xaf.log" value="com.netspective.sparx.log" summary="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.ace' with 'com.netspective.sparx.ace'."/>
+    	<replace dir="${basedir}" token="com.xaf.ace" value="com.netspective.sparx.ace" summary="yes"/>
+    	
+    	<echo message="Replacing references to 'com.xaf.config' with 'com.netspective.sparx.util.config'."/>
+    	<replace dir="${basedir}" token="com.xaf.config" value="com.netspective.sparx.util.config" summary="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.value' with 'com.netspective.sparx.util.value'."/>
+    	<replace dir="${basedir}" token="com.xaf.value" value="com.netspective.sparx.util.value" summary="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.navigate.taglib' with 'com.netspective.sparx.xaf.taglib'."/>
+    	<replace dir="${basedir}" token="com.xaf.navigate.taglib" value="com.netspective.sparx.xaf.taglib" summary="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.db.schema' with 'com.netspective.sparx.xif.dal'."/>
+    	<replace dir="${basedir}" token="com.xaf.db.schema" value="com.netspective.sparx.dal" summary="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.db.ConnectionContext' with 'com.netspective.sparx.xif.dal.ConnectionContext'."/>
+    	<replace dir="${basedir}" token="com.xaf.db.ConnectionContext" value="com.netspective.sparx.xif.dal.ConnectionContext" summary="yes"/>
+
+    	<echo message="Replacing references to 'com.xaf.db' with 'com.netspective.sparx.xif.db'."/>
+    	<replace dir="${basedir}" token="com.xaf.db" value="com.netspective.sparx.xif.db" summary="yes"/>
+    	
+    	<echo message="Replacing references to 'com.xaf' with 'com.netspective.sparx.xaf'."/>
+    	<replace dir="${basedir}" token="com.xaf" value="com.netspective.sparx.xaf" summary="yes"/>
+    	
+    	<echo message="********************** MIGRATION NOTE *************************"/>
+    	<echo message="** [signature change] Please be sure to update your AppLoginDialog.java in WEB-INF/classes and replace producePage(DialogContext, Writer) with producePage(Writer, DialogContext)"/>
+    	<echo message="** [signature change] Please be sure to update your PageTag.java in WEB-INF/classes and replace loginDialog.producePage(DialogContext, Writer) with loginDialog.producePage(Writer, DialogContext)"/>
+    	<echo message="** [method change] Please be sure to update all your dialog classes in WEB-INF/classes and replace getHtml(dc) with renderHtml(writer, dc)"/>
+    	<echo message="***************************************************************"/>
+    </target>
+    
+    <!-- 
+    ============================= Compile application ======================= 
+    -->
+    
+    <target name="compile" depends="init">
+	    <javac srcdir="${app.classes.dir}" classpath="${app.java.classpath}"/>
+    </target>
+    
+    <!-- 
+    ============================= Generate Database Items ======================= 
+    -->
+        
+    <target name="dal" depends="init">
+        <!-- generate the data access layer java files -->
+    	<delete dir="${app.java.dal.dir}"/>
+    	<dal schema="${config.app.schema.source-file}" dest="${app.java.dal.dir}" stylesheetroot="${java.dal.stylesheet.root.dir}"/>
+    	<property name="dal.temp.build.dir" value="${app.java.dal.dir}/classes"/>
+    	<mkdir dir="${dal.temp.build.dir}"/>
+        <javac srcdir="${app.java.dal.dir}" destdir="${dal.temp.build.dir}"/>
+        <jar jarfile="${app.java.dal.jar}" basedir="${dal.temp.build.dir}">
+            <include name="**"/>
+        </jar>
+        
+        <!-- now move the file to the application's lib directory -->
+    	<delete dir="${dal.temp.build.dir}"/>
+    	<mkdir dir="${app.lib.dir}"/>
+    	<move file="${app.java.dal.jar}" todir="${app.lib.dir}"/>
+    	<echo message="The Data Access Library JAR file is in ${app.lib.dir}"/>
+    </target>
+
+    <target name="dal-doc" depends="dal">
+        <mkdir dir="${app.java.dal.doc.dir}" />
+        <javadoc packagenames="dal.*,com.netspective.sparx.db.*,com.netspective.sparx.dal.*,com.netspective.sparx.form.DialogContext,com.netspective.sparx.sql.DmlStatement"
+             sourcepath="${app.java.dal.dir}:${sparx.java.dir}"
+             destdir="${app.java.dal.doc.dir}"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="Application DAL API"
+             doctitle="Application DAL API Documentation"
+             bottom="Copyright &#169; 2001 Netspective. All Rights Reserved."/>
+    </target>
+    
+    <!-- 
+    ============================= Generate UI Items ================================
+    -->
+        
+    <target name="dcb" depends="init">
+        <!-- generate the dialog context beans files -->
+    	<dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" debug="no"/>
+
+    	<property name="dcb.temp.build.dir" value="${app.java.dcb.dir}/build"/>
+    	<mkdir dir="${dcb.temp.build.dir}"/>
+        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}"/>
+        <jar jarfile="${app.java.dcb.jar}" basedir="${dcb.temp.build.dir}">
+            <include name="**"/>
+        </jar>
+
+        <!-- now move the file to the application's lib directory -->
+    	<delete dir="${dal.temp.build.dir}"/>
+    	<mkdir dir="${app.lib.dir}"/>
+    	<move file="${app.java.dcb.jar}" todir="${app.lib.dir}"/>
+    	<echo message="The Dialog Context Beans JAR file is in ${app.lib.dir}"/>
+    </target>
+    
+    <target name="dcb-doc" depends="dcb">
+        <mkdir dir="${app.java.dcb.doc.dir}"/>
+        <javadoc packagenames="${app.java.dcb.package}.*,com.netspective.sparx.form.*"
+             sourcepath="${app.java.dcb.dir}:${sparx.java.dir}"
+             destdir="${app.java.dcb.doc.dir}"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="Application Dialog Context Beans API"
+             doctitle="Application Dialog Context Beans API Documentation"
+             bottom="Copyright &#169; 2001 Netspective. All Rights Reserved."/>
+    </target>
+    
+    <!-- 
+    ============================= Clean Items ================================== 
+    * Dispose of all *.class files in WEB-INF/classes directory to 
+      force an automatic recompile
+    -->
+        
+    <target name="clean" depends="init">
+	<delete>
+		<fileset dir="${app.classes.dir}" includes="**/*.class"/>
+	</delete>    	
+	<delete dir="${resin.work.dir}"/>
+	<delete dir="${config.app.site-temp-path}"/>
+	<mkdir dir="${config.app.site-temp-path}"/>
+    </target>
+
+    <!-- =============================== Help =============================== -->
+    <target name="all" depends="init,clean,dal,dcb,compile,dal-doc,dcb-doc">
+    	<echo message="Complete"/>
+    </target>
+
+    <target name="targets">
+        <echo message=""/>
+        <echo message="ANT build targets for Application"/>
+        <echo message=""/>
+        <echo message="The following targets are available:"/>
+        <echo message="  all          Run all of the targets in this order: clean, dal, dal-doc, dcb, dcb-doc"/>
+        <echo message="  clean        Clean directories"/>
+        <echo message="  setup-sparx  Setup sparx files (configuration.xml, log4j, etc.)"/>
+        <echo message="  compile      Compile all the classes in the WEB-INF/classes directory"/>
+        <echo message="  dal          Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
+        <echo message="  dal-doc      Generate the Data Access Layer (DAL) API Documentation"/>
+        <echo message="  dcb          Generate the Dialog Context Beans from Dialogs (XML)"/>
+        <echo message="  dcb-doc      Generate the Dialog Context Beans API Documentation"/>
+    </target>
+</project>

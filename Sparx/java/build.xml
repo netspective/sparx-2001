@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ===================================================================
+
+Build file for Sparx - for use with the Jakarta Ant java build tool
+
+Setup instructions:
+    Before running an Ant build, you must
+     - set the JAVA_HOME environment variable to the JDK root directory
+     - set the ANT_HOME environment variable to the Ant root directory
+     - set CLASSPATH with all required libraries:
+       * Apache Xerces 1.4 or above (http://xml.apache.org)
+       * Apache Xalan 2.1 or above (http://xml.apache.org)
+       * Jakarta ORO Matcher 2.0 or above (http://jakarta.apache.org)
+       * Jakarta Log4J 1.1 or above (http://jakarta.apache.org)
+       * Java Servlet API 2.2 or above (http://java.sun.com)
+       * Java JDBC 2.0 Standard Extensions (http://java.sun.com)
+
+Build Instructions:
+   To build, run
+     build.bat (win32) or build.sh (unix) - optionally with a target arg as indicated below -
+   in the directory where this file is located.
+
+Build targets:
+    This build file supports the following targets:
+    - compile   compiles XAF in ../build/classes.
+    - jar       jars XAF classes from ../build/classes into ../lib/sparx.jar.
+    - sparx     creates ../lib/sparx.jar [the default target]
+
+-->
+<project name="Sparx" default="sparx" basedir=".">
+
+    <target name="init">
+	    <property name="build.dir" value="../build"/>
+	    <property name="build.classes.dir" value="${build.dir}/classes"/>
+	    <property name="lib.dir" value="../lib"/>
+
+		<delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+
+	    <property name="build.log.class.package" value="com.netspective.sparx"/>
+	    <property name="build.log.class.name" value="BuildLog"/>
+
+	    <property name="ant.home" value="${env.ANT_HOME}"/>
+	    <property name="ant.lib.dir" value="${ant.home}/lib"/>
+	    <property name="ant.jar" value="${ant.lib.dir}/ant.jar"/>
+
+	    <property name="debug" value="on"/>
+	    <property name="optimize" value="true"/>
+
+	    <property environment="env"/>
+
+	    <!-- Compile the BuildConfiguration class -->
+	    <javac srcdir="com/netspective/sparx" destdir="${build.classes.dir}"
+		includes="BuildConfiguration.java,util/ant/BuildConfigurationTask.java,util/ant/GenerateBuildLogClassTask.java,util/ant/ClassPathTask.java"
+			debug="${debug}"
+			optimize="${optimize}"
+			deprecation="off"/>
+
+	    <taskdef name="gblc" classname="com.netspective.sparx.util.ant.GenerateBuildLogClassTask" classpath="${build.classes.dir}"/>
+		<gblc package="${build.log.class.package}" class="${build.log.class.name}"/>
+		<echo message="Built on ${build.log.date} (host=${build.log.host.name}; ip=${build.log.host.ip})"/>
+		
+		<!-- put the build configuration items into the properties (com.netspective.sparx.util.ant.BuildConfigurationTask) -->
+	    <taskdef name="config" classname="com.netspective.sparx.util.ant.BuildConfigurationTask" classpath="${build.classes.dir}"/>
+		<config/>
+
+		<!-- show the current class path -->
+		<taskdef name="cp" classname="com.netspective.sparx.util.ant.ClassPathTask" classpath="${build.classes.dir}"/>
+		<cp listall="yes"/>
+
+	    <property name="lib-ext.dir" value="${lib.dir}/${build.libitem.path.prefix}"/>
+        <mkdir dir="${lib-ext.dir}"/>
+
+	    <property name="web-shared.dir" value="../web-shared"/>
+	    <property name="web-shared.dirname" value="web-shared"/>
+	    <property name="web-shared.versioned.dirname" value="web-shared-${build.libitem.path.prefix}"/>
+	    <property name="doc.dir" value="${web-shared.dir}/docs"/>
+	    <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
+
+	    <property name="jar.prefix" value="${build.libitem.file.prefix}"/>
+	    <property name="lib.jar" value="${jar.prefix}.jar"/>
+	    <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
+	    <property name="web-shared.zip" value="${jar.prefix}_web-shared.zip"/>
+    </target>
+
+    <!-- ============================= Build XAF ========================= -->
+    <target name="compile" depends="init">
+
+        <!-- Compile XAF components -->
+        <javac srcdir="." destdir="${build.classes.dir}"
+            debug="${debug}"
+            optimize="${optimize}"
+            deprecation="off" >
+        </javac>
+
+    </target>
+
+    <!-- ============================= Jar XAF ========================= -->
+    <target name="jar" depends="compile">
+
+        <!-- Create XAF BINARIES JAR file -->
+        <jar jarfile="${lib-ext.dir}/${lib.jar}" basedir="${build.classes.dir}">
+            <include name="com/netspective/sparx/**"/>
+        </jar>
+
+        <copy file="${lib-ext.dir}/${lib.jar}" tofile="${lib.dir}/${lib.jar}"/>
+    </target>
+
+    <!-- ============================= JavaDoc XAF ========================= -->
+    <!-- Add XAF internal javadoc -->
+    <target name="javadoc" depends="init">
+        <mkdir dir="${javadoc.dir}" />
+        <javadoc packagenames="com.netspective.sparx.*"
+             sourcepath="."
+             destdir="${javadoc.dir}"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="XAF API"
+             doctitle="XAF API Documentation"
+             bottom="Copyright &#169; 2001 Netspective. All Rights Reserved."
+        />
+        <jar jarfile="${lib-ext.dir}/${doc.jar}" basedir="${javadoc.dir}" >
+            <include name="**" />
+        </jar>
+
+        <copy file="${lib-ext.dir}/${doc.jar}" tofile="${lib.dir}/${doc.jar}"/>
+
+    </target>
+
+    <!-- ============================= JavaDoc XAF ========================= -->
+
+    <target name="web-shared" depends="init">
+    	<!-- store two copies of the ZIP file:
+    	     1) a zip file with web-shared as the path prefix
+    	     2) a zip file with web-shared-[version] as the path prefix
+    	-->
+    	<zip zipfile="${lib.dir}/${web-shared.zip}">
+    		<zipfileset dir="${web-shared.dir}" prefix="${web-shared.dirname}"/>
+    	</zip>
+    	<zip zipfile="${lib-ext.dir}/${web-shared.zip}">
+    		<zipfileset dir="${web-shared.dir}" prefix="${web-shared.versioned.dirname}"/>
+    	</zip>
+    </target>
+
+    <!-- ==================== Administrative targets  ======================= -->
+    <target name="clean" depends="init">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="sparx" depends="init,compile,jar,javadoc,web-shared,clean"/>
+
+    <!-- =============================== Help =============================== -->
+    <target name="targets">
+        <echo message=""/>
+        <echo message="ANT build targets for XAF"/>
+        <echo message=""/>
+        <echo message="The following targets are available:"/>
+        <echo message="  sparx                Clean, compile and then create JAR"/>
+        <echo message="  clean                Clean build and jar directories"/>
+        <echo message="  jar                  Create JAR"/>
+        <echo message="  javadoc              Create JavaDoc for Classes"/>
+        <echo message="  compile              Compile XAF"/>
+        <echo message="  web-shared           Create a ZIP file of the web-shared directory"/>
+    </target>
+</project>

@@ -1,0 +1,159 @@
+<chapter>
+	<title>Using the Applications Components Explorer (ACE)</title>
+
+	<section>
+		<title>Overview</title>
+		<para>
+			ACE is an integral component of the Sparx XAF that allows for
+			web-based application components discovery, documentation, and interactive
+			testing. ACE is a servlet that is run inside the ServletContext
+			of the owner application (as opposed to a separate ServletContext).
+			So, ACE is always resident inside all Sparx applications
+			unless it is removed for security or performance considerations.
+			ACE is almost always available as <literal>http://server/appid/ace</literal>.
+			For example, in the sample application <literal>web-cura</literal> it
+			is reached by going to <literal>http://server/cura/ace</literal>.
+		</para>
+		<para>
+			The default username/password for ACE is <literal>ace/ace</literal>. The username
+			and password are stored cleartext at this time in
+			<filename class="conf">WEB-INF/configuration.xml</filename> (see the
+			<literal>framework.ace.login.user-name</literal> and
+			<literal>framework.ace.login.user-password</literal>).
+		</para>
+	</section>
+
+	<section>
+		<title>ACE Pages</title>
+		<itemizedlist>
+			<listitem>
+                <para>
+				The <literal>Home</literal> page shows
+				<itemizedlist>
+					<listitem><para><emphasis>Execution Environment</emphasis> (Development, Testing, or Production)</para></listitem>
+					<listitem><para>Sparx version</para></listitem>
+					<listitem><para>Operating system Sparx is running on</para></listitem>
+					<listitem><para>Java JDK version and vendor</para></listitem>
+					<listitem><para>Java VM version and vendor</para></listitem>
+				</itemizedlist>
+                </para>
+			</listitem>
+			<listitem><para>
+				The <literal>Application</literal> menu contains
+				<itemizedlist>
+					<listitem><para>Dialogs</para></listitem>
+					<listitem><para>Configuration</para></listitem>
+					<listitem><para>Servlet Context</para></listitem>
+					<listitem><para>Access Control</para></listitem>
+					<listitem><para>System Properties</para></listitem>
+					<listitem><para>Metrics</para></listitem>
+					<listitem><para>Factories</para></listitem>
+					<listitem><para>Logs</para></listitem>
+				</itemizedlist>
+			</para></listitem>
+			<listitem><para>
+				The <literal>Database</literal> menu contains
+				<itemizedlist>
+					<listitem><para>SQL Statements</para></listitem>
+					<listitem><para>SQL Query Definitions</para></listitem>
+					<listitem><para>Schema (XML)</para></listitem>
+					<listitem><para>DB Meta Data</para></listitem>
+					<listitem><para>Generate DDL</para></listitem>
+					<listitem><para>Data Sources</para></listitem>
+				</itemizedlist>
+			</para></listitem>
+			<listitem><para>
+				The <literal>Documents</literal> menu contains
+				<itemizedlist>
+					<listitem><para>Tag Documentation</para></listitem>
+					<listitem><para>Java Documentation</para></listitem>
+					<listitem><para>Project Documentation</para></listitem>
+					<listitem><para>Framework Documentation</para></listitem>
+				</itemizedlist>
+			</para></listitem>
+		</itemizedlist>
+	</section>
+
+
+	<section>
+		<title>Application Dialogs Page</title>
+        <para>
+        All dialogs defined in <filename class="conf">WEB-INF/ui/dialog.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Dialogs</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/dialogs/ace-dialogs.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>
+	</section>
+
+	<section>
+		<title>Application Configuration Page</title>
+        <para>
+        All configuration items defined in <filename class="conf">WEB-INF/configuration.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Configurations</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="./resources/images/ace/configurations.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>
+	</section>
+
+	<section>
+		<title>Application Servlet Context Page</title>
+		<para>
+        The servlet context items defined in <filename class="conf">WEB-INF/web.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Servlet Context</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        
+        <para>
+        <mediaobject>
+        <imageobject align="left">
+            <imagedata fileref="resources/images/ace/servletcontext.jpg" format="JPEG"/>
+        </imageobject>
+        </mediaobject>              
+        </para>            
+	
+	</section>
+
+	<section>
+		<title>Application Access Control Page</title>
+        <para>
+        The permissions defined in <filename class="conf">WEB-INF/security/access-control.xml</filename>
+        are listed in &explorer-name; under 
+        <menuchoice role="bold">
+            <guimenu>Application</guimenu>  
+            <guimenuitem>Access Control</guimenuitem>                
+        </menuchoice>    menu item.
+        </para>
+        
+        <para>
+        <screenshot>
+            <mediaobject>
+            <imageobject align="left">
+                <imagedata fileref="resources/images/ace/acl.jpg" format="JPEG"/>
+            </imageobject>
+            </mediaobject> 
+        </screenshot>
+        </para>        
+	</section>
+
+</chapter>

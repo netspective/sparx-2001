@@ -1,0 +1,326 @@
+<chapter>
+    <title>Querying Relational Data: Static Queries</title>
+
+    <section id="Query">
+        <title>Overview</title>
+        <para>
+            &framework-name; provides a centralized location to create and store all static SQL statements
+            with bind parameters in a single repository:
+            <filename class="conf">web-app/Site/WEB-INF/ui/statement.xml</filename>.
+            The XML file also provides the flexibility of defining sql statements for
+            multiple data sources in one centralized location.
+
+        </para>
+    </section>
+
+    <section id="Creating-Query">
+        <title>Creating a static query</title>
+        <para>
+        All static queries regardless of their data source are defined in 
+        <filename class="conf">WEB-INF/ui/statement.xml</filename>.
+        Each query statement must belong to a query package also.
+        </para>
+        <section>
+            <title>Defining the query</title>
+            <para>
+            A static query is defined(with or without bind parameters) by using the XML tag, 
+            <emphasis role="bold">&lt;statement&gt;</emphasis>. 
+            It is important to remember that in Sparx, every static query must belong to a statement package represented
+            by <emphasis role="bold">&lt;sql-statements&gt;</emphasis> XML tag.
+            Two XML tags <emphasis role="bold">&lt;params&gt;</emphasis> and <emphasis role="bold">&lt;param&gt;</emphasis>
+            are used to indicate the replacement
+            values for the bind parameters. The following is an example of a SQL statement
+            with two bind parameters belonging to a sql package:
+            <programlisting>
+            &lt;sql-statements package="user"&gt;
+                &lt;statement name="info"&gt;
+                    select                        
+                        name,
+                        address,
+                        phone,
+                        email
+                    from
+                        Customers
+                    where
+                        regionid = ? and
+                        custid = ?
+                    &lt;params&gt;
+                        &lt;param value="request:region_id"/&gt;
+                        &lt;param value="request:cust_id"/&gt;
+                    &lt;/params&gt;
+                &lt;/statement&gt;
+            &lt;/sql-statements&gt;
+            </programlisting>
+            
+            The listing above show that the <emphasis>regionid</emphasis> and <emphasis>custid</emphasis>
+            columns are defined with bind parameters. In the example, the values for the bind parameters are obtained
+            from the HTTP request using the <emphasis>request</emphasis> Single Value Source. The order in 
+            which the bind parameters are defined within the <emphasis role="bold">&lt;params&gt;</emphasis> tag must be the same as
+            the order in which they appear in the query statement.
+            </para>
+            
+            <para>
+            For the case where a SQL IN condition is necessary, a special parameter attribute is available.
+            The attribute is called <emphasis>param-list</emphasis> and it follows the value source
+            format(param-list:paramIndex). For example:
+            <programlisting>            
+    &lt;sql-statements package="user"&gt;
+        &lt;statement name="info"&gt;
+            select                        
+                name,
+                address,
+                phone,
+                email
+            from
+                Customers
+            where
+                regionid IN (${param-list:0}) and
+                custid = ?   
+            &lt;params&gt;
+                &lt;param values="request:region_id"/&gt;
+                &lt;param value="request:cust_id"/&gt;
+            &lt;/params&gt;                
+        &lt;/statement&gt;
+    &lt;/sql-statements&gt;
+            </programlisting>
+            
+            Note that <emphasis>regionid</emphasis> values are obtained from the <emphasis>region_id</emphasis>
+            request parameter which is returning a list of values. The value attribute for the
+            <emphasis role="bold">&lt;param&gt;</emphasis> tag in this case is <emphasis>values</emphasis>
+            (to reflect multiple values).
+            </para>
+        </section>
+
+        <section>
+            <title>Defining the report</title>
+            <para>
+            The display result of the query execution can be configured easily using the 
+            <emphasis>&lt;report&gt;</emphasis> XML tag .
+            Column names can be assigned and the acutal result itself can be aligned or modified as a URL. 
+            An example is shown below  for adding a customized report for the query created above:
+            <programlisting>
+            &lt;sql-statements package="user"&gt;
+                &lt;statement name="info"&gt;
+                    select                        
+                        name,
+                        address,
+                        phone,
+                        email
+                    from
+                        Customers
+                    where
+                        regionid = ? and
+                        custid = ?
+                    &lt;params&gt;
+                        &lt;param value="request:region_id"/&gt;
+                        &lt;param value="request:cust_id"/&gt;
+                    &lt;/params&gt;
+                    &lt;report heading="Customer Information"&gt;                        
+                        &lt;column index="0" heading="Name" align="left" url="http://clickme/${0}"/&gt;
+                        &lt;column index="1" heading="Address" align="left"/&gt;
+                        &lt;column index="2" heading="Phone" align="left"/&gt;
+                        &lt;column index="3" heading="ID" align="left"/&gt;                        
+                    &lt;/report&gt;                   
+                &lt;/statement&gt;
+            &lt;/sql-statements&gt;
+            </programlisting>
+            Each <emphasis role="bold">&lt;column&gt;</emphasis> XML tag of the report corresponds to the query statement's
+            result set column entry though the the attribute <emphasis>index</emphasis>. The query above does
+            not specify the data source thus giving it the flexibility to be used for multiple data sources. 
+            If the data source needs to be defined with the statement, an attribute called <emphasis>data-src</emphasis>
+            is also available for the <emphasis role="bold">&lt;statement&gt;</emphasis> tag.
+            
+            </para>
+        </section>
+
+    </section>
+
+    <section id="Testing-Query">
+        <title>Testing the static query</title>
+        <section>
+            <title>Unit Testing</title>
+            <para>
+                Most static queries can be unit tested using though the Application Component Explorer(ACE). 
+                The 
+                <menuchoice>
+                    <guimenu>Database</guimenu>  
+                    <guimenu>SQL Statements</guimenu>
+                </menuchoice>             
+                menu entry in ACE displays all the SQL statements defined in 
+                <filename class="conf">web-app/Site/WEB-INF/ui/statement.xml</filename> as shown below. 
+             </para>
+             <para>
+                <mediaobject>
+                <imageobject align="left">
+                    <imagedata fileref="./resources/images/statements/ace-statements.jpg" format="JPEG"/>
+                </imageobject>
+                </mediaobject>
+
+                By clicking on the execute icon (<imageobject><imagedata fileref="../../resources/images/ace/icons/exec_sql.gif" format="GIF"/>
+                </imageobject>) of any of the queries, one can test the execution of that SQL query.
+
+            </para>
+
+        </section>
+        <section>
+            <title>Integration Testing</title>
+            <para>
+                A custom tag called <emphasis role="bold">&lt;xaf:query&gt;</emphasis> is available to use a static 
+                query within a JSP file. The following is an example of using the query defined above inside a JSP:
+                <programlisting>
+&lt;xaf:query name="user.info" skin="report" debug="no"/&gt;
+                </programlisting>
+            </para>
+        </section>
+    </section>
+
+    <section id="Using-Query">
+        <title>Using the static query</title>
+
+        <section id="Using-Query-Tag">
+                <para>
+                Static queries can be executed inside a JSP using the custom tag <sgmltag class="starttag">
+                xaf:query</sgmltag>. The execution of the query can also be configured in different ways: 
+                to display reports, to fill in HTML dialogs, or to save the data in arrays inside of displaying them.                
+                </para>            
+
+                <section>
+                <title> Used as a report </title>
+                <para> 
+                By default a static query report can be created by including the query within a JSP and describing 
+                the report type.
+                <programlisting>
+                <![CDATA[
+<xaf:query name="user.info" skin="report" debug="no"/>
+                ]]>
+                </programlisting>                
+                The <sgmltag class="attribute">skin</sgmltag> attribute determines how the report is displayed
+                on the screen. For example, the <programlisting> skin="report" </programlisting> will 
+                display the retrieved data in a report format (multiple rows with column names as the first row)
+                while <programlisting> skin="text-csv" </programlisting>
+                displays the retrieved data as comma seperated variables.                
+                
+                A static query report can also be created a result of a submit action of a dialog. For example, by listing the 
+                static query customt tag inside the custom dialog tag node, <sgmltag class="starttag">xaf:dialog</sgmltag>
+                , one can ensure that the query will only be executed when the dialog is submitted:
+                <programlisting>
+                <![CDATA[
+<xaf:dialog name="test.test1">
+    <xaf:query name="user.info" skin="report" debug="no"/>
+</xaf:dialog>
+                ]]>
+                </programlisting>                
+                
+                </para>
+            </section>
+            <section>
+                <title> Used to fill a dialog </title>
+                <para>
+                Instead of printing a report to the screen, the retrieved data from the static query
+                can be saved into a proceeding dialog. The following JSP sample is an example of this:
+                <programlisting>
+&lt;xaf:query name="user.info" report="none" store="form:*" debug="no"/&gt;
+&lt;xaf:dialog name="test.test1"/&gt;                    
+                </programlisting>     
+                The data retrieved from the query is not displayed but it is filled into the dialog through
+                the <emphasis>store="form:*"</emphasis> and  <emphasis>report="none"</emphasis> settings.
+                For this to work, the dialog field names must be the same as the column names defined in
+                the query statement.
+                </para>
+            </section>
+            <section>
+                <title> Used to create an array variable </title>
+                <para>  
+                The retrieved data from a static query can be saved into a HTTP request attribute or a HTTP session
+                attribute variable. The following is an example of saving the data inside a request attribute:
+                <programlisting>
+&lt;xaf:query name="user.info" 
+            report="none" 
+            store="request-attr:userInfo" 
+            storeType="row-map" 
+            debug="no"/&gt;              
+&lt;%
+Map user = (Map)request.getAttribute("userInfo");            
+%&gt;
+                </programlisting>      
+                The above example saves the query data inside a request attribute called 
+                <emphasis>userInfo</emphasis> of <emphasis>Map</emphasis> object type. 
+                
+                </para>
+            </section>
+        </section>            
+ 
+        <section id="Using-Query-Java">
+            <title>Using Java objects</title>
+            <para>                
+            &framework-name; provides an alternative way to execute queries within a JSP document
+            rather then using a <sgmltag class="starttag">xaf:query</sgmltag> custom tag. There are 
+            convience methods provided within <classname>com.xaf.sql.StatementManager</classname> class
+            to execute SQL queries. These methods can execute queries in the following ways:
+            <itemizedlist>
+                <listitem>
+                Executing a static query defined in <filename class="conf">statement.xml</filename>
+                by using the query id passed to the method as a parameter
+                </listitem>
+                <listitem>
+                Executing a static query which is directly passed to the method as a parameter
+                </listitem>
+            </itemizedlist>
+            <example>
+                <title>Defined Query</title>
+                <para>
+                The following is an example of using the <classname>com.xaf.sql.StatementManager</classname> class
+                within a JSP to execute a query defined in <filename class="conf">statement.xml</filename>:
+                <programlisting>
+                <![CDATA[                
+    <%
+    DatabaseContext dbContext = DatabaseContextFactory.getSystemContext();
+    Map result = StatementManager.executeStmtGetValuesMap(dbContext, pageContext, 
+        "jdbc/cura", "org.name-only", new Object[new String("123")]);
+    %>
+                ]]>                      
+                </programlisting>
+                The above example is doing exactly the same as the following JSP snippet using the query custom 
+                tag (assuming the query is expecting the bind parameter from a request attribute called <literal>org_id</literal>):
+                <programlisting>                
+                <![CDATA[                
+    <%
+    request.setAttribute("org_id", "123");
+    %>
+    <xaf:query name="org.name-only" dataSource="jdbc/cura" report="none" 
+    store="request-attr:result"  storeType="row-map"/>
+    <%
+    Map result = (Map)request.getAttribute("result");
+    %>
+                ]]>                      
+                </programlisting>                
+                </para>
+            </example>
+            
+            <example>
+                <title>Passed In Query</title>
+                <para>
+                The following is an example of using the <classname>com.xaf.sql.StatementManager</classname> class
+                within a JSP to execute a query which is passed in (not defined in <filename class="conf">statement.xml</filename>):
+                <programlisting>
+                <![CDATA[                
+    <%
+    DatabaseContext dbContext = DatabaseContextFactory.getSystemContext();
+    Map result = StatementManager.executeSqlGetValuesMap(dbContext, pageContext, 
+        "jdbc/cura", "select org_name from org where org_id = ?", new Object[new String("123")]);
+    %>
+                ]]>                      
+                </programlisting>
+                <note>
+                It is recommended that all static queries be defined in <filename class="conf">statement.xml</filename>
+                and this way of exeuting queries should be only used for debugging or development purposes.
+                </note>
+                </para>
+            </example>
+            
+            </para>
+        </section>
+  
+    </section>
+
+</chapter>
