@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.23 2002-10-01 16:02:31 shahid.shah Exp $
+$Id: app-build.xml,v 1.24 2002-10-14 15:07:24 aye.thu Exp $
 -->
 
 <project name="app" default="all">
@@ -60,7 +60,7 @@ $Id: app-build.xml,v 1.23 2002-10-01 16:02:31 shahid.shah Exp $
             <fileset dir="lib">
                 <include name="**/*.jar"/>
                 <exclude name="*-ids.jar"/> <!-- don't include the app-generated Identifiers JAR (config) -->
-                <exclude name="*-dal.jar"/> <!-- don't include the app-generated DAL JAR (database) -->
+                <!--exclude name="*-dal.jar"/--> <!-- don't include the app-generated DAL JAR (database) -->
                 <exclude name="*-dcb.jar"/> <!-- don't include the app-generated DCB JAR (UI) -->
             </fileset>
             <fileset dir="${sparx.home}/lib/redist">
@@ -361,6 +361,9 @@ $Id: app-build.xml,v 1.23 2002-10-01 16:02:31 shahid.shah Exp $
     -->
 
     <target name="dcb" depends="init" if="app.ui.source-file-exists">
+        <javac srcdir="${app.classes.dir}" classpathref="project.class.path" deprecation="on">
+            <include name="**/form/field/*.java"/>
+        </javac>    
         <!-- generate the dialog context beans files -->
         <dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" debug="no"/>
 
