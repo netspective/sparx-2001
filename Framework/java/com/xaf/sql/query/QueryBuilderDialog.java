@@ -20,6 +20,7 @@ public class QueryBuilderDialog extends Dialog
 	static public final int QBDLGFLAG_HIDE_OUTPUT_DESTS = DLGFLAG_CUSTOM_START;
 	static public final int QBDLGFLAG_ALLOW_DEBUG       = QBDLGFLAG_HIDE_OUTPUT_DESTS * 2;
 	static public final int QBDLGFLAG_HIDE_CRITERIA     = QBDLGFLAG_ALLOW_DEBUG * 2;
+    static public final int QBDLGFLAG_ALWAYS_SHOW_RSNAV = QBDLGFLAG_HIDE_CRITERIA * 2;
 
 	static public final String QBDIALOG_QUERYDEFN_NAME_PASSTHRU_FIELDNAME = "queryDefnName";
 
@@ -58,6 +59,9 @@ public class QueryBuilderDialog extends Dialog
 
 		if(elem.getAttribute("show-criteria").equals("no"))
 			setFlag(QBDLGFLAG_HIDE_CRITERIA);
+
+        if(elem.getAttribute("always-show-rs-nav").equals("yes"))
+            setFlag(QBDLGFLAG_ALWAYS_SHOW_RSNAV);
 	}
 
 	public void addInputFields()
@@ -441,4 +445,45 @@ public class QueryBuilderDialog extends Dialog
 		}
 	}
 
+    /**
+     * return the output from the execute method or the execute method and the dialog (which contains
+     * the ResultSetNavigagors next/prev buttons). If there is only one page or scrolling is not being
+     * performed (state == null) then only show the output of the query. However, if there is more than
+     * one page or the number of pages is unknown, then show the entire dialog.
+     */
+
+    public String getHtml(DialogContext dc, boolean contextPreparedAlready)
+    {
+        if(flagIsSet(QBDLGFLAG_ALWAYS_SHOW_RSNAV))
+            return super.getHtml(dc, contextPreparedAlready);
+
+        if(! contextPreparedAlready)
+			prepareContext(dc);
+
+		if(dc.inExecuteMode())
+		{
+            String output = execute(dc);
+            QuerySelectScrollState state = (QuerySelectScrollState)	dc.getRequest().getAttribute(dc.getTransactionId() + "_state");
+            if(state != null)
+            {
+                int totalPages = state.getTotalPages();
+                if(totalPages == -1 || totalPages > 1)
+                {
+                    StringBuffer html = new StringBuffer();
+                    html.append(output);
+					html.append(getLoopSeparator());
+                    html.append(dc.getSkin().getHtml(dc));
+                    return html.toString();
+                }
+                else
+                    return output;
+            }
+            else
+                return output;
+        }
+        else
+		{
+			return dc.getSkin().getHtml(dc);
+		}
+    }
 }

@@ -12,6 +12,7 @@ package com.xaf.form;
 import java.util.*;
 import org.w3c.dom.*;
 import com.xaf.form.field.*;
+import com.xaf.sql.query.ResultSetNavigatorButtonsField;
 
 public class DialogFieldFactory
 {
@@ -67,6 +68,7 @@ public class DialogFieldFactory
         fieldClasses.put("field.zip", ZipField.class);
         fieldClasses.put("field.email", EmailField.class);
         fieldClasses.put("field.currency", CurrencyField.class);
+        fieldClasses.put("field.rs-navigator", ResultSetNavigatorButtonsField.class);
 
         conditionalsClasses.put("display", DialogFieldConditionalDisplay.class); // legacy
         conditionalsClasses.put("display-on-js-expr", DialogFieldConditionalDisplay.class);

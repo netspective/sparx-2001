@@ -95,8 +95,18 @@ public class QuerySelectDialog extends QueryBuilderDialog
 			addField(options);
 		}
 
-		//setDirector(new DialogDirector());
-		addField(new ResultSetNavigatorButtonsField());
+        boolean foundNavigator = false;
+        List fields = getFields();
+        for(Iterator i = fields.iterator(); i.hasNext(); )
+        {
+            if(i.next() instanceof ResultSetNavigatorButtonsField)
+            {
+                foundNavigator = true;
+                break;
+            }
+        }
+        if(! foundNavigator)
+            addField(new ResultSetNavigatorButtonsField());
 	}
 
 	public void makeStateChanges(DialogContext dc, int stage)

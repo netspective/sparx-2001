@@ -65,6 +65,8 @@ public class QuerySelectScrollState extends ResultSetScrollState
 			this.skin = new HtmlReportSkin();
 			this.resultSetValid = true;
 		}
+        else
+            throw new SQLException("Unable to execute SQL: " + select.getErrorSql());
     }
 
 	public QuerySelect getSelect() { return select; }

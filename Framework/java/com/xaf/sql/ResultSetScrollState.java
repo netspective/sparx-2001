@@ -29,7 +29,7 @@ public class ResultSetScrollState
     {
 		this.resultSet = rs;
 		this.rowsPerPage = rowsPerPage;
-		this.resultSetScrollable = (rs.getType() != ResultSet.TYPE_FORWARD_ONLY);
+		this.resultSetScrollable = rs != null ? (rs.getType() != ResultSet.TYPE_FORWARD_ONLY) : false;
 		this.totalRows = -1;
 		this.totalPages = -1;
 		this.activePage = 1;

@@ -99,6 +99,7 @@ public class Dialog
 	public final void setAppendAfterLoop(boolean value) { if(value) setFlag(DLGFLAG_APPEND_WHEN_LOOPING); else clearFlag(DLGFLAG_APPEND_WHEN_LOOPING); }
 
 	public final int getLayoutColumnsCount() { return layoutColumnsCount; }
+    public final String getLoopSeparator() { return loopSeparator; }
 
 	public final String getOriginalRefererParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_ORIG_REFERER; }
 	public final String getActiveModeParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_ACTIVEMODE; }
@@ -112,7 +113,7 @@ public class Dialog
 
 	public final Task[] getExecuteTasks() { return executeTasks; }
 
-	public final ArrayList getFields() { return fields; }
+	public final List getFields() { return fields; }
 	public final boolean retainRequestParams() { return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS) || (retainRequestParams != null); }
 	public final String[] getRetainRequestParams() { return retainRequestParams; }
 	public final void setRetainRequestParams(String[] value) { retainRequestParams = value; }
