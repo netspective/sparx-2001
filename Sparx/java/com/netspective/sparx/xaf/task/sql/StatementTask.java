@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.5 2002-09-17 18:30:35 aye.thu Exp $
+ * $Id: StatementTask.java,v 1.6 2002-09-29 01:16:06 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -112,7 +112,6 @@ public class StatementTask extends BasicTask
     public StatementTask()
     {
         super();
-        System.out.println("StatementTask!");
     }
 
     public void reset()
