@@ -29,7 +29,9 @@ public class StatementExecutionLogEntry
 		if(req instanceof HttpServletRequest)
 		{
 			HttpServletRequest httpReq = (HttpServletRequest) req;
-			source = httpReq.getRequestURI() + "?" + httpReq.getQueryString();
+			source = httpReq.getRequestURI();
+			String qs = httpReq.getQueryString();
+			if(qs != null) source += "?" + qs;
 		}
 
 		statementName = si.getId();
