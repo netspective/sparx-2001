@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HtmlSingleRowReportSkin.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: HtmlSingleRowReportSkin.java,v 1.2 2002-08-25 19:07:58 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -69,17 +69,19 @@ import com.netspective.sparx.xaf.report.ReportContext;
 
 public class HtmlSingleRowReportSkin extends HtmlReportSkin
 {
+    public static final int HTMLFLAG_SKIPNULLCOLUMNS = HTMLFLAG_STARTCUSTOM;
+
     protected int tableCols;
     protected boolean horizontalLayout;
     protected String breakFontAttrs = "face='verdana,arial,helvetica' size=2 color=navy";
     protected String captionCellAttrs = "";
 
-    public HtmlSingleRowReportSkin(int tableCols, boolean horizontalLayout)
+    public HtmlSingleRowReportSkin(boolean fullWidth, int tableCols, boolean horizontalLayout)
     {
-        super();
+        super(fullWidth);
         this.tableCols = tableCols;
         this.horizontalLayout = horizontalLayout;
-        setFlag(HTMLFLAG_SHOW_BANNER);
+        setFlag(HTMLFLAG_SHOW_BANNER | HTMLFLAG_SKIPNULLCOLUMNS);
         clearFlag(HTMLFLAG_SHOW_HEAD_ROW | HTMLFLAG_SHOW_FOOT_ROW);
     }
 
@@ -112,13 +114,16 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
                 if(state.isHidden())
                     continue;
 
+                if(flagIsSet(HTMLFLAG_SKIPNULLCOLUMNS) && rowData[column.getColIndexInArray()] == null)
+                    continue;
+
                 String data =
                         state.flagIsSet(ReportColumn.COLFLAG_HASOUTPUTPATTERN) ?
                         state.getOutputFormat() :
                         column.getFormattedData(rc, 1, rowData, true);
 
-                dataTable.append("<td " + captionCellAttrs + "><font " + dataHdFontAttrs + ">" +
-                        column.getHeading().getValue(rc) + ":</font></td>");
+                dataTable.append("<td " + captionCellAttrs + "><font " + dataHdFontAttrs + "><nobr>" +
+                        column.getHeading().getValue(rc) + ":</nobr></font></td>");
                 dataTable.append("<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'><font " + dataFontAttrs + ">" + (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='" + state.getUrl() + "'" + state.getUrlAnchorAttrs() + ">" + data + "</a>" : data) + "</font></td>");
 
                 colCount++;

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: HtmlSingleRowReportNoCaptionSkin.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: HtmlSingleRowReportNoCaptionSkin.java,v 1.2 2002-08-25 19:07:58 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -69,12 +69,14 @@ import com.netspective.sparx.xaf.report.ReportContext;
 
 public class HtmlSingleRowReportNoCaptionSkin extends HtmlReportSkin
 {
+    public static final int HTMLFLAG_SKIPNULLCOLUMNS = HTMLFLAG_STARTCUSTOM;
+
     protected int tableCols;
     protected boolean horizontalLayout;
 
-    public HtmlSingleRowReportNoCaptionSkin(int tableCols, boolean horizontalLayout)
+    public HtmlSingleRowReportNoCaptionSkin(boolean fullWidth, int tableCols, boolean horizontalLayout)
     {
-        super();
+        super(fullWidth);
         this.tableCols = tableCols;
         this.horizontalLayout = horizontalLayout;
         setFlag(HTMLFLAG_SHOW_BANNER);
@@ -100,6 +102,9 @@ public class HtmlSingleRowReportNoCaptionSkin extends HtmlReportSkin
                 ReportContext.ColumnState state = states[i];
 
                 if(state.isHidden())
+                    continue;
+
+                if(flagIsSet(HTMLFLAG_SKIPNULLCOLUMNS) && rowData[column.getColIndexInArray()] == null)
                     continue;
 
                 String data =

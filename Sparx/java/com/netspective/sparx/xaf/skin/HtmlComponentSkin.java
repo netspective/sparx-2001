@@ -51,16 +51,16 @@
  */
  
 /**
- * $Id: HtmlComponentSkin.java,v 1.2 2002-02-02 00:00:31 snshah Exp $
+ * $Id: HtmlComponentSkin.java,v 1.3 2002-08-25 19:07:58 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
 
 public class HtmlComponentSkin extends HtmlReportSkin
 {
-    public HtmlComponentSkin()
+    public HtmlComponentSkin(boolean fullWidth)
     {
-        super();
+        super(fullWidth);
         clearFlag(HTMLFLAG_SHOW_HEAD_ROW | HTMLFLAG_ADD_ROW_SEPARATORS);
         dataFontAttrs = "face='verdana,arial' size='2' style='font-size: 7pt;'";
     }

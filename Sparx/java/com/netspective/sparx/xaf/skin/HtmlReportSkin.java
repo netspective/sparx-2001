@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.5 2002-08-24 05:36:29 shahid.shah Exp $
+ * $Id: HtmlReportSkin.java,v 1.6 2002-08-25 19:07:58 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -82,22 +82,25 @@ public class HtmlReportSkin implements ReportSkin
     static public final int HTMLFLAG_SHOW_HEAD_ROW = HTMLFLAG_SHOW_BANNER * 2;
     static public final int HTMLFLAG_SHOW_FOOT_ROW = HTMLFLAG_SHOW_HEAD_ROW * 2;
     static public final int HTMLFLAG_ADD_ROW_SEPARATORS = HTMLFLAG_SHOW_FOOT_ROW * 2;
+    static public final int HTMLFLAG_FULL_WIDTH = HTMLFLAG_ADD_ROW_SEPARATORS * 2;
+    static public final int HTMLFLAG_STARTCUSTOM = HTMLFLAG_FULL_WIDTH * 2;
 
     static public final String[] ALIGN_ATTRS = {"LEFT", "CENTER", "RIGHT"};
 
     protected int flags;
-    protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#666666'";
-    protected String innerTableAttrs = "cellpadding='2' cellspacing='0' border='0' width='100%'";
+    protected String frameHdTableAttrs = "cellspacing=0 cellpadding=0 width='100%' border=0";
     protected String frameHdRowAttrs = "bgcolor='#666666' height=15";
     protected String frameHdRowSpacerAttrs = "bgcolor='#666666' height=2";
     protected String frameHdCellAttrs = "bgcolor='#666666' width='40%'";
     protected String frameHdInfoCellAttrs = "bgcolor='white'";
     protected String frameHdFontAttrs = "face='tahoma,arial,helvetica' size=1 color=white";
+    protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#666666' width='100%' ";
+    protected String innerTableAttrs = "cellpadding='2' cellspacing='0' border='0' width='100%'";
     protected SingleValueSource frameHdTabImgSrcValueSource = ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/tabs/transparent-triangle.gif");
     protected SingleValueSource frameHdSpacerImgSrcValueSource = ValueSourceFactory.getSingleValueSource("config-expr:${sparx.shared.images-url}/tabs/black-on-lgray/spacer.gif");
     protected String frameFtRowAttrs = "bgcolor='#EEEEEE'";
     protected String frameFtFontAttrs = "face='tahoma,arial,helvetica' size=2 color='#000000'";
-    protected String bannerRowAttrs = "bgcolor='#EEEEEE'";
+    protected String bannerRowAttrs = "bgcolor='#DDDDDD'";
     protected String bannerItemFontAttrs = "face='arial,helvetica' size=2";
     protected String dataHdRowAttrs = "bgcolor='#EEEEEE'";
     protected String dataHdCellAttrs = "style='border-bottom: 2px solid #999999'";
@@ -111,9 +114,11 @@ public class HtmlReportSkin implements ReportSkin
     protected String sortAscImgSrc = "/shared/resources/images/navigate/triangle-up-blue.gif";
     protected String sortDescImgSrc = "/shared/resources/images/navigate/triangle-down-lblue.gif";
 
-    public HtmlReportSkin()
+    public HtmlReportSkin(boolean fullWidth)
     {
         setFlag(HTMLFLAG_SHOW_BANNER | HTMLFLAG_SHOW_HEAD_ROW | HTMLFLAG_SHOW_FOOT_ROW | HTMLFLAG_ADD_ROW_SEPARATORS);
+        if(fullWidth)
+            setFlag(HTMLFLAG_FULL_WIDTH);
     }
 
     public String getFileExtension()
@@ -153,7 +158,10 @@ public class HtmlReportSkin implements ReportSkin
         ReportFrame frame = rc.getReport().getFrame();
         ReportBanner banner = rc.getReport().getBanner();
 
-        writer.write("<table cellspacing=0 cellpadding=0><tr><td>");
+        writer.write("<table cellspacing=0 cellpadding=0 border=0 ");
+        if(flagIsSet(HTMLFLAG_FULL_WIDTH))
+            writer.write("width='100%' ");
+        writer.write("><tr><td>");
 
         boolean haveOuterTable = (frame != null || banner != null);
         if(haveOuterTable)
@@ -172,7 +180,7 @@ public class HtmlReportSkin implements ReportSkin
                 String frameHdTabImgSrc = frameHdTabImgSrcValueSource.getValue(rc);
                 String frameHdSpacerImgSrc = frameHdSpacerImgSrcValueSource.getValue(rc);
 
-                writer.write("<table cellspacing=0 cellpadding=0 width='100%'>");
+                writer.write("<table "+ frameHdTableAttrs +">");
                 writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
                 writer.write("<tr " + frameHdRowSpacerAttrs +"><td colspan=3><img src='"+ frameHdSpacerImgSrc +"' height=2></td></tr>");
                 writer.write("</table>");
@@ -569,6 +577,121 @@ public class HtmlReportSkin implements ReportSkin
             writer.write("<td align='" + ALIGN_ATTRS[column.getAlignStyle()] + "'><font " + dataFtFontAttrs + "><b>" + column.getFormattedData(rc, states[i].getCalc()) + "</b></font></td><td><font " + dataFtFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
         writer.write("</tr>");
+    }
+
+    public String getFrameHdTableAttrs()
+    {
+        return frameHdTableAttrs;
+    }
+
+    public void setFrameHdTableAttrs(String frameHdTableAttrs)
+    {
+        this.frameHdTableAttrs = frameHdTableAttrs;
+    }
+
+    public String getFrameHdRowSpacerAttrs()
+    {
+        return frameHdRowSpacerAttrs;
+    }
+
+    public void setFrameHdRowSpacerAttrs(String frameHdRowSpacerAttrs)
+    {
+        this.frameHdRowSpacerAttrs = frameHdRowSpacerAttrs;
+    }
+
+    public String getFrameHdCellAttrs()
+    {
+        return frameHdCellAttrs;
+    }
+
+    public void setFrameHdCellAttrs(String frameHdCellAttrs)
+    {
+        this.frameHdCellAttrs = frameHdCellAttrs;
+    }
+
+    public String getFrameHdInfoCellAttrs()
+    {
+        return frameHdInfoCellAttrs;
+    }
+
+    public void setFrameHdInfoCellAttrs(String frameHdInfoCellAttrs)
+    {
+        this.frameHdInfoCellAttrs = frameHdInfoCellAttrs;
+    }
+
+    public SingleValueSource getFrameHdTabImgSrcValueSource()
+    {
+        return frameHdTabImgSrcValueSource;
+    }
+
+    public void setFrameHdTabImgSrcValueSource(SingleValueSource frameHdTabImgSrcValueSource)
+    {
+        this.frameHdTabImgSrcValueSource = frameHdTabImgSrcValueSource;
+    }
+
+    public SingleValueSource getFrameHdSpacerImgSrcValueSource()
+    {
+        return frameHdSpacerImgSrcValueSource;
+    }
+
+    public void setFrameHdSpacerImgSrcValueSource(SingleValueSource frameHdSpacerImgSrcValueSource)
+    {
+        this.frameHdSpacerImgSrcValueSource = frameHdSpacerImgSrcValueSource;
+    }
+
+    public String getDataHdRowAttrs()
+    {
+        return dataHdRowAttrs;
+    }
+
+    public void setDataHdRowAttrs(String dataHdRowAttrs)
+    {
+        this.dataHdRowAttrs = dataHdRowAttrs;
+    }
+
+    public String getDataHdCellAttrs()
+    {
+        return dataHdCellAttrs;
+    }
+
+    public void setDataHdCellAttrs(String dataHdCellAttrs)
+    {
+        this.dataHdCellAttrs = dataHdCellAttrs;
+    }
+
+    public String getDataEvenRowAttrs()
+    {
+        return dataEvenRowAttrs;
+    }
+
+    public void setDataEvenRowAttrs(String dataEvenRowAttrs)
+    {
+        this.dataEvenRowAttrs = dataEvenRowAttrs;
+    }
+
+    public String getDataOddRowAttrs()
+    {
+        return dataOddRowAttrs;
+    }
+
+    public void setDataOddRowAttrs(String dataOddRowAttrs)
+    {
+        this.dataOddRowAttrs = dataOddRowAttrs;
+    }
+
+    public String getDataFtRowAttrs()
+    {
+        return dataFtRowAttrs;
+    }
+
+    public void setDataFtRowAttrs(String dataFtRowAttrs)
+    {
+        this.dataFtRowAttrs = dataFtRowAttrs;
+    }
+
+    public void setFlags(int flags)
+    {
+        this.flags = flags;
     }
 
     public String getOuterTableAttrs()
