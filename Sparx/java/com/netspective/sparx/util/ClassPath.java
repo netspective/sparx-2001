@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: ClassPath.java,v 1.1 2002-09-04 16:33:25 shahid.shah Exp $
+ * $Id: ClassPath.java,v 1.2 2002-09-04 23:21:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util;
@@ -149,22 +149,39 @@ public class ClassPath
         }
     }
 
-    public static ClassPathInfo[] getClassPaths()
+    public static void addClassPaths(List classPathList, String path)
     {
-        List classPathList = new ArrayList();
-
-        StringTokenizer tokenizer =
-                new StringTokenizer(System.getProperty("java.class.path"), File.pathSeparator);
-
+        StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
         while(tokenizer.hasMoreTokens())
         {
             String pathName = tokenizer.nextToken();
             classPathList.add(new ClassPathInfo(pathName));
         }
+    }
 
+    public static ClassPathInfo[] getClassPaths(String[] paths)
+    {
+        List classPathList = new ArrayList();
+        for(int i = 0; i < paths.length; i++)
+            addClassPaths(classPathList, paths[i]);
         if(classPathList.size() == 0)
             return null;
 
         return (ClassPathInfo[]) classPathList.toArray(new ClassPathInfo[classPathList.size()]);
+    }
+
+    public static ClassPathInfo[] getClassPaths(String path)
+    {
+        List classPathList = new ArrayList();
+        addClassPaths(classPathList, path);
+        if(classPathList.size() == 0)
+            return null;
+
+        return (ClassPathInfo[]) classPathList.toArray(new ClassPathInfo[classPathList.size()]);
+    }
+
+    public static ClassPathInfo[] getClassPaths()
+    {
+        return getClassPaths(System.getProperty("java.class.path"));
     }
 }

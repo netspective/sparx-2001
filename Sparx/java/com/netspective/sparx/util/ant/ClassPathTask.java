@@ -51,13 +51,14 @@
  */
  
 /**
- * $Id: ClassPathTask.java,v 1.2 2002-09-04 16:33:25 shahid.shah Exp $
+ * $Id: ClassPathTask.java,v 1.3 2002-09-04 23:21:45 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.ant;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.Path;
 
 import com.netspective.sparx.BuildConfiguration;
 import com.netspective.sparx.util.ClassPath;
@@ -66,6 +67,7 @@ public class ClassPathTask extends Task
 {
     private boolean listAll;
     private String showLocOfClass;
+    private Path additionalClassPath;
 
     public ClassPathTask()
     {
@@ -84,14 +86,22 @@ public class ClassPathTask extends Task
 
     public void setClass(String className)
     {
-        showLocOfClass = className;
+        showLocOfClass = project.replaceProperties(className);
+    }
+
+    public void setAdditional(Path path)
+    {
+        additionalClassPath = path;
     }
 
     public void execute() throws BuildException
     {
         if(listAll)
         {
-            ClassPath.ClassPathInfo[] cpi = ClassPath.getClassPaths();
+            ClassPath.ClassPathInfo[] cpi = additionalClassPath != null ?
+                ClassPath.getClassPaths(new String[] { System.getProperty("java.class.path"), additionalClassPath.toString() }) :
+                ClassPath.getClassPaths();
+
             for(int i = 0; i < cpi.length; i++)
             {
                 ClassPath.ClassPathInfo info = cpi[i];
