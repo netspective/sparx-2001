@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DateTimeField.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DateTimeField.java,v 1.2 2002-01-28 10:06:46 jruss Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -505,6 +505,8 @@ public class DateTimeField extends TextField
 
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { return (Date) getValueAsObject(\"" + fieldName + "\"); }\n");
         mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { return (Date) getValueAsObject(\"" + fieldName + "\", defaultValue); }\n");
+        mi.addJavaCode("\tpublic void set" + memberName + "(String value) { setValue(\""+ fieldName +"\", value); }\n");
+
 
         return mi;
     }
