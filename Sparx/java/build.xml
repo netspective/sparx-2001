@@ -43,7 +43,7 @@ Build targets:
         <fail message="JAVA_HOME is not set to a valid JDK directory." unless="java.home.exists"/>
         <echo message="JAVA_HOME is ${env.JAVA_HOME}"/>
     </target>
-    
+
     <target name="init" depends="check-java-home">
 
         <path id="sparx.home.path">
@@ -78,7 +78,7 @@ Build targets:
         <property name="optimize" value="true"/>
 
         <!-- Compile the Ant utility classes -->
-        <javac srcdir="com/netspective/sparx" destdir="${build.classes.dir}" 
+        <javac srcdir="com/netspective/sparx" destdir="${build.classes.dir}"
             includes="util/ClassPath.java,util/ant/GenerateBuildLogClassTask.java"
             debug="${debug}" optimize="${optimize}" deprecation="on"
             classpathref="project.class.path"
@@ -185,7 +185,7 @@ Build targets:
     </target>
 
     <!-- ==================== Deployment/kitting targets  =================== -->
-       
+
     <target name="kit-eval" depends="init">
         <property name="kit.base-dir-name" value="${build.libitem.file.prefix}"/>
         <property name="kit.full-name" value="${kit.dir}/${kit.base-dir-name}.zip"/>
@@ -199,8 +199,8 @@ Build targets:
         </zip>
     </target>
 
-    <target name="kit-eval-full" depends="init">        
-    	<property name="kit.build.dir" value="${kit.dir}/kit-eval-build"/>    	
+    <target name="kit-eval-full" depends="init">
+    	<property name="kit.build.dir" value="${kit.dir}/kit-eval-build"/>
         <property name="kit.full-name" value="${kit.dir}/${build.libitem.file.prefix}-eval"/>
         <property name="kit.base-dir-name" value="Netspective"/>
         <property name="kit.sparx-dir-name" value="${kit.base-dir-name}/${build.libitem.file.prefix}"/>
@@ -210,7 +210,7 @@ Build targets:
         <property name="sparx.samples.dir" value="../.."/>
 
         <delete dir="${kit.build.dir}"/>
-        
+
         <copy todir="${kit.build.dir}/${kit.base-dir-name}">
             <fileset dir="../documentation">
                 <include name="*.pdf"/>
@@ -228,18 +228,18 @@ Build targets:
         <copy todir="${kit.build.dir}/${kit.sparx-dir-name}/web-shared">
             <fileset dir="../web-shared"/>
         </copy>
-        		
+
 		<property name="sparx.cvs.root" value=":pserver:shahid.shah@localhost:/home/netspective/cvs/Sparx"/>
-		
-		<cvs command="checkout" package="hello" dest="${kit.samples.stage.dir}" 
-				cvsRoot="${sparx.cvs.root}"
-				compressionlevel="9" failonerror="yes" quiet="yes"/>
-				
-		<cvs command="checkout" package="library" dest="${kit.samples.stage.dir}" 
+
+		<cvs command="checkout" package="hello" dest="${kit.samples.stage.dir}"
 				cvsRoot="${sparx.cvs.root}"
 				compressionlevel="9" failonerror="yes" quiet="yes"/>
 
-		<cvs command="checkout" package="cura" dest="${kit.samples.stage.dir}" 
+		<cvs command="checkout" package="library" dest="${kit.samples.stage.dir}"
+				cvsRoot="${sparx.cvs.root}"
+				compressionlevel="9" failonerror="yes" quiet="yes"/>
+
+		<cvs command="checkout" package="cura" dest="${kit.samples.stage.dir}"
 				cvsRoot="${sparx.cvs.root}"
 				compressionlevel="9" failonerror="yes" quiet="yes"/>
 
@@ -261,25 +261,25 @@ Build targets:
 		<replace file="${kit.samples.stage.dir}/cura/${sparx.home.replace.file.bat}" token="${sparx.home.replace.token.bat}" value="${sparx.home.replace.value.bat}" summary="yes"/>
 		<replace file="${kit.samples.stage.dir}/cura/${sparx.home.replace.file.sh}" token="${sparx.home.replace.token.sh}" value="${sparx.home.replace.value.sh}" summary="yes"/>
 
-		<!-- 
+		<!--
 			Now we have the complete Sparx build and samples from CVS so build resin.
 			1) Unzip the ZIP file and copy samples and create a eval.zip file.
 			2) Delete the ZIP file contents unzipped in (1).
 			3) Untar the tar.gz file and copy samples and create a eva.tar.gz file.
 		-->
-				
+
         <!-- remember, resin's zip file already has resin-x.y.z as the base dir -->
 		<unzip src="${kit.dir}/resin-${kit.resin-version}.zip" dest="${kit.build.dir}/${kit.base-dir-name}"/>
 
         <copy todir="${kit.build.dir}/${kit.base-dir-name}/resin-${kit.resin-version}/webapps">
             <fileset dir="${kit.samples.stage.dir}"/>
         </copy>
-		
+
         <delete file="${kit.full-name}.zip"/>
         <zip destfile="${kit.full-name}.zip">
             <zipfileset dir="${kit.build.dir}/${kit.base-dir-name}" prefix="${kit.base-dir-name}"/>
         </zip>
-        
+
         <delete dir="${kit.build.dir}/${kit.base-dir-name}/resin-${kit.resin-version}"/>
 
 		<untar src="${kit.dir}/resin-${kit.resin-version}.tar.gz" dest="${kit.build.dir}/${kit.base-dir-name}" compression="gzip"/>
@@ -287,7 +287,7 @@ Build targets:
         <copy todir="${kit.build.dir}/${kit.base-dir-name}/resin-${kit.resin-version}/webapps">
             <fileset dir="${kit.samples.stage.dir}"/>
         </copy>
-		
+
         <delete file="${kit.full-name}.tar.gz"/>
         <tar destfile="${kit.full-name}.tar.gz" compression="gzip">
             <tarfileset dir="${kit.build.dir}/${kit.base-dir-name}" prefix="${kit.base-dir-name}"/>
@@ -300,6 +300,7 @@ Build targets:
     </target>
 
     <target name="sparx" depends="init,compile,jar,javadoc,web-shared,clean"/>
+    <target name="sparx-no-docs" depends="init,compile,jar,web-shared,clean"/>
 
     <target name="change-log" depends="init">
         <cvschangelog dir=".." destfile="../documentation/change-log.xml"/>

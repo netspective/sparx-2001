@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.29 2003-04-24 21:12:26 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.30 2003-05-01 19:49:55 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -494,6 +494,7 @@ function DialogField_alertMessage(control, message)
 	{
 		alert(this.caption + ":   " + message);
 	}
+	control.value = "";
 	control.focus();
 	handleCancelBubble(control);
 }
@@ -1296,6 +1297,18 @@ function IntegerField_isValid(field, control)
 		field.alertMessage(control, "'"+ control.value +"' is an invalid integer.");
 		return false;
 	}
+
+	if(field.minValue != "" && control.value < field.minValue)
+	{
+		field.alertMessage(control, "Minimum value is " + field.minValue);
+		return false;
+	}
+	if(field.maxValue != "" && control.value > field.maxValue)
+	{
+		field.alertMessage(control, "Maximum value is " + field.maxValue);
+		return false;
+	}
+
 	return true;
 }
 
@@ -1541,7 +1554,7 @@ addFieldType("com.netspective.sparx.xaf.form.field.SelectField", null, null, nul
 addFieldType("com.netspective.sparx.xaf.form.field.BooleanField", null, null, null, null, null, null, BooleanField_onClick);
 addFieldType("com.netspective.sparx.xaf.form.field.MemoField", null, MemoField_isValid, null, null, null, MemoField_onKeyPress);
 addFieldType("com.netspective.sparx.xaf.form.field.DateTimeField", DateField_finalizeDefn, DateField_isValid, null, null, DateField_valueChanged, DateField_onKeyPress, null);
-addFieldType("com.netspective.sparx.xaf.form.field.IntegerField", null, IntegerField_isValid, null, null, null, IntegerField_onKeyPress);
+addFieldType("com.netspective.sparx.xaf.form.field.IntegerField", null, IntegerField_isValid, null, null, null, IntegerField_onKeyPress, null);
 addFieldType("com.netspective.sparx.xaf.form.field.FloatField", null, FloatField_isValid, null, null, null, FloatField_onKeyPress);
 addFieldType("com.netspective.sparx.xaf.form.field.SocialSecurityField", null, SocialSecurityField_isValid, null, null, SocialSecurityField_valueChanged, SocialSecurityField_onKeyPress, null);
 addFieldType("com.netspective.sparx.xaf.form.field.PhoneField", null, PhoneField_isValid, null, null, PhoneField_valueChanged, null, null);

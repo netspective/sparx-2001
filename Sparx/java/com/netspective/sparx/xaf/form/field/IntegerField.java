@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: IntegerField.java,v 1.5 2002-12-24 15:39:57 shahbaz.javeed Exp $
+ * $Id: IntegerField.java,v 1.6 2003-05-01 19:49:55 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -63,133 +63,145 @@ import com.netspective.sparx.xaf.form.DialogContextMemberInfo;
 
 public class IntegerField extends TextField
 {
-    private int minValue = java.lang.Integer.MIN_VALUE;
-    private int maxValue = java.lang.Integer.MAX_VALUE;
+	private int minValue = java.lang.Integer.MIN_VALUE;
+	private int maxValue = java.lang.Integer.MAX_VALUE;
 
-    public IntegerField()
-    {
-        super();
-        setSize(10);
-    }
+	public IntegerField()
+	{
+		super();
+		setSize(10);
+	}
 
-    public IntegerField(String aName, String aCaption)
-    {
-        super(aName, aCaption);
-        setSize(10);
-    }
+	public IntegerField(String aName, String aCaption)
+	{
+		super(aName, aCaption);
+		setSize(10);
+	}
 
-    public final int getMinValue()
-    {
-        return minValue;
-    }
+	public final int getMinValue()
+	{
+		return minValue;
+	}
 
-    public void setMinValue(int value)
-    {
-        minValue = value;
-    }
+	public void setMinValue(int value)
+	{
+		minValue = value;
+	}
 
-    public final int getMaxValue()
-    {
-        return maxValue;
-    }
+	public final int getMaxValue()
+	{
+		return maxValue;
+	}
 
-    public void setMaxValue(int value)
-    {
-        maxValue = value;
-    }
+	public void setMaxValue(int value)
+	{
+		maxValue = value;
+	}
 
-    public void setMinMaxValue(int low, int high)
-    {
-        minValue = low;
-        maxValue = high;
-    }
+	public void setMinMaxValue(int low, int high)
+	{
+		minValue = low;
+		maxValue = high;
+	}
 
-    public void importFromXml(Element elem)
-    {
-        super.importFromXml(elem);
+	public void importFromXml(Element elem)
+	{
+		super.importFromXml(elem);
 
-        String value = elem.getAttribute("min");
-        if(value.length() != 0)
-            minValue = Integer.parseInt(value);
+		String value = elem.getAttribute("min");
+		if (value.length() != 0)
+			minValue = Integer.parseInt(value);
 
-        value = elem.getAttribute("max");
-        if(value.length() != 0)
-            maxValue = Integer.parseInt(value);
-    }
+		value = elem.getAttribute("max");
+		if (value.length() != 0)
+			maxValue = Integer.parseInt(value);
+	}
 
-    public boolean needsValidation(DialogContext dc)
-    {
-        return true;
-    }
+	public String getCustomJavaScriptDefn(DialogContext dc)
+	{
+		StringBuffer buf = new StringBuffer(super.getCustomJavaScriptDefn(dc));
 
-    public Object getValueAsObject(String value)
-    {
-        Integer result = null;
+		if(minValue != java.lang.Integer.MIN_VALUE)
+			buf.append("field.minValue = " + minValue + ";\n");
+		if(maxValue != java.lang.Integer.MAX_VALUE)
+			buf.append("field.maxValue = " + maxValue + ";\n");
 
-        try
-        {
-            result = new Integer(value);
-        }
-        catch(NumberFormatException e)
-        {
-            result = null;
-        }
-        return result;
-    }
+		return buf.toString();
+	}
 
-    public boolean isValid(DialogContext dc)
-    {
-        boolean textValid = super.isValid(dc);
-        if(textValid)
-        {
-            String strValue = dc.getValue(this);
-            if(!isRequired(dc) && (strValue == null || strValue.length() == 0))
-                return true;
+	public boolean needsValidation(DialogContext dc)
+	{
+		return true;
+	}
 
-            Integer value = null;
-            try
-            {
-                value = new Integer(strValue);
-            }
-            catch(Exception e)
-            {
-                invalidate(dc, "'" + strValue + "' is not a valid integer.");
-                return false;
-            }
-            if(value.intValue() < minValue || value.intValue() > maxValue)
-            {
-                invalidate(dc, getCaption(dc) + " needs to be between " + minValue + " and " + maxValue + ".");
-                return false;
-            }
-            return true;
-        }
-        else
-            return false;
-    }
+	public Object getValueAsObject(String value)
+	{
+		Integer result = null;
 
-    /**
-     * Produces Java code when a custom DialogContext is created
-     */
-    public DialogContextMemberInfo getDialogContextMemberInfo()
-    {
-        DialogContextMemberInfo mi = createDialogContextMemberInfo("int");
-        String fieldName = mi.getFieldName();
-        String memberName = mi.getMemberName();
-        String dataType = mi.getDataType();
+		try
+		{
+			result = new Integer(value);
+		}
+		catch (NumberFormatException e)
+		{
+			result = null;
+		}
+		return result;
+	}
 
-        mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? 0 : o.intValue(); }\n");
-        mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.intValue(); }\n");
+	public boolean isValid(DialogContext dc)
+	{
+		boolean textValid = super.isValid(dc);
+		if (textValid)
+		{
+			String strValue = dc.getValue(this);
+			if (!isRequired(dc) && (strValue == null || strValue.length() == 0))
+				return true;
 
-        mi.addJavaCode("\tpublic String get" + memberName + "String() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? \"0\" : o.toString(); }\n");
-        mi.addJavaCode("\tpublic String get" + memberName + "String(String defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.toString(); }\n");
+			Integer value = null;
+			try
+			{
+				value = new Integer(strValue);
+			}
+			catch (Exception e)
+			{
+				invalidate(dc, "'" + strValue + "' is not a valid integer.");
+				return false;
+			}
+			if (value.intValue() < minValue || value.intValue() > maxValue)
+			{
+				invalidate(dc, getCaption(dc) + " needs to be between " + minValue + " and " + maxValue + ".");
+				return false;
+			}
+			return true;
+		}
+		else
+			return false;
+	}
 
-        mi.addJavaCode("\tpublic Object get" + memberName + "Object() { return getValueAsObject(\"" + fieldName + "\"); }\n");
-        mi.addJavaCode("\tpublic Object get" + memberName + "Object(Object defaultValue) { return getValueAsObject(\"" + fieldName + "\", defaultValue); }\n");
+	/**
+	 * Produces Java code when a custom DialogContext is created
+	 */
+	public DialogContextMemberInfo getDialogContextMemberInfo()
+	{
+		DialogContextMemberInfo mi = createDialogContextMemberInfo("int");
+		String fieldName = mi.getFieldName();
+		String memberName = mi.getMemberName();
+		String dataType = mi.getDataType();
 
-        mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", Integer.toString(value)); }\n");
-        mi.addJavaCode("\tpublic void set" + memberName + "(String value) { setValue(\"" + fieldName + "\", value); }\n");
-        mi.addJavaCode("\tpublic void set" + memberName + "Object(Object value) { setValue(\"" + fieldName + "\", value != null ? ((Integer) value).toString() : null); }\n");
+		mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? 0 : o.intValue(); }\n");
+		mi.addJavaCode("\tpublic " + dataType + " get" + memberName + "(" + dataType + " defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.intValue(); }\n");
 
-        return mi;
-    }
+		mi.addJavaCode("\tpublic String get" + memberName + "String() { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? \"0\" : o.toString(); }\n");
+		mi.addJavaCode("\tpublic String get" + memberName + "String(String defaultValue) { Integer o = (Integer) getValueAsObject(\"" + fieldName + "\"); return o == null ? defaultValue : o.toString(); }\n");
+
+		mi.addJavaCode("\tpublic Object get" + memberName + "Object() { return getValueAsObject(\"" + fieldName + "\"); }\n");
+		mi.addJavaCode("\tpublic Object get" + memberName + "Object(Object defaultValue) { return getValueAsObject(\"" + fieldName + "\", defaultValue); }\n");
+
+		mi.addJavaCode("\tpublic void set" + memberName + "(" + dataType + " value) { setValue(\"" + fieldName + "\", Integer.toString(value)); }\n");
+		mi.addJavaCode("\tpublic void set" + memberName + "(String value) { setValue(\"" + fieldName + "\", value); }\n");
+		mi.addJavaCode("\tpublic void set" + memberName + "Object(Object value) { setValue(\"" + fieldName + "\", value != null ? ((Integer) value).toString() : null); }\n");
+
+		return mi;
+	}
 }
