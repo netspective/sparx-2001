@@ -14,7 +14,7 @@
 		<page level="1" name="index" caption="Home" heading="Netspective Sparx Application Platform">
 			<quick-links>
 				<quick-link caption="Java Documentation (JavaDoc)" page="javadoc/index"/>
-				<quick-link caption="Work in Progress (WIP)" page="to-do"/>
+				<quick-link caption="Development Road Map" page="to-do"/>
 			</quick-links>
 		</page>
 

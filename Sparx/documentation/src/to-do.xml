@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <page name="to-do">
-	<section heading="Sparx Work in Progress (WIP or to-do list)">
+	<section heading="Sparx Future Development Road Map">
 		<project>
             <task>
                 <name>Defects</name>
@@ -52,6 +52,7 @@
 
                     <task>
                         <name>Configuration</name>
+                        <task><name>Add an environment called "Maintenance" that would be in addition to "Production", "Development", etc. In this mode, PageTag would automatically return "maintenance mode" message.</name></task>
                         <task><name>Add ability to retrieve environment variables for configuration properties (use Ant example).</name></task>
                     </task>
 
@@ -83,6 +84,7 @@
                     <task><name>The System Properties page in Resin 2.0.2 does not show all of the system properties.</name></task>
                     <task><name>Allow multiple SchemaDoc files to be viewed in ACE without requiring changes to configuration.xml.</name></task>
                     <task><name>Automatically generate dialogs that will test SQL statements and parameters.</name></task>
+                    <task><name>When documenting SQL statements, show &lt;report> tag documentation too.</name></task>
                 </task>
 
                 <task>
@@ -173,6 +175,12 @@
                         <task><name>Try and catch maxlength and other DAL exceptions prior to the values getting to the JDBC driver.</name></task>
                         <task><name>Implement bulk upload/download via XML or delimited files.</name></task>
                     </task>
+                </task>
+                
+                <task>
+                    <name>Legal</name>
+                    <task><name>Add license agreements to all XSLT, javascript, and other "resource" files.</name></task>
+                    <task><name>Add license agreements to all sample project files.</name></task>
                 </task>
             </task>
 		</project>
