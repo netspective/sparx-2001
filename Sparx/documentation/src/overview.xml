@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<page name="overview">
+    <summary>
+        Sparx is a complete framework which helps with the entire software development lifecycle. Design and prototyping,
+        implementation, automatically generating unit tests, automatically creating implementation documentation, and
+        providing production logs and metrics are just some of the development deliverables and phases that Sparx
+        helps accelerate and standardize.
+    </summary>
+
+	<section heading="Sparx Modules">
+        As shown in the diagram below, Sparx comprises four <i>modules</i> that all work together to provide a
+        sophisticated yet easy to use development framework that automates the creation and operation of the
+        presentation, business, and data layers of your application.
+        <p/>
+        <table class="data" cellspacing="0" cellpadding="3">
+            <tr class="data_head">
+                <th class="data">Module</th>
+                <th class="data">Layer</th>
+                <th class="data">Description</th>
+            </tr>
+            <tr class="data">
+                <td class="data"><b>ACE</b></td>
+                <td class="data">Admin Console</td>
+                <td class="data"><page-summary page="ace"/></td>
+            </tr>
+            <tr class="data">
+                <td class="data"><b>XAF</b></td>
+                <td class="data">Presentation, Business, Data</td>
+                <td class="data"><page-summary page="xaf"/></td>
+            </tr>
+            <tr class="data">
+                <td class="data"><b>XIF</b></td>
+                <td class="data">Business, Data</td>
+                <td class="data"><page-summary page="xif"/></td>
+            </tr>
+            <tr class="data">
+                <td class="data"><b>DAL</b></td>
+                <td class="data">Data</td>
+                <td class="data"><page-summary page="dal"/></td>
+            </tr>
+        </table>
+    </section>
+
+	<section>
+		<center>
+		<table width="100%">
+			<tr>
+				<td rowspan="3" colspan="2" align="center"><image name="sparx-overview-full"/></td>
+				<td align="center"><image name="sparx-callout-ace"/></td>
+			</tr>
+			<tr><td align="center"><image name="sparx-callout-dal"/></td></tr>
+			<tr><td align="center"><image name="sparx-callout-xaf"/></td></tr>
+			<tr>
+				<td align="center"><image name="sparx-callout-xif"/></td>
+				<td align="center"><image name="sparx-callout-db"/></td>
+				<td align="center"><image name="sparx-callout-ui"/></td>
+			</tr>
+		</table>
+		</center>
+	</section>
+
+</page>

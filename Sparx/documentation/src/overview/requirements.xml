@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+
+<page name="overview/requirements">
+    <summary>
+		Sparx is completely application server and platform neutral. All of the Sparx's many features are available in
+        any Servlet-compliant application server like WebLogic, Websphere, Tomcat, and Resin. Sparx can work both with or
+        without EJBs. Sparx's main requirement is the Java Developer's Kit (JDK). You can
+        choose the Sun Java SDK, the IBM Java SDK, or any other variety that you prefer, as long as it complies with
+        Java 1.2 or above.
+        <ul>
+            <li>You can obtain Sun's Java SDK from <a href="http://java.sun.com/">http://java.sun.com</a>.</li>
+            <li>You can find IBM's Java SDK at <a href="http://www.ibm.com/java">http://www.ibm.com/java</a>.</li>
+        </ul>
+    </summary>
+
+	<section heading="General Requirements">
+        <table class="data" cellspacing="0" cellpadding="3" width="100%">
+            <tr class="data_head">
+                <th class="data">Category</th>
+                <th class="data">Requirements</th>
+            </tr>
+            <tr class="data" valign="top">
+                <td class="data">Operating System</td>
+                <td class="data">Any platform that supports JDK 1.2 or above (e.g. Windows NT/2000/XP, Unix, Linux, Mac).</td>
+            </tr>
+            <tr class="data" valign="top">
+                <td class="data">Database</td>
+                <td class="data">Any relational or object database that has a JDBC 2.0 driver (e.g. Oracle, Sybase, SQL Server).</td>
+            </tr>
+            <tr class="data" valign="top">
+                <td class="data">Application Server</td>
+                <td class="data">Any application server that supports the Java Servlet 2.2 or above specification (Weblogic, Websphere, Resin, Tomcat, etc).</td>
+            </tr>
+            <tr class="data" valign="top">
+                <td class="data">IDE</td>
+                <td class="data">Use any IDE or plain text editor.</td>
+            </tr>
+            <tr class="data" valign="top">
+                <td class="data">Object Services Protocol</td>
+                <td class="data">Choose from CORBA, EJB, RMI, SOAP, DCOM or other object services.</td>
+            </tr>
+            <tr class="data" valign="top">
+                <td class="data">Process Model</td>
+                <td class="data">Use any variety of process models like waterfall, RAD, JAD, XP (Extreme Programming), and other lightweight development processes.</td>
+            </tr>
+        </table>
+	</section>
+
+    <section heading="Database Requirements">
+        Our Developer Kit for evaluation is bundled with several sample applications. The two simpler sample applications,
+        called web-hello and web-library, can be run using the bundled (free) HSQL Java database.
+        <p/>
+        One of the larger samples is Cura,
+        a web based project management application for demonstration purposes. If you plan to evaluate Cura you will
+        need to install Oracle (version 8 or newer) on a server and make it available for access by the server that will
+        have the Sparx Developer Kit installed. You can choose to install Oracle on the same server as the Sparx
+        Developer Kit provided it has the resources to handle both an application server and a database server.
+    </section>
+
+    <section heading="Integrated Development Environment (IDE) Requirements">
+        You can also install a complete Java integrated development environment (IDE) for developing Sparx
+        applications. Installation of such a development environment is, of course, strictly a personal preference
+        and is <i>completely optional</i>. Sparx does not require nor endorse any particular Java IDE but will work
+        with any IDE or text editor that you might wish to use while developing applications.
+        If you choose to optionally install an IDE, take a look at:
+        <ul>
+            <li>IBM's VisualAge for Java</li>
+            <li>JBuilder Community Edition</li>
+            <li>IDEA's IntelliJ</li>
+        </ul>
+    </section>
+
+	<section heading="Open-source (free) Libraries used by Sparx">
+	<ul>
+		<li><link http="jakarta.apache.org">Jakarta Ant 1.4.1</link> or above</li>
+		<li><link http="jakarta.apache.org">Jakarta Log4J 1.1</link> or above</li>
+		<li><link http="jakarta.apache.org">Jakarta ORO 2.0</link> or above</li>
+		<li><link http="xml.apache.org">Apache Xerces 1.4</link> or above</li>
+		<li><link http="xml.apache.org">Apache Xalan 2.1</link> or above</li>
+	</ul>
+	</section>
+</page>

@@ -13,12 +13,23 @@
 	<page level="0">
 		<page level="1" name="index" caption="Home" heading="Netspective Sparx Application Platform">
 			<quick-links>
-				<quick-link caption="Java Documentation (JavaDoc)" page="javadoc/index"/>
-				<quick-link caption="Development Road Map" page="to-do"/>
+				<quick-link caption="Why use Sparx?" page="overview/why-use-sparx"/>
+				<quick-link caption="Sparx API (JavaDoc)" page="javadoc/index"/>
+				<!-- <quick-link caption="Development Road Map" page="to-do"/> -->
 			</quick-links>
 		</page>
 
-		<page level="1" name="requirements" caption="Requirements" heading="Netspective Sparx Requirements"/>
+		<page level="1" name="overview" caption="Overview" heading="Netspective Sparx Overview">
+            <page level="2" name="overview/why-use-sparx" caption="Why Use Sparx?"/>
+            <page level="2" name="overview/requirements" caption="Requirements" heading="Netspective Sparx Requirements"/>
+            <page level="2" name="overview/eval-kit" caption="Evaluation Kit" heading="Netspective Sparx Evaluation Kit"/>
+        </page>
+        <page level="1" name="samples" caption="Samples" heading="Netspective Sparx Sample Applications">
+            <page level="2" name="samples/web-hello" caption="Hello World"/>
+            <page level="2" name="samples/web-library" caption="Library"/>
+            <page level="2" name="samples/web-cura" caption="Cura"/>
+            <page level="2" name="samples/web-babyreg" caption="Gift Registry"/>
+        </page>
 		<page level="1" name="ace" caption="ACE" heading="Netspective Sparx ACE">
 			<page level="2" name="ace/impl-doc" caption="Implementation Docs" heading="Automatic Implementation Documentation">
 				<page level="3" name="ace/impl-doc/dialogs" caption="Dialogs"/>
@@ -106,7 +117,7 @@
 			<page level="2" name="dal/domains" caption="Domain Classes" heading="Domain, Row, and Rows Classes"/>
 			<page level="2" name="dal/tables" caption="Table Classes"/>
 		</page>
-		<page level="1" name="resources" caption="Resources" heading="Netspective Sparx Resources"/>
+		<!-- <page level="1" name="resources" caption="Resources" heading="Netspective Sparx Resources"/> -->
 	</page>
 
 	<images>
@@ -117,6 +128,10 @@
 			<image name="cats-cradle" src="design/cradle-home.gif"/>
 			<image name="eai-home" src="diagrams/eai-home.gif"/>
 			<image name="process-deliverables" src="diagrams/process/deliverables.gif"/>
+
+			<image name="sparx-dk-main" src="design/sparx-dk-main.jpg"/>
+			<image name="sparx-dk-download" src="design/sparx-dk-download.gif"/>
+			<image name="sparx-dk-online" src="design/sparx-dk-online.gif"/>
 
 			<image name="sparx-overview-alone" src="diagrams/sparx/overview-alone.gif"/>
 			<image name="sparx-overview-full" src="diagrams/sparx/overview-full.jpg"/>

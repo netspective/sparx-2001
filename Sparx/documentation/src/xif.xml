@@ -2,9 +2,11 @@
 
 <page name="xif">
 	<summary>
-	The eXtensible Information Framework (XIF) is Sparx's Java and XML
-	library consisting of dozens of reusable tables, columns, and indexes
-	that are useful for almost any e-business application.
+	The eXtensible Information Framework (XIF) is Sparx's Java and XML library consisting of dozens of reusable tables,
+    columns, and indexes that are useful for almost any e-business application. XIF manages one or more <i>SchemaDoc</i>
+    files which are object-oriented XML files that represent entire database schemas. Once a SchemaDoc file is manually
+    created or reverse-engineered from an existing database, it can be used to generate SQL DDL (data definitions for
+    creating tables and objects), SQL DML (insert/updates, etc) and complete database documentation.
 	</summary>
 
 	<section heading="Sparx XIF Benefits">

@@ -3,10 +3,10 @@
 set SPARX_HOME=C:\Projects\Sparx
 set BUILD_FILE=build.xml
 set BASE_DIR=%SPARX_HOME%\documentation\src
-set SPARX_REDIST_HOME=S:\utils\java\lib\sparx-redist
+set SPARX_REDIST_HOME=D:\shared\utils\java\lib\sparx-redist
 
 set JAVA_HOME=C:\utils\java\jdk1.3.1
-set ANT_HOME=S:\utils\java\lib\jakarta-ant-1.4.1
+set ANT_HOME=D:\shared\utils\java\lib\jakarta-ant-1.4.1
 
 set XERCES_JAR=%SPARX_REDIST_HOME%\xerces.jar
 set XALAN_JAR=%SPARX_REDIST_HOME%\xalan.jar

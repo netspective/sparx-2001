@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<page name="overview/why-use-sparx">
+
+	<summary>
+        Sparx is pure Java library consisting of over 250 re-usable classes that greatly simplify the development and
+        deployment of small-, medium-, and large-scale thin client, browser-based, data-driven,	dynamic web
+        applications. Based on Enterprise Java standards like J2EE, XML, Servlets, JSPs, JDBC, and JNDI, XAF uses proven
+		re-use development methodologies that can be applied to produce robust Java web applications in half the time.
+        Using Sparx, small development teams can produce and deploy significant applications with higher quality code
+        and automated implementation documentation. Sparx promises that a small number of average programmers can create
+		great software that will delight end-users.
+    </summary>
+
+	<section heading="Technical Benefits of using Sparx">
+        <ul>
+            <li>Application developers spend time on real features significant to end-users instead of infrastructure issues that are important only to programmers.</li>
+            <li>Technical managers can better manage their application development projects by utilizing the built-in project management, application documentation, unit-testing, and artifact-generation tools.</li>
+            <li>Most of the user interface and database logic is coded in a declarative style using XML instead of programmatic style using Java. This significantly reduces the amount of code (as much as 50-75% of code can be eliminated), increases re-use, and increases code quality.</li>
+            <li>Analysts can use the declarative user interface features to create prototypes that can later be completed by programmers (no more throw-away prototypes).</li>
+            <li>Applications are built by assembling declared UI (forms/dialogs) and database (SQL) components combined with application-specific business logic using single or multiple distributed application tiers.</li>
+            <li>Sparx is not a templating system that simply generates HTML but a feature-rich framework that significantly reduces the time to produce high-quality data-intensive thin-client applications.</li>
+            <li>Sparx does not favor Servlets over JSPs or JSPs over servlets and can work in one, the other, or both evironments simultaneously with no loss of functionality in either evironment.</li>
+            <li>Although Sparx favors XML for specifications of forms and database components, programmers can choose to eliminate XML and use the Sparx APIs and program completely in Java.</li>
+            <li>Implements common design patterns like MVC and factories. Skins infrastructure allow identical business logic to be used acroos different user interfaces for a variety of browsers and platforms like hand-helds.</li>
+            <li>Netspective understands the rigors of methodologies like waterfall and the agilitity of methodologies like eXtreme Programmer (XP) and created Sparx to work equally well in various environments.</li>
+        </ul>
+	</section>
+
+</page>

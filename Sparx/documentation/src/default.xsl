@@ -676,6 +676,11 @@
 	</xsl:if>
 </xsl:template>
 
+<!-- find the given page and get the contents of the summary tag -->
+<xsl:template match="page-summary">
+    <xsl:copy-of select="document(concat(@page, '.xml'))/page/summary"/>
+</xsl:template>
+
 <!-- find the children of the active-page using the structure.xml file and collect all the <summary> tags -->
 <xsl:template match="summarize-children">
 	<xsl:param name="active-page"/>
