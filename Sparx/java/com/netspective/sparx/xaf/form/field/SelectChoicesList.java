@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectChoicesList.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: SelectChoicesList.java,v 1.2 2002-12-26 19:34:31 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -140,5 +140,26 @@ public class SelectChoicesList
                     choice.selected = true;
             }
         }
+    }
+
+    public int size()
+    {
+        return valueList.size();
+    }
+
+    public Object[][] getChoicesForReport()
+    {
+        if(valueList.size() == 0)
+            return null;
+
+        Object[][] rows = new Object[valueList.size()][2];
+        for(int row = 0; row < valueList.size(); row++)
+        {
+            SelectChoice choice = (SelectChoice) valueList.get(row);
+            rows[row][0] = choice.getValue();
+            rows[row][1] = choice.getCaption();
+        }
+
+        return rows;
     }
 }
