@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.12 2002-12-29 17:08:26 shahid.shah Exp $
+ * $Id: AbstractTable.java,v 1.13 2002-12-30 18:08:00 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -822,7 +822,7 @@ public abstract class AbstractTable implements Table
             return false;
 
         boolean successful = executeDml(cc, row, dml, null);
-        row.afterInsert(cc);
+        row.afterInsert(cc, dml);
 
         cc.returnConnection();
         return successful;
@@ -843,7 +843,7 @@ public abstract class AbstractTable implements Table
             return false;
 
         boolean successful = executeDml(cc, row, dml, whereCondBindParams);
-        row.afterUpdate(cc);
+        row.afterUpdate(cc, dml);
 
         cc.returnConnection();
         return successful;
@@ -862,7 +862,7 @@ public abstract class AbstractTable implements Table
             return false;
 
         boolean successful = executeDml(cc, row, dml, whereCondBindParams);
-        row.afterDelete(cc);
+        row.afterDelete(cc, dml);
 
         cc.returnConnection();
         return successful;
