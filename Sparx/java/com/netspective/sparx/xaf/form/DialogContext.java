@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.6 2002-02-09 13:02:12 snshah Exp $
+ * $Id: DialogContext.java,v 1.7 2002-02-10 11:27:13 snshah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -948,6 +948,15 @@ public class DialogContext extends ServletValueContext
             return null;
         else
             return state.field;
+    }
+
+    public long getFieldFlags(String qualifiedName)
+    {
+        DialogFieldState state = (DialogFieldState) fieldStates.get(qualifiedName);
+        if(state == null)
+            return 0;
+        else
+            return state.flags;
     }
 
     public DialogFieldState getFieldState(String qualifiedName)
