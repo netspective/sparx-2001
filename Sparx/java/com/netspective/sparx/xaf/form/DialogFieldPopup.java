@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldPopup.java,v 1.5 2002-12-31 19:38:55 shahid.shah Exp $
+ * $Id: DialogFieldPopup.java,v 1.6 2003-04-18 00:05:24 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -72,6 +72,7 @@ public class DialogFieldPopup
     private String[] fillFields = null;
     private boolean allowMulti = false;
     private boolean closeAfter = true;
+    private String[] extractFields = null; // these are the fields whose values will be appended to the popup's URL
 
     protected DialogFieldPopup()
     {
@@ -140,9 +141,33 @@ public class DialogFieldPopup
         return actionUrl != null ? actionUrl.getValue(dc) : null;
     }
 
+    public void setActionUrl(String action)
+    {
+        actionUrl = action != null ? ValueSourceFactory.getSingleOrStaticValueSource(action) : null;
+    }
+
+    public String[] getExtractFields()
+    {
+        return extractFields;
+    }
+
+    /**
+     * Set the dialog fields for extracting values
+     * @param value
+     */
+    public void setExtractFields(String[] value)
+    {
+        extractFields = value;
+    }
+
     public final String[] getFillFields()
     {
         return fillFields;
+    }
+
+    public void setFillFields(String[] fields)
+    {
+        fillFields = fields;
     }
 
     public final boolean allowMultiSelect()
