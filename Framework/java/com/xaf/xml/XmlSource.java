@@ -10,6 +10,7 @@ package com.xaf.xml;
  */
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
@@ -350,4 +351,44 @@ public class XmlSource
 
 		return doc;
  	}
+
+	public void saveXML(String fileName)
+	{
+		/* we use reflection so that org.apache.xml.serialize.* is not a package requirement */
+
+		OutputStream os = null;
+		try
+		{
+			Class serializerCls = Class.forName("org.apache.xml.serialize.XMLSerializer");
+			Class outputFormatCls = Class.forName("org.apache.xml.serialize.OutputFormat");
+
+			Constructor serialCons = serializerCls.getDeclaredConstructor(new Class[] { OutputStream.class, outputFormatCls });
+			Constructor outputCons = outputFormatCls.getDeclaredConstructor(new Class[] { Document.class });
+
+			os = new FileOutputStream(fileName);
+			Object outputFormat = outputCons.newInstance(new Object[] { xmlDoc });
+			Method indenting = outputFormatCls.getMethod("setIndenting", new Class[] { boolean.class });
+			indenting.invoke(outputFormat, new Object[] { new Boolean(true) });
+
+			Object serializer = serialCons.newInstance(new Object[] { os, outputFormat });
+			Method serialize = serializerCls.getMethod("serialize", new Class[] { Document.class });
+			serialize.invoke(serializer, new Object[] { xmlDoc });
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException("Unable to save '" + fileName + "': " + e);
+		}
+		finally
+		{
+			try
+			{
+				if(os != null)
+	    			os.close();
+			}
+			catch(Exception e)
+			{
+			}
+		}
+	}
+
 }

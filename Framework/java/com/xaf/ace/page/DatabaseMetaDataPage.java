@@ -3,16 +3,13 @@ package com.xaf.ace.page;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
-import javax.naming.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
 import com.xaf.ace.*;
 import com.xaf.db.*;
-import com.xaf.db.generate.*;
 import com.xaf.form.*;
 import com.xaf.config.*;
 import com.xaf.page.*;
@@ -20,105 +17,58 @@ import com.xaf.skin.*;
 
 public class DatabaseMetaDataPage extends AceServletPage
 {
+	private DatabaseMetaDataToSchemaDocDialog dialog;
+
 	public final String getName() { return "meta-data"; }
 	public final String getPageIcon() { return "schema.gif"; }
 	public final String getCaption(PageContext pc) { return "DB Meta Data"; }
 	public final String getHeading(PageContext pc) { return "Database Meta Data"; }
 
-	public Document createDocument(PageContext pc, String dataSourceId) throws ParserConfigurationException, NamingException, SQLException
+	public void handlePageBody(PageContext pc) throws ServletException, IOException
 	{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder parser = factory.newDocumentBuilder();
-		Document doc = parser.newDocument();
+        PrintWriter out = pc.getResponse().getWriter();
+		if(dialog == null)
+			dialog = new DatabaseMetaDataToSchemaDocDialog();
 
-		Element root = doc.createElement("schema");
-		root.setAttribute("name", dataSourceId);
-		doc.appendChild(root);
+		ServletContext context = pc.getServletContext();
 
-		DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), pc.getServletContext());
-		Connection conn = dbc.getConnection(pc, dataSourceId);
-
-		DatabaseMetaData dbmd = conn.getMetaData();
-		Map types = new HashMap();
-		ResultSet typesRS = dbmd.getTypeInfo();
-		while(typesRS.next())
+		DialogContext dc = new DialogContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), dialog, SkinFactory.getDialogSkin());
+		dialog.prepareContext(dc);
+		if(! dc.inExecuteMode())
 		{
-			types.put(typesRS.getString(2), typesRS.getString(1));
+			out.write("&nbsp;<p><center>");
+			out.write(dialog.getHtml(dc, true));
+			out.write("</center>");
+			return;
 		}
-		typesRS.close();
 
-		ResultSet tables = dbmd.getTables(null, null, null, new String[] {"TABLE", "VIEW"});
-		while(tables.next())
+		Connection conn = null;
+		try
 		{
-			String tableName = tables.getString(3);
+			Class.forName(dc.getValue("ds_driver_name"));
+			conn = DriverManager.getConnection(dc.getValue("ds_url"), dc.getValue("ds_username"), dc.getValue("ds_password"));
 
-			Element table = doc.createElement("table");
-			table.setAttribute("name", tableName);
-			root.appendChild(table);
+			SchemaDocument schema = new SchemaDocument(conn, dc.getValue("ds_catalog"), dc.getValue("ds_schema"));
 
-			Map primaryKeys = new HashMap();
+			String fileName = dc.getValue("out_file_name");
+			schema.saveXML(fileName);
+
+			out.write("Wrote file '"+fileName+"'");
+		}
+		catch(Exception e)
+		{
+			throw new ServletException(e);
+		}
+		finally
+		{
 			try
 			{
-				ResultSet pkRS = dbmd.getPrimaryKeys(null, null, tableName);
-				while(pkRS.next())
-				{
-					primaryKeys.put(pkRS.getString(4), pkRS.getString(5));
-				}
+				if(conn != null) conn.close();
 			}
 			catch(Exception e)
 			{
-				// driver may not support this function
+				throw new ServletException(e);
 			}
-
-			ResultSet columns = dbmd.getColumns(null, null, tableName, null);
-			while(columns.next())
-			{
-				String columnName = columns.getString(4);
-				Element column = doc.createElement("column");
-				try
-				{
-					column.setAttribute("name", columnName);
-					column.setAttribute("type", columns.getString(6));
-					if(primaryKeys.containsKey(columnName))
-						column.setAttribute("primarykey", "yes");
-
-					column.setAttribute("sqldefn", types.get(columns.getString(5)) + " " + columns.getString(7));
-					column.setAttribute("descr", columns.getString(12));
-					column.setAttribute("default", columns.getString(13));
-				}
-				catch(Exception e)
-				{
-				}
-
-				table.appendChild(column);
-			}
-		    columns.close();
-		}
-		tables.close();
-		conn.close();
-
-		return doc;
-	}
-
-	public void handlePageBody(PageContext pc) throws ServletException, IOException
-	{
-		try
-		{
-			String dataSource = pc.getRequest().getParameter("data-src");
-			if(dataSource != null)
-			    transform(pc, createDocument(pc, dataSource), ACE_CONFIG_ITEMS_PREFIX + "schema-browser-xsl");
-		}
-		catch(NamingException e)
-		{
-			pc.getResponse().getWriter().write(e.toString());
-		}
-		catch(SQLException e)
-		{
-			pc.getResponse().getWriter().write(e.toString());
-		}
-		catch(ParserConfigurationException e)
-		{
-			pc.getResponse().getWriter().write(e.toString());
 		}
 	}
 }

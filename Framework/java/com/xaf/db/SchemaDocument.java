@@ -2,6 +2,10 @@ package com.xaf.db;
 
 import java.io.*;
 import java.util.*;
+import java.sql.*;
+import java.lang.reflect.*;
+import javax.xml.parsers.*;
+
 import org.w3c.dom.*;
 
 import com.xaf.xml.*;
@@ -65,6 +69,12 @@ public class SchemaDocument extends XmlSource
         this();
 		loadDocument(file);
  	}
+
+	public SchemaDocument(Connection conn, String catalog, String schemaPattern) throws ParserConfigurationException, SQLException
+	{
+		this();
+		loadDocument(conn, catalog, schemaPattern);
+	}
 
     public void setUrl(String url)
     {
@@ -655,6 +665,140 @@ public class SchemaDocument extends XmlSource
         createAuditTables();
 		createStructure();
 		addMetaInformation();
+	}
+
+	/*------------------------------------------------------------------------*/
+
+	public void initializeConnection(Connection conn)
+	{
+		/*
+		   ORACLE connections don't do remarks reporting automatically, they have
+		   to be turned-on separately. First we check to see if it's a pooled
+		   connection (like Resin's connection pooling) which actually keeps a
+		   handle to a "real" connection. We use reflection just in case the
+		   connection isn't an ORACLE connection (will fail gracefully).
+		*/
+
+		Connection realConn = conn;
+		try
+		{
+			Method getConnection = conn.getClass().getMethod("getConnection", null);
+			realConn = (Connection) getConnection.invoke(conn, null);
+		}
+		catch(Exception e)
+		{
+			// means that the conn object is the real connection
+		}
+
+		try
+		{
+			Method remarksReporting = realConn.getClass().getMethod("setRemarksReporting", new Class[] { boolean.class } );
+			remarksReporting.invoke(realConn, new Object[] { new Boolean(true) });
+		}
+		catch(Exception e)
+		{
+		}
+	}
+
+	public void setAttribute(Element elem, String name, String value)
+	{
+		if(value != null && value.length() > 0)
+			elem.setAttribute(name, value);
+	}
+
+	public void loadDocument(Connection conn, String catalog, String schemaPattern) throws ParserConfigurationException, SQLException
+	{
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder parser = factory.newDocumentBuilder();
+		xmlDoc = parser.newDocument();
+
+		Element root = xmlDoc.createElement("schema");
+		root.setAttribute("name", "generated");
+		xmlDoc.appendChild(root);
+		//initializeConnection(conn);
+
+		DatabaseMetaData dbmd = conn.getMetaData();
+		Map types = new HashMap();
+		ResultSet typesRS = dbmd.getTypeInfo();
+		while(typesRS.next())
+		{
+			types.put(typesRS.getString(2), typesRS.getString(1));
+		}
+		typesRS.close();
+
+		ResultSet tables = dbmd.getTables(catalog, schemaPattern, null, new String[] { "TABLE" });
+		while(tables.next())
+		{
+			/* make the table name title cased (cap each letter after _) */
+			String tableNameOrig = tables.getString(3);
+			StringBuffer tableNameBuf = new StringBuffer(tableNameOrig.toLowerCase());
+			boolean capNext = false;
+			for(int i = 0; i < tableNameBuf.length(); i++)
+			{
+				if(tableNameBuf.charAt(i) == '_')
+					capNext = true;
+				else
+				{
+					if(i == 0 || capNext)
+					{
+						tableNameBuf.setCharAt(i, Character.toUpperCase(tableNameBuf.charAt(i)));
+						capNext = false;
+					}
+				}
+			}
+
+			String tableName = tableNameBuf.toString();
+			Element table = xmlDoc.createElement("table");
+			table.setAttribute("name", tableName);
+			root.appendChild(table);
+
+			Map primaryKeys = new HashMap();
+			try
+			{
+				ResultSet pkRS = dbmd.getPrimaryKeys(null, null, tableNameOrig);
+				while(pkRS.next())
+				{
+					primaryKeys.put(pkRS.getString(4), pkRS.getString(5));
+				}
+				pkRS.close();
+			}
+			catch(Exception e)
+			{
+				// driver may not support this function
+			}
+
+			ResultSet columns = dbmd.getColumns(null, null, tableNameOrig, null);
+			while(columns.next())
+			{
+				String columnNameOrig = columns.getString(4);
+				String columnName = columnNameOrig.toLowerCase();
+				Element column = xmlDoc.createElement("column");
+				try
+				{
+					setAttribute(column, "name", columnName);
+					setAttribute(column, "type", columns.getString(6));
+					if(primaryKeys.containsKey(columnNameOrig))
+						setAttribute(column, "primarykey", "yes");
+
+					String sqlDefn = columns.getString(5);
+					String size = columns.getString(7);
+
+					sqlDefn = (sqlDefn == null ? columns.getString(6) : (String) types.get(sqlDefn));
+					if(sqlDefn == null) sqlDefn = columns.getString(6);
+
+					setAttribute(column, "sqldefn", sqlDefn + "(" + size + ")");
+					setAttribute(column, "descr", columns.getString(12));
+					setAttribute(column, "default", columns.getString(13));
+				}
+				catch(Exception e)
+				{
+				}
+
+				table.appendChild(column);
+			}
+		    columns.close();
+		}
+		tables.close();
 	}
 }
 
