@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppConfigurationPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppConfigurationPage.java,v 1.3 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -64,7 +64,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -88,7 +87,7 @@ public class AppConfigurationPage extends AceServletPage
         return "config";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "configuration.gif";
     }
@@ -119,7 +118,7 @@ public class AppConfigurationPage extends AceServletPage
             itemElem.setAttribute("description", property.getDescription());
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws IOException
     {
         ServletContext context = nc.getServletContext();
         Document configDoc = null;
@@ -131,7 +130,7 @@ public class AppConfigurationPage extends AceServletPage
         }
         catch(Exception e)
         {
-            throw new ServletException(e);
+            throw new RuntimeException(e.getMessage());
         }
 
         Element configRootElem = configDoc.createElement("xaf");

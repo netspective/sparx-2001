@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppFactoryPage.java,v 1.3 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppFactoryPage.java,v 1.4 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -59,7 +59,6 @@ package com.netspective.sparx.ace.page;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -75,6 +74,7 @@ import com.netspective.sparx.xaf.querydefn.SqlComparisonFactory;
 import com.netspective.sparx.xaf.task.TaskFactory;
 import com.netspective.sparx.xaf.html.ComponentCommandFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -110,7 +110,7 @@ public class AppFactoryPage extends AceServletPage
         return name == null ? "factory" : name;
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "factories.gif";
     }
@@ -125,7 +125,7 @@ public class AppFactoryPage extends AceServletPage
         return getCaption(vc);
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         Document doc = null;
         try
@@ -136,7 +136,7 @@ public class AppFactoryPage extends AceServletPage
         }
         catch(Exception e)
         {
-            throw new ServletException(e);
+            throw new NavigationPageException(e);
         }
 
         Element rootElem = doc.createElement("xaf");

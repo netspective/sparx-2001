@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppAccessControlListPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppAccessControlListPage.java,v 1.3 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -60,7 +60,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xaf.security.AccessControlList;
@@ -75,7 +74,7 @@ public class AppAccessControlListPage extends AceServletPage
         return "acl";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "access.gif";
     }
@@ -90,7 +89,7 @@ public class AppAccessControlListPage extends AceServletPage
         return "Access Control List";
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws IOException
     {
         ServletContext context = nc.getServletContext();
         AccessControlList acl = AccessControlListFactory.getACL(context);

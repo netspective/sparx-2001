@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppInitParamsPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppInitParamsPage.java,v 1.5 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -61,7 +61,6 @@ import java.io.Writer;
 import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -73,6 +72,7 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 
 public class AppInitParamsPage extends AceServletPage
 {
@@ -81,7 +81,7 @@ public class AppInitParamsPage extends AceServletPage
         return "servlet-context";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "servlet_context.gif";
     }
@@ -96,7 +96,7 @@ public class AppInitParamsPage extends AceServletPage
         return "Application Servlet Context";
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         Document doc = null;
@@ -108,7 +108,7 @@ public class AppInitParamsPage extends AceServletPage
         }
         catch(Exception e)
         {
-            throw new ServletException(e);
+            throw new NavigationPageException(e);
         }
 
         Element rootElem = doc.createElement("xaf");

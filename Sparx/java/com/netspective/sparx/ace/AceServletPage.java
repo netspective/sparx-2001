@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.9 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.10 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -63,7 +63,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -77,19 +76,31 @@ import org.w3c.dom.Text;
 
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
+import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.html.Component;
 import com.netspective.sparx.xaf.html.component.HierarchicalMenu;
 import com.netspective.sparx.xaf.page.PageControllerServlet;
 import com.netspective.sparx.xaf.navigate.NavigationPage;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 
 public class AceServletPage extends NavigationPage
 {
     static public final String ACE_TESTITEM_ATTRNAME = "ace-test-item";
     static public final String ACE_CONFIG_ITEM_PROPBROWSERXSL = com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "properties-browser-xsl";
 
-    public String getTitle(NavigationPathContext nc)
+    public Class getChildPathClass()
+    {
+        return AceServletPage.class;
+    }
+
+    public NavigationPath createChildPathInstance()
+    {
+        return new AceServletPage();
+    }
+
+    public String getTitle(ValueContext nc)
     {
         return "ACE - " + getHeading(nc);
     }
@@ -229,7 +240,7 @@ public class AceServletPage extends NavigationPage
         }
     }
 
-    public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws IOException
     {
         if(getTestCommandItem(nc) != null)
             return;
@@ -239,32 +250,24 @@ public class AceServletPage extends NavigationPage
         HierarchicalMenu.DrawContext dc = new HierarchicalMenu.DrawContext();
         nc.getRequest().setAttribute(HierarchicalMenu.DrawContext.class.getName(), dc);
 
-
         Component[] menus = ((AppComponentsExplorerServlet) nc.getServlet()).getMenuBar();
-        try
+        PrintWriter out = nc.getResponse().getWriter();
+        out.print("<head>\n");
+        out.print("<title>");
+        out.print(getTitle(nc));
+        out.print("</title>\n");
+        out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
+        out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
+        for(int i = 0; i < menus.length; i++)
         {
-            PrintWriter out = nc.getResponse().getWriter();
-            out.print("<head>\n");
-            out.print("<title>");
-            out.print(getTitle(nc));
-            out.print("</title>\n");
-            out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/ace.css'>\n");
-            out.print("<link rel='stylesheet' href='" + sharedCssRootURL + "/syntax.css'>\n");
-            for(int i = 0; i < menus.length; i++)
-            {
-                dc.firstMenu = i == 0;
-                dc.lastMenu = i == (menus.length - 1);
-                menus[i].renderHtml(nc, out);
-            }
-            out.print("</head>\n\n");
+            dc.firstMenu = i == 0;
+            dc.lastMenu = i == (menus.length - 1);
+            menus[i].renderHtml(nc, out);
         }
-        catch(IOException e)
-        {
-            throw new ServletException(e);
-        }
+        out.print("</head>\n\n");
     }
 
-    public void handlePageHeader(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageHeader(Writer writer, NavigationPathContext nc) throws IOException
     {
         if(getTestCommandItem(nc) != null)
             return;
@@ -273,37 +276,30 @@ public class AceServletPage extends NavigationPage
         String sharedImagesRootURL = servlet.getSharedImagesRootURL();
         String homeUrl = servlet.getHomePath().getAbsolutePath(nc);
 
-        try
-        {
-            PrintWriter out = nc.getResponse().getWriter();
-            out.print("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
-            out.print("<map name='menu_map'>");
-            out.print(" <area shape='rect' coords='14,19,76,41' href='" + homeUrl + "'>");
-            out.print(" <area shape='rect' coords='79,20,140,41' onMouseOver=\"popUp('HM_Menu2',event)\" onMouseOut=\"popDown('HM_Menu2')\">");
-            out.print(" <area shape='rect' coords='144,21,207,41' onMouseOver=\"popUp('HM_Menu3',event)\" onMouseOut=\"popDown('HM_Menu3')\">");
-            out.print(" <area shape='rect' coords='211,21,275,41' onMouseOver=\"popUp('HM_Menu4',event)\" onMouseOut=\"popDown('HM_Menu4')\">");
-            out.print("</map>");
-            out.print("<table border='0' cellpadding='0' cellspacing='0' height='44'>");
-            out.print("	<tr>");
-            out.print("		<td><a href='" + (((HttpServletRequest) nc.getRequest()).getContextPath()) + "'><img src='" + sharedImagesRootURL + "/ace/masthead-logo.gif' width='158' height='44' border='0'></a></td>");
-            out.print("		<td><img src='" + sharedImagesRootURL + "/ace/masthead.gif' width='642' height='44' border='0' usemap='#menu_map'></td>");
-            out.print("	</tr>");
-            out.print("</table>");
-            out.print("<table border='0' cellpadding='0' cellspacing='0' height='38' width='100%'>");
-            out.print("	<tr>");
-            out.print("		<td width='107'><img src='" + sharedImagesRootURL + "/ace/masthead-icon-leader.gif' width='107' height='38' border='0'></td>");
-            out.print("		<td width='32' bgcolor='white' valign='middle' align='center'><img src='" + sharedImagesRootURL + "/ace/icons/" + getPageIcon() + "' width='32' height='32' border='0'></td>");
-            out.print("		<td width='18'><img src='" + sharedImagesRootURL + "/ace/masthead-curve.gif' width='18' height='38' border='0'></td>");
-            out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left'><nobr>" + getHeading(nc) + "</nobr></td>");
-            out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left' width='166'><img src='" + sharedImagesRootURL + "/ace/masthead-sparx.gif' width='166' height='38' border='0'></td>");
-            out.print("	</tr>");
-            out.print(" <tr bgcolor='#003366' height='2'><td bgcolor='#003366' height='2' colspan='5'></td></tr>");
-            out.print("</table>");
-        }
-        catch(IOException e)
-        {
-            throw new ServletException(e);
-        }
+        PrintWriter out = nc.getResponse().getWriter();
+        out.print("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
+        out.print("<map name='menu_map'>");
+        out.print(" <area shape='rect' coords='14,19,76,41' href='" + homeUrl + "'>");
+        out.print(" <area shape='rect' coords='79,20,140,41' onMouseOver=\"popUp('HM_Menu2',event)\" onMouseOut=\"popDown('HM_Menu2')\">");
+        out.print(" <area shape='rect' coords='144,21,207,41' onMouseOver=\"popUp('HM_Menu3',event)\" onMouseOut=\"popDown('HM_Menu3')\">");
+        out.print(" <area shape='rect' coords='211,21,275,41' onMouseOver=\"popUp('HM_Menu4',event)\" onMouseOut=\"popDown('HM_Menu4')\">");
+        out.print("</map>");
+        out.print("<table border='0' cellpadding='0' cellspacing='0' height='44'>");
+        out.print("	<tr>");
+        out.print("		<td><a href='" + (((HttpServletRequest) nc.getRequest()).getContextPath()) + "'><img src='" + sharedImagesRootURL + "/ace/masthead-logo.gif' width='158' height='44' border='0'></a></td>");
+        out.print("		<td><img src='" + sharedImagesRootURL + "/ace/masthead.gif' width='642' height='44' border='0' usemap='#menu_map'></td>");
+        out.print("	</tr>");
+        out.print("</table>");
+        out.print("<table border='0' cellpadding='0' cellspacing='0' height='38' width='100%'>");
+        out.print("	<tr>");
+        out.print("		<td width='107'><img src='" + sharedImagesRootURL + "/ace/masthead-icon-leader.gif' width='107' height='38' border='0'></td>");
+        out.print("		<td width='32' bgcolor='white' valign='middle' align='center'><img src='" + sharedImagesRootURL + "/ace/icons/" + getEntityImageUrl() + "' width='32' height='32' border='0'></td>");
+        out.print("		<td width='18'><img src='" + sharedImagesRootURL + "/ace/masthead-curve.gif' width='18' height='38' border='0'></td>");
+        out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left'><nobr>" + getHeading(nc) + "</nobr></td>");
+        out.print("		<td background='" + sharedImagesRootURL + "/ace/2tone.gif' class='subheads' valign='middle' align='left' width='166'><img src='" + sharedImagesRootURL + "/ace/masthead-sparx.gif' width='166' height='38' border='0'></td>");
+        out.print("	</tr>");
+        out.print(" <tr bgcolor='#003366' height='2'><td bgcolor='#003366' height='2' colspan='5'></td></tr>");
+        out.print("</table>");
     }
 
     public void handleUnitTestPageBegin(Writer writer, NavigationPathContext nc, String category) throws IOException
@@ -363,7 +359,7 @@ public class AceServletPage extends NavigationPage
         out.println("		</table>");
     }
 
-    public void handlePage(Writer writer, NavigationPathContext nc) throws ServletException
+    public void handlePage(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         NavigationPath.FindResults results = nc.getActivePathFindResults();
         String[] unmatchedItems = results.unmatchedPathItems();

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.7 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.8 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -61,7 +61,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -75,6 +74,7 @@ import com.netspective.sparx.xaf.html.ComponentCommandFactory;
 import com.netspective.sparx.xaf.html.ComponentCommandException;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class AppDialogsPage extends AceServletPage
@@ -86,7 +86,7 @@ public class AppDialogsPage extends AceServletPage
         return "dialogs";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "dialogs.gif";
     }
@@ -119,7 +119,7 @@ public class AppDialogsPage extends AceServletPage
             dialog.renderHtml(out, dc, true);
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         DialogManager manager = DialogManagerFactory.getManager(context);
@@ -140,7 +140,7 @@ public class AppDialogsPage extends AceServletPage
             }
             catch (ComponentCommandException e)
             {
-                throw new ServletException(e);
+                throw new NavigationPageException(e);
             }
             out.write("<p>");
             out.write("Try out additional options by using the following format:<br>");

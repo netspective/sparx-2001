@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DataSourcesPage.java,v 1.2 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: DataSourcesPage.java,v 1.3 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -61,7 +61,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 import javax.naming.NamingException;
-import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -71,6 +70,7 @@ import org.w3c.dom.Element;
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DataSourcesPage extends AceServletPage
@@ -80,7 +80,7 @@ public class DataSourcesPage extends AceServletPage
         return "data-sources";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "data_source.gif";
     }
@@ -95,7 +95,7 @@ public class DataSourcesPage extends AceServletPage
         return "Application Data Sources";
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         Document doc = null;
         try
@@ -106,7 +106,7 @@ public class DataSourcesPage extends AceServletPage
         }
         catch(Exception e)
         {
-            throw new ServletException(e);
+            throw new NavigationPageException(e);
         }
 
         Element rootElem = doc.createElement("xaf");

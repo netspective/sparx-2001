@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseQueryDefnPage.java,v 1.5 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: DatabaseQueryDefnPage.java,v 1.6 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -61,7 +61,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -74,6 +73,7 @@ import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QuerySelectDialog;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseQueryDefnPage extends AceServletPage
@@ -83,7 +83,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
         return "query-defn";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "sql_query_defn.gif";
     }
@@ -98,7 +98,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
         return "SQL Query Definitions";
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         String testWhat = getTestCommandItem(nc);
         if(testWhat != null)
@@ -123,7 +123,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
         transform(nc, manager.getDocument(nc.getServletContext(), null), com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "query-defn-browser-xsl");
     }
 
-    public void handleTestQueryDefn(NavigationPathContext nc, String queryDefnId) throws ServletException, IOException
+    public void handleTestQueryDefn(NavigationPathContext nc, String queryDefnId) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
@@ -143,7 +143,7 @@ public class DatabaseQueryDefnPage extends AceServletPage
         dialog.renderHtml(context, nc.getServlet(), (HttpServletRequest) nc.getRequest(), (HttpServletResponse) nc.getResponse(), SkinFactory.getDialogSkin());
     }
 
-    public void handleTestQueryDefnSelectDialog(NavigationPathContext nc, String queryDefnId, String dialogId) throws ServletException, IOException
+    public void handleTestQueryDefnSelectDialog(NavigationPathContext nc, String queryDefnId, String dialogId) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);

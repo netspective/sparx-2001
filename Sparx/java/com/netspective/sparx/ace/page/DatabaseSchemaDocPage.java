@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.5 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.6 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -59,7 +59,6 @@ package com.netspective.sparx.ace.page;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -69,6 +68,7 @@ import com.netspective.sparx.xaf.querydefn.QueryBuilderDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPath;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.xif.SchemaDocFactory;
 import com.netspective.sparx.xif.SchemaDocument;
 import com.netspective.sparx.xif.dal.Schema;
@@ -83,7 +83,7 @@ public class DatabaseSchemaDocPage extends AceServletPage
         return "schema-doc";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "schema.gif";
     }
@@ -150,7 +150,7 @@ public class DatabaseSchemaDocPage extends AceServletPage
         out.write("</center>");
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         SchemaDocument schema = SchemaDocFactory.getDoc(nc.getServletContext());
         schema.addMetaInfoOptions();

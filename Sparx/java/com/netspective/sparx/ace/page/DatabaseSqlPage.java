@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.9 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.10 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -62,7 +62,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -79,6 +78,7 @@ import com.netspective.sparx.xaf.task.TaskContext;
 import com.netspective.sparx.xaf.task.TaskExecuteException;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 import com.netspective.sparx.util.value.ValueContext;
 
 public class DatabaseSqlPage extends AceServletPage
@@ -88,7 +88,7 @@ public class DatabaseSqlPage extends AceServletPage
         return "sql";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "sql.gif";
     }
@@ -108,7 +108,7 @@ public class DatabaseSqlPage extends AceServletPage
         return "yes".equals(vc.getRequest().getParameter("ui"));
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         String testItem = getTestCommandItem(nc);
         if(testItem != null)
@@ -130,7 +130,7 @@ public class DatabaseSqlPage extends AceServletPage
         }
     }
 
-    public void handleTestStatementWithUI(NavigationPathContext nc, String stmtId) throws IOException
+    public void handleTestStatementWithUI(NavigationPathContext nc, String stmtId) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);
@@ -157,7 +157,7 @@ public class DatabaseSqlPage extends AceServletPage
             out.write("Statement '"+ stmtId +"' not found in default context.");
     }
 
-    public void handleTestStatementNoUI(NavigationPathContext nc, String stmtId) throws ServletException, IOException
+    public void handleTestStatementNoUI(NavigationPathContext nc, String stmtId) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         StatementManager manager = StatementManagerFactory.getManager(context);

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DocumentsPage.java,v 1.10 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.11 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -62,7 +62,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -76,10 +75,7 @@ import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.Property;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.html.SyntaxHighlight;
-import com.netspective.sparx.xaf.navigate.FileSystemContext;
-import com.netspective.sparx.xaf.navigate.FileSystemEntry;
-import com.netspective.sparx.xaf.navigate.NavigationPathContext;
-import com.netspective.sparx.xaf.navigate.NavigationPath;
+import com.netspective.sparx.xaf.navigate.*;
 
 public class DocumentsPage extends AceServletPage
 {
@@ -119,7 +115,7 @@ public class DocumentsPage extends AceServletPage
         return name == null ? "documents" : name;
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "docs_project.gif";
     }
@@ -139,7 +135,7 @@ public class DocumentsPage extends AceServletPage
         return isFileRef;
     }
 
-    public void handlePage(Writer writer, NavigationPathContext nc) throws ServletException
+    public void handlePage(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         if(!transformersMapInitialized)
         {
@@ -163,97 +159,90 @@ public class DocumentsPage extends AceServletPage
             }
         }
 
-        try
+        String browseDoc = nc.getRequest().getParameter("browseDoc");
+        if(browseDoc != null)
         {
-            String browseDoc = nc.getRequest().getParameter("browseDoc");
-            if(browseDoc != null)
+            File browseFile = new File(browseDoc);
+            String browseFilePath = browseFile.getAbsolutePath();
+            String servletPath = nc.getServletContext().getRealPath("");
+            if(browseFilePath.startsWith(servletPath))
             {
-                File browseFile = new File(browseDoc);
-                String browseFilePath = browseFile.getAbsolutePath();
-                String servletPath = nc.getServletContext().getRealPath("");
-                if(browseFilePath.startsWith(servletPath))
-                {
-                    if(handleDocument(writer, nc, browseFile, true))
-                        return;
-                    else
-                        throw new ServletException("Don't know how to render " + browseFilePath);
-                }
+                if(handleDocument(writer, nc, browseFile, true))
+                    return;
                 else
-                    throw new ServletException("File '"+ browseFilePath +"' is not within the context path '"+ servletPath +"'.");
-            }
-
-            if(!isFileRef)
-            {
-                ((HttpServletResponse) nc.getResponse()).sendRedirect(ref);
-                return;
-            }
-
-            NavigationPath.FindResults activePath = nc.getActivePathFindResults();
-            String relativePath = activePath.getUnmatchedPath();
-
-            if(fsContext == null)
-            {
-                fsContext = new FileSystemContext(
-                        activePath.getMatchedPath().getAbsolutePath(nc),
-                        ref, getCaption(nc), relativePath);
+                    throw new NavigationPageException("Don't know how to render " + browseFilePath);
             }
             else
-                fsContext.setRelativePath(relativePath);
+                throw new NavigationPageException("File '"+ browseFilePath +"' is not within the context path '"+ servletPath +"'.");
+        }
 
-            FileSystemEntry activeEntry = fsContext.getActivePath();
-            if(activeEntry.isDirectory())
+        if(!isFileRef)
+        {
+            ((HttpServletResponse) nc.getResponse()).sendRedirect(ref);
+            return;
+        }
+
+        NavigationPath.FindResults activePath = nc.getActivePathFindResults();
+        String relativePath = activePath.getUnmatchedPath();
+
+        if(fsContext == null)
+        {
+            fsContext = new FileSystemContext(
+                    activePath.getMatchedPath().getAbsolutePath(nc),
+                    ref, getCaption(nc), relativePath);
+        }
+        else
+            fsContext.setRelativePath(relativePath);
+
+        FileSystemEntry activeEntry = fsContext.getActivePath();
+        if(activeEntry.isDirectory())
+        {
+            Document navgDoc = null;
+            try
             {
-                Document navgDoc = null;
-                try
-                {
-                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder builder = factory.newDocumentBuilder();
-                    navgDoc = builder.newDocument();
-                }
-                catch(Exception e)
-                {
-                    throw new ServletException(e);
-                }
-
-                Element navgRootElem = navgDoc.createElement("xaf");
-                navgDoc.appendChild(navgRootElem);
-
-                fsContext.addXML(navgRootElem, fsContext);
-
-                handlePageMetaData(writer, nc);
-                handlePageHeader(writer, nc);
-                transform(nc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
-                handlePageFooter(writer, nc);
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                navgDoc = builder.newDocument();
             }
-            else
+            catch(Exception e)
             {
-                if(! handleDocument(writer, nc, activeEntry, false))
+                throw new NavigationPageException(e);
+            }
+
+            Element navgRootElem = navgDoc.createElement("xaf");
+            navgDoc.appendChild(navgRootElem);
+
+            fsContext.addXML(navgRootElem, fsContext);
+
+            handlePageMetaData(writer, nc);
+            handlePageHeader(writer, nc);
+            transform(nc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
+            handlePageFooter(writer, nc);
+        }
+        else
+        {
+            if(! handleDocument(writer, nc, activeEntry, false))
+            {
+                if(transformersMap != null)
                 {
-                    if(transformersMap != null)
+                    String transformUsingStyleSheet = (String) transformersMap.get(activeEntry.getEntryType());
+                    if(transformUsingStyleSheet != null)
                     {
-                        String transformUsingStyleSheet = (String) transformersMap.get(activeEntry.getEntryType());
-                        if(transformUsingStyleSheet != null)
-                        {
-                            handlePageMetaData(writer, nc);
-                            handlePageHeader(writer, nc);
-                            transform(nc, activeEntry, transformUsingStyleSheet);
-                            handlePageFooter(writer, nc);
-                        }
-                        else
-                            activeEntry.send((HttpServletResponse) nc.getResponse());
+                        handlePageMetaData(writer, nc);
+                        handlePageHeader(writer, nc);
+                        transform(nc, activeEntry, transformUsingStyleSheet);
+                        handlePageFooter(writer, nc);
                     }
                     else
                         activeEntry.send((HttpServletResponse) nc.getResponse());
                 }
+                else
+                    activeEntry.send((HttpServletResponse) nc.getResponse());
             }
-        }
-        catch(IOException e)
-        {
-            throw new ServletException(e);
         }
     }
 
-    private boolean handleDocument(Writer writer, NavigationPathContext nc, File activeEntry, boolean browsing) throws ServletException, IOException
+    private boolean handleDocument(Writer writer, NavigationPathContext nc, File activeEntry, boolean browsing) throws NavigationPageException, IOException
     {
         if(activeEntry.getAbsolutePath().indexOf("javadoc") != -1)
             return false;
@@ -276,7 +265,7 @@ public class DocumentsPage extends AceServletPage
             }
             catch(Exception e)
             {
-                throw new ServletException(e);
+                throw new NavigationPageException(e);
             }
 
             Element navgRootElem = navgDoc.createElement("xaf");

@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AppMetricsPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: AppMetricsPage.java,v 1.5 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -63,7 +63,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -81,6 +80,7 @@ import com.netspective.sparx.xaf.form.DialogManagerFactory;
 import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 
 public class AppMetricsPage extends AceServletPage
 {
@@ -95,7 +95,7 @@ public class AppMetricsPage extends AceServletPage
         return "metrics";
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "metrics.gif";
     }
@@ -180,7 +180,7 @@ public class AppMetricsPage extends AceServletPage
         calcFileSystemMetrics(path, 1, dirMetrics, allFileMetrics, codeFileMetrics, appFileMetrics);
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         ServletContext context = nc.getServletContext();
         ConfigurationManager config = ConfigurationManagerFactory.getManager(context);
@@ -218,7 +218,7 @@ public class AppMetricsPage extends AceServletPage
         }
         catch(Exception e)
         {
-            throw new ServletException(e);
+            throw new NavigationPageException(e);
         }
     }
 }

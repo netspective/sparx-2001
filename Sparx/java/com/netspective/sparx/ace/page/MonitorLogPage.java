@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: MonitorLogPage.java,v 1.4 2002-12-27 17:16:03 shahid.shah Exp $
+ * $Id: MonitorLogPage.java,v 1.5 2002-12-28 20:07:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -64,8 +64,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletException;
-
 import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.FileAppender;
@@ -73,6 +71,7 @@ import org.apache.log4j.FileAppender;
 import com.netspective.sparx.ace.AceServletPage;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.xaf.navigate.NavigationPathContext;
+import com.netspective.sparx.xaf.navigate.NavigationPageException;
 
 public class MonitorLogPage extends AceServletPage
 {
@@ -121,7 +120,7 @@ public class MonitorLogPage extends AceServletPage
         return loggerName == null ? "monitor" : loggerName;
     }
 
-    public final String getPageIcon()
+    public final String getEntityImageUrl()
     {
         return "monitor.gif";
     }
@@ -199,7 +198,7 @@ public class MonitorLogPage extends AceServletPage
         out.write("</table></div>");
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         PrintWriter out = nc.getResponse().getWriter();
         if(loggerName == null)

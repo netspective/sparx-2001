@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPage.java,v 1.1 2002-12-27 17:16:04 shahid.shah Exp $
+ * $Id: NavigationPage.java,v 1.2 2002-12-28 20:07:37 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -68,36 +68,41 @@ import javax.servlet.ServletException;
 
 public class NavigationPage extends NavigationPath
 {
-    public String getPageIcon()
+    public Class getChildPathClass()
     {
-        return null;
+        return NavigationPage.class;
+    }
+
+    public NavigationPath createChildPathInstance()
+    {
+        return new NavigationPage();
     }
 
     public String getCaption(ValueContext vc)
     {
-        return getName();
-    }
-
-    public String getHeading(ValueContext vc)
-    {
-        String result = getCaption(vc);
+        String result = super.getCaption(vc);
         if(result == null)
             return getName();
         else
             return result;
     }
 
-    public String getTitle(ValueContext vc)
+    public String getHeading(ValueContext vc)
     {
-        String result = getHeading(vc);
+        String result = super.getHeading(vc);
         if(result == null)
             return getCaption(vc);
         else
             return result;
     }
 
-    public void registerPage(PageControllerServlet servlet, NavigationPath rootPath)
+    public String getTitle(ValueContext vc)
     {
+        String result = super.getTitle(vc);
+        if(result == null)
+            return getHeading(vc);
+        else
+            return result;
     }
 
     public boolean requireLogin(NavigationPathContext nc)
@@ -110,24 +115,30 @@ public class NavigationPage extends NavigationPath
         return true;
     }
 
-    public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageMetaData(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
+        NavigationPathSkin skin = nc.getSkin();
+        if(skin != null) skin.renderPageMetaData(writer, nc);
     }
 
-    public void handlePageHeader(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageHeader(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
+        NavigationPathSkin skin = nc.getSkin();
+        if(skin != null) skin.renderPageHeader(writer, nc);
     }
 
-    public void handlePageBody(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageBody(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         writer.write("Path '"+ nc.getActivePathFindResults().getSearchedForPath() +"' is a " + this.getClass().getName() + " class but has no body.");
     }
 
-    public void handlePageFooter(Writer writer, NavigationPathContext nc) throws ServletException, IOException
+    public void handlePageFooter(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
+        NavigationPathSkin skin = nc.getSkin();
+        if(skin != null) skin.renderPageFooter(writer, nc);
     }
 
-    public void handlePage(Writer writer, NavigationPathContext nc) throws ServletException
+    public void handlePage(Writer writer, NavigationPathContext nc) throws NavigationPageException, IOException
     {
         try
         {
@@ -139,11 +150,7 @@ public class NavigationPage extends NavigationPath
         }
         catch (ComponentCommandException e)
         {
-            throw new ServletException(e);
-        }
-        catch(IOException e)
-        {
-            throw new ServletException(e);
+            throw new NavigationPageException(e);
         }
     }
 }
