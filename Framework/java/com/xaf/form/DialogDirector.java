@@ -109,13 +109,20 @@ public class DialogDirector extends DialogField
 		}
 		else
 		{
-            String cancelStr = "";
-			if(cancelActionUrl.equals("back"))
+            String cancelStr = cancelActionUrl != null ? cancelActionUrl.getValue(dc) : null;
+			if("back".equals(cancelStr))
+			{
 				html.append("onclick=\"history.back()\" ");
+			}
+			else if(cancelStr != null && cancelStr.startsWith("javascript:"))
+			{
+				html.append("onclick=\"");
+				html.append(cancelStr);
+				html.append("\" ");
+			}
 			else
 			{
 				html.append("onclick=\"document.location = '");
-                cancelStr = cancelActionUrl != null ? cancelActionUrl.getValue(dc) : null;
 				html.append(cancelStr);
 				html.append("'\" ");
 			}
