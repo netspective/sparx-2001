@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractTable.java,v 1.14 2003-01-08 06:39:36 shahbaz.javeed Exp $
+ * $Id: AbstractTable.java,v 1.15 2003-02-05 15:36:14 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -484,10 +484,7 @@ public abstract class AbstractTable implements Table
             finally
             {
                 if (rs != null)
-                {
                     rs.getStatement().close();
-                    rs.close();
-                }
             }
         }
         finally
@@ -529,10 +526,7 @@ public abstract class AbstractTable implements Table
             finally
             {
                 if (rs != null)
-                {
                     rs.getStatement().close();
-                    rs.close();
-                }
             }
         }
         finally
@@ -574,10 +568,7 @@ public abstract class AbstractTable implements Table
             finally
             {
                 if (rs != null)
-                {
                     rs.getStatement().close();
-                    rs.close();
-                }
             }
         }
         finally
@@ -606,6 +597,7 @@ public abstract class AbstractTable implements Table
             sqlString = this.createPreparedStatmentString(colNames, colValues);
         else
             sqlString = this.createPreparedStatmentString(colNames);
+
         PreparedStatement stmt = conn.prepareStatement(sqlString);
         for (int k = 0; k < colValues.length; k++)
         {
