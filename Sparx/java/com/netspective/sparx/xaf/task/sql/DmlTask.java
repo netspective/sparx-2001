@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DmlTask.java,v 1.3 2002-03-31 14:00:37 snshah Exp $
+ * $Id: DmlTask.java,v 1.4 2002-08-17 15:11:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -68,14 +68,15 @@ import java.util.StringTokenizer;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
-import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.xif.db.DatabasePolicy;
+import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogFieldConditionalAction;
 import com.netspective.sparx.xaf.form.DialogFieldFactory;
@@ -91,6 +92,8 @@ import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.util.value.CustomSqlValue;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.log.AppServerCategory;
+import com.netspective.sparx.util.log.LogManager;
 
 public class DmlTask extends BasicTask
 {
@@ -497,6 +500,7 @@ public class DmlTask extends BasicTask
         DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
         String dataSourceId = this.getDataSource() != null ? this.getDataSource().getValue(tc) : null;
         Connection conn = null;
+        boolean connIsShared = false;  // conn being shared within a transaction? if so, we don't want to close when we're done
         PreparedStatement stmt = null;
 
         DatabasePolicy databasePolicy = null;
@@ -569,7 +573,12 @@ public class DmlTask extends BasicTask
                 }
             }
 
-            conn = dbContext.getConnection(tc, dataSourceId);
+            conn = dbContext.getSharedConnection(tc, dataSourceId);
+            if(conn == null)
+                conn = dbContext.getConnection(tc, dataSourceId);
+            else
+                connIsShared = true;
+
             switch(tempCmd)
             {
                 case DMLCMD_INSERT:
@@ -598,6 +607,8 @@ public class DmlTask extends BasicTask
                     break;
 
                 case DMLCMD_REMOVE:
+                    if(whereCond == null)
+                        throw new TaskExecuteException("No 'where' attribute provided.");
                     dml = new DmlStatement(tableName, whereCond.getValue(tc));
                     break;
                 case DMLCMD_UNKNOWN:
@@ -651,6 +662,11 @@ public class DmlTask extends BasicTask
             try
             {
                 if(stmt != null) stmt.close();
+                if(conn != null && ! connIsShared)
+                {
+                        conn.close();
+                        AppServerCategory.getInstance(LogManager.DEBUG_SQL).debug(((HttpServletRequest) tc.getRequest()).getServletPath() + " closing connection: " + conn);
+                }
             }
             catch(SQLException e)
             {

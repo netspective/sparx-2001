@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: TransactionTask.java,v 1.3 2002-03-31 14:00:54 snshah Exp $
+ * $Id: TransactionTask.java,v 1.4 2002-08-17 15:11:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -148,41 +148,29 @@ public class TransactionTask extends BasicTask
 
         try
         {
-            ServletContext context = tc.getServletContext();
-            ServletRequest request = tc.getRequest();
-            DatabaseContext dbContext = DatabaseContextFactory.getContext(request, context);
-            String dataSourceId = this.getDataSource() != null ?this.getDataSource().getValue(tc) : null;
-            dataSourceId = dbContext.translateDataSourceId(tc, dataSourceId);
-            int command = this.getCommand();
+            DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), tc.getServletContext());
 
-            if(command == COMMAND_BEGIN)
+            /* get the appropriate datasource and translate it first so that if it's value source we'll get a static string */
+            String dataSourceId = this.getDataSource() != null ? this.getDataSource().getValue(tc) : null;
+            dataSourceId = dbContext.translateDataSourceId(tc, dataSourceId);
+
+            int command = this.getCommand();
+            switch(command)
             {
-                // get a connection and bind it to the request so that DMLs after this
-                // can use the connection
-                Connection conn = dbContext.getConnection(tc, dataSourceId);
-                conn.setAutoCommit(false);
-                request.setAttribute(dataSourceId, conn);
-            }
-            else if(command == COMMAND_END)
-            {
-                Connection conn = (Connection) request.getAttribute(dataSourceId);
-                // commit and close the connection
-                conn.commit();
-                conn.setAutoCommit(true);
-                request.removeAttribute(dataSourceId);
-            }
-            else if (command == COMMAND_ROLLBACK)
-            {
-                // get the connection and rollback the transaction
-                Connection conn = (Connection) request.getAttribute(dataSourceId);
-                conn.rollback();
-                conn.setAutoCommit(true);
-                request.removeAttribute(dataSourceId);
-            }
-            else
-            {
-                // unknown command
-                throw new TaskExecuteException("No appropriate Transaction command provided.");
+                case COMMAND_BEGIN:
+                    dbContext.beginConnectionSharing(tc, dataSourceId);
+                    break;
+
+                case COMMAND_END:
+                    dbContext.endConnectionSharing(tc, dataSourceId, true);
+                    break;
+
+                case COMMAND_ROLLBACK:
+                    dbContext.endConnectionSharing(tc, dataSourceId, false);
+                    break;
+
+                default:
+                    throw new TaskExecuteException("No appropriate Transaction command provided ("+ command +").");
             }
         }
         catch(Exception e)

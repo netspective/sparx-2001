@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementTask.java,v 1.1 2002-01-20 14:53:19 snshah Exp $
+ * $Id: StatementTask.java,v 1.2 2002-08-17 15:11:24 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.task.sql;
@@ -64,6 +64,7 @@ import java.sql.SQLException;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.w3c.dom.Element;
 
@@ -343,7 +344,8 @@ public class StatementTask extends BasicTask
             }
             else
                 out = new StringWriter();
-            String dataSourceId = this.getDataSource() != null ?this.getDataSource().getValue(tc) : null;
+            String dataSourceId = this.getDataSource() != null ? this.getDataSource().getValue(tc) : null;
+
             if(produceReport && storeValueSource == null)
             {
                 if(statementInfo != null)
@@ -365,8 +367,6 @@ public class StatementTask extends BasicTask
                 else
                     stmtManager.produceReportAndStoreResultSet(out, dbContext, tc, dataSourceId, reportSkin, stmtName, null, reportId, storeValueSource, storeValueType);
             }
-
-            out.close();
         }
         catch(IOException e)
         {
@@ -396,6 +396,17 @@ public class StatementTask extends BasicTask
         catch(NamingException e)
         {
             throw new TaskExecuteException(e);
+        }
+        finally
+        {
+            try
+            {
+                if(out != null) out.close();
+            }
+            catch(IOException ioe)
+            {
+                throw new TaskExecuteException(ioe);
+            }
         }
 
         if(reportDest != null)
