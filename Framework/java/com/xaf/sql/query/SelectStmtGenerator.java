@@ -164,7 +164,6 @@ public class SelectStmtGenerator
 		}
 
 		boolean haveCondWheres = false;
-		int condLast = condsUsedCount-1;
 		if(condsUsedCount > 0)
 		{
 			if(haveJoinWheres)
@@ -172,18 +171,22 @@ public class SelectStmtGenerator
 			else
 				sql.append("where\n  (\n");
 
-			for(int c = 0; c < condsAvailCount; c++)
+    		int condsUsedLast = condsUsedCount-1;
+            int condsUsedIndex = 0;
+			for(int condsAvailIndex = 0; condsAvailIndex < condsAvailCount; condsAvailIndex++)
 			{
-				QueryCondition cond = (QueryCondition) conds.get(c);
+				QueryCondition cond = (QueryCondition) conds.get(condsAvailIndex);
                 if(cond.removeIfValueIsNull())
                 {
                     String value = cond.getValue().getValue(vc);
                     if(value == null || value.length() == 0)
                         continue;
                 }
+
+                condsUsedIndex++;
 				addJoin(cond.getField());
 				sql.append("  (" + cond.getWhereCondExpr(this) + ")");
-				if(c != condLast)
+				if(condsUsedIndex != condsUsedLast)
 					sql.append(cond.getConnectorSql());
 				sql.append("\n");
 			}
