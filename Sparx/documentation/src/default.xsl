@@ -871,28 +871,28 @@
 				<td class="data">
 					<xsl:choose>
 						<xsl:when test="starts-with(local-name(), 'field.')">
-							<a class="xml-element" href="{concat($root-dir, 'products/xaf/dialogs/controls.html#', local-name())}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xaf/dialogs/controls.html#', local-name())}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'dialogs'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xaf/dialogs/xml.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xaf/dialogs/xml.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'configuration'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xaf/configuration.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xaf/configuration.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'sql-statements'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xaf/sql/xml.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xaf/sql/xml.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'query-defn'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xaf/dynamic-queries/xml.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xaf/dynamic-queries/xml.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'datatype'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xif/datatypes.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xif/datatypes.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'tabletype'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xif/tabletypes.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xif/tabletypes.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:when test="local-name() = 'table'">
-							<a class="xml-element" href="{concat($root-dir, 'products/xif/tabletypes.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
+							<a class="xml-element" href="{concat($root-dir, 'xif/tabletypes.html')}"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></a>
 						</xsl:when>
 						<xsl:otherwise>
 							<font color="blue"><nobr>&lt;<xsl:value-of select="local-name()"/>&gt;</nobr></font>
