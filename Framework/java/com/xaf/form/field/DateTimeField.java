@@ -116,6 +116,7 @@ public class DateTimeField extends TextField
         if (value != null && value.length() > 0)
         {
             this.format = new SimpleDateFormat(value);
+            this.format.setLenient(false);
         }
 
 
