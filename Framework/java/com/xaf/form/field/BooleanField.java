@@ -81,7 +81,7 @@ public class BooleanField extends DialogField
 
 	public String getControlHtml(DialogContext dc)
 	{
-		if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
+		if(dc.flagIsSet(getQualifiedName(), FLDFLAG_INPUT_HIDDEN))
 			return getHiddenControlHtml(dc);
 
 		boolean value = false;
@@ -91,6 +91,11 @@ public class BooleanField extends DialogField
 
 		String falseText = CHOICES_TEXT[(choices * 2) + 0];
 		String trueText = CHOICES_TEXT[(choices * 2) + 1];
+
+		if(isReadOnly(dc))
+		{
+			return "<input type='hidden' name='"+ getId() +"' value='" + (strValue != null ? strValue : "") + "'><span id='"+ getQualifiedName() +"'>" + (value ? trueText : falseText) + "</span>";
+		}
 
 		String id = getId();
 		String defaultControlAttrs = dc.getSkin().getDefaultControlAttrs();

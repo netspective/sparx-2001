@@ -26,6 +26,19 @@ public class Dialog
 	static public final String PARAMNAME_ORIG_REFERER  = ".orig_referer";
 	static public final String PARAMNAME_TRANSACTIONID = ".transaction_id";
 
+	/*
+	   the Data Command when first passed in (start of dialog, run seq == 1)
+	   is passed using the parameter "data_cmd" (INITIAL). When the dialog is
+	   in run sequence > 1 (after submit) the data command is passed in as a
+	   hidden "pass-thru" variable with the suffix PARAMNAME_DATA_CMD
+    */
+	static public final String PARAMNAME_DATA_CMD_INITIAL  = "data_cmd";
+	static public final String PARAMNAME_DATA_CMD          = ".data_cmd";
+	static public final String PARAMVALUE_DATA_CMD_ADD     = "add";
+	static public final String PARAMVALUE_DATA_CMD_EDIT    = "edit";
+	static public final String PARAMVALUE_DATA_CMD_DELETE  = "delete";
+	static public final String PARAMVALUE_DATA_CMD_CONFIRM = "confirm";
+
 	private ArrayList fields = new ArrayList();
     private Task[] executeTasks;
 	private DialogDirector director;
@@ -73,6 +86,7 @@ public class Dialog
 	public final String getExecuteSequenceParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_EXECSEQ; }
 	public final String getTransactionIdParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_TRANSACTIONID; }
 	public final String getValuesRequestAttrName() { return "dialog-" + name + "-field-values"; }
+	public final String getDataCmdParamName() { return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_DATA_CMD; }
 
 	public final Task[] getExecuteTasks() { return executeTasks; }
 

@@ -9,7 +9,8 @@ import com.xaf.form.field.*;
 public class DialogField
 {
 	static public final int FLDFLAG_REQUIRED             = 1;
-	static public final int FLDFLAG_INVISIBLE            = FLDFLAG_REQUIRED * 2;
+	static public final int FLDFLAG_PRIMARYKEY           = FLDFLAG_REQUIRED * 2;
+	static public final int FLDFLAG_INVISIBLE            = FLDFLAG_PRIMARYKEY * 2;
 	static public final int FLDFLAG_READONLY             = FLDFLAG_INVISIBLE * 2;
 	static public final int FLDFLAG_INITIAL_FOCUS        = FLDFLAG_READONLY * 2;
 	static public final int FLDFLAG_PERSIST              = FLDFLAG_INITIAL_FOCUS * 2;
@@ -92,6 +93,9 @@ public class DialogField
 
 		if(elem.getAttribute("required").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_REQUIRED);
+
+		if(elem.getAttribute("primary=key").equalsIgnoreCase("yes"))
+			setFlag(DialogField.FLDFLAG_PRIMARYKEY);
 
 		if(elem.getAttribute("initial-focus").equalsIgnoreCase("yes"))
 			setFlag(DialogField.FLDFLAG_INITIAL_FOCUS);
@@ -493,7 +497,15 @@ public class DialogField
 		if(simpleName != null)
 			return dc.flagIsSet(getQualifiedName(), FLDFLAG_READONLY);
 		else
-			return flagIsSet(FLDFLAG_READONLY) ? true : false;
+			return flagIsSet(FLDFLAG_READONLY);
+	}
+
+	public final boolean isInputHidden(DialogContext dc)
+	{
+		if(simpleName != null)
+			return dc.flagIsSet(getQualifiedName(), FLDFLAG_INPUT_HIDDEN);
+		else
+			return flagIsSet(FLDFLAG_INPUT_HIDDEN);
 	}
 
 	public final boolean persistValue() { return (flags & FLDFLAG_PERSIST) == 0 ? false : true; }

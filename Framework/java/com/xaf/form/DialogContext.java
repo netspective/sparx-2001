@@ -32,10 +32,29 @@ public final class DialogContext extends Hashtable implements ValueContext
 		public long flags;
 		public ArrayList errorMessages;
 
-		DialogFieldState(DialogField aField)
+		DialogFieldState(DialogField aField, int dataCmd)
 		{
 			field = aField;
 			flags = field.getFlags();
+
+			switch(dataCmd)
+			{
+				case DATA_CMD_NONE:
+				case DATA_CMD_ADD:
+					break;
+
+				case DATA_CMD_EDIT:
+					// when in "edit" mode, the primary key should be read-only
+					if((flags & DialogField.FLDFLAG_PRIMARYKEY) != 0)
+						flags |= DialogField.FLDFLAG_READONLY;
+					break;
+
+				case DATA_CMD_CONFIRM:
+				case DATA_CMD_DELETE:
+					// when in "delete" mode, all the fields should be read-only
+					flags |= DialogField.FLDFLAG_READONLY;
+					break;
+			}
 		}
 	}
 
@@ -43,6 +62,12 @@ public final class DialogContext extends Hashtable implements ValueContext
 	static public final char DIALOGMODE_INPUT    = 'I';
 	static public final char DIALOGMODE_VALIDATE = 'V';
 	static public final char DIALOGMODE_EXECUTE  = 'E';
+
+	static public final int DATA_CMD_NONE    = 0;
+	static public final int DATA_CMD_ADD     = 1;
+	static public final int DATA_CMD_EDIT    = 2;
+	static public final int DATA_CMD_DELETE  = 3;
+	static public final int DATA_CMD_CONFIRM = 4;
 
 	static public final int VALSTAGE_NOT_PERFORMED       = 0;
 	static public final int VALSTAGE_PERFORMED_FAILED    = 1;
@@ -67,6 +92,8 @@ public final class DialogContext extends Hashtable implements ValueContext
 	private String originalReferer;
 	private DatabaseContext dbContext;
 	private boolean executeHandled;
+	private String dataCmdStr;
+	private int dataCmd;
 
 	public DialogContext(ServletContext aContext, Servlet aServlet, HttpServletRequest aRequest, HttpServletResponse aResponse, Dialog aDialog, DialogSkin aSkin)
 	{
@@ -110,11 +137,25 @@ public final class DialogContext extends Hashtable implements ValueContext
 			{
 				transactionId = "No MessageDigest Algorithm found!";
 			}
+			dataCmdStr = aRequest.getParameter(Dialog.PARAMNAME_DATA_CMD_INITIAL);
 		}
 		else
 		{
 			originalReferer = aRequest.getParameter(dialog.getOriginalRefererParamName());
 			transactionId = aRequest.getParameter(dialog.getTransactionIdParamName());
+			dataCmdStr = aRequest.getParameter(dialog.getDataCmdParamName());
+		}
+
+		if(dataCmdStr != null)
+		{
+			if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_ADD))
+				dataCmd = DATA_CMD_ADD;
+			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_EDIT))
+				dataCmd = DATA_CMD_EDIT;
+			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_DELETE))
+				dataCmd = DATA_CMD_DELETE;
+			else if(dataCmdStr.equals(Dialog.PARAMVALUE_DATA_CMD_CONFIRM))
+				dataCmd = DATA_CMD_CONFIRM;
 		}
 
 		createStateFields(dialog.getFields());
@@ -124,7 +165,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 		{
 			String qName = director.getQualifiedName();
 			if(qName != null)
-				put(qName, new DialogFieldState(director));
+				put(qName, new DialogFieldState(director, dataCmd));
 		}
 	}
 
@@ -142,7 +183,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 			DialogField field = (DialogField) fields.get(i);
 			String qName = field.getQualifiedName();
 			if(qName != null)
-				put(qName, new DialogFieldState(field));
+				put(qName, new DialogFieldState(field, dataCmd));
 			List children = field.getChildren();
 			if(children != null)
 				createStateFields(children);
@@ -236,6 +277,7 @@ public final class DialogContext extends Hashtable implements ValueContext
 	public final ServletResponse getResponse() { return response; }
 	public final HttpSession getSession() { return request.getSession(true); }
 	public final DialogSkin getSkin() { return skin; }
+	public final int getDataCommand() { return dataCmd; }
 
 	public final DatabaseContext getDatabaseContext() { return dbContext; }
 	public final void setDatabaseContext(DatabaseContext value) { dbContext = value; }
@@ -256,6 +298,9 @@ public final class DialogContext extends Hashtable implements ValueContext
 		hiddens.append("<input type='hidden' name='"+ dialog.getExecuteSequenceParamName() +"' value='"+ execSequence +"'>\n");
 		hiddens.append("<input type='hidden' name='"+ dialog.getActiveModeParamName() +"' value='"+ nextMode +"'>\n");
 		hiddens.append("<input type='hidden' name='"+ dialog.PARAMNAME_DIALOGQNAME +"' value='"+ (runSequence > 1 ? request.getParameter(Dialog.PARAMNAME_DIALOGQNAME) : request.getParameter(DialogManager.REQPARAMNAME_DIALOG)) +"'>\n");
+
+		if(dataCmdStr != null)
+			hiddens.append("<input type='hidden' name='"+ dialog.getDataCmdParamName() +"' value='"+ dataCmdStr + "'>\n");
 
 		if(dialog.retainRequestParams())
 		{

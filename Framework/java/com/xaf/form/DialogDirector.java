@@ -65,6 +65,26 @@ public class DialogDirector extends DialogField
 	{
 		String attrs = dc.getSkin().getDefaultControlAttrs();
 
+		String submitCaption = this.submitCaption;
+		String cancelCaption = this.cancelCaption;
+
+		switch(dc.getDataCommand())
+		{
+			case DialogContext.DATA_CMD_ADD:
+			case DialogContext.DATA_CMD_EDIT:
+				submitCaption = " Save ";
+				break;
+
+			case DialogContext.DATA_CMD_DELETE:
+				submitCaption = " Delete ";
+				break;
+
+			case DialogContext.DATA_CMD_CONFIRM:
+				submitCaption = "  Yes  ";
+				cancelCaption = "  No   ";
+				break;
+		}
+
 		StringBuffer html = new StringBuffer("<center>");
 		html.append("<input type='submit' value='");
 		html.append(submitCaption);

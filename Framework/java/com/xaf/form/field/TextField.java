@@ -106,17 +106,19 @@ public class TextField extends DialogField
 			return getHiddenControlHtml(dc);
 
 		String value = dc.getValue(this);
+		if(value == null) value = "";
+
 		if(isReadOnly(dc))
 		{
-			return "<input type='hidden' name='"+ getId() +"' value='" + (value != null ? value : "") + "'><span id='"+ getQualifiedName() +"'>" + value + "</span>";
+			return "<input type='hidden' name='"+ getId() +"' value='" + value + "'><span id='"+ getQualifiedName() +"'>" + value + "</span>";
 		}
 		else if(! flagIsSet(FLDFLAG_MASKENTRY))
 		{
-			return "<input type=\"text\" name=\""+ getId() +"\" value=\"" + (value != null ? value : "") + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
+			return "<input type=\"text\" name=\""+ getId() +"\" value=\"" + value + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
 		}
 		else
 		{
-			return "<input type=\"password\" name=\""+ getId() +"\" value=\"" + (value != null ? value : "") + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
+			return "<input type=\"password\" name=\""+ getId() +"\" value=\"" + value + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
 		}
 	}
 }

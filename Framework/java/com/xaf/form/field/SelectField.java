@@ -271,7 +271,7 @@ public class SelectField extends DialogField
 			"</TABLE>";
 	}
 
-	public String getHiddenControlHtml(DialogContext dc)
+	public String getHiddenControlHtml(DialogContext dc, boolean showCaptions)
 	{
         SelectChoicesList choices = null;
 		if(listSource != null)
@@ -286,11 +286,27 @@ public class SelectField extends DialogField
 		Iterator i = choices.getIterator();
 		StringBuffer html = new StringBuffer();
 
-		while(i.hasNext())
+		if(showCaptions)
 		{
-			SelectChoice choice = (SelectChoice) i.next();
-			if(choice.selected)
-				html.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'>");
+			while(i.hasNext())
+			{
+				SelectChoice choice = (SelectChoice) i.next();
+				if(choice.selected)
+				{
+					if(html.length() > 0)
+						html.append("<br>");
+					html.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'><span id='"+ getQualifiedName() +"'>" + choice.caption + "</span>");
+				}
+			}
+		}
+		else
+		{
+			while(i.hasNext())
+			{
+				SelectChoice choice = (SelectChoice) i.next();
+				if(choice.selected)
+					html.append("<input type='hidden' name='"+ id +"' value='"+ choice.value +"'>");
+			}
 		}
 
 		return html.toString();
@@ -298,8 +314,11 @@ public class SelectField extends DialogField
 
 	public String getControlHtml(DialogContext dc)
 	{
-		if(flagIsSet(FLDFLAG_INPUT_HIDDEN))
-			return getHiddenControlHtml(dc);
+		if(isInputHidden(dc))
+			return getHiddenControlHtml(dc, false);
+
+		if(isReadOnly(dc))
+			return getHiddenControlHtml(dc, true);
 
         SelectChoicesList choices = null;
 		if(listSource != null)
