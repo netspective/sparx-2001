@@ -36,6 +36,54 @@ public class ConfigurationManager extends XmlSource
 		return defaultConfig.getValue(vc, propertyName);
 	}
 
+	public String[] getDelimitedValues(ValueContext vc, String propertyName, String[] defaultValue, String delim)
+	{
+		String value = getValue(vc, propertyName);
+		if(value == null) return defaultValue;
+
+		List values = new ArrayList();
+		StringTokenizer st = new StringTokenizer(value, delim);
+		while(st.hasMoreTokens())
+			values.add(st.nextToken());
+
+		return (String[]) values.toArray(new String[values.size()]);
+	}
+
+	public boolean getBooleanValue(ValueContext vc, String propertyName, boolean defaultValue)
+	{
+		String value = getValue(vc, propertyName);
+		if(value == null) return defaultValue;
+		return value.equalsIgnoreCase("yes") || value.equals("1") || value.equalsIgnoreCase("true");
+	}
+
+	public int getIntValue(ValueContext vc, String propertyName, int defaultValue)
+	{
+		String value = getValue(vc, propertyName);
+		if(value == null) return defaultValue;
+		return Integer.parseInt(value);
+	}
+
+	public long getLongValue(ValueContext vc, String propertyName, long defaultValue)
+	{
+		String value = getValue(vc, propertyName);
+		if(value == null) return defaultValue;
+		return Long.parseLong(value);
+	}
+
+	public double getDoubleValue(ValueContext vc, String propertyName, double defaultValue)
+	{
+		String value = getValue(vc, propertyName);
+		if(value == null) return defaultValue;
+		return Double.parseDouble(value);
+	}
+
+	public float getFloatValue(ValueContext vc, String propertyName, float defaultValue)
+	{
+		String value = getValue(vc, propertyName);
+		if(value == null) return defaultValue;
+		return Float.parseFloat(value);
+	}
+
 	public void catalogNodes()
 	{
 		defaultConfig.clear();
