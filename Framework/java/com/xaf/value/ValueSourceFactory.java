@@ -14,6 +14,7 @@ public class ValueSourceFactory
         srcClasses.put("form", DialogFieldValue.class);
 		srcClasses.put("formOrRequest", DialogFieldOrRequestParameterValue.class);
         srcClasses.put("query", QueryResultsListValue.class);
+        srcClasses.put("query-cols", QueryColumnsListValue.class);
 		srcClasses.put("dialog-field-types", DialogFieldFactoryListValue.class);
         srcClasses.put("query-defn-fields", QueryDefnFieldsListValue.class);
 		srcClasses.put("query-defn-selects", QueryDefnSelectsListValue.class);

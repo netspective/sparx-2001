@@ -23,9 +23,9 @@ public class DialogFieldFactoryListValue extends ListSource
     {
     }
 
-    public SelectChoicesList getSelectChoices(DialogContext dc, String key)
+    public SelectChoicesList getSelectChoices(ValueContext vc)
     {
-		choices = new SelectChoicesList();
+		SelectChoicesList choices = new SelectChoicesList();
 		Map fields = DialogFieldFactory.getFieldClasses();
 		for(Iterator i = fields.keySet().iterator(); i.hasNext(); )
 		{

@@ -27,12 +27,9 @@ public class SqlComparisonsListValue extends ListSource
 		groupName = srcParams;
     }
 
-    public SelectChoicesList getSelectChoices(DialogContext dc, String key)
+    public SelectChoicesList getSelectChoices(ValueContext vc)
     {
-		if(choices == null)
-			choices = new SelectChoicesList();
-		else
-			choices.clear();
+		SelectChoicesList choices = new SelectChoicesList();
 
 		List comparisons = SqlComparisonFactory.getComparisonsList();
 		if(groupName == null || groupName.equals("all"))

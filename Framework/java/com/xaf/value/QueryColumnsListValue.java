@@ -1,14 +1,5 @@
 package com.xaf.value;
 
-/**
- * Title:        The Extensible Application Platform
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author Shahid N. Shah
- * @version 1.0
- */
-
 import java.io.*;
 import java.util.*;
 import java.sql.*;
@@ -21,17 +12,17 @@ import com.xaf.form.field.*;
 import com.xaf.db.*;
 import com.xaf.sql.*;
 
-public class QueryResultsListValue extends ListSource
+public class QueryColumnsListValue extends ListSource
 {
 	private String stmtMgrName;
 	private String dataSourceId;
 	private String stmtName;
 
-    public QueryResultsListValue()
+    public QueryColumnsListValue()
     {
     }
 
-	public QueryResultsListValue(String stmtMgrName, String dataSourceId, String queryName)
+	public QueryColumnsListValue(String stmtMgrName, String dataSourceId, String queryName)
 	{
 		this.stmtMgrName = stmtMgrName;
 		this.dataSourceId = dataSourceId;
@@ -68,21 +59,13 @@ public class QueryResultsListValue extends ListSource
 		{
 			rs = getResultSet(vc);
 			ResultSetMetaData rsmd = rs.getMetaData();
-			int numColumns = rsmd.getColumnCount();
+			int colsCount = rsmd.getColumnCount();
 
-			if(numColumns == 1)
+			if(rs.next())
 			{
-				while(rs.next())
+				for(int i = 1; i <= colsCount; i++)
 				{
-					String columnData = rs.getString(1);
-					choices.add(new SelectChoice(columnData, columnData));
-				}
-			}
-			else if (numColumns > 1)
-			{
-				while(rs.next())
-				{
-					choices.add(new SelectChoice(rs.getString(1), rs.getString(2)));
+					choices.add(new SelectChoice(rsmd.getColumnLabel(i), rs.getString(i)));
 				}
 			}
 		}
@@ -111,7 +94,7 @@ public class QueryResultsListValue extends ListSource
 		ResultSet rs = null;
 		try
 		{
-			String[] result = StatementManager.getResultSetRowsAsStrings(getResultSet(vc));
+			String[] result = StatementManager.getResultSetSingleRowAsStrings(getResultSet(vc));
 			if(result == null)
 				return new String[] { "" };
 			else

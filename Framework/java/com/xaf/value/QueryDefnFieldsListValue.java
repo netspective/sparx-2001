@@ -43,15 +43,12 @@ public class QueryDefnFieldsListValue extends ListSource
             queryDefnName = srcParams;
     }
 
-    public SelectChoicesList getSelectChoices(DialogContext dc, String key)
+    public SelectChoicesList getSelectChoices(ValueContext vc)
     {
-		//if(choices != null)
-		//	return choices;
-
-		choices = new SelectChoicesList();
+		SelectChoicesList choices = new SelectChoicesList();
 		try
 		{
-			StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(dc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
+			StatementManager stmtMgr = stmtMgrName == null ? StatementManagerFactory.getManager(vc.getServletContext()) : StatementManagerFactory.getManager(stmtMgrName);
 			QueryDefinition queryDefn = stmtMgr.getQueryDefn(queryDefnName);
 
 			if(queryDefn == null)

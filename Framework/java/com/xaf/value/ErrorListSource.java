@@ -28,7 +28,8 @@ public class ErrorListSource extends ListSource
 
     public void initializeSource(String srcParams)
     {
-        choices = new SelectChoicesList();
+        SelectChoicesList choices = new SelectChoicesList();
         choices.add(new SelectChoice("Error creating ListSource: " + errorMessage + " (" + srcParams + ")"));
+		setChoices(choices);
     }
 }

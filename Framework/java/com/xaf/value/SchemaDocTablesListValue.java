@@ -12,10 +12,10 @@ public class SchemaDocTablesListValue extends ListSource
     {
     }
 
-    public SelectChoicesList getSelectChoices(DialogContext dc, String key)
+    public SelectChoicesList getSelectChoices(ValueContext vc)
     {
-		choices = new SelectChoicesList();
-		SchemaDocument schemaDoc = SchemaDocFactory.getDoc(dc.getServletContext());
+		SelectChoicesList choices = new SelectChoicesList();
+		SchemaDocument schemaDoc = SchemaDocFactory.getDoc(vc.getServletContext());
 		if(schemaDoc == null)
 		{
 			choices.add(new SelectChoice("Default schema document not found in ServletContext init parameter 'schema.file'"));

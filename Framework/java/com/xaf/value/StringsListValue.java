@@ -24,7 +24,7 @@ public class StringsListValue extends ListSource
 
     public void initializeSource(String srcParams)
     {
-        choices = new SelectChoicesList();
+        SelectChoicesList choices = new SelectChoicesList();
 		if(srcParams == null) return;
 
 		StringTokenizer st = new StringTokenizer(srcParams, selectChoiceDelim);
@@ -51,5 +51,7 @@ public class StringsListValue extends ListSource
 			}
 			choices.add(new SelectChoice(caption, value));
 		}
+
+		setChoices(choices);
     }
 }
