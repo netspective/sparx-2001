@@ -51,10 +51,12 @@
  */
 
 /**
- * $Id: ClassPath.java,v 1.2 2002-09-04 23:21:45 shahid.shah Exp $
+ * $Id: ClassPath.java,v 1.3 2002-11-30 16:36:47 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util;
+
+import com.netspective.sparx.util.log.LogManager;
 
 import java.io.File;
 import java.util.List;
@@ -86,6 +88,85 @@ public class ClassPath
             return null;
         else
             return classUrl.getFile();
+    }
+
+    static public class InstanceGenerator
+    {
+        private String className;
+        private Class defaultClass;
+        private Object instance;
+        private Exception error;
+
+        public InstanceGenerator(String className, Class defaultClass, boolean validate)
+        {
+            this.className = className;
+            this.defaultClass = defaultClass;
+
+            Class activeClass = null;
+            if(className == null || className.length() == 0)
+                activeClass = defaultClass;
+            else
+            {
+                try
+                {
+                    activeClass = Class.forName(className);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    error = e;
+                    return;
+                }
+            }
+
+            try
+            {
+                instance = activeClass.newInstance();
+            }
+            catch (InstantiationException e)
+            {
+                error = e;
+                return;
+            }
+            catch (IllegalAccessException e)
+            {
+                error = e;
+                return;
+            }
+
+            if(! defaultClass.isInstance(instance))
+                error = new ClassCastException("class "+ className +" must extend class "+ defaultClass.getName() +".");
+
+            if(validate && error != null)
+            {
+                LogManager.recordException(this.getClass(), "constructor", "class = '"+ className +"', default = '"+ defaultClass +"'", error);
+                throw getException();
+            }
+        }
+
+        public String getClassName()
+        {
+            return className;
+        }
+
+        public Class getDefaultClass()
+        {
+            return defaultClass;
+        }
+
+        public boolean isValid()
+        {
+            return error == null;
+        }
+
+        public RuntimeException getException()
+        {
+            return new RuntimeException(error.toString());
+        }
+
+        public Object getInstance()
+        {
+            return instance;
+        }
     }
 
     static public class ClassPathInfo
