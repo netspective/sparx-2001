@@ -83,7 +83,7 @@ public class HtmlSingleRowReportSkin extends HtmlReportSkin
         produceDataRows(writer, rc, rowData);
 	}
 
-	public void produceDataRows(Writer writer, ReportContext rc, Object[][] data) throws IOException
+	public void produceDataRows(Writer writer, ReportContext rc, Object[][] data, int startDataRow) throws IOException
 	{
 		// position the single row -- if we can't do "next" then no row exists
 		if(data == null || data.length < 1)
