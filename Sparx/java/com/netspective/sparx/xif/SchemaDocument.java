@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.20 2002-12-19 20:27:11 shahbaz.javeed Exp $
+ * $Id: SchemaDocument.java,v 1.21 2002-12-23 05:02:23 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -89,11 +89,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import com.netspective.sparx.util.StringUtilities;
 import com.netspective.sparx.util.xml.XmlSource;
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xif.dal.Schema;
 
 /**
  * Provides the ability to fully describe an entire database
@@ -113,8 +113,13 @@ import com.netspective.sparx.xaf.form.DialogField;
 
 public class SchemaDocument extends XmlSource
 {
-    public static final String ATTRNAME_TYPE = "type";
+    public static final String ELEMNAME_DAL_GENERATOR = "dal-generator";
     public static final String ELEMNAME_GENERATE_ID = "generate-id";
+
+    public static final String ATTRNAME_TYPE = "type";
+    public static final String ATTRNAME_DAL_PACKAGE = "package";
+    public static final String ATTRNAME_DAL_STYLESHEET = "style-sheet";
+    public static final String ATTRPREFIX_INHERITFIELD = "field.";
 
     public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
@@ -166,6 +171,7 @@ public class SchemaDocument extends XmlSource
     private Map tableDialogDefns = new HashMap(); // key is uppercase TABLE_NAME, value is DialogDefinition instance
     private Map dialogFieldDefns = new HashMap(); // key is uppercase TABLE_NAME.COLUMN_NAME, value is a DialogFieldDefinition instance
     private Map columnsWithFieldDefns = new HashMap(); // key is uppercase TABLE_NAME, value is a string list with names of columns with field defns
+    private DataAccessLayerProperties dalProperties = new DataAccessLayerProperties();
 
     /**
      * Class which holds information about a JDBC type and its associated JavaClass and primitive type
@@ -350,6 +356,11 @@ public class SchemaDocument extends XmlSource
         loadDocument(conn, catalog, schemaPattern);
     }
 
+    public DataAccessLayerGenerator getDataAccessLayerGenerator(String sparxSharedJavaDalStylesheetsRootDir)
+    {
+        return new DataAccessLayerGenerator(sparxSharedJavaDalStylesheetsRootDir);
+    }
+
     public boolean loadDocument(File file)
     {
         boolean status = super.loadDocument(file);
@@ -363,21 +374,21 @@ public class SchemaDocument extends XmlSource
      */
     public static String sqlIdentifierToText(String original, boolean uppercaseEachWord)
     {
-        if(original == null || original.length() == 0)
+        if (original == null || original.length() == 0)
             return original;
 
         StringBuffer text = new StringBuffer();
         text.append(Character.toUpperCase(original.charAt(0)));
         boolean wordBreak = false;
-        for(int i = 1; i < original.length(); i++)
+        for (int i = 1; i < original.length(); i++)
         {
             char ch = original.charAt(i);
-            if(ch == '_')
+            if (ch == '_')
             {
                 text.append(' ');
                 wordBreak = true;
             }
-            else if(wordBreak)
+            else if (wordBreak)
             {
                 text.append(uppercaseEachWord ? Character.toUpperCase(ch) : Character.toLowerCase(ch));
                 wordBreak = false;
@@ -391,12 +402,12 @@ public class SchemaDocument extends XmlSource
     public void overrideOrInheritAttribute(Element src, Element dest, String attribName, String defaultValue)
     {
         String overrideValue = src.getAttribute(attribName);
-        if(overrideValue.length() > 0)
+        if (overrideValue.length() > 0)
             dest.setAttribute(attribName, overrideValue);
         else
         {
             String originalValue = dest.getAttribute(attribName);
-            if(originalValue.length() == 0)
+            if (originalValue.length() == 0)
                 dest.setAttribute(attribName, defaultValue);
         }
     }
@@ -404,7 +415,7 @@ public class SchemaDocument extends XmlSource
     public void overrideAttributes(Element srcElement, Element destElem)
     {
         NamedNodeMap inhAttrs = srcElement.getAttributes();
-        for(int i = 0; i < inhAttrs.getLength(); i++)
+        for (int i = 0; i < inhAttrs.getLength(); i++)
         {
             Node attrNode = inhAttrs.item(i);
             destElem.setAttribute(attrNode.getNodeName(), attrNode.getNodeValue());
@@ -421,9 +432,9 @@ public class SchemaDocument extends XmlSource
             this.table = table;
 
             String tableName = table.getAttribute("name");
-            if(dialogDefn.getAttribute("name").length() == 0)
+            if (dialogDefn.getAttribute("name").length() == 0)
                 dialogDefn.setAttribute("name", tableName);
-            if(dialogDefn.getAttribute("heading").length() == 0)
+            if (dialogDefn.getAttribute("heading").length() == 0)
                 dialogDefn.setAttribute("heading", "create-data-cmd-heading:" + sqlIdentifierToText(tableName, true));
 
             this.dialogDefn = (Element) dialogDefn.cloneNode(true);
@@ -443,14 +454,18 @@ public class SchemaDocument extends XmlSource
         {
             return table.getAttribute("name").toUpperCase();
         }
+
         public Element createDialogElement(Element parent, Element tableDialogRefPlaceholder)
         {
             // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
             overrideAttributes(tableDialogRefPlaceholder, dialogDefn);
-            Element cloned = (Element) parent.getOwnerDocument().importNode(dialogDefn, true);
-            cloned.setAttribute("_original-tag", tableDialogRefPlaceholder.getNodeName());
-            parent.insertBefore(cloned, tableDialogRefPlaceholder);
-            return cloned;
+            Element clonedDialogDefn = (Element) parent.getOwnerDocument().importNode(dialogDefn, true);
+            clonedDialogDefn.setAttribute("_original-tag", tableDialogRefPlaceholder.getNodeName());
+            clonedDialogDefn.setAttribute("class", "com.netspective.sparx.xif.dal.TableDialog");
+            //Element clonedTableDefn = (Element) parent.getOwnerDocument().importNode(table, true);
+            //clonedDialogDefn.appendChild(clonedTableDefn);
+            parent.insertBefore(clonedDialogDefn, tableDialogRefPlaceholder);
+            return clonedDialogDefn;
         }
     }
 
@@ -467,25 +482,38 @@ public class SchemaDocument extends XmlSource
 
             // setup some useful defaults if they're not already defined
             final String columnName = column.getAttribute("name");
-            if(dialogFieldDefn.getAttribute("name").length() == 0)
-                dialogFieldDefn.setAttribute("name", columnName);
-            if(dialogFieldDefn.getAttribute("caption").length() == 0)
-                dialogFieldDefn.setAttribute("caption", sqlIdentifierToText(columnName, false));
+            setAttrValueDefault(dialogFieldDefn, "name", columnName);
+            setAttrValueDefault(dialogFieldDefn, "caption", sqlIdentifierToText(columnName, false));
 
             this.dialogFieldDefn = (Element) dialogFieldDefn.cloneNode(true);
 
-            // now just inherit all the information that comes from the <column> tag so that attributes like "required", "primarykey", etc are brought in
-            // but attributes like "size" are not inherited since they have different meanings (see below)
-            inheritElement(column, this.dialogFieldDefn, dialogFieldExcludeColElemsFromInherit, null);
+            // inherit all items common to columns and fields
+            setAttrValueDefault(this.dialogFieldDefn, "required", column.getAttribute("required"));
+            setAttrValueDefault(this.dialogFieldDefn, "primarykey", column.getAttribute("primarykey"));
+
+            if(column.getAttribute("_gen-create-id").length() > 0)
+                this.dialogFieldDefn.setAttribute("hidden", "yes");
+
+            NamedNodeMap colAttrs = column.getAttributes();
+            for(int a = 0; a < colAttrs.getLength(); a++)
+            {
+                // if there are any attributes in the <column> tag that beging with "field." then copy them without the field. prefix
+                String attrName = colAttrs.item(a).getNodeName();
+                if(attrName.startsWith(ATTRPREFIX_INHERITFIELD))
+                    this.dialogFieldDefn.setAttribute(attrName.substring(ATTRPREFIX_INHERITFIELD.length()), colAttrs.item(a).getNodeValue());
+            }
 
             // in a <column> tag the "size" really means "maximum length" so do the translation
             String size = findElementOrAttrValue(column, "size");
-            if(size != null)
+            if (size != null)
                 this.dialogFieldDefn.setAttribute("max-length", size);
 
-            String description = findElementOrAttrValue(column, "descr");
-            if(description != null && this.dialogFieldDefn.getAttribute("hint").length() == 0)
-                this.dialogFieldDefn.setAttribute("hint", description);
+            if(this.dialogFieldDefn.getAttribute("hint").equals("descr"))
+            {
+                String description = findElementOrAttrValue(column, "descr");
+                if (description != null && this.dialogFieldDefn.getAttribute("hint").equals("descr"))
+                    this.dialogFieldDefn.setAttribute("hint", description);
+            }
 
             // if we have a select field and no choices are specified, check to see if the <column> tag is a reference
             // to an enumeration table; if it is, then we probably want to make the enum's data choices for this field
@@ -493,7 +521,7 @@ public class SchemaDocument extends XmlSource
             if (refInfo != null)
             {
                 Element refTable = (Element) tableNodes.get(refInfo.tableName.toUpperCase());
-                if(refTable.getAttribute("is-enum").equals("yes") && this.dialogFieldDefn.getAttribute("choices").length() == 0)
+                if (refTable.getAttribute("is-enum").equals("yes") && this.dialogFieldDefn.getAttribute("choices").length() == 0)
                     this.dialogFieldDefn.setAttribute("choices", "schema-enum:" + refInfo.tableName);
             }
         }
@@ -518,14 +546,27 @@ public class SchemaDocument extends XmlSource
             return (table.getAttribute("name") + "." + column.getAttribute("name")).toUpperCase();
         }
 
+        public void setupDALProperties()
+        {
+            setAttrValueDefault(dialogFieldDefn, "dal-column-data-type-class", column.getAttribute("_gen-data-type-class"));
+            setAttrValueDefault(dialogFieldDefn, "dal-column-method-name", column.getAttribute("_gen-method-name"));
+            setAttrValueDefault(dialogFieldDefn, "dal-column-constant-name", column.getAttribute("_gen-constant-name"));
+            setAttrValueDefault(dialogFieldDefn, "dal-table-method-name", table.getAttribute("_gen-table-method-name"));
+            setAttrValueDefault(dialogFieldDefn, "dal-table-class-name", table.getAttribute("_gen-table-class-name"));
+            setAttrValueDefault(dialogFieldDefn, "dal-table-row-class-name", table.getAttribute("_gen-row-class-name"));
+            setAttrValueDefault(dialogFieldDefn, "dal-table-rows-class-name", table.getAttribute("_gen-rows-class-name"));
+        }
+
         public Element resolveDialogField(Element dialogElem, Element tableColumnRefFieldPlaceholder)
         {
             // if there are any attributes in the <field.table-column> tag, they all override whatever is in <field.xxx> tag inside the <column>
             overrideAttributes(tableColumnRefFieldPlaceholder, dialogFieldDefn);
-            Element cloned = (Element) dialogElem.getOwnerDocument().importNode(dialogFieldDefn, true);
-            cloned.setAttribute("_original-tag", tableColumnRefFieldPlaceholder.getNodeName());
-            dialogElem.insertBefore(cloned, tableColumnRefFieldPlaceholder);
-            return cloned;
+            Element clonedDialogFieldDefn = (Element) dialogElem.getOwnerDocument().importNode(dialogFieldDefn, true);
+            clonedDialogFieldDefn.setAttribute("_original-tag", tableColumnRefFieldPlaceholder.getNodeName());
+            //Element clonedColumnDefn = (Element) dialogElem.getOwnerDocument().importNode(column, true);
+            //clonedDialogFieldDefn.appendChild(clonedColumnDefn);
+            dialogElem.insertBefore(clonedDialogFieldDefn, tableColumnRefFieldPlaceholder);
+            return clonedDialogFieldDefn;
         }
     }
 
@@ -738,21 +779,21 @@ public class SchemaDocument extends XmlSource
         if (0 == customSequence.length()) customSequence = (tableAbbrev + "_" + column.getAttribute("name") + "_SEQ").toUpperCase();
         column.setAttribute("_gen-sequence-name", customSequence);
 
-        if("autoinc".equals(column.getAttribute("type")) || column.getAttribute("autoinc").equals("yes") || "autoinc".equals(generateId))
+        if ("autoinc".equals(column.getAttribute("type")) || column.getAttribute("autoinc").equals("yes") || "autoinc".equals(generateId))
             column.setAttribute("_gen-create-id", "autoinc");
 
-        if("guid".equals(column.getAttribute("type")) || column.getAttribute("guid").equals("yes") || "guid".equals(generateId) ||
+        if ("guid".equals(column.getAttribute("type")) || column.getAttribute("guid").equals("yes") || "guid".equals(generateId) ||
                 "guid32".equals(column.getAttribute("type")) || column.getAttribute("guid32").equals("yes") || "guid32".equals(generateId))
             column.setAttribute("_gen-create-id", "guid32");
 
-        if(dialogFieldDefn != null)
+        if (dialogFieldDefn != null)
         {
             DialogFieldDefinition defn = new DialogFieldDefinition(table, column, dialogFieldDefn);
             dialogFieldDefns.put(defn.getMapKey(), defn);
 
             String tableName = table.getAttribute("name").toUpperCase();
             List tableColNames = (List) columnsWithFieldDefns.get(tableName);
-            if(tableColNames == null)
+            if (tableColNames == null)
             {
                 tableColNames = new ArrayList();
                 columnsWithFieldDefns.put(tableName, tableColNames);
@@ -906,89 +947,33 @@ public class SchemaDocument extends XmlSource
         }
     }
 
-    public void prepareForDataAccessLayer(Element table)
+    public DataAccessLayerProperties getDALProperties()
     {
-        String tableName = table.getAttribute("name");
-        Document tableDoc = table.getOwnerDocument();
+        return dalProperties;
+    }
 
-        NodeList columns = table.getChildNodes();
-        Element colNameElem = null;
-        for (int c = 0; c < columns.getLength(); c++)
+    public Schema getSchema()
+    {
+        if (dalProperties.schemaInstance != null)
+            return dalProperties.schemaInstance;
+
+        try
         {
-            Node node = columns.item(c);
-            if (node.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-
-            String nodeName = node.getNodeName();
-            if (nodeName.equals("column"))
-            {
-                Element columnElem = (Element) node;
-                NodeList javaClassElems = columnElem.getElementsByTagName("java-class");
-                if (javaClassElems.getLength() == 0)
-                {
-                    String dataTypeName = columnElem.getAttribute("type");
-                    errors.add("Column '" + columnElem.getAttribute("name") + "' (type '" + dataTypeName + "') in table '" + tableName + "' has no DAL java-class specification");
-                    Element dataTypeElem = (Element) dataTypeNodes.get(dataTypeName);
-                    if (dataTypeElem != null)
-                        errors.add("Type '" + dataTypeName + "' has " + dataTypeElem.getElementsByTagName("java-class").getLength() + " DAL java-class elements");
-                    else
-                        errors.add("Type '" + dataTypeName + "' not found.");
-                }
-                else if (javaClassElems.getLength() > 1)
-                    errors.add("Column '" + columnElem.getAttribute("name") + "' (type '" + columnElem.getAttribute("type") + "') in table '" + tableName + "' has multiple DAL java-class specifications");
-            }
-            else if (nodeName.equals("java-dal-accessor"))
-            {
-                Element accessor = (Element) node;
-
-                String methodName = accessor.getAttribute("name");
-                NodeList columnElems = table.getElementsByTagName("column");
-                int columnsCount = columnElems.getLength();
-
-                // if the convenient method <java-dal-accessor name="abc" columns="a,b,c"/> is used, expand to <column name="a">, etc
-                String columnsList = accessor.getAttribute("columns");
-                if (columnsList.length() > 0)
-                {
-                    StringTokenizer st = new StringTokenizer(accessor.getAttribute("columns"), ",");
-                    while (st.hasMoreTokens())
-                    {
-                        String accessorColName = st.nextToken().trim();
-                        colNameElem = tableDoc.createElement("column");
-                        colNameElem.setAttribute("name", accessorColName);
-                        accessor.appendChild(colNameElem);
-                    }
-                }
-
-                // the @columns is now expanded, check that each of the accessor <column> tags actually exists in the table
-                NodeList accessorColumnElems = accessor.getElementsByTagName("column");
-                int accessorColumnsCount = accessorColumnElems.getLength();
-                for (int ac = 0; ac < accessorColumnsCount; ac++)
-                {
-                    Element accessorColumnElem = (Element) accessorColumnElems.item(ac);
-                    String accessorColName = accessorColumnElem.getAttribute("name");
-                    System.out.print(accessorColName);
-                    boolean found = false;
-                    for (int ic = 0; ic < columnsCount; ic++)
-                    {
-                        Element columnElem = (Element) columnElems.item(ic);
-                        if (columnElem.getAttribute("name").equals(accessorColName))
-                        {
-                            found = true;
-                            String dataType = columnElem.getAttribute("type");
-                            Element dataTypeElem = (Element) dataTypeNodes.get(dataType);
-                            if (dataTypeElem.getElementsByTagName("java-type").getLength() > 0)
-                            {
-                                accessor.setAttribute("_gen-has-primitive-params", "yes");
-                            }
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        errors.add("Accessor '" + methodName + "' column '" + accessorColName + "' not found in table '" + tableName + "'");
-                    }
-                }
-            }
+            Class cls = Class.forName(dalProperties.schemaQualifiedClassName);
+            dalProperties.schemaInstance = (Schema) cls.newInstance();
+            return dalProperties.schemaInstance;
+        }
+        catch (ClassNotFoundException e)
+        {
+            return null;
+        }
+        catch (InstantiationException e)
+        {
+            return null;
+        }
+        catch (IllegalAccessException e)
+        {
+            return null;
         }
     }
 
@@ -1397,7 +1382,6 @@ public class SchemaDocument extends XmlSource
         }
     }
 
-    //TODO: Refactor this to make it more generic
     public void keepOnlyUniqueValidationRules(Element dataType)
     {
         NodeList validationRules = dataType.getElementsByTagName("validation");
@@ -1405,9 +1389,9 @@ public class SchemaDocument extends XmlSource
 
         if (0 < validationRules.getLength())
         {
-            Node validation = validationRules.item(0).cloneNode(false);
-
-            for (int i = 0; i < validationRules.getLength(); i ++) {
+            //Node validation = validationRules.item(0).cloneNode(false);
+            for (int i = 0; i < validationRules.getLength(); i++)
+            {
                 Element parent = (Element) validationRules.item(i);
                 NodeList rules = parent.getElementsByTagName("rule");
 
@@ -1433,50 +1417,7 @@ public class SchemaDocument extends XmlSource
                     }
                 }
             }
-
-            // Now add all the rules that are left into one unified validation node...
-            // ... and then delete the original validation nodes ...
-            // ... and replace them with the new unified validation node
-/*
-            for (int i = 0; i < validationRules.getLength(); i ++) {
-                Element parent = (Element) validationRules.item(i);
-                NodeList rules = parent.getElementsByTagName("rule");
-
-                for (int j = 0; j < rules.getLength(); j ++) {
-                    validation.appendChild(rules.item(j).cloneNode(true));
-                }
-
-                dataType.removeChild(parent);
-            }
-
-            dataType.appendChild(validation);
-*/
         }
-    }
-
-    private String getCompleteNodeContents(Node element)
-    {
-        StringBuffer sb = new StringBuffer(element.getNodeName());
-        StringBuffer at = new StringBuffer();
-        NamedNodeMap attributes = element.getAttributes();
-
-        sb.append("[");
-
-        for (int i = 0; i < attributes.getLength(); i ++)
-        {
-            Node attribute = attributes.item(i);
-
-            at.append(':');
-            at.append(attribute.getNodeName());
-            at.append('=');
-            at.append(attribute.getNodeValue());
-        }
-
-        at.deleteCharAt(0);
-        sb.append(at);
-        sb.append("]=");
-        sb.append(element.getNodeValue());
-        return sb.toString();
     }
 
     private String getRuleContents(Node ruleNode)
@@ -1507,6 +1448,7 @@ public class SchemaDocument extends XmlSource
             keepOnlyLastElement(dataType, "default");
             keepOnlyLastElement(dataType, "java-class");
             keepOnlyLastElement(dataType, "java-type");
+            keepOnlyLastElement(dataType, "java-default");
 
             keepOnlyUniqueValidationRules(dataType);
         }
@@ -1523,10 +1465,12 @@ public class SchemaDocument extends XmlSource
         tableDialogDefns.clear();
         dialogFieldDefns.clear();
         columnsWithFieldDefns.clear();
+        dalProperties = new DataAccessLayerProperties();
 
         if (xmlDoc == null)
             return;
 
+        Element dalGeneratorElement = null;
         NodeList children = xmlDoc.getDocumentElement().getChildNodes();
         for (int n = 0; n < children.getLength(); n++)
         {
@@ -1553,6 +1497,8 @@ public class SchemaDocument extends XmlSource
                 indexTypeNodes.put(element.getAttribute("name"), node);
             else if (nodeName.equals("table"))
                 tableNodes.put(element.getAttribute("name").toUpperCase(), node);
+            else if (nodeName.equals(ELEMNAME_DAL_GENERATOR))
+                dalGeneratorElement = element;
         }
 
         Iterator i = tableNodes.values().iterator();
@@ -1582,9 +1528,8 @@ public class SchemaDocument extends XmlSource
         // we want to be sure to do it so that data types that are generating Java can be "extended"
         doDataTypeInheritance();
 
-        i = tableNodes.values().iterator();
-        while (i.hasNext())
-            prepareForDataAccessLayer((Element) i.next());
+        // setup all the DAL properties
+        dalProperties.setGeneratorElement(dalGeneratorElement);
 
         addMetaInformation();
     }
@@ -1809,9 +1754,12 @@ public class SchemaDocument extends XmlSource
         }
     }
 
-    static public class ObjectRelationalGenerator
+    public class DataAccessLayerProperties
     {
-        private String destRoot;
+        private Element generatorElement;
+        private String schemaQualifiedClassName;
+        private Schema schemaInstance;
+
         private String dataTypesPkg;
         private String tableTypesPkg;
         private String tablesPkg;
@@ -1822,39 +1770,15 @@ public class SchemaDocument extends XmlSource
         private String schemaPkg;
         private String schemaClassName;
 
-        private String dataTypesGeneratorStyleSheet;
-        private String tableTypesGeneratorStyleSheet;
-        private String tablesGeneratorStyleSheet;
-        private String domainsGeneratorStyleSheet;
-        private String listenersGeneratorStyleSheet;
-        private String rowsGeneratorStyleSheet;
-        private String rowsListGeneratorStyleSheet;
-        private String schemaGeneratorStyleSheet;
-        private String xsdGeneratorStyleSheet;
+        private Map dataTypesClassMap = new HashMap();
+        private Map tableTypesClassMap = new HashMap();
+        private Map domainClassMap = new HashMap();
+        private Map rowClassMap = new HashMap();
+        private Map rowsClassMap = new HashMap();
+        private Map tableClassMap = new HashMap();
 
-        private int dataTypesGeneratedCount;
-        private int tableTypesGeneratedCount;
-        private int tablesGeneratedCount;
-
-        private List messages = new ArrayList();
-
-        public ObjectRelationalGenerator()
+        public DataAccessLayerProperties()
         {
-        }
-
-        public List getMessages()
-        {
-            return messages;
-        }
-
-        public String getDestRoot()
-        {
-            return destRoot;
-        }
-
-        public void setDestRoot(String destRoot)
-        {
-            this.destRoot = destRoot;
         }
 
         public String getDataTypesPkg()
@@ -1945,6 +1869,628 @@ public class SchemaDocument extends XmlSource
         public void setSchemaClassName(String schemaClassName)
         {
             this.schemaClassName = schemaClassName;
+        }
+
+        public String getSchemaQualifiedClassName()
+        {
+            return schemaQualifiedClassName;
+        }
+
+        public void setGeneratorElement(Element value)
+        {
+            generatorElement = value;
+
+            if (generatorElement == null)
+            {
+                generatorElement = xmlDoc.createElement(ELEMNAME_DAL_GENERATOR);
+                xmlDoc.getDocumentElement().appendChild(generatorElement);
+            }
+
+            NodeList dpnl = generatorElement.getElementsByTagName("destination-path");
+            if (dpnl.getLength() == 0)
+            {
+                Element destRoot = xmlDoc.createElement("destination-path");
+                destRoot.appendChild(xmlDoc.createTextNode(new File(docSource.getFile().getParentFile(), "java").getAbsolutePath()));
+                generatorElement.appendChild(destRoot);
+            }
+
+            Element activeElem = getOrCreateElement(generatorElement, "data-types");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.column");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/data-type-generator.xsl");
+            dataTypesPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "table-types");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.table.type");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/table-type-generator.xsl");
+            tableTypesPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "tables");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.table");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/table-generator.xsl");
+            tablesPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "domains");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.domain");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/domain-generator.xsl");
+            domainsPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "listeners");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.listener");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/listener-generator.xsl");
+            listenersPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "rows");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.domain.row");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/row-generator.xsl");
+            rowsPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "row-lists");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal.domain.rows");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/rows-generator.xsl");
+            rowsListPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+
+            activeElem = getOrCreateElement(generatorElement, "schema");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_PACKAGE, "app.dal");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/schema-generator.xsl");
+            setAttrValueDefault(activeElem, "class", "DataAccessLayer");
+            schemaPkg = activeElem.getAttribute(ATTRNAME_DAL_PACKAGE);
+            schemaClassName = activeElem.getAttribute("class");
+
+            schemaQualifiedClassName = schemaPkg + "." + schemaClassName;
+
+            activeElem = getOrCreateElement(generatorElement, "xsd");
+            setAttrValueDefault(activeElem, ATTRNAME_DAL_STYLESHEET, "${sparx.shared.dal.stylesheet.root.dir}/xsd-generator.xsl");
+
+            Iterator i = tableNodes.values().iterator();
+            while (i.hasNext())
+                prepareTableElements((Element) i.next());
+
+            setupDataTypesProperties();
+            setupTableTypesProperties();
+            setupTablesProperties();
+
+            i = dialogFieldDefns.values().iterator();
+            while(i.hasNext())
+               ((DialogFieldDefinition) i.next()).setupDALProperties();
+        }
+
+        public void prepareTableElements(Element table)
+        {
+            String tableName = table.getAttribute("name");
+            Document tableDoc = table.getOwnerDocument();
+
+            NodeList columns = table.getChildNodes();
+            Element colNameElem = null;
+            for (int c = 0; c < columns.getLength(); c++)
+            {
+                Node node = columns.item(c);
+                if (node.getNodeType() != Node.ELEMENT_NODE)
+                    continue;
+
+                String nodeName = node.getNodeName();
+                if (nodeName.equals("column"))
+                {
+                    Element columnElem = (Element) node;
+                    NodeList javaClassElems = columnElem.getElementsByTagName("java-class");
+                    if (javaClassElems.getLength() == 0)
+                    {
+                        String dataTypeName = columnElem.getAttribute("type");
+                        errors.add("Column '" + columnElem.getAttribute("name") + "' (type '" + dataTypeName + "') in table '" + tableName + "' has no DAL java-class specification");
+                        Element dataTypeElem = (Element) dataTypeNodes.get(dataTypeName);
+                        if (dataTypeElem != null)
+                            errors.add("Type '" + dataTypeName + "' has " + dataTypeElem.getElementsByTagName("java-class").getLength() + " DAL java-class elements");
+                        else
+                            errors.add("Type '" + dataTypeName + "' not found.");
+                    }
+                    else if (javaClassElems.getLength() > 1)
+                        errors.add("Column '" + columnElem.getAttribute("name") + "' (type '" + columnElem.getAttribute("type") + "') in table '" + tableName + "' has multiple DAL java-class specifications");
+                }
+                else if (nodeName.equals("java-dal-accessor"))
+                {
+                    Element accessor = (Element) node;
+
+                    String methodName = accessor.getAttribute("name");
+                    NodeList columnElems = table.getElementsByTagName("column");
+                    int columnsCount = columnElems.getLength();
+
+                    // if the convenient method <java-dal-accessor name="abc" columns="a,b,c"/> is used, expand to <column name="a">, etc
+                    String columnsList = accessor.getAttribute("columns");
+                    if (columnsList.length() > 0)
+                    {
+                        StringTokenizer st = new StringTokenizer(accessor.getAttribute("columns"), ",");
+                        while (st.hasMoreTokens())
+                        {
+                            String accessorColName = st.nextToken().trim();
+                            colNameElem = tableDoc.createElement("column");
+                            colNameElem.setAttribute("name", accessorColName);
+                            accessor.appendChild(colNameElem);
+                        }
+                    }
+
+                    // the @columns is now expanded, check that each of the accessor <column> tags actually exists in the table
+                    NodeList accessorColumnElems = accessor.getElementsByTagName("column");
+                    int accessorColumnsCount = accessorColumnElems.getLength();
+                    for (int ac = 0; ac < accessorColumnsCount; ac++)
+                    {
+                        Element accessorColumnElem = (Element) accessorColumnElems.item(ac);
+                        String accessorColName = accessorColumnElem.getAttribute("name");
+                        boolean found = false;
+                        for (int ic = 0; ic < columnsCount; ic++)
+                        {
+                            Element columnElem = (Element) columnElems.item(ic);
+                            if (columnElem.getAttribute("name").equals(accessorColName))
+                            {
+                                found = true;
+                                String dataType = columnElem.getAttribute("type");
+                                Element dataTypeElem = (Element) dataTypeNodes.get(dataType);
+                                if (dataTypeElem.getElementsByTagName("java-type").getLength() > 0)
+                                {
+                                    accessor.setAttribute("_gen-has-primitive-params", "yes");
+                                }
+                                break;
+                            }
+                        }
+                        if (!found)
+                        {
+                            errors.add("Accessor '" + methodName + "' column '" + accessorColName + "' not found in table '" + tableName + "'");
+                        }
+                    }
+                }
+            }
+        }
+
+        public void setupDataTypesProperties()
+        {
+            Map dataTypes = getDataTypes();
+
+            DATATYPES:
+            for (Iterator i = dataTypes.values().iterator(); i.hasNext();)
+            {
+                Element dataTypeElem = (Element) i.next();
+                String dataTypeName = XmlSource.xmlTextToJavaIdentifier(dataTypeElem.getAttribute("name"), true) + "Column";
+                String javaTypeInitCap = null;
+/*
+                The code below stores the class name to be used when creating any elements of this data type in the
+                Java code.  This class name is different from the name used when creating the Java class for the
+                data type.  If one changes this value here but leaves the value for the "_gen-data-type-class-name"
+                attribute intact, theoretically one can allow for the creation of custom Java classes for each datatype.
+*/
+                // Check to see if a dal-class child node is available...
+                NodeList childNodes = dataTypeElem.getChildNodes();
+                boolean hasCustomDalClass = false;
+                boolean[] dalClassTaggedChildren = new boolean[childNodes.getLength()];
+                int childNum = 0;
+                int ruleNum = 0;
+
+                for (childNum = 0; null != childNodes && childNum < childNodes.getLength(); childNum++)
+                {
+                    Node child = childNodes.item(childNum);
+
+                    if (Node.ELEMENT_NODE != child.getNodeType())
+                        continue;
+
+                    if ("dal-class".equals(child.getNodeName()))
+                    {
+                        hasCustomDalClass = true;
+                        dalClassTaggedChildren[childNum] = true;
+                    }
+
+                    if ("validation".equals(child.getNodeName()))
+                    {
+                        NodeList ruleNodes = child.getChildNodes();
+
+                        for (int loop = 0; null != ruleNodes && loop < ruleNodes.getLength(); loop++)
+                        {
+                            Node rule = ruleNodes.item(loop);
+
+                            if (Node.ELEMENT_NODE != rule.getNodeType())
+                                continue;
+
+                            String ruleName = ((Element) rule).getAttribute("name");
+                            ruleName = "".equals(ruleName) ? "number-" : ruleName;
+                            String ruleConstantName = ruleName;
+                            String ruleIdentifierName = ruleName;
+                            ruleConstantName = XmlSource.xmlTextToJavaConstant(ruleConstantName);
+                            ruleIdentifierName = XmlSource.xmlTextToJavaIdentifier(ruleIdentifierName, true);
+
+                            String ruleValue = (new Integer(ruleNum++)).toString();
+
+                            ((Element) rule).setAttribute("_gen-java-constant-name", ruleConstantName);
+                            ((Element) rule).setAttribute("_gen-java-constant-value", ruleValue);
+                            ((Element) rule).setAttribute("_gen-rule-name", ruleName);
+                            ((Element) rule).setAttribute("_gen-java-identifier-name", ruleIdentifierName);
+                            ruleNum++;
+                        }
+                    }
+                }
+
+                // This is the default value of the dalClassName.  If no custom dal class nodes are found, this will
+                // be used.  The default value is generated using information in the datatype itself.
+                String dalClassName = dataTypesPkg + "." + dataTypeName;
+
+                if (hasCustomDalClass)
+                {
+                    // If a custom class is specified, go ahead and plug in the package attribute and the classname
+                    // into the dataTypesClassMap
+                    for (childNum = 0; childNum < childNodes.getLength(); childNum++)
+                    {
+                        if (dalClassTaggedChildren[childNum])
+                        {
+                            Element child = (Element) childNodes.item(childNum);
+                            // This means the last defined value of dal-class will be what takes effect.  Not an efficient
+                            // solution, but let's see where it takes us
+                            dalClassName = child.getAttribute("package") + "." + child.getFirstChild().getNodeValue();
+                        }
+                    }
+                }
+
+                dataTypesClassMap.put(dataTypeElem.getAttribute("name"), dalClassName);
+
+                NodeList children = dataTypeElem.getChildNodes();
+                for (int c = 0; c < children.getLength(); c++)
+                {
+                    Node child = children.item(c);
+                    if (child.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    String childName = child.getNodeName();
+                    if ("composite".equals(childName))
+                    {
+                        // composites will already have been "expanded" by the SchemaDocument so we don't create any classes
+                        if (dataTypeElem.getElementsByTagName("composite").getLength() > 0)
+                            continue DATATYPES;
+                    }
+                    else if ("java-type".equals(childName))
+                        javaTypeInitCap = XmlSource.xmlTextToJavaIdentifier(child.getFirstChild().getNodeValue(), true);
+                }
+
+                dataTypeElem.setAttribute("_gen-data-type-name", dataTypeName);
+                dataTypeElem.setAttribute("_gen-data-type-class-name", (String) dataTypesClassMap.get(dataTypeElem.getAttribute("name")));
+                dataTypeElem.setAttribute("_gen-java-type-init-cap", javaTypeInitCap);
+            }
+        }
+
+        public void setupTableTypesProperties()
+        {
+            Map tableTypes = getTableTypes();
+
+            for (Iterator i = tableTypes.values().iterator(); i.hasNext();)
+            {
+                Element tableTypeElem = (Element) i.next();
+                String tableTypeClassName = XmlSource.xmlTextToJavaIdentifier(tableTypeElem.getAttribute("name"), true);
+                tableTypeElem.setAttribute("_gen_table_type_class_name", tableTypeClassName);
+
+/*
+                The code below stores the class name to be used when creating any elements of this data type in the
+                Java code.  This class name is different from the name used when creating the Java class for the
+                data type.  If one changes this value here but leaves the value for the "_gen-data-type-class-name"
+                attribute intact, theoretically one can allow for the creation of custom Java classes for each datatype.
+*/
+                // Check to see if a dal-class child node is available...
+                NodeList dalClassChildren = tableTypeElem.getChildNodes();
+                boolean hasCustomDalClass = false;
+                boolean[] dalClassTaggedChildren = new boolean[dalClassChildren.getLength()];
+                int childNum = 0;
+
+
+                for (childNum = 0; null != dalClassChildren && childNum < dalClassChildren.getLength(); childNum++)
+                {
+                    Node child = dalClassChildren.item(childNum);
+
+                    if (Node.ELEMENT_NODE == child.getNodeType() && "dal-class".equals(child.getNodeName()))
+                    {
+                        hasCustomDalClass = true;
+                        dalClassTaggedChildren[childNum] = true;
+                    }
+                }
+
+                // This is the default value of the dalClassName.  If no custom dal class nodes are found, this will
+                // be used.  The default value is generated using information in the datatype itself.
+                String dalClassName = tableTypesPkg + "." + tableTypeClassName;
+
+                if (hasCustomDalClass)
+                {
+                    // If a custom class is specified, go ahead and plug in the package attribute and the classname
+                    // into the dataTypesClassMap
+                    for (childNum = 0; childNum < dalClassChildren.getLength(); childNum++)
+                    {
+                        if (dalClassTaggedChildren[childNum])
+                        {
+                            Element child = (Element) dalClassChildren.item(childNum);
+                            // This means the last defined value of dal-class will be what takes effect.  Not an efficient
+                            // solution, but let's see where it takes us
+                            dalClassName = child.getAttribute("package") + "." + child.getFirstChild().getNodeValue();
+                        }
+                    }
+                }
+
+                tableTypesClassMap.put(tableTypeElem.getAttribute("name"), dalClassName);
+
+                NodeList children = tableTypeElem.getChildNodes();
+                for (int c = 0; c < children.getLength(); c++)
+                {
+                    Node child = children.item(c);
+                    if (child.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    String childName = child.getNodeName();
+                    if ("column".equals(childName))
+                    {
+                        Element columnElem = (Element) child;
+                        columnElem.setAttribute("_gen-member-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), false));
+                        columnElem.setAttribute("_gen-method-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), true));
+                        columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
+
+                        NodeList jtnl = columnElem.getElementsByTagName("java-type");
+                        if (jtnl.getLength() > 0)
+                            columnElem.setAttribute("_gen-java-type-init-cap", XmlSource.xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
+                    }
+                }
+            }
+        }
+
+        public void setupTablesProperties()
+        {
+            Map tables = getTables();
+            for (Iterator i = tables.values().iterator(); i.hasNext();)
+            {
+                Element tableElem = (Element) i.next();
+
+                String tableName = tableElem.getAttribute("name");
+                String tableNameAsJavaIdentfier = XmlSource.xmlTextToJavaIdentifier(tableName, true);
+                String tableClassName = tableNameAsJavaIdentfier + "Table";
+                String domainName = tableNameAsJavaIdentfier;
+                String listenerName = tableNameAsJavaIdentfier + "Listener";
+                String rowName = tableNameAsJavaIdentfier + "Row";
+                String rowListName = tableNameAsJavaIdentfier + "Rows";
+                StringBuffer tableTypesList = new StringBuffer();
+
+                /* Add default entries to the domain, row, rows and table Class Maps */
+                domainClassMap.put(tableName, domainsPkg + "." + domainName);
+                rowClassMap.put(tableName, rowsPkg + "." + rowName);
+                rowsClassMap.put(tableName, rowsListPkg + "." + rowListName);
+                tableClassMap.put(tableName, tablesPkg + "." + tableClassName);
+
+                NodeList children = tableElem.getChildNodes();
+                for (int c = 0; c < children.getLength(); c++)
+                {
+                    Node child = children.item(c);
+                    if (child.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    String childName = child.getNodeName();
+                    if ("column".equals(childName))
+                    {
+                        Element columnElem = (Element) child;
+                        String columnName = columnElem.getAttribute("name");
+                        String dalColumnMemberName = columnElem.getAttribute("dal-member-name");
+                        String dalColumnMethodName = columnElem.getAttribute("dal-method-name");
+                        String dalColumnConstantName = columnElem.getAttribute("dal-constant-name");
+
+                        // if we are given a member name, use it otherwise generate it and check to make sure it's not a reserved word
+                        String columnMemberName = dalColumnMemberName.length() > 0 ? dalColumnMemberName : xmlTextToJavaIdentifier(columnName, false);
+                        if (dalColumnMemberName.length() == 0 && (javaReservedWords.contains(columnMemberName) || javaReservedTerms.contains(columnMemberName)))
+                            columnMemberName = "_" + columnMemberName;
+
+                        // if we are given a method name, use it otherwise generate it and check to make sure it's not called "class" 'cause we shouldn't generate "getClass()"
+                        String columnMethodName = dalColumnMethodName.length() > 0 ? dalColumnMethodName : xmlTextToJavaIdentifier(columnName, true);
+                        if (dalColumnMethodName.length() == 0 && "class".equals(columnName))
+                            columnMethodName = "_Class";
+
+                        columnElem.setAttribute("_gen-member-name", columnMemberName);
+                        columnElem.setAttribute("_gen-method-name", columnMethodName);
+                        columnElem.setAttribute("_gen-constant-name", dalColumnConstantName.length() > 0 ? dalColumnConstantName : columnName.toUpperCase());
+                        columnElem.setAttribute("_gen-node-name", xmlTextToNodeName(columnName));
+                        columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
+
+                        NodeList jtnl = columnElem.getElementsByTagName("java-type");
+                        if (jtnl.getLength() > 0)
+                            columnElem.setAttribute("_gen-java-type-init-cap", xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
+                    }
+                    else if ("extends".equals(childName))
+                    {
+                        if (tableTypesList.length() > 0)
+                            tableTypesList.append(", ");
+                        tableTypesList.append((String) tableTypesClassMap.get(child.getFirstChild().getNodeValue()));
+                    }
+                    else if ("dal-domain-class".equals(childName))
+                    {
+                        String dalDomainClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
+                        // This overrides the default stored above
+                        domainClassMap.put(tableName, dalDomainClassName);
+                    }
+                    else if ("dal-row-class".equals(childName))
+                    {
+                        String dalRowClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
+                        // This overrides the default stored above
+                        rowClassMap.put(tableName, dalRowClassName);
+                    }
+                    else if ("dal-rows-class".equals(childName))
+                    {
+                        String dalRowsClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
+                        // This overrides the default stored above
+                        rowsClassMap.put(tableName, dalRowsClassName);
+                    }
+                    else if ("dal-table-class".equals(childName))
+                    {
+                        String dalTableClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
+                        // This overrides the default stored above
+                        tableClassMap.put(tableName, dalTableClassName);
+                    }
+                }
+
+                if (tableTypesList.length() > 0)
+                    tableElem.setAttribute("_implements-table-types", tableTypesList.toString());
+                tableElem.setAttribute("_gen-domain-name", domainName);
+                tableElem.setAttribute("_gen-domain-class-name", (String) domainClassMap.get(tableName));
+                tableElem.setAttribute("_gen-domain-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
+                tableElem.setAttribute("_gen-domain-method-name", tableNameAsJavaIdentfier);
+                tableElem.setAttribute("_gen-listener-name", listenerName);
+                tableElem.setAttribute("_gen-listener-class-name", listenersPkg + "." + listenerName);
+                tableElem.setAttribute("_gen-listener-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
+                tableElem.setAttribute("_gen-listener-method-name", tableNameAsJavaIdentfier);
+                tableElem.setAttribute("_gen-table-name", tableClassName);
+                tableElem.setAttribute("_gen-table-class-name", (String) tableClassMap.get(tableName));
+                tableElem.setAttribute("_gen-table-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
+                tableElem.setAttribute("_gen-table-method-name", tableNameAsJavaIdentfier);
+                tableElem.setAttribute("_gen-row-name", rowName);
+                tableElem.setAttribute("_gen-row-class-name", (String) rowClassMap.get(tableName));
+                tableElem.setAttribute("_gen-rows-name", rowListName);
+                tableElem.setAttribute("_gen-rows-member-name", xmlTextToJavaIdentifier(rowListName, false));
+                tableElem.setAttribute("_gen-rows-class-name", (String) rowsClassMap.get(tableName));
+
+                if (!(tablesPkg + "." + tableClassName).equals(tableClassMap.get(tableName)))
+                    tableElem.setAttribute("_gen-table-orig-class-name", tablesPkg + "." + tableClassName);
+            }
+
+            for (Iterator i = tables.values().iterator(); i.hasNext();)
+            {
+                Element tableElem = (Element) i.next();
+
+                NodeList children = tableElem.getChildNodes();
+                for (int c = 0; c < children.getLength(); c++)
+                {
+                    Node child = children.item(c);
+                    if (child.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    String childName = child.getNodeName();
+                    if ("column".equals(childName))
+                    {
+                        Element columnElem = (Element) child;
+                        String refTableName = columnElem.getAttribute("reftbl");
+                        if (refTableName.length() > 0l)
+                        {
+                            Element refTableElem = (Element) getTables().get(refTableName.toUpperCase());
+                            if (refTableElem != null)
+                            {
+                                if ("yes".equals(refTableElem.getAttribute("is-enum")))
+                                    columnElem.setAttribute("_gen-ref-table-is-enum", "yes");
+                                columnElem.setAttribute("_gen-ref-table-name", refTableElem.getAttribute("_gen-table-name"));
+                                columnElem.setAttribute("_gen-ref-table-class-name", refTableElem.getAttribute("_gen-table-class-name"));
+                                columnElem.setAttribute("_gen-ref-table-member-name", refTableElem.getAttribute("_gen-table-member-name"));
+                                columnElem.setAttribute("_gen-ref-table-method-name", refTableElem.getAttribute("_gen-table-method-name"));
+                            }
+                        }
+                    }
+                    else if ("child-table".equals(childName))
+                    {
+                        Element childTableRefElem = (Element) child;
+                        Element childTableElem = (Element) getTables().get(childTableRefElem.getAttribute("name").toUpperCase());
+                        if (childTableElem != null)
+                        {
+                            NamedNodeMap attrs = childTableElem.getAttributes();
+                            for (int a = 0; a < attrs.getLength(); a++)
+                            {
+                                // copy all the "generated" names/values for each child table so searches don't have
+                                // to be performed later
+                                Node attr = attrs.item(a);
+                                String attrName = attr.getNodeName();
+                                if (attrName.startsWith("_gen"))
+                                    childTableRefElem.setAttribute(attrName, attr.getNodeValue());
+                            }
+
+                            Element connector = getParentConnectorColumn(childTableElem);
+                            if (connector != null)
+                            {
+                                attrs = connector.getAttributes();
+                                for (int a = 0; a < attrs.getLength(); a++)
+                                {
+                                    // copy all the "generated" names/values for each child column so searches don't have
+                                    // to be performed later
+                                    Node attr = attrs.item(a);
+                                    String attrName = attr.getNodeName();
+                                    if (attrName.startsWith("_gen"))
+                                        childTableRefElem.setAttribute("child-col-" + attrName, attr.getNodeValue());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public class DataAccessLayerGenerator
+    {
+        private String sparxSharedJavaDalStylesheetsRootDir;
+        private String destRoot;
+        private String dataTypesGeneratorStyleSheet;
+        private String tableTypesGeneratorStyleSheet;
+        private String tablesGeneratorStyleSheet;
+        private String domainsGeneratorStyleSheet;
+        private String listenersGeneratorStyleSheet;
+        private String rowsGeneratorStyleSheet;
+        private String rowsListGeneratorStyleSheet;
+        private String schemaGeneratorStyleSheet;
+        private String xsdGeneratorStyleSheet;
+
+        private int dataTypesGeneratedCount;
+        private int tableTypesGeneratedCount;
+        private int tablesGeneratedCount;
+
+        private List messages = new ArrayList();
+
+        public DataAccessLayerGenerator(String sparxSharedJavaDalStylesheetsRootDir)
+        {
+            this.sparxSharedJavaDalStylesheetsRootDir = sparxSharedJavaDalStylesheetsRootDir;
+
+            destRoot = getTagText(dalProperties.generatorElement, "destination-path", null);
+            if (destRoot != null)
+            {
+                File destFile = new File(destRoot);
+                if (!destFile.isAbsolute())
+                {
+                    File srcFile = getSourceDocument().getFile();
+                    destFile = new File(srcFile, destRoot);
+                    destRoot = destFile.getAbsolutePath();
+                }
+            }
+
+            NodeList children = dalProperties.generatorElement.getChildNodes();
+            for (int n = 0; n < children.getLength(); n++)
+            {
+                Node node = children.item(n);
+                if (node.getNodeType() != Node.ELEMENT_NODE)
+                    continue;
+
+                Element element = (Element) node;
+                String nodeName = element.getNodeName();
+
+                if (nodeName.equals("data-types"))
+                    dataTypesGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("table-types"))
+                    tableTypesGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("tables"))
+                    tablesGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("domains"))
+                    domainsGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("listeners"))
+                    listenersGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("rows"))
+                    rowsGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("row-lists"))
+                    rowsListGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("schema"))
+                    schemaGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+                else if (nodeName.equals("xsd"))
+                    xsdGeneratorStyleSheet = element.getAttribute(ATTRNAME_DAL_STYLESHEET);
+            }
+        }
+
+        public List getMessages()
+        {
+            return messages;
+        }
+
+        public String getDestRoot()
+        {
+            return destRoot;
+        }
+
+        public void setDestRoot(String destRoot)
+        {
+            this.destRoot = destRoot;
         }
 
         public String getDataTypesGeneratorStyleSheet()
@@ -2052,17 +2598,17 @@ public class SchemaDocument extends XmlSource
             return tablesGeneratedCount;
         }
 
-        public void createDataTypesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap, Map tableTypesClassMap) throws TransformerConfigurationException, TransformerException
+        public void createDataTypesClasses() throws TransformerConfigurationException, TransformerException
         {
             dataTypesGeneratedCount = 0;
-            String dataTypesPkgDirName = dataTypesPkg.replace('.', '/');
+            String dataTypesPkgDirName = dalProperties.dataTypesPkg.replace('.', '/');
             File dataTypesDir = new File(destRoot + "/" + dataTypesPkgDirName);
             dataTypesDir.mkdirs();
 
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer dataTypesTransformer = tFactory.newTransformer(new StreamSource(dataTypesGeneratorStyleSheet));
-            dataTypesTransformer.setParameter("package-name", dataTypesPkg);
-            Map dataTypes = schemaDoc.getDataTypes();
+            dataTypesTransformer.setParameter("package-name", dalProperties.dataTypesPkg);
+            Map dataTypes = getDataTypes();
 
             messages.add(new String("Generating: Datatypes"));
 
@@ -2070,112 +2616,18 @@ public class SchemaDocument extends XmlSource
             for (Iterator i = dataTypes.values().iterator(); i.hasNext();)
             {
                 Element dataTypeElem = (Element) i.next();
-                String dataTypeName = XmlSource.xmlTextToJavaIdentifier(dataTypeElem.getAttribute("name"), true) + "Column";
+                String dataTypeName = dataTypeElem.getAttribute("_gen-data-type-name");
+
+                // composites don't have classes, so we'll skip them
+                if(dataTypeName.length() == 0)
+                    continue DATATYPES;
+
                 String dataTypeFile = dataTypesDir.getAbsolutePath() + "/" + dataTypeName + ".java";
-                String javaTypeInitCap = null;
-/*
-                The code below stores the class name to be used when creating any elements of this data type in the
-                Java code.  This class name is different from the name used when creating the Java class for the
-                data type.  If one changes this value here but leaves the value for the "_gen-data-type-class-name"
-                attribute intact, theoretically one can allow for the creation of custom Java classes for each datatype.
-*/
-                // Check to see if a dal-class child node is available...
-                NodeList childNodes = dataTypeElem.getChildNodes();
-                boolean hasCustomDalClass = false;
-                boolean[] dalClassTaggedChildren = new boolean[childNodes.getLength()];
-                int childNum = 0;
-                int ruleNum = 0;
-
-                for (childNum = 0; null != childNodes && childNum < childNodes.getLength(); childNum++)
-                {
-                    Node child = childNodes.item(childNum);
-
-                    if (Node.ELEMENT_NODE != child.getNodeType())
-                        continue;
-
-                    if ("dal-class".equals(child.getNodeName()))
-                    {
-                        hasCustomDalClass = true;
-                        dalClassTaggedChildren[childNum] = true;
-                    }
-
-                    if ("validation".equals(child.getNodeName()))
-                    {
-                        NodeList ruleNodes = child.getChildNodes();
-
-                        for (int loop = 0; null != ruleNodes && loop < ruleNodes.getLength(); loop++)
-                        {
-                            Node rule = ruleNodes.item(loop);
-
-                            if (Node.ELEMENT_NODE != rule.getNodeType())
-                                continue;
-
-                            String ruleName = ((Element) rule).getAttribute("name");
-                            ruleName = "".equals(ruleName) ? "number-" : ruleName;
-                            String ruleConstantName = ruleName;
-                            String ruleIdentifierName = ruleName;
-                            ruleConstantName = XmlSource.xmlTextToJavaConstant(ruleConstantName);
-                            ruleIdentifierName = XmlSource.xmlTextToJavaIdentifier(ruleIdentifierName, true);
-
-                            String ruleValue = (new Integer(ruleNum++)).toString();
-
-                            ((Element) rule).setAttribute("_gen-java-constant-name", ruleConstantName);
-                            ((Element) rule).setAttribute("_gen-java-constant-value", ruleValue);
-                            ((Element) rule).setAttribute("_gen-rule-name", ruleName);
-                            ((Element) rule).setAttribute("_gen-java-identifier-name", ruleIdentifierName);
-                            ruleNum++;
-                        }
-                    }
-                }
-
-                // This is the default value of the dalClassName.  If no custom dal class nodes are found, this will
-                // be used.  The default value is generated using information in the datatype itself.
-                String dalClassName = dataTypesPkg + "." + dataTypeName;
-
-                if (hasCustomDalClass)
-                {
-                    // If a custom class is specified, go ahead and plug in the package attribute and the classname
-                    // into the dataTypesClassMap
-                    for (childNum = 0; childNum < childNodes.getLength(); childNum++)
-                    {
-                        if (dalClassTaggedChildren[childNum])
-                        {
-                            Element child = (Element) childNodes.item(childNum);
-                            // This means the last defined value of dal-class will be what takes effect.  Not an efficient
-                            // solution, but let's see where it takes us
-                            dalClassName = child.getAttribute("package") + "." + child.getFirstChild().getNodeValue();
-                        }
-                    }
-                }
-
-                dataTypesClassMap.put(dataTypeElem.getAttribute("name"), dalClassName);
-
-                NodeList children = dataTypeElem.getChildNodes();
-                for (int c = 0; c < children.getLength(); c++)
-                {
-                    Node child = children.item(c);
-                    if (child.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
-
-                    String childName = child.getNodeName();
-                    if ("composite".equals(childName))
-                    {
-                        // composites will already have been "expanded" by the SchemaDocument so we don't create any classes
-                        if (dataTypeElem.getElementsByTagName("composite").getLength() > 0)
-                            continue DATATYPES;
-                    }
-                    else if ("java-type".equals(childName))
-                        javaTypeInitCap = XmlSource.xmlTextToJavaIdentifier(child.getFirstChild().getNodeValue(), true);
-                }
+                String javaTypeInitCap = dataTypeElem.getAttribute("_gen-java-type-init-cap");
 
                 dataTypesTransformer.setParameter("data-type-name", dataTypeName);
                 if (javaTypeInitCap != null)
                     dataTypesTransformer.setParameter("java-type-init-cap", javaTypeInitCap);
-
-                dataTypeElem.setAttribute("_gen-data-type-name", dataTypeName);
-//                dataTypeElem.setAttribute("_gen-data-type-class-name", dataTypesPkg + "." + dataTypeName);
-                dataTypeElem.setAttribute("_gen-data-type-class-name", (String) dataTypesClassMap.get(dataTypeElem.getAttribute("name")));
-                dataTypeElem.setAttribute("_gen-java-type-init-cap", javaTypeInitCap);
 
                 messages.add(new String("Applying stylesheet '" + dataTypeFile + "' for dataType '" + dataTypeName + "'"));
                 dataTypesTransformer.transform
@@ -2186,328 +2638,83 @@ public class SchemaDocument extends XmlSource
             }
         }
 
-        public void createTableTypesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap, Map tableTypesClassMap) throws TransformerConfigurationException, TransformerException
+        public void createTableTypesClasses() throws TransformerConfigurationException, TransformerException
         {
-            String tableTypesPkgDirName = tableTypesPkg.replace('.', '/');
+            String tableTypesPkgDirName = dalProperties.tableTypesPkg.replace('.', '/');
             File tableTypesDir = new File(destRoot + "/" + tableTypesPkgDirName);
             tableTypesDir.mkdirs();
 
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer tableTypesTransformer = tFactory.newTransformer(new StreamSource(tableTypesGeneratorStyleSheet));
 
-            Map tableTypes = schemaDoc.getTableTypes();
+            Map tableTypes = getTableTypes();
 
             messages.add(new String("Generating: Tabletypes"));
 
             for (Iterator i = tableTypes.values().iterator(); i.hasNext();)
             {
                 Element tableTypeElem = (Element) i.next();
-                String tableTypeClassName = XmlSource.xmlTextToJavaIdentifier(tableTypeElem.getAttribute("name"), true);
+                String tableTypeClassName = tableTypeElem.getAttribute("_gen_table_type_class_name");
                 String tableTypeFile = tableTypesDir.getAbsolutePath() + "/" + tableTypeClassName + ".java";
 
-/*
-                The code below stores the class name to be used when creating any elements of this data type in the
-                Java code.  This class name is different from the name used when creating the Java class for the
-                data type.  If one changes this value here but leaves the value for the "_gen-data-type-class-name"
-                attribute intact, theoretically one can allow for the creation of custom Java classes for each datatype.
-*/
-                // Check to see if a dal-class child node is available...
-                NodeList dalClassChildren = tableTypeElem.getChildNodes();
-                boolean hasCustomDalClass = false;
-                boolean[] dalClassTaggedChildren = new boolean[dalClassChildren.getLength()];
-                int childNum = 0;
-
-
-                for (childNum = 0; null != dalClassChildren && childNum < dalClassChildren.getLength(); childNum++)
-                {
-                    Node child = dalClassChildren.item(childNum);
-
-                    if (Node.ELEMENT_NODE == child.getNodeType() && "dal-class".equals(child.getNodeName()))
-                    {
-                        hasCustomDalClass = true;
-                        dalClassTaggedChildren[childNum] = true;
-                    }
-                }
-
-                // This is the default value of the dalClassName.  If no custom dal class nodes are found, this will
-                // be used.  The default value is generated using information in the datatype itself.
-                String dalClassName = tableTypesPkg + "." + tableTypeClassName;
-
-                if (hasCustomDalClass)
-                {
-                    // If a custom class is specified, go ahead and plug in the package attribute and the classname
-                    // into the dataTypesClassMap
-                    for (childNum = 0; childNum < dalClassChildren.getLength(); childNum++)
-                    {
-                        if (dalClassTaggedChildren[childNum])
-                        {
-                            Element child = (Element) dalClassChildren.item(childNum);
-                            // This means the last defined value of dal-class will be what takes effect.  Not an efficient
-                            // solution, but let's see where it takes us
-                            dalClassName = child.getAttribute("package") + "." + child.getFirstChild().getNodeValue();
-                        }
-                    }
-                }
-
-                tableTypesClassMap.put(tableTypeElem.getAttribute("name"), dalClassName);
-
-                NodeList children = tableTypeElem.getChildNodes();
-                for (int c = 0; c < children.getLength(); c++)
-                {
-                    Node child = children.item(c);
-                    if (child.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
-
-                    String childName = child.getNodeName();
-                    if ("column".equals(childName))
-                    {
-                        Element columnElem = (Element) child;
-                        columnElem.setAttribute("_gen-member-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), false));
-                        columnElem.setAttribute("_gen-method-name", XmlSource.xmlTextToJavaIdentifier(columnElem.getAttribute("name"), true));
-                        columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
-
-                        NodeList jtnl = columnElem.getElementsByTagName("java-type");
-                        if (jtnl.getLength() > 0)
-                            columnElem.setAttribute("_gen-java-type-init-cap", XmlSource.xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
-                    }
-                }
-
                 messages.add(new String("Applying stylesheet '" + tableTypeFile + "' for tableType '" + tableTypeClassName + "'"));
-                tableTypesTransformer.setParameter("package-name", tableTypesPkg);
+
+                tableTypesTransformer.setParameter("package-name", dalProperties.tableTypesPkg);
                 tableTypesTransformer.setParameter("table-type-name", tableTypeClassName);
-                tableTypesTransformer.setParameter("table-type-class-name", tableTypesPkg + "." + tableTypeClassName);
+                tableTypesTransformer.setParameter("table-type-class-name", dalProperties.tableTypesPkg + "." + tableTypeClassName);
                 tableTypesTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableTypeElem), new javax.xml.transform.stream.StreamResult(tableTypeFile));
                 tableTypesGeneratedCount++;
             }
         }
 
-        public void createTablesClasses(SchemaDocument schemaDoc, Map dataTypesClassMap, Map tableTypesClassMap, Map domainClassMap, Map rowClassMap, Map rowsClassMap, Map tableClassMap) throws TransformerConfigurationException, TransformerException
+        public void createTablesClasses() throws TransformerConfigurationException, TransformerException
         {
-            String tablesPkgDirName = tablesPkg.replace('.', '/');
+            String tablesPkgDirName = dalProperties.tablesPkg.replace('.', '/');
             File tablesDir = new File(destRoot + "/" + tablesPkgDirName);
             tablesDir.mkdirs();
 
-            String domainsPkgDirName = domainsPkg.replace('.', '/');
+            String domainsPkgDirName = dalProperties.domainsPkg.replace('.', '/');
             File domainsDir = new File(destRoot + "/" + domainsPkgDirName);
             domainsDir.mkdirs();
 
-            String listenersPkgDirName = listenersPkg.replace('.', '/');
+            String listenersPkgDirName = dalProperties.listenersPkg.replace('.', '/');
             File listenersDir = new File(destRoot + "/" + listenersPkgDirName);
             listenersDir.mkdirs();
 
-            String rowsPkgDirName = rowsPkg.replace('.', '/');
+            String rowsPkgDirName = dalProperties.rowsPkg.replace('.', '/');
             File rowsDir = new File(destRoot + "/" + rowsPkgDirName);
             rowsDir.mkdirs();
 
-            String rowsListPkgDirName = rowsListPkg.replace('.', '/');
+            String rowsListPkgDirName = dalProperties.rowsListPkg.replace('.', '/');
             File rowsListDir = new File(destRoot + "/" + rowsListPkgDirName);
             rowsListDir.mkdirs();
 
-            String completeSchemaClassName = schemaPkg + "." + schemaClassName;
-
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer tablesTransformer = tFactory.newTransformer(new StreamSource(tablesGeneratorStyleSheet));
-            tablesTransformer.setParameter("schema-class-name", completeSchemaClassName);
-            tablesTransformer.setParameter("package-name", tablesPkg);
+            tablesTransformer.setParameter("schema-class-name", dalProperties.schemaQualifiedClassName);
+            tablesTransformer.setParameter("package-name", dalProperties.tablesPkg);
             Transformer domainsTransformer = tFactory.newTransformer(new StreamSource(domainsGeneratorStyleSheet));
-            domainsTransformer.setParameter("schema-class-name", completeSchemaClassName);
-            domainsTransformer.setParameter("package-name", domainsPkg);
+            domainsTransformer.setParameter("schema-class-name", dalProperties.schemaQualifiedClassName);
+            domainsTransformer.setParameter("package-name", dalProperties.domainsPkg);
             Transformer listenersTransformer = tFactory.newTransformer(new StreamSource(listenersGeneratorStyleSheet));
-            listenersTransformer.setParameter("schema-class-name", completeSchemaClassName);
-            listenersTransformer.setParameter("package-name", listenersPkg);
+            listenersTransformer.setParameter("schema-class-name", dalProperties.schemaQualifiedClassName);
+            listenersTransformer.setParameter("package-name", dalProperties.listenersPkg);
             Transformer rowsTransformer = tFactory.newTransformer(new StreamSource(rowsGeneratorStyleSheet));
-            rowsTransformer.setParameter("schema-class-name", completeSchemaClassName);
-            rowsTransformer.setParameter("package-name", rowsPkg);
+            rowsTransformer.setParameter("schema-class-name", dalProperties.schemaQualifiedClassName);
+            rowsTransformer.setParameter("package-name", dalProperties.rowsPkg);
             Transformer rowsListTransformer = tFactory.newTransformer(new StreamSource(rowsListGeneratorStyleSheet));
-            rowsListTransformer.setParameter("schema-class-name", completeSchemaClassName);
-            rowsListTransformer.setParameter("package-name", rowsListPkg);
+            rowsListTransformer.setParameter("schema-class-name", dalProperties.schemaQualifiedClassName);
+            rowsListTransformer.setParameter("package-name", dalProperties.rowsListPkg);
 
             messages.add(new String("Generating: Tables, Rows, RowLists and Domains"));
 
-            Map tables = schemaDoc.getTables();
-            for (Iterator i = tables.values().iterator(); i.hasNext();)
-            {
-                Element tableElem = (Element) i.next();
-
-                String tableName = tableElem.getAttribute("name");
-                String tableNameAsJavaIdentfier = XmlSource.xmlTextToJavaIdentifier(tableName, true);
-                String tableClassName = tableNameAsJavaIdentfier + "Table";
-                String domainName = tableNameAsJavaIdentfier;
-                String listenerName = tableNameAsJavaIdentfier + "Listener";
-                String rowName = tableNameAsJavaIdentfier + "Row";
-                String rowListName = tableNameAsJavaIdentfier + "Rows";
-                StringBuffer tableTypesList = new StringBuffer();
-
-                /* Add default entries to the domain, row, rows and table Class Maps */
-                domainClassMap.put(tableName, domainsPkg + "." + domainName);
-                rowClassMap.put(tableName, rowsPkg + "." + rowName);
-                rowsClassMap.put(tableName, rowsListPkg + "." + rowListName);
-                tableClassMap.put(tableName, tablesPkg + "." + tableClassName);
-
-                messages.add(new String("Table: " + tableName));
-
-                NodeList children = tableElem.getChildNodes();
-                for (int c = 0; c < children.getLength(); c++)
-                {
-                    Node child = children.item(c);
-                    if (child.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
-
-                    String childName = child.getNodeName();
-                    if ("column".equals(childName))
-                    {
-                        Element columnElem = (Element) child;
-                        String columnName = columnElem.getAttribute("name");
-                        String dalColumnMemberName = columnElem.getAttribute("dal-member-name");
-                        String dalColumnMethodName = columnElem.getAttribute("dal-method-name");
-                        String dalColumnConstantName = columnElem.getAttribute("dal-constant-name");
-
-                        // if we are given a member name, use it otherwise generate it and check to make sure it's not a reserved word
-                        String columnMemberName = dalColumnMemberName.length() > 0 ? dalColumnMemberName : xmlTextToJavaIdentifier(columnName, false);
-                        if (dalColumnMemberName.length() == 0 && (javaReservedWords.contains(columnMemberName) || javaReservedTerms.contains(columnMemberName)))
-                            columnMemberName = "_" + columnMemberName;
-
-                        // if we are given a method name, use it otherwise generate it and check to make sure it's not called "class" 'cause we shouldn't generate "getClass()"
-                        String columnMethodName = dalColumnMethodName.length() > 0 ? dalColumnMethodName : xmlTextToJavaIdentifier(columnName, true);
-                        if (dalColumnMethodName.length() == 0 && "class".equals(columnName))
-                            columnMethodName = "_Class";
-
-                        columnElem.setAttribute("_gen-member-name", columnMemberName);
-                        columnElem.setAttribute("_gen-method-name", columnMethodName);
-                        columnElem.setAttribute("_gen-constant-name", dalColumnConstantName.length() > 0 ? dalColumnConstantName : columnName.toUpperCase());
-                        columnElem.setAttribute("_gen-node-name", xmlTextToNodeName(columnName));
-                        columnElem.setAttribute("_gen-data-type-class", (String) dataTypesClassMap.get(columnElem.getAttribute("type")));
-
-                        NodeList jtnl = columnElem.getElementsByTagName("java-type");
-                        if (jtnl.getLength() > 0)
-                            columnElem.setAttribute("_gen-java-type-init-cap", xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
-                    }
-                    else if ("extends".equals(childName))
-                    {
-                        if (tableTypesList.length() > 0)
-                            tableTypesList.append(", ");
-                        tableTypesList.append((String) tableTypesClassMap.get(child.getFirstChild().getNodeValue()));
-                    }
-                    else if ("dal-domain-class".equals(childName))
-                    {
-                        String dalDomainClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
-                        // This overrides the default stored above
-                        domainClassMap.put(tableName, dalDomainClassName);
-                        messages.add(new String("Custom Domain Class: " + dalDomainClassName));
-                    }
-                    else if ("dal-row-class".equals(childName))
-                    {
-                        String dalRowClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
-                        // This overrides the default stored above
-                        rowClassMap.put(tableName, dalRowClassName);
-                        messages.add(new String("Custom Row Class: " + dalRowClassName));
-                    }
-                    else if ("dal-rows-class".equals(childName))
-                    {
-                        String dalRowsClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
-                        // This overrides the default stored above
-                        rowsClassMap.put(tableName, dalRowsClassName);
-                        messages.add(new String("Custom Rows Class: " + dalRowsClassName));
-                    }
-                    else if ("dal-table-class".equals(childName))
-                    {
-                        String dalTableClassName = ((Element) child).getAttribute("package") + "." + child.getFirstChild().getNodeValue();
-                        // This overrides the default stored above
-                        tableClassMap.put(tableName, dalTableClassName);
-                        messages.add(new String("Custom Table Class: " + dalTableClassName));
-                    }
-                }
-
-                if (tableTypesList.length() > 0)
-                    tableElem.setAttribute("_implements-table-types", tableTypesList.toString());
-                tableElem.setAttribute("_gen-domain-name", domainName);
-                tableElem.setAttribute("_gen-domain-class-name", (String) domainClassMap.get(tableName));
-                tableElem.setAttribute("_gen-domain-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
-                tableElem.setAttribute("_gen-domain-method-name", tableNameAsJavaIdentfier);
-                tableElem.setAttribute("_gen-listener-name", listenerName);
-                tableElem.setAttribute("_gen-listener-class-name", listenersPkg + "." + listenerName);
-                tableElem.setAttribute("_gen-listener-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
-                tableElem.setAttribute("_gen-listener-method-name", tableNameAsJavaIdentfier);
-                tableElem.setAttribute("_gen-table-name", tableClassName);
-                tableElem.setAttribute("_gen-table-class-name", (String) tableClassMap.get(tableName));
-                tableElem.setAttribute("_gen-table-member-name", XmlSource.xmlTextToJavaIdentifier(tableName, false));
-                tableElem.setAttribute("_gen-table-method-name", tableNameAsJavaIdentfier);
-                tableElem.setAttribute("_gen-row-name", rowName);
-                tableElem.setAttribute("_gen-row-class-name", (String) rowClassMap.get(tableName));
-                tableElem.setAttribute("_gen-rows-name", rowListName);
-                tableElem.setAttribute("_gen-rows-member-name", xmlTextToJavaIdentifier(rowListName, false));
-                tableElem.setAttribute("_gen-rows-class-name", (String) rowsClassMap.get(tableName));
-
-                if (!(tablesPkg + "." + tableClassName).equals(tableClassMap.get(tableName)))
-                    tableElem.setAttribute("_gen-table-orig-class-name", tablesPkg + "." + tableClassName);
-            }
+            Map tables = getTables();
 
             for (Iterator i = tables.values().iterator(); i.hasNext();)
             {
                 Element tableElem = (Element) i.next();
                 String tableName = tableElem.getAttribute("name");
-
-                NodeList children = tableElem.getChildNodes();
-                for (int c = 0; c < children.getLength(); c++)
-                {
-                    Node child = children.item(c);
-                    if (child.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
-
-                    String childName = child.getNodeName();
-                    if ("column".equals(childName))
-                    {
-                        Element columnElem = (Element) child;
-                        String refTableName = columnElem.getAttribute("reftbl");
-                        if (refTableName.length() > 0l)
-                        {
-                            Element refTableElem = (Element) schemaDoc.getTables().get(refTableName.toUpperCase());
-                            if (refTableElem != null)
-                            {
-                                if ("yes".equals(refTableElem.getAttribute("is-enum")))
-                                    columnElem.setAttribute("_gen-ref-table-is-enum", "yes");
-                                columnElem.setAttribute("_gen-ref-table-name", refTableElem.getAttribute("_gen-table-name"));
-                                columnElem.setAttribute("_gen-ref-table-class-name", refTableElem.getAttribute("_gen-table-class-name"));
-                                columnElem.setAttribute("_gen-ref-table-member-name", refTableElem.getAttribute("_gen-table-member-name"));
-                                columnElem.setAttribute("_gen-ref-table-method-name", refTableElem.getAttribute("_gen-table-method-name"));
-                            }
-                        }
-                    }
-                    else if ("child-table".equals(childName))
-                    {
-                        Element childTableRefElem = (Element) child;
-                        Element childTableElem = (Element) schemaDoc.getTables().get(childTableRefElem.getAttribute("name").toUpperCase());
-                        if (childTableElem != null)
-                        {
-                            NamedNodeMap attrs = childTableElem.getAttributes();
-                            for (int a = 0; a < attrs.getLength(); a++)
-                            {
-                                // copy all the "generated" names/values for each child table so searches don't have
-                                // to be performed later
-                                Node attr = attrs.item(a);
-                                String attrName = attr.getNodeName();
-                                if (attrName.startsWith("_gen"))
-                                    childTableRefElem.setAttribute(attrName, attr.getNodeValue());
-                            }
-
-                            Element connector = schemaDoc.getParentConnectorColumn(childTableElem);
-                            if (connector != null)
-                            {
-                                attrs = connector.getAttributes();
-                                for (int a = 0; a < attrs.getLength(); a++)
-                                {
-                                    // copy all the "generated" names/values for each child column so searches don't have
-                                    // to be performed later
-                                    Node attr = attrs.item(a);
-                                    String attrName = attr.getNodeName();
-                                    if (attrName.startsWith("_gen"))
-                                        childTableRefElem.setAttribute("child-col-" + attrName, attr.getNodeValue());
-                                }
-                            }
-                        }
-                    }
-                }
 
                 String tableClassName = tableElem.getAttribute("_gen-table-name");
                 String domainName = tableElem.getAttribute("_gen-domain-name");
@@ -2529,14 +2736,13 @@ public class SchemaDocument extends XmlSource
 
                 messages.add(new String("Applying stylesheet '" + domainFile + "' for domain '" + domainName + "'"));
                 domainsTransformer.setParameter("domain-name", domainName);
-                domainsTransformer.setParameter("domain-class-name", domainClassMap.get(tableName));
-//                domainsTransformer.setParameter("domain-class-name", domainsPkg + "." + domainName);
+                domainsTransformer.setParameter("domain-class-name", dalProperties.domainClassMap.get(tableName));
                 domainsTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(domainFile));
 
                 messages.add(new String("Applying stylesheet '" + listenerFile + "' for listener '" + listenerName + "'"));
                 listenersTransformer.setParameter("listener-name", listenerName);
-                listenersTransformer.setParameter("listener-class-name", listenersPkg + "." + listenerName);
+                listenersTransformer.setParameter("listener-class-name", dalProperties.listenersPkg + "." + listenerName);
                 listenersTransformer.transform
                         (new javax.xml.transform.dom.DOMSource(tableElem), new javax.xml.transform.stream.StreamResult(listenerFile));
 
@@ -2553,45 +2759,66 @@ public class SchemaDocument extends XmlSource
             }
         }
 
-        public void createSchemaClass(SchemaDocument schemaDoc) throws TransformerConfigurationException, TransformerException
+        public void createSchemaClass() throws TransformerConfigurationException, TransformerException
         {
-            String schemaPkgDirName = schemaPkg.replace('.', '/');
+            String schemaPkgDirName = dalProperties.schemaPkg.replace('.', '/');
             File schemaDir = new File(destRoot + "/" + schemaPkgDirName);
             schemaDir.mkdirs();
 
             TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer schemaTransformer = tFactory.newTransformer(new StreamSource(schemaGeneratorStyleSheet));
-            schemaTransformer.setParameter("package-name", schemaPkg);
-            schemaTransformer.setParameter("class-name", schemaClassName);
-            String schemaFile = schemaDir.getAbsolutePath() + "/" + schemaClassName + ".java";
+            schemaTransformer.setParameter("package-name", dalProperties.schemaPkg);
+            schemaTransformer.setParameter("class-name", dalProperties.schemaClassName);
+            String schemaFile = schemaDir.getAbsolutePath() + "/" + dalProperties.schemaClassName + ".java";
 
             messages.add(new String("Generating '" + schemaFile + "'"));
             schemaTransformer.transform
-                    (new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()), new javax.xml.transform.stream.StreamResult(schemaFile));
+                    (new javax.xml.transform.dom.DOMSource(getDocument()), new javax.xml.transform.stream.StreamResult(schemaFile));
 
             Transformer xsdTransformer = tFactory.newTransformer(new StreamSource(xsdGeneratorStyleSheet));
-            String xsdFile = schemaDir.getAbsolutePath() + "/" + schemaClassName + ".xsd";
+            String xsdFile = schemaDir.getAbsolutePath() + "/" + dalProperties.schemaClassName + ".xsd";
             messages.add(new String("Generating '" + xsdFile + "'"));
             xsdTransformer.transform
-                    (new javax.xml.transform.dom.DOMSource(schemaDoc.getDocument()), new javax.xml.transform.stream.StreamResult(xsdFile));
+                    (new javax.xml.transform.dom.DOMSource(getDocument()), new javax.xml.transform.stream.StreamResult(xsdFile));
         }
 
-        public void generate(SchemaDocument schemaDoc) throws TransformerConfigurationException, TransformerException
+        public String fixupFileName(String fileName)
         {
-            Map dataTypesClassMap = new HashMap();
-            Map tableTypesClassMap = new HashMap();
-            Map domainClassMap = new HashMap();
-            Map rowClassMap = new HashMap();
-            Map rowsClassMap = new HashMap();
-            Map tableClassMap = new HashMap();
-            new File(destRoot).mkdirs();
+            final String replace = "${sparx.shared.dal.stylesheet.root.dir}";
+            if (fileName.startsWith(replace))
+                return sparxSharedJavaDalStylesheetsRootDir + fileName.substring(replace.length());
+            else
+            {
+                File file = new File(fileName);
+                if (!file.isAbsolute())
+                    file = new File(getSourceDocument().getFile(), fileName);
+                return file.getAbsolutePath();
+            }
+        }
 
+        public void fixupFileNames()
+        {
+            dataTypesGeneratorStyleSheet = fixupFileName(dataTypesGeneratorStyleSheet);
+            tableTypesGeneratorStyleSheet = fixupFileName(tableTypesGeneratorStyleSheet);
+            tablesGeneratorStyleSheet = fixupFileName(tablesGeneratorStyleSheet);
+            domainsGeneratorStyleSheet = fixupFileName(domainsGeneratorStyleSheet);
+            listenersGeneratorStyleSheet = fixupFileName(listenersGeneratorStyleSheet);
+            rowsGeneratorStyleSheet = fixupFileName(rowsGeneratorStyleSheet);
+            rowsListGeneratorStyleSheet = fixupFileName(rowsListGeneratorStyleSheet);
+            schemaGeneratorStyleSheet = fixupFileName(schemaGeneratorStyleSheet);
+            xsdGeneratorStyleSheet = fixupFileName(xsdGeneratorStyleSheet);
+        }
+
+        public void generate() throws TransformerConfigurationException, TransformerException
+        {
+            fixupFileNames();
+            new File(destRoot).mkdirs();
             messages.clear();
 
-            createDataTypesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
-            createTableTypesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap);
-            createTablesClasses(schemaDoc, dataTypesClassMap, tableTypesClassMap, domainClassMap, rowClassMap, rowsClassMap, tableClassMap);
-            createSchemaClass(schemaDoc);
+            createDataTypesClasses();
+            createTableTypesClasses();
+            createTablesClasses();
+            createSchemaClass();
         }
     }
 
