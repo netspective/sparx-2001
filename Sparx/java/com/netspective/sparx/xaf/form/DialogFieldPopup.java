@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogFieldPopup.java,v 1.4 2002-11-27 16:49:49 aye.thu Exp $
+ * $Id: DialogFieldPopup.java,v 1.5 2002-12-31 19:38:55 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -72,6 +72,11 @@ public class DialogFieldPopup
     private String[] fillFields = null;
     private boolean allowMulti = false;
     private boolean closeAfter = true;
+
+    protected DialogFieldPopup()
+    {
+
+    }
 
     /**
      * Construct <code>DialogFieldPopup</code>
