@@ -2,8 +2,12 @@ package com.xaf.db;
 
 import java.io.*;
 import java.sql.*;
+import java.util.*;
+
 import javax.sql.*;
 import javax.naming.*;
+
+import org.w3c.dom.*;
 
 /**
  * The reference DatabaseContext implementation for a servlet or JSP using XAF
@@ -69,4 +73,33 @@ public class BasicDatabaseContext implements DatabaseContext
 
 		return RESULTSET_NOT_SCROLLABLE;
 	}
+
+    public void createCatalog(Element parent) throws NamingException
+    {
+        Document doc = parent.getOwnerDocument();
+
+		Context env = (Context) new InitialContext().lookup("java:comp/env/jdbc");
+		for(NamingEnumeration e = env.list(""); e.hasMore(); )
+		{
+			Element propertyElem = doc.createElement("property");
+
+			NameClassPair entry = (NameClassPair) e.nextElement();
+			DatabaseContextFactory.addText(doc, propertyElem, "name", "jdbc/" + entry.getName());
+
+			try
+			{
+				DataSource source = (DataSource) env.lookup(entry.getName());
+				DatabaseMetaData dbmd = source.getConnection().getMetaData();
+				DatabaseContextFactory.addText(doc, propertyElem, "value", dbmd.getDriverName());
+				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Version " + dbmd.getDriverVersion());
+				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "URL: " + dbmd.getURL());
+				DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "User: " + dbmd.getUserName());
+			}
+			catch(Exception ex)
+			{
+				DatabaseContextFactory.addText(doc, propertyElem, "value", ex.toString());
+			}
+			parent.appendChild(propertyElem);
+		}
+    }
 }

@@ -1,31 +1,20 @@
 package com.xaf.db;
 
-import com.codestudio.sql.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.sql.*;
+import java.util.*;
+
 import javax.sql.*;
 import javax.naming.*;
-/**
- * Title:        The eXtensible Application Framework
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Netspective Communications Corporation
- * @author
- * @version 1.0
- */
+
+import org.w3c.dom.*;
 
 public class PoolmanDatabaseContext implements DatabaseContext
 {
     static private boolean forceNonScrollableRS;
-	static private Context env;
-
 	private String jndiKey;
-	private Connection connection;
-
-    public PoolmanDatabaseContext(Connection conn)
-    {
-        connection = conn;
-    }
+    private Connection connection;
 
     public PoolmanDatabaseContext(String aJndiKey)
 	{
@@ -50,9 +39,9 @@ public class PoolmanDatabaseContext implements DatabaseContext
         {
             throw new SQLException("Poolman ClassNotFoundException");
         }
-	    Connection con = DriverManager.getConnection("jdbc:poolman://" + dataSourceId);
+	    connection = DriverManager.getConnection("jdbc:poolman://" + dataSourceId);
 
-		return con;
+		return connection;
 	}
 
     static public void setNonScrollableResultSet(boolean force) { forceNonScrollableRS = force; }
@@ -74,4 +63,87 @@ public class PoolmanDatabaseContext implements DatabaseContext
 
 		return RESULTSET_NOT_SCROLLABLE;
 	}
+
+    /**
+     * Creates a catalog of all the data sources available. Because Poolman is
+	 * an optional DatabaseContext we can not simply "import" all the com.codestudio.*
+	 * files. Instead, we use java reflection to get the methods and classes.
+     *
+     * @param parent
+     * @returns
+     */
+    public void createCatalog(Element parent) throws NamingException
+    {
+        Document doc = parent.getOwnerDocument();
+
+        Class sqlutilClass = null;
+		Class jdbcPoolClass = null;
+		Method getAllPoolNamesMethod = null;
+		Method getPoolMethod = null;
+		Method getPoolDataSourceMethod = null;
+        Object sqlUtil = null;
+
+        try
+        {
+            sqlutilClass = Class.forName("com.codestudio.util.SQLUtil");
+			jdbcPoolClass = Class.forName("com.codestudio.util.JDBCPool");
+
+			getAllPoolNamesMethod = sqlutilClass.getMethod("getAllPoolnames", null);
+			getPoolMethod = sqlutilClass.getMethod("getPool", new Class[] { String.class });
+			getPoolDataSourceMethod = jdbcPoolClass.getMethod("getDataSource", null);
+
+            sqlUtil = sqlutilClass.newInstance();
+        }
+		catch(ClassNotFoundException e)
+		{
+			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+		}
+		catch(NoSuchMethodException e)
+		{
+			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+		}
+		catch(InstantiationException e)
+		{
+			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+		}
+		catch(IllegalAccessException e)
+		{
+			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+		}
+
+		try
+		{
+			Enumeration poolList = (Enumeration) getAllPoolNamesMethod.invoke(sqlUtil, null);
+			while (poolList.hasMoreElements())
+			{
+				Element propertyElem = doc.createElement("property");
+				String entry = (String) poolList.nextElement();
+				DatabaseContextFactory.addText(doc, propertyElem, "name", "jdbc/" + entry);
+
+				try
+				{
+					Object pool = getPoolMethod.invoke(sqlUtil, new Object[] { entry });
+					DataSource source = (DataSource) getPoolDataSourceMethod.invoke(pool, null);
+					DatabaseMetaData dbmd = source.getConnection().getMetaData();
+					DatabaseContextFactory.addText(doc, propertyElem, "value", dbmd.getDriverName());
+					DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "Version " + dbmd.getDriverVersion());
+					DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "URL: " + dbmd.getURL());
+					DatabaseContextFactory.addText(doc, propertyElem, "value-detail", "User: " + dbmd.getUserName());
+				}
+				catch (Exception ex)
+				{
+					DatabaseContextFactory.addText(doc, propertyElem, "value", ex.toString());
+				}
+				parent.appendChild(propertyElem);
+			}
+		}
+		catch(InvocationTargetException e)
+		{
+			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+		}
+		catch(IllegalAccessException e)
+		{
+			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+		}
+    }
 }

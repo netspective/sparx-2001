@@ -13,6 +13,7 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 import com.xaf.ace.*;
+import com.xaf.db.*;
 import com.xaf.form.*;
 import com.xaf.page.*;
 import com.xaf.skin.*;
@@ -41,37 +42,12 @@ public class DataSourcesPage extends AceServletPage
 		Element rootElem = doc.createElement("xaf");
 		doc.appendChild(rootElem);
 
-		Element propertiesElem = doc.createElement("properties");
-		rootElem.appendChild(propertiesElem);
-
 		try
 		{
-			Context env = (Context) new InitialContext().lookup("java:comp/env/jdbc");
-			for(NamingEnumeration e = env.list(""); e.hasMore(); )
-			{
-				Element propertyElem = doc.createElement("property");
-
-				NameClassPair entry = (NameClassPair) e.nextElement();
-				addText(propertyElem, "name", "jdbc/" + entry.getName());
-
-				try
-				{
-					DataSource source = (DataSource) env.lookup(entry.getName());
-					DatabaseMetaData dbmd = source.getConnection().getMetaData();
-					addText(propertyElem, "value", dbmd.getDriverName());
-					addText(propertyElem, "value-detail", "Version " + dbmd.getDriverVersion());
-					addText(propertyElem, "value-detail", "URL: " + dbmd.getURL());
-					addText(propertyElem, "value-detail", "User: " + dbmd.getUserName());
-				}
-				catch(Exception ex)
-				{
-					addText(propertyElem, "value", ex.toString());
-				}
-				propertiesElem.appendChild(propertyElem);
-			}
-			transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
+			DatabaseContextFactory.createCatalog(context, pc.getRequest(), rootElem);
+	    	transform(pc, doc, ACE_CONFIG_ITEM_PROPBROWSERXSL);
 		}
-		catch(Exception e)
+		catch(NamingException e)
 		{
 			PrintWriter out = pc.getResponse().getWriter();
 			out.write(e.toString());

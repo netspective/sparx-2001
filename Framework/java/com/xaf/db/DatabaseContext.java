@@ -2,6 +2,7 @@ package com.xaf.db;
 
 import java.sql.*;
 import javax.naming.*;
+import org.w3c.dom.*;
 
 /**
  * Provides an interface for obtaining a default or named JDBC Connection object;
@@ -19,4 +20,5 @@ public interface DatabaseContext
 	public Connection getConnection(String dataSourceId) throws NamingException, SQLException;
 
 	public int getScrollableResultSetType() throws NamingException, SQLException;
+    public void createCatalog(Element parent) throws NamingException;
 }

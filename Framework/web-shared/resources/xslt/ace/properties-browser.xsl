@@ -26,6 +26,14 @@
 	<tr class="heading_rule">
 		<td height="1" ></td>
 	</tr>
+	<xsl:if test="@class">
+		<tr class="heading_detail">
+			<td><xsl:value-of select="@class"/></td>
+		</tr>
+		<tr class="heading_rule">
+			<td height="1" ></td>
+		</tr>
+	</xsl:if>
 	</table>
 	<br/>
 	<table cellspacing="0" cellpadding="2">
