@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: ComponentCommandFactory.java,v 1.4 2003-01-20 05:33:06 roque.hernandez Exp $
+ * $Id: ComponentCommandFactory.java,v 1.5 2003-02-03 00:42:26 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.html;
 
 import com.netspective.sparx.xaf.html.command.*;
 import com.netspective.sparx.util.value.ServletValueContext;
+import com.netspective.sparx.util.value.ValueContext;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -171,6 +172,25 @@ public class ComponentCommandFactory
         StatementComponentCommand command = new StatementComponentCommand();
         command.setCommand(params);
         return command;
+    }
+
+    static public boolean containsDialogCommand(ValueContext vc)
+    {
+        String pageCmdReqParamValue = vc.getRequest().getParameter(ComponentCommand.PAGE_COMMAND_REQUEST_PARAM_NAME);
+        if(pageCmdReqParamValue == null)
+            return false;
+
+        String pageCmd = "unknown";
+        String pageCmdParam = null;
+        int cmdDelimPos = pageCmdReqParamValue.indexOf(CMDNAME_AND_PARAM_DELIM);
+        if(cmdDelimPos != -1)
+        {
+            pageCmd = pageCmdReqParamValue.substring(0, cmdDelimPos);
+            pageCmdParam = pageCmdReqParamValue.substring(cmdDelimPos+1);
+        }
+
+        ComponentCommand command = ComponentCommandFactory.getCommand(pageCmd, pageCmdParam);
+        return command instanceof DialogComponentCommand;
     }
 
     public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp) throws ComponentCommandException, IOException
