@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectChoicesList.java,v 1.2 2002-12-26 19:34:31 shahid.shah Exp $
+ * $Id: SelectChoicesList.java,v 1.3 2002-12-31 19:45:30 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -59,13 +59,37 @@ package com.netspective.sparx.xaf.form.field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.io.Writer;
+import java.io.IOException;
 
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.report.ReportContext;
+import com.netspective.sparx.xaf.report.Report;
+import com.netspective.sparx.xaf.report.StandardReport;
+import com.netspective.sparx.xaf.report.ReportColumn;
+import com.netspective.sparx.xaf.report.ReportSkin;
+import com.netspective.sparx.xaf.report.column.GeneralColumn;
+import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.util.value.ValueContext;
 
 public class SelectChoicesList
 {
-    ArrayList valueList = new ArrayList();
-    HashMap valueMap = new HashMap();
+    static public Report selectChoicesReport = new StandardReport();
+
+    static
+    {
+        ReportColumn[] columns = new ReportColumn[]
+        {
+            new GeneralColumn(0, "ID"),
+            new GeneralColumn(1, "Caption")
+        };
+        selectChoicesReport.initialize(columns, null);
+        selectChoicesReport.setFlag(StandardReport.REPORTFLAG_HIDE_HEADING);
+    }
+
+    private ArrayList valueList = new ArrayList();
+    private HashMap valueMap = new HashMap();
+    private SelectChoice selectedChoice;
 
     public void add(SelectChoice choice)
     {
@@ -73,10 +97,16 @@ public class SelectChoicesList
         valueMap.put(choice.value, choice);
     }
 
+    public SelectChoice get(String value)
+    {
+        return (SelectChoice) valueMap.get(value);
+    }
+
     public void clear()
     {
         valueList.clear();
         valueMap.clear();
+        selectedChoice = null;
     }
 
     public String[] getCaptions()
@@ -137,9 +167,17 @@ public class SelectChoicesList
             {
                 SelectChoice choice = (SelectChoice) valueMap.get(value);
                 if(choice != null)
+                {
                     choice.selected = true;
+                    selectedChoice = choice;
+                }
             }
         }
+    }
+
+    public SelectChoice getSelectedChoice()
+    {
+        return selectedChoice;
     }
 
     public int size()
@@ -161,5 +199,26 @@ public class SelectChoicesList
         }
 
         return rows;
+    }
+
+    public ReportContext getReportContext(ValueContext vc, Report report, ReportSkin skin)
+    {
+        return new ReportContext(vc, report, skin == null ? SkinFactory.getDefaultReportSkin() : skin);
+    }
+
+    public void renderChoicesHtml(Writer writer, ReportContext rc, String[] urlFormats, boolean isPopup) throws IOException
+    {
+        ReportContext.ColumnState[] state = rc.getStates();
+        if(isPopup)
+        {
+            state[0].setUrl("javascript:opener.activeDialogPopup.populateControls(\"${0}\", \"${1}\")");
+            state[1].setUrl("javascript:opener.activeDialogPopup.populateControls(\"${0}\", \"${1}\")");
+        }
+        if(urlFormats != null)
+        {
+            for(int i = 0; i < urlFormats.length; i++)
+                state[i].setUrl(urlFormats[i]);
+        }
+        rc.produceReport(writer, getChoicesForReport());
     }
 }
