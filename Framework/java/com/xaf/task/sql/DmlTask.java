@@ -17,7 +17,7 @@ import com.xaf.skin.*;
 import com.xaf.task.*;
 import com.xaf.value.*;
 
-public class DmlTask extends AbstractTask
+public class DmlTask extends BasicTask
 {
 	static public final int DMLCMD_UNKNOWN = 0;
 	static public final int DMLCMD_INSERT = 1;
@@ -29,10 +29,13 @@ public class DmlTask extends AbstractTask
 	private String tableName;
 	private SingleValueSource dataSourceValueSource;
     private String fields;
+    private String columns;
+    private String autoIncDefn;
+    private SingleValueSource autoIncStoreValueSource;
 	private SingleValueSource insertCheckValueSource;
 	private SingleValueSource updateCheckValueSource;
-    private String whereCond;
-    private String columns;
+    private SingleValueSource whereCond;
+    private String whereCondBindParams;
     private String dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
 
     public DmlTask()
@@ -48,10 +51,13 @@ public class DmlTask extends AbstractTask
 		dataSourceValueSource = null;
 		fields = null;
         whereCond = null;
+        whereCondBindParams = null;
         columns = null;
 		insertCheckValueSource = null;
 		updateCheckValueSource = null;
         dialogContextAttr = DialogContext.DIALOG_CONTEXT_ATTR_NAME;
+        autoIncDefn = null;
+        autoIncStoreValueSource = null;
     }
 
 	public int getCommand() { return command; }
@@ -64,6 +70,8 @@ public class DmlTask extends AbstractTask
 			setCommand(DMLCMD_UPDATE);
 		else if("insert-or-update".equals(value))
 			setCommand(DMLCMD_INSERT_OR_UPDATE);
+        else if("delete".equals(value))
+			setCommand(DMLCMD_REMOVE);
         else if("remove".equals(value))
 			setCommand(DMLCMD_REMOVE);
 		else
@@ -82,8 +90,17 @@ public class DmlTask extends AbstractTask
 	public String getFields() { return fields; }
 	public void setFields(String value) { fields = (value != null && value.length() > 0) ? value : null; }
 
-   	public String getWhere() { return whereCond; }
-	public void setWhere(String value) { whereCond = (value != null && value.length() > 0) ? value : null; }
+    public String getAutoInc() { return autoIncDefn; }
+	public void setAutoInc(String value) { autoIncDefn = (value != null && value.length() > 0) ? value : null; }
+
+    public SingleValueSource getAutoIncStore() { return autoIncStoreValueSource; }
+	public void setAutoIncStore(String value) { autoIncStoreValueSource = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null; }
+
+   	public SingleValueSource getWhereCond() { return whereCond; }
+	public void setWhereCond(String value) { whereCond = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null; }
+
+    public String getWhereCondBindParams() { return whereCondBindParams; }
+	public void setWhereCondBindParams(String value) { whereCondBindParams = (value != null && value.length() > 0) ? value : null; }
 
    	public String getColumns() { return columns; }
 	public void setColumns(String value) { columns = (value != null && value.length() > 0) ? value : null; }
@@ -104,9 +121,12 @@ public class DmlTask extends AbstractTask
 		super.initialize(elem);
 
 		setTable(elem.getAttribute("table"));
+        setAutoInc(elem.getAttribute("auto-inc"));
+        setAutoIncStore(elem.getAttribute("auto-inc-store"));
 		setCommand(elem.getAttribute("command"));
 		setDataSource(elem.getAttribute("data-src"));
-		setWhere(elem.getAttribute("where"));
+		setWhereCond(elem.getAttribute("where"));
+        setWhereCondBindParams(elem.getAttribute("where-bind"));
 		setFields(elem.getAttribute("fields"));
 		setColumns(elem.getAttribute("columns"));
 		setDialogContextAttrName(elem.getAttribute("dialog-context-attr"));
@@ -213,25 +233,50 @@ public class DmlTask extends AbstractTask
         }
     }
 
+    public int bindWhereCondParams(TaskContext tc, PreparedStatement stmt, int startColumnNum) throws SQLException, TaskExecuteException
+    {
+        if(whereCondBindParams == null)
+            return startColumnNum;
+
+        int activeColumnNum = startColumnNum;
+        StringTokenizer st = new StringTokenizer(whereCondBindParams, ",");
+        while(st.hasMoreTokens())
+        {
+            String vsName = st.nextToken();
+            SingleValueSource vs = ValueSourceFactory.getSingleValueSource(vsName);
+            if(vs == null)
+                throw new TaskExecuteException("In DmlTag, the where condition bind params has an invalid ValueSource '"+vsName+"'.");
+
+            Object value = vs.getObjectValue(tc);
+            stmt.setObject(activeColumnNum, value);
+            activeColumnNum++;
+        }
+        return activeColumnNum;
+    }
+
     public void execute(TaskContext tc) throws TaskExecuteException
     {
+        tc.registerTaskExecutionBegin(this);
+
+        ServletContext context = tc.getServletContext();
+        DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
+        String dataSourceId = this.getDataSource() != null ? this.getDataSource().getValue(tc) : null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        DatabasePolicy databasePolicy = null;
+        String autoIncSeqOrTableName = tableName;
+        String autoIncColName = autoIncDefn;
+        Object autoIncColValue = null;
+
         Generator.DmlStatement dml = null;
         List columnNames = new ArrayList();
         List columnValues = new ArrayList();
-        Object[] columnsAndValues = null;
 
 		try
 		{
             populateFieldsDmlItems(tc, columnNames, columnValues);
             populateColumnsDmlItems(tc, columnNames, columnValues);
-
-            columnsAndValues = new Object[columnNames.size() * 2];
-            for(int i = 0; i < columnNames.size(); i++)
-            {
-                int columnIndex = i * 2;
-                columnsAndValues[columnIndex] = columnNames.get(i);
-                columnsAndValues[columnIndex+1] = columnValues.get(i);
-            }
 
 			int tempCmd = command;
 			if(command == DMLCMD_INSERT_OR_UPDATE)
@@ -289,10 +334,23 @@ public class DmlTask extends AbstractTask
 				}
 			}
 
+            conn = dbContext.getConnection(tc, dataSourceId);
 			switch(tempCmd)
 			{
 				case DMLCMD_INSERT:
-	                dml = Generator.createInsertStmt(tableName, columnsAndValues);
+                    if(autoIncDefn != null)
+                    {
+                        databasePolicy = DatabaseContextFactory.getDatabasePolicy(conn);
+                        int tokenSepPos = autoIncDefn.indexOf(",");
+                        if(tokenSepPos != -1)
+                        {
+                            autoIncColName = autoIncDefn.substring(0, tokenSepPos);
+                            autoIncSeqOrTableName = autoIncDefn.substring(tokenSepPos+1);
+                        }
+                        autoIncColValue = databasePolicy.handleAutoIncPreDmlExecute(conn, tc, autoIncSeqOrTableName, autoIncColName, columnNames, columnValues);
+                    }
+
+	                dml = Generator.createInsertStmt(tableName, columnNames, columnValues);
 					break;
 
 				case DMLCMD_INSERT_OR_UPDATE:
@@ -301,11 +359,11 @@ public class DmlTask extends AbstractTask
 				case DMLCMD_UPDATE:
 					if(whereCond == null)
 						throw new TaskExecuteException("No 'where' attribute provided.");
-					dml = Generator.createUpdateStmt(tableName, columnsAndValues, whereCond, null);
+					dml = Generator.createUpdateStmt(tableName, columnNames, columnValues, whereCond.getValue(tc));
 					break;
 
 				case DMLCMD_REMOVE:
-					dml = Generator.createDeleteStmt(tableName, whereCond, null);
+					dml = Generator.createDeleteStmt(tableName, whereCond.getValue(tc));
 					break;
 				case DMLCMD_UNKNOWN:
 					throw new TaskExecuteException("No appropriate DML command provided.");
@@ -318,49 +376,52 @@ public class DmlTask extends AbstractTask
                 tc.addResultMessage("</pre>");
                 return;
             }
-		}
-        catch(Exception e)
-        {
-            throw new TaskExecuteException(e);
-        }
 
-        try
-        {
-            ServletContext context = tc.getServletContext();
-            DatabaseContext dbContext = DatabaseContextFactory.getContext(tc.getRequest(), context);
-            String dataSourceId = this.getDataSource() != null ?this.getDataSource().getValue(tc) : null;
-            Connection conn = dbContext.getConnection(tc, dataSourceId);
-            PreparedStatement stmt = conn.prepareStatement(dml.sql);
+            stmt = conn.prepareStatement(dml.sql);
 
-            //out.write(dml.sql);
-            //out.flush();
-           // bind all of the parameters
             int columnNum = 1;
-            long bindColFlags = dml.bindColFlags;
-            for(int c = 0; c < columnsAndValues.length; c++)
+            if(dml.bindValues != null)
             {
-                long valueIndexFlag = (long) java.lang.Math.pow(2.0, c);
-                if((bindColFlags & valueIndexFlag) != 0)
+                for(int c = 0; c < dml.bindValues.length; c++)
                 {
-                    // ???NO??? we do a c/2 because of name/value pairs in columnsAndValues
-                    // we then add +1 because SQL bind parameters start at 1, not zero
-                    //int columnNum = (c/2)+1;
-                    //out.write("<li>Column " + columnNum + "/" + c + ": bind " + columnsAndValues[c].toString() + " " + columnsAndValues[c].getClass().getName());
-                    //out.flush();
-                    stmt.setObject(columnNum, columnsAndValues[c]);
-                    columnNum++;
+                    if(dml.bindValues[c])
+                    {
+                        stmt.setObject(columnNum, columnValues.get(c));
+                        columnNum++;
+                    }
                 }
             }
 
+            bindWhereCondParams(tc, stmt, columnNum);
             stmt.execute();
+
+            if(tempCmd == DMLCMD_INSERT && autoIncDefn != null)
+            {
+                autoIncColValue = databasePolicy.handleAutoIncPostDmlExecute(conn, tc, autoIncSeqOrTableName, autoIncColName, autoIncColValue);
+                if(autoIncStoreValueSource != null)
+                    autoIncStoreValueSource.setValue(tc, autoIncColValue);
+            }
         }
         catch(SQLException e)
         {
-			throw new TaskExecuteException(e);
+			throw new TaskExecuteException(e, dml.toString());
         }
         catch(NamingException e)
         {
 			throw new TaskExecuteException(e);
         }
+        finally
+        {
+            try
+            {
+                if(stmt != null) stmt.close();
+            }
+            catch(SQLException e)
+            {
+                throw new TaskExecuteException(e);
+            }
+        }
+
+        tc.registerTaskExecutionEnd(this);
 	}
 }
