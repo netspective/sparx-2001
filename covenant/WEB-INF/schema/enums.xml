@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<schema name="enumerations">
+    <include file="table-types.xml"/>
+
+    <table name="Requirement_Status" abbrev="req_status" type="Enumeration">
+        <enum>Priority</enum>
+    </table>
+
+</schema>

@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+
+<schema name="db">
+
+    <indextype name="unique"/>
+
+    <table name="Requirement" abbrev="Req" type="Default">
+        <column name="id" type="auto-inc"  primarykey="yes"/>
+        <column name="account" lookupref="Account.id" />
+        <column name="project" lookupref="Project.id" />
+        <column name="req_number" type="integer" />
+        <column name="description" type="text"/>
+        <column name="version" lookupref="Version.id"/>
+        <column name="module" lookupref="Module.id"/>
+        <column name="current_status" lookupref="Requirement_Status"/>
+        <column name="total_hours" type="integer"/>
+        <column name="parent_id" selfref="Requirement.id"/>
+    </table>
+
+    <table name="Requirement_Detail" abbrev="ReqDtl" type="Default">
+        <column name="id" type="auto-inc"  primarykey="yes"/>
+        <column name="requirement_id" lookupref="Requirement.id"/>
+        <column name="entry_date" type="date"/>
+        <column name="status" lookupref="Requirement_Status"/>
+        <column name="initiated_by" type="text"/>
+        <column name="assigned_to" lookupref="Member.id"/>
+        <column name="assigned_by" lookupref="Member.id"/>
+        <column name="description" type="text"/>
+        <column name="assessment"  type="text"/>
+        <column name="previous_detail_id" selfref="Requirement_Detail.id"/>
+    </table>
+
+    <table name="Req_Determined_By" abbrev="ReqDetBy" type="Default">
+        <column name="id" type="auto-inc"  primarykey="yes"/>
+        <column name="requirement_id" lookupref="Requirement.id"/>
+        <column name="determinant_id" lookupref="Requirement.id"/>
+
+        <index name="$tbl_abbrev$_unq" type="unique" columns="requirement_id,determinant_id"/>
+    </table>
+
+    <table name="Req_Depends_On" abbrev="ReqDepOn" type="Default">
+        <column name="id" type="auto-inc"  primarykey="yes"/>
+        <column name="requirement_id" lookupref="Requirement.id"/>
+        <column name="dependent_id" lookupref="Requirement.id"/>
+
+        <index name="$tbl_abbrev$_unq" type="unique" columns="requirement_id,dependent_id"/>
+    </table>
+
+    <table name="Req_Attribute" abbrev="ReqAttr" type="Default">
+        <column name="id"  type="auto-inc" primarykey="yes" />
+        <column name="attribute_name" type="text"/>
+    </table>
+
+    <table name="Req_Attribute_Value" abbrev="ReqAttrVal" type="Attribute_Value">
+        <param name="attribute_id">Req_Attribute.id</param>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+    <table name="Req_Detail_Work" abbrev="ReqDtlWrk" type="Default">
+        <column name="id" type="auto-inc"  primarykey="yes"/>
+        <column name="detail_id" lookupref="Requirement_Detail.id"/>
+        <column name="entry_date" type="date"/>
+        <column name="hours" type="integer"/>
+        <column name="by_whom" lookupref="Member.id"/>
+    </table>
+
+    <table name="Req_Comment" abbrev="ReqCom" type="Default">
+        <column name="id" type="auto-inc"  primarykey="yes"/>
+        <column name="detail_id" lookupref="Requirement_Detail.id"/>
+        <column name="comments" type="text" size="50"/>
+        <column name="by_whom" lookupref="Member.id"/>
+        <column name="entry_date" type="date"/>
+    </table>
+
+    <table name="Req_Exp_Start_Date" abbrev="ReqExpStDt" type="Column_History">
+        <column name="exp_start_date" type="date"/>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+    <table name="Req_Exp_End_Date" abbrev="ReqExpEdDt" type="Column_History">
+        <column name="exp_end_date" type="date"/>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+    <table name="Req_Act_Start_Date" abbrev="ReqActStDt" type="Column_History">
+        <column name="actual_start_date" type="date"/>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+    <table name="Req_Act_End_Date" abbrev="ReqActEdDt" type="Column_History">
+        <column name="actual_end_date" type="date"/>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+    <table name="Req_Verified_By" abbrev="ReqVerBy" type="Column_History">
+        <column name="verified_by" type="text"/>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+    <table name="Req_Sign_Off_Date" abbrev="ReqSgnOfDt" type="Column_History">
+        <column name="sign_off_date" type="date"/>
+        <param name="parent_id">Requirement.id</param>
+    </table>
+
+</schema>

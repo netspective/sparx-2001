@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <!--
+    <register-navigation-skin name="default" class="app.skin.NavigationSkin"/>
+    -->
+
+	<structure>
+		<page id="/home" caption="Home" title="Welcome to the App" heading="Welcome to the app" url="simple-expr:${create-app-url:/index.jsp}"/>
+
+		<!-- NOTE:
+		     to see how the "cmd" is used in URLs, go to ACE -> Application -> Factory -> Component Commands
+		     http://localhost:8080/covenant/ace/application/factory/component-commands -->
+
+		<page id="/add" caption="Add" url="simple-expr:${create-app-url:/index.jsp}/add/account?cmd=dialog,table.Account,add">
+            <page id="/add/account" caption="Account" url="simple-expr:${create-app-url:/index.jsp}/add/account?cmd=dialog,table.Account,add"/>
+            <page id="/add/member" caption="Member" url="simple-expr:${create-app-url:/index.jsp}/add/member?cmd=dialog,table.Member,add"/>
+            <page id="/add/module" caption="Module" url="simple-expr:${create-app-url:/index.jsp}/add/module?cmd=dialog,table.Module,add"/>
+            <page id="/add/project" caption="Project" url="simple-expr:${create-app-url:/index.jsp}/add/project?cmd=dialog,table.Project,add"/>
+		</page>
+
+		<page id="/manage" caption="Manage" url="simple-expr:${create-app-url:/index.jsp}/manage">
+            <page id="/manage/account" caption="Account" url="simple-expr:${create-app-url:/index.jsp}/manage/account?cmd=dialog,table.Account,add"/>
+            <page id="/manage/member" caption="Member" url="simple-expr:${create-app-url:/index.jsp}/manage/member?cmd=dialog,table.Member,add"/>
+            <page id="/manage/module" caption="Module" url="simple-expr:${create-app-url:/index.jsp}/manage/module?cmd=dialog,table.Module,add"/>
+            <page id="/manage/project" caption="Project" url="simple-expr:${create-app-url:/index.jsp}/manage/project?cmd=dialog,table.Project,add"/>
+
+            <page id="/manage/requirement" caption="Requirements" url="simple-expr:${create-app-url:/index.jsp}/manage/requirement/start-date?cmd=dialog,table.Req_Act_End_Date,add">
+                <page id="/manage/requirement/start-date" caption="Start Date" url="simple-expr:${create-app-url:/index.jsp}/manage/requirement/start-date?cmd=dialog,table.Req_Act_End_Date,add"/>
+                <page id="/manage/requirement/end-date" caption="End Date" url="simple-expr:${create-app-url:/index.jsp}/test/test-b/x"/>
+                <page id="/manage/requirement/attribute" caption="Attribute" url="simple-expr:${create-app-url:/index.jsp}/test/test-b/z"/>
+            </page>
+
+		</page>
+	</structure>
+</xaf>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<xaf>
+    <!--
+    <register-navigation-skin name="default" class="app.skin.NavigationSkin"/>
+    -->
+
+	<structure>
+		<page id="/home" caption="home" url="config-expr:${create-app-url:/index.jsp}"/>
+		<page id="/test" caption="test" url="config-expr:${create-app-url:/index.jsp}/test">
+            <page id="/test/test-a" caption="test-a" url="config-expr:${create-app-url:/index.jsp}/test/test-a"/>
+            <page id="/test/test-b" caption="test-b" url="config-expr:${create-app-url:/index.jsp}/test/test-b">
+                <page id="/test/test-b/x" caption="test-bx" url="config-expr:${create-app-url:/index.jsp}/test/test-b/x"/>
+                <page id="/test/test-b/y" caption="test-by" url="config-expr:${create-app-url:/index.jsp}/test/test-b/y"/>
+                <page id="/test/test-b/z" caption="test-bz" url="config-expr:${create-app-url:/index.jsp}/test/test-b/z"/>
+            </page>
+		</page>
+	</structure>
+</xaf>
+

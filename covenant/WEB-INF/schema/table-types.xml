@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<schema name="tabletypes">
+
+	<indextype name="unique"/>
+
+	<tabletype name="Default">
+        <column name="cr_stamp" type="stamp" required="dbms" descr="Date/time record was created" field.hidden="yes">
+            <java-default>new java.util.Date()</java-default>
+        </column>
+       <!-- <column name="cr_person_id" lookupref="Person.system_id" descr="The user that created the record" field.hidden="yes">
+            <java-default>new Long(0)</java-default>
+        </column>-->
+        <column name="record_status_id" lookupref="${params.recordStatusEnum}" default="0" required="yes" descr="The status of a row in the table" field.hidden="yes">
+            <java-default>new Integer(0)</java-default>
+        </column>
+
+		<!-- this is made as a parameter so that inheriting tables can override the status enumeration if needed -->
+		<param name="recordStatusEnum">Record_Status</param>
+
+        <!-- each table gets a "default" dialog for convenience (remove it if not necessary) -->
+        <dialog>
+            <field.table-column column="*"/>
+        </dialog>
+	</tabletype>
+
+    <tabletype name="Status" type="Enumeration">
+        <enum id="0" abbrev="I">Inactive</enum>
+        <enum id="1" abbrev="A">Active</enum>
+        <enum id="99" abbrev="U">Unknown</enum>
+    </tabletype>
+
+    <table name="Record_Status" abbrev="RecStatus" type="Status">
+        <!-- nothing here yet, just a placeholder for later enhancements -->
+    </table>
+
+	<!--
+	*********************************************************************
+	** Enumeration and Lookup Templates
+	*********************************************************************
+	-->
+
+	<table name="Reference_Item">
+		<description>
+			This table is basically used for creating parent/child relationships
+			for Enumeration and Lookup tables. Since it has no columns, no physical
+			table will exist so it becomes a simple logical placeholder.
+		</description>
+	</table>
+
+	<tabletype name="Enumeration" parent="Reference_Item">
+		<param name="captionSize">96</param>
+		<param name="abbrevSize">32</param>
+
+		<column name="id" type="integer" primarykey="yes" descr="The value associated with a single enum"/>
+		<column name="caption" type="text" size="${params.captionSize}" required="yes" descr="The name/text an end-user would see"/>
+		<column name="abbrev" type="text" size="${params.abbrevSize}" unique="yes" descr="An abbreviated form of the caption"/>
+	</tabletype>
+
+    <!--
+    *********************************************************************
+    ** Table Types
+    *********************************************************************
+	-->
+
+    <tabletype name="Column_History" type="Default">
+        <column name="id" type="auto-inc" primarykey="yes" descr="ID of this table's row"/>
+        <column name="parent_id" lookupref="${params.parent_id}" descr="ID of parent table"/>
+        <column name="start_date" type="date" descr="Start of Duration"/>
+        <column name="end_date" type="date" descr="End of Duration"/>
+        <column name="by_whom" lookupref="Member.id"/>
+
+        <index name="$tbl_abbrev$_unq" type="unique" columns="id,start_date"/>
+    </tabletype>
+
+    <tabletype name="Attribute_Value" type="Default">
+        <column name="id" type="auto-inc" primarykey="yes"/>
+        <column name="value" type="text"/>
+        <column name="attribute_id" lookupref="${params.attribute_id}" />
+        <column name="parent_id" lookupref="${params.parent_id}" />
+    </tabletype>
+
+</schema>

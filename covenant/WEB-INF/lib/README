@@ -1,0 +1,40 @@
+
+********************************************************************************
+* Sparx Redistributables README                                                *
+*==============================================================================*
+* -- log4j.jar belongs in your application's WEB-INF/lib directory. DO NOT try *
+*    to share the log4j.jar file across applications (you will get sporadic    *
+*    ClassCast exceptions).                                                    *
+*                                                                              *
+* -- If you would like to share common libraries across multiple web apps,     *
+*    all files EXCEPT log4j.jar, servlet.jar and jdbc.jar may be placed into   *
+*    the application server's lib directory. Usually, servlet.jar and jdbc.jar *
+*    are already present in the app server's classpath and are provided in the *
+*    Sparx redists only to run Ant build files from the command line.          *
+*                                                                              *
+* -- If you do not want to share these libraries across applications, you may  *
+*    copy all files EXCEPT servlet.jar and jdbc.jar into your application's    *
+*    WEB-INF/lib directory. Usually, servlet.jar and jdbc.jar are already      *
+*    present in the app server's classpath and are provided in the Sparx       *
+*    redists only to run Ant build files from the command line.                *
+*                                                                              *
+* -- IMPORTANT NOTE: Sparx has only been tested with Xerces and Xalan with     *
+*    regards to XML parsing and XSLT transformations. Although Sparx uses JAXP *
+*    and TrAX, the only libraries that have been certified for use are Xerces  *
+*    and Xalan.                                                                *
+********************************************************************************
+
+Library                                 Ver        File                Source                                                            
+--------------------------------------- ---------- ------------------- ----------------------------------------------------------------- 
+Java JDBC API                           2.0        jdbc.jar            http://java.sun.com
+Java Servlet API                        2.3        servlet.jar         http://java.sun.com
+Apache Xalan                            2.4.0      xalan.jar           http://xml.apache.org/xalan-j
+Apache Xalan JAXP/TrAX XML APIs         2.4.0      xml-apis.jar        http://xml.apache.org/xerces-j
+Apache Xerces                           2.0.2      xerces.jar          http://xml.apache.org/xerces-j
+Jakarta Ant                             1.5.0      ant.jar             http://jakarta.apache.org/ant
+Jakarta Log4J                           1.2.6      log4j.jar           http://jakarta.apache.org/log4j/docs
+Jakarta ORO                             2.0.4      oro.jar             http://jakarta.apache.org/oro
+Jakarta Commons Logging                 1.0.2      commons-logging.jar http://jakarta.apache.org/commons
+Jakarta Commons Jexl                    1.0 beta 1 commons-jexl.jar    http://jakarta.apache.org/commons
+JUnit Testing Framework                 3.8        junit.jar           http://www.junit.org
+Ostermiller Syntax Highlighting Library 1.1.1      syntax.jar          http://ostermiller.org/syntax
