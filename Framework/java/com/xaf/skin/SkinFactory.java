@@ -61,8 +61,17 @@ public class SkinFactory
 
 	public static void setupDialogSkinsDefaults()
 	{
-		addDialogSkin("default", new StandardDialogSkin());
-		addDialogSkin("hand-held", new HandHeldDialogSkin());
+		/**
+		 * Remember, skins can be created at runtime so we don't want to override
+		 * any that a user might have already put into the factory.
+		 */
+
+		if(! dialogSkins.containsKey("default"))
+			addDialogSkin("default", new StandardDialogSkin());
+
+		if(! dialogSkins.containsKey("hand-held"))
+			addDialogSkin("hand-held", new HandHeldDialogSkin());
+
 		haveDialogSkinsDefaults = true;
 	}
 

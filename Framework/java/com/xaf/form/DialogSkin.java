@@ -2,6 +2,8 @@ package com.xaf.form;
 
 import java.io.*;
 import java.util.*;
+import org.w3c.dom.*;
+
 import com.xaf.form.field.*;
 
 public interface DialogSkin
@@ -12,4 +14,5 @@ public interface DialogSkin
 	public String getSeparatorHtml(DialogContext dc, SeparatorField field);
 	public String getDefaultControlAttrs();
 	public String getControlAreaFontAttrs();
+	public void importFromXml(Element elem);
 }

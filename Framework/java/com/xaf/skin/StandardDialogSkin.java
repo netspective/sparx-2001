@@ -3,6 +3,9 @@ package com.xaf.skin;
 import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
+
+import org.w3c.dom.*;
+
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 import com.xaf.value.*;
@@ -12,6 +15,7 @@ public class StandardDialogSkin implements DialogSkin
 	public final String FIELDROW_PREFIX = "_dfr.";
 	public final String GRIDHEADROW_PREFIX = "_dghr.";
 	public final String GRIDFIELDROW_PREFIX = "_dgfr.";
+	public final String EMPTY = "";
 
 	protected String outerTableAttrs;
 	protected String innerTableAttrs;
@@ -31,6 +35,14 @@ public class StandardDialogSkin implements DialogSkin
     protected String hintFontAttrs;
     protected String errorMsgFontAttrs;
     protected String captionSuffix;
+	protected String includePreScripts;
+	protected String includePostScripts;
+	protected String includePreStyleSheets;
+	protected String includePostStyleSheets;
+	protected String prependPreScript;
+	protected String prependPostScript;
+	protected String appendPreScript;
+	protected String appendPostScript;
 
 	public StandardDialogSkin()
 	{
@@ -38,7 +50,7 @@ public class StandardDialogSkin implements DialogSkin
 		innerTableAttrs = "cellspacing='0' cellpadding='4' bgcolor='lightyellow' ";
 		frameHdRowAlign = "LEFT";
 		frameHdRowAttrs = "bgcolor='#6699CC' ";
-		frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='white' ";
+		frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='yellow' ";
 		fieldRowAttrs = "";
 		fieldRowErrorAttrs = "bgcolor='beige' ";
 		captionCellAttrs = "align='right' ";
@@ -52,6 +64,111 @@ public class StandardDialogSkin implements DialogSkin
         hintFontAttrs = "color='navy'";
         errorMsgFontAttrs = "color='red'";
         captionSuffix = ": ";
+		includePreScripts = null;
+		includePostScripts = null;
+		includePreStyleSheets = null;
+		includePostStyleSheets = null;
+		prependPreScript = null;
+		prependPostScript = null;
+		appendPreScript = null;
+		appendPostScript = null;
+	}
+
+	public void importFromXml(Element elem)
+	{
+		NodeList children = elem.getChildNodes();
+		for(int n = 0; n < children.getLength(); n++)
+		{
+			Node node = children.item(n);
+			if(node.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+
+            String nodeName = node.getNodeName();
+			Element nodeElem = (Element) node;
+			Node firstChild = node.getFirstChild();
+			String nodeText = firstChild != null ? firstChild.getNodeValue() : null;
+
+			if(nodeName.equals("outer-table-attrs") && nodeText != null)
+				outerTableAttrs = nodeText;
+			else if(nodeName.equals("inner-table-attrs") && nodeText != null)
+				innerTableAttrs = nodeText;
+			else if(nodeName.equals("frame-head-row-align") && nodeText != null)
+				frameHdRowAlign = nodeText;
+			else if(nodeName.equals("frame-head-row-attrs") && nodeText != null)
+				frameHdRowAttrs = nodeText;
+			else if(nodeName.equals("frame-head-font-attrs") && nodeText != null)
+				frameHdFontAttrs = nodeText;
+			else if(nodeName.equals("field-row-attrs") && nodeText != null)
+				fieldRowAttrs = nodeText;
+			else if(nodeName.equals("field-row-error-attrs") && nodeText != null)
+				fieldRowErrorAttrs = nodeText;
+			else if(nodeName.equals("caption-cell-attrs") && nodeText != null)
+				captionCellAttrs = nodeText;
+			else if(nodeName.equals("caption-font-attrs") && nodeText != null)
+				captionFontAttrs = nodeText;
+			else if(nodeName.equals("grid-caption-font-attrs") && nodeText != null)
+				gridCaptionFontAttrs = nodeText;
+			else if(nodeName.equals("grid-row-caption-font-attrs") && nodeText != null)
+				gridRowCaptionFontAttrs = nodeText;
+			else if(nodeName.equals("control-area-font-attrs") && nodeText != null)
+				controlAreaFontAttrs = nodeText;
+			else if(nodeName.equals("control-attrs") && nodeText != null)
+				controlAttrs = nodeText;
+			else if(nodeName.equals("separator-font-attrs") && nodeText != null)
+				separatorFontAttrs = nodeText;
+			else if(nodeName.equals("separator-html") && nodeText != null)
+				separatorHtml = nodeText;
+			else if(nodeName.equals("hint-font-attrs") && nodeText != null)
+				hintFontAttrs = nodeText;
+			else if(nodeName.equals("error-msg-html") && nodeText != null)
+				errorMsgFontAttrs = nodeText;
+			else if(nodeName.equals("caption-suffix") && nodeText != null)
+				captionSuffix = nodeText;
+			else if(nodeName.equals("prepend-pre-script") && nodeText != null)
+				prependPreScript = "<script>\n" + nodeText + "\n</script>";
+			else if(nodeName.equals("prepend-post-script") && nodeText != null)
+				prependPostScript = "<script>\n" + nodeText + "\n</script>";
+			else if(nodeName.equals("append-pre-script") && nodeText != null)
+				appendPreScript = "<script>\n" + nodeText + "\n</script>";
+			else if(nodeName.equals("append-post-script") && nodeText != null)
+				appendPostScript = "<script>\n" + nodeText + "\n</script>";
+			else if(nodeName.equals("include-pre-script"))
+			{
+				String lang = nodeElem.getAttribute("language");
+				if(lang.length() == 0) lang = "JavaScript";
+				String inc = "<script src='"+nodeElem.getAttribute("src")+"' language='"+lang+"'></script>\n";;
+				if(includePreScripts == null)
+					includePreScripts = inc;
+				else
+					includePreScripts += inc;
+			}
+			else if(nodeName.equals("include-post-script"))
+			{
+				String lang = nodeElem.getAttribute("language");
+				if(lang.length() == 0) lang = "JavaScript";
+				String inc = "<script src='"+nodeElem.getAttribute("src")+"' language='"+lang+"'></script>\n";
+				if(includePostScripts == null)
+					includePostScripts = inc;
+				else
+					includePostScripts += inc;
+			}
+			else if(nodeName.equals("include-pre-stylesheet"))
+			{
+				String inc = "<link rel='stylesheet' href='"+nodeElem.getAttribute("href")+"'>\n";
+				if(includePreStyleSheets == null)
+					includePreStyleSheets = inc;
+				else
+					includePreStyleSheets += inc;
+			}
+			else if(nodeName.equals("include-post-stylesheet"))
+			{
+				String inc = "<link rel='stylesheet' href='"+nodeElem.getAttribute("href")+"'>\n";
+				if(includePostStyleSheets == null)
+					includePostStyleSheets = inc;
+				else
+					includePostStyleSheets += inc;
+			}
+		}
 	}
 
 	public final String getControlAreaFontAttrs()
@@ -494,12 +611,16 @@ public class StandardDialogSkin implements DialogSkin
 			actionURL = ((HttpServletRequest) dc.getRequest()).getRequestURI();
 
 		return
+			(includePreStyleSheets != null ? includePreStyleSheets : EMPTY) +
 			"<link rel='stylesheet' href='/shared/resources/css/dialog.css'>\n"+
+			(includePostStyleSheets != null ? includePostStyleSheets : EMPTY) +
+			(prependPreScript != null ? prependPreScript : EMPTY) +
 			"<script language='JavaScript'>var _version = 1.0;</script>\n"+
 			"<script language='JavaScript1.1'>_version = 1.1;</script>\n"+
 			"<script language='JavaScript1.2'>_version = 1.2;</script>\n"+
 			"<script language='JavaScript1.3'>_version = 1.3;</script>\n"+
 			"<script language='JavaScript1.4'>_version = 1.4;</script>\n"+
+			(includePreScripts != null ? includePreScripts : EMPTY) +
 			"<script src='/shared/resources/scripts/popup.js' language='JavaScript1.1'></script>\n"+
 			"<script src='/shared/resources/scripts/dialog.js' language='JavaScript1.2'></script>\n"+
 			"<script>\n"+
@@ -508,6 +629,8 @@ public class StandardDialogSkin implements DialogSkin
 			"		alert('ERROR: /shared/resources/scripts/dialog.js could not be loaded');\n"+
 			"	}\n"+
 			"</script>\n"+
+			(includePostScripts != null ? includePostScripts : EMPTY) +
+			(prependPostScript != null ? prependPostScript : EMPTY) +
 			"<table "+ outerTableAttrs +">\n" +
 			"<tr><td><table "+innerTableAttrs+">" +
 			(heading == null ? "" :
@@ -517,13 +640,15 @@ public class StandardDialogSkin implements DialogSkin
 			fieldsHtml +
 			"</form>\n" +
 			"</table></td></tr></table>"+
+			(appendPreScript != null ? appendPreScript : EMPTY) +
 			"<script>\n"+
 			"       var " + dialogName + " = new Dialog(\"" + dialogName + "\");\n" +
 			"       var dialog = " + dialogName + "; setActiveDialog(dialog);\n" +
 			"       var field;\n" +
 				    fieldsJSDefn +
 			"       dialog.finalizeContents();\n" +
-			"</script>\n";
+			"</script>\n"+
+			(appendPostScript != null ? appendPostScript : EMPTY);
 	}
 
 	public String getSeparatorHtml(DialogContext dc, SeparatorField field)

@@ -125,24 +125,25 @@ public class DialogManager extends XmlSource
 				Element dialogsElem = (Element) node;
 				String stmtPkg = dialogsElem.getAttribute("package");
 
-				NodeList statementChildren = node.getChildNodes();
-				for(int c = 0; c < statementChildren.getLength(); c++)
+				NodeList dialogsChildren = node.getChildNodes();
+				for(int c = 0; c < dialogsChildren.getLength(); c++)
 				{
-					Node stmtChild = statementChildren.item(c);
-					if(stmtChild.getNodeType() != Node.ELEMENT_NODE)
+					Node dialogsChild = dialogsChildren.item(c);
+					if(dialogsChild.getNodeType() != Node.ELEMENT_NODE)
 						continue;
 
-					String scName = stmtChild.getNodeName();
+					String scName = dialogsChild.getNodeName();
 	    			if(scName.equals("dialog"))
 					{
-						DialogInfo di = new DialogInfo(stmtPkg, (Element) stmtChild);
+						Element dialogElem = (Element) dialogsChild;
+						DialogInfo di = new DialogInfo(stmtPkg, dialogElem);
 		    			dialogs.put(di.getLookupName(), di);
-						((Element) stmtChild).setAttribute("qualified-name", di.getLookupName());
-						((Element) stmtChild).setAttribute("package", stmtPkg);
+						dialogElem.setAttribute("qualified-name", di.getLookupName());
+						dialogElem.setAttribute("package", stmtPkg);
 					}
 					else if(scName.equals("register-field"))
 					{
-						Element typeElem = (Element) stmtChild;
+						Element typeElem = (Element) dialogsChild;
 						String className = typeElem.getAttribute("class");
 						try
 						{
@@ -153,29 +154,44 @@ public class DialogManager extends XmlSource
 							errors.add("Field class '"+className+"' not found: " + e.toString());
 						}
 					}
-					else if(scName.equals("register-skin"))
-					{
-						Element typeElem = (Element) stmtChild;
-						String className = typeElem.getAttribute("class");
-						try
-						{
-							SkinFactory.addDialogSkin(typeElem.getAttribute("name"), className);
-						}
-						catch(IllegalAccessException e)
-						{
-							errors.add("DialogSkin class '"+className+"' access exception: " + e.toString());
-						}
-						catch(ClassNotFoundException e)
-						{
-							errors.add("DialogSkin class '"+className+"' not found: " + e.toString());
-						}
-						catch(InstantiationException e)
-						{
-							errors.add("DialogSkin class '"+className+"' instantiation exception: " + e.toString());
-						}
-					}
 				}
 			}
+			else if(nodeName.equals("dialog-skin"))
+			{
+				Element skinElem = (Element) node;
+				DialogSkin skin = null;
+				String className = skinElem.getAttribute("class");
+				if(className.length() > 0)
+				{
+					try
+					{
+						Class skinClass = Class.forName(className);
+						skin = (DialogSkin) skinClass.newInstance();
+					}
+					catch(IllegalAccessException e)
+					{
+						errors.add("DialogSkin class '"+className+"' access exception: " + e.toString());
+					}
+					catch(ClassNotFoundException e)
+					{
+						errors.add("DialogSkin class '"+className+"' not found: " + e.toString());
+					}
+					catch(InstantiationException e)
+					{
+						errors.add("DialogSkin class '"+className+"' instantiation exception: " + e.toString());
+					}
+				}
+				else
+				{
+					skin = new StandardDialogSkin();
+				}
+
+				skin.importFromXml(skinElem);
+				SkinFactory.addDialogSkin(skinElem.getAttribute("name"), skin);
+				errors.add("Added skin " + skin.getClass().getName() + " as " + skinElem.getAttribute("name"));
+			}
 		}
+
+		addMetaInformation();
 	}
 }

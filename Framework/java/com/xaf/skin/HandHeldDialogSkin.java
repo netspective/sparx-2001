@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
 
+import org.w3c.dom.*;
+
 import com.xaf.form.*;
 import com.xaf.form.field.*;
 import com.xaf.value.*;
@@ -46,6 +48,11 @@ public class HandHeldDialogSkin implements DialogSkin
         errorMsgFontAttrs = "color='red'";
         captionSuffix = ": ";
     }
+
+	public void importFromXml(Element elem)
+	{
+		throw new RuntimeException("Not implemented yet.");
+	}
 
 	public final String getControlAreaFontAttrs()
 	{
