@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: dialog.js,v 1.24 2003-04-18 22:20:51 thai.nguyen Exp $
+ * $Id: dialog.js,v 1.25 2003-04-21 22:03:00 thai.nguyen Exp $
  */
 
 var DIALOGFIELD_PREFIX = '_dc';
@@ -541,10 +541,10 @@ function DialogField_isValid()
 		{
 			var valid = true;
 			if (this.customHandlers.isValidType == 'extends')
-			    valid = fieldType.isValid(this, control);
+				valid = fieldType.isValid(this, control);
 			if (valid)
 			{
-			    valid = this.customHandlers.isValid(this, control);
+				valid = this.customHandlers.isValid(this, control);
 			}
 			return valid;
 		}
@@ -561,8 +561,8 @@ function DialogField_isValid()
 		{
 			if(control.value.length == 0)
 			{
-			    this.alertRequired(control);
-			    return false;
+				this.alertRequired(control);
+				return false;
 			}
 		}
 	}
@@ -701,7 +701,7 @@ function setAllCheckboxes(sourceCheckbox, otherCheckboxesPrefix)
 		{
 			control = form.elements[i];
 			if(control.name.indexOf(otherCheckboxesPrefix) == 0)
-			    control.checked = isChecked;
+				control.checked = isChecked;
 		}
 	}
 }
@@ -872,9 +872,9 @@ function SimpleSort(objSelect)
 		{
 			if(arrTemp[x].text > arrTemp[y].text)
 			{
-			    objTemp = arrTemp[x].text;
-			    arrTemp[x].text = arrTemp[y].text;
-			    arrTemp[y].text = objTemp;
+				objTemp = arrTemp[x].text;
+				arrTemp[x].text = arrTemp[y].text;
+				arrTemp[y].text = objTemp;
 			}
 		}
 	}
@@ -898,7 +898,7 @@ function controlOnClick(control, event)
 		if (field.customHandlers.clickType == 'extends')
 		{
 			if (field.type.click != null)
-			    retval = field.type.click(field, control);
+				retval = field.type.click(field, control);
 		}
 		if (retval)
 			field.customHandlers.click(field, control);
@@ -924,7 +924,7 @@ function controlOnKeypress(control, event)
 		if (field.customHandlers.keyPressType == 'extends')
 		{
 			if (field.type.keyPress != null)
-			    retval =  field.type.keyPress(field, control);
+				retval =  field.type.keyPress(field, control);
 		}
 
 		if (retval)
@@ -950,7 +950,7 @@ function controlOnFocus(control, event)
 		if (field.customHandlers.getFocusType == 'extends')
 		{
 			if (field.type.getFocus != null)
-			    retval =  field.type.getFocus(field, control);
+				retval =  field.type.getFocus(field, control);
 		}
 		if (retval)
 			retval =  field.customHandlers.getFocus(field, control);
@@ -974,7 +974,13 @@ function controlOnChange(control, event)
 	if (field.scannable == 'yes')
 	{
 		field.isScanned = false;
-		scanField_changeDisplayValue(field, control);
+		var validScan = scanField_changeDisplayValue(field, control);
+		if(! validScan)
+		{
+			window.event.cancelBubble = true;
+			window.event.returnValue = false;
+			return false;
+		}
 	}
 
 	if(field.dependentConditions.length > 0)
@@ -1016,7 +1022,7 @@ function controlOnBlur(control, event)
 		if (field.customHandlers.loseFocusType == 'extends')
 		{
 			if (field.type.loseFocus != null)
-		    retval = field.type.loseFocus(field, control);
+			retval = field.type.loseFocus(field, control);
 		}
 		if (retval)
 			retval =  field.customHandlers.loseFocus(field, control);
@@ -1027,7 +1033,7 @@ function controlOnBlur(control, event)
 			retval = field.type.loseFocus(field, control);
 	}
 
-	if(control.value != "" && field.submitOnBlur)
+	if(control.value != "" && field != null && field.submitOnBlur)
 	{
 		submitOnblur(field, control);
 	}
@@ -1144,7 +1150,7 @@ function BooleanField_onClick(field, control)
 		{
 			var conditionalFields = field.dependentConditions;
 			for(var i = 0; i < conditionalFields.length; i++)
-		    conditionalFields[i].evaluate(activeDialog, control);
+			conditionalFields[i].evaluate(activeDialog, control);
 		}
 	}
 	return true;
@@ -1167,20 +1173,20 @@ function TextField_valueChanged(field, control)
 
 	if (control.value.length > 0)
 	{
-        if (field.validValues)
-        {
-            var valid = false;
-            for (k in field.validValues)
-            {
-                if (field.validValues[k] == control.value)
-                    valid = true;
-            }
-            if (valid == false)
-            {
-                field.alertMessage(control, "value '" + control.value + "' is not valid. ");
-                return false;
-            }
-        }
+		if (field.validValues)
+		{
+			var valid = false;
+			for (k in field.validValues)
+			{
+				if (field.validValues[k] == control.value)
+					valid = true;
+			}
+			if (valid == false)
+			{
+				field.alertMessage(control, "value '" + control.value + "' is not valid. ");
+				return false;
+			}
+		}
 		if (field.text_format_pattern != null && (typeof field.text_format_pattern != "undefined"))
 		{
 			var test = testText(field, control);
@@ -1212,21 +1218,21 @@ function TextField_isValid(field, control)
 	}
 	if (control.value.length > 0)
 	{
-        if (field.validValues)
-        {
-            var valid = false;
-            for (k in field.validValues)
-            {
-                if (field.validValues[k] == control.value)
-                    valid = true;
-            }
-            if (valid == false)
-            {
-                field.alertMessage(control, control.name + ": Entered field value '" + control.value + "' is not valid. ");
-                return false;
-            }
-        }
-    }
+		if (field.validValues)
+		{
+			var valid = false;
+			for (k in field.validValues)
+			{
+				if (field.validValues[k] == control.value)
+					valid = true;
+			}
+			if (valid == false)
+			{
+				field.alertMessage(control, control.name + ": Entered field value '" + control.value + "' is not valid. ");
+				return false;
+			}
+		}
+	}
 
 	if (control.value.length > 0 && field.text_format_pattern != '')
 	{
@@ -1436,40 +1442,40 @@ function SocialSecurityField_onKeyPress(field, control, event)
 function SelectField_isValid(field, control)
 {
 	var style = field.style;
-    if (style == SELECTSTYLE_POPUP)
-    {
-        if (field.isRequired() && control.value.length == 0)
-        {
-            field.alertRequired(control);
-            return false;
-        }
-        alert(field.name + " " + control.value.length);
-        if (control.value.length > 0 && field.choicesCaption)
-        {
-            var valid = -1;
+	if (style == SELECTSTYLE_POPUP)
+	{
+		if (field.isRequired() && control.value.length == 0)
+		{
+			field.alertRequired(control);
+			return false;
+		}
+		alert(field.name + " " + control.value.length);
+		if (control.value.length > 0 && field.choicesCaption)
+		{
+			var valid = -1;
 
-            for (var i=0; i < field.choicesCaption.length; i++)
-            {
-                if (field.choicesCaption[i] == control.value)
-                    valid = i;
-            }
-            if (valid < 0)
-            {
-                field.alertMessage(control, "Entered field value '" + control.value + "' is not valid. ");
-                return false;
-            }
-            else
-            {
-                adjacentArea = field.getAdjacentArea(activeDialog);
-                if(adjacentArea != null)
-                {
-                    alert("Adjacent set to " + field.choicesValue[valid]);
-                    adjacentArea.innerHTML = field.choicesValue[valid];
-                }
-                return true;
-            }
-        }
-    }
+			for (var i=0; i < field.choicesCaption.length; i++)
+			{
+				if (field.choicesCaption[i] == control.value)
+					valid = i;
+			}
+			if (valid < 0)
+			{
+				field.alertMessage(control, "Entered field value '" + control.value + "' is not valid. ");
+				return false;
+			}
+			else
+			{
+				adjacentArea = field.getAdjacentArea(activeDialog);
+				if(adjacentArea != null)
+				{
+					alert("Adjacent set to " + field.choicesValue[valid]);
+					adjacentArea.innerHTML = field.choicesValue[valid];
+				}
+				return true;
+			}
+		}
+	}
 
 	if(field.isRequired())
 	{
@@ -1478,13 +1484,13 @@ function SelectField_isValid(field, control)
 			var selectedCount = 0;
 			for(var r = 0; r < control.length; r++)
 			{
-			    if(control[r].checked)
-			        selectedCount++;
+				if(control[r].checked)
+					selectedCount++;
 			}
 			if(selectedCount == 0)
 			{
-			    field.alertRequired(control[0]);
-			    return false;
+				field.alertRequired(control[0]);
+				return false;
 			}
 		}
 		else if(style == SELECTSTYLE_COMBO)
@@ -1502,13 +1508,13 @@ function SelectField_isValid(field, control)
 			var options = control.options;
 			for(var o = 0; o < options.length; o++)
 			{
-			    if(options[o].selected)
-			        selectedCount++;
+				if(options[o].selected)
+					selectedCount++;
 			}
 			if(selectedCount == 0)
 			{
-			    field.alertRequired(control);
-			    return false;
+				field.alertRequired(control);
+				return false;
 			}
 		}
 		else if(style == SELECTSTYLE_MULTICHECK)
@@ -1516,13 +1522,13 @@ function SelectField_isValid(field, control)
 			var selectedCount = 0;
 			for(var c = 0; c < control.length; c++)
 			{
-			    if(control[c].checked)
-			        selectedCount++;
+				if(control[c].checked)
+					selectedCount++;
 			}
 			if(selectedCount == 0)
 			{
-			    field.alertRequired(control[0]);
-			    return false;
+				field.alertRequired(control[0]);
+				return false;
 			}
 		}
 		else if(style == SELECTSTYLE_MULTIDUAL)
@@ -1531,13 +1537,13 @@ function SelectField_isValid(field, control)
 			var options = control.options;
 			for(var o = 0; o < options.length; o++)
 			{
-			    if(options[o].selected)
-			        selectedCount++;
+				if(options[o].selected)
+					selectedCount++;
 			}
 			if(selectedCount == 0)
 			{
-			    field.alertRequired(control);
-			    return false;
+				field.alertRequired(control);
+				return false;
 			}
 		}
 
@@ -1610,23 +1616,23 @@ function formatCurrency(field, control)
 			var pattern = field.text_format_pattern;
 			if (pattern.exec(value))
 			{
-			    match = pattern.exec(value)
-			    if (field.negative_pos == "after")
-			    {
-			        if (match[1] == "")
-			            match[1] = field.currency_symbol;
-			        if (typeof match[3] == "undefined")
-			            match[3] = ".00";
-			        control.value = match[1] + match[2] + match[3];
-			    }
-			    else if (field.negative_pos == "before")
-			    {
-			        if (match[2] == "")
-			            match[2] = field.currency_symbol;
-			        if (typeof match[4] == "undefined")
-			            match[4] = ".00";
-			        control.value = match[1] + match[2] + match[3] + match[4];
-			    }
+				match = pattern.exec(value)
+				if (field.negative_pos == "after")
+				{
+					if (match[1] == "")
+						match[1] = field.currency_symbol;
+					if (typeof match[3] == "undefined")
+						match[3] = ".00";
+					control.value = match[1] + match[2] + match[3];
+				}
+				else if (field.negative_pos == "before")
+				{
+					if (match[2] == "")
+						match[2] = field.currency_symbol;
+					if (typeof match[4] == "undefined")
+						match[4] = ".00";
+					control.value = match[1] + match[2] + match[3] + match[4];
+				}
 			}
 		}
 	}
@@ -1656,11 +1662,11 @@ function formatPhone(field, control)
 			var phoneStr = control.value;
 			if (field.phone_format_type == 'dash')
 			{
-			    phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3$4");
+				phoneStr = phoneStr.replace(field.text_format_pattern, "$1-$2-$3$4");
 			}
 			else
 			{
-			    phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3$4");
+				phoneStr = phoneStr.replace(field.text_format_pattern, "($1) $2-$3$4");
 			}
 			control.value = phoneStr;
 		}
@@ -1782,13 +1788,13 @@ function formatDate(field, control, delim, strictYear)
 		{
 			if (a[0] == 0)
 			{
-			    a[0] = currentMonth;
-			    a[1] = currentDate;
+				a[0] = currentMonth;
+				a[1] = currentDate;
 			}
 			else
 			{
-			    a[1] = a[0];
-			    a[0] = currentMonth;
+				a[1] = a[0];
+				a[0] = currentMonth;
 			}
 		}
 	}
@@ -1835,14 +1841,14 @@ function splitOnChar(strString, strDelimiter)
 		if ( strString.charAt(i) != strDelimiter )
 		{
 			if (a[field] == null)
-			    a[field] = strString.charAt(i);
+				a[field] = strString.charAt(i);
 			else
-			    a[field] += strString.charAt(i);
+				a[field] += strString.charAt(i);
 		}
 		else
 		{
 			if (a[field] != null)
-			    field++;
+				field++;
 		}
 	}
 	return a;
@@ -1861,12 +1867,12 @@ function splitNotInArray(strString, arrArray)
 		{
 			if (strString.charAt(i) == arrArray[k])
 			{
-			    if (a[field] == null || typeof a[field] == "undefined")
-			        a[field] = strString.charAt(i);
-			    else
-			        a[field] += strString.charAt(i);
-			    matched = 1;
-			    break;
+				if (a[field] == null || typeof a[field] == "undefined")
+					a[field] = strString.charAt(i);
+				else
+					a[field] += strString.charAt(i);
+				matched = 1;
+				break;
 			}
 		}
 		if ( matched == 0 && a[field] != null )
@@ -1922,8 +1928,8 @@ function doubleEntry(field, control)
 // --------------------------------------------
 function scanField_changeDisplayValue(field, control)
 {
-	var beginPattern = new RegExp("^" + field.scanStartCode);
-	var endPattern   = new RegExp(field.scanStopCode + "$");
+	var beginPattern = new RegExp("^" + field.scanStartCode, field.scanCodeIgnoreCase);
+	var endPattern   = new RegExp(field.scanStopCode + "$", field.scanCodeIgnoreCase);
 
 	var newValue = control.value.replace(beginPattern, "");
 	newValue = newValue.replace(endPattern, "");
@@ -1939,10 +1945,11 @@ function scanField_changeDisplayValue(field, control)
 
 	if(field.isScanned && field.scanFieldCustomScript != "")
 	{
-		newValue = field.scanFieldCustomScript(newValue);
+		newValue = field.scanFieldCustomScript(field, control, newValue);
 	}
 
 	control.value = newValue;
+	return (newValue != "") ? true : false;
 }
 
 //****************************************************************************
@@ -2101,7 +2108,7 @@ function documentOnKeyUp()
 		var excRegExp = new RegExp(field.autoBlurExcRegExp, "g");
 		var adjustedVal = control.value.replace(excRegExp, "");
 
-		var beginPattern = new RegExp("^" + field.scanStartCode);
+		var beginPattern = new RegExp("^" + field.scanStartCode, field.scanCodeIgnoreCase);
 		if(control.value.search(beginPattern) != -1)
 		{
 			if(adjustedVal.length == field.autoBlurLength + field.scanStartCode.length +

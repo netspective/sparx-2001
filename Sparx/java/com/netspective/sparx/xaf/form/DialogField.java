@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.24 2003-04-18 22:12:56 thai.nguyen Exp $
+ * $Id: DialogField.java,v 1.25 2003-04-21 22:03:00 thai.nguyen Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -155,6 +155,7 @@ public class DialogField
 	private String autoBlurExcludeRegExp;
 	private String submitOnBlurPartnerField;
 	private String submitOnBlurCustomScript;
+	private String scanCodeIgnoreCase;
 
 	/**
 	 * Creates a dialog field
@@ -407,6 +408,8 @@ public class DialogField
 
 		String customScript = elem.getAttribute("custom-script");
 		scanFieldCustomScript = (customScript == null || customScript.length() == 0) ? "" : customScript;
+
+		scanCodeIgnoreCase = (elem.getAttribute("ignore-case").equalsIgnoreCase("yes")) ? "i" : "";
 	}
 
 	/**
@@ -1643,10 +1646,11 @@ public class DialogField
 			sb.append("field.scannable = 'yes';\n");
 			sb.append("field.scanStartCode = '" + scanStartCode + "';\n");
 			sb.append("field.scanStopCode = '" + scanStopCode + "';\n");
+			sb.append("field.scanCodeIgnoreCase = '" + scanCodeIgnoreCase + "';\n");
 			sb.append("field.isScanned = false;\n");
 			sb.append("field.scanPartnerField = '" + scanPartnerField + "';\n");
 			if(scanFieldCustomScript != null && scanFieldCustomScript.length() > 0)
-				sb.append("field.scanFieldCustomScript = new Function(\"inputString\", \"" + scanFieldCustomScript + "\");\n");
+				sb.append("field.scanFieldCustomScript = new Function(\"field\", \"control\", \"inputString\", \"" + scanFieldCustomScript + "\");\n");
 			else
 				sb.append("field.scanFieldCustomScript = '';\n");
 		}
