@@ -51,6 +51,15 @@ Build targets:
 
         <property environment="env"/>
 
+        <!-- set the build.number property -->
+        <buildnumber file="build.number"/>
+
+        <!-- replace the build number in the BuildConfiguration file -->
+        <replaceregexp file="com/netspective/sparx/BuildConfiguration.java"
+                         match="public static final int buildNumber = ([0-9]+);"
+                         replace="public static final int buildNumber = ${build.number};"
+                         byline="true" />
+
         <!-- Compile the BuildConfiguration class -->
         <javac srcdir="com/netspective/sparx" destdir="${build.classes.dir}"
         includes="BuildConfiguration.java,util/ant/BuildConfigurationTask.java,util/ant/GenerateBuildLogClassTask.java,util/ant/ClassPathTask.java"
@@ -165,7 +174,7 @@ Build targets:
             <zipfileset dir="../lib/redist" prefix="Sparx/lib/redist" excludes="CVS"/>
             <zipfileset dir="../tools" includes="app-build.*" prefix="Sparx/tools" excludes="CVS"/>
             <zipfileset dir="../web-shared" prefix="Sparx/web-shared" excludes="CVS"/>
-        </zip>          
+        </zip>
     </target>
 
     <!-- ==================== Administrative targets  ======================= -->

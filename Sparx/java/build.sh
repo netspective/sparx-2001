@@ -3,7 +3,7 @@
 BUILD_FILE=build.xml
 SPARX_REDIST_HOME=`pwd`/../lib/redist
 
-ANT_JAR=$SPARX_REDIST_HOME/ant.jar
+ANT_JAR=$SPARX_REDIST_HOME/ant.jar:$SPARX_REDIST_HOME/ant-optional.jar
 XMLAPIS_JAR=$SPARX_REDIST_HOME/xml-apis.jar
 XERCES_JAR=$SPARX_REDIST_HOME/xerces.jar
 XALAN_JAR=$SPARX_REDIST_HOME/xalan.jar

@@ -1,6 +1,6 @@
 @echo off
 
-REM $Id: build.bat,v 1.4 2002-08-18 20:36:10 shahid.shah Exp $
+REM $Id: build.bat,v 1.5 2002-08-23 16:51:20 shahid.shah Exp $
 
 REM **************************************************************************
 REM ** This script should be be run from the SPARX_HOME\java directory.     **
@@ -37,7 +37,7 @@ REM **************************************************************************
 
 set SPARX_REDIST_LIB=%SPARX_HOME%\lib\redist
 
-set ANT_JAR=%SPARX_REDIST_LIB%\ant.jar
+set ANT_JAR=%SPARX_REDIST_LIB%\ant.jar;%SPARX_REDIST_LIB%\ant-optional.jar
 set XMLAPIS_JAR=%SPARX_REDIST_LIB%\xml-apis.jar
 set XERCES_JAR=%SPARX_REDIST_LIB%\xerces.jar
 set XALAN_JAR=%SPARX_REDIST_LIB%\xalan.jar
