@@ -20,26 +20,7 @@
 								<xsd:complexType>
 									<xsd:choice>
 										<xsd:group ref="dialog-fields"/>
-										<xsd:element name="execute-tasks" minOccurs="0">
-											<xsd:complexType>
-												<xsd:choice>
-													<xsd:element name="exec-statement" minOccurs="0" maxOccurs="unbounded">
-														<xsd:complexType>
-															<xsd:complexContent>
-																<xsd:extension base="statementType">
-																	<xsd:attribute name="name" type="xsd:string" use="optional"/>
-																</xsd:extension>
-															</xsd:complexContent>
-														</xsd:complexType>
-													</xsd:element>
-													<xsd:element name="exec-redirect" minOccurs="0">
-														<xsd:complexType>
-															<xsd:attribute name="url" type="xsd:uriReference" use="required"/>
-														</xsd:complexType>
-													</xsd:element>
-												</xsd:choice>
-											</xsd:complexType>
-										</xsd:element>
+										<xsd:element name="execute-tasks" type="execute-tasksType" minOccurs="0"/>
 										<xsd:element name="director" minOccurs="0"/>
 									</xsd:choice>
 									<xsd:attribute name="name" type="xsd:string" use="required"/>
@@ -566,4 +547,41 @@
 			<xsd:element name="report" type="reportType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:choice>
 	</xsd:complexType>
+	<xsd:complexType name="execute-tasksType">
+		<xsd:choice>
+			<xsd:element name="exec-statement" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="statementType">
+							<xsd:attribute name="name" type="xsd:string" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="exec-redirect" minOccurs="0">
+				<xsd:complexType>
+					<xsd:attribute name="url" type="xsd:uriReference" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="exec-dml" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="table" type="xsd:string" use="required"/>
+					<xsd:attribute name="command" type="exec-dml-command-enum" use="required"/>
+					<xsd:attribute name="data-src" type="xsd:string" use="optional"/>
+					<xsd:attribute name="transaction" type="xsd:string" use="optional"/>
+					<xsd:attribute name="where" type="xsd:string" use="optional"/>
+					<xsd:attribute name="fields" type="xsd:string" use="optional"/>
+					<xsd:attribute name="columns" type="xsd:string" use="optional"/>
+					<xsd:attribute name="dialog-context-attr" type="xsd:string" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="exec-dml-command-enum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="insert"/>
+			<xsd:enumeration value="update"/>
+			<xsd:enumeration value="remove"/>
+		</xsd:restriction>
+	</xsd:simpleType>
 </xsd:schema>
