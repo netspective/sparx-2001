@@ -162,57 +162,42 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		initializeDefn();
 	}
 
+	public <xsl:value-of select="$table-name"/>(Schema schema, String tableName)
+	{
+		super(schema, tableName);
+		initializeDefn();
+	}
+
 	public void initializeDefn()
 	{
 <xsl:for-each select="column">
 	<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
-<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:if test="@type = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
-		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="$table-abbrev"/>_<xsl:value-of select="@name"/>_SEQ&quot;);
+<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.NODENAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>);
+<xsl:if test="@_gen-create-id = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSequencedPrimaryKey(true);<xsl:text>
+		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="@_gen-sequence-name"/>&quot;);
 </xsl:if>
-<xsl:if test="(@type != 'autoinc' or @type != 'guid32') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
+<xsl:if test="not(@_gen-create-id = 'autoinc') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setNaturalPrimaryKey(true);
 </xsl:if>
-<xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsRequired(true);
+<xsl:if test="@required = 'yes' or @required = 'application'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setRequired(true);
 </xsl:if>
-<xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsUnique(true);
+<xsl:if test="@required = 'yes' or @required = 'dbms'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setRequiredByDbms(true);
 </xsl:if>
-<xsl:choose>
-	<xsl:when test="@default-java">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="@default-java"/>);
-	</xsl:when>
-	<xsl:when test="default[@type = 'java']">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultValue(<xsl:value-of select="default"/>);
-	</xsl:when>
-</xsl:choose>
-<!-- Added by SJ -->
+<xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setUnique(true);
+</xsl:if>
 <xsl:for-each select="default">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);
 </xsl:for-each>
-<!--xsl:choose>
-	<xsl:when test="@default">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@default"/>&quot;);
-	</xsl:when>
-	<xsl:when test="default[not(@type)]">
-		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="default"/>&quot;);
-	</xsl:when>
-</xsl:choose -->
-<!-- End of Addition -->
 <xsl:if test="size and size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="size"/>);
 </xsl:if>
 <xsl:if test="@size and @size != $default-text-size"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSize(<xsl:value-of select="@size"/>);
 </xsl:if>
-<xsl:if test="selfref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_SELF, &quot;<xsl:value-of select="lookupref"/>&quot;);
+<xsl:if test="@selfref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(ForeignKey.FKEYTYPE_SELF, &quot;<xsl:value-of select="@selfref"/>&quot;);
 </xsl:if>
-<xsl:if test="parentref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_PARENT, &quot;<xsl:value-of select="parentref"/>&quot;);
+<xsl:if test="@parentref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(ForeignKey.FKEYTYPE_PARENT, &quot;<xsl:value-of select="@parentref"/>&quot;);
 </xsl:if>
-<xsl:if test="lookupref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(Column.FKEYREF_LOOKUP, &quot;<xsl:value-of select="selfref"/>&quot;);
+<xsl:if test="@lookupref"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setForeignKeyRef(ForeignKey.FKEYTYPE_LOOKUP, &quot;<xsl:value-of select="@lookupref"/>&quot;);
 </xsl:if>
 </xsl:for-each>
-		setAllColumns(new Column[] {
-<xsl:for-each select="column"><xsl:text>			</xsl:text><xsl:value-of select="@_gen-member-name"/><xsl:if test="position() != last()"><xsl:text>,
-</xsl:text></xsl:if>
-</xsl:for-each>
-		});
 	}
 
 	/**
@@ -279,7 +264,14 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
 	}
-</xsl:if>
+<xsl:if test="@type = 'autoinc'">
+	// For Autoinc/Guid32 Transparency
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key **/
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+	{
+		return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, (<xsl:value-of select="$java-class-spec"/>) value, null);
+	}
+</xsl:if></xsl:if>
 <xsl:if test="java-type and (@primarykey = 'yes') and ../child-table">
 	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type and loads all the child objects **/
 	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, <xsl:value-of select="java-type"/> value, boolean retrieveChildren) throws NamingException, SQLException
@@ -294,7 +286,16 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 		if(retrieveChildren) row.retrieveChildren(cc);
 		return row;
 	}
-</xsl:if>
+<xsl:if test="@type = 'autoinc'">
+	// For Autoinc/Guid32 Transparency
+	/** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key and loads all the child objects **/
+	public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value, boolean retrieveChildren) throws NamingException, SQLException
+	{
+		<xsl:value-of select="$_gen-table-row-class-name"/> row = (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, (<xsl:value-of select="$java-class-spec"/>) value, null);
+		if(retrieveChildren) row.retrieveChildren(cc);
+		return row;
+	}
+</xsl:if></xsl:if>
 <xsl:if test="@reftype = 'parent'">
 <xsl:if test="java-type">
 	/** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by the parent key as a primitive type **/
@@ -324,6 +325,27 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 	{
 		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, value);
 	}
+
+	// AGProcessing Starts
+	// Rows Class: <xsl:value-of select="../@_gen-rows-class-name"/>, Column Type: <xsl:value-of select="@type"/>, Gen Method Name: <xsl:value-of select="@_gen-method-name"/>
+<xsl:if test="@type = 'autoinc' or @type = 'longint'">
+	// For Autoinc/Guid32 Transparency
+	/** Returns the <xsl:value-of select="../@_gen-rows-class-name"/> identified by the parent key **/
+	public <xsl:value-of select="../@_gen-rows-class-name"/> get<xsl:value-of select="../@_gen-rows-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+	{
+		return (<xsl:value-of select="../@_gen-rows-class-name"/>) getRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, (<xsl:value-of select="$java-class-spec"/>) value, null);
+	}
+
+	/**
+	* Deletes all the rows identified by the parent key (does a fast SQL delete, which does not generate interim rows and therefore does not call beforeDelete and afterDelete methods in Row)
+	**/
+	public void delete<xsl:value-of select="../@_gen-rows-name"/>Using<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+	{
+		deleteRecordsByEquality(cc, <xsl:value-of select="../@_gen-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, (<xsl:value-of select="$java-class-spec"/>) value);
+	}
+</xsl:if>
+	// AGProcessing Ends
+	
 </xsl:if>
 <xsl:if test="java-type and (@unique = 'yes' and @primarykey != 'yes')">
     /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by the primary key as a primitive type **/
@@ -337,6 +359,14 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
     {
         return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, value, null);
     }
+<xsl:if test="@type = 'autoinc'">
+		// For Autoinc/Guid32 Transparency
+    /** Returns the <xsl:value-of select="$_gen-table-row-class-name"/> identified by a unique key <xsl:value-of select="@name"/> **/
+    public <xsl:value-of select="$_gen-table-row-class-name"/> get<xsl:value-of select="$_gen-table-method-name"/>By<xsl:value-of select="@_gen-method-name"/>(ConnectionContext cc, Object value) throws NamingException, SQLException
+    {
+        return (<xsl:value-of select="$_gen-table-row-class-name"/>) getRecordByPrimaryKey(cc, (<xsl:value-of select="$java-class-spec"/>) value, null);
+    }
+</xsl:if>
 </xsl:if>
 </xsl:for-each>
 <xsl:for-each select="index[@type='unique' and @java-method-name]">

@@ -7,10 +7,10 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
 
-$Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
+$Id: build.xml,v 1.11 2003-01-12 00:46:38 kamesh.pemmaraju Exp $
 -->
 
-<project name="app" default="all">
+<project name="app" default="all-but-docs">
 
     <property environment="env"/>
 
@@ -76,8 +76,8 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <property name="sparx.tools.dir" value="${sparx.home}/tools"/>
         <property name="sparx.shared.dir" value="${sparx.home}/web-shared"/>
         <property name="sparx.shared.resources.dir" value="${sparx.shared.dir}/resources"/>
-        <property name="sparx.shared.resources.templates.dir" value="${sparx.shared.dir}/resources/templates"/>
-        <property name="sparx.shared.resources.templates.WEB-INF.dir" value="${sparx.shared.dir}/resources/templates/WEB-INF"/>
+        <property name="sparx.shared.templates.dir" value="${sparx.shared.dir}/templates"/>
+        <property name="sparx.shared.templates.WEB-INF.dir" value="${sparx.shared.templates.dir}/WEB-INF"/>
 
         <property name="app.lib.dir" value="${app.WEB-INF.dir}/lib"/>
         <property name="app.config.file" value="${app.WEB-INF.dir}/conf/sparx.xml"/>
@@ -99,6 +99,7 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <!-- define the tasks that will be used in this file -->
         <taskdef name="config" classname="com.netspective.sparx.util.ant.ImportConfigurationTask" classpathref="project.class.path"/>
         <taskdef name="dal" classname="com.netspective.sparx.util.ant.GenerateJavaDALTask" classpathref="project.class.path"/>
+        <taskdef name="ddl" classname="com.netspective.sparx.util.ant.GenerateDDLTask" classpathref="project.class.path"/>
         <taskdef name="dcb" classname="com.netspective.sparx.util.ant.GenerateDialogBeansTask" classpathref="project.class.path"/>
 
         <!-- read all of the sparx.xml configuration entries into config.* entries -->
@@ -109,6 +110,7 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <property name="app.classes.dir" value="${config.app.web-inf-root-path}/classes"/>
         <property name="app.lib.dir" value="${config.app.web-inf-root-path}/lib"/>
         <property name="java.dal.stylesheet.root.dir" value="${config.sparx.shared.xslt-path}/schema-gen/java-gen"/>
+        <property name="schema.ddl.stylesheet.root.dir" value="${config.sparx.shared.xslt-path}/schema-gen"/>
 
         <property name="app.javadoc.root.dir" value="${config.app.documents-root-path}/javadoc"/>
         <property name="app.java.identifiers.jar.name" value="${app.name}-ids.jar"/>
@@ -121,10 +123,20 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <property name="app.java.identifiers.config-props.class-name" value="${app.java.identifiers.pkg-name}.Config"/>
 
         <available file="${config.app.schema.source-file}" property="app.schema.source-file-exists"/>
+        <available file="${config.app.customdal.src.path}" property="app.customdal.src.path-exists"/>
         <property name="app.java.dal.jar.name" value="${app.name}-dal.jar"/>
         <property name="app.java.dal.dir" value="${config.app.schema.root-path}/java"/>
         <property name="app.java.dal.jar" value="${config.app.schema.root-path}/${app.java.dal.jar.name}"/>
         <property name="app.java.dal.doc.dir" value="${app.javadoc.root.dir}/dal"/>
+
+        <condition property="app.java.dal.src.path" value="${app.java.dal.dir}">
+            <isfalse value="${app.customdal.src.path-exists}"/>
+        </condition>
+        <condition property="app.java.dal.src.path" value="${app.java.dal.dir}:${config.app.customdal.src.path}">
+            <istrue value="${app.customdal.src.path-exists}"/>
+        </condition>
+
+        <property name="app.schema.ddl.dir" value="${config.app.schema.root-path}/ddl"/>
 
         <available file="${config.app.ui.source-file}" property="app.ui.source-file-exists"/>
         <property name="app.java.dcb.jar.name" value="${app.name}-dcb.jar"/>
@@ -142,11 +154,14 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
 
         <available file="${app.classes.dir}" type="dir" property="app.classes.dir-exists"/>
 
+        <!--
         <echo message="app.classes.dir-exists = ${app.classes.dir-exists}"/>
         <echo message="app.schema.source-file-exists = ${app.schema.source-file-exists}"/>
+        <echo message="app.customdal.src.path-exists = ${app.customdal.src.path-exists}"/>
         <echo message="app.ui.source-file-exists = ${app.ui.source-file-exists}"/>
         <echo message="app.sql.source-file-exists = ${app.sql.source-file-exists}"/>
         <echo message="app.security.acl-file-exists = ${app.security.acl-file-exists}"/>
+        -->
     </target>
 
     <!--
@@ -155,6 +170,7 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
 
     <target name="setup-sparx-structure" depends="global">
         <mkdir dir="${app.root.dir}/sparx/resources"/>
+        <mkdir dir="${app.root.dir}/sparx/templates"/>
         <mkdir dir="${app.WEB-INF.dir}"/>
         <mkdir dir="${app.WEB-INF.dir}/classes"/>
         <mkdir dir="${app.WEB-INF.dir}/classes/app"/>
@@ -173,19 +189,20 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
     </target>
 
     <target name="copy-sparx-templates" depends="global">
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/resin-web.xml" todir="${app.WEB-INF.dir}/conf"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml" todir="${app.WEB-INF.dir}/conf"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/tomcat-web.xml" todir="${app.WEB-INF.dir}/conf"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/data-types.xml" todir="${app.WEB-INF.dir}/schema"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/schema/schema.xml" todir="${app.WEB-INF.dir}/schema"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/sql/statements.xml" todir="${app.WEB-INF.dir}/sql"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/security/access-control.xml" todir="${app.WEB-INF.dir}/security"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
+        <copy file="${sparx.shared.templates.dir}/index.jsp" todir="${app.root.dir}"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/conf/tomcat-web.xml" tofile="${app.WEB-INF.dir}/web.xml"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/conf/resin-web.xml" todir="${app.WEB-INF.dir}/conf"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/conf/app-config.xml" todir="${app.WEB-INF.dir}/conf"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/conf/tomcat-web.xml" todir="${app.WEB-INF.dir}/conf"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/schema/table-types.xml" todir="${app.WEB-INF.dir}/schema"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/schema/schema.xml" todir="${app.WEB-INF.dir}/schema"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/sql/statements.xml" todir="${app.WEB-INF.dir}/sql"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/security/access-control.xml" todir="${app.WEB-INF.dir}/security"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/ui/dialogs.xml" todir="${app.WEB-INF.dir}/ui"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/ui/structure.xml" todir="${app.WEB-INF.dir}/ui"/>
     </target>
 
     <target name="copy-sparx-libs" depends="global">
@@ -202,7 +219,11 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         </uptodate>
 
         <uptodate property="log4j.properties-is-uptodate" targetfile="${app.WEB-INF.dir}/classes/log4j.properties">
-            <srcfiles dir= "${sparx.shared.resources.templates.WEB-INF.dir}/classes" includes="log4j.properties"/>
+            <srcfiles dir= "${sparx.shared.templates.WEB-INF.dir}/classes" includes="log4j.properties"/>
+        </uptodate>
+
+        <uptodate property="page.tld-is-uptodate" targetfile="${app.WEB-INF.dir}/tld/page.tld">
+            <srcfiles dir= "${sparx.shared.templates.WEB-INF.dir}/tld" includes="page.tld"/>
         </uptodate>
 
         <copy file="${sparx.tools.dir}/app-build.xml" tofile="${app.WEB-INF.dir}/build.xml"/>
@@ -224,12 +245,18 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <copy todir="${app.root.dir}/sparx/resources">
             <fileset dir="${sparx.shared.resources.dir}"/>
         </copy>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
+        <mkdir dir="${app.root.dir}/sparx/templates"/>
+        <copy todir="${app.root.dir}/sparx/templates">
+            <fileset dir="${sparx.shared.templates.dir}"/>
+        </copy>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/tld/sparx.tld" todir="${app.WEB-INF.dir}/tld"/>
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/conf/sparx.xml" todir="${app.WEB-INF.dir}/conf"/>
         <replace file="${app.root.dir}/sparx/resources/css/dialog.css" token="background-image: url(/shared/resources/images/dialog/required-field.gif)" value="background-image: url(/${app.name}/sparx/resources/images/dialog/required-field.gif)" summary="yes"/>
 
         <available property="app.config.exists" file="${app.WEB-INF.dir}/conf/app-config.xml"/>
-        <fail message="Please copy ${sparx.shared.resources.templates.WEB-INF.dir}/conf/app-config.xml to conf/app-config.xml and run upgrade-sparx again." unless="app.config.exists"/>
+        <fail message="Please copy ${sparx.shared.templates.WEB-INF.dir}/conf/app-config.xml to conf/app-config.xml and run upgrade-sparx again." unless="app.config.exists"/>
+
+        <available property="old.templates.dir.exists" file="${app.root.dir}/sparx/resources/templates"/>
     </target>
 
     <target name="start-sparx-app" depends="setup-sparx-structure,copy-sparx-templates,copy-sparx-resources,copy-sparx-libs">
@@ -260,15 +287,33 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
     <target name="check-log4j.properties" depends="copy-sparx-libs" unless="log4j.properties-is-uptodate">
         <echo message="** NOTE ** Please check the following files to see if there are updates you need:"/>
         <echo message="    ${app.WEB-INF.dir}/classes/log4j.properties is older than"/>
-        <echo message="    ${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties"/>
+        <echo message="    ${sparx.shared.templates.WEB-INF.dir}/classes/log4j.properties"/>
         <echo message="   You can use the 'upgrade-log4j.properties' target to update this file."/>
     </target>
 
-    <target name="upgrade-log4j.properties" depends="global">
-        <copy file="${sparx.shared.resources.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
+    <target name="check-page.tld" depends="copy-sparx-libs" unless="page.tld-is-uptodate">
+        <echo message="** NOTE ** Please check the following files to see if there are updates you need:"/>
+        <echo message="    ${app.WEB-INF.dir}/tld/page.tld is older than"/>
+        <echo message="    ${sparx.shared.templates.WEB-INF.dir}/tld/page.tld"/>
+        <echo message="   You can use the 'upgrade-page.tld' target to update this file."/>
     </target>
 
-    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh,check-log4j.properties">
+    <!-- since version 2.2 -->
+    <target name="check-retired-resources-templates" depends="copy-sparx-resources" if="old.templates.dir.exists">
+        <echo message="** NOTE ** The ${app.root.dir}/sparx/resources/templates directory has been moved."/>
+        <echo message="   Please remove ${app.root.dir}/sparx/resources/templates."/>
+        <echo message="   The new location is ${app.root.dir}/sparx/templates."/>
+    </target>
+
+    <target name="upgrade-log4j.properties" depends="global">
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/classes/log4j.properties" todir="${app.WEB-INF.dir}/classes"/>
+    </target>
+
+    <target name="upgrade-page.tld" depends="global">
+        <copy file="${sparx.shared.templates.WEB-INF.dir}/tld/page.tld" todir="${app.WEB-INF.dir}/tld"/>
+    </target>
+
+    <target name="upgrade-sparx" depends="copy-sparx-libs,copy-sparx-resources,upgrade-build-xml,upgrade-build-bat,upgrade-build-sh,check-log4j.properties,check-page.tld,check-retired-resources-templates">
         <echo message="Sparx libraries and resources have been updated."/>
     </target>
 
@@ -338,7 +383,8 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <dal schema="${config.app.schema.source-file}" dest="${app.java.dal.dir}" stylesheetroot="${java.dal.stylesheet.root.dir}"/>
         <property name="dal.temp.build.dir" value="${app.java.dal.dir}/classes"/>
         <mkdir dir="${dal.temp.build.dir}"/>
-        <javac srcdir="${app.java.dal.dir}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
+        <echo message="DAL source path is ${app.java.dal.src.path}"/>
+        <javac srcdir="${app.java.dal.src.path}" destdir="${dal.temp.build.dir}" classpathref="project.class.path"/>
         <jar jarfile="${app.java.dal.jar}" basedir="${dal.temp.build.dir}">
             <include name="**"/>
         </jar>
@@ -368,6 +414,10 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         </javadoc>
     </target>
 
+    <target name="ddl" depends="init" if="app.schema.source-file-exists">
+        <ddl schema="${config.app.schema.source-file}" dest="${app.schema.ddl.dir}" stylesdir="${schema.ddl.stylesheet.root.dir}"/>
+    </target>
+
     <!--
     ============================= Generate UI Items ================================
     -->
@@ -377,11 +427,16 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
             <include name="**/form/field/*.java"/>
         </javac>
         <!-- generate the dialog context beans files -->
-        <dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" debug="no"/>
+        <dcb source="${config.app.ui.source-file}" package="${app.java.dcb.package}." dest="${app.java.dcb.dir}" schema="${config.app.schema.source-file}" debug="no"/>
 
         <property name="dcb.temp.build.dir" value="${app.java.dcb.dir}/build"/>
         <mkdir dir="${dcb.temp.build.dir}"/>
-        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}" classpathref="project.class.path"/>
+        <echo message="${app.lib.dir}/${app.java.dal.jar}"/>
+        <javac srcdir="${app.java.dcb.dir}" destdir="${dcb.temp.build.dir}" classpathref="project.class.path">
+            <classpath>
+            	<pathelement location="${app.lib.dir}/${app.java.dal.jar.name}"/>
+            </classpath>
+        </javac>
         <jar jarfile="${app.java.dcb.jar}" basedir="${dcb.temp.build.dir}">
             <include name="**"/>
         </jar>
@@ -405,6 +460,9 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
              windowtitle="Application Dialog Context Beans API"
              doctitle="Application Dialog Context Beans API Documentation"
              bottom="Copyright &#169; 2001 Netspective. All Rights Reserved.">
+            <classpath>
+            	<pathelement location="${app.lib.dir}/${app.java.dal.jar.name}"/>
+            </classpath>
             <sourcepath>
                 <pathelement path="${app.java.dcb.dir}"/>
             </sourcepath>
@@ -528,12 +586,14 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <echo message="                  latest version available in SPARX_HOME (basically runs these"/>
         <echo message="                  two targets: copy-sparx-libs and copy-sparx-resources"/>
         <echo message="  upgrade-log4j.properties Upgrades WEB-INF/classes/log4.properties file"/>
+        <echo message="  upgrade-page.tld Upgrades WEB-INF/tld/page.tld file"/>
         <echo message="  "/>
         <echo message="  compile         Compile all the classes in the WEB-INF/classes directory"/>
         <echo message="  dal             Generate the Data Access Layer (DAL) from SchemaDoc (XML)"/>
         <echo message="  dal-doc         Generate the Data Access Layer (DAL) API Documentation"/>
         <echo message="  dcb             Generate the Dialog Context Beans from Dialogs (XML)"/>
         <echo message="  dcb-doc         Generate the Dialog Context Beans API Documentation"/>
+        <echo message="  ddl             Generate the schema SQL DDL files from SchemaDoc (XML)"/>
         <echo message="  identifiers     Generate the Identifiers for Dialogs, Statements, Configs, etc."/>
         <echo message="  identifiers-doc Generate the Identifiers API Documentation"/>
         <echo message="  "/>
@@ -544,8 +604,8 @@ $Id: build.xml,v 1.10 2002-11-28 21:18:48 shahid.shah Exp $
         <echo message="                        files (like WEB-INF/tld/sparx.tld) that are maintained"/>
         <echo message="                        only in Sparx distribution"/>
         <echo message="  copy-sparx-templates  Copy all starter files for a Sparx application (if you"/>
-        <echo message="                        run this on an existing application YOUR files will be"/>
-        <echo message="                        overwritten by the original Sparx templates from"/>
+        <echo message="                        run this on an existing application _YOUR_ files will be"/>
+        <echo message="                        OVERWRITTEN by the original Sparx templates from"/>
         <echo message="                        SPARX_HOME"/>
     </target>
 </project>

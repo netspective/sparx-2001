@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html"/>
 
+<xsl:param name="ace-url"/>
 <xsl:param name="root-url"/>
 <xsl:param name="detail-type"/>
 <xsl:param name="detail-name"/>
@@ -24,8 +25,6 @@
 		</xsl:when>
 		<xsl:when test="$detail-type = 'erd'">
 			<xsl:apply-templates select="table-structure"/>
-		</xsl:when>
-		<xsl:when test="$detail-type = 'generate'">
 		</xsl:when>
 		<xsl:when test="$detail-type = 'graphviz'">
 			<code>
@@ -126,6 +125,30 @@
 						</xsl:for-each>
 						</ol>
 					</xsl:if>
+
+                    <p/>
+                    <h1>Data Access Layer (DAL) Settings</h1>
+                    <b>Destination-path</b>: <xsl:value-of select="dal-generator/destination-path"/><br/><br/>
+
+                    <table class="data_table" cellspacing="0" cellpadding="2" border="0">
+                        <tr class="data_table_header">
+                            <th class="data_table">Name</th>
+                            <th class="data_table">Package</th>
+                            <th class="data_table">Class</th>
+                            <th class="data_table">Stylesheet</th>
+                        </tr>
+
+                        <xsl:for-each select="dal-generator/*[name() != 'destination-path']">
+                            <tr valign="top" class="data_table">
+                                <td class="data_table"><xsl:value-of select="name()"/></td>
+                                <td class="data_table"><xsl:value-of select="@package"/></td>
+                                <td class="data_table"><xsl:value-of select="@class"/></td>
+                                <td class="data_table"><xsl:value-of select="@style-sheet"/></td>
+                            </tr>
+                        </xsl:for-each>
+
+                    </table>
+
 				</td>
 			</tr>
 		</table>
@@ -224,7 +247,7 @@
 		<tr>
 			<td class="table_info_caption">Actions:</td>
 			<td class="table_description">
-                <a href="{concat($root-url, '/query/', $app.dal.schema.class-name, '/', @name)}"><img src="{concat($sparx.ace.images-root-url, '/icons/exec_query_defn.gif')}" border="0"/> Execute Query Definition</a>
+                <a href="{concat($ace-url, '/database/query-defn/test/query-defn/', @name)}"><img src="{concat($sparx.ace.images-root-url, '/icons/exec_query_defn.gif')}" border="0"/> Execute Query Definition</a>
 			</td>
 		</tr>
 		<tr valign="top">
@@ -282,8 +305,12 @@
 		<th></th>
 		<th>Java Type</th>
 		<th></th>
+        <th>Gen ID</th>
+        <th></th>
+        <th>Seq Name</th>
+        <th></th>
 	</tr>
-	<tr><td colspan="16"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="20"><img width="100%" height="3"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	<xsl:for-each select="column">
 	<tr>
 		<xsl:if test="@primarykey='yes'">
@@ -376,14 +403,32 @@
 			</xsl:choose>
 		</td>
 		<td width="4"></td>
+        <td class="column_sql">
+            <xsl:choose>
+                <xsl:when test="@_gen-create-id">
+                    <xsl:value-of select="@_gen-create-id"/>
+                </xsl:when>
+                <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
+        </td>
+        <td width="4"></td>
+        <td class="column_sql">
+            <xsl:choose>
+                <xsl:when test="@_gen-create-id = 'autoinc' and @_gen-sequence-name">
+                    <xsl:value-of select="@_gen-sequence-name"/>
+                </xsl:when>
+                <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
+        </td>
+        <td width="4"></td>
 	</tr>
 	<tr>
 		<xsl:if test="@primarykey='yes'">
 			<xsl:attribute name="bgcolor">#EEEEEE</xsl:attribute>
 		</xsl:if>
-		<td colspan="14" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
+		<td colspan="18" class="column_descr"><xsl:value-of select="descr | @descr"/></td>
 	</tr>
-	<tr><td colspan="16"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
+	<tr><td colspan="20"><img width="100%" height="1"><xsl:attribute name="src"><xsl:value-of select="$sparx.shared.images-url"/>/design/bar.gif</xsl:attribute></img></td></tr>
 	</xsl:for-each>
 	</table>
 
@@ -461,6 +506,54 @@
 	</table>
 	</xsl:if>
 
+    <xsl:if test="trigger">
+        <p/><h1>Triggers</h1>
+            <table>
+            <xsl:for-each select="trigger">
+                <tr>
+                    <td rowspan="2" valign="top">
+                        <nobr><b><xsl:value-of select="concat(@time, ' ', @event)"/></b></nobr>
+                    </td>
+                    <td>
+                        <xsl:for-each select="@*[name() != 'time' and name() != 'event']">
+                            <font color="green"><xsl:value-of select="name()"/></font> = <xsl:value-of select="."/><br/>
+                        </xsl:for-each>
+                    </td>
+                </tr>
+                <tr>
+                    <td><pre><xsl:value-of select="code-documentation"/></pre></td>
+                </tr>
+            </xsl:for-each>
+            </table>
+    </xsl:if>
+
+    <p/><h1>DAL Properties</h1>
+    <table border="0" cellspacing="0">
+    <tr bgcolor="beige">
+        <th>Name</th>
+        <th>&#160;</th>
+        <th>Value</th>
+    </tr>
+    <xsl:for-each select="@*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select="*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    </table>
+
 	</td></tr></table>
 </xsl:template>
 
@@ -470,23 +563,38 @@
     <tr valign="top">
         <xsl:for-each select="$table/column">
        		<td>
-       		<xsl:if test="$data-elem[name() = 'enum'] and @name = 'caption'">
-				<xsl:value-of select="$data-elem/text()"/>
-       		</xsl:if>
-        	<xsl:variable name="column-name" select="@name"/>
-        	<!-- the for-each should be using select="$data-elem/@*" but Xalan doesn't work with that, so we're using @* since . is already the $data-elm -->
-        	<xsl:for-each select="@*">
-        		<xsl:choose>
-					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
-					<xsl:otherwise>&#160;</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:for-each>
-        	<xsl:for-each select="$data-elem/*">
-        		<xsl:choose>
-					<xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
-					<xsl:otherwise>&#160;</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:for-each>
+            <xsl:choose>
+                <xsl:when test="$data-elem[name() = 'enum']">
+                    <xsl:choose>
+                        <xsl:when test="@name = 'id'"><xsl:attribute name="align">right</xsl:attribute><xsl:value-of select="$data-elem/@id"/></xsl:when>
+                        <xsl:when test="@name = 'caption'"><xsl:value-of select="$data-elem/text()"/></xsl:when>
+                        <xsl:when test="@name = 'abbrev'">
+                            <xsl:choose>
+                                <xsl:when test="$data-elem/@abbrev">
+                                    <xsl:value-of select="$data-elem/@abbrev"/>
+                                </xsl:when>
+                                <xsl:otherwise>&#160;</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="column-name" select="@name"/>
+                    <!-- the for-each should be using select="$data-elem/@*" but Xalan doesn't work with that, so we're using @* since . is already the $data-elm -->
+                    <xsl:for-each select="@*">
+                        <xsl:choose>
+                            <xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
+                            <xsl:otherwise>&#160;</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                    <xsl:for-each select="$data-elem/*">
+                        <xsl:choose>
+                            <xsl:when test="name() = $column-name"><xsl:value-of select="."/></xsl:when>
+                            <xsl:otherwise>&#160;</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
        		</td>
 		</xsl:for-each>
     </tr>
@@ -517,10 +625,10 @@
 	<a href="." style="text-decoration:none">Return to <b><xsl:value-of select="$detail-name"/></b> table.</a>
 	<p/>
 	<table>
-	<xsl:for-each select="@*">
+	<xsl:for-each select="@*[not(starts-with(name(), 'dal-') or starts-with(name(), '_gen'))]">
 		<tr><td class="column_attr_caption"><xsl:value-of select="name()"/>:</td><td class="column_attr_value"><xsl:value-of select="."/></td></tr>
 	</xsl:for-each>
-	<xsl:for-each select="*[name() != 'referenced-by']">
+	<xsl:for-each select="*[name() != 'referenced-by' and name() != 'trigger' and name() != 'validate']">
 		<tr>
 			<td class="column_elem_caption">
 			<xsl:value-of select="name()"/>:
@@ -549,6 +657,102 @@
 		</tr>
 	</xsl:if>
 	</table>
+
+    <xsl:if test="validate">
+    <p/><h1>Validation</h1>
+        <table>
+        <xsl:for-each select="validate">
+            <tr>
+                <td valign="top">
+                    <nobr><b><xsl:value-of select="@name"/></b></nobr>
+                </td>
+                <td>
+                    <xsl:for-each select="@*[name() != 'name']">
+                        <xsl:value-of select="name()"/> = <font color="green"><xsl:value-of select="."/></font><br/>
+                    </xsl:for-each>
+                    <table>
+                        <xsl:for-each select="message-success">
+                            <tr><td>Message (Success)</td><td><xsl:value-of select="."/></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="message-failure">
+                            <tr><td>Message (Failure)</td><td><xsl:value-of select="."/></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="reg-ex-pattern">
+                            <tr><td>Reg-ex Pattern</td><td><xsl:value-of select="."/></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="declare-java-code[@type = 'singleton']">
+                            <tr>
+                                <td>
+                                    Declare (<xsl:value-of select="@ID"/>)
+                                    <xsl:if test="@_gen-is-duplicate">[Duplicate]</xsl:if>
+                                </td>
+                                <td><pre><xsl:value-of select="code-documentation"/></pre></td>
+                            </tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="declare-java-code[not(@type)]">
+                            <tr><td>Declare</td><td><pre><xsl:value-of select="code-documentation"/></pre></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="static-java-code">
+                            <tr><td>Static</td><td><pre><xsl:value-of select="code-documentation"/></pre></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="java-code">
+                            <tr><td>Code</td><td><pre><xsl:value-of select="code-documentation"/></pre></td></tr>
+                        </xsl:for-each>
+                    </table>
+                </td>
+            </tr>
+        </xsl:for-each>
+        </table>
+    </xsl:if>
+
+    <xsl:if test="trigger">
+    <p/><h1>Triggers</h1>
+        <table>
+        <xsl:for-each select="trigger">
+            <tr>
+                <td rowspan="2" valign="top">
+                    <nobr><b><xsl:value-of select="concat(@time, ' ', @event)"/></b></nobr>
+                </td>
+                <td>
+                    <xsl:for-each select="@*[name() != 'time' and name() != 'event']">
+                        <xsl:value-of select="name()"/> = <font color="green"><xsl:value-of select="."/></font><br/>
+                    </xsl:for-each>
+                </td>
+            </tr>
+            <tr>
+                <td><pre><font color="green"><xsl:value-of select="code-documentation"/></font></pre></td>
+            </tr>
+        </xsl:for-each>
+        </table>
+    </xsl:if>
+
+    <p/><h1>DAL Properties</h1>
+    <table border="0" cellspacing="0">
+    <tr bgcolor="beige">
+        <th>Name</th>
+        <th>&#160;</th>
+        <th>Value</th>
+    </tr>
+    <xsl:for-each select="@*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select="*">
+        <xsl:if test="starts-with(name(), 'dal-') or starts-with(name(), '_gen')">
+        <tr>
+        <td><xsl:value-of select="name()"/></td>
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+        </tr>
+        </xsl:if>
+    </xsl:for-each>
+    </table>
+
 	</td></tr></table>
 </xsl:template>
 

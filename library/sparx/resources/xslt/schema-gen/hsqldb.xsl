@@ -92,20 +92,4 @@
 
 	<xsl:value-of select="' '"/>
 </xsl:template>
-<xsl:template name="column-sql-modifiers">
-	<xsl:param name="table"/>
-	<xsl:param name="column"/>
-
-	<xsl:if test="$generate-constraints != 'yes'">
-		<xsl:if test="@primarykey='yes' and @type='autoinc'">
-			<xsl:text> IDENTITY PRIMARY KEY</xsl:text>
-		</xsl:if>
-		<xsl:if test="@primarykey='yes' and @type='guid32'">
-			<xsl:text>  PRIMARY KEY</xsl:text>
-		</xsl:if>
-		<xsl:if test="@required='yes'">
-			<xsl:text> NOT NULL</xsl:text>
-		</xsl:if>
-	</xsl:if>
-</xsl:template>
 </xsl:stylesheet>

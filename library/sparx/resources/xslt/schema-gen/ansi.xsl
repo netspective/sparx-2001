@@ -76,7 +76,7 @@
 drop table <xsl:value-of select="$table/@name"/><xsl:value-of select="$statement-terminator"/>
 </xsl:if>
 <xsl:if test="$generate-seq = 'yes'">
-<xsl:for-each select="$table/column[@type = 'autoinc']">
+<xsl:for-each select="$table/column[@_gen-create-id = 'autoinc']">
 	<xsl:call-template name="sequence-definition">
 		<xsl:with-param name="table" select="$table"/>
 		<xsl:with-param name="column" select="."/>
@@ -115,18 +115,13 @@ create<xsl:value-of select="$table-modifiers"/> table <xsl:value-of select="$tab
 
 	<xsl:if test="$generate-drop-seq">
 		<xsl:text>drop sequence </xsl:text>
-		<xsl:value-of select="$table/@abbrev"/>
-		<xsl:text>_</xsl:text>
-		<xsl:value-of select="$column/@name"/>
-		<xsl:text>_SEQ</xsl:text>
+		<xsl:value-of select="$column/@_gen-sequence-name"/>
 		<xsl:value-of select="$statement-terminator"/>
 	</xsl:if>
 
 	<xsl:text>create sequence </xsl:text>
-	<xsl:value-of select="$table/@abbrev"/>
-	<xsl:text>_</xsl:text>
-	<xsl:value-of select="$column/@name"/>
-	<xsl:text>_SEQ increment by 1 start with 1 nomaxvalue nocache nocycle</xsl:text>
+	<xsl:value-of select="$column/@_gen-sequence-name"/>
+	<xsl:text> increment by 1 start with 1 nomaxvalue nocache nocycle</xsl:text>
 	<xsl:value-of select="$statement-terminator"/>
 </xsl:template>
 

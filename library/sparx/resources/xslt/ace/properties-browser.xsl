@@ -63,7 +63,7 @@
 	</div>
 </xsl:template>
 
-<xsl:template match="xaf/factory[not(value-source)]">
+<xsl:template match="xaf/factory[not(value-source) and not(component-command)]">
 	<div class="page_source">
 		Source: <xsl:value-of select="@class"/>
 	</div>
@@ -98,32 +98,57 @@
 			<th class="data_table">LVS</th>
 			<th class="data_table" title="Read/Write">RW</th>
 			<th class="data_table">Usage</th>
-			<th class="data_table">Class</th>
 		</tr>
 		<xsl:for-each select="*">
 			<xsl:sort select="@name"/>
 			<tr valign="top" class="data_table">
-				<td class="data_table"><xsl:value-of select="@name"/></td>
-				<td class="data_table">
+				<td rowspan="2" class="data_table"><xsl:value-of select="@name"/></td>
+				<td class="data_table" align="center">
 					<xsl:if test="@svs = 'yes'">S</xsl:if>
 				</td>
-				<td class="data_table">
+				<td class="data_table" align="center">
 					<xsl:if test="@lvs = 'yes'">L</xsl:if>
 				</td>
-				<td class="data_table">
+				<td class="data_table" align="center">
 					<xsl:if test="@allow-write = 'yes'">RW</xsl:if>
 				</td>				
 				<td class="data_table"><xsl:value-of select="@params" disable-output-escaping="yes"/></td>
-				<td class="data_table">
-					<font color="green"><xsl:value-of select="@class"/></font>
-					<xsl:if test="descr">
-						<br/><xsl:value-of select="descr" disable-output-escaping="yes"/>
-					</xsl:if>
-				</td>
 			</tr>
+            <tr valign="top" class="data_table">
+                <td colspan="4" class="data_table">
+                    <font color="green"><xsl:value-of select="@class"/></font>
+                    <xsl:if test="descr">
+                        <br/><xsl:value-of select="descr" disable-output-escaping="yes"/>
+                    </xsl:if>
+                </td>
+            </tr>
 		</xsl:for-each>
 	</table>
 	</div>
 </xsl:template>
+
+    <xsl:template match="xaf/factory[component-command]">
+        <div class="page_source">
+            Source: <xsl:value-of select="@class"/>
+        </div>
+
+        <div class="content">
+        <table>
+            <xsl:for-each select="*">
+                <xsl:sort select="@name"/>
+                <tr valign="top">
+                    <td><nobr><b><a name="{@name}"><xsl:value-of select="@name"/></a></b></nobr></td>
+                    <td>
+                        <font color="green"><xsl:value-of select="@class"/></font><br/>
+                        <xsl:value-of select="descr" disable-output-escaping="yes"/><p/>
+                        <xsl:value-of select="@usage" disable-output-escaping="yes"/>
+                        <xsl:value-of select="@params" disable-output-escaping="yes"/>
+                        <p/>
+                    </td>
+                </tr>
+            </xsl:for-each>
+        </table>
+        </div>
+    </xsl:template>
 
 </xsl:stylesheet>

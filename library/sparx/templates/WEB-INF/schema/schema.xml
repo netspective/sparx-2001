@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<schema name="db">
+    <include file="../../sparx/resources/schema/data-types.xml"/>
+    <include file="table-types.xml"/>
+
+    <table name="Person" type="Default">
+        <column name="system_id" primarykey="yes" type="auto-inc" descr="The user's auto-generated id (internal identifier)"/>
+        <column name="person_id" unique="yes" type="email" descr="The user's e-mail address or other identifier"/>
+        <column name="name_first" type="text" required="yes" size="32" descr="User's first name"/>
+        <column name="name_last" type="text" required="yes" size="32" descr="User's last name"/>
+        <column name="password" type="text" descr="The user's password"/>
+
+        <statement name="lookup">
+            select system_id, person_id, name_first, name_last from person
+        </statement>
+    </table>
+
+</schema>

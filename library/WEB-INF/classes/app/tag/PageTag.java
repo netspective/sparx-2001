@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
-import com.netspective.sparx.xaf.page.VirtualPath;
+// import com.netspective.sparx.xaf.page.VirtualPath;    removed in 2.2
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import com.netspective.sparx.xif.db.DatabaseContext;
 
@@ -21,6 +21,29 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 {
     private static String DEFAULT_DS_NAME = "jdbc/library";
     private static boolean validConnection;
+
+    private String heading;
+    private String title;
+
+
+    public String getHeading() {
+        return heading;
+    }
+
+    public void setHeading(String heading) {
+        this.heading = heading;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
 
     public boolean validConnection()
     {

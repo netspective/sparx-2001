@@ -70,7 +70,7 @@
 	  <res-ref-name>jdbc/library</res-ref-name>
 	  <res-type>javax.sql.DataSource</res-type>
 	  <init-param driver-name="org.hsqldb.jdbcDriver"/>
-	  <init-param url="jdbc:hsqldb:c:\Projects\library\WEB-INF\database\library.hsqldb"/>
+	  <init-param url="jdbc:hsqldb:c:\projects\webapps\library\WEB-INF\Database\library.hsqldb"/>
 	  <init-param user="sa"/>
 	  <init-param password=""/>
 	  <init-param max-connections="20"/>

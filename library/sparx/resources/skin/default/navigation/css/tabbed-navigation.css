@@ -1,0 +1,69 @@
+BODY {
+	FONT-SIZE: 12pt; MARGIN: 0px; FONT-FAMILY: helvetica, arial, sans-serif; BACKGROUND-COLOR: #ffffff
+}
+
+
+/* app_header is paced at the very top of the page */
+table.app_header { background-color: #003366; border: 0; }
+td.app_header{ text-align : left; color : #888888; font-family : Tahoma; font : 7pt; text-indent : 5%; }
+a.app_header{ color : White; text-decoration : none; font-family : Tahoma; font : 7pt; }
+a.app_header:hover{	color : #91ADC8; text-decoration : none; font-family : Tahoma; font : 7pt; }
+
+/* mast_header the very next level down, where the application information resides */
+table.mast_header { background-color: #336699}
+
+/* app_name is where the application name is displayed, it is placed within the mast_header */
+a.app_name { color : lightyellow; text-decoration : none; font-family : arial; font : 16pt;	font-weight: bold; }
+
+td.level1_tabs_on { font-family: "Tahoma"; font-size: 8pt; color: #E0E0E0; background-color: #666666; border-top-width: 1; border-right-width: 1; border-bottom-width: 1; border-left-width: 1; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: #CCCCCC; border-right-color: #343434; border-bottom-color: #666666; border-left-color: #CCCCCC; text-align: center; vertical-align: middle; white-space: nowrap; padding-right: 15px; padding-left: 15px; text-indent: 5px; }
+td.level1_tabs_off { font-family: "Tahoma"; font-size: 8pt; color: #000000; background-color: #343434; border-top-width: 1; border-right-width: 0; border-bottom-width: 1; border-left-width: 1; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: #343434; border-right-color: #343434; border-bottom-color: #909790; border-left-color: #343434; text-align: center; vertical-align: middle; white-space: nowrap; padding-right: 15px; padding-left: 15px; }
+a.level1_tabs_navigation_off { ffont-family: "Tahoma"; font-size: 10pt; font-weight: bold; text-decoration: none; color: #E0E0E0; }
+a.level1_tabs_navigation_off:hover { font-family: "Tahoma"; font-size: 10pt; font-weight: bold; text-decoration: none; color: #527DA9; }
+a.level1_tabs_navigation_on { font-family: "Tahoma"; font-size: 10pt; font-weight: bold; text-decoration: none; color: #FFFFFF; }
+a.level1_tabs_navigation_on:hover { font-family: "Tahoma"; font-size: 10pt; font-weight: bold; text-decoration: none; color: #91ADC8; }
+/* This item is used to separate each tab at this level and then at the very end to extend the effect it creates */
+td.inner_level1_tabs_separator { border-bottom-width: 1; border-bottom-style: solid; border-bottom-color: #909790; }
+
+
+table.level2_tabs { background-color: #666666; }
+td.level2_tabs_off { font-family: "Tahoma"; font-size: 8pt; font-weight: bold; color: #E0E0E0; background-color: #666666; border-top-width: thin; border-right-width: thin; border-bottom-width: thin; border-left-width: thin; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: #666666; border-right-color: #666666; border-bottom-color: #666666; border-left-color: #666666; text-align: center; vertical-align: middle; white-space: nowrap; padding-right: 5px; padding-left: 5px; text-indent: 5px; }
+td.level2_tabs_on { font-family: "Tahoma"; font-size: 8pt; font-weight: bold; color: #000000; background-color: #CCCCCC; border-top-width: 1; border-right-width: 1; border-bottom-width: 1; border-left-width: 1; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: #000000; border-right-color: #999999; border-bottom-color: #CCCCCC; border-left-color: #000000; text-align: center; vertical-align: middle; white-space: nowrap; padding-right: 5px; padding-left: 5px; }
+a.level2_tabs_navigation_on { ffont-family: "Tahoma"; font-size: 8pt; font-weight: bold; text-decoration: none; color: #000000 }
+a.level2_tabs_navigation_on:hover { font-family: "Tahoma"; font-size: 8pt; font-weight: bold; text-decoration: none; color: #527DA9; }
+a.level2_tabs_navigation_off { font-family: "Tahoma"; font-size: 8pt; font-weight: bold; text-decoration: none; color: #E0E0E0 }
+a.level2_tabs_navigation_off:hover { font-family: "Tahoma"; font-size: 8pt; font-weight: bold; text-decoration: none; color: #91ADC8; }
+
+/* The page_header is the heading that is between the level2 tabs and the actual content of the page */
+td.page_header { font-weight: bold; font-size: 18pt; color: white; background-color: #343434; text-indent: 10px; font-family : Arial, Helvetica; }
+table.page_header { background-color: #343434;}
+
+/* The sub_heading is sometimes displayed right below the page_header */
+td.sub_heading { font-family: "Tahoma"; font-size: 8pt; font-weight: bold; color: #333333; }
+tr.sub_heading { background-color: #cccccc; }
+
+/* the "main" table is the one that holds the level3 tabs and the actual content of the page */
+table.main { background-color: #cccccc;}
+
+td.level3_tabs_div {background-color: #999999 }
+tr.level3_tabs_on { background-color: #ffffff;}
+tr.level3_tabs_off {background-color: #cccccc;}
+a.level3_tabs_off { font-family: tahoma; font-size: 8pt; color: black; text-decoration: none; }
+a.level3_tabs_off:hover { font-family: tahoma; font-size: 8pt; text-decoration: none; color: #527DA9; }
+a.level3_tabs_on { font-family: tahoma; font-size: 8pt; font-weight: bold; color: black; text-decoration: none; }
+a.level3_tabs_on:hover { font-family: tahoma; font-size: 8pt; font-weight: bold; text-decoration: none; color: #527DA9; }
+
+/* The page_content holds the content of the page that is besides the level3 tabs */
+td.page_content { background-color: #ffffff;}
+
+td.power_by_sparx_footer {font-family: Verdana,Arial,Helvetica; font-size: 7pt; font-color: #777777;}
+td.copyright_footer {font-family: Verdana,Arial,Helvetica; font-size: 7pt; font-color: #777777;}
+
+/* This I belive can be removes, they are supposed to represent dialog and query output, but have not been
+   able to perform the tests necesary to safely remove them */
+table.data { }
+tr.data { }
+tr.data_head { background: #EEEEEE; }
+th.data { font-family: tahoma; font-size: 8pt; border-bottom: 1 solid #999999; font-weight: normal; }
+td.data { font-family: tahoma; font-size: 8pt; border-bottom: 1 solid #CCCCCC; }
+td.data_code { font-family: lucida sans, courier; font-size: 8pt; border-bottom: 1 solid #CCCCCC; }
+td.data_check { font-family: tahoma; font-size: 8pt; text-align: center; border-bottom: 1 solid #CCCCCC; }

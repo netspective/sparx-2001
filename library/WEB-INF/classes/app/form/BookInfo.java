@@ -1,25 +1,26 @@
 package app.form;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.SQLException;
-
-import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import app.dal.DataAccessLayer;
 import app.dal.domain.row.BookInfoRow;
 import app.dal.table.BookInfoTable;
 import app.form.context.library.BookInfoContext;
 
+
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xif.dal.ConnectionContext;
 
+import javax.naming.NamingException;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.SQLException;
+import java.awt.*;
+
 
 public class BookInfo extends Dialog
+
 {
+
     /**
      * This is the class that you do your entire dialog validation with
      */

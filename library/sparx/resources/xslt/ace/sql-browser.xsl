@@ -161,7 +161,7 @@
     <h1>Test this SQL Statement</h1>
     <ul>
         <li>by <a href="{concat($root-url,'/test/',@qualified-name,'?ui=yes')}" target="{concat('statement.', @qualified-name)}">supplying parameters</a> in a dialog with pageable results</li>
-        <li>by using parameters supplied in the XML and <a href="{concat($root-url,'/test/',@qualified-name,'?pageable=yes')}" target="{concat('statement.', @qualified-name)}">with</a> pageable results</li>
+        <li>by using parameters supplied in the XML and <a href="{concat($root-url,'/test/',@qualified-name,',-,20')}" target="{concat('statement.', @qualified-name)}">with</a> pageable results</li>
         <li>by using parameters supplied in the XML but <a href="{concat($root-url,'/test/',@qualified-name)}" target="{concat('statement.', @qualified-name)}">without</a> pageable results</li>
     </ul>
 	<h1>SQL</h1>

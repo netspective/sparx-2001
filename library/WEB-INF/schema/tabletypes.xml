@@ -34,8 +34,8 @@
 		<param name="abbrevsize">32</param>
 
 		<column name="id" type="integer" primarykey="yes" descr="The value associated with a single enum"/>
-		<column name="caption" type="text" size="$capsize$" required="yes" descr="The name/text an end-user would see"/>
-		<column name="abbrev" type="text" size="$abbrevsize$" descr="An abbreviated form of the caption"/>
+		<column name="caption" type="text" size="${params.capsize}" required="yes" descr="The name/text an end-user would see"/>
+		<column name="abbrev" type="text" size="${params.abbrevsize}" descr="An abbreviated form of the caption"/>
 	</tabletype>
 
 	<table name="Lookup_Result_Type" abbrev="LkResTy" type="Enumeration">
