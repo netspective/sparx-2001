@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogDirector.java,v 1.7 2003-03-19 20:46:36 thai.nguyen Exp $
+ * $Id: DialogDirector.java,v 1.8 2003-06-02 21:01:54 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -175,6 +175,12 @@ public class DialogDirector extends DialogField
             submitCaption = ValueSourceFactory.getSingleOrStaticValueSource("  Yes  ");
             cancelCaption = ValueSourceFactory.getSingleOrStaticValueSource("  No   ");
         }
+        else if ("acknowledge".equals(value))
+        {
+            submitCaption = ValueSourceFactory.getSingleOrStaticValueSource("  OK  ");
+            cancelCaption = null;
+            cancelActionUrl = null;
+        }
 
         value = elem.getAttribute("submit-caption");
         if(value != null && value.length() > 0)
@@ -220,8 +226,8 @@ public class DialogDirector extends DialogField
     {
         String attrs = dc.getSkin().getDefaultControlAttrs();
 
-        String submitCaption = this.submitCaption.getValue(dc);
-        String cancelCaption = this.cancelCaption.getValue(dc);
+        String submitCaption = (this.submitCaption != null) ? this.submitCaption.getValue(dc) : null;
+        String cancelCaption = (this.cancelCaption != null) ? this.cancelCaption.getValue(dc): null;
 
         int dataCmd = dc.getDataCommand();
         switch(dataCmd)
@@ -270,44 +276,47 @@ public class DialogDirector extends DialogField
             writer.write(">&nbsp;&nbsp;");
         }
 
-        writer.write("<input type='button' class=\"dialog-button\" value='");
-        writer.write(cancelCaption);
-        writer.write("' ");
-        if(cancelActionUrl == null)
+        if (cancelCaption != null)
         {
-            String referer = dc.getOriginalReferer();
-            if(referer != null)
+            writer.write("<input type='button' class=\"dialog-button\" value='");
+            writer.write(cancelCaption);
+            writer.write("' ");
+            if(cancelActionUrl == null)
             {
-                writer.write("onclick=\"document.location = '");
-                writer.write(referer);
-                writer.write("'\" ");
+                String referer = dc.getOriginalReferer();
+                if(referer != null)
+                {
+                    writer.write("onclick=\"document.location = '");
+                    writer.write(referer);
+                    writer.write("'\" ");
+                }
+                else
+                {
+                    writer.write("onclick=\"history.back()\" ");
+                }
             }
             else
             {
-                writer.write("onclick=\"history.back()\" ");
+                String cancelStr = cancelActionUrl != null ? cancelActionUrl.getValue(dc) : null;
+                if("back".equals(cancelStr))
+                {
+                    writer.write("onclick=\"history.back()\" ");
+                }
+                else if(cancelStr != null && cancelStr.startsWith("javascript:"))
+                {
+                    writer.write("onclick=\"");
+                    writer.write(cancelStr);
+                    writer.write("\" ");
+                }
+                else
+                {
+                    writer.write("onclick=\"document.location = '");
+                    writer.write(cancelStr);
+                    writer.write("'\" ");
+                }
             }
+            writer.write(attrs + ">");
         }
-        else
-        {
-            String cancelStr = cancelActionUrl != null ? cancelActionUrl.getValue(dc) : null;
-            if("back".equals(cancelStr))
-            {
-                writer.write("onclick=\"history.back()\" ");
-            }
-            else if(cancelStr != null && cancelStr.startsWith("javascript:"))
-            {
-                writer.write("onclick=\"");
-                writer.write(cancelStr);
-                writer.write("\" ");
-            }
-            else
-            {
-                writer.write("onclick=\"document.location = '");
-                writer.write(cancelStr);
-                writer.write("'\" ");
-            }
-        }
-        writer.write(attrs);
-        writer.write("></center>");
+        writer.write("</center>");
     }
 }
