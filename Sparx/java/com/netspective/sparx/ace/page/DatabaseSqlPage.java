@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSqlPage.java,v 1.4 2002-09-07 23:06:15 shahid.shah Exp $
+ * $Id: DatabaseSqlPage.java,v 1.5 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -115,10 +115,12 @@ public class DatabaseSqlPage extends AceServletPage
         String testItem = getTestCommandItem(pc);
         if(testItem != null)
         {
+            handleUnitTestPageBegin(pc, "Static SQL Unit Test");
             if (useDialogParams(pc))
                 handleTestStatementWithUI(pc, testItem);
             else
                 handleTestStatementNoUI(pc, testItem);
+            handleUnitTestPageEnd(pc);
         }
         else
         {
@@ -147,9 +149,8 @@ public class DatabaseSqlPage extends AceServletPage
             {
                 DialogContext dc = dialog.createContext(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
                 dialog.prepareContext(dc);
-                out.write("<center>");
                 dialog.renderHtml(out, dc, true);
-                out.write("</center><p>");
+                out.write("<p>");
                 out.write(si.getDebugHtml(pc));
 
             }
@@ -170,9 +171,9 @@ public class DatabaseSqlPage extends AceServletPage
         DatabaseContext dbc = DatabaseContextFactory.getContext(pc.getRequest(), context);
 
         out.write("<h1>SQL: " + stmtId + "</h1>");
+        StatementInfo si = manager.getStatement(stmtId);
         try
         {
-            StatementInfo si = manager.getStatement(stmtId);
             if ("yes".equals(pc.getRequest().getParameter("pageable")))
             {
                 try
@@ -193,12 +194,18 @@ public class DatabaseSqlPage extends AceServletPage
                 }
                 catch (TaskExecuteException e)
                 {
-                    throw new ServletException(e);
+                    StringWriter msg = new StringWriter();
+                    msg.write(e.toString());
+
+                    PrintWriter pw = new PrintWriter(msg);
+                    e.printStackTrace(pw);
+                    out.write("<pre>");
+                    out.write(msg.toString());
+                    out.write("</pre>");
                 }
             }
             else
                 manager.produceReport(out, dbc, pc, null, SkinFactory.getReportSkin("report"), stmtId, null, null);
-            out.write(si.getDebugHtml(pc));
         }
         catch(Exception e)
         {
@@ -211,5 +218,6 @@ public class DatabaseSqlPage extends AceServletPage
             out.write(msg.toString());
             out.write("</pre>");
         }
+        out.write(si.getDebugHtml(pc));
     }
 }

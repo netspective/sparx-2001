@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseQueryDefnPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: DatabaseQueryDefnPage.java,v 1.2 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -105,10 +105,12 @@ public class DatabaseQueryDefnPage extends AceServletPage
             String[] testParams = results.unmatchedPathItems();
             // note -- testParams[0] will be the word "test"
             //         testParams[1] will be "test what"
+            handleUnitTestPageBegin(pc, "Dyanmic Query Unit Test");
             if(testWhat.equals("query-defn"))
                 handleTestQueryDefn(pc, testParams[2]);
             else if(testWhat.equals("query-defn-dlg"))
                 handleTestQueryDefnSelectDialog(pc, testParams[2], testParams[3]);
+            handleUnitTestPageEnd(pc);
             return;
         }
 

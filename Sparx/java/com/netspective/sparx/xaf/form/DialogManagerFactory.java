@@ -51,17 +51,21 @@
  */
  
 /**
- * $Id: DialogManagerFactory.java,v 1.1 2002-01-20 14:53:18 snshah Exp $
+ * $Id: DialogManagerFactory.java,v 1.2 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -74,6 +78,7 @@ import com.netspective.sparx.util.factory.Factory;
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.security.AccessControlList;
+import com.netspective.sparx.xaf.page.PageContext;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -158,5 +163,143 @@ public class DialogManagerFactory implements Factory
             return getManager(context);
         else
             return getManager(dlgSource);
+    }
+
+    /**
+     * cmdParams should look like:
+     *   0 dialog name (required)
+     *   1 data command like add,edit,delete,confirm (optional, may be empty or set to "-" to mean "none")
+     *   2 skin name (optional, may be empty or set to "-" to mean "none")
+     */
+
+    public static DialogCommands getCommands(String cmdParams)
+    {
+        return new DialogCommands(cmdParams);
+    }
+
+    public static class DialogCommands
+    {
+        static public final String PAGE_COMMAND_REQUEST_PARAM_NAME = "cmd";
+        static public final String[] DIALOG_COMMAND_RETAIN_PARAMS =
+                {
+                    PAGE_COMMAND_REQUEST_PARAM_NAME
+                };
+
+        private String dialogName;
+        private String dataCmd;
+        private String skinName;
+
+        public DialogCommands(String cmdParams)
+        {
+            StringTokenizer st = new StringTokenizer(cmdParams, ",");
+            dialogName = st.nextToken();
+
+            if(st.hasMoreTokens())
+            {
+                dataCmd = st.nextToken();
+                if(dataCmd.equals("-"))
+                    dataCmd = null;
+            }
+            else
+                dataCmd = null;
+
+            if(st.hasMoreTokens())
+            {
+                skinName = st.nextToken();
+                if(skinName.equals("-"))
+                    skinName = null;
+            }
+            else
+                skinName = null;
+        }
+
+        public String getDataCmd()
+        {
+            return dataCmd;
+        }
+
+        public String getDialogName()
+        {
+            return dialogName;
+        }
+
+        public String getSkinName()
+        {
+            return skinName;
+        }
+
+        public void setDataCmd(String dataCmd)
+        {
+            this.dataCmd = dataCmd;
+        }
+
+        public void setDialogName(String dialogName)
+        {
+            this.dialogName = dialogName;
+        }
+
+        public void setSkinName(String skinName)
+        {
+            this.skinName = skinName;
+        }
+
+        public String generateCommand()
+        {
+            StringBuffer sb = new StringBuffer(dialogName);
+            sb.append(",");
+            sb.append(dataCmd != null ? dataCmd : "-");
+            if(skinName != null)
+            {
+                sb.append(",");
+                sb.append(skinName);
+            }
+            return sb.toString();
+        }
+
+        public void handleDialog(ValueContext vc) throws IOException
+        {
+
+            if(dataCmd != null)
+                vc.getRequest().setAttribute(com.netspective.sparx.xaf.form.Dialog.PARAMNAME_DATA_CMD_INITIAL, dataCmd);
+
+            PrintWriter out = vc.getResponse().getWriter();
+            javax.servlet.ServletContext context = vc.getServletContext();
+            com.netspective.sparx.xaf.form.DialogManager manager = com.netspective.sparx.xaf.form.DialogManagerFactory.getManager(context);
+            if(manager == null)
+            {
+                out.write("DialogManager not found in ServletContext");
+                return;
+            }
+
+            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(dialogName);
+            if(dialog == null)
+            {
+                out.write("Dialog '" + dialogName + "' not found in manager '" + manager + "'.");
+                return;
+            }
+
+            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
+            if(skin == null)
+            {
+                out.write("DialogSkin '" + skinName + "' not found in skin factory.");
+                return;
+            }
+
+            com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(context, vc.getServlet(), (javax.servlet.http.HttpServletRequest) vc.getRequest(), (javax.servlet.http.HttpServletResponse) vc.getResponse(), skin);
+            dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
+            dialog.prepareContext(dc);
+
+            if(dc.inExecuteMode())
+            {
+                dialog.execute(out, dc);
+                if(! dc.executeStageHandled())
+                {
+                    out.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
+                    out.write(dc.getDebugHtml());
+                }
+            }
+            else
+                dialog.renderHtml(out, dc, true);
+        }
     }
 }

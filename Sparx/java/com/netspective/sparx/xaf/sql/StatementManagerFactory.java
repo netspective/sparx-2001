@@ -51,14 +51,17 @@
  */
  
 /**
- * $Id: StatementManagerFactory.java,v 1.3 2002-08-25 16:06:16 shahid.shah Exp $
+ * $Id: StatementManagerFactory.java,v 1.4 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
@@ -67,6 +70,7 @@ import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
+import com.netspective.sparx.xaf.form.DialogManagerFactory;
 
 public class StatementManagerFactory implements Factory
 {
@@ -114,4 +118,128 @@ public class StatementManagerFactory implements Factory
         context.setAttribute(ATTRNAME_STATEMENTMGR, manager);
         return manager;
     }
+
+    /**
+     * cmdParams should look like:
+     *   0 query definition name (required)
+     *   1 dialog name (required)
+     *   2 skin name (optional, may be empty or set to "-" to mean "none")
+     */
+
+
+    public static DialogCommands getCommands(String cmdParams)
+    {
+        return new DialogCommands(cmdParams);
+    }
+
+    public static class DialogCommands
+    {
+        private String dialogName;
+        private String source;
+        private String skinName;
+
+        public DialogCommands(String cmdParams)
+        {
+            StringTokenizer st = new StringTokenizer(cmdParams, ",");
+            source = st.nextToken();
+
+            if(st.hasMoreTokens())
+                dialogName = st.nextToken();
+            else
+                dialogName = "unknown";
+
+            if(st.hasMoreTokens())
+            {
+                skinName = st.nextToken();
+                if(skinName.equals("-"))
+                    skinName = null;
+            }
+            else
+                skinName = null;
+        }
+
+        public String getSource()
+        {
+            return source;
+        }
+
+        public String getDialogName()
+        {
+            return dialogName;
+        }
+
+        public String getSkinName()
+        {
+            return skinName;
+        }
+
+        public void setSource(String dataCmd)
+        {
+            this.source = dataCmd;
+        }
+
+        public void setDialogName(String dialogName)
+        {
+            this.dialogName = dialogName;
+        }
+
+        public void setSkinName(String skinName)
+        {
+            this.skinName = skinName;
+        }
+
+        public String generateCommand()
+        {
+            StringBuffer sb = new StringBuffer(source);
+            sb.append(",");
+            sb.append(dialogName != null ? source : "-");
+            if(skinName != null)
+            {
+                sb.append(",");
+                sb.append(skinName);
+            }
+            return sb.toString();
+        }
+
+        public void handleDialog(ValueContext vc) throws IOException
+        {
+            PrintWriter out = vc.getResponse().getWriter();
+            javax.servlet.ServletContext context = vc.getServletContext();
+
+            com.netspective.sparx.xaf.sql.StatementManager manager = com.netspective.sparx.xaf.sql.StatementManagerFactory.getManager(context);
+            if(manager == null)
+            {
+                out.write("StatementManager not found in ServletContext");
+                return;
+            }
+
+            com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(source);
+            if(queryDefn == null)
+            {
+                out.write("QueryDefinition '" + source + "' not found in StatementManager");
+                return;
+            }
+
+            com.netspective.sparx.xaf.querydefn.QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogName);
+            if(dialog == null)
+            {
+                out.write("QuerySelectDialog '" + dialogName + "' not found in QueryDefinition '" + source + "'");
+                return;
+            }
+
+            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
+            if(skin == null)
+            {
+                out.write("DialogSkin '" + skinName + "' not found in skin factory.");
+                return;
+            }
+
+            com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(vc.getServletContext(), vc.getServlet(), (javax.servlet.http.HttpServletRequest) vc.getRequest(), (javax.servlet.http.HttpServletResponse) vc.getResponse(), skin);
+            dc.setRetainRequestParams(DialogManagerFactory.DialogCommands.DIALOG_COMMAND_RETAIN_PARAMS);
+            dialog.prepareContext(dc);
+
+            dialog.renderHtml(out, dc, true);
+        }
+    }
+
 }

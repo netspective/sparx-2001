@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: PageControllerServlet.java,v 1.3 2002-08-18 21:05:44 shahid.shah Exp $
+ * $Id: PageControllerServlet.java,v 1.4 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.page;
@@ -70,6 +70,10 @@ import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.Servlet;
+import javax.servlet.ServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.jsp.JspException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,8 +84,10 @@ import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManager;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.DialogManagerFactory;
 import com.netspective.sparx.xaf.security.LoginDialog;
 import com.netspective.sparx.xaf.skin.SkinFactory;
+import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 
@@ -408,6 +414,42 @@ public class PageControllerServlet extends HttpServlet implements FilenameFilter
 
         return false;
     }
+
+    public static boolean handleDefaultBodyItem(ServletContext context, Servlet servlet, ServletRequest req, ServletResponse resp) throws IOException
+    {
+        String pageCmdReqParam = req.getParameter(DialogManagerFactory.DialogCommands.PAGE_COMMAND_REQUEST_PARAM_NAME);
+        if(pageCmdReqParam == null)
+            return false;
+
+        String pageCmd = "unknown";
+        String pageCmdParam = null;
+        int cmdDelimPos = pageCmdReqParam.indexOf(",");
+        if(cmdDelimPos != -1)
+        {
+            pageCmd = pageCmdReqParam.substring(0, cmdDelimPos);
+            pageCmdParam = pageCmdReqParam.substring(cmdDelimPos+1);
+        }
+
+        // a "standard" page command needs to be handled
+        if(pageCmd.equals("dialog"))
+        {
+            DialogManagerFactory.DialogCommands dcmd = DialogManagerFactory.getCommands(pageCmdParam);
+            dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp));
+        }
+        else if(pageCmd.equals("qd-dialog"))
+        {
+            StatementManagerFactory.DialogCommands dcmd = StatementManagerFactory.getCommands(pageCmdParam);
+            dcmd.handleDialog(new ServletValueContext(context, servlet, req, resp));
+        }
+        else
+        {
+            resp.getWriter().write("Page command '" + pageCmd + "' not recognized.");
+            return false;
+        }
+
+        return true;
+    }
+
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {

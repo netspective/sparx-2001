@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: PageTag.java,v 1.2 2002-08-24 05:37:39 shahid.shah Exp $
+ * $Id: PageTag.java,v 1.3 2002-09-08 02:08:12 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.taglib;
@@ -84,6 +84,7 @@ import com.netspective.sparx.xaf.sql.StatementManager;
 import com.netspective.sparx.xaf.sql.StatementManagerFactory;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xaf.querydefn.QuerySelectDialog;
+import com.netspective.sparx.xaf.page.PageControllerServlet;
 import com.netspective.sparx.util.value.ServletValueContext;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.config.Configuration;
@@ -91,14 +92,8 @@ import com.netspective.sparx.util.config.ConfigurationManagerFactory;
 
 public class PageTag extends javax.servlet.jsp.tagext.TagSupport
 {
-    static public final String PAGE_COMMAND_REQUEST_PARAM_NAME = "cmd";
     static public final String PAGE_SECURITY_MESSAGE_ATTRNAME = "security-message";
     static public final String PAGE_DEFAULT_LOGIN_DIALOG_CLASS = "com.netspective.sparx.xaf.security.LoginDialog";
-
-    static public final String[] DIALOG_COMMAND_RETAIN_PARAMS =
-            {
-                PAGE_COMMAND_REQUEST_PARAM_NAME
-            };
 
     static private com.netspective.sparx.xaf.security.LoginDialog loginDialog;
 
@@ -254,166 +249,20 @@ public class PageTag extends javax.servlet.jsp.tagext.TagSupport
         return true;
     }
 
-    /**
-     * When cmd=dialog is called, the expected parameters are:
-     *   0 dialog name (required)
-     *   1 data command like add,edit,delete,confirm (optional, may be empty or set to "-" to mean "none")
-     *   2 skin name (optional, may be empty or set to "-" to mean "none")
-     */
-
-    public void handleDialogInBody(String[] params) throws javax.servlet.jsp.JspException
-    {
-        javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
-        String dialogName = params[0];
-        String dataCmd = params.length > 1 ? ("-".equals(params[1]) ? null : params[1]) : null;
-        String skinName = params.length > 2 ? ("-".equals(params[2]) ? null : params[2]) : null;
-
-        if(dataCmd != null)
-            pageContext.getRequest().setAttribute(com.netspective.sparx.xaf.form.Dialog.PARAMNAME_DATA_CMD_INITIAL, dataCmd);
-
-        try
-        {
-            javax.servlet.jsp.JspWriter out = pageContext.getOut();
-            javax.servlet.ServletContext context = pageContext.getServletContext();
-            com.netspective.sparx.xaf.form.DialogManager manager = com.netspective.sparx.xaf.form.DialogManagerFactory.getManager(context);
-            if(manager == null)
-            {
-                out.write("DialogManager not found in ServletContext");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.Dialog dialog = manager.getDialog(dialogName);
-            if(dialog == null)
-            {
-                out.write("Dialog '" + dialogName + "' not found in manager '" + manager + "'.");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
-            if(skin == null)
-            {
-                out.write("DialogSkin '" + skinName + "' not found in skin factory.");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(context, (javax.servlet.Servlet) pageContext.getPage(), (javax.servlet.http.HttpServletRequest) pageContext.getRequest(), (javax.servlet.http.HttpServletResponse) pageContext.getResponse(), skin);
-            dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
-            dialog.prepareContext(dc);
-
-            if(dc.inExecuteMode())
-            {
-                dialog.execute(out, dc);
-                if(! dc.executeStageHandled())
-                {
-                    out.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
-                    out.write(dc.getDebugHtml());
-                }
-            }
-            else
-                dialog.renderHtml(out, dc, true);
-        }
-        catch(java.io.IOException e)
-        {
-            throw new javax.servlet.jsp.JspException(e.toString());
-        }
-    }
-
-    /**
-     * When cmd=qd-dialog is called, the expected parameters are:
-     *   0 query definition name (required)
-     *   1 dialog name (required)
-     *   2 skin name (optional, may be empty or set to "-" to mean "none")
-     */
-
-    public void handleQuerySelectDialogInBody(String[] params) throws javax.servlet.jsp.JspException
-    {
-        javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
-        String source = params[0];
-        String dialogName = params[1];
-        String skinName = params.length > 2 ? ("-".equals(params[2]) ? null : params[2]) : null;
-
-        try
-        {
-            javax.servlet.jsp.JspWriter out = pageContext.getOut();
-            javax.servlet.ServletContext context = pageContext.getServletContext();
-
-            com.netspective.sparx.xaf.sql.StatementManager manager = com.netspective.sparx.xaf.sql.StatementManagerFactory.getManager(context);
-            if(manager == null)
-            {
-                out.write("StatementManager not found in ServletContext");
-                return;
-            }
-
-            com.netspective.sparx.xaf.querydefn.QueryDefinition queryDefn = manager.getQueryDefn(source);
-            if(queryDefn == null)
-            {
-                out.write("QueryDefinition '" + source + "' not found in StatementManager");
-                return;
-            }
-
-            com.netspective.sparx.xaf.querydefn.QuerySelectDialog dialog = queryDefn.getSelectDialog(dialogName);
-            if(dialog == null)
-            {
-                out.write("QuerySelectDialog '" + dialogName + "' not found in QueryDefinition '" + source + "'");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.DialogSkin skin = skinName == null ? com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin() : com.netspective.sparx.xaf.skin.SkinFactory.getDialogSkin(skinName);
-            if(skin == null)
-            {
-                out.write("DialogSkin '" + skinName + "' not found in skin factory.");
-                return;
-            }
-
-            com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(pageContext.getServletContext(), (javax.servlet.Servlet) pageContext.getPage(), (javax.servlet.http.HttpServletRequest) pageContext.getRequest(), (javax.servlet.http.HttpServletResponse) pageContext.getResponse(), skin);
-            dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
-            dialog.prepareContext(dc);
-
-            dialog.renderHtml(out, dc, true);
-            return;
-        }
-        catch(java.io.IOException e)
-        {
-            throw new javax.servlet.jsp.JspException(e.toString());
-        }
-    }
-
     public boolean handleDefaultBodyItem() throws javax.servlet.jsp.JspException
     {
-        javax.servlet.http.HttpServletRequest request = ((javax.servlet.http.HttpServletRequest) pageContext.getRequest());
-        String pageCmdParam = request.getParameter(PAGE_COMMAND_REQUEST_PARAM_NAME);
-        if(pageCmdParam == null)
-            return false;
-
-        java.util.StringTokenizer st = new java.util.StringTokenizer(pageCmdParam, ",");
-        String pageCmd = st.nextToken();
-        java.util.List pageCmdParamsList = new java.util.ArrayList();
-        while(st.hasMoreTokens())
-            pageCmdParamsList.add(st.nextToken());
-
-        String[] pageCmdParamsArray = null;
-        if(pageCmdParamsList.size() > 0)
-            pageCmdParamsArray = (String[]) pageCmdParamsList.toArray(new String[pageCmdParamsList.size()]);
-
-        // a "standard" page command needs to be handled
-        if(pageCmd.equals("dialog"))
-            handleDialogInBody(pageCmdParamsArray);
-        else if(pageCmd.equals("qd-dialog"))
-            handleQuerySelectDialogInBody(pageCmdParamsArray);
-        else
+        try
         {
-            try
-            {
-                pageContext.getResponse().getWriter().write("Page command '" + pageCmd + "' not recognized.");
-            }
-            catch(java.io.IOException e)
-            {
-                throw new javax.servlet.jsp.JspException(e.toString());
-            }
-            return false;
+            return PageControllerServlet.handleDefaultBodyItem(
+                    pageContext.getServletContext(),
+                    (Servlet) pageContext.getPage(),
+                    pageContext.getRequest(), pageContext.getResponse()
+                    );
         }
-
-        return true;
+        catch(IOException e)
+        {
+            throw new JspException(e);
+        }
     }
 
     public int doStartTag() throws javax.servlet.jsp.JspException

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: AppDialogsPage.java,v 1.2 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -65,6 +65,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.netspective.sparx.ace.AceServletPage;
+import com.netspective.sparx.ace.AppComponentsExplorerServlet;
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogManager;
@@ -124,14 +125,26 @@ public class AppDialogsPage extends AceServletPage
         String testItem = getTestCommandItem(pc);
         if(testItem != null)
         {
-            String dialogId = testItem;
-            Dialog dialog = manager.getDialog(dialogId);
-
             PrintWriter out = pc.getResponse().getWriter();
-            out.write("<h1>Dialog: " + dialogId + "</h1>");
-            out.write("<p>&nbsp;<center>");
-            dialog.renderHtml(context, pc.getServlet(), (HttpServletRequest) pc.getRequest(), (HttpServletResponse) pc.getResponse(), SkinFactory.getDialogSkin());
-            out.write("</center>");
+            DialogManagerFactory.DialogCommands dcmd = DialogManagerFactory.getCommands(testItem);
+            VirtualPath.FindResults path = pc.getActivePath();
+
+            handleUnitTestPageBegin(pc, "Form (Dialog) Unit Test");
+            dcmd.handleDialog(pc);
+            out.write("<p>");
+            out.write("Try out additional options by using the following format:<br>");
+            out.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/dialogId,data-cmd,skin-name</code><p>");
+
+            dcmd.setDataCmd("add");
+            dcmd.setSkinName("standard");
+            out.write("For example, to try the dialog in 'add' mode using the 'standard' skin:<br>");
+            out.write("<a href='"+ dcmd.generateCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.generateCommand() + "</a><p>");
+
+            dcmd.setDataCmd("edit");
+            dcmd.setSkinName(null);
+            out.write("To try the dialog in 'edit' mode using the default skin:<br>");
+            out.write("<a href='"+ dcmd.generateCommand() +"'>"+ path.getMatchedPath().getAbsolutePath() +"/test/" + dcmd.generateCommand() + "</a><p>");
+            handleUnitTestPageEnd(pc);
         }
         else
         {

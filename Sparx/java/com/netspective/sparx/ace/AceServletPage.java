@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AceServletPage.java,v 1.4 2002-09-02 22:52:36 shahid.shah Exp $
+ * $Id: AceServletPage.java,v 1.5 2002-09-08 02:08:11 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace;
@@ -310,6 +310,61 @@ public class AceServletPage extends AbstractServletPage
         {
             throw new ServletException(e);
         }
+    }
+
+    public void handleUnitTestPageBegin(PageContext pc, String category) throws IOException
+    {
+        AppComponentsExplorerServlet servlet = (AppComponentsExplorerServlet) pc.getServlet();
+        String unitTestsImagesPrefix = servlet.getSharedImagesRootURL() + "/ace/unit-test/unit-test-";
+        String homeUrl = servlet.getHomePath().getAbsolutePath(pc);
+
+        PrintWriter out = pc.getResponse().getWriter();
+
+        out.println("<body TOPMARGIN='0' LEFTMARGIN='0' MARGINWIDTH='0' MARGINHEIGHT='0' bgcolor='white'>");
+        out.println("		<basefont face='Trebuchet MS' size=2>");
+        out.println("		<style>h1 { font-size: 14pt; color: darkred; border-bottom: 1px solid #FF0000; } </style>");
+        out.println("		<table width='100%' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("			<tr>");
+        out.println("				<td align='left' valign='top' width='412'><a href='"+ homeUrl +"'><img src='"+ unitTestsImagesPrefix +"01.gif' alt='' width='412' height='56' border='0'></a></td>");
+        out.println("				<td align='left' valign='top' width='100%'><img src='"+ unitTestsImagesPrefix +"02.gif' alt='' width='100%' height='56' border='0'></td>");
+        out.println("				<td align='left' valign='top' width='181'>");
+        out.println("					<table width='64' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("						<tr>");
+        out.println("							<td align='left' valign='top'><img src='"+ unitTestsImagesPrefix +"03.gif' alt='' width='181' height='9' border='0'></td>");
+        out.println("						</tr>");
+        out.println("						<tr>");
+        out.println("							<td align='left' valign='top'>");
+        out.println("								<table width='72' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("									<tr>");
+        out.println("										<td align='left' valign='top'><img src='"+ unitTestsImagesPrefix +"04.gif' alt='' width='6' height='47' border='0'></td>");
+        out.println("										<td align='left' valign='top'>");
+        out.println("											<table width='64' border='0' cellspacing='0' cellpadding='0'>");
+        out.println("												<tr height='17'>");
+        out.println("													<td align='center' valign='middle' bgcolor='white' height='17'><font size=1 face='Arial,Helvetica,Geneva,Swiss,SunSans-Regular'>"+ category +"</font></td>");
+        out.println("												</tr>");
+        out.println("												<tr>");
+        out.println("													<td align='left' valign='top'><img src='"+ unitTestsImagesPrefix +"07.gif' alt='' width='156' height='30' border='0'></td>");
+        out.println("												</tr>");
+        out.println("											</table>");
+        out.println("										</td>");
+        out.println("										<td align='left' valign='top'><img src='"+ unitTestsImagesPrefix +"06.gif' alt='' width='19' height='47' border='0'></td>");
+        out.println("									</tr>");
+        out.println("								</table>");
+        out.println("							</td>");
+        out.println("						</tr>");
+        out.println("					</table>");
+        out.println("				</td>");
+        out.println("			</tr>");
+        out.println("		</table>");
+        out.println("		<table border='0' cellspacing='5' cellpadding='5' align='center'>");
+        out.println("			<tr><td>");
+    }
+
+    public void handleUnitTestPageEnd(PageContext pc) throws IOException
+    {
+        PrintWriter out = pc.getResponse().getWriter();
+        out.println("			</td></tr>");
+        out.println("		</table>");
     }
 
     public void handlePage(PageContext pc) throws ServletException
