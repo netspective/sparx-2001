@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPageUrlCmdValue.java,v 1.3 2003-01-29 04:31:01 shahid.shah Exp $
+ * $Id: NavigationPageUrlCmdValue.java,v 1.4 2003-02-02 16:38:06 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -103,7 +103,7 @@ public class NavigationPageUrlCmdValue extends NavigationPageUrlValue
         String url = super.getValue(vc);
 
         if (cmd != null && cmd.length() > 0)
-            url = (url.indexOf('?') > 0 ? "&" : "?") + "cmd=" + cmd;
+            url = url + (url.indexOf('?') > 0 ? "&" : "?") + "cmd=" + cmd;
 
         return url;
 
