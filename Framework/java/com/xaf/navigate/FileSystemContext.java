@@ -13,7 +13,7 @@ import java.util.*;
 import java.io.*;
 import org.w3c.dom.*;
 
-public class FileSystemContext
+public class FileSystemContext implements FilenameFilter
 {
 	private String rootURI;
 	private FileSystemEntry rootPath;
@@ -25,15 +25,7 @@ public class FileSystemContext
 		rootURI = aRootURI;
 		rootPath = new FileSystemEntry(null, aRootPathStr);
 		rootPath.setEntryCaption(aRootCaption);
-
-		relativePathStr = aRelativePathStr;
-		if(relativePathStr != null && (relativePathStr.equals("") || relativePathStr.equals("/")))
-			relativePathStr = null;
-
-		if(relativePathStr != null)
-			activePath = new FileSystemEntry(rootPath, rootPath.getAbsolutePath() + rootPath.separator + relativePathStr);
-		else
-			activePath = rootPath;
+		setRelativePath(aRelativePathStr);
 	}
 
 	public final String getRootURI() { return rootURI; }
@@ -46,7 +38,23 @@ public class FileSystemContext
 	public void setActivePath(FileSystemEntry value) { activePath = value; }
 
 	public final String getRelativePath() { return relativePathStr; }
-	public void setRelativePath(String value) { relativePathStr = value; }
+	public void setRelativePath(String value)
+	{
+		relativePathStr = value;
+		if(relativePathStr != null && (relativePathStr.equals("") || relativePathStr.equals("/")))
+			relativePathStr = null;
+
+		if(relativePathStr != null)
+			activePath = new FileSystemEntry(rootPath, rootPath.getAbsolutePath() + rootPath.separator + relativePathStr);
+		else
+			activePath = rootPath;
+	}
+
+	/* called in FileSystemContext when Filenames need to be filtered */
+	public boolean accept(File dir, String name)
+	{
+		return true;
+	}
 
 	public void addXML(Element fsElem, FilenameFilter filter)
 	{
@@ -69,9 +77,10 @@ public class FileSystemContext
 				Element parent = (Element) parents.appendChild(doc.createElement("parent"));
 				parent.setAttribute("level", new Integer(level).toString());
 				parent.setAttribute("caption", entry.getEntryCaption());
-				parent.setAttribute("url", entry.getEntryURI());
+				parent.setAttribute("url", rootURI + entry.getEntryURI());
 				parent.setAttribute("path", entry.getAbsolutePath());
 				parent.setAttribute("isroot", new Boolean(entry.isRoot()).toString());
+				parent.setAttribute("islast", new Boolean(! i.hasNext()).toString());
 
 				level++;
 			}
@@ -95,7 +104,8 @@ public class FileSystemContext
 					entryElem.setAttribute("type", entry.getEntryType());
 				}
 				entryElem.setAttribute("caption", entry.getEntryCaption());
-				entryElem.setAttribute("url", entry.getEntryURI());
+				entryElem.setAttribute("type", entry.getEntryType());
+				entryElem.setAttribute("url", rootURI + entry.getEntryURI());
 				entryElem.setAttribute("path", entry.getAbsolutePath());
 			}
 		}

@@ -3,13 +3,18 @@ package com.xaf.navigate;
 import java.io.*;
 import java.util.*;
 
+import javax.servlet.http.*;
+
 public class FileSystemEntry extends File
 {
 	static public final String ROOT_URI = "/";
+	static public final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
+
 	private FileSystemEntry rootPath;
 	private String entryCaption;
 	private String entryExtension;
 	private String entryURI = ROOT_URI;
+	private String contentType = DEFAULT_CONTENT_TYPE;
 
 	FileSystemEntry(FileSystemEntry aRootPath, String s)
 	{
@@ -96,4 +101,33 @@ public class FileSystemEntry extends File
 
 		return null;
 	}
+
+    public void send(HttpServletResponse response) throws IOException
+    {
+        int sentsize = 0;
+
+        InputStream  in = new BufferedInputStream(new FileInputStream(getAbsolutePath()));
+
+        response.setContentType(contentType);
+        response.setContentLength((int) length()); // seems that here sits a possible problem for files >= 2 GB...
+
+        OutputStream out = response.getOutputStream();
+
+        int  readlen;
+        byte buffer[] = new byte[ 256 ];
+
+        while( (readlen = in.read(buffer)) != -1)
+        {
+          // throws IOException: broken pipe when download is canceled.
+          out.write( buffer, 0, readlen );
+          sentsize += readlen;
+        }
+
+        // Success ! Close streams.
+        out.flush();
+        out.close();
+
+        in.close();
+    }
+
 }

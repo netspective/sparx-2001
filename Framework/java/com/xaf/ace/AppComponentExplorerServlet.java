@@ -14,6 +14,7 @@ import org.w3c.dom.*;
 import com.xaf.config.*;
 import com.xaf.db.*;
 import com.xaf.form.*;
+import com.xaf.navigate.*;
 import com.xaf.skin.*;
 import com.xaf.sql.*;
 import com.xaf.sql.query.*;
@@ -22,7 +23,7 @@ import com.xaf.value.*;
 
 public class AppComponentExplorerServlet extends HttpServlet
 {
-	private static final String[] APP_AREAS = { "Home", "", "Schema", "schema", "DDL", "ddl", "UI", "ui", "SQL", "sql", "Project", "project", "TagDoc", "tagdoc", "JavaDoc", "javadoc" };
+	private static final String[] APP_AREAS = { "Home", "", "Config", "config", "Schema", "schema", "DDL", "ddl", "UI", "ui", "SQL", "sql", "Documents", "documents", "TagDoc", "tagdoc", "JavaDoc", "javadoc" };
     private static final String CONTENT_TYPE = "text/html";
 
 	private Map appAreaElemsMap = new Hashtable();
@@ -31,9 +32,11 @@ public class AppComponentExplorerServlet extends HttpServlet
 	private Document appComponents;
 	private Element rootElem;
 	private Element contextElem;
+	private Element configItemsElem;
 	private Hashtable styleSheetParams = new Hashtable();
 	private String aceHomeStyleSheet;
 	private SchemaGeneratorDialog dialog;
+	private FileSystemContext projectFSContext;
 
 	public class GenerateDDLOptions
 	{
@@ -119,35 +122,6 @@ public class AppComponentExplorerServlet extends HttpServlet
 			contextParamsElem.appendChild(paramElem);
 		}
 
-		Element configItemsElem = appComponents.createElement("config-items");
-		contextElem.appendChild(configItemsElem);
-		ConfigurationManager manager = ConfigurationManagerFactory.getManager(context);
-		Element itemElem = appComponents.createElement("config-item");
-		addText(itemElem, "name", "app.config.source-file");
-		addText(itemElem, "value", manager.getSourceDocument().getFile().getAbsolutePath());
-		configItemsElem.appendChild(itemElem);
-
-		Configuration defaultConfig = manager.getDefaultConfiguration();
-		for(Iterator i = defaultConfig.entrySet().iterator(); i.hasNext(); )
-		{
-			itemElem = appComponents.createElement("config-item");
-			Map.Entry configEntry = (Map.Entry) i.next();
-			addText(itemElem, "name", (String) configEntry.getKey());
-			Property property = (Property) configEntry.getValue();
-			String expression = property.getExpression();
-			String value = defaultConfig.getValue(vc, property.getName());
-			addText(itemElem, "value", value);
-			if(! expression.equals(value))
-			{
-				addText(itemElem, "expression", expression);
-				if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
-					addText(itemElem, "final", "no");
-			}
-			if(property.getDescription() != null)
-				addText(itemElem, "description", property.getDescription());
-			configItemsElem.appendChild(itemElem);
-		}
-
 		Element directoryParamsElem = appComponents.createElement("data-sources");
 		contextElem.appendChild(directoryParamsElem);
 		try
@@ -191,6 +165,8 @@ public class AppComponentExplorerServlet extends HttpServlet
 
     public void doGenerateDDL(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+		preparePage(request, response, "/ddl");
+
         PrintWriter out = response.getWriter();
 		if(dialog == null)
 			dialog = new SchemaGeneratorDialog();
@@ -249,40 +225,167 @@ public class AppComponentExplorerServlet extends HttpServlet
 		out.write("</pre>");
     }
 
+	public void preparePage(HttpServletRequest request, HttpServletResponse response, String rootUrl) throws IOException
+	{
+		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath());
+
+		ServletContext context = getServletContext();
+		ValueContext vc = new ServletValueContext(request, response, context);
+
+		for(Iterator i = appConfig.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry configEntry = (Map.Entry) i.next();
+
+			Property property = (Property) configEntry.getValue();
+			String propName = property.getName();
+			styleSheetParams.put(propName, appConfig.getValue(vc, propName));
+		}
+
+        response.setContentType(CONTENT_TYPE);
+		response.getWriter().write(Transform.nodeToString(aceHomeStyleSheet, appComponents, styleSheetParams));
+
+		if(rootUrl != null)
+			styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + rootUrl);
+	}
+
+	public void doConfig(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		preparePage(request, response, "/config");
+
+		ServletContext context = getServletContext();
+		ValueContext vc = new ServletValueContext(request, response, context);
+
+		Document configDoc = null;
+		try
+		{
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			configDoc = builder.newDocument();
+		}
+		catch(Exception e)
+		{
+			throw new ServletException(e);
+		}
+
+		Element configRootElem = configDoc.createElement("xaf");
+		configDoc.appendChild(configRootElem);
+
+		configItemsElem = configDoc.createElement("config-items");
+		configRootElem.appendChild(configItemsElem);
+
+		ConfigurationManager manager = ConfigurationManagerFactory.getManager(context);
+		configItemsElem.setAttribute("source-file", manager.getSourceDocument().getFile().getAbsolutePath());
+
+		Configuration defaultConfig = manager.getDefaultConfiguration();
+		for(Iterator i = defaultConfig.entrySet().iterator(); i.hasNext(); )
+		{
+			Element itemElem = configDoc.createElement("config-item");
+			Map.Entry configEntry = (Map.Entry) i.next();
+			itemElem.setAttribute("name", (String) configEntry.getKey());
+			Property property = (Property) configEntry.getValue();
+			String expression = property.getExpression();
+			String value = defaultConfig.getValue(vc, property.getName());
+			itemElem.setAttribute("value", value);
+			if(! expression.equals(value))
+			{
+				itemElem.setAttribute("expression", expression);
+				if(! property.flagIsSet(Property.PROPFLAG_IS_FINAL))
+					itemElem.setAttribute("final", "no");
+			}
+			if(property.getDescription() != null)
+				itemElem.setAttribute("description", property.getDescription());
+			configItemsElem.appendChild(itemElem);
+		}
+
+		String styleSheet = appConfig.getValue(vc, "app.ace.config-browser-xsl");
+
+        PrintWriter out = response.getWriter();
+		out.write(Transform.nodeToString(styleSheet, configDoc, styleSheetParams));
+	}
+
 	public void doSchema(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		preparePage(request, response, "/schema");
+
 		ServletContext context = getServletContext();
 		ValueContext vc = new ServletValueContext(request, response, context);
 		SchemaDocument schema = SchemaDocFactory.getDoc(appConfig.getValue(vc, "app.schema.source-file"));
 		String styleSheet = appConfig.getValue(vc, "app.ace.schema-browser-xsl");
 
         PrintWriter out = response.getWriter();
-		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + "/schema");
 		out.write(Transform.nodeToString(styleSheet, schema.getDocument(), styleSheetParams));
 	}
 
 	public void doUI(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		preparePage(request, response, "/ui");
+
 		ServletContext context = getServletContext();
 		DialogManager manager = DialogManagerFactory.getManager(context);
 		ValueContext vc = new ServletValueContext(request, response, context);
 		String styleSheet = appConfig.getValue(vc, "app.ace.ui-browser-xsl");
 
         PrintWriter out = response.getWriter();
-		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + "/ui");
 		out.write(Transform.nodeToString(styleSheet, manager.getDocument(), styleSheetParams));
 	}
 
 	public void doSql(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		preparePage(request, response, "/sql");
+
 		ServletContext context = getServletContext();
 		StatementManager manager = StatementManagerFactory.getManager(context);
 		ValueContext vc = new ServletValueContext(request, response, context);
 		String styleSheet = appConfig.getValue(vc, "app.ace.sql-browser-xsl");
 
         PrintWriter out = response.getWriter();
-		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath() + "/sql");
 		out.write(Transform.nodeToString(styleSheet, manager.getDocument(), styleSheetParams));
+	}
+
+	public void doProject(HttpServletRequest request, HttpServletResponse response, String relativePath) throws ServletException, IOException
+	{
+		ServletContext context = getServletContext();
+		ValueContext vc = new ServletValueContext(request, response, context);
+		if(projectFSContext == null)
+		{
+			projectFSContext = new FileSystemContext(
+				appConfig.getValue(vc, "app.ace.project.navigate.root-url"),
+				appConfig.getValue(vc, "app.ace.project.navigate.root-path"),
+				appConfig.getValue(vc, "app.ace.project.navigate.root-caption"),
+				relativePath);
+		}
+		else
+			projectFSContext.setRelativePath(relativePath);
+
+		FileSystemEntry activeEntry = projectFSContext.getActivePath();
+		if(activeEntry.isDirectory())
+		{
+			Document navgDoc = null;
+			try
+			{
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				navgDoc = builder.newDocument();
+			}
+			catch(Exception e)
+			{
+				throw new ServletException(e);
+			}
+
+			Element navgRootElem = navgDoc.createElement("xaf");
+			navgDoc.appendChild(navgRootElem);
+
+			projectFSContext.addXML(navgRootElem, projectFSContext);
+			String styleSheet = appConfig.getValue(vc, "app.ace.project-browser-xsl");
+
+			PrintWriter out = response.getWriter();
+			preparePage(request, response, "/documents");
+			out.write(Transform.nodeToString(styleSheet, navgDoc, styleSheetParams));
+		}
+		else
+		{
+			activeEntry.send(response);
+		}
 	}
 
 	public void doTestDialog(HttpServletRequest request, HttpServletResponse response, String dialogId) throws ServletException, IOException
@@ -357,12 +460,10 @@ public class AppComponentExplorerServlet extends HttpServlet
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        response.setContentType(CONTENT_TYPE);
         PrintWriter out = response.getWriter();
 		ServletContext context = getServletContext();
 
 		String area = null, command = null, commandParam = null, commandSubParam = null;
-		String styleSheet = aceHomeStyleSheet;
 		styleSheetParams.clear();
 		styleSheetParams.put("root-url", request.getContextPath() + request.getServletPath());
 		styleSheetParams.put("test-url", request.getContextPath() + request.getServletPath() + "/test");
@@ -437,12 +538,13 @@ public class AppComponentExplorerServlet extends HttpServlet
 		}
 		else
 		{
-			out.write(Transform.nodeToString(styleSheet, appComponents, styleSheetParams));
 			ValueContext vc = new ServletValueContext(request, response, context);
 			if("javadoc".equals(area))
 				response.sendRedirect(appConfig.getValue(vc, "app.ace.javadoc-url"));
 			else if("tagdoc".equals(area))
 				response.sendRedirect(appConfig.getValue(vc, "app.ace.tagdoc-url"));
+			else if("config".equals(area))
+				doConfig(request, response);
 			else if("schema".equals(area))
 				doSchema(request, response);
 			else if("ddl".equals(area))
@@ -451,6 +553,12 @@ public class AppComponentExplorerServlet extends HttpServlet
 				doUI(request, response);
 			else if("sql".equals(area))
 				doSql(request, response);
+			else if("documents".equals(area))
+				doProject(request, response, pathInfo.substring("documents".length()+1));
+			else
+			{
+				preparePage(request, response, null);
+			}
 		}
     }
 
