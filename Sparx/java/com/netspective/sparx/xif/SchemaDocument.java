@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.4 2002-02-09 13:02:13 snshah Exp $
+ * $Id: SchemaDocument.java,v 1.5 2002-03-31 14:05:00 snshah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -612,7 +612,6 @@ public class SchemaDocument extends XmlSource
                                 colNameElem = tableDoc.createElement("column");
                                 colNameElem.setAttribute("name", accessorColName);
                                 accessor.appendChild(colNameElem);
-                                System.out.println("Adding column: " + accessorColName + " " + columnElem.getAttribute("name"));
                                 break;
                             }
                         }
