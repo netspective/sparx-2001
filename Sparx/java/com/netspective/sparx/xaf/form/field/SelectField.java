@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SelectField.java,v 1.3 2002-12-31 19:46:25 shahid.shah Exp $
+ * $Id: SelectField.java,v 1.4 2003-01-06 17:34:27 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
@@ -76,7 +76,7 @@ import com.netspective.sparx.util.value.ValueSourceFactory;
 
 public class SelectField extends TextField
 {
-    static public final long FLDFLAG_SORTCHOICES = DialogField.FLDFLAG_STARTCUSTOM;
+    static public final long FLDFLAG_SORTCHOICES = TextField.FLDFLAG_STARTCUSTOM;
     static public final long FLDFLAG_PREPENDBLANK = FLDFLAG_SORTCHOICES * 2;
     static public final long FLDFLAG_APPENDBLANK = FLDFLAG_PREPENDBLANK * 2;
 
