@@ -2,36 +2,24 @@
 
 <schema name="generic-datatypes">
 
-	<!-- include file="deprecated-data-types.xml"/ -->
-
-	<!--
-	*********************************************************************
-	** Generic Datatypes used by all tables
-	*********************************************************************
-	-->
-
 	<datatype name="text">
 		<java-class package="java.lang">String</java-class>
-		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
-		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
+		<sqldefn dbms="ansi">varchar(${size})</sqldefn>
+		<sqldefn dbms="mssql">varchar(${size})</sqldefn>
 		<size>32</size>
 
-		<validation>
-			<rule name="max-length" type="max-length">getSize()</rule>
-		</validation>
+    	<validate type="max-length" length="getSize()"/>
 
 		<field.text size="20"/>
 	</datatype>
 
 	<datatype name="text-set">
 		<java-class package="java.lang">String</java-class>
-		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
-		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
+		<sqldefn dbms="ansi">varchar(${size})</sqldefn>
+		<sqldefn dbms="mssql">varchar(${size})</sqldefn>
 		<size>255</size>
 
-		<validation>
-			<rule name="max-length" type="max-length">getSize()</rule>
-		</validation>
+        <validate type="max-length" length="getSize()"/>
 
 		<field.text size="20"/>
 	</datatype>
@@ -49,11 +37,6 @@
 		<sqldefn dbms="ansi">float</sqldefn>
 		<sqldefn dbms="oracle">number(20,6)</sqldefn>
 
-		<validation>
-			<rule name="digits-and-decimals-only" type="regex" success-message="Success" failure-message="Failure">^\\d*(\\.\\d*)?$</rule>
-			<rule name="minimum-value" type="min">0.0</rule>
-		</validation>
-
 		<field.float size="16" min="0.0"/>
 	</datatype>
 
@@ -62,12 +45,6 @@
 		<java-class package="java.lang">Integer</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(8)</sqldefn>
-
-		<validation>
-			<rule name="digits-only" type="regex" success-message="Success" failure-message="Failure">^\\d*$</rule>
-			<rule name="minimum-value" type="min">0</rule>
-			<rule name="maximum-value" type="max">99999999</rule>
-		</validation>
 
 		<field.integer size="16" min="0" max="99999999"/>
 	</datatype>
@@ -78,12 +55,6 @@
 		<sqldefn dbms="ansi">smallint</sqldefn>
 		<sqldefn dbms="oracle">number(4)</sqldefn>
 
-		<validation>
-			<rule name="digits-only" type="regex" success-message="Success" failure-message="Failure">^\\d*$</rule>
-			<rule name="minimum-value" type="min">0</rule>
-			<rule name="maximum-value" type="max">9999</rule>
-		</validation>
-
 		<field.integer size="16" min="0" max="9999"/>
 	</datatype>
 
@@ -92,11 +63,6 @@
 		<java-class package="java.lang">Long</java-class>
 		<sqldefn dbms="ansi">integer</sqldefn>
 		<sqldefn dbms="oracle">number(16)</sqldefn>
-
-		<validation>
-			<rule name="digits-only" type="regex" success-message="Success" failure-message="Failure">^\\d*$</rule>
-			<rule name="minimum-value" type="min">0</rule>
-		</validation>
 
 		<field.integer size="16" min="0"/>
 	</datatype>
@@ -129,9 +95,10 @@
 		<sqldefn dbms="ansi">float</sqldefn>
 		<sqldefn dbms="oracle">number(5,2)</sqldefn>
 
-		<validation>
-			<rule name="maximum-value" type="min">100.0</rule>
-		</validation>
+        <validate type="max-length" length="100"/>
+        <validate type="min-value" value="new Float(0.0)"/>
+        <validate type="max-value" value="new Float(100.0)"/>
+        <validate type="min-length" length="20"/>
 
 		<field.float size="16" min="0.0" max="100.0"/>
 	</datatype>
@@ -179,8 +146,41 @@
 		<copytype>long-integer</copytype>
 		<sqldefn dbms="mssql">integer IDENTITY</sqldefn>
 		<sqldefn dbms="hsqldb">integer IDENTITY</sqldefn>
+        <generate-id>autoinc</generate-id>
 
-		<field.integer size="16" min="0"/>
+        <trigger type="dal-row-java" time="before" event="insert" use-db-policy="yes" use-dbms-id="yes" use-table-instance="yes">
+            if (databasePolicy.retainAutoIncColInDml())
+            {
+                Column ${column.getAttribute("_gen-member-name")}Col = table.get${column.getAttribute("_gen-method-name")}Column();
+                Object value = databasePolicy.handleAutoIncPreDmlExecute(cc.getConnection(), ${column.getAttribute("_gen-member-name")}Col.getSequenceName(), COLNAME_${column.getAttribute("_gen-constant-name")});
+                dml.updateValue(COLAI_${column.getAttribute("_gen-constant-name")}, dbmsId, value);
+                set${column.getAttribute("_gen-method-name")}(value instanceof ${column.getAttribute("_gen-java-class-spec")} ? (${column.getAttribute("_gen-java-class-spec")}) value : new ${column.getAttribute("_gen-java-class-spec")}(value.toString()));
+            }
+            else
+            {
+                dml.removeColumn(COLNAME_${column.getAttribute("_gen-constant-name")});
+                dml.createSql(dbmsId);
+            }
+        </trigger>
+
+        <trigger type="dal-row-java" time="after" event="insert" use-db-policy="yes" use-table-instance="yes">
+            {
+                Column ${column.getAttribute("_gen-member-name")}Col = table.get${column.getAttribute("_gen-method-name")}Column();
+                String seqOrTableName = databasePolicy.retainAutoIncColInDml() ? ${column.getAttribute("_gen-member-name")}Col.getSequenceName() : table.getName();
+                Object value = databasePolicy.handleAutoIncPostDmlExecute(cc.getConnection(), seqOrTableName, ${column.getAttribute("_gen-member-name")}Col.getName(), get${column.getAttribute("_gen-method-name")}());
+                set${column.getAttribute("_gen-method-name")}(value instanceof ${column.getAttribute("_gen-java-class-spec")} ? (${column.getAttribute("_gen-java-class-spec")}) value : new ${column.getAttribute("_gen-java-class-spec")}(value.toString()));
+            }
+        </trigger>
+
+        <trigger type="dal-row-java" time="before" event="update" use-db-policy="yes" use-dbms-id="yes">
+            if (!databasePolicy.retainAutoIncColInDml())
+            {
+                dml.removeColumn(COLNAME_${column.getAttribute("_gen-constant-name")});
+                dml.createSql(dbmsId);
+            }
+        </trigger>
+
+        <field.integer size="16" min="0"/>
 	</datatype>
 
 	<datatype name="data-block">
@@ -194,45 +194,175 @@
 	<datatype name="email" type="text">
 		<size>64</size>
 
-		<validation>
-			<rule name="email-format" type="regex" success-message="Success" failure-message="Please ensure that this field contains a valid email address.&lt;br&gt;Acceptable email address formats can have any digits or letters of the alphabet and must have an @ in the middle.">^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$</rule>
-		</validation>
+    	<validate type="email-format"/>
 
 		<field.email size="20"/>
 	</datatype>
 
 	<datatype name="guid-text">
 		<java-class package="java.lang">String</java-class>
-		<sqldefn dbms="ansi">varchar(%size%)</sqldefn>
-		<sqldefn dbms="mssql">varchar(%size%)</sqldefn>
+		<sqldefn dbms="ansi">varchar(${size})</sqldefn>
+		<sqldefn dbms="mssql">varchar(${size})</sqldefn>
 		<size>36</size>
 
-		<validation>
-			<rule name="guid32-format" type="regex" success-message="Success" failure-message="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit.">^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$</rule>
-			<rule name="max-length" type="max-length">getSize()</rule>
-		</validation>
+        <validate type="guid32-format"/>
 
 		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
 	</datatype>
 
 	<datatype name="guid32" type="guid-text">
 		<copytype>guid-text</copytype>
+        <generate-id>guid32</generate-id>
 
 		<field.text size="20" validate-pattern="/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/" validate-msg="Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit."/>
+
+        <trigger type="dal-row-java" time="before" event="insert" use-db-policy="yes" use-dbms-id="yes" use-table-instance="yes">
+            if (databasePolicy.retainGUIDColInDml())
+            {
+                Object value = databasePolicy.handleGUIDPreDmlExecute(cc.getConnection(), table.getName(), COLNAME_${column.getAttribute("_gen-constant-name")});
+                dml.updateValue(COLAI_${column.getAttribute("_gen-constant-name")}, dbmsId, value);
+                set${column.getAttribute("_gen-method-name")}(value instanceof ${column.getAttribute("_gen-java-class-spec")} ? (${column.getAttribute("_gen-java-class-spec")}) value : new ${column.getAttribute("_gen-java-class-spec")}(value.toString()));
+            }
+            else
+            {
+                dml.removeColumn(COLNAME_${column.getAttribute("_gen-constant-name")});
+                dml.createSql(dbmsId);
+            }
+        </trigger>
+
+        <trigger type="dal-row-java" time="after" event="insert" use-db-policy="yes" use-table-instance="yes">
+            {
+                Column ${column.getAttribute("_gen-member-name")}Col = table.get${column.getAttribute("_gen-method-name")}Column();
+                String seqOrTableName = databasePolicy.retainAutoIncColInDml() ? ${column.getAttribute("_gen-member-name")}Col.getSequenceName() : table.getName();
+                Object value = databasePolicy.handleGUIDPostDmlExecute(cc.getConnection(), seqOrTableName, ${column.getAttribute("_gen-member-name")}Col.getName(), get${column.getAttribute("_gen-method-name")}());
+                set${column.getAttribute("_gen-method-name")}(value instanceof ${column.getAttribute("_gen-java-class-spec")} ? (${column.getAttribute("_gen-java-class-spec")}) value : new ${column.getAttribute("_gen-java-class-spec")}(value.toString()));
+            }
+        </trigger>
+
+        <trigger type="dal-row-java" time="before" event="update" use-db-policy="yes" use-dbms-id="yes">
+            if (!databasePolicy.retainGUIDColInDml())
+            {
+                dml.removeColumn(COLNAME_${column.getAttribute("_gen-constant-name")});
+                dml.createSql(dbmsId);
+            }
+        </trigger>
 	</datatype>
 
 	<datatype name="duration">
 		<composite>
-			<column name="$name$_begin_date" type="date"/>
-			<column name="$name$_end_date" type="date"/>
+			<column name="${column.getAttribute(&quot;name&quot;)}_begin_date" type="date" descr="${column.getAttribute(&quot;name&quot;)} beginning date"/>
+			<column name="${column.getAttribute(&quot;name&quot;)}_end_date" type="date" descr="${column.getAttribute(&quot;name&quot;)} ending date"/>
 		</composite>
 	</datatype>
 
 	<datatype name="stamp-range">
 		<composite>
-			<column name="$name$_begin_stamp" type="stamp"/>
-			<column name="$name$_end_stamp" type="stamp"/>
+			<column name="${column.getAttribute(&quot;name&quot;)}_begin_stamp" type="stamp"/>
+			<column name="${column.getAttribute(&quot;name&quot;)}_end_stamp" type="stamp"/>
 		</composite>
 	</datatype>
+
+    <!-- ***********************************************************************************************************
+               Validation rules
+         *********************************************************************************************************** -->
+
+    <validation-rule name="default">
+        <message-success>${rule.getAttribute("name")} valid</message-success>
+        <message-failure>${rule.getAttribute("name")} invalid</message-failure>
+
+        <declare-java-code indent="    ">
+            private static String RULENAME_${rule.getAttribute("_gen-constant-name")} = "${rule.getAttribute("name")}";
+            private static String RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} = "${rule.getElementsByTagName("message-success").item(0).getFirstChild().getNodeValue()}";
+            private static String RULEMSGFAIL_${rule.getAttribute("_gen-constant-name")} = "${rule.getElementsByTagName("message-failure").item(0).getFirstChild().getNodeValue()}";
+        </declare-java-code>
+    </validation-rule>
+
+    <validation-rule name="perl5-regular-expression" type="default">
+        <import-java-code indent="">
+            import org.apache.oro.text.regex.MalformedPatternException;
+            import org.apache.oro.text.regex.Pattern;
+            import org.apache.oro.text.regex.PatternCompiler;
+            import org.apache.oro.text.regex.PatternMatcher;
+            import org.apache.oro.text.regex.Perl5Compiler;
+            import org.apache.oro.text.regex.Perl5Matcher;
+        </import-java-code>
+        <declare-java-code type="singleton" ID="perl5-regular-expression" indent="    ">
+            private static PatternCompiler patternCompiler = new Perl5Compiler();
+            private static PatternMatcher patternMatcher = new Perl5Matcher();
+        </declare-java-code>
+        <declare-java-code indent="    ">
+            private static String REGEXPATTERN_${rule.getAttribute("_gen-constant-name")} = "${rule.getElementsByTagName("reg-ex-pattern").item(0).getFirstChild().getNodeValue()}";
+            private static Pattern ${rule.getAttribute("_gen-member-name")}Pattern;
+        </declare-java-code>
+        <static-java-code indent="        ">
+            try
+            {
+                ${rule.getAttribute("_gen-member-name")}Pattern = patternCompiler.compile(REGEXPATTERN_${rule.getAttribute("_gen-constant-name")});
+            }
+            catch(MalformedPatternException ${rule.getAttribute("_gen-member-name")}Exception)
+            {
+                ${rule.getAttribute("_gen-member-name")}Pattern = null;
+            }
+        </static-java-code>
+        <java-code indent="        ">
+            if(value != null &amp;&amp; ${rule.getAttribute("_gen-member-name")}Pattern != null)
+            {
+                boolean valid = patternMatcher.matches(value, ${rule.getAttribute("_gen-member-name")}Pattern);
+                bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : RULEMSGFAIL_${rule.getAttribute("_gen-constant-name")});
+            }
+            else
+                bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, false, "Reg ex pattern '"+ REGEXPATTERN_${rule.getAttribute("_gen-constant-name")} +"' is invalid.");
+        </java-code>
+    </validation-rule>
+
+    <validation-rule name="guid32-format" type="perl5-regular-expression">
+        <reg-ex-pattern>^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$</reg-ex-pattern>
+        <message-failure>Please ensure that this field contains a valid GUID32.&lt;br&gt;The format of a GUID32 is xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;br&gt;where x is an uppercase letter or digit.</message-failure>
+    </validation-rule>
+
+    <validation-rule name="email-format" type="perl5-regular-expression">
+        <reg-ex-pattern>^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$</reg-ex-pattern>
+        <message-failure>Please ensure that this field contains a valid email address.&lt;br&gt;Acceptable email address formats can have any digits or letters of the alphabet and must have an @ in the middle.</message-failure>
+    </validation-rule>
+
+    <validation-rule name="min-length" type="default">
+        <java-code indent="        ">
+        if(value != null)
+        {
+            boolean valid = value.toString().length() &lt; ${rule.getAttribute("length")};
+            bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : ("Length of '"+ value +"' is less than " + ${rule.getAttribute("length")}));
+        }
+        </java-code>
+    </validation-rule>
+
+    <validation-rule name="max-length" type="default">
+        <java-code indent="        ">
+        if(value != null)
+        {
+            boolean valid = value.toString().length() &gt; ${rule.getAttribute("length")};
+            bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : ("Length of '"+ value +"' is greater than " + ${rule.getAttribute("length")}));
+        }
+        </java-code>
+    </validation-rule>
+
+    <validation-rule name="min-value" type="default">
+        <java-code indent="        ">
+        if(value != null &amp;&amp; value instanceof Comparable)
+        {
+            boolean valid = value.compareTo(${rule.getAttribute("value")}) &lt; 0;
+            bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : (value.toString() + " is less than " + ${rule.getAttribute("value")}));
+        }
+        </java-code>
+    </validation-rule>
+
+    <validation-rule name="max-value" type="default">
+        <java-code indent="        ">
+        if(value != null &amp;&amp; value instanceof Comparable)
+        {
+            boolean valid = value.compareTo(${rule.getAttribute("value")}) &gt; 0;
+            bdvResult.addResultInfo(RULENAME_${rule.getAttribute("_gen-constant-name")}, valid, valid ? RULEMSGVALID_${rule.getAttribute("_gen-constant-name")} : (value.toString() + " is greater than " + ${rule.getAttribute("value")}));
+        }
+        </java-code>
+    </validation-rule>
 
 </schema>

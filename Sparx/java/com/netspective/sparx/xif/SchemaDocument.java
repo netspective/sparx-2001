@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.23 2002-12-29 17:08:26 shahid.shah Exp $
+ * $Id: SchemaDocument.java,v 1.24 2002-12-30 18:08:51 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -126,7 +126,7 @@ public class SchemaDocument extends XmlSource
     public static final String STMTNAME_DEFAULT = "default";
     public static final String QUERYDEFID_DEFAULT = "default";
 
-    public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default"};
+    public static final String[] MACROSIN_COLUMNNODES = {"name", "parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default", "descr"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
@@ -191,6 +191,7 @@ public class SchemaDocument extends XmlSource
     private Map dataTypeNodes = new HashMap();
     private Map tableTypeNodes = new HashMap();
     private Map indexTypeNodes = new HashMap();
+    private Map validationRuleNodes = new HashMap();
     private Map tableNodes = new HashMap();
     private List columnTableNodes = new ArrayList();
     private Map tableParams = new HashMap(); // key is table name, value is hash-table of key/value pairs
@@ -308,11 +309,11 @@ public class SchemaDocument extends XmlSource
                 switch (jdbcType.intValue())
                 {
                     case java.sql.Types.VARCHAR:
-                        sqlDefnElem = sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName + "(%size%)");
+                        sqlDefnElem = sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName + "(${size})");
                         break;
 
                     case java.sql.Types.NUMERIC:
-                        sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName + "(%size%, %decimals%)");
+                        sqlDefnElem = createTextElem(dataTypeElem, "sqldefn", dmbdTypeName + "(${size}, ${decimals})");
                         break;
 
                     default:
@@ -703,6 +704,11 @@ public class SchemaDocument extends XmlSource
         return dataTypeNodes;
     }
 
+    public Map getValidationRules()
+    {
+        return validationRuleNodes;
+    }
+
     public Map getTableTypes()
     {
         return tableTypeNodes;
@@ -811,18 +817,19 @@ public class SchemaDocument extends XmlSource
 
     public DocumentFragment getCompositeColumns(Element table, Element column, Element composite)
     {
+        Map expressionVariables = new HashMap();
+        expressionVariables.put("column", column);
+        expressionVariables.put("composite", composite);
+
         NodeList compNodes = composite.getChildNodes();
-        String compositeName = column.getAttribute("name");
         DocumentFragment compColumns = composite.getOwnerDocument().createDocumentFragment();
         for (int c = 0; c < compNodes.getLength(); c++)
         {
             Node compNode = compNodes.item(c);
             if (compNode.getNodeName().equals("column"))
             {
-                Node nameAttr = ((Element) compNode).getAttributeNode("name");
-                replaceNodeValue(nameAttr, "$name$", compositeName);
+                replaceNodeMacros(compNode, replaceMacrosInColumnNodes, expressionVariables);
                 fixupColumnElement(table, (Element) compNode, false);
-                ((Element) compNode).setAttribute("descr", column.getAttribute("descr"));
                 compColumns.appendChild(compNode);
             }
         }
@@ -884,12 +891,12 @@ public class SchemaDocument extends XmlSource
         if (size != null && sqlDefnElems.size() > 0)
         {
             for (int i = 0; i < sqlDefnElems.size(); i++)
-                replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "%size%", size);
+                replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "${size}", size);
         }
         if (decimals != null && sqlDefnElems.size() > 0)
         {
             for (int i = 0; i < sqlDefnElems.size(); i++)
-                replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "%decimals%", decimals);
+                replaceNodeValue(((Element) sqlDefnElems.get(i)).getFirstChild(), "${decimals}", decimals);
         }
 
         String customSequence = column.getAttribute("sequence-name");
@@ -1101,7 +1108,7 @@ public class SchemaDocument extends XmlSource
 
     public void fixupTableElement(Element table)
     {
-        Hashtable params = new Hashtable();
+        Map params = new HashMap();
         String tableName = table.getAttribute("name");
         tableParams.put(tableName, params);
         inheritNodes(table, tableTypeNodes, ATTRNAME_TYPE, defaultExcludeElementsFromInherit);
@@ -1146,9 +1153,9 @@ public class SchemaDocument extends XmlSource
             table.removeChild(replaceCols[j][0]);
         }
 
-        params.put("tbl_name", table.getAttribute("name"));
-        params.put("tbl_Name", ucfirst(table.getAttribute("name")));
-        params.put("tbl_abbrev", table.getAttribute("abbrev"));
+        Map expressionVariables = new HashMap();
+        expressionVariables.put("params", params);
+        expressionVariables.put("table", table);
 
         Element tableParentElem = (Element) table.getParentNode();
         if (tableParentElem != null && tableParentElem.getNodeName().equals("column"))
@@ -1156,22 +1163,15 @@ public class SchemaDocument extends XmlSource
             Element parentColumn = tableParentElem;
             Element parentColTable = (Element) parentColumn.getParentNode();
 
-            params.put("parenttbl_name", parentColTable.getAttribute("name"));
-            params.put("parenttbl_Name", ucfirst(parentColTable.getAttribute("name")));
-            params.put("parenttbl_abbrev", parentColTable.getAttribute("abbrev"));
+            expressionVariables.put("parentColTable", parentColTable);
+            expressionVariables.put("parentColumn", tableParentElem);
 
             String primaryKey = getPrimaryKey(parentColTable);
             if (primaryKey != null)
-                params.put("parenttbl_prikey", primaryKey);
-
-            params.put("parentcol_name", parentColumn.getAttribute("name"));
-            params.put("parentcol_Name", ucfirst(parentColumn.getAttribute("name")));
-            params.put("parentcol_abbrev", parentColumn.getAttribute("abbrev"));
-            params.put("parentcol_short", parentColumn.getAttribute("abbrev"));
-            params.put("parentcol_Short", parentColumn.getAttribute("abbrev"));
+                expressionVariables.put("parentColTablePriKey", primaryKey);
         }
 
-        replaceNodeMacros(table, replaceMacrosInTableNodes, params);
+        replaceNodeMacros(table, replaceMacrosInTableNodes, expressionVariables);
 
         boolean isEnum = false;
         boolean isLookup = false;
@@ -1186,13 +1186,14 @@ public class SchemaDocument extends XmlSource
                 continue;
 
             String nodeName = node.getNodeName();
+            expressionVariables.put("this", node);
             if (nodeName.equals("column"))
             {
-                replaceNodeMacros(node, replaceMacrosInColumnNodes, params);
+                replaceNodeMacros(node, replaceMacrosInColumnNodes, expressionVariables);
                 lastColumnSeen = (Element) node;
             }
             else if (nodeName.equals("index"))
-                replaceNodeMacros(node, replaceMacrosInTableNodes, params);
+                replaceNodeMacros(node, replaceMacrosInIndexNodes, expressionVariables);
             else if (nodeName.equals("parent"))
             {
                 if (table.getAttribute("parent").length() == 0)
@@ -1596,57 +1597,6 @@ public class SchemaDocument extends XmlSource
         }
     }
 
-    public void keepOnlyUniqueValidationRules(Element dataType)
-    {
-        NodeList validationRules = dataType.getElementsByTagName("validation");
-        Map elemHash = new HashMap();
-
-        if (0 < validationRules.getLength())
-        {
-            //Node validation = validationRules.item(0).cloneNode(false);
-            for (int i = 0; i < validationRules.getLength(); i++)
-            {
-                Element parent = (Element) validationRules.item(i);
-                NodeList rules = parent.getElementsByTagName("rule");
-
-                for (int j = 0; j < rules.getLength(); j++)
-                {
-                    Element elem = (Element) rules.item(j);
-                    String ruleContents = getRuleContents(elem);
-                    elem.setAttribute("rule-contents", ruleContents);
-
-                    if (elemHash.containsKey(ruleContents))
-                    {
-                        // This means that this node is a duplicate of one already checked, so replace the earlier
-                        // node in the hash with this one and delete that older one from the DOM.
-                        Node oldNode = (Node) elemHash.put(ruleContents, rules.item(j));
-                        Node nodeParent = oldNode.getParentNode();
-                        nodeParent.removeChild(oldNode);
-                    }
-                    else
-                    {
-                        // This means that this node is not present in the element Hash.  It needs to be there for
-                        // dupe checking with other (later) nodes
-                        elemHash.put(ruleContents, rules.item(j));
-                    }
-                }
-            }
-        }
-    }
-
-    private String getRuleContents(Node ruleNode)
-    {
-        Element elem = (Element) ruleNode;
-        String ruleContents = elem.getNodeName() + "[";
-
-        ruleContents += "name=" + elem.getAttribute("name");
-        ruleContents += ":type=" + elem.getAttribute("type");
-
-        ruleContents += "]";
-
-        return ruleContents;
-    }
-
     public void doDataTypeInheritance()
     {
         for (Iterator i = dataTypeNodes.values().iterator(); i.hasNext();)
@@ -1663,14 +1613,13 @@ public class SchemaDocument extends XmlSource
             keepOnlyLastElement(dataType, "java-class");
             keepOnlyLastElement(dataType, "java-type");
             keepOnlyLastElement(dataType, "java-default");
-
-            keepOnlyUniqueValidationRules(dataType);
         }
     }
 
     public void catalogNodes()
     {
         dataTypeNodes.clear();
+        validationRuleNodes.clear();
         indexTypeNodes.clear();
         tableTypeNodes.clear();
         tableNodes.clear();
@@ -1707,6 +1656,8 @@ public class SchemaDocument extends XmlSource
                 if (sqlWriteFmt.getLength() > 0)
                     node.removeChild(sqlWriteFmt.item(0));
             }
+            else if (nodeName.equals("validation-rule"))
+                validationRuleNodes.put(element.getAttribute("name"), node);
             else if (nodeName.equals("tabletype"))
                 tableTypeNodes.put(element.getAttribute("name"), node);
             else if (nodeName.equals("indextype"))
@@ -2295,7 +2246,6 @@ public class SchemaDocument extends XmlSource
                 boolean hasCustomDalClass = false;
                 boolean[] dalClassTaggedChildren = new boolean[childNodes.getLength()];
                 int childNum = 0;
-                int ruleNum = 0;
 
                 for (childNum = 0; null != childNodes && childNum < childNodes.getLength(); childNum++)
                 {
@@ -2309,33 +2259,17 @@ public class SchemaDocument extends XmlSource
                         hasCustomDalClass = true;
                         dalClassTaggedChildren[childNum] = true;
                     }
-
-                    if ("validation".equals(child.getNodeName()))
+                    else if (child.getNodeName().equals("validate"))
                     {
-                        NodeList ruleNodes = child.getChildNodes();
-
-                        for (int loop = 0; null != ruleNodes && loop < ruleNodes.getLength(); loop++)
-                        {
-                            Node rule = ruleNodes.item(loop);
-
-                            if (Node.ELEMENT_NODE != rule.getNodeType())
-                                continue;
-
-                            String ruleName = ((Element) rule).getAttribute("name");
-                            ruleName = "".equals(ruleName) ? "number-" : ruleName;
-                            String ruleConstantName = ruleName;
-                            String ruleIdentifierName = ruleName;
-                            ruleConstantName = XmlSource.xmlTextToJavaConstant(ruleConstantName);
-                            ruleIdentifierName = XmlSource.xmlTextToJavaIdentifier(ruleIdentifierName, true);
-
-                            String ruleValue = (new Integer(ruleNum++)).toString();
-
-                            ((Element) rule).setAttribute("_gen-java-constant-name", ruleConstantName);
-                            ((Element) rule).setAttribute("_gen-java-constant-value", ruleValue);
-                            ((Element) rule).setAttribute("_gen-rule-name", ruleName);
-                            ((Element) rule).setAttribute("_gen-java-identifier-name", ruleIdentifierName);
-                            ruleNum++;
-                        }
+                        Element validateElem = (Element) child;
+                        inheritNodes(validateElem, validationRuleNodes, ATTRNAME_TYPE, defaultExcludeElementsFromInherit);
+                        String name = validateElem.getAttribute("name");
+                        setAttrValueDefault(validateElem, "_gen-member-name", xmlTextToJavaIdentifier(name, false));
+                        setAttrValueDefault(validateElem, "_gen-method-name", xmlTextToJavaIdentifier(name, true));
+                        setAttrValueDefault(validateElem, "_gen-constant-name", xmlTextToJavaConstant(name));
+                        keepOnlyLastElement(validateElem, "message-failure");
+                        keepOnlyLastElement(validateElem, "message-success");
+                        keepOnlyLastElement(validateElem, "reg-ex-pattern");
                     }
                 }
 
@@ -2377,6 +2311,8 @@ public class SchemaDocument extends XmlSource
                     }
                     else if ("java-type".equals(childName))
                         javaTypeInitCap = XmlSource.xmlTextToJavaIdentifier(child.getFirstChild().getNodeValue(), true);
+
+                    prepareValidationElements(dataTypeElem);
                 }
 
                 dataTypeElem.setAttribute("_gen-data-type-name", dataTypeName);
@@ -2406,7 +2342,6 @@ public class SchemaDocument extends XmlSource
                 boolean hasCustomDalClass = false;
                 boolean[] dalClassTaggedChildren = new boolean[dalClassChildren.getLength()];
                 int childNum = 0;
-
 
                 for (childNum = 0; null != dalClassChildren && childNum < dalClassChildren.getLength(); childNum++)
                 {
@@ -2521,6 +2456,15 @@ public class SchemaDocument extends XmlSource
                         NodeList jtnl = columnElem.getElementsByTagName("java-type");
                         if (jtnl.getLength() > 0)
                             columnElem.setAttribute("_gen-java-type-init-cap", xmlTextToJavaIdentifier(jtnl.item(0).getFirstChild().getNodeValue(), true));
+
+                        NodeList javaClassElems = columnElem.getElementsByTagName("java-class");
+                        if(javaClassElems.getLength() > 0)
+                        {
+                            Element javaClassElem = (Element) javaClassElems.item(0);
+                            String javaClass = javaClassElem.getFirstChild().getNodeValue();
+                            String javaPackage = javaClassElem.getAttribute("package");
+                            columnElem.setAttribute("_gen-java-class-spec", javaPackage + "." + javaClass);
+                        }
                     }
                     else if ("extends".equals(childName))
                     {
@@ -2607,6 +2551,19 @@ public class SchemaDocument extends XmlSource
                                 columnElem.setAttribute("_gen-ref-table-method-name", refTableElem.getAttribute("_gen-table-method-name"));
                             }
                         }
+
+                        NodeList triggerElems = columnElem.getElementsByTagName("trigger");
+                        if(triggerElems.getLength() > 0)
+                        {
+                            for(int te = 0; te < triggerElems.getLength(); te++)
+                            {
+                                Element triggerElem = (Element) triggerElems.item(te);
+                                Map variables = new HashMap();
+                                variables.put("table", tableElem);
+                                variables.put("column", columnElem);
+                                prepareJavaCodeText(triggerElem, variables, "        ");
+                            }
+                        }
                     }
                     else if ("child-table".equals(childName))
                     {
@@ -2641,8 +2598,93 @@ public class SchemaDocument extends XmlSource
                             }
                         }
                     }
+                    else if ("trigger".equals(childName))
+                    {
+                        Element triggerElem = (Element) child;
+                        Map variables = new HashMap();
+                        variables.put("table", tableElem);
+                        prepareJavaCodeText(triggerElem, variables, "        ");
+                    }
                 }
             }
+        }
+
+        private void prepareValidationElements(Element dataTypeElem)
+        {
+            NodeList validateElems = dataTypeElem.getElementsByTagName("validate");
+            if(validateElems.getLength() > 0)
+            {
+                Set singletonSet = new HashSet();
+                Set ruleIdSet = new HashSet();
+
+                for(int ve = 0; ve < validateElems.getLength(); ve++)
+                {
+                    Element validateElem = (Element) validateElems.item(ve);
+                    List codeBlocks = new ArrayList();
+
+                    Map variables = new HashMap();
+                    variables.put("datatype", dataTypeElem);
+                    variables.put("rule", validateElem);
+
+                    String ruleName = validateElem.getAttribute("name");
+                    if(ruleIdSet.contains(ruleName))
+                        validateElem.setAttribute("_gen-is-duplicate", "yes");
+                    else
+                        ruleIdSet.add(ruleName);
+
+                    NodeList validateElemChildren = validateElem.getChildNodes();
+                    for(int vec = 0; vec < validateElemChildren.getLength(); vec++)
+                    {
+                        Node validateElemChild = validateElemChildren.item(vec);
+                        if (validateElemChild.getNodeType() != Node.ELEMENT_NODE)
+                            continue;
+
+                        String validateElemChildName = validateElemChild.getNodeName();
+                        Node validateElemChildFirstChild = validateElemChild.getFirstChild();
+                        if(validateElemChildName.equals("message-success"))
+                            validateElemChildFirstChild.setNodeValue(replaceExpressions(validateElemChildFirstChild.getNodeValue(), variables));
+                        else if(validateElemChildName.equals("message-failure"))
+                            validateElemChildFirstChild.setNodeValue(replaceExpressions(validateElemChildFirstChild.getNodeValue(), variables));
+                        else if(validateElemChildName.equals("declare-java-code"))
+                        {
+                            if(((Element) validateElemChild).getAttribute("type").equals("singleton"))
+                            {
+                                // we look to see if we've already added this singleton and if so, mark it as duplicate so XSLT can check for dupes
+                                String singletonId = ((Element) validateElemChild).getAttribute("ID");
+                                if(singletonSet.contains(singletonId))
+                                    ((Element) validateElemChild).setAttribute("_gen-is-duplicate", "yes");
+                                else
+                                    singletonSet.add(singletonId);
+                                codeBlocks.add(validateElemChild);
+                            }
+                            else
+                                codeBlocks.add(validateElemChild);
+                        }
+                        else if(validateElemChildName.indexOf("java-code") >= 0)
+                            codeBlocks.add(validateElemChild);
+                    }
+
+                    for(int cb = 0; cb < codeBlocks.size(); cb++)
+                    {
+                        Element codeElem = (Element) codeBlocks.get(cb);
+                        prepareJavaCodeText(codeElem, variables, codeElem.getAttribute("indent"));
+                    }
+                }
+            }
+        }
+
+        private void prepareJavaCodeText(Element triggerElem, Map variables, String indent)
+        {
+            Text triggerCodeText = (Text) triggerElem.getFirstChild();
+
+            String originalCode = triggerCodeText.getNodeValue();
+            String replacedCode = replaceExpressions(originalCode, variables);
+
+            Text replacedCodeText = xmlDoc.createTextNode(getIndentedText(replacedCode, indent, true));
+            triggerElem.appendChild(xmlDoc.createElement("final-code")).appendChild(replacedCodeText);
+
+            Text documentCodeText = xmlDoc.createTextNode(getUnindentedText(replacedCode));
+            triggerElem.appendChild(xmlDoc.createElement("code-documentation")).appendChild(documentCodeText);
         }
     }
 

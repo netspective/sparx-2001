@@ -173,14 +173,14 @@ public class <xsl:value-of select="$table-name"/> extends AbstractTable <xsl:if 
 <xsl:for-each select="column">
 	<xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
 <xsl:text>		</xsl:text><xsl:value-of select="$member-name"/> = new <xsl:value-of select="@_gen-data-type-class"/>(this, <xsl:value-of select="$_gen-table-row-class-name"/>.COLNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.NODENAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:value-of select="$_gen-table-row-class-name"/>.DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>);
-<xsl:if test="@_gen-create-id = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsSequencedPrimaryKey(true);<xsl:text>
+<xsl:if test="@_gen-create-id = 'autoinc' and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setSequencedPrimaryKey(true);<xsl:text>
 		</xsl:text><xsl:value-of select="$member-name"/>.setSequenceName(&quot;<xsl:value-of select="@_gen-sequence-name"/>&quot;);
 </xsl:if>
-<xsl:if test="not(@_gen-create-id = 'autoinc') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsNaturalPrimaryKey(true);
+<xsl:if test="not(@_gen-create-id = 'autoinc') and @primarykey = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setNaturalPrimaryKey(true);
 </xsl:if>
-<xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsRequired(true);
+<xsl:if test="@required = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setRequired(true);
 </xsl:if>
-<xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setIsUnique(true);
+<xsl:if test="@unique = 'yes'"><xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setUnique(true);
 </xsl:if>
 <xsl:for-each select="default">
 		<xsl:text>		</xsl:text><xsl:value-of select="$member-name"/>.setDefaultSqlExprValue(&quot;<xsl:value-of select="@dbms"/>&quot;, &quot;<xsl:value-of select="."/>&quot;);

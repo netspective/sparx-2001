@@ -366,8 +366,81 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		dc.setValue(fieldName != null ? fieldName : DLGFIELDNAME_<xsl:value-of select="@_gen-constant-name"/>, <xsl:choose><xsl:when test="$java-class-spec = 'java.lang.String'">get<xsl:value-of select="@_gen-method-name"/>()</xsl:when><xsl:otherwise>table.get<xsl:value-of select="@_gen-method-name"/>Column().format(dc, get<xsl:value-of select="@_gen-method-name"/>())</xsl:otherwise></xsl:choose>);
 </xsl:for-each>	}
 
+<xsl:if test="column/trigger[@type='dal-row-java' and @time = 'before' and @event='insert']">
+    public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        if(! super.beforeInsert(cc, dml))
+            return false;
+        <xsl:call-template name="row-trigger-code">
+            <xsl:with-param name="time">before</xsl:with-param>
+            <xsl:with-param name="event">insert</xsl:with-param>
+        </xsl:call-template>
+        return true;
+    }
+</xsl:if>
+
+<xsl:if test="column/trigger[@type='dal-row-java' and @time = 'after' and @event='insert']">
+    public void afterInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        <xsl:call-template name="row-trigger-code">
+            <xsl:with-param name="time">after</xsl:with-param>
+            <xsl:with-param name="event">insert</xsl:with-param>
+        </xsl:call-template>
+        super.afterInsert(cc, dml);
+    }
+</xsl:if>
+
+<xsl:if test="column/trigger[@type='dal-row-java' and @time = 'before' and @event='update']">
+    public boolean beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        if(! super.beforeUpdate(cc, dml))
+            return false;
+        <xsl:call-template name="row-trigger-code">
+            <xsl:with-param name="time">before</xsl:with-param>
+            <xsl:with-param name="event">update</xsl:with-param>
+        </xsl:call-template>
+        return true;
+    }
+</xsl:if>
+
+<xsl:if test="column/trigger[@type='dal-row-java' and @time = 'after' and @event='update']">
+    public void afterUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        <xsl:call-template name="row-trigger-code">
+            <xsl:with-param name="time">after</xsl:with-param>
+            <xsl:with-param name="event">update</xsl:with-param>
+        </xsl:call-template>
+        super.afterUpdate(cc, dml);
+    }
+</xsl:if>
+
+<xsl:if test="column/trigger[@type='dal-row-java' and @time = 'before' and @event='delete']">
+    public boolean beforeDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        if(! super.beforeDelete(cc, dml))
+            return false;
+        <xsl:call-template name="row-trigger-code">
+            <xsl:with-param name="time">before</xsl:with-param>
+            <xsl:with-param name="event">delete</xsl:with-param>
+        </xsl:call-template>
+        return true;
+    }
+</xsl:if>
+
+<xsl:if test="column/trigger[@type='dal-row-java' and @time = 'after' and @event='delete']">
+    public void afterDelete(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+    {
+        <xsl:call-template name="row-trigger-code">
+            <xsl:with-param name="time">after</xsl:with-param>
+            <xsl:with-param name="event">delete</xsl:with-param>
+        </xsl:call-template>
+        super.afterDelete(cc, dml);
+    }
+</xsl:if>
+
+    /* COMMENTED OUT BY SHAHID N. SHAH IN SPARX 2.2.1 -- REMOVE FROM row-generator.xsl AFTER TESTING IS COMPLETE
 <xsl:if test="column[@_gen-create-id]">
-	public boolean beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+	public boolean _beforeInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
 	{
 		if(! super.beforeInsert(cc, dml))
 			return false;
@@ -407,7 +480,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		return true;
 	}
 
-	public boolean beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
+	public boolean _beforeUpdate(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
 	{
 		if(! super.beforeUpdate(cc, dml))
 			return false;
@@ -432,7 +505,7 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		return true;
 	}
 
-	public void afterInsert(ConnectionContext cc) throws NamingException, SQLException
+	public void _afterInsert(ConnectionContext cc, DmlStatement dml) throws NamingException, SQLException
 	{
 		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
 		DatabasePolicy databasePolicy = cc.getDatabasePolicy();
@@ -458,9 +531,10 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 <xsl:text>	</xsl:text>set<xsl:value-of select="@_gen-method-name"/>(value instanceof <xsl:value-of select="$java-class-spec"/> ? (<xsl:value-of select="$java-class-spec"/>) value : new <xsl:value-of select="$java-class-spec"/>(value.toString()));
 </xsl:for-each>
 
-		super.afterInsert(cc);
+		super.afterInsert(cc, dml);
 	}
 </xsl:if>
+    */
 
 <xsl:for-each select="column">
 <xsl:variable name="member-name"><xsl:value-of select="@_gen-member-name"/></xsl:variable>
@@ -528,37 +602,31 @@ public class <xsl:value-of select="$row-name"/> extends AbstractRow implements <
 		return <xsl:value-of select="@_gen-rows-member-name"/>;
 	}
 </xsl:for-each>
-	public String toString()
-	{
-		<xsl:value-of select="$_gen-table-class-name"/> table = (<xsl:value-of select="$_gen-table-class-name"/>) getTable();
-        Object value = null;
-        Object valueForBindParam = null;
-		StringBuffer str = new StringBuffer();
-        str.append("Class = ");
-        str.append(this.getClass().getName());
-		str.append(", Primary Key = ");
-		str.append(getActivePrimaryKeyValue());
-		str.append("\n");
-<xsl:for-each select="column">		str.append(COLNAME_<xsl:value-of select="@_gen-constant-name"/>);
-		str.append(" = ");
-        valueForBindParam = table.get<xsl:value-of select="@_gen-method-name"/>Column().getValueForSqlBindParam(<xsl:value-of select="@_gen-member-name"/>);
-        if(<xsl:value-of select="@_gen-member-name"/> != null)
-        {
-            str.append(<xsl:value-of select="@_gen-member-name"/>.toString() + " (" + <xsl:value-of select="@_gen-member-name"/>.getClass().getName() + ")");
-            if(! <xsl:value-of select="@_gen-member-name"/>.getClass().getName().equals(valueForBindParam.getClass().getName()))
-                str.append("[BIND AS "+ valueForBindParam.getClass().getName() +"]");
-        }
-        else
-            str.append("NULL");
-		if(haveSqlExprData(COLAI_<xsl:value-of select="@_gen-constant-name"/>))
-			str.append(" [SQL Expr: [" + sqlExprDataToString(COLAI_<xsl:value-of select="@_gen-constant-name"/>) + "]]");
-		else
-			str.append(" [No SQL Expr]");
-		str.append("\n");
-</xsl:for-each>
-		return str.toString();
-	}
 }
+</xsl:template>
+
+<!--
+    The following code checks to see if there are any special declarations in table or column triggers and performs the
+    declarations. Then, it emits the table trigger code with the 'before-columns' position and then each column's
+    triggers, and finally the table trigger code in the 'after-columns' position.
+-->
+<xsl:template name="row-trigger-code">
+    <xsl:param name="time"/>
+    <xsl:param name="event"/>
+
+<xsl:if test=".//trigger[@type='dal-row-java' and @time=$time and @event=$event and @use-table-instance='yes']">        <xsl:value-of select="@_gen-table-class-name"/> table = (<xsl:value-of select="@_gen-table-class-name"/>) getTable();
+</xsl:if>
+<xsl:if test=".//trigger[@type='dal-row-java' and @time=$time and @event=$event and @use-db-policy='yes']">        DatabasePolicy databasePolicy = cc.getDatabasePolicy();
+</xsl:if>
+<xsl:if test=".//trigger[@type='dal-row-java' and @time=$time and @event=$event and @use-dbms-id='yes']">        String dbmsId = databasePolicy.getDBMSName();
+</xsl:if>
+
+<xsl:for-each select="trigger[@type='dal-row-java' and @position='before-columns' and @time=$time and @event=$event]">        <xsl:value-of select="final-code"/>
+</xsl:for-each>
+<xsl:for-each select="column/trigger[@type='dal-row-java' and @time=$time and @event=$event]">        <xsl:value-of select="final-code"/>
+</xsl:for-each>
+<xsl:for-each select="trigger[@type='dal-row-java' and (not(@position) or @position='after-columns') and @time=$time and @event=$event]">        <xsl:value-of select="final-code"/>
+</xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -506,6 +506,27 @@
 	</table>
 	</xsl:if>
 
+    <xsl:if test="trigger">
+        <p/><h1>Triggers</h1>
+            <table>
+            <xsl:for-each select="trigger">
+                <tr>
+                    <td rowspan="2" valign="top">
+                        <nobr><b><xsl:value-of select="concat(@time, ' ', @event)"/></b></nobr>
+                    </td>
+                    <td>
+                        <xsl:for-each select="@*[name() != 'time' and name() != 'event']">
+                            <font color="green"><xsl:value-of select="name()"/></font> = <xsl:value-of select="."/><br/>
+                        </xsl:for-each>
+                    </td>
+                </tr>
+                <tr>
+                    <td><pre><xsl:value-of select="code-documentation"/></pre></td>
+                </tr>
+            </xsl:for-each>
+            </table>
+    </xsl:if>
+
     <p/><h1>DAL Properties</h1>
     <table border="0" cellspacing="0">
     <tr bgcolor="beige">
@@ -607,7 +628,7 @@
 	<xsl:for-each select="@*[not(starts-with(name(), 'dal-') or starts-with(name(), '_gen'))]">
 		<tr><td class="column_attr_caption"><xsl:value-of select="name()"/>:</td><td class="column_attr_value"><xsl:value-of select="."/></td></tr>
 	</xsl:for-each>
-	<xsl:for-each select="*[name() != 'referenced-by']">
+	<xsl:for-each select="*[name() != 'referenced-by' and name() != 'trigger' and name() != 'validate']">
 		<tr>
 			<td class="column_elem_caption">
 			<xsl:value-of select="name()"/>:
@@ -636,6 +657,74 @@
 		</tr>
 	</xsl:if>
 	</table>
+
+    <xsl:if test="validate">
+    <p/><h1>Validation</h1>
+        <table>
+        <xsl:for-each select="validate">
+            <tr>
+                <td valign="top">
+                    <nobr><b><xsl:value-of select="@name"/></b></nobr>
+                </td>
+                <td>
+                    <xsl:for-each select="@*[name() != 'name']">
+                        <xsl:value-of select="name()"/> = <font color="green"><xsl:value-of select="."/></font><br/>
+                    </xsl:for-each>
+                    <table>
+                        <xsl:for-each select="message-success">
+                            <tr><td>Message (Success)</td><td><xsl:value-of select="."/></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="message-failure">
+                            <tr><td>Message (Failure)</td><td><xsl:value-of select="."/></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="reg-ex-pattern">
+                            <tr><td>Reg-ex Pattern</td><td><xsl:value-of select="."/></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="declare-java-code[@type = 'singleton']">
+                            <tr>
+                                <td>
+                                    Declare (<xsl:value-of select="@ID"/>)
+                                    <xsl:if test="@_gen-is-duplicate">[Duplicate]</xsl:if>
+                                </td>
+                                <td><pre><xsl:value-of select="code-documentation"/></pre></td>
+                            </tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="declare-java-code[not(@type)]">
+                            <tr><td>Declare</td><td><pre><xsl:value-of select="code-documentation"/></pre></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="static-java-code">
+                            <tr><td>Static</td><td><pre><xsl:value-of select="code-documentation"/></pre></td></tr>
+                        </xsl:for-each>
+                        <xsl:for-each select="java-code">
+                            <tr><td>Code</td><td><pre><xsl:value-of select="code-documentation"/></pre></td></tr>
+                        </xsl:for-each>
+                    </table>
+                </td>
+            </tr>
+        </xsl:for-each>
+        </table>
+    </xsl:if>
+
+    <xsl:if test="trigger">
+    <p/><h1>Triggers</h1>
+        <table>
+        <xsl:for-each select="trigger">
+            <tr>
+                <td rowspan="2" valign="top">
+                    <nobr><b><xsl:value-of select="concat(@time, ' ', @event)"/></b></nobr>
+                </td>
+                <td>
+                    <xsl:for-each select="@*[name() != 'time' and name() != 'event']">
+                        <xsl:value-of select="name()"/> = <font color="green"><xsl:value-of select="."/></font><br/>
+                    </xsl:for-each>
+                </td>
+            </tr>
+            <tr>
+                <td><pre><font color="green"><xsl:value-of select="code-documentation"/></font></pre></td>
+            </tr>
+        </xsl:for-each>
+        </table>
+    </xsl:if>
 
     <p/><h1>DAL Properties</h1>
     <table border="0" cellspacing="0">
