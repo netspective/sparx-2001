@@ -694,10 +694,10 @@ public class StatementManager extends XmlSource
     /**
      * Executes static (XML) SQL and returns all the objects as a matrix
      */
-    public Object[] executeStmtGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    public Object[][] executeStmtGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
     {
         ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
-        Object[] result = getResultSetRowsAsMatrix(ri.getResultSet());
+        Object[][] result = getResultSetRowsAsMatrix(ri.getResultSet());
         ri.close();
         return result;
     }
@@ -774,10 +774,10 @@ public class StatementManager extends XmlSource
     /**
      * Executes dynamic (passed into method) SQL and returns all the objects as a matrix
      */
-    static public Object[] executeSqlGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
+    static public Object[][] executeSqlGetValuesMatrix(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws NamingException, SQLException
     {
         ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
-        Object[] result = getResultSetRowsAsMatrix(ri.getResultSet());
+        Object[][] result = getResultSetRowsAsMatrix(ri.getResultSet());
         ri.close();
         return result;
     }

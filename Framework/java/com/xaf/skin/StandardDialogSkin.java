@@ -32,6 +32,7 @@ public class StandardDialogSkin implements DialogSkin
 	protected String captionCellAttrs;
 	protected String captionFontAttrs;
 	protected String controlAreaFontAttrs;
+    protected String controlAreaStyleAttrs;
 	protected String controlAttrs;
 	protected String separatorFontAttrs;
 	protected String separatorHtml;
@@ -63,6 +64,7 @@ public class StandardDialogSkin implements DialogSkin
 		gridCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
         gridRowCaptionFontAttrs = "size='2' face='tahoma,arial,helvetica' color='navy' style='font-size:9pt' ";
 		controlAreaFontAttrs = "size='2' face='tahoma,arial,helvetica' style='font-size:8pt' ";
+        controlAreaStyleAttrs = "style=\"background-color: lightyellow\"";
 		controlAttrs = " class='dialog_control' onfocus='controlOnFocus(this, event)' onchange='controlOnChange(this, event)' " +
             "onblur='controlOnBlur(this, event)' onkeypress='controlOnKeypress(this, event)' onclick='controlOnClick(this, event) '";
 		separatorFontAttrs = "face='verdana,arial' size=2 color=#555555";
@@ -122,6 +124,8 @@ public class StandardDialogSkin implements DialogSkin
 				gridRowCaptionFontAttrs = nodeText;
 			else if(nodeName.equals("control-area-font-attrs") && nodeText != null)
 				controlAreaFontAttrs = nodeText;
+            else if(nodeName.equals("control-area-style-attrs") && nodeText != null)
+				controlAreaStyleAttrs = nodeText;
 			else if(nodeName.equals("control-attrs") && nodeText != null)
 				controlAttrs = nodeText;
 			else if(nodeName.equals("separator-font-attrs") && nodeText != null)
@@ -711,7 +715,10 @@ public class StandardDialogSkin implements DialogSkin
 	public String getControlAreaFontAttrs() { return controlAreaFontAttrs; }
 	public void setControlAreaFontAttrs(String value) { controlAreaFontAttrs = value; }
 
-	public String getControlAttrs() { return controlAttrs; }
+    public String getControlAreaStyleAttrs() { return controlAreaStyleAttrs; }
+    public void setControlAreaStyleAttrs(String value) { this.controlAreaStyleAttrs = value; }
+
+    public String getControlAttrs() { return controlAttrs; }
 	public void setControlAttrs(String value) { controlAttrs = value; }
 
 	public String getSeparatorFontAttrs() { return separatorFontAttrs; }

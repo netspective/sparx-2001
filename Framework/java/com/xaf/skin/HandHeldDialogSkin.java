@@ -22,6 +22,7 @@ public class HandHeldDialogSkin implements DialogSkin
 	protected String captionCellAttrs;
 	protected String captionFontAttrs;
 	protected String controlAreaFontAttrs;
+    protected String controlAreaStyleAttrs;
 	protected String controlAttrs;
 	protected String separatorFontAttrs;
 	protected String separatorHtml;
@@ -41,6 +42,7 @@ public class HandHeldDialogSkin implements DialogSkin
 		captionCellAttrs = "align='right' ";
 		captionFontAttrs = "";
 		controlAreaFontAttrs = "";
+        controlAreaStyleAttrs = "";
 		controlAttrs = "";
 		separatorFontAttrs = "";
 		separatorHtml = "<hr size=1 color=#555555>";
@@ -59,7 +61,12 @@ public class HandHeldDialogSkin implements DialogSkin
 		return controlAreaFontAttrs;
 	}
 
-	public final String getDefaultControlAttrs()
+    public String getControlAreaStyleAttrs()
+    {
+        return controlAreaStyleAttrs;
+    }
+
+    public final String getDefaultControlAttrs()
 	{
 		return controlAttrs;
 	}

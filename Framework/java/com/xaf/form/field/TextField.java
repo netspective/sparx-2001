@@ -232,13 +232,14 @@ public class TextField extends DialogField
 		String value = dc.getValue(this);
 		if(value == null) value = "";
 
+        String readonlyStyle = dc.getSkin().getControlAreaStyleAttrs();
 		if(isReadOnly(dc))
 		{
 			return "<input type='hidden' name='"+ getId() +"' value=\"" + value + "\"><span id='"+ getQualifiedName() +"'>" + value + "</span>";
 		}
         else if (isBrowserReadOnly(dc))
         {
-	        return "<input type=\"text\" name=\""+ getId() +"\" readonly style=\"background-color: lightyellow\" value=\"" + value + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
+	        return "<input type=\"text\" name=\""+ getId() +"\" readonly " + readonlyStyle + " value=\"" + value + "\" maxlength=\""+ maxLength + "\" size=\""+ size + "\" "+ (isRequired(dc) ? "class='required'" : "") +dc.getSkin().getDefaultControlAttrs() + ">";
         }
 		else if(! flagIsSet(FLDFLAG_MASKENTRY))
 		{

@@ -99,6 +99,7 @@ public class DialogTag extends TagSupport
 			if(dc.inExecuteMode())
 			{
 				String html = dialog.execute(dc);
+                System.out.println("++++++++++++++++++\n" + html + "\n+++++++++++++");
 				if(! dc.executeStageHandled())
 				{
 					// these two attributes are set because they are defined by
@@ -113,7 +114,10 @@ public class DialogTag extends TagSupport
 				else
 				{
 					if(html != null)
+                    {
+                        System.out.println("WRITE!");
 						out.write(html);
+                    }
 					return SKIP_BODY;
 				}
 			}

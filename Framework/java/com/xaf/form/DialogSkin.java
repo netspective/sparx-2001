@@ -14,5 +14,6 @@ public interface DialogSkin
 	public String getSeparatorHtml(DialogContext dc, SeparatorField field);
 	public String getDefaultControlAttrs();
 	public String getControlAreaFontAttrs();
+    public String getControlAreaStyleAttrs();
 	public void importFromXml(Element elem);
 }

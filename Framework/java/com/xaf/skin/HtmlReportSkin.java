@@ -29,10 +29,12 @@ public class HtmlReportSkin implements ReportSkin
 
     protected int flags;
 	protected String outerTableAttrs = "border=0 cellspacing=1 cellpadding=2 bgcolor='#EEEEEE'";
-	protected String innerTableAttrs = "cellpadding='1' cellspacing='0' border='0'";
+	protected String innerTableAttrs = "cellpadding='1' cellspacing='0' border='0' width='100%'";
 	protected String frameHdRowAttrs = "bgcolor='#6699CC''";
 	protected String frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color=white";
     protected String frameHdTableRowBgcolorAttrs = "#FFFFCC";
+    protected String frameFtRowAttrs = "bgcolor='lightyellow'";
+	protected String frameFtFontAttrs = "face='verdana,arial,helvetica' size=2 color='#000000'";
 	protected String bannerRowAttrs = "bgcolor='lightyellow'";
 	protected String bannerItemFontAttrs = "face='arial,helvetica' size=2";
 	protected String dataHdFontAttrs = "face='verdana,arial' size='2' style='font-size: 8pt;' color='navy'";
@@ -131,7 +133,15 @@ public class HtmlReportSkin implements ReportSkin
 
         if(haveOuterTable)
         {
-            writer.write("</td></tr></table>");
+            writer.write("</td></tr>");
+            String footing = null;
+            SingleValueSource fvs = frame.getFooting();
+            if(fvs != null)
+            {
+                footing = fvs.getValue(rc);
+                writer.write("<tr "+ frameFtRowAttrs +"><td><font "+ frameFtFontAttrs + "><b>" + footing + "</b></font></td></tr>");
+            }
+            writer.write("</table>");
         }
 
 		com.xaf.log.LogManager.recordAccess((javax.servlet.http.HttpServletRequest) rc.getRequest(), null, this.getClass().getName(), rc.getLogId(), startTime);
@@ -391,4 +401,5 @@ public class HtmlReportSkin implements ReportSkin
 		}
 		writer.write("</tr>");
     }
+
 }

@@ -56,7 +56,7 @@ public class StandardReport implements Report
 	public final void clearFlag(long flag) { flags &= ~flag; }
 	public final void updateFlag(long flag, boolean set) { if(set) flags |= flag; else flags &= ~flag; }
 
-	public void initialize(ResultSet rs, Element defnElem) throws SQLException
+    public void initialize(ResultSet rs, Element defnElem) throws SQLException
 	{
 		if(flagIsSet(REPORTFLAG_INITIALIZED)) return;
 
@@ -115,6 +115,14 @@ public class StandardReport implements Report
 			if(frame == null) frame = new ReportFrame();
 			frame.setHeading(heading);
 		}
+
+        String footing = elem.getAttribute("footing");
+		if(footing.length() > 0)
+		{
+			if(frame == null) frame = new ReportFrame();
+			frame.setFooting(footing);
+		}
+
 
 		if(elem.getAttribute("first-row").equals("column-headings"))
 			setFlag(REPORTFLAG_FIRST_DATA_ROW_HAS_HEADINGS);

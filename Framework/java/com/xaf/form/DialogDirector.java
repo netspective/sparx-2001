@@ -5,8 +5,8 @@ import com.xaf.value.*;
 
 public class DialogDirector extends DialogField
 {
-	private String submitCaption = "   OK   ";
-	private String cancelCaption = " Cancel ";
+	private SingleValueSource submitCaption;
+	private SingleValueSource cancelCaption;
 	private SingleValueSource submitActionUrl;
 	private SingleValueSource cancelActionUrl;
 
@@ -18,13 +18,21 @@ public class DialogDirector extends DialogField
 	public DialogDirector(String name)
 	{
 		super(name, null);
+        this.submitCaption = ValueSourceFactory.getSingleOrStaticValueSource("   OK   ");
+        this.cancelCaption = ValueSourceFactory.getSingleOrStaticValueSource(" Cancel ");
 	}
 
-	public String getSubmitCaption() { return submitCaption; }
-	public void setSubmitCaption(String value) { submitCaption = value; }
+	public SingleValueSource getSubmitCaption() { return submitCaption; }
+	public void setSubmitCaption(String value)
+    {
+        submitCaption = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
-	public String getCancelCaption() { return cancelCaption; }
-	public void setCancelCaption(String value) { cancelCaption = value; }
+	public SingleValueSource getCancelCaption() { return cancelCaption; }
+	public void setCancelCaption(String value)
+    {
+        cancelCaption = (value != null && value.length() > 0) ? ValueSourceFactory.getSingleOrStaticValueSource(value) : null;
+    }
 
 	public SingleValueSource getSubmitActionUrl() { return submitActionUrl; }
 	public void setSubmitActionUrl(String value)
@@ -44,20 +52,20 @@ public class DialogDirector extends DialogField
 
 		String value = elem.getAttribute("style");
 		if("data".equals(value))
-			submitCaption = "  Save  ";
+			submitCaption = ValueSourceFactory.getSingleOrStaticValueSource("  Save  ");
 		else if("confirm".equals(value))
 		{
-			submitCaption = "  Yes  ";
-			cancelCaption = "  No   ";
+			submitCaption = ValueSourceFactory.getSingleOrStaticValueSource("  Yes  ");
+			cancelCaption = ValueSourceFactory.getSingleOrStaticValueSource("  No   ");
 		}
 
 		value = elem.getAttribute("submit-caption");
-		if(value.length() != 0)
-			submitCaption = value;
+        if (value != null && value.length() > 0)
+		    submitCaption = ValueSourceFactory.getSingleOrStaticValueSource(value);
 
 		value = elem.getAttribute("cancel-caption");
-		if(value.length() != 0)
-			cancelCaption = value;
+        if (value != null && value.length() > 0)
+		    cancelCaption = ValueSourceFactory.getSingleOrStaticValueSource(value);
 
 		value = elem.getAttribute("submit-url");
 		if(value.length() != 0)
@@ -72,8 +80,8 @@ public class DialogDirector extends DialogField
 	{
 		String attrs = dc.getSkin().getDefaultControlAttrs();
 
-		String submitCaption = this.submitCaption;
-		String cancelCaption = this.cancelCaption;
+		String submitCaption = this.submitCaption.getValue(dc);
+		String cancelCaption = this.cancelCaption.getValue(dc);
 
 		switch(dc.getDataCommand())
 		{

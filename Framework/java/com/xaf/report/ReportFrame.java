@@ -44,15 +44,29 @@ public class ReportFrame
     }
 
     private SingleValueSource heading;
+    private SingleValueSource footing;
     private ArrayList items;
 
     public ReportFrame()
     {
+        heading = null;
+        footing = null;
     }
 
 	public SingleValueSource getHeading() { return heading; }
 	public void setHeading(String value) { heading = ValueSourceFactory.getSingleOrStaticValueSource(value); }
 	public void setHeading(SingleValueSource vs) { heading = vs; }
+
+    public SingleValueSource getFooting()
+    {
+        return footing;
+    }
+
+    public void setFooting(String value)
+    {
+        if (value != null && value.length() != 0)
+            this.footing = ValueSourceFactory.getSingleOrStaticValueSource(value);
+    }
 
     public ArrayList getItems() { return items; }
     public Item getItem(int n) { return (Item) items.get(n); }
