@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: AbstractTable.java,v 1.1 2002-01-20 14:53:20 snshah Exp $
+ * $Id: AbstractTable.java,v 1.2 2002-01-28 10:12:53 jruss Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -644,7 +644,9 @@ public abstract class AbstractTable implements Table
             List columnValues = dml.getColumnValues();
             if(bindValues != null)
             {
-                for(int c = 0; c < bindValues.length; c++)
+								// Need to use columnValues.size() since the dml may have removed
+								// columns if autoinc columns are not included in the SQL
+                for(int c = 0; c < columnValues.size(); c++)
                 {
                     if(bindValues[c])
                     {
