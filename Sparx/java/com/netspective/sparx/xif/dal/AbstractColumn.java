@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AbstractColumn.java,v 1.6 2002-12-23 05:07:01 shahid.shah Exp $
+ * $Id: AbstractColumn.java,v 1.7 2002-12-30 18:06:53 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -118,6 +118,8 @@ public abstract class AbstractColumn implements Column
     {
         return name;
     }
+
+    abstract public Object getValueForSqlBindParam(Object value);
 
     public String getNameForMapKey()
     {
@@ -340,32 +342,32 @@ public abstract class AbstractColumn implements Column
         return flagIsSet(COLUMNFLAG_ISUNIQUE);
     }
 
-    public void setIsIndexed(boolean flag)
+    public void setIndexed(boolean flag)
     {
         setOrClearFlag(COLUMNFLAG_ISINDEXED, flag);
     }
 
-    public void setIsNaturalPrimaryKey(boolean flag)
+    public void setNaturalPrimaryKey(boolean flag)
     {
         setOrClearFlag(COLUMNFLAG_ISNATURALPRIMARYKEY, flag);
     }
 
-    public void setIsRequired(boolean flag)
+    public void setRequired(boolean flag)
     {
         setOrClearFlag(COLUMNFLAG_ISREQUIRED_APPLICATION, flag);
     }
 
-    public void setIsRequiredByDbms(boolean flag)
+    public void setRequiredByDbms(boolean flag)
     {
         setOrClearFlag(COLUMNFLAG_ISREQUIRED_DBMS, flag);
     }
 
-    public void setIsSequencedPrimaryKey(boolean flag)
+    public void setSequencedPrimaryKey(boolean flag)
     {
         setOrClearFlag(COLUMNFLAG_ISSEQUENCEDPRIMARYKEY, flag);
     }
 
-    public void setIsUnique(boolean flag)
+    public void setUnique(boolean flag)
     {
         setOrClearFlag(COLUMNFLAG_ISUNIQUE, flag);
     }

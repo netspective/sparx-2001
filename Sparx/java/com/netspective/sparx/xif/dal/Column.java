@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Column.java,v 1.4 2002-12-23 05:07:01 shahid.shah Exp $
+ * $Id: Column.java,v 1.5 2002-12-30 18:06:53 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -77,6 +77,11 @@ public interface Column
      * runtime lookup purposes.
      */
     public String getNameForMapKey();
+
+    /**
+     * Given a value, convert it for use as a bind parameter (usually type-specific)
+     */
+    public Object getValueForSqlBindParam(Object value);
 
     /**
      * Returns the name of the column suitable for use as an XML node name (e.g. abc_def becomes abc-def)
@@ -236,15 +241,15 @@ public interface Column
 
     public boolean isUnique();
 
-    public void setIsIndexed(boolean flag);
+    public void setIndexed(boolean flag);
 
-    public void setIsNaturalPrimaryKey(boolean flag);
+    public void setNaturalPrimaryKey(boolean flag);
 
-    public void setIsRequired(boolean flag);
+    public void setRequired(boolean flag);
 
-    public void setIsRequiredByDbms(boolean flag);
+    public void setRequiredByDbms(boolean flag);
 
-    public void setIsSequencedPrimaryKey(boolean flag);
+    public void setSequencedPrimaryKey(boolean flag);
 
-    public void setIsUnique(boolean flag);
+    public void setUnique(boolean flag);
 }
