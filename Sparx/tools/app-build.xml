@@ -7,7 +7,7 @@ Setup instructions:
     Before running an Ant build, you must
      - set the SPARX_HOME environment variable to the Sparx root directory
        
-$Id: app-build.xml,v 1.24 2002-10-14 15:07:24 aye.thu Exp $
+$Id: app-build.xml,v 1.25 2002-10-20 16:01:21 shahid.shah Exp $
 -->
 
 <project name="app" default="all">
@@ -73,7 +73,6 @@ $Id: app-build.xml,v 1.24 2002-10-14 15:07:24 aye.thu Exp $
         <classp listall="yes" additionalref="project.class.path"/>
                 
         <property name="sparx.lib.dir" value="${sparx.home}/lib"/>
-        <property name="sparx.java.dir" value="${sparx.home}/java"/>
         <property name="sparx.tools.dir" value="${sparx.home}/tools"/>
         <property name="sparx.shared.dir" value="${sparx.home}/web-shared"/>
         <property name="sparx.shared.resources.dir" value="${sparx.shared.dir}/resources"/>
@@ -95,7 +94,6 @@ $Id: app-build.xml,v 1.24 2002-10-14 15:07:24 aye.thu Exp $
 
         <echo message="Application name is '${app.name}'"/>
         <echo message="Running build in ${app.WEB-INF.dir}"/>
-        <echo message="Sparx source is in ${sparx.java.dir}"/>
         <echo message="Application Site root is ${app.root.dir}"/>
 
         <!-- define the tasks that will be used in this file -->
@@ -351,7 +349,6 @@ $Id: app-build.xml,v 1.24 2002-10-14 15:07:24 aye.thu Exp $
              bottom="Copyright &#169; 2001 Netspective. All Rights Reserved.">
             <sourcepath>
                 <pathelement path="${app.java.dal.dir}"/>
-                <pathelement path="${sparx.java.dir}"/>
             </sourcepath>
         </javadoc>
     </target>
@@ -395,7 +392,6 @@ $Id: app-build.xml,v 1.24 2002-10-14 15:07:24 aye.thu Exp $
              bottom="Copyright &#169; 2001 Netspective. All Rights Reserved.">
             <sourcepath>
                 <pathelement path="${app.java.dcb.dir}"/>
-                <pathelement path="${sparx.java.dir}"/>
             </sourcepath>
         </javadoc>
     </target>
