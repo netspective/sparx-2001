@@ -13,20 +13,23 @@ public class MemoField extends DialogField
 
 	protected int rows, cols;
 	protected int wrap;
+    private int maxLength;
 
 	public MemoField()
 	{
 		super();
 		rows = 3;
 		cols = 40;
+        maxLength = 2048;
 		wrap = WORDWRAP_SOFT;
 	}
 
-	public MemoField(String aName, String aCaption, int aCols, int aRows)
+	public MemoField(String aName, String aCaption, int aCols, int aRows, int length)
 	{
 		super(aName, aCaption);
 		rows = aRows;
 		cols = aCols;
+        maxLength = length;
 		wrap = WORDWRAP_SOFT;
 	}
 
@@ -50,6 +53,10 @@ public class MemoField extends DialogField
 		value = elem.getAttribute("cols");
 		if(value.length() != 0)
 			cols = Integer.parseInt(value);
+
+		value = elem.getAttribute("max-length");
+		if(value.length() != 0)
+			maxLength = Integer.parseInt(value);
 
 		if(elem.getAttribute("wrap").equalsIgnoreCase("hard"))
 			wrap = MemoField.WORDWRAP_HARD;
@@ -99,7 +106,7 @@ public class MemoField extends DialogField
 		else
 		{
 			return
-				"<textarea maxlength=\"2048\" name=\""+ id +"\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
+				"<textarea maxlength=\"" + maxLength + "\" name=\""+ id +"\" rows=\"" + rows + "\" cols=\"" + cols + "\" wrap=\"" +
 					WORDWRAP_STYLES[wrap] + "\"" + (isRequired(dc) ? "class='required'" : "") + dc.getSkin().getDefaultControlAttrs() + ">" + (value != null ? value : "") + "</textarea>";
 		}
 	}
