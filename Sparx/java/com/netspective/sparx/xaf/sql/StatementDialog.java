@@ -60,19 +60,27 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.Servlet;
 
 import org.w3c.dom.Element;
 
 import com.netspective.sparx.xaf.form.Dialog;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.DialogSkin;
+import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalDisplay;
+import com.netspective.sparx.xaf.form.field.SelectField;
 import com.netspective.sparx.xaf.querydefn.ResultSetNavigatorButtonsField;
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
+import com.netspective.sparx.util.value.StaticValue;
 
 public class StatementDialog extends Dialog
 {
@@ -88,6 +96,7 @@ public class StatementDialog extends Dialog
     private StatementInfo statementInfo;
     private String reportName;
     private String skinName;
+    private ResultSetNavigatorButtonsField navBtns;
 
     public StatementDialog(StatementInfo si, String reportName, String skinName)
     {
@@ -97,9 +106,9 @@ public class StatementDialog extends Dialog
         setStatementInfo(si);
         setSkinName(skinName);
         setReportName(reportName);
-        ResultSetNavigatorButtonsField btn = new ResultSetNavigatorButtonsField();
-        btn.clearFlag(DialogField.FLDFLAG_INVISIBLE);
-        addField(btn);
+        setFlag(Dialog.DLGFLAG_HIDE_HEADING_IN_EXEC_MODE);
+        navBtns = new ResultSetNavigatorButtonsField();
+        addField(navBtns);
     }
 
     public void setReportName(String reportName)
@@ -156,68 +165,65 @@ public class StatementDialog extends Dialog
         return this.statementInfo;
     }
 
-    /**
-     * Import the dialog configuration from XML
-     *
-     * @param packageName
-     * @param elem DOM element
-     */
-    public void importFromXml(String packageName, Element elem)
-    {
-        super.importFromXml(packageName, elem);
 
+    public void makeStateChanges(DialogContext dc, int stage)
+    {
+        boolean hideFields = dc.inExecuteMode() && stage == DialogContext.STATECALCSTAGE_FINAL;
+
+        Iterator k = this.getFields().iterator();
+        while(k.hasNext())
+        {
+            DialogField field = (DialogField) k.next();
+            field.makeStateChanges(dc, stage);
+            if(hideFields)
+                dc.setFlag(field.getQualifiedName(), DialogField.FLDFLAG_INVISIBLE);
+        }
+
+        if(hideFields)
+        {
+            dc.clearFlag("rs_nav_buttons", DialogField.FLDFLAG_INVISIBLE);
+            dc.setFlag("director", DialogField.FLDFLAG_INVISIBLE);
+        }
     }
 
     /**
-     * return the output from the execute method or the execute method and the dialog (which contains
-     * the ResultSetNavigagors next/prev buttons). If there is only one page or scrolling is not being
-     * performed (state == null) then only show the output of the query. However, if there is more than
-     * one page or the number of pages is unknown, then show the entire dialog.
+     * If we only have a single field it means we have no parameters that need to be entered so go straight into
+     * the execution of the dialog (no input mode).
      */
-
     public void renderHtml(Writer writer, DialogContext dc, boolean contextPreparedAlready) throws IOException
     {
-        if (flagIsSet(STMTDLGFLAG_ALWAYS_SHOW_RSNAV))
-        {
-            super.renderHtml(writer, dc, contextPreparedAlready);
-            return;
-        }
-
-        if (!contextPreparedAlready)
+        if(!contextPreparedAlready)
             prepareContext(dc);
 
-        // Dialog is ALWAYS in EXECUTE mode
-        execute(writer, dc);
-        ResultSetScrollState state = (ResultSetScrollState) dc.getRequest().getAttribute(dc.getTransactionId() + "_state");
-        if (state != null)
-        {
-            int totalPages = state.getTotalPages();
-            if (totalPages == -1 || totalPages > 1)
-            {
-                writer.write(getLoopSeparator());
-                dc.getSkin().renderHtml(writer, dc);
-            }
-            else
-            {
-                String transactionId = dc.getTransactionId();
-                HttpSession session = dc.getSession();
-                session.removeAttribute(transactionId);
-                session.removeAttribute(STMTDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+        if(getFields().size() == 1 || dc.inExecuteMode())
+            execute(writer, dc);
+        else
+            dc.getSkin().renderHtml(writer, dc);
+    }
 
-                try
-                {
-                    state.close();
-                }
-                catch (SQLException e)
-                {
-                    throw new IOException(e.toString());
-                }
-            }
+    private void manageScrollState(Writer writer, DialogContext dc, ResultSetScrollState state) throws IOException
+    {
+        int totalPages = state.getTotalPages();
+        if (totalPages == -1 || totalPages > 1)
+        {
+            writer.write(getLoopSeparator());
+            dc.getSkin().renderHtml(writer, dc);
         }
         else
         {
-            System.out.println("STATE IS NULL");
-            dc.getSkin().renderHtml(writer, dc);
+            String transactionId = dc.getTransactionId();
+            HttpSession session = dc.getSession();
+            session.removeAttribute(transactionId);
+            session.removeAttribute(STMTDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
+
+            try
+            {
+                state.close();
+            }
+            catch (SQLException e)
+            {
+                throw new IOException(e.toString());
+            }
         }
     }
 
@@ -234,9 +240,6 @@ public class StatementDialog extends Dialog
         HttpSession session = dc.getSession();
         HttpServletRequest request = (HttpServletRequest) dc.getRequest();
         StatementScrollState state = (StatementScrollState) session.getAttribute(transactionId);
-
-        boolean keepScrollState = true;
-        int pageSize = this.rowsPerPage;
 
         try
         {
@@ -256,19 +259,26 @@ public class StatementDialog extends Dialog
                     activeState.close();
                     session.removeAttribute(STMTDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME);
                 }
+
+                int rowsPerPage = getRowsPerPage();
+                // check to see if user has created a field called 'rows_per_page'
+                // which overwrites the default one
+                String rowsPerPageStr = dc.getValue("rows_per_page");
+                if(rowsPerPageStr == null || rowsPerPageStr.length() == 0)
+                    rowsPerPageStr = dc.getValue("output.rows_per_page");
+                if(rowsPerPageStr != null && rowsPerPageStr.length() > 0)
+                    rowsPerPage = Integer.parseInt(rowsPerPageStr);
+
                 // create a new scroll state object for this query
                 DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), dc.getServletContext());
                 String dataSourceId = statementInfo.getDataSource() != null ?statementInfo.getDataSource().getValue(dc) : null;
                 state = new StatementScrollState(statementInfo, dbContext, dc, dataSourceId, getReportName(), getSkinName(),
-                        getRowsPerPage(), ResultSetScrollState.SCROLLTYPE_USERESULTSET);
+                        rowsPerPage, ResultSetScrollState.SCROLLTYPE_USERESULTSET);
 
                 if(state.isValid())
                 {
-                    if(keepScrollState)
-                    {
-                        session.setAttribute(transactionId, state);
-                        session.setAttribute(STMTDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME, state);
-                    }
+                    session.setAttribute(transactionId, state);
+                    session.setAttribute(STMTDIALOG_ACTIVE_QSSS_SESSION_ATTR_NAME, state);
                 }
                 else
                 {
@@ -291,13 +301,7 @@ public class StatementDialog extends Dialog
                 state.setPage(1);
 
             state.produceReport(writer, dc);
-
-            if (!keepScrollState)
-            {
-                request.removeAttribute(stateReqAttrName);
-                state.close();
-                state = null;
-            }
+            manageScrollState(writer, dc, state);
         }
         catch (Exception e)
         {

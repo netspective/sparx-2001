@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementInfo.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: StatementInfo.java,v 1.2 2002-09-07 21:58:13 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -61,10 +61,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.io.StringReader;
+import java.io.IOException;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.apache.oro.text.perl.Perl5Util;
 
 import com.netspective.sparx.util.config.Configuration;
 import com.netspective.sparx.util.config.ConfigurationManagerFactory;
@@ -73,12 +77,23 @@ import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.StaticValue;
 import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.xaf.form.Dialog;
+import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.DialogDirector;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.field.TextField;
+import com.netspective.sparx.xaf.form.field.IntegerField;
+import com.netspective.sparx.xaf.form.field.BooleanField;
+import com.netspective.sparx.xaf.form.field.MemoField;
+import com.netspective.sparx.xaf.task.TaskContext;
 
 public class StatementInfo
 {
     public final static String REPLACEMENT_PREFIX = "${";
     public final static String LISTPARAM_PREFIX = "param-list:";
+    public final static String REQ_ATTR_NAME_DEBUG_APPLY_CONTEXT = "debug-apply-context";
 
     private String pkgName;
     private String stmtName;
@@ -86,10 +101,13 @@ public class StatementInfo
     private Element stmtElem;
     private boolean sqlIsDynamic;
     private String sql;
+    private int sqlLinesCount;
+    private int sqlMaxLineSize;
     private StatementParameter[] parameters;
     private Element defaultReportElem;
     private Map reportElems;
     private StatementExecutionLog execLog = new StatementExecutionLog();
+    private StatementDialog dialog;
 
     public StatementInfo()
     {
@@ -99,9 +117,48 @@ public class StatementInfo
     {
         this.pkgName = "dynamic";
         this.stmtName = "stmt_" + this.toString();
+        setSql(sql);
+    }
+
+    private void setSql(String sql)
+    {
         this.sql = sql;
         if(sql.indexOf(REPLACEMENT_PREFIX) != -1)
             sqlIsDynamic = true;
+
+        /*
+         * if the entire SQL string is indented, find out how far the first line is indented
+         */
+        StringBuffer replStr = new StringBuffer();
+        for(int i = 0; i < sql.length(); i++)
+        {
+            char ch = sql.charAt(i);
+            if(Character.isWhitespace(ch))
+                replStr.append(ch);
+            else
+                break;
+        }
+
+        /*
+         * If the first line is indented, unindent all the lines the distance of just the first line
+         */
+        Perl5Util perlUtil = new Perl5Util();
+
+        if(replStr.length() > 0)
+            this.sql = perlUtil.substitute("s/" + replStr + "/\n/g", sql);
+
+        this.sql = this.sql.trim();
+
+        sqlLinesCount = 0;
+        sqlMaxLineSize = 0;
+        StringTokenizer st = new StringTokenizer(this.sql, "\n");
+        while(st.hasMoreTokens())
+        {
+            String line = st.nextToken();
+            if(line.length() > sqlMaxLineSize)
+                sqlMaxLineSize = line.length();
+            sqlLinesCount++;
+        }
     }
 
     public final String getPkgName()
@@ -167,12 +224,50 @@ public class StatementInfo
             return formatSql(vc);
     }
 
+    public void createDefaultDialog()
+    {
+        dialog = new StatementDialog(this, null, null);
+        dialog.setName("statement_" + getId().replace('.', '_'));
+        dialog.setHeading("Test " + getId());
+
+        /*
+        MemoField sqlField = new MemoField("sql", "SQL", sqlMaxLineSize > 0 ? sqlMaxLineSize+20 : 60, sqlLinesCount > 0 ? sqlLinesCount+1 : 10, 4096);
+        sqlField.setDefaultValue(new StaticValue(sql));
+        dialog.addField(sqlField);
+        */
+
+        if(parameters != null)
+        {
+            for(int i = 0; i < parameters.length; i++)
+            {
+                DialogField field = parameters[i].getDialogField();
+                dialog.addField(field);
+            }
+        }
+
+        IntegerField rowsPerPageField = new IntegerField("rows_per_page", "Rows per page");
+        rowsPerPageField.setDefaultValue(new StaticValue("10"));
+        dialog.addField(rowsPerPageField);
+
+        dialog.setDirector(new DialogDirector());
+    }
+
+    public StatementDialog getDialog()
+    {
+        if(dialog == null)
+            createDefaultDialog();
+        return dialog;
+    }
+
+    public String createExceptionMessage(String message)
+    {
+        return "Error in statement '"+ getId() +"': " + message;
+    }
+
     /** Replace ${xxx} values
      */
     public String formatSql(ValueContext vc)
     {
-        Configuration config = ConfigurationManagerFactory.getDefaultConfiguration(vc.getServletContext());
-
         StringBuffer sb = new StringBuffer();
         int i = 0;
         int prev = 0;
@@ -199,7 +294,7 @@ public class StatementInfo
                 int endName = sql.indexOf('}', pos);
                 if(endName < 0)
                 {
-                    throw new RuntimeException("Syntax error in sql: " + sql);
+                    throw new RuntimeException(createExceptionMessage("Syntax error in sql: " + sql));
                 }
                 String expression = sql.substring(pos + 2, endName);
 
@@ -212,7 +307,7 @@ public class StatementInfo
                         {
                             StatementParameter param = parameters[paramNum];
                             if(!param.isListType())
-                                throw new RuntimeException("Only list parameters may be specified here (param '" + paramNum + "')");
+                                throw new RuntimeException(createExceptionMessage("Only list parameters may be specified here (param '" + paramNum + "')"));
 
                             ListValueSource source = param.getListSource();
                             String[] values = source.getValues(vc);
@@ -225,7 +320,7 @@ public class StatementInfo
                             }
                         }
                         else
-                            throw new RuntimeException("Parameter '" + paramNum + "' does not exist");
+                            throw new RuntimeException(createExceptionMessage("Parameter '" + paramNum + "' does not exist"));
                     }
                     catch(Exception e)
                     {
@@ -234,8 +329,10 @@ public class StatementInfo
                 }
                 else
                 {
-                    // TO DO: replace ' with '' !!
-                    sb.append(config.getTextValue(vc, expression));
+                    SingleValueSource svs = ValueSourceFactory.getSingleValueSource(expression);
+                    if(svs == null)
+                        throw new RuntimeException(createExceptionMessage("Single value source expected for '"+ expression +"', but none found"));
+                    sb.append(svs.getValue(vc));
                 }
 
                 prev = endName + 1;
@@ -251,11 +348,25 @@ public class StatementInfo
         if(parameters == null)
             return;
 
-        StatementParameter.ApplyContext ac = new StatementParameter.ApplyContext(this);
-        int paramsCount = parameters.length;
-        for(int i = 0; i < paramsCount; i++)
+        if(vc instanceof DialogContext && (((DialogContext) vc).getDialog() instanceof StatementDialog))
         {
-            parameters[i].apply(ac, dc, vc, stmt);
+            // we're probably running a StatementInfo unit test dialog so get the values from the DialogContext
+            StatementParameter.ApplyContext ac = new StatementParameter.ApplyContext(this, true);
+            int paramsCount = parameters.length;
+            for(int i = 0; i < paramsCount; i++)
+            {
+                parameters[i].apply(ac, (DialogContext) vc, stmt);
+            }
+            vc.getRequest().setAttribute(REQ_ATTR_NAME_DEBUG_APPLY_CONTEXT, ac);
+        }
+        else
+        {
+            StatementParameter.ApplyContext ac = new StatementParameter.ApplyContext(this, false);
+            int paramsCount = parameters.length;
+            for(int i = 0; i < paramsCount; i++)
+            {
+                parameters[i].apply(ac, dc, vc, stmt);
+            }
         }
     }
 
@@ -264,9 +375,7 @@ public class StatementInfo
         this.pkgName = pkgName;
         this.stmtElem = stmtElem;
         stmtName = stmtElem.getAttribute("name");
-        sql = stmtElem.getFirstChild().getNodeValue();
-        if(sql.indexOf(REPLACEMENT_PREFIX) != -1)
-            sqlIsDynamic = true;
+        setSql(stmtElem.getFirstChild().getNodeValue());
 
         ArrayList paramElems = new ArrayList();
 
@@ -287,13 +396,7 @@ public class StatementInfo
             if(stmtChild.getNodeType() != Node.ELEMENT_NODE)
                 continue;
             String childName = stmtChild.getNodeName();
-            if(childName.equals("sql"))
-            {
-                sql = stmtChild.getNodeValue();
-                if(sql.indexOf(REPLACEMENT_PREFIX) != -1)
-                    sqlIsDynamic = true;
-            }
-            else if(childName.equals("report"))
+            if(childName.equals("report"))
             {
                 Element reportElem = (Element) stmtChild;
                 if(xs != null) xs.processTemplates(reportElem);
@@ -329,7 +432,8 @@ public class StatementInfo
             for(int p = 0; p < paramElemsCount; p++)
             {
                 Element paramElem = (Element) paramElems.get(p);
-                parameters[p] = new StatementParameter(this, p, paramElem);
+                parameters[p] = new StatementParameter(this, p);
+                parameters[p].importFromXml(paramElem);
             }
         }
     }
@@ -343,11 +447,25 @@ public class StatementInfo
         if(parameters != null)
         {
             html.append("<p>Bind Parameters:<ol>");
-            int paramsCount = parameters.length;
-            for(int i = 0; i < paramsCount; i++)
+            StatementParameter.ApplyContext debugAC = (StatementParameter.ApplyContext) vc.getRequest().getAttribute(REQ_ATTR_NAME_DEBUG_APPLY_CONTEXT);
+            if(debugAC != null)
             {
-                parameters[i].appendDebugHtml(html, vc);
+                Object[] bindValues = debugAC.getDebugBindValues();
+                for(int i = 0; i < bindValues.length; i++)
+                {
+                    Object value = bindValues[i];
+                    html.append("<li>" + value.getClass().getName() + " = " + value + "</li>");
+                }
             }
+            else
+            {
+                int paramsCount = parameters.length;
+                for(int i = 0; i < paramsCount; i++)
+                {
+                    parameters[i].appendDebugHtml(html, vc);
+                }
+            }
+            html.append("</ol>");
         }
         html.append("<p>");
         return html.toString();

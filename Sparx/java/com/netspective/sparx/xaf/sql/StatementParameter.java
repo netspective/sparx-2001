@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: StatementParameter.java,v 1.1 2002-01-20 14:53:17 snshah Exp $
+ * $Id: StatementParameter.java,v 1.2 2002-09-07 21:58:13 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.sql;
@@ -59,14 +59,28 @@ package com.netspective.sparx.xaf.sql;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueContext;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.StaticValue;
+import com.netspective.sparx.util.xml.XmlSource;
+import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.DialogFieldFactory;
+import com.netspective.sparx.xaf.form.DialogContext;
+import com.netspective.sparx.xaf.form.field.TextField;
+import com.netspective.sparx.xaf.form.field.IntegerField;
+import com.netspective.sparx.xaf.form.field.FloatField;
+import com.netspective.sparx.xaf.form.field.SelectField;
 
 public class StatementParameter
 {
@@ -74,10 +88,12 @@ public class StatementParameter
     {
         private StatementInfo stmtInfo;
         private int activeParamNum;
+        private List debugBindValues;
 
-        public ApplyContext(StatementInfo stmtInfo)
+        public ApplyContext(StatementInfo stmtInfo, boolean debug)
         {
             this.stmtInfo = stmtInfo;
+            if(debug) debugBindValues = new ArrayList();
             activeParamNum = 0;
         }
 
@@ -90,34 +106,152 @@ public class StatementParameter
         {
             return ++activeParamNum;
         }
+
+        public void addDebugBindValue(Object object)
+        {
+            debugBindValues.add(object);
+        }
+
+        public Object[] getDebugBindValues()
+        {
+            return debugBindValues.toArray();
+        }
     }
 
+    private StatementInfo si;
+    private String paramName;
     private Object valueSource;
     private int paramType;
+    private int givenParamNum;
+    private DialogField dialogField;
+    private String fieldError;
 
-    public StatementParameter(StatementInfo statement, int paramNum, Element paramElem)
+    public StatementParameter(StatementInfo si, int paramNum)
     {
-        String valueSrcId = paramElem.getAttribute("value");
-        if(valueSrcId.length() > 0)
+        this.si = si;
+        givenParamNum = paramNum;
+    }
+
+    public String getParamName()
+    {
+        return paramName;
+    }
+
+    public void setParamName(String paramName)
+    {
+        this.paramName = paramName;
+    }
+
+    public void setFieldDefaultValue()
+    {
+        if(paramType != Types.ARRAY)
         {
-            valueSource = ValueSourceFactory.getSingleOrStaticValueSource(valueSrcId);
-            String paramTypeName = paramElem.getAttribute("type");
-            if(paramTypeName.length() > 0)
-            {
-                Integer typeNum = (Integer) StatementManager.SQL_TYPES_MAP.get(paramTypeName);
-                if(typeNum == null)
-                    throw new RuntimeException("param type '" + paramTypeName + "' is invalid for statement '" + statement.getId() + "'");
-                paramType = typeNum.intValue();
-            }
+            dialogField.setDefaultValue((SingleValueSource) valueSource);
+            dialogField.setHint(new StaticValue("Parameter is of type " + StatementManager.getTypeNameForId(paramType) + ", default value is '"+ ((SingleValueSource) valueSource).getId() +"'."));
+        }
+        else
+        {
+            ((SelectField) dialogField).setDefaultListValue((ListValueSource) valueSource);
+            dialogField.setHint(new StaticValue("Parameter is of type " + StatementManager.getTypeNameForId(paramType) + ", default value is '"+ ((ListValueSource) valueSource).getId() +"'."));
+        }
+        if(fieldError != null)
+            dialogField.setHint(fieldError + ". " + dialogField.getHint(null));
+    }
+
+    public void createDefaultDialogField()
+    {
+        String name = "param_" + givenParamNum;
+        String caption = "Parameter " + givenParamNum;
+
+        if(paramType != Types.ARRAY)
+        {
+            if(paramType == Types.VARCHAR)
+                dialogField = new TextField(name, caption);
             else
             {
-                paramType = Types.VARCHAR;
+                switch(paramType)
+                {
+                    case Types.INTEGER:
+                        dialogField = new IntegerField(name, caption);
+                        break;
+
+                    case Types.DOUBLE:
+                        dialogField = new FloatField(name, caption);
+                        break;
+                }
             }
         }
         else
         {
-            valueSource = ValueSourceFactory.getListValueSource(paramElem.getAttribute("values"));
-            paramType = Types.ARRAY;
+            dialogField = new SelectField(name, caption, SelectField.SELECTSTYLE_MULTIDUAL, (ListValueSource) valueSource);
+        }
+
+        setFieldDefaultValue();
+    }
+
+    public void importFromXml(Element paramElem)
+    {
+        setParamName(paramElem.getAttribute("name"));
+        String valueSrcId = paramElem.getAttribute("value");
+        if(valueSrcId.length() > 0)
+        {
+            String paramTypeName = paramElem.getAttribute("type");
+            setValue(paramTypeName, valueSrcId);
+        }
+        else
+        {
+            valueSrcId = paramElem.getAttribute("values");
+            if(valueSrcId.length() > 0)
+                setValues(valueSrcId);
+            else
+                throw new RuntimeException("Statement '"+ si.getId() +"' parameter "+ givenParamNum +" has no value specified");
+        }
+
+        NodeList children = paramElem.getChildNodes();
+        for(int ch = 0; ch < children.getLength(); ch++)
+        {
+            Node node = children.item(ch);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            String childName = node.getNodeName();
+            if(childName.startsWith(DialogField.FIELDTAGPREFIX))
+            {
+                Element fieldElem = (Element) node;
+                dialogField = DialogFieldFactory.createField(childName);
+                if(dialogField != null)
+                {
+                    dialogField.importFromXml(fieldElem);
+                    setFieldDefaultValue();
+                }
+                else
+                {
+                    fieldError = "Unable to create field of type '" + childName + "'";
+                    createDefaultDialogField();
+                }
+            }
+        }
+    }
+
+    private void setValues(String listValueSrcId)
+    {
+        valueSource = ValueSourceFactory.getListValueSource(listValueSrcId);
+        paramType = Types.ARRAY;
+    }
+
+    private void setValue(String paramTypeName, String valueSrcId)
+    {
+        valueSource = ValueSourceFactory.getSingleOrStaticValueSource(valueSrcId);
+        if(paramTypeName != null && paramTypeName.length() > 0)
+        {
+            Integer typeNum = (Integer) StatementManager.SQL_TYPES_MAP.get(paramTypeName);
+            if(typeNum == null)
+                throw new RuntimeException("param type '" + paramTypeName + "' is invalid for statement '" + si.getId() + "'");
+            paramType = typeNum.intValue();
+        }
+        else
+        {
+            paramType = Types.VARCHAR;
         }
     }
 
@@ -139,6 +273,42 @@ public class StatementParameter
     public int getParamType()
     {
         return paramType;
+    }
+
+    public DialogField getDialogField()
+    {
+        if(dialogField == null)
+            createDefaultDialogField();
+        return dialogField;
+    }
+
+    public void setUnitTestField(DialogField unitTestField)
+    {
+        this.dialogField = unitTestField;
+    }
+
+    /**
+     * Apply bind parameter value to the given PreparedStatement that is running inside a StatementDialog unit
+     * test type of DialogContext.
+     */
+    public void apply(ApplyContext ac, DialogContext dc, PreparedStatement stmt) throws SQLException
+    {
+        if(paramType != Types.ARRAY)
+        {
+            Object bindValue = dc.getValueForSqlBindParam(dialogField);
+            stmt.setObject(ac.getNextParamNum(), bindValue);
+            ac.addDebugBindValue(bindValue);
+        }
+        else
+        {
+            String[] values = dc.getValues(dialogField);
+            for(int q = 0; q < values.length; q++)
+            {
+                int paramNum = ac.getNextParamNum();
+                stmt.setObject(paramNum, values[q]);
+                ac.addDebugBindValue(values[q]);
+            }
+        }
     }
 
     public void apply(ApplyContext ac, DatabaseContext dc, ValueContext vc, PreparedStatement stmt) throws SQLException
