@@ -162,7 +162,7 @@ public class BookInfo   extends Dialog
 				writer.write ("bkInfoRow.beforeInsert() returned false!<br>");
 			}
 
-	        boolean successful = bkInfoTable.executeDml(cc, bkInfoRow, dml, null);
+	        boolean successful = bkInfoTbl.executeDml(cc, bkInfoRow, dml, null);
 	        bkInfoRow.afterInsert(cc);
 
        		cc.returnConnection();
