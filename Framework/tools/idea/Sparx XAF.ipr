@@ -118,10 +118,10 @@
   </component>
   <component class="com.intellij.cvsSupport.CvsManager">
     <expanded_paths>
-      <path value="C:/Projects/Framework/java/com/xaf" />
-      <path value="C:/Projects/Framework/java/com/xaf/ace" />
-      <path value="C:/Projects/Framework/java" />
       <path value="C:/Projects/Framework/java/com" />
+      <path value="C:/Projects/Framework/java" />
+      <path value="C:/Projects/Framework/java/com/xaf/ace" />
+      <path value="C:/Projects/Framework/java/com/xaf" />
     </expanded_paths>
   </component>
   <component class="com.intellij.debugger.Debugger">
@@ -229,20 +229,17 @@
   </component>
   <component class="com.intellij.ide.desktop.IdeDocumentManager">
     <recent_files>
+      <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppAccessControlListPage.java" column="13" line="13" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/BuildConfiguration.java" column="44" line="13" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/config/ConfigurationManager.java" column="36" line="24" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/form/DialogManager.java" column="0" line="288" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/xml/XmlSource.java" column="22" line="109" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/ace/page/AppConfigurationPage.java" column="0" line="40" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/Column.java" column="30" line="28" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/RowData.java" column="17" line="13" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/sql/StatementManager.java" column="56" line="313" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/value/ServletValueContext.java" column="64" line="55" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/value/ValueContext.java" column="45" line="32" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/DataContext.java" column="37" line="23" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/BasicRowData.java" column="46" line="44" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/AbstractColumn.java" column="84" line="95" />
-      <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/BasicColumnData.java" column="43" line="56" />
       <file_info url="file://C:/Projects/Framework/java/com/xaf/db/schema/AbstractRow.java" column="53" line="70" />
     </recent_files>
   </component>
@@ -250,17 +247,9 @@
   <component class="com.intellij.ide.navigator.impl.ProjectNavigatorSettings">
     <navigator id="ClasspathNavigator" flattenPackages="false" showMembers="false" />
     <navigator id="ProjectNavigator" flattenPackages="false" showMembers="false">
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/form" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/db/schema" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/sql" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf" />
       <expanded_node type="directory" url="file://C:/Projects/Framework/java/com" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/value" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace/page" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/config" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/db" />
-      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf/ace" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java" />
+      <expanded_node type="directory" url="file://C:/Projects/Framework/java/com/xaf" />
     </navigator>
     <navigator id="SourcepathNavigator" flattenPackages="false" showMembers="false" />
   </component>
