@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.12 2003-02-03 00:34:24 shahid.shah Exp $
+ * $Id: ValueSourceFactory.java,v 1.13 2003-04-23 21:05:32 aye.thu Exp $
  */
 
 package com.netspective.sparx.util.value;
@@ -84,6 +84,7 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("form-or-request-attr", DialogFieldOrRequestAttributeValue.class);
         srcClasses.put("query", QueryResultsListValue.class);
         srcClasses.put("query-cols", QueryColumnsListValue.class);
+        srcClasses.put("cache-query", CachedQueryResultsListValue.class);
         srcClasses.put("dialog-field-types", DialogFieldFactoryListValue.class);
         srcClasses.put("dialogs", DialogsListValue.class);
         srcClasses.put("query-defn-fields", QueryDefnFieldsListValue.class);
