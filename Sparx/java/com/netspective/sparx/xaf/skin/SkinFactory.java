@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.8 2002-12-27 17:16:05 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.9 2003-01-01 19:30:42 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -73,6 +73,10 @@ public class SkinFactory implements Factory
     private static Map reportSkins = new HashMap();
     private static Map dialogSkins = new HashMap();
     private static Map navigationSkins = new HashMap();
+
+    public static String DEFAULT_DIALOG_SKIN_NAME = "default";
+    public static String DEFAULT_REPORT_SKIN_NAME = "report-compressed";
+    public static String DEFAULT_NAVIGATION_SKIN_NAME = "default";
 
     static
     {
@@ -104,6 +108,21 @@ public class SkinFactory implements Factory
         addNavigationSkin("default", new HtmlTabbedNavigationSkin());
     }
 
+    public static Map getDialogSkins()
+    {
+        return dialogSkins;
+    }
+
+    public static Map getNavigationSkins()
+    {
+        return navigationSkins;
+    }
+
+    public static Map getReportSkins()
+    {
+        return reportSkins;
+    }
+
     public static void addReportSkin(String id, ReportSkin skin)
     {
         reportSkins.put(id, skin);
@@ -122,7 +141,7 @@ public class SkinFactory implements Factory
 
     public static ReportSkin getDefaultReportSkin()
     {
-        return getReportSkin("report-compressed");
+        return getReportSkin(DEFAULT_REPORT_SKIN_NAME);
     }
 
     public static void addDialogSkin(String id, DialogSkin skin)
@@ -143,7 +162,7 @@ public class SkinFactory implements Factory
 
     public static DialogSkin getDialogSkin()
     {
-        return getDialogSkin("default");
+        return getDialogSkin(DEFAULT_DIALOG_SKIN_NAME);
     }
 
     public static void addNavigationSkin(String id, NavigationPathSkin skin)
@@ -164,7 +183,7 @@ public class SkinFactory implements Factory
 
     public static NavigationPathSkin getNavigationSkin()
     {
-        return getNavigationSkin("default");
+        return getNavigationSkin(DEFAULT_NAVIGATION_SKIN_NAME);
     }
 
     public static void createCatalog(Element parent)
@@ -193,6 +212,20 @@ public class SkinFactory implements Factory
             Map.Entry entry = (Map.Entry) i.next();
 
             Element childElem = doc.createElement("report-column-format");
+            childElem.setAttribute("name", (String) entry.getKey());
+            childElem.setAttribute("class", (entry.getValue()).getClass().getName());
+            factoryElem.appendChild(childElem);
+        }
+
+        factoryElem = doc.createElement("factory");
+        parent.appendChild(factoryElem);
+        factoryElem.setAttribute("name", "Navigation Skins");
+        factoryElem.setAttribute("class", SkinFactory.class.getName());
+        for(Iterator i = navigationSkins.entrySet().iterator(); i.hasNext();)
+        {
+            Map.Entry entry = (Map.Entry) i.next();
+
+            Element childElem = doc.createElement("navigation-skin");
             childElem.setAttribute("name", (String) entry.getKey());
             childElem.setAttribute("class", (entry.getValue()).getClass().getName());
             factoryElem.appendChild(childElem);
