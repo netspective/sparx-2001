@@ -258,12 +258,12 @@
 	
 	<datatype name="lookup-with-freeform">
 		<composite>
-			<column name="${column.getAttribute(&quot;name&quot;)}_id" lookupref="${column.getAttribute(&quot;enumeration-table&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)}">
-				<field.select caption="${column.getAttribute(&quot;caption&quot;)}"/>
+			<column name="${column.getAttribute(&quot;name&quot;)}_id" lookupref="${column.getAttribute(&quot;enumeration-table&quot;)}" caption="${column.getAttribute(&quot;caption&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)}">
+				<field.select caption="${this.getParentNode().getAttribute(&quot;caption&quot;)}"/>
 			</column>
-			<column name="${column.getAttribute(&quot;name&quot;)}" type="text" size="${column.getAttribute(&quot;size&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)} (if 'Other' chosen above)">
-				<field.text caption="Other ${column.getAttribute(&quot;caption&quot;)}" size="16">
-					<conditional action="display" partner="${column.getAttribute(&quot;caption&quot;)}_id" js-expr="control.options[control.selectedIndex].text == 'Other'"/>
+			<column name="${column.getAttribute(&quot;name&quot;)}" type="text" size="${column.getAttribute(&quot;size&quot;)}" caption="${column.getAttribute(&quot;caption&quot;)}" descr="${column.getAttribute(&quot;descr&quot;)} (if 'Other' chosen above)">
+				<field.text caption="Other ${this.getParentNode().getAttribute(&quot;caption&quot;)}" size="16">
+					<conditional action="display" partner="${this.getParentNode().getAttribute(&quot;name&quot;)}_id" js-expr="control.options[control.selectedIndex].text == 'Other'"/>
 				</field.text>
 			</column>
 		</composite>

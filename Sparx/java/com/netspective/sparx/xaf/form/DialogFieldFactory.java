@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogFieldFactory.java,v 1.6 2003-01-06 17:33:31 shahbaz.javeed Exp $
+ * $Id: DialogFieldFactory.java,v 1.7 2003-02-04 18:01:40 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -125,6 +125,16 @@ public class DialogFieldFactory implements Factory
     public static Map getFieldClasses()
     {
         return fieldClasses;
+    }
+
+    /**
+     * Gets the list of  dialog field conditional classes as a map
+     *
+     * @return Map
+     */
+    public static Map getConditionalsClasses()
+    {
+        return conditionalsClasses;
     }
 
     /**

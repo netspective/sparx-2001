@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.27 2003-01-21 17:58:36 shahbaz.javeed Exp $
+ * $Id: SchemaDocument.java,v 1.28 2003-02-04 18:01:40 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -93,6 +93,7 @@ import com.netspective.sparx.util.ClassPath;
 import com.netspective.sparx.xaf.form.field.SelectChoice;
 import com.netspective.sparx.xaf.form.field.SelectChoicesList;
 import com.netspective.sparx.xaf.form.DialogField;
+import com.netspective.sparx.xaf.form.DialogFieldFactory;
 import com.netspective.sparx.xaf.querydefn.QueryDefinition;
 import com.netspective.sparx.xif.dal.Schema;
 
@@ -125,9 +126,12 @@ public class SchemaDocument extends XmlSource
     public static final String STMTNAME_DEFAULT = "default";
     public static final String QUERYDEFID_DEFAULT = "default";
 
-    public static final String[] MACROSIN_COLUMNNODES = {"name", "parentref", "lookupref", "selfref", "usetype", "sequence-name", "sqldefn", "size", "decimals", "default", "descr"};
+    public static final String[] MACROSIN_COLUMNNODES = {"name", "parentref", "lookupref", "selfref", "usetype", "sequence-name", "sqldefn", "size", "decimals", "default", "descr", "caption"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
+
+    public static final String[] MACROSIN_FIELDNODES = {"name", "caption", "size"};
+    public static final String[] MACROSIN_CONDITIONALSNODES = {"action", "flag", "data-cmd", "partner", "js-expr"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
 
     public static final String[] JAVA_RESERVED_WORDS = {"abstract", "assert", "boolean", "break", "byte",
@@ -160,6 +164,8 @@ public class SchemaDocument extends XmlSource
     private static Set replaceMacrosInColumnNodes = null;
     private static Set replaceMacrosInTableNodes = null;
     private static Set replaceMacrosInIndexNodes = null;
+    private static Set replaceMacrosInFieldNodes = null;
+    private static Set replaceMacrosInConditionalsNodes = null;
     private static Set javaReservedWords = new HashSet();
     private static Set javaReservedTerms = new HashSet();
     private static Set refColumnExcludeElementsFromInherit = new HashSet();
@@ -171,12 +177,20 @@ public class SchemaDocument extends XmlSource
         replaceMacrosInTableNodes = new HashSet();
         replaceMacrosInIndexNodes = new HashSet();
 
+        replaceMacrosInFieldNodes = new HashSet();
+        replaceMacrosInConditionalsNodes = new HashSet();
+
         for (int i = 0; i < MACROSIN_COLUMNNODES.length; i++)
             replaceMacrosInColumnNodes.add(MACROSIN_COLUMNNODES[i]);
         for (int i = 0; i < MACROSIN_TABLENODES.length; i++)
             replaceMacrosInTableNodes.add(MACROSIN_TABLENODES[i]);
         for (int i = 0; i < MACROSIN_INDEXNODES.length; i++)
             replaceMacrosInIndexNodes.add(MACROSIN_INDEXNODES[i]);
+
+        for (int i = 0; i < MACROSIN_FIELDNODES.length; i++)
+            replaceMacrosInFieldNodes.add(MACROSIN_FIELDNODES[i]);
+        for (int i = 0; i < MACROSIN_CONDITIONALSNODES.length; i++)
+            replaceMacrosInConditionalsNodes.add(MACROSIN_CONDITIONALSNODES[i]);
 
         for (int i = 0; i < JAVA_RESERVED_WORDS.length; i++)
             javaReservedWords.add(JAVA_RESERVED_WORDS[i]);
@@ -1119,6 +1133,28 @@ public class SchemaDocument extends XmlSource
         }
     }
 
+    public void fixupTableColumnFieldElement(Element tableColumnField, Map variables)
+    {
+        variables.put("this", tableColumnField);
+        replaceNodeMacros(tableColumnField, replaceMacrosInFieldNodes, variables);
+
+        NodeList fieldChildren = tableColumnField.getChildNodes();
+
+        for (int child = 0; child < fieldChildren.getLength(); child ++)
+        {
+            Node childNode = fieldChildren.item(child);
+            if (childNode.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+
+            String childNodeName = childNode.getNodeName();
+            if ("conditional".equals(childNodeName))
+            {
+                variables.put("this", childNode);
+                replaceNodeMacros(childNode, replaceMacrosInConditionalsNodes, variables);
+            }
+        }
+    }
+
     public void fixupChildTableElement(Element parentColumn, Element table)
     {
         Element parentColTable = (Element) parentColumn.getParentNode();
@@ -1154,6 +1190,7 @@ public class SchemaDocument extends XmlSource
         Map params = new HashMap();
 
         String tableName = table.getAttribute("name");
+
         if (table.getAttribute("abbrev").length() == 0)
             table.setAttribute("abbrev", tableName);
 
@@ -1224,6 +1261,24 @@ public class SchemaDocument extends XmlSource
             {
                 replaceNodeMacros(node, replaceMacrosInColumnNodes, expressionVariables);
                 lastColumnSeen = (Element) node;
+
+                NodeList colChildren = node.getChildNodes();
+
+                for (int child = 0; child < colChildren.getLength(); child ++)
+                {
+                    Node childNode = colChildren.item(child);
+                    if (childNode.getNodeType() != Node.ELEMENT_NODE)
+                        continue;
+
+                    Element childElem = (Element) childNode;
+                    String childNodeName = childElem.getNodeName();
+                    if (DialogFieldFactory.getFieldClasses().containsKey(childNodeName))
+                    {
+                        String oldName = childElem.getAttribute("name");
+                        fixupTableColumnFieldElement(childElem, expressionVariables);
+                        String newName = childElem.getAttribute("name");
+                    }
+                }
             }
             else if (nodeName.equals("index"))
                 replaceNodeMacros(node, replaceMacrosInIndexNodes, expressionVariables);
