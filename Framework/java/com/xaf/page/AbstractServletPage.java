@@ -19,6 +19,11 @@ public class AbstractServletPage implements ServletPage
 		return "servlet_page_" + pageNumber;
 	}
 
+	public String getPageIcon()
+	{
+		return null;
+	}
+
 	public String getCaption(PageContext pc)
 	{
 		return getName();

@@ -8,6 +8,7 @@ import java.util.*;
 public interface ServletPage
 {
 	public String getName();
+	public String getPageIcon();
 	public String getCaption(PageContext pc);
 	public String getHeading(PageContext pc);
 	public String getTitle(PageContext pc);
