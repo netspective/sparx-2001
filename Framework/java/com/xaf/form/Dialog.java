@@ -14,6 +14,12 @@ import com.xaf.value.*;
 
 public class Dialog
 {
+	static public final int DLGFLAG_CONTENTS_FINALIZED        = 1;
+	static public final int DLGFLAG_RETAIN_ALL_REQUEST_PARAMS = DLGFLAG_CONTENTS_FINALIZED * 2;
+	static public final int DLGFLAG_LOOP_DATA_ENTRY           = DLGFLAG_RETAIN_ALL_REQUEST_PARAMS * 2;
+	static public final int DLGFLAG_APPEND_WHEN_LOOPING       = DLGFLAG_LOOP_DATA_ENTRY * 2;
+	static public final int DLGFLAG_CUSTOM_START              = DLGFLAG_APPEND_WHEN_LOOPING * 2;
+
 	static public final String PARAMNAME_AUTOEXECUTE   = "_d_exec";
 	static public final String PARAMNAME_DIALOGPREFIX  = "_d.";
 	static public final String PARAMNAME_CONTROLPREFIX = "_dc.";
@@ -41,22 +47,20 @@ public class Dialog
 	static public final String PARAMVALUE_DATA_CMD_CONFIRM = "confirm";
 
 	private ArrayList fields = new ArrayList();
+	private int flags;
     private Task[] executeTasks;
 	private DialogDirector director;
 	private String name;
 	private SingleValueSource heading;
 	private String actionURL;
-	private boolean loopDataEntry = true;
-	private boolean appendWhenLooping = true;
 	private String loopSeparator = "<p>";
-	private boolean contentsFinalized;
 	private int layoutColumnsCount = 1;
-	private boolean retainAllRequestParams;
 	private String[] retainRequestParams;
 
 	public Dialog()
 	{
 		layoutColumnsCount = 1;
+		flags = (DLGFLAG_LOOP_DATA_ENTRY | DLGFLAG_APPEND_WHEN_LOOPING);
 	}
 
 	public Dialog(String aName, String aHeading)
@@ -64,19 +68,25 @@ public class Dialog
 		name = aName;
 		setHeading(aHeading);
 		layoutColumnsCount = 1;
+		flags = (DLGFLAG_LOOP_DATA_ENTRY | DLGFLAG_APPEND_WHEN_LOOPING);
 	}
 
 	public String getName() { return name; }
 	public void setName(String newName) { name = newName; }
 
+	public final long getFlags() { return flags; }
+	public final boolean flagIsSet(long flag) { return (flags & flag) == 0 ? false : true; }
+	public final void setFlag(long flag) {	flags |= flag; }
+	public final void clearFlag(long flag) { flags &= ~flag; }
+
 	public SingleValueSource getHeading() { return heading; }
 	public void setHeading(String value) { heading = ValueSourceFactory.getSingleOrStaticValueSource(value); }
 	public void setHeading(SingleValueSource vs) { heading = vs; }
 
-	public final boolean loopEntries() { return loopDataEntry; }
-	public final void setLoopEntries(boolean value) { loopDataEntry = value; }
-	public final boolean appendAfterLoop() { return appendWhenLooping; }
-	public final void setAppendAfterLoop(boolean value) { appendWhenLooping = value; }
+	public final boolean loopEntries() { return flagIsSet(DLGFLAG_LOOP_DATA_ENTRY); }
+	public final void setLoopEntries(boolean value) { if(value) setFlag(DLGFLAG_LOOP_DATA_ENTRY); else clearFlag(DLGFLAG_LOOP_DATA_ENTRY); }
+	public final boolean appendAfterLoop() { return flagIsSet(DLGFLAG_APPEND_WHEN_LOOPING); }
+	public final void setAppendAfterLoop(boolean value) { if(value) setFlag(DLGFLAG_APPEND_WHEN_LOOPING); else clearFlag(DLGFLAG_APPEND_WHEN_LOOPING); }
 
 	public final int getLayoutColumnsCount() { return layoutColumnsCount; }
 
@@ -93,11 +103,10 @@ public class Dialog
 	public final Task[] getExecuteTasks() { return executeTasks; }
 
 	public final ArrayList getFields() { return fields; }
-	public final boolean retainRequestParams() { return retainAllRequestParams || (retainRequestParams != null); }
+	public final boolean retainRequestParams() { return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS) || (retainRequestParams != null); }
 	public final String[] getRetainRequestParams() { return retainRequestParams; }
 	public final void setRetainRequestParams(String[] value) { retainRequestParams = value; }
-	public final boolean retainAllRequestParams() { return retainAllRequestParams; }
-	public final void setRetainAlLRequestParams(boolean value) { retainAllRequestParams = true; }
+	public final boolean retainAllRequestParams() { return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS); }
 
 	public final DialogDirector getDirector() { return director; }
 	public void setDirector(DialogDirector value) { director = value; }
@@ -126,7 +135,7 @@ public class Dialog
 
 		String loop = elem.getAttribute("loop");
 		if(loop.equals("no"))
-			loopDataEntry = false;
+			clearFlag(DLGFLAG_LOOP_DATA_ENTRY);
 
 		if(director == null)
 			director = new DialogDirector();
@@ -135,7 +144,7 @@ public class Dialog
 		if(retainRequestParamsStr.length() > 0)
 		{
 			if(retainRequestParamsStr.equals("*"))
-				retainAllRequestParams = true;
+				setFlag(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS);
 			else
 			{
 				ArrayList paramNames = new ArrayList();
@@ -149,7 +158,7 @@ public class Dialog
 		}
 		else
 		{
-			retainAllRequestParams = false;
+			clearFlag(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS);
 			retainRequestParams = null;
 		}
 
@@ -213,7 +222,7 @@ public class Dialog
 	public void clearFields()
 	{
 		fields.clear();
-		contentsFinalized = false;
+		clearFlag(DLGFLAG_CONTENTS_FINALIZED);
 	}
 
 	public void addField(DialogField field)
@@ -248,7 +257,7 @@ public class Dialog
 				layoutColumnsCount++;
 			}
 		}
-		contentsFinalized = true;
+		setFlag(DLGFLAG_CONTENTS_FINALIZED);
 	}
 
 	public void populateValues(DialogContext dc)
@@ -319,7 +328,7 @@ public class Dialog
 
 	public void prepareContext(DialogContext dc)
 	{
-		if(! contentsFinalized)
+		if(! flagIsSet(DLGFLAG_CONTENTS_FINALIZED))
 		    finalizeContents();
 
 		populateValues(dc);
@@ -335,10 +344,10 @@ public class Dialog
 		{
 			// "looping" means to keep the dialog on the screen even after
 			// the "execute" phase has been reached -- useful for lookups, etc
-			if(loopDataEntry)
+			if(loopEntries())
 			{
 				StringBuffer html = new StringBuffer();
-				if(appendWhenLooping)
+				if(appendAfterLoop())
 				{
 					html.append(execute(dc));
 					html.append(loopSeparator);
