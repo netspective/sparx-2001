@@ -37,6 +37,7 @@ public class ValueSourceFactory
         srcClasses.put("config", ConfigurationValue.class);
         srcClasses.put("config-expr", ConfigurationExprValue.class);
         srcClasses.put("filesystem-entries", FilesystemEntriesListValue.class);
+        srcClasses.put("create-data-cmd-heading", DialogDataCmdExprValue.class);
         srcClasses.put("custom-sql", CustomSqlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
         defaultsAvailable = true;
     }
