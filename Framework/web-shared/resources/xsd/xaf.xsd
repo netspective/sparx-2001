@@ -136,7 +136,7 @@
 			<xsd:documentation>Basic attributes that can be set for all dialog fields</xsd:documentation>
 		</xsd:annotation>
 		<xsd:attribute name="name" type="xsd:string" use="optional"/>
-		<xsd:attribute name="caption" type="xsd:string" use="optional"/>
+		<xsd:attribute name="caption" type="single-value-source" use="optional"/>
 		<xsd:attribute name="default" type="single-value-source" use="optional"/>
 		<xsd:attribute name="hint" type="xsd:string" use="optional"/>
 		<xsd:attribute name="required" type="yes-no-enum" use="optional" value="no"/>
@@ -255,6 +255,7 @@
 					<xsd:choice>
 						<xsd:element name="field.composite" type="field.compositeType" maxOccurs="unbounded"/>
 					</xsd:choice>
+					<xsd:attribute name="captions" type="list-value-source" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="field.static" type="field.textType" minOccurs="0" maxOccurs="unbounded"/>
