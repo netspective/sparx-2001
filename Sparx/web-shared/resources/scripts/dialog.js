@@ -75,6 +75,20 @@ function getControl(dialog, id)
     }
 }
 
+function radioButtonSelected(fieldName, value)
+{
+	// radio buttons are named {fieldName}{value} like "_dc.fieldName0" and "_dc.fieldName1", etc
+	var fieldId = DIALOGFIELD_PREFIX + "." + fieldName + value;
+	var control = getControl(activeDialog, fieldId);
+	if(control == null)
+	{
+		alert("Field '" + fieldId + "' not found in active dialog -- can't check for radio button value");
+		return false;
+	}
+	
+	return control.checked;
+}
+
 //****************************************************************************
 // FieldType class
 //****************************************************************************
