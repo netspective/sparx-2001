@@ -32,10 +32,9 @@ Authors:
     <property name="ant.home" value="${ant_home}"/>
     <property name="debug" value="on"/>
     <property name="optimize" value="true"/>
-    <property environment="env"/>
     
-    <property name="xerces.jar" value="../3rdparty/xerces.jar" />
-    <property name="xalan.jar" value="../3rdparty/xalan.jar" />
+    <property environment="env"/>
+    <property file="build.properties"/>
     
     <property name="resin.libpath" value="${env.RESIN_HOME}/lib"/>
     <property name="resin.jar" value="${resin.libpath}/resin.jar"/>
@@ -48,15 +47,12 @@ Authors:
 
     <property name="classpath" value="${resin.jar};${jsdk22.jar};${dom.jar};${sax.jar};${jaxp.jar};${jdbc-ext};${jndi}"/> 
 
-    <property name="name" value="xaf"/>
-    <property name="version" value="1_0"/>
-
     <property name="build.dir" value="../build"/>
     <property name="lib.dir" value="../lib"/>
     <property name="doc.dir" value="../web-shared/docs"/>
     <property name="javadoc.dir" value="${doc.dir}/javadoc"/>
 
-    <property name="jar.prefix" value="${name}_${version}"/>
+    <property name="jar.prefix" value="${build.product.id}-${build.version.major}_${build.version.minor}_${build.number}"/>
     <property name="lib.jar" value="${jar.prefix}.jar"/>
     <property name="src.jar" value="${jar.prefix}_src.jar"/>
     <property name="doc.jar" value="${jar.prefix}_doc.jar"/>
@@ -86,8 +82,11 @@ Authors:
     <target name="jar" depends="compile">
 
         <!-- Create XAF BINARIES JAR file -->
+        <copy file="build.properties" todir="${build.dir}/classes"/>
+        
         <jar jarfile="${lib.dir}/${lib.jar}" basedir="${build.dir}/classes">
-            <include name="com/xaf/**" />
+            <include name="build.properties"/>
+            <include name="com/xaf/**"/>
         </jar>
 
         <!-- Create XAF SOURCE JAR file -->
