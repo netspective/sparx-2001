@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: EnumeratedAttribute.java,v 1.2 2002-02-27 00:53:31 snshah Exp $
+ * $Id: EnumeratedAttribute.java,v 1.3 2002-07-06 14:42:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.xml;
@@ -59,9 +59,6 @@ package com.netspective.sparx.util.xml;
 /**
  * Helper class for attributes that can only take one of a fixed list
  * of values.
- *
- * <p>See {@link org.apache.tools.ant.taskdefs.FixCRLF FixCRLF} for an
- * example.
  *
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
  */

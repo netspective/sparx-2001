@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DatabaseContextFactory.java,v 1.3 2002-03-26 22:52:41 snshah Exp $
+ * $Id: DatabaseContextFactory.java,v 1.4 2002-07-06 14:42:41 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xif.db;
@@ -147,9 +147,6 @@ public class DatabaseContextFactory implements Factory
 
     /**
      * Creates a catalog of all the data sources available
-     *
-     * @param parent
-     * @return
      */
     public static void createCatalog(ValueContext vc, Element parent) throws NamingException
     {

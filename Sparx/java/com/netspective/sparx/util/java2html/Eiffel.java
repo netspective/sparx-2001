@@ -70,7 +70,7 @@ public class Eiffel
 		The exception is thrown on <a href="#line42">line 42</a>
 
 		<pre>
-   *  1 <font color="#b22222">import</font> com.t_tank.Eiffel;
+   *  1 <font color="#b22222">import</font> com.netspective.sparx.util.java2html.Eiffel;
    *  2 
    *  3 <font color="#b22222">public</font> <font color="#b22222">class</font> IntegerStack
    *  4 {
@@ -147,7 +147,7 @@ public class Eiffel
 		is invoked on an empty stack.
 
 		<pre>
-    *  1 <font color="#b22222">import</font> com.t_tank.Eiffel;
+    *  1 <font color="#b22222">import</font> com.netspective.sparx.util.java2html.Eiffel;
     *  2 
     *  3 <font color="#b22222">public</font> <font color="#b22222">class</font> IntegerStack
     *  4 {
@@ -215,7 +215,7 @@ public class Eiffel
 		postcondition violation exception.
 
 		<pre>
-    *  1 <font color="#b22222">import</font> com.t_tank.Eiffel;
+    *  1 <font color="#b22222">import</font> com.netspective.sparx.util.java2html.Eiffel;
     *  2 
     *  3 <font color="#b22222">public</font> <font color="#b22222">class</font> IntegerStack
     *  4 {
@@ -298,7 +298,7 @@ public class Eiffel
 		dbc construct as in the following example:
 		<blockquote>
 		<pre>
-			* 1 import com.t_tank.Eiffel;
+			* 1 import com.netspective.sparx.util.java2html.Eiffel;
 			* 2
 			* 3 public class XYZ
 			* 4 {
@@ -365,7 +365,7 @@ public class Eiffel
 
 	/**
 		Exception thrown in case of a precondition violation
-		@see com.t_tank.Eiffel#Require
+		@see com.netspective.sparx.util.java2html.Eiffel#Require
 	*/
 	public static class EPrecondition extends Error {
 		public EPrecondition(String message)
@@ -376,7 +376,7 @@ public class Eiffel
 
 	/**
 		Exception thrown in case of a postcondition violation
-		@see com.t_tank.Eiffel#Ensure
+		@see com.netspective.sparx.util.java2html.Eiffel#Ensure
 	*/
 	public static class EPostcondition extends Error {
 		public EPostcondition(String message)
@@ -387,7 +387,7 @@ public class Eiffel
 
 	/**
 		Exception thrown in case of an assertion violation
-		@see com.t_tank.Eiffel#Assert
+		@see com.netspective.sparx.util.java2html.Eiffel#Assert
 	*/
 	public static class EAssertion extends Error {
 		public EAssertion(String message)
@@ -398,7 +398,7 @@ public class Eiffel
 
 	/**
 		Exception thrown upon invocation of <code>Eiffel.Error()</code>
-		@see com.t_tank.Eiffel#Error
+		@see com.netspective.sparx.util.java2html.Eiffel#Error
 	*/
 	public static class EError extends Error {
 		public EError(String message)
