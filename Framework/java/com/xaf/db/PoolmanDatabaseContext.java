@@ -81,39 +81,37 @@ public class PoolmanDatabaseContext implements DatabaseContext
 		Method getAllPoolNamesMethod = null;
 		Method getPoolMethod = null;
 		Method getPoolDataSourceMethod = null;
+        Method getNewInstanceMethod = null;
         Object sqlUtil = null;
-
+        Object[] empty = new Object[] {};
+        String error = null;
         try
         {
             sqlutilClass = Class.forName("com.codestudio.util.SQLUtil");
 			jdbcPoolClass = Class.forName("com.codestudio.util.JDBCPool");
 
+            getNewInstanceMethod = sqlutilClass.getMethod("getInstance", null);
 			getAllPoolNamesMethod = sqlutilClass.getMethod("getAllPoolnames", null);
 			getPoolMethod = sqlutilClass.getMethod("getPool", new Class[] { String.class });
 			getPoolDataSourceMethod = jdbcPoolClass.getMethod("getDataSource", null);
 
-            sqlUtil = sqlutilClass.newInstance();
+
         }
 		catch(ClassNotFoundException e)
 		{
-			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+			DatabaseContextFactory.addErrorProperty(doc, parent, error+ e.toString());
+            return;
 		}
 		catch(NoSuchMethodException e)
 		{
-			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
-		}
-		catch(InstantiationException e)
-		{
-			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
-		}
-		catch(IllegalAccessException e)
-		{
-			DatabaseContextFactory.addErrorProperty(doc, parent, e.toString());
+			DatabaseContextFactory.addErrorProperty(doc, parent, error + e.toString());
+            return;
 		}
 
 		try
 		{
-			Enumeration poolList = (Enumeration) getAllPoolNamesMethod.invoke(sqlUtil, null);
+            sqlUtil = getNewInstanceMethod.invoke(null, empty);
+			Enumeration poolList = (Enumeration) getAllPoolNamesMethod.invoke(sqlUtil, empty);
 			while (poolList.hasMoreElements())
 			{
 				Element propertyElem = doc.createElement("property");
