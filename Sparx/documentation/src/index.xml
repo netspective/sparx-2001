@@ -11,13 +11,14 @@
                     Servlet engines alone.
                     <ul>
                         <li>
-                            Sparx is <link page="overview/requirements">app server and platform neutral</link> and will work with
-                            any Java2 JDK and Servlet engine or application server like WebLogic, WebSphere, Tomcat, or Resin.
+                            Sparx is <link page="overview/requirements">app server and platform neutral</link> and will
+                            work with any Java2 JDK and Servlet engine or application server like WebLogic, WebSphere,
+                            Tomcat, or Resin.
                         </li>
                         <li>
-                            Sparx work great with other frameworks; so, you can start with Struts as your Servlet controller and use
-                            Sparx to fill out the <link page="xaf">presentation</link>, <link page="xif">business</link>, and
-                            <link page="dal">data</link> layers.
+                            Sparx works great with other frameworks; so, you can start with Struts as your Servlet
+                            controller and use Sparx to fill out the <link page="xaf">presentation</link>,
+                            <link page="xif">business</link>, and <link page="dal">data</link> layers.
                         </li>
                     </ul>
                 </td>
@@ -29,16 +30,16 @@
                         <tr valign="top">
                             <td><image name="sparx-dk-online"/></td>
                             <td>
-                                Try the <link page="samples">sample apps</link> and look at the source code for the Sparx examples
-                                using <link page="ace">ACE</link> <b>online</b>. No software installation or downloads
-                                are required.
+                                Try the <link page="samples">sample apps</link> and look at the source code for the
+                                Sparx examples using <link page="ace">ACE</link> <b>online</b>. No software installation
+                                or downloads are required.
                             </td>
                             <td> </td>
                             <td><image name="sparx-dk-download"/></td>
                             <td>
-                                If you want to get the full benefit of Sparx and create your own applications, <b>download</b>
-                                a free copy of the <link page="overview">Sparx Evaluation Kit</link>. It comes
-                                complete with an app server, database, sample applications, documentation, and an
+                                If you want to get the full benefit of Sparx and create your own applications,
+                                <b>download</b> a free copy of the <link page="overview">Sparx Evaluation Kit</link>. It
+                                comes complete with an app server, database, sample applications, documentation, and an
                                 automated installer.
                             </td>
                         </tr>
