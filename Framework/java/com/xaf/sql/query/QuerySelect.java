@@ -333,7 +333,7 @@ public class QuerySelect
 		Map queryFields = queryDefn.getFieldsMap();
 
 		name = elem.getAttribute("id");
-		caption = elem.getAttribute("caption");
+		caption = elem.getAttribute("heading");
 		String value = elem.getAttribute("distinct");
 		if(value != null && value.equals("no"))
 			distinctRows = false;

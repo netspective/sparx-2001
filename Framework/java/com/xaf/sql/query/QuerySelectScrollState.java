@@ -44,6 +44,15 @@ public class QuerySelectScrollState extends ResultSetScrollState
 			this.reportDefn = new StandardReport();
 			this.reportDefn.initialize(rs, null);
 
+            String heading = select.getCaption();
+		    if(heading != null && heading.length() > 0)
+		    {
+                ReportFrame frame = new ReportFrame();
+			    frame.setHeading(heading);
+                this.reportDefn.setFrame(frame);
+		    }
+
+
 			ReportColumnsList rcl = this.reportDefn.getColumns();
 			List selectFields = select.getReportFields();
 			for(int i = 0; i < rcl.size(); i++)

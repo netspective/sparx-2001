@@ -12,6 +12,7 @@ package com.xaf.report;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
+import java.net.URLEncoder;
 
 import org.w3c.dom.*;
 import com.xaf.form.*;
@@ -43,6 +44,7 @@ public class StandardReport implements Report
 
     public String getName() { return name; }
 	public ReportFrame getFrame() { return frame; }
+    public void setFrame(ReportFrame rf) { frame = rf; }
 	public ReportBanner getBanner() { return banner; }
 
 	public ReportColumnsList getColumns() { return columns; }
@@ -193,21 +195,48 @@ public class StandardReport implements Report
         StringBuffer sb = new StringBuffer();
         int i = 0;
         int prev = 0;
+        boolean encode = false;
 
-        int pos;
-        while((pos=row.indexOf("$", prev)) >= 0)
+        int pos = 0;
+        int pos1 = row.indexOf("$", prev);
+        int pos2 = row.indexOf("%", prev);
+        if (pos2 != -1)
+        {
+            if (pos1 != -1 && pos2 > pos1)
+            {
+                pos = pos1;
+            }
+            else
+            {
+                encode = true;
+                pos = pos2;
+            }
+        }
+        else
+        {
+            encode = false;
+            pos = pos1;
+        }
+
+        while(pos  >= 0)
 		{
             if(pos>0)
 			{
+                // append the substring before the '$' or '%' character
                 sb.append(row.substring( prev, pos ));
             }
             if( pos == (row.length() - 1))
 			{
-                sb.append('$');
+                if (encode)
+                    sb.append('%');
+                else
+                    sb.append('$');
                 prev = pos + 1;
             }
             else if (row.charAt( pos + 1 ) != '{')
 			{
+                // if the '$' is not associated with a '{', shouldn't we
+                // throw an error??
                 sb.append(row.charAt(pos + 1));
                 prev=pos+2;
             }
@@ -227,7 +256,10 @@ public class StandardReport implements Report
 					try
 					{
 						int colIndex = Integer.parseInt(expression);
-						sb.append(columns.getColumn(colIndex).getFormattedData(rc, rowNum, rowData, false));
+                        if (encode)
+						    sb.append(URLEncoder.encode(columns.getColumn(colIndex).getFormattedData(rc, rowNum, rowData, false)));
+                        else
+                            sb.append(columns.getColumn(colIndex).getFormattedData(rc, rowNum, rowData, false));
 					}
 					catch(NumberFormatException e)
 					{
@@ -240,6 +272,25 @@ public class StandardReport implements Report
 				}
 
                 prev=endName+1;
+                pos1 = row.indexOf("$", prev);
+                pos2 = row.indexOf("%", prev);
+                if (pos2 != -1)
+                {
+                    if (pos1 != -1 && pos2 > pos1)
+                    {
+                        pos = pos1;
+                    }
+                    else
+                    {
+                        encode = true;
+                        pos = pos2;
+                    }
+                }
+                else
+                {
+                    encode = false;
+                    pos = pos1;
+                }
             }
         }
 

@@ -19,6 +19,7 @@ public interface Report
 {
     public String getName();
 	public ReportFrame getFrame();
+    public void setFrame(ReportFrame rf);
 	public ReportBanner getBanner();
 
 	public Object getCanvas();
