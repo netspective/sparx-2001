@@ -33,7 +33,7 @@ public class NumericColumn extends GeneralColumn
         setFormatter(formatter);
     }
 
-	public String getFormattedData(ReportContext rc, Object[] rowData, boolean doCalc)
+	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc)
 	{
 		int colIndex = getColIndexInArray();
         Object oData = rowData[colIndex];
@@ -42,7 +42,8 @@ public class NumericColumn extends GeneralColumn
         if(oData != null)
         {
             value = ((Number) oData).longValue();
-            data = ((NumberFormat) getFormatter()).format(value);
+			NumberFormat fmt = (NumberFormat) getFormatter();
+			data = fmt == null ? data : fmt.format(value);
         }
 
         if(doCalc)

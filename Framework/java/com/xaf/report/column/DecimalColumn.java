@@ -22,7 +22,7 @@ public class DecimalColumn extends NumericColumn
         setFormat("decimal");
     }
 
-	public String getFormattedData(ReportContext rc, Object[] rowData, boolean doCalc)
+	public String getFormattedData(ReportContext rc, long rowNum, Object[] rowData, boolean doCalc)
 	{
 		int colIndex = getColIndexInArray();
         Object oData = rowData[colIndex];
@@ -31,7 +31,8 @@ public class DecimalColumn extends NumericColumn
         if(oData != null)
         {
             value = ((Number) oData).doubleValue();
-            data = ((NumberFormat) getFormatter()).format(value);
+			NumberFormat fmt = (NumberFormat) getFormatter();
+			data = fmt == null ? data : fmt.format(value);
         }
 
         if(doCalc)
