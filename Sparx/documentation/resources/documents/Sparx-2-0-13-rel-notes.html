@@ -261,9 +261,15 @@ table.MsoTableGrid
      you need to start copying your other (web-xxx) application’s UI, SQL,
      CLASSES, JSP, and other files to the new application. Don’t worry if you
      mess anything up since you can always run new-<span class=SpellE>sparx</span>-app
-     again to create a new shell. DO NOT copy your old configuration.xml file -- 
- the new one in WEB-INF/conf/sparx.xml is more recent. Also, DO NOT copy over 
- the WEB-INF/tld directory contents -- the new ones are more current. </li>
+     again to create a new shell. <u>DO NOT</u> copy any of the following files 
+ over to the new structure:<ol style='margin-top:0in' start=1 type=1>
+ <li>your old WEB-INF/configuration.xml file -- 
+ the new one in WEB-INF/conf/sparx.xml is more recent and more generic</li>
+ <li>WEB-INF/tld directory contents -- the new ones are more current and generic</li>
+ <li>WEB-INF/classes/log4j.properties -- the new one is more current and generic</li>
+</ol>
+
+ </li>
  <li class=MsoNormal style='mso-list:l3 level1 lfo5;tab-stops:list .5in'>Once
      you have copied all of your files over, make sure to change the location
      of your application file in <span class=SpellE><span style='font-family:
