@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <page name="to-do">
-	<section heading="Sparx Future Development Road Map">
-		<project>
+    <section heading="Sparx Future Development Road Map">
+        <project>
             <task>
                 <name>Defects</name>
 
@@ -13,7 +13,6 @@
 
                 <task>
                     <name>Minor</name>
-                    <task><name>Applications need to be able to be aggregated into .ear or .jar files and still work (due to the XML files, that may not be the case right now).</name></task>
                     <task><name>Implement e-mail feature in output types for Query Builder and Query Select Dialogs.</name></task>
                     <task><name>Implement file compression in output types for Query Builder and Query Select Dialogs.</name></task>
                     <task><name>Query defn auto sorting is not carrying/retaining parameters.</name></task>
@@ -29,22 +28,21 @@
 
                 <task>
                     <name>Architecture</name>
+                    <task><name>Create debug mode in PageTag (or ACE) that would allow JSPs and other running code to track Sparx components (like in ASPire). Turning this mode on will show list of dialogs, statements, query defs, tables, etc being used on any particular page.</name></task>
                     <task><name>Create Ant task that will generate DDL from app-build.xml instead of forcing generation through ACE.</name></task>
                     <task><name>Create Ant task that will allow the running of Metrics generator from app-build.xml and store results in a configurable file name (for scripting the execution of metrics).</name></task>
                     <task><name>Allow debugging of XML after XSLT pre-processing (using &lt;pre-process debug="abc.xml"> or some other directive).</name></task>
                     <task><name>Add "category" column to xaf.monitor.page log. Categories will be "page", "skin", "context", etc.</name></task>
-                    <task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of constructing "source" references manually.</name></task>
                     <task><name>Create Netspective Core library patterned after <a href="http://www.generationjava.com/java/GenJavaCore.shtml">GenerationJava Core Library</a>.</name></task>
                     <task><name>Integrate <a href="http://httpunit.sourceforge.net/">HTTPUnit</a> for doing black-box unit testing of HTML generators (skins).</name></task>
                     <task><name>Integrate <a href="http://httpunit.sourceforge.net/doc/servletunit-intro.html">ServletUnit</a> or <a href="http://jakarta.apache.org/commons/cactus/">Jakarta Cactus</a> for doing black-box and white-box unit testing of servlets.</name></task>
-                    <task><name>Integrate <a href="http://www.vaegar.f9.co.uk/java2html.html">Java2HTML</a> to allow colorized Java code to be viewed through browser (in addition to JavaDoc)</name></task>
-                    <task><name>Create debug mode in PageTag (or ACE) that would allow JSPs and other running code to track Sparx components (like in ASPire). Turning this mode on will show list of dialogs, statements, query defs, tables, etc being used on any particular page.</name></task>
 
                     <task>
                         <name>Logging</name>
                         <task><name>Add auditing of user actions in dialogs, pages, and SQL (as opposed to just system logging).</name></task>
                         <task><name>Add <a href="http://freshmeat.net/releases/51516/">Java Exception Notification</a> into framework.</name></task>
                         <task><name>Integrate with <a href="http://appstats.sourceforge.net/">AppStats Framework</a>.</name></task>
+                        <task><name>In the logging calls, use HttpUtils.getRequestURL() method instead of constructing "source" references manually.</name></task>
                     </task>
 
                     <task>
@@ -68,7 +66,6 @@
 
                 <task>
                     <name>Application Components Explorer (ACE)</name>
-                    <task><name>Add a dialog that connects to <a href="http://www.clarkware.com/software.html#JWhich">JWhich</a> to show where classes are coming from.</name></task>
                     <task><name>Add <a href="http://www.kclee.com/clemens/java/javancss/">JavaNCSS</a> output to the Metrics page (for Java Source in addition to XML source).</name></task>
                     <task><name>Install <a href="http://www.clarkware.com/software/JDepend.html">JDepend</a> to augment the metrics page with even more data.</name></task>
                     <task><name>Enable ACE instrumentation using <a href="http://java.sun.com/products/JavaManagement/">JMX</a>.</name></task>
@@ -92,10 +89,9 @@
                     <name>eXtensible Application Framework (XAF)</name>
                     <task>
                         <name>Dialogs</name>
-                        <task><name>Add ability to check min/max lengths on field.text tags (like min="5" would verify that a string is at least 5 characters long).</name></task>
+                        <task><name>Implement client-side data persistence in fields using cookies (FLDFLAG_PERSIST).</name></task>
                         <task><name>Add ability to replace value sources and include XHTML tags in field.html (right now it's a basic value string with escaped tags).</name></task>
                         <task><name>Create methods that can use reflection to fill in ReportContext and DialogContext values into a Bean.</name></task>
-                        <task><name>Implement client-side data persistence in fields using cookies (FLDFLAG_PERSIST).</name></task>
                         <task><name>Implement new field type &lt;field.schema&gt; to create fields directly from SchemaDoc.</name></task>
                         <task><name>Create non-cached dialogs so that certain dialogs will always be created when called (allows for dynamic dialogs).</name></task>
                         <task><name>Allow &lt;field.select&gt; and &lt;field.report&gt; to specify max number of selections a user can make.</name></task>
@@ -111,13 +107,7 @@
                     </task>
 
                     <task>
-                        <name>Navigator</name>
-                        <task><name>Allow navigator items to be shown/hidden dynamically.</name></task>
-                    </task>
-
-                    <task>
                         <name>Static SQL Statements</name>
-                        <task><name>Add paging capability for static queries (just like in Query Definition).</name></task>
                         <task><name>For each SQL statement package, generate a class so that each SQL statement defined in the XML becomes a method of that class.</name></task>
                         <task><name>Allow creating SQL statements with the same IDs but for different databases; at runtime, the proper SQL statement would be selected and executed based on the DB at runtime.</name></task>
                     </task>
@@ -146,6 +136,12 @@
                         <name>Tasks</name>
                         <task><name>exec-statement closing tag In populate-tasks tag, if we use exec-statement, and if we give a closing tag &lt;/exec-statement>, it gives an invalid SQL statement error. If we do not use the closing tag explicitly and if we use / to close in the exec-statement, then it works fine.</name></task>
                     </task>
+                    
+                    <task>
+                        <name>Navigator</name>
+                        <task><name>Allow navigator items to be shown/hidden dynamically.</name></task>
+                    </task>
+
                 </task>
 
                 <task>
@@ -153,19 +149,19 @@
                     <task>
                         <name>General</name>
                         <task><name>The ConnectionContext class should become the de facto standard class for managing connections so that transactions can be shared across tasks and the DAL.</name></task>
-			<task><name>Catch and notify user of undefined datatypes, etc. when generating schema/DAL</name></task>
+                        <task><name>Catch and notify user of undefined datatypes, etc. when generating schema/DAL</name></task>
                     </task>
 
                     <task>
                         <name>SchemaDoc</name>
-                        <task><name>For each table in the SchemaDoc, automatically generate Query Definitions.</name></task>
                         <task><name>For each table in the SchemaDoc, add/update/delete forms.</name></task>
+                        <task><name>Improve automatically generated table Query Definitions with more features.</name></task>
                         <task><name>Add SchemaDoc totals (tables, columns, etc) to the application Metrics.</name></task>
                         <task><name>Add sequences, composite forgeign keys to SchemaDoc.</name></task>
                         <task><name>Create cacheable ResultSets with configurable timeouts.</name></task>
                         <task><name>Add support for <a href="http://sourceforge.net/projects/csvjdbc/">CSV JDBC</a> Driver.</name></task>
                         <task><name>Add abbrev attribute for columns (just like tables).</name></task>
-                        <task><name>Allow sequence names to specified as an attribute of a column (instead of just being auto-generated).</name></task>
+                        <task><name>Allow sequence names to be specified as an attribute of a column (instead of just being auto-generated).</name></task>
                         <task><name>Consider creating a DDL skin that, instead of generating SQL DDL, generates Ant tasks that can create DDL for any database in a RDBMS-independent fashion.</name></task>
                         <task><name>Create new tags that would allow SQL statements like StatementManager to be placed into SchemaDocs. These SQL statements would allow arbitrary SQL in DAL classes.</name></task>
                     </task>
@@ -174,8 +170,8 @@
                         <name>Data Access Layer (DAL)</name>
                         <task><name>Review <a href="http://jrf.sourceforge.net/">jRelationalFramework</a> and <a href="http://alzabo.sourceforge.net/">Alzabo</a> for new DAL features.</name></task>
                         <task><name>For each getXXXByYYY() method add an existsXXXWithYYY() method to check for simple existence</name></task>
-                        <task><name>Try and catch maxlength and other DAL exceptions prior to the values getting to the JDBC driver.</name></task>
-                        <task><name>Implement bulk upload/download via XML or delimited files.</name></task>
+                        <task><name>Try and catch required, maxlength, and other DAL exceptions prior to the values getting to the JDBC driver.</name></task>
+                        <task><name>Add more features to the bulk upload/download via XML.</name></task>
                     </task>
                 </task>
 
@@ -185,6 +181,6 @@
                     <task><name>Add license agreements to all sample project files.</name></task>
                 </task>
             </task>
-		</project>
-	</section>
+        </project>
+    </section>
 </page>
