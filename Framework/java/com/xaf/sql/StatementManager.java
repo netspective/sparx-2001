@@ -648,6 +648,19 @@ public class StatementManager extends XmlSource
 	}
 
     /**
+     * Executes static (XML) SQL and returns true if any results were found
+     */
+    public boolean stmtRecordExists(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        boolean result = false;
+        ResultInfo ri = execute(dc, vc, dataSourceId, statementId, params);
+        if(ri.getResultSet().next())
+            result = true;
+        ri.close();
+        return result;
+    }
+
+    /**
      * Executes static (XML) SQL and returns the first column of the first row (single value)
      */
     public Object executeStmtGetValue(DatabaseContext dc, ValueContext vc, String dataSourceId, String statementId, Object[] params) throws StatementNotFoundException, NamingException, SQLException
@@ -725,6 +738,19 @@ public class StatementManager extends XmlSource
             dynamicSql.put(sql, si);
         }
         return execute(dc, vc, dataSourceId, si, params);
+    }
+
+    /**
+     * Executes dynamic (passed into method) SQL and returns true if any results were found
+     */
+    static public boolean sqlRecordExists(DatabaseContext dc, ValueContext vc, String dataSourceId, String sql, Object[] params) throws StatementNotFoundException, NamingException, SQLException
+    {
+        boolean result = false;
+        ResultInfo ri = executeSql(dc, vc, dataSourceId, sql, params);
+        if(ri.getResultSet().next())
+            result = true;
+        ri.close();
+        return result;
     }
 
     /**
