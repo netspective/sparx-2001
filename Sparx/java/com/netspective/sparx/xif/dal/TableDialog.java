@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: TableDialog.java,v 1.1 2002-12-23 05:03:45 shahid.shah Exp $
+ * $Id: TableDialog.java,v 1.2 2002-12-26 21:26:28 shahbaz.javeed Exp $
  */
 
 package com.netspective.sparx.xif.dal;
@@ -217,12 +217,12 @@ public class TableDialog extends Dialog
         }
 
         Row row = table.createRow();
-
-        // now grab all the field values
         row.populateDataByNames(dc);
 
         try
         {
+            cc.beginTransaction();
+
             switch(dc.getDataCommand())
             {
                 case DialogContext.DATA_CMD_ADD:
@@ -240,6 +240,8 @@ public class TableDialog extends Dialog
                     dc.setLastRowManipulated(row);
                     break;
             }
+
+            cc.commitActiveTransaction();
             handlePostExecute(writer, dc);
         }
         catch (Exception e)
