@@ -51,12 +51,9 @@ Build targets:
 
 	    <property environment="env"/>
 
-	    <property name="CLASSPATH" value="${env.CLASSPATH}"/>
-
 	    <!-- Compile the BuildConfiguration class -->
 	    <javac srcdir="com/xaf" destdir="${build.classes.dir}"
-			includes="BuildConfiguration.java,ant/BuildConfigurationTask.java,ant/GenerateBuildLogClassTask.java"
-            classpath="${CLASSPATH}"
+		includes="BuildConfiguration.java,ant/BuildConfigurationTask.java,ant/GenerateBuildLogClassTask.java,ant/ClassPathTask.java"
 			debug="${debug}"
 			optimize="${optimize}"
 			deprecation="off"/>
@@ -68,6 +65,10 @@ Build targets:
 		<!-- put the build configuration items into the properties (com.xaf.ant.BuildConfigurationTask) -->
 	    <taskdef name="config" classname="com.xaf.ant.BuildConfigurationTask" classpath="${build.classes.dir}"/>
 		<config/>
+
+		<!-- show the current class path -->
+		<taskdef name="cp" classname="com.xaf.ant.ClassPathTask" classpath="${build.classes.dir}"/>
+		<cp listall="yes"/>
 
 	    <property name="lib-ext.dir" value="${lib.dir}/${build.libitem.path.prefix}"/>
         <mkdir dir="${lib-ext.dir}"/>
@@ -90,7 +91,6 @@ Build targets:
 
         <!-- Compile XAF components -->
         <javac srcdir="." destdir="${build.classes.dir}"
-            classpath="${CLASSPATH}"
             debug="${debug}"
             optimize="${optimize}"
             deprecation="off" >
@@ -121,7 +121,6 @@ Build targets:
     <target name="javadoc" depends="init">
         <mkdir dir="${javadoc.dir}" />
         <javadoc packagenames="com.xaf.*"
-             classpath="${CLASSPATH}"
              sourcepath="."
              destdir="${javadoc.dir}"
              author="true"

@@ -1,40 +1,24 @@
-SAVECP=$CLASSPATH
+#!/bin/sh
 
-JAVA_UTILS=/opt/java
+SPARX_HOME=$HOME/Projects/Framework
+export SPARX_HOME
 
-if ["$ANT_HOME" = ""]; then
-	export ANT_HOME=$JAVA_UTILS/jakarta-ant-1.3
-fi
+BUILD_FILE=build.xml
 
-if ["$XERCES_JAR" = ""]; then
-	export XERCES_JAR=$JAVA_UTILS/xerces-1_4_1/xerces.jar
-fi
+JAVA_LIB=/home/shared/utils/java/lib
+APP_SERVER_LIB=/home/shared/utils/java/app-servers/jakarta-tomcat-4.0.1/common/lib
 
-if ["$XALAN_JAR" = ""]; then
-	export XALAN_JAR=$JAVA_UTILS/xalan-j_2_1_0/bin/xalan.jar
-fi
+ANT_HOME=$JAVA_LIB/jakarta-ant-1.4.1
+XERCES_JAR=$JAVA_LIB/xerces-1_4_4/xerces.jar
+XALAN_JAR=$JAVA_LIB/xalan-j_2_1_0/bin/xalan.jar
+#XALAN_JAR=$JAVA_LIB/xalan-j_2_2_D14/bin/xml-apis.jar:$JAVA_LIB/xalan-j_2_2_D14/bin/xalan.jar
+OROMATCHER_JAR=$JAVA_LIB/jakarta-oro-2.0.4/jakarta-oro-2.0.4.jar
+LOG4J_JAR=$JAVA_LIB/jakarta-log4j-1.1.3/dist/lib/log4j.jar
+SERVLETAPI_JAR=$APP_SERVER_LIB/servlet.jar
+JDBC2X_JAR=$APP_SERVER_LIB/jdbc2_0-stdext.jar
+FRAMEWORK_JAR=$SPARX_HOME/lib/xaf-1_2_8.jar
+JAVACP=$JAVA_HOME/lib/tools.jar
 
-if [ "$OROMATCHER_JAR" = "" ]; then
-	export OROMATCHER_JAR=$JAVA_UTILS/jakarta-oro-2.0.2/jakarta-oro-2.0.2.jar
-fi
+USE_CLASS_PATH=$APP_CLASSES:$XERCES_JAR:$FRAMEWORK_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR:$XALAN_JAR:$JAVACP
 
-if [ "$LOG4J_JAR" = "" ]; then
-	export LOG4J_JAR=$JAVA_UTILS/jakarta-log4j-1.1.3/dist/lib/log4j.jar
-fi
-
-if [ "$SERVLETAPI_JAR" = "" ]; then
-	export SERVLETAPI_JAR=/usr/local/resin/lib/jsdk22.jar
-fi
-
-if [ "$JDBC2X_JAR" = "" ]; then
-	export JDBC2X_JAR=/usr/local/resin/lib/jdbc2_0-stdext.jar
-fi
-
-export CLASSPATH=$CLASSPATH:$ANT_HOME/lib/ant.jar:$XERCES_JAR:$XALAN_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR
-
-echo $CLASSPATH
-
-$ANT_HOME/bin/ant -buildfile build.xml $1
-
-export CLASSPATH=$SAVECP
-export SAVECP=
+java -Dant.home=$ANT_HOME -classpath $USE_CLASS_PATH:$ANT_HOME/lib/ant.jar org.apache.tools.ant.Main -Dbasedir=$APP_ROOT -buildfile $BUILD_FILE $1 $2 $3 $4 $5
