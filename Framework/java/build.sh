@@ -1,8 +1,5 @@
 #!/bin/sh
 
-SPARX_HOME=$HOME/Projects/Framework
-export SPARX_HOME
-
 BUILD_FILE=build.xml
 
 JAVA_LIB=/home/shared/utils/java/lib
@@ -16,7 +13,6 @@ OROMATCHER_JAR=$JAVA_LIB/jakarta-oro-2.0.4/jakarta-oro-2.0.4.jar
 LOG4J_JAR=$JAVA_LIB/jakarta-log4j-1.1.3/dist/lib/log4j.jar
 SERVLETAPI_JAR=$APP_SERVER_LIB/servlet.jar
 JDBC2X_JAR=$APP_SERVER_LIB/jdbc2_0-stdext.jar
-FRAMEWORK_JAR=$SPARX_HOME/lib/xaf-1_2_8.jar
 JAVACP=$JAVA_HOME/lib/tools.jar
 
 USE_CLASS_PATH=$APP_CLASSES:$XERCES_JAR:$FRAMEWORK_JAR:$OROMATCHER_JAR:$LOG4J_JAR:$SERVLETAPI_JAR:$JDBC2X_JAR:$XALAN_JAR:$JAVACP
