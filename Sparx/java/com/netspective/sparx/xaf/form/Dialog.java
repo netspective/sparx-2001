@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.3 2002-02-17 14:03:15 snshah Exp $
+ * $Id: Dialog.java,v 1.4 2002-07-12 21:19:59 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -85,6 +85,20 @@ import com.netspective.sparx.xaf.task.TaskInitializeException;
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
 
+/**
+ * The <code>Dialog</code> object contains the dialog/form's structural information, field types, rules, and
+ * execution logic. It is cached and reused whenever needed. It contains methods to create the HTML for display,
+ * to perform client-side validations, and to perform server-side validations.
+ * <p>
+ * <center>
+ * <img src="doc-files/dialog-1.jpg"/>
+ * </center>
+ * <p>
+ * The dialog execution logic can contain different actions
+ * such as SQL and business actions. These actions may be specified as XML or can point to any Java action classes.
+ * For dialog objects that need more complex actions for data population, validation,
+ * and execution, the <code>Dialog</code> class can be subclassed to implement customized actions.
+ */
 public class Dialog
 {
     // NOTE: when adding new flags, make sure to create them before the
@@ -99,6 +113,9 @@ public class Dialog
     static public final int DLGFLAG_ENCTYPE_MULTIPART_FORMDATA = DLGFLAG_HIDE_READONLY_HINTS * 2;
     static public final int DLGFLAG_CUSTOM_START = DLGFLAG_ENCTYPE_MULTIPART_FORMDATA * 2;
 
+    /**
+     * Request parameter which indicates whether or not the dialog should be automatically executed when it is being loaded
+     */
     static public final String PARAMNAME_AUTOEXECUTE = "_d_exec";
     static public final String PARAMNAME_OVERRIDE_SKIN = "_d_skin";
     static public final String PARAMNAME_DIALOGPREFIX = "_d.";
@@ -122,14 +139,32 @@ public class Dialog
     */
     static public final String PARAMNAME_DATA_CMD_INITIAL = "data_cmd";
     static public final String PARAMNAME_DATA_CMD = ".data_cmd";
+    /**
+     * Add data command. In 'Add' mode, the default action button is a 'Save' button.
+     */
     static public final String PARAMVALUE_DATA_CMD_ADD = "add";
+    /**
+     * Edit data command. IN 'Edit' mode, the default action button is a 'Apply' button.
+     */
     static public final String PARAMVALUE_DATA_CMD_EDIT = "edit";
+    /**
+     * Delete data command. In 'Delete' mode, all fields are read-only and the default
+     * action button is a 'Delete' button.
+     */
     static public final String PARAMVALUE_DATA_CMD_DELETE = "delete";
+    /**
+     * Confirm data command
+     */
     static public final String PARAMVALUE_DATA_CMD_CONFIRM = "confirm";
+    /**
+     * Print data command
+     */
     static public final String PARAMVALUE_DATA_CMD_PRINT = "print";
 
-    // This flag is used to search for a session parameter indicating whether or not
-    // the dialog is being used in an application or ACE.
+    /**
+     * This flag is used to search for a session parameter indicating whether or not
+     * the dialog is being used in an application or ACE.
+     */
     public static final String ENV_PARAMNAME = "dialog_environment";
 
     private ArrayList fields = new ArrayList();
@@ -149,12 +184,21 @@ public class Dialog
     private Class directorClass = DialogDirector.class;
     private SingleValueSource includeJSFile = null;
 
+    /**
+     * Create a dialog
+     */
     public Dialog()
     {
         layoutColumnsCount = 1;
         flags = (DLGFLAG_LOOP_DATA_ENTRY | DLGFLAG_APPEND_WHEN_LOOPING);
     }
 
+    /**
+     * Create a dialog
+     *
+     * @param aName dialog name
+     * @param aHeading dialog heading
+     */
     public Dialog(String aName, String aHeading)
     {
         name = aName;
@@ -163,61 +207,122 @@ public class Dialog
         flags = (DLGFLAG_LOOP_DATA_ENTRY | DLGFLAG_APPEND_WHEN_LOOPING);
     }
 
+    /**
+     * Gets the dialog name
+     *
+     * @return String name
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Gets the dialog name defined in XML
+     *
+     * @return String
+     */
     public String getNameFromXml()
     {
         return nameFromXml;
     }
 
+    /**
+     * Sets the dialog name
+     *
+     * @param newName dialog name
+     */
     public void setName(String newName)
     {
         name = newName;
     }
 
+    /**
+     * Gets the flags as a bitmapped value
+     *
+     * @return long
+     */
     public final long getFlags()
     {
         return flags;
     }
 
+    /**
+     * Checks to see if a flag is set
+     *
+     * @param flag      bit-mapped value
+     * @return boolean  True if the flag is set
+     */
     public final boolean flagIsSet(long flag)
     {
         return (flags & flag) == 0 ? false : true;
     }
 
+    /**
+     * Sets the flag
+     *
+     * @param flag bit-mapped value
+     */
     public final void setFlag(long flag)
     {
         flags |= flag;
     }
 
+    /**
+     * Clears the flag
+     *
+     * @para, flag bit-mapped value
+     */
     public final void clearFlag(long flag)
     {
         flags &= ~flag;
     }
 
+    /**
+     * Gets the dialog heading as a value source
+     *
+     * @return SingleValueSource
+     */
     public SingleValueSource getHeading()
     {
         return heading;
     }
 
+    /**
+     * Sets the heading of the dialog
+     *
+     * @param value value source string
+     */
     public void setHeading(String value)
     {
         heading = ValueSourceFactory.getSingleOrStaticValueSource(value);
     }
 
+    /**
+     * Sets the heading of the dialog
+     *
+     * @param vs value source object
+     */
     public void setHeading(SingleValueSource vs)
     {
         heading = vs;
     }
 
+    /**
+     * Checks to see if the loop entries flag is set
+     *
+     * @return boolean
+     */
     public final boolean loopEntries()
     {
         return flagIsSet(DLGFLAG_LOOP_DATA_ENTRY);
     }
 
+    /**
+     * Sets the loop entries flag
+     *
+     * @param value
+     */
     public final void setLoopEntries(boolean value)
     {
         if(value) setFlag(DLGFLAG_LOOP_DATA_ENTRY); else clearFlag(DLGFLAG_LOOP_DATA_ENTRY);
@@ -297,27 +402,48 @@ public class Dialog
     {
         return executeTasks;
     }
-
+    /**
+     * Get a list of dialog fields
+     *
+     * @return List
+     */
     public final List getFields()
     {
         return fields;
     }
 
+    /**
+     * Indicates whether or not to retain the HTTP request parameters as dialog fields
+     *
+     * @return boolean True if the request parameters are retained in the dialog
+     */
     public final boolean retainRequestParams()
     {
         return flagIsSet(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS) || (retainRequestParams != null);
     }
-
+    /**
+     * Get the retained request parameters as a string array
+     *
+     * @return String[]
+     */
     public final String[] getRetainRequestParams()
     {
         return retainRequestParams;
     }
 
+    /**
+     * Set the retained request parameters
+     *
+     * @param  String[] array of string values
+     */
     public final void setRetainRequestParams(String[] value)
     {
         retainRequestParams = value;
     }
 
+    /**
+     *
+     */
     public final void setRetainAllRequestParams(boolean value)
     {
         if(value) setFlag(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS); else clearFlag(DLGFLAG_RETAIN_ALL_REQUEST_PARAMS);
@@ -348,6 +474,11 @@ public class Dialog
         return includeJSFile;
     }
 
+    /**
+     * Get the dialog context class for the dialog object
+     *
+     * @return Class
+     */
     public static Class findDialogContextClass(String packageName, Element elem) throws ClassNotFoundException
     {
         Class dcClass = null;
@@ -382,6 +513,12 @@ public class Dialog
         dcClass = cls;
     }
 
+    /**
+     * Import the dialog configuration from XML
+     *
+     * @param packageName   Dialog package name
+     * @param elem          the dialog XML element
+     */
     public void importFromXml(String packageName, Element elem)
     {
         pkgName = packageName;
@@ -546,17 +683,31 @@ public class Dialog
         }
     }
 
+    /**
+     * Clear all the dialog fields. Also clear the <code>DLGFLAG_CONTENTS_FINALIZED</code> flag.
+     */
     public void clearFields()
     {
         fields.clear();
         clearFlag(DLGFLAG_CONTENTS_FINALIZED);
     }
 
+    /**
+     * Add a dialog field
+     *
+     * @param field datlog field
+     */
     public void addField(DialogField field)
     {
         fields.add(field);
     }
 
+    /**
+     * Get the dialog field by its qualified name
+     *
+     * @param qualifiedName  qualified field name
+     * @return DialogField
+     */
     public DialogField findField(String qualifiedName)
     {
         Iterator i = fields.iterator();
@@ -571,6 +722,9 @@ public class Dialog
         return null;
     }
 
+    /**
+     * Loops through each dialog field and finalize them.
+     */
     public void finalizeContents()
     {
         Iterator i = fields.iterator();
@@ -590,6 +744,13 @@ public class Dialog
         setFlag(DLGFLAG_CONTENTS_FINALIZED);
     }
 
+    /**
+     * Process the tasks that has been registered for populating the dialog fields
+     * These are the tasks that has been registered using the &lt;populate-tasks&gt; XML tag.
+     *
+     * @param dc dialog context
+     *
+     */
     public void processPopulateTasks(DialogContext dc)
     {
         if(populateTasks != null && populateTasks.isValid())
@@ -612,6 +773,13 @@ public class Dialog
         }
     }
 
+    /**
+     * Process the tasks that has been configured as execution actions of the dialog.
+     * These are the tasks that has been configured using the &lt;execute-tasks&gt; XML Tag.
+     *
+     * @param writer    output stream for error messages
+     * @param dc        dialog context
+     */
     public void processExecuteTasks(Writer writer, DialogContext dc) throws IOException
     {
         if(executeTasks != null && executeTasks.isValid())
@@ -683,6 +851,11 @@ public class Dialog
         }
     }
 
+    /**
+     * Execute the actions of the dialog
+     * @param writer output stream for error message
+     * @param dc dialog context
+     */
     public void execute(Writer writer, DialogContext dc) throws IOException
     {
         processExecuteTasks(writer, dc);
@@ -691,6 +864,17 @@ public class Dialog
             writer.write("Need to add Dialog actions, provide listener, or override Dialog.execute(DialogContext)." + dc.getDebugHtml());
     }
 
+    /**
+     * Create a dialog context for this dialog
+     *
+     * @param context   servlet context
+     * @param servlet   Servlet object
+     * @param request   Http servlet request
+     * @param response  Http servlet response
+     * @param skin      dialog skin
+     *
+     * @return DialogContext
+     */
     public DialogContext createContext(ServletContext context, Servlet servlet, HttpServletRequest request, HttpServletResponse response, DialogSkin skin)
     {
         DialogContext dc = null;
@@ -706,6 +890,12 @@ public class Dialog
         return dc;
     }
 
+    /**
+     * Initially populates the dialog with values in display format and then calculates the state of the dialog.
+     * If the dialog is in execute mode, the values are then formatted for submittal.
+     *
+     * @param dc dialog context
+     */
     public void prepareContext(DialogContext dc)
     {
         if(!flagIsSet(DLGFLAG_CONTENTS_FINALIZED))
@@ -718,6 +908,13 @@ public class Dialog
 
     }
 
+    /**
+     * Create and write the HTML for the dialog
+     *
+     * @param writer                    stream to write the HTML
+     * @param dc                        dialog context
+     * @param contextPreparedAlready    flag to indicate whether or not the context has been prepared
+     */
     public void renderHtml(Writer writer, DialogContext dc, boolean contextPreparedAlready) throws IOException
     {
         if(!contextPreparedAlready)
@@ -751,6 +948,16 @@ public class Dialog
         }
     }
 
+    /**
+     * Create and write the HTML for the dialog. This method calls <code>renderHtml(Writer writer, DialogContext dc, boolean contextPreparedAlready)</code>
+     * with the context flag set to <code>false</code>.
+     *
+     * @param context servlet context
+     * @param servlet servlet object
+     * @param request Http servlet request
+     * @param response Http servlet response
+     * @param skin dialog skin
+     */
     public void renderHtml(ServletContext context, Servlet servlet, HttpServletRequest request, HttpServletResponse response, DialogSkin skin) throws IOException
     {
         DialogContext dc = createContext(context, servlet, request, response, skin);
@@ -803,6 +1010,12 @@ public class Dialog
         return code.toString();
     }
 
+    /**
+     * Indicates whether not the dialog needs validation
+     *
+     * @param dc dialog context
+     * @return boolean
+     */
     public boolean needsValidation(DialogContext dc)
     {
         int validateFieldsCount = 0;
@@ -818,6 +1031,12 @@ public class Dialog
         return validateFieldsCount > 0 ? true : false;
     }
 
+    /**
+     * Checks whether or not the dailog is valid for the execution
+     *
+     * @param dc dialog context
+     * @return boolean
+     */
     public boolean isValid(DialogContext dc)
     {
         int valStage = dc.getValidationStage();

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.8 2002-07-10 20:56:24 aye.thu Exp $
+ * $Id: DialogField.java,v 1.9 2002-07-12 21:19:59 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -154,6 +154,11 @@ public class DialogField
         caption = aCaption != null ? ValueSourceFactory.getSingleOrStaticValueSource(aCaption) : null;
     }
 
+    /**
+     * Checks to see if the field requires multi-part endcoding
+     *
+     * @return boolean
+     */
     public boolean requiresMultiPartEncoding()
     {
         // if any child requires multi part encoding, then return true (this will take of things recursively)
@@ -172,6 +177,13 @@ public class DialogField
         return false;
     }
 
+    /**
+     * Checks to see if the default value is a list value source. Returns <code>false</code>
+     * always for a <code>DialogField</code> object but child classes requiring a default
+     * list value source will return <code>true</code>.
+     *
+     * @return boolean
+     */
     public boolean defaultIsListValueSource()
     {
         return false;
@@ -600,11 +612,21 @@ public class DialogField
         errorMessage = newMessage;
     }
 
+    /**
+     * Gets the default value of the field as a value source
+     *
+     * @return SingleValueSource    value source containing the field's value
+     */
     public final SingleValueSource getDefaultValue()
     {
         return defaultValue;
     }
 
+    /**
+     * Sets the default value for the field
+     *
+     * @param value value source containing the value
+     */
     public void setDefaultValue(SingleValueSource value)
     {
         defaultValue = value;
@@ -620,11 +642,21 @@ public class DialogField
         popup = value;
     }
 
+    /**
+     * Gets a list of children fields
+     *
+     * @return List list of children fields
+     */
     public final List getChildren()
     {
         return children;
     }
 
+    /**
+     * Adds a child field.
+     *
+     * @param field child field
+     */
     public void addChildField(DialogField field)
     {
         for(int i = 0; i < CHILD_CARRY_FLAGS.length; i++)
@@ -642,22 +674,42 @@ public class DialogField
             field.setQualifiedName(qualifiedName + "." + field.getSimpleName());
     }
 
+    /**
+     * Gets a list of errors
+     *
+     * @return List list of errors
+     */
     public final List getErrors()
     {
         return errors;
     }
 
+    /**
+     * Adds a error message for the field
+     *
+     * @param msg error message
+     */
     public final void addErrorMessage(String msg)
     {
         if(errors == null) errors = new ArrayList();
         errors.add(msg);
     }
 
+    /**
+     * Get a list of conditional actions
+     *
+     * @return List a list of conditional actions
+     */
     public final List getConditionalActions()
     {
         return conditionalActions;
     }
 
+    /**
+     * Adds a conditional action
+     *
+     * @param action conditional action object
+     */
     public void addConditionalAction(DialogFieldConditionalAction action)
     {
         if(conditionalActions == null) conditionalActions = new ArrayList();
@@ -669,7 +721,7 @@ public class DialogField
     }
 
     /**
-     * get all the javascripts defined for this field
+     * Gets all the javascripts defined for this field
      *
      * @return ArrayList
      */
@@ -679,7 +731,7 @@ public class DialogField
     }
 
     /**
-     * Add a javascript to the list of scripts defined for this field
+     * Adds a javascript to the list of scripts defined for this field
      *
      * @param script custom js object
      */
@@ -717,6 +769,12 @@ public class DialogField
         return null;
     }
 
+    /**
+     * Set the qualified name of the field and its' children fields. The qualified name of a field is a sum of
+     * the parent field's qualified name and the field's simple name.
+     *
+     * @param dialog parent dialog
+     */
     public void finalizeQualifiedName(Dialog dialog)
     {
         String newQName = simpleName;
@@ -736,6 +794,12 @@ public class DialogField
         }
     }
 
+    /**
+     * Finalize the dialog field's contents: loops through each conditional action of the field to
+     * assign partner fields and loops through each child field to finalize their contents.
+     *
+     * @param dialog parent dialog
+     */
     public void finalizeContents(Dialog dialog)
     {
         if(conditionalActions != null)
@@ -776,12 +840,22 @@ public class DialogField
     {
         return flags;
     }
-
+    /**
+     * Check if a flag is set
+     *
+     * @param flag      bit-mapped flag
+     * @return boolean  True if the passed in flag is set, else False
+     */
     public final boolean flagIsSet(long flag)
     {
         return (flags & flag) == 0 ? false : true;
     }
 
+    /**
+     * Set a flag
+     *
+     * @param flag bit-mapped flag
+     */
     public final void setFlag(long flag)
     {
         flags |= flag;
@@ -795,6 +869,11 @@ public class DialogField
         }
     }
 
+    /**
+     * Cleat a flag
+     *
+     * @param flag bit-mapped flag
+     */
     public final void clearFlag(long flag)
     {
         flags &= ~flag;
@@ -808,6 +887,12 @@ public class DialogField
         }
     }
 
+    /**
+     * Indicates whether or not the field is a required field. It checks the  <code>FLDFLAG_REQUIRED</code>
+     * flag of the field and its' children.
+     *
+     * @param dc  dialog context
+     */
     public final boolean isRequired(DialogContext dc)
     {
         String qName = getQualifiedName();
@@ -832,6 +917,13 @@ public class DialogField
         return false;
     }
 
+    /**
+     * Checks whether or not the field is visible. The check is done by seeing if the invisible flag, <code>FLDFLAG_INVISIBLE</code>
+     * is set or not and by making sure each partner field of its' conditionals have a value or not.
+     *
+     * @param dc dialog context
+     * @return boolean True if the field is visible
+     */
     public final boolean isVisible(DialogContext dc)
     {
         if(flagIsSet(FLDFLAG_HAS_CONDITIONAL_DATA))

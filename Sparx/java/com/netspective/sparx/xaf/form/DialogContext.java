@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.12 2002-07-03 06:16:55 aye.thu Exp $
+ * $Id: DialogContext.java,v 1.13 2002-07-12 21:19:59 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -110,15 +110,13 @@ import com.netspective.sparx.xif.db.DatabaseContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 
 /**
- * A dialog context is a manager for handling the behavior of a dialog. While the <code>Dialog</code> object is more
- * of a pure container for data, the <code>DialogContext</code> object provides the logic and functionality of the dialog.
- * It provids a variety of dialog information such as the state a dialog is in and the value of a dialog field. It
- * controls dialog behavior by keeping track of and guiding the dialog through the different
- * stages. The dialog context also handles the population of values into the fields of a dialog from a SQL query and
- * execution of insert or update SQL statements using the dialog field values.
+ * A dialog context functions as the controller of the dialog, tracking and managing field state and field data.
+ * A new <code>DialogContext</code> object is created for each HTTP request coming from a JSP even though
+ * the dialogs are cached.
  * <p>
- * A default <code>DialogContext</code> object is created when the dialog is displayed, resulting in a unique context object
- * for each dialog object. For most occasions, the default <code>DialogContext</code> object should be sufficient but
+ * <img src="doc-files/dialogcontext-1.jpg"/>
+ * <p>
+ * For most occasions, the default <code>DialogContext</code> object should be sufficient but
  * for special curcumstances when the behavior of a dialog needs to be modified, the <code>DialogContext</code> class
  * can be extended (inherited) to create a customzied dialog context.
  *
