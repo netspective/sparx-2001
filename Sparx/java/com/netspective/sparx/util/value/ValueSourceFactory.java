@@ -51,14 +51,12 @@
  */
  
 /**
- * $Id: ValueSourceFactory.java,v 1.6 2002-11-03 23:25:25 shahid.shah Exp $
+ * $Id: ValueSourceFactory.java,v 1.7 2002-12-26 19:32:50 shahid.shah Exp $
  */
 
 package com.netspective.sparx.util.value;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -114,6 +112,7 @@ public class ValueSourceFactory implements Factory
         srcClasses.put("report-record-url", RecordEditorUrlValue.class);
         srcClasses.put("java", JavaExpressionValue.class);
         srcClasses.put("custom-sql", CustomSqlValue.class); /* special-purpose ValueSource used only in DmlTask.java */
+        srcClasses.put("image-src", ImageSourceValue.class); /* special-purpose ValueSource used only in DmlTask.java */
     }
 
     public static Map getValueSourceClasses()
@@ -164,7 +163,7 @@ public class ValueSourceFactory implements Factory
                     if(descr != null)
                     {
                         Element vsDescrElem = doc.createElement("descr");
-                        vsDescrElem.setNodeValue(vsDoc.getDescription());
+                        vsDescrElem.appendChild(doc.createTextNode(vsDoc.getDescription()));
                         childElem.appendChild(vsDescrElem);
                     }
                 }
@@ -172,7 +171,7 @@ public class ValueSourceFactory implements Factory
             catch(Exception e)
             {
                 Element vsDescrElem = doc.createElement("descr");
-                vsDescrElem.setNodeValue(e.toString());
+                vsDescrElem.appendChild(doc.createTextNode(e.toString()));
                 childElem.appendChild(vsDescrElem);
             }
         }
