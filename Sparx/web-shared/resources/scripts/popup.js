@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: popup.js,v 1.6 2003-04-23 21:06:22 aye.thu Exp $
+ * $Id: popup.js,v 1.7 2003-05-09 15:06:04 aye.thu Exp $
  */
 
 //****************************************************************************
@@ -215,7 +215,7 @@ function DialogFieldPopup(sourceForm, sourceField, actionURL, windowClass, close
         // expecting the last variable as an array object containing field names from which to extract values and
 	    // append to the popup URL
 	    var extractArray = arguments[startFillArg+1];
-	    //this.appendActionUrl(extractArray);
+	    this.appendActionUrl(extractArray);
     }
 
 	// the remaining are object-based methods
@@ -226,7 +226,7 @@ function DialogFieldPopup(sourceForm, sourceField, actionURL, windowClass, close
 	this.doPopup();
 }
 
-/*
+
 function DialogFieldPopup_appendActionUrl(valueArray)
 {
     // test to make sure it is an array
@@ -240,13 +240,15 @@ function DialogFieldPopup_appendActionUrl(valueArray)
             {
 		        control = field.getControl(this.dialog);
 		        // check if the Url already contains a '?'
-		        this.actionUrl = this.actionUrl + control.value;
-
+		        if (this.actionURL.indexOf('?') != -1)
+		            this.actionURL = this.actionURL + "&" + fieldName + "=" + control.value;
+		        else
+                    this.actionURL = this.actionURL + "?" + fieldName + "=" + control.value;
 		    }
         }
     }
 }
-*/
+
 function DialogFieldPopup_populateControl(value)
 {    
 	this.controlsInfo[0].populateValue(value);
