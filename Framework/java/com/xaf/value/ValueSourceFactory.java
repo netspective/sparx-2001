@@ -1,6 +1,7 @@
 package com.xaf.value;
 
 import java.util.*;
+import org.w3c.dom.*;
 
 public class ValueSourceFactory
 {
@@ -30,8 +31,30 @@ public class ValueSourceFactory
         srcClasses.put("servlet-context-init-param", ServletContextInitParamValue.class);
         srcClasses.put("servlet-context-path", ServletContextPathValue.class);
         srcClasses.put("create-app-url", ServletContextUriValue.class);
+        srcClasses.put("config", ConfigurationValue.class);
+        srcClasses.put("config-expr", ConfigurationExprValue.class);
         defaultsAvailable = true;
     }
+
+	public static void createCatalog(Element parent)
+	{
+		if(! defaultsAvailable) setupDefaults();
+
+		Document doc = parent.getOwnerDocument();
+		Element factoryElem = doc.createElement("factory");
+		parent.appendChild(factoryElem);
+		factoryElem.setAttribute("name", "Value Sources");
+		factoryElem.setAttribute("class", ValueSourceFactory.class.getName());
+		for(Iterator i = srcClasses.entrySet().iterator(); i.hasNext(); )
+		{
+			Map.Entry entry = (Map.Entry) i.next();
+
+			Element childElem = doc.createElement("value-source");
+			childElem.setAttribute("name", (String) entry.getKey());
+			childElem.setAttribute("class", ((Class) entry.getValue()).getName());
+			factoryElem.appendChild(childElem);
+		}
+	}
 
 	public static SingleValueSource getSingleValueSource(String source)
 	{
