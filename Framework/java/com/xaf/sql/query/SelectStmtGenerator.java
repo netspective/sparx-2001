@@ -98,8 +98,9 @@ public class SelectStmtGenerator
 		}
 
 		List conds = select.getConditions();
-		int condCount = conds.size();
-		for(int c = 0; c < condCount; c++)
+		int condsAvailCount = conds.size();
+        int condsUsedCount = 0;
+		for(int c = 0; c < condsAvailCount; c++)
 		{
 			QueryCondition cond = (QueryCondition) conds.get(c);
             if(cond.removeIfValueIsNull())
@@ -109,6 +110,7 @@ public class SelectStmtGenerator
                     continue;
             }
 
+            condsUsedCount++;
 			QueryField field = cond.getField();
 			if(field != null)
 				addJoin(field);
@@ -162,15 +164,15 @@ public class SelectStmtGenerator
 		}
 
 		boolean haveCondWheres = false;
-		int condLast = condCount-1;
-		if(condCount > 0)
+		int condLast = condsUsedCount-1;
+		if(condsUsedCount > 0)
 		{
 			if(haveJoinWheres)
 				sql.append(" and (\n");
 			else
 				sql.append("where\n  (\n");
 
-			for(int c = 0; c < condCount; c++)
+			for(int c = 0; c < condsAvailCount; c++)
 			{
 				QueryCondition cond = (QueryCondition) conds.get(c);
                 if(cond.removeIfValueIsNull())
@@ -201,7 +203,8 @@ public class SelectStmtGenerator
 				first = true;
 			}
 
-			for(int we = 0; we < condCount; we++)
+            int whereExprsCount = whereExprs.size();
+			for(int we = 0; we < whereExprsCount; we++)
 			{
 				SqlWhereExpression expr = (SqlWhereExpression) whereExprs.get(we);
 				if(first)
