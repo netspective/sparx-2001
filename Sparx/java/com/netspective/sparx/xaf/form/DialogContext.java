@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.24 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.25 2002-11-28 21:13:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -78,17 +78,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.net.URLEncoder;
+import java.net.URLDecoder;
 
 import javax.naming.NamingException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.oro.text.perl.Perl5Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -157,6 +159,16 @@ public class DialogContext extends ServletValueContext
         {
             field = aField;
             flags = field.getFlags();
+            if(runSequence == 1 && ((flags & DialogField.FLDFLAG_PERSIST) != 0))
+            {
+                Cookie[] cookies = ((HttpServletRequest) request).getCookies();
+                for(int i =0; i < cookies.length; i++)
+                {
+                    Cookie cookie = cookies[i];
+                    if(cookie.getName().equals(field.getCookieName()))
+                        value = URLDecoder.decode(cookie.getValue());
+                }
+            }
 
             switch(dataCmd)
             {
@@ -176,6 +188,16 @@ public class DialogContext extends ServletValueContext
                     // when in "delete" mode, all the fields should be read-only
                     flags |= DialogField.FLDFLAG_READONLY;
                     break;
+            }
+        }
+
+        public void persistValue()
+        {
+            if((flags & DialogField.FLDFLAG_PERSIST) != 0 && (value != null))
+            {
+                Cookie cookie = new Cookie(field.getCookieName(), URLEncoder.encode(value));
+                cookie.setMaxAge(60 * 60 * 24 * 365); // 1 year
+                ((HttpServletResponse) response).addCookie(cookie);
             }
         }
 
@@ -441,6 +463,16 @@ public class DialogContext extends ServletValueContext
         LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
     }
 
+    public void persistValues()
+    {
+        Iterator i = fieldStates.values().iterator();
+        while(i.hasNext())
+        {
+            DialogFieldState state = (DialogFieldState) i.next();
+            state.persistValue();
+        }
+    }
+
     public boolean isRedirectDisabled()
     {
         return redirectDisabled;
@@ -484,7 +516,7 @@ public class DialogContext extends ServletValueContext
         if(response.isCommitted())
             skin.renderRedirectHtml(writer, this, redirectToUrl);
         else
-            ((HttpServletResponse) response).sendRedirect(redirectToUrl);
+            response.sendRedirect(redirectToUrl);
     }
 
     /**
@@ -757,7 +789,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Retrieve dialog context information from a XML
      *
-     * @param String XML file
+     * @param xml XML file
      * @throws ParserConfigurationException if an XML parsing exception occurred
      * @throws SAXException SAX Exception
      * @throws IOException if error occurred in reading the XML file
@@ -957,7 +989,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Gets the number of times the dialog has been ran
      *
-     * @param int sequence number
+     * @return int sequence number
      */
     public int getRunSequence()
     {
@@ -967,7 +999,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Gets the number of times the dialog has been executed
      *
-     * @param int execution count
+     * @return int execution count
      */
     public int getExecuteSequence()
     {
@@ -1002,7 +1034,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Returns the active mode of the dialog
      *
-     * @param char Mode
+     * @return char Mode
      */
     public char getActiveMode()
     {
@@ -1012,7 +1044,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Returns what the next mode of the dialog is
      *
-     * @param char Mode
+     * @return char Mode
      */
     public char getNextMode()
     {
@@ -1042,7 +1074,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Return true if the "pending" button was pressed in the dialog.
      *
-     * @param boolean
+     * @return boolean
      */
     public boolean isPending()
     {
@@ -1070,7 +1102,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Returns the <code>DialogSkin</code> object the dialog is using for its display
      *
-     * @param DialogSkin dialog skin
+     * @return DialogSkin dialog skin
      */
     public DialogSkin getSkin()
     {
@@ -1105,7 +1137,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Sets the current debug flags
      *
-     * @return int data command
+     * @param flags data command
      */
     public void setDebugFlags(int flags)
     {
@@ -1115,7 +1147,7 @@ public class DialogContext extends ServletValueContext
     /**
      * Sets the current debug flags
      *
-     * @return int data command
+     * @param flagsText flags as text
      */
     public void setDebugFlags(String flagsText)
     {
@@ -1613,7 +1645,7 @@ public class DialogContext extends ServletValueContext
 
         for(Iterator i = state.errorMessages.iterator(); i.hasNext();)
         {
-            if(((String) i.next()).equals(message))
+            if(i.next().equals(message))
                 return;
         }
 
@@ -1648,7 +1680,7 @@ public class DialogContext extends ServletValueContext
 
         for(Iterator i = dlgErrorMessages.iterator(); i.hasNext();)
         {
-            if(((String) i.next()).equals(message))
+            if(i.next().equals(message))
                 return;
         }
 

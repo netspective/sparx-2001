@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogField.java,v 1.12 2002-10-10 22:38:03 shahid.shah Exp $
+ * $Id: DialogField.java,v 1.13 2002-11-28 21:13:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -116,7 +116,6 @@ public class DialogField
     static public int fieldCounter = 0;
 
     private DialogField parent;
-    private int arrayIndex = -1;
     private String id;
     private String simpleName;
     private String qualifiedName;
@@ -320,7 +319,6 @@ public class DialogField
      * Reads the XML for Custom Javascript configuration assigned to a dialog field
      *
      * @param elem client-js node
-     * @return none
      */
     public void importCustomJavaScriptFromXml(Element elem)
     {
@@ -527,7 +525,7 @@ public class DialogField
      */
     public String getCookieName()
     {
-        return "DLG_" + parent.getSimpleName() + "_FLD_" + (cookieName.length() > 0 ? cookieName : simpleName);
+        return cookieName == null ? (Dialog.PARAMNAME_CONTROLPREFIX + getQualifiedName()) : cookieName;
     }
 
     /**

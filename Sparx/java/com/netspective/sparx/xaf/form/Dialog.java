@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.13 2002-11-03 23:26:42 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.14 2002-11-28 21:13:36 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -75,7 +75,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.apache.log4j.Logger;
 
-import com.netspective.sparx.xaf.form.field.FileField;
 import com.netspective.sparx.xaf.form.field.SelectField;
 import com.netspective.sparx.xaf.form.field.StaticField;
 import com.netspective.sparx.xaf.task.BasicTask;
@@ -200,7 +199,6 @@ public class Dialog
     private String nameFromXml;
     private String name;
     private SingleValueSource heading;
-    private String actionURL;
     private String loopSeparator = "<p>";
     private int layoutColumnsCount = 1;
     private String[] retainRequestParams;
@@ -479,7 +477,7 @@ public class Dialog
     /**
      * Set the retained request parameters
      *
-     * @param  String[] array of string values
+     * @param value array of string values
      */
     public final void setRetainRequestParams(String[] value)
     {
@@ -903,6 +901,13 @@ public class Dialog
                 field.populateValue(dc, formatType);
         }
 
+        if(director != null)
+        {
+            DialogField field = director.getNextActionsField();
+            if(field != null)
+                field.populateValue(dc, formatType);
+        }
+
         if(dc.isInitialEntry())
             processPopulateTasks(dc);
     }
@@ -990,7 +995,10 @@ public class Dialog
         dc.calcState();
         // validated and the dialog is ready for execution
         if(dc.inExecuteMode())
+        {
+            dc.persistValues();
             this.populateValues(dc, DialogField.SUBMIT_FORMAT);
+        }
 
     }
 
