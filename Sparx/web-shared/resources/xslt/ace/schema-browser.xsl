@@ -105,7 +105,8 @@
 					<xsl:for-each select="meta-info/source-files/source-file">
 						<li>
 							<a>
-							<xsl:attribute name="href"><xsl:value-of select="@abs-path"/></xsl:attribute>
+							<xsl:attribute name="href"><xsl:value-of select="concat($root-url, '../../../documents?browseDoc=', @abs-path)"/></xsl:attribute>
+							<xsl:attribute name="target"><xsl:value-of select="@abs-path"/></xsl:attribute>
 							<xsl:value-of select="@abs-path"/>
 							</a>
 							<xsl:if test="@included-from">

@@ -65,7 +65,8 @@
 					<tr class="data_table">
 						<td class="data_table">
 						<a class="data_table">
-						<xsl:attribute name="href"><xsl:value-of select="@abs-path"/></xsl:attribute>
+						<xsl:attribute name="href"><xsl:value-of select="concat($root-url, '../../../documents?browseDoc=', @abs-path)"/></xsl:attribute>
+						<xsl:attribute name="target"><xsl:value-of select="@abs-path"/></xsl:attribute>
 						<xsl:value-of select="@abs-path"/>
 						</a>
 						</td>

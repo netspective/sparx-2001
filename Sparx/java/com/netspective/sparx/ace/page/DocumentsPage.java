@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DocumentsPage.java,v 1.3 2002-07-04 19:07:26 shahid.shah Exp $
+ * $Id: DocumentsPage.java,v 1.4 2002-07-04 19:39:00 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -181,6 +181,22 @@ public class DocumentsPage extends AceServletPage
 
         try
         {
+            String browseDoc = pc.getRequest().getParameter("browseDoc");
+            if(browseDoc != null)
+            {
+                File browseFile = new File(browseDoc);
+                String fileName = browseFile.getName();
+                String fileType = fileName.substring(fileName.lastIndexOf('.')+1);
+                DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(fileType);
+                if(docContentHandler != null)
+                {
+                    handleDocument(pc, docContentHandler, browseFile, true);
+                    return;
+                }
+                else
+                    throw new ServletException("File type '"+fileType+"' not known.");
+            }
+
             if(!isFileRef)
             {
                 ((HttpServletResponse) pc.getResponse()).sendRedirect(ref);
@@ -230,28 +246,7 @@ public class DocumentsPage extends AceServletPage
                 DocumentContentHandler docContentHandler = (DocumentContentHandler) documentHandlerMap.get(activeEntry.getEntryType());
                 if(docContentHandler != null)
                 {
-                    Document navgDoc = null;
-                    try
-                    {
-                        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                        DocumentBuilder builder = factory.newDocumentBuilder();
-                        navgDoc = builder.newDocument();
-                    }
-                    catch(Exception e)
-                    {
-                        throw new ServletException(e);
-                    }
-
-                    Element navgRootElem = navgDoc.createElement("xaf");
-                    navgDoc.appendChild(navgRootElem);
-
-                    fsContext.addXML(navgRootElem, fsContext);
-                    handlePageMetaData(pc);
-                    handlePageHeader(pc);
-                    transform(pc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
-                    pc.getResponse().getOutputStream().print("&nbsp;&nbsp;<b><code>"+ activeEntry.getAbsolutePath() +"</code></b>");
-                    docContentHandler.generateHtml(pc, new FileInputStream(activeEntry));
-                    handlePageFooter(pc);
+                    handleDocument(pc, docContentHandler, activeEntry, false);
                 }
                 else
                 {
@@ -277,5 +272,37 @@ public class DocumentsPage extends AceServletPage
         {
             throw new ServletException(e);
         }
+    }
+
+    private void handleDocument(PageContext pc, DocumentContentHandler docContentHandler, File activeEntry, boolean browsing) throws ServletException, IOException
+    {
+        handlePageMetaData(pc);
+        handlePageHeader(pc);
+
+        if(! browsing)
+        {
+            Document navgDoc = null;
+            try
+            {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                navgDoc = builder.newDocument();
+            }
+            catch(Exception e)
+            {
+                throw new ServletException(e);
+            }
+
+            Element navgRootElem = navgDoc.createElement("xaf");
+            navgDoc.appendChild(navgRootElem);
+
+            fsContext.addXML(navgRootElem, fsContext);
+            transform(pc, navgDoc, com.netspective.sparx.Globals.ACE_CONFIG_ITEMS_PREFIX + "docs-browser-xsl");
+        }
+
+        pc.getResponse().getOutputStream().print("&nbsp;&nbsp;<b><code>"+ activeEntry.getAbsolutePath() +"</code></b>");
+        docContentHandler.generateHtml(pc, new FileInputStream(activeEntry));
+
+        handlePageFooter(pc);
     }
 }
