@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: StandardDialogSkin.java,v 1.11 2002-12-31 19:53:00 shahid.shah Exp $
+ * $Id: StandardDialogSkin.java,v 1.12 2003-01-14 23:23:11 aye.thu Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -129,7 +129,7 @@ public class StandardDialogSkin implements DialogSkin
     {
         summarizeErrors = true;
         outerTableAttrs = "cellspacing='1' cellpadding='0' bgcolor='#6699CC' ";
-        innerTableAttrs = "cellspacing='0' cellpadding='4' bgcolor='#EEEEEE' ";
+        innerTableAttrs = "width='100%' cellspacing='0' cellpadding='4' bgcolor='#EEEEEE' ";
         frameHdRowAlign = "LEFT";
         frameHdRowAttrs = "bgcolor='#6699CC' ";
         frameHdFontAttrs = "face='verdana,arial,helvetica' size=2 color='white' style='font-size:8pt' ";
