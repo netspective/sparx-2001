@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: NavigationPath.java,v 1.12 2003-01-28 06:15:46 roque.hernandez Exp $
+ * $Id: NavigationPath.java,v 1.13 2003-01-28 20:48:50 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.navigate;
@@ -537,6 +537,8 @@ public class NavigationPath
                     heading = caption;
                     childElem.setAttribute("heading", caption);
                 }
+
+                childPath.setHeading(heading);
 
                 String subHeading = childElem.getAttribute("sub-heading");
                 if (subHeading != null && subHeading.length() > 0)
