@@ -76,7 +76,7 @@ public class DialogFieldFactory
         conditionalsClasses.put("display-on-js-expr", DialogFieldConditionalDisplay.class);
         conditionalsClasses.put("data", DialogFieldConditionalData.class); // legacy
         conditionalsClasses.put("display-when-partner-not-null", DialogFieldConditionalData.class);
-        conditionalsClasses.put("invisible-when-data-cmd", DialogFieldConditionalInvisible.class);
+        conditionalsClasses.put("apply-flag", DialogFieldConditionalApplyFlag.class);
 
 		defaultsAvailable = true;
 	}

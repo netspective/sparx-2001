@@ -45,11 +45,11 @@ public class DialogField
 	private String cookieName;
 	private String errorMessage;
 	private SingleValueSource defaultValue;
-	private ArrayList errors;
-	private ArrayList children;
-	private ArrayList conditionalActions;
-	private ArrayList dependentConditions;
-    private ArrayList clientJavascripts;
+	private List errors;
+	private List children;
+	private List conditionalActions;
+	private List dependentConditions;
+    private List clientJavascripts;
 	private long flags;
 	private DialogFieldPopup popup;
     private String hint;
@@ -344,7 +344,7 @@ public class DialogField
 	public final DialogFieldPopup getPopup() { return popup; }
 	public void setPopup(DialogFieldPopup value) { popup = value; }
 
-	public final ArrayList getChildren() { return children; }
+	public final List getChildren() { return children; }
 
 	public void addChildField(DialogField field)
 	{
@@ -363,7 +363,7 @@ public class DialogField
 			field.setQualifiedName(qualifiedName + "." + field.getSimpleName());
 	}
 
-	public final ArrayList getErrors() { return errors; }
+	public final List getErrors() { return errors; }
 
 	public final void addErrorMessage(String msg)
 	{
@@ -371,13 +371,13 @@ public class DialogField
 		errors.add(msg);
 	}
 
-	public final ArrayList getConditionalActions() { return conditionalActions; }
+	public final List getConditionalActions() { return conditionalActions; }
 
 	public void addConditionalAction(DialogFieldConditionalAction action)
 	{
 		if(conditionalActions == null) conditionalActions = new ArrayList();
 
-		if(action instanceof DialogFieldConditionalData || action instanceof DialogFieldConditionalInvisible)
+		if(action instanceof DialogFieldConditionalData || action instanceof DialogFieldConditionalApplyFlag)
 			setFlag(FLDFLAG_HAS_CONDITIONAL_DATA);
 
 		conditionalActions.add(action);
@@ -388,7 +388,7 @@ public class DialogField
      *
      * @returns ArrayList
      */
-    public final  ArrayList getClientJavascripts() { return this.clientJavascripts; }
+    public final List getClientJavascripts() { return this.clientJavascripts; }
 
     /**
      * Add a javascript to the list of scripts defined for this field
@@ -467,7 +467,7 @@ public class DialogField
 		}
 	}
 
-	public final ArrayList getDependentConditions() { return dependentConditions; }
+	public final List getDependentConditions() { return dependentConditions; }
 	public void addDependentCondition(DialogFieldConditionalAction action)
 	{
 		if(dependentConditions == null) dependentConditions = new ArrayList();
@@ -545,11 +545,6 @@ public class DialogField
 							return false;
 					}
 				}
-                else if(action instanceof DialogFieldConditionalInvisible)
-                {
-                    if(! ((DialogFieldConditionalInvisible) action).isVisible(dc))
-                        return false;
-                }
 			}
 		}
         String qName = getQualifiedName();
@@ -694,6 +689,19 @@ public class DialogField
 		return getValueAsObject(value);
 	}
 
+    public void makeStateChanges(DialogContext dc, int stage)
+    {
+        if(stage == DialogContext.STATECALCSTAGE_FINAL && conditionalActions != null)
+        {
+            for(int i = 0; i < conditionalActions.size(); i++)
+            {
+                DialogFieldConditionalAction action = (DialogFieldConditionalAction) conditionalActions.get(i);
+                if(action instanceof DialogFieldConditionalApplyFlag)
+                    ((DialogFieldConditionalApplyFlag) action).applyFlags(dc);
+            }
+        }
+    }
+
 	public void populateValue(DialogContext dc, int formatType)
 	{
 		if(id == null) return;
@@ -737,7 +745,7 @@ public class DialogField
         if (customStr != null)
             js += customStr;
 
-		ArrayList dependentConditions = this.getDependentConditions();
+		List dependentConditions = this.getDependentConditions();
 		if(dependentConditions != null)
 		{
 			StringBuffer dcJs = new StringBuffer();
@@ -755,7 +763,7 @@ public class DialogField
 			js = js + dcJs.toString();
 		}
 
-		ArrayList children = this.getChildren();
+		List children = this.getChildren();
 		if(children != null)
 		{
 			StringBuffer childJs = new StringBuffer();
@@ -779,7 +787,7 @@ public class DialogField
     {
         String ret = "";
 
-        ArrayList jsList = this.getClientJavascripts();
+        List jsList = this.getClientJavascripts();
         if (jsList != null)
         {
             String jsType = "";
