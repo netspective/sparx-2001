@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: SchemaDocument.java,v 1.8 2002-04-10 23:08:35 snshah Exp $
+ * $Id: SchemaDocument.java,v 1.9 2002-04-17 15:17:39 jruss Exp $
  */
 
 package com.netspective.sparx.xif;
@@ -113,7 +113,7 @@ public class SchemaDocument extends XmlSource
 {
     public static final String ATTRNAME_TYPE = "type";
 
-    public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals"};
+    public static final String[] MACROSIN_COLUMNNODES = {"parentref", "lookupref", "selfref", "usetype", "cache", "sqldefn", "size", "decimals", "default"};
     public static final String[] MACROSIN_TABLENODES = {"name", "abbrev", "parent"};
     public static final String[] MACROSIN_INDEXNODES = {"name"};
     public static final String[] REFTYPE_NAMES = {"none", "parent", "lookup", "self", "usetype"};
