@@ -135,11 +135,14 @@ public class HtmlReportSkin implements ReportSkin
         {
             writer.write("</td></tr>");
             String footing = null;
-            SingleValueSource fvs = frame.getFooting();
-            if(fvs != null)
+            if (frame != null)
             {
-                footing = fvs.getValue(rc);
-                writer.write("<tr "+ frameFtRowAttrs +"><td><font "+ frameFtFontAttrs + "><b>" + footing + "</b></font></td></tr>");
+                SingleValueSource fvs = frame.getFooting();
+                if(fvs != null)
+                {
+                    footing = fvs.getValue(rc);
+                    writer.write("<tr "+ frameFtRowAttrs +"><td><font "+ frameFtFontAttrs + "><b>" + footing + "</b></font></td></tr>");
+                }
             }
             writer.write("</table>");
         }
