@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: HtmlReportSkin.java,v 1.7 2002-08-25 20:38:17 shahid.shah Exp $
+ * $Id: HtmlReportSkin.java,v 1.8 2002-10-13 18:42:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -116,6 +116,11 @@ public class HtmlReportSkin implements ReportSkin
     protected String rowSepImgSrc = "/shared/resources/images/design/bar.gif";
     protected String sortAscImgSrc = "/shared/resources/images/navigate/triangle-up-blue.gif";
     protected String sortDescImgSrc = "/shared/resources/images/navigate/triangle-down-lblue.gif";
+    protected int rowDecoratorPrependColsCount = 0;
+    protected int rowDecoratorAppendColsCount = 0;
+    protected SingleValueSource addDataText = ValueSourceFactory.getSingleValueSource("create-record-add-text:Record");
+    protected SingleValueSource editDataText = ValueSourceFactory.getSingleValueSource("config-expr:<img src='${sparx.shared.images-url}/design/action-edit-update.gif' border=0>");
+    protected SingleValueSource deleteDataText = ValueSourceFactory.getSingleValueSource("config-expr:<img src='${sparx.shared.images-url}/design/action-edit-remove.gif' border=0>");
 
     public HtmlReportSkin(boolean fullWidth)
     {
@@ -154,37 +159,54 @@ public class HtmlReportSkin implements ReportSkin
         if(set) flags |= flag; else flags &= ~flag;
     }
 
+    public void produceHeadingExtras(Writer writer, ReportContext rc, ReportFrame frame) throws IOException
+    {
+        SingleValueSource hevs = frame.getHeadingExtra();
+        if(hevs != null)
+            writer.write(hevs.getValue(rc));
+        else
+            writer.write("&nbsp;");
+    }
+
+    public ReportBanner getReportBanner(ReportContext rc)
+    {
+        return rc.getReport().getBanner();
+    }
+
+    public ReportFrame getReportFrame(ReportContext rc)
+    {
+        return rc.getReport().getFrame();
+    }
+
     public void produceReport(Writer writer, ReportContext rc, ResultSet rs, Object[][] data) throws SQLException, IOException
     {
         long startTime = new java.util.Date().getTime();
 
-        ReportFrame frame = rc.getReport().getFrame();
-        ReportBanner banner = rc.getReport().getBanner();
+        ReportFrame frame = getReportFrame(rc);
+        ReportBanner banner = getReportBanner(rc);
 
         writer.write("<table cellspacing=0 cellpadding=0 border=0 ");
         if(flagIsSet(HTMLFLAG_FULL_WIDTH))
             writer.write("width='100%' ");
         writer.write("><tr><td>");
 
-        boolean haveOuterTable = (frame != null || banner != null);
+        boolean haveOuterTable = (frame.hasHeadingOrFooting() || banner != null);
         if(haveOuterTable)
         {
-            if(frame != null)
+            String heading = null;
+            SingleValueSource hvs = frame.getHeading();
+            if(hvs != null)
+                heading = hvs.getValue(rc);
+
+            if(heading != null)
             {
-                String heading = null;
-                SingleValueSource hvs = frame.getHeading();
-                if(hvs != null)
-                    heading = hvs.getValue(rc);
-
-                SingleValueSource hevs = frame.getHeadingExtra();
-                String headingExtra = hevs != null ? hevs.getValue(rc) : null;
-                if(headingExtra == null) headingExtra = "&nbsp;";
-
                 String frameHdTabImgSrc = frameHdTabImgSrcValueSource.getValue(rc);
                 String frameHdSpacerImgSrc = frameHdSpacerImgSrcValueSource.getValue(rc);
 
                 writer.write("<table "+ frameHdTableAttrs +">");
-                writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdInfoFontAttrs + "><nobr>"+ headingExtra +"</nobr></font></td></tr>");
+                writer.write("<tr " + frameHdRowAttrs + "><td " + frameHdCellAttrs + "><nobr><font " + frameHdFontAttrs + ">&nbsp;<b>" + heading + "</b>&nbsp;</nobr></font></td><td width=14><font " + frameHdFontAttrs + "><img src='"+ frameHdTabImgSrc +"'></font></td><td "+ frameHdInfoCellAttrs +"><font " + frameHdInfoFontAttrs + "><nobr>");
+                produceHeadingExtras(writer, rc, frame);
+                writer.write("</nobr></font></td></tr>");
                 writer.write("<tr " + frameHdRowSpacerAttrs +"><td colspan=3><img src='"+ frameHdSpacerImgSrc +"' height=2></td></tr>");
                 writer.write("</table>");
             }
@@ -234,15 +256,11 @@ public class HtmlReportSkin implements ReportSkin
         if(haveOuterTable)
         {
             writer.write("</td></tr>");
-            String footing = null;
-            if(frame != null)
+            SingleValueSource fvs = frame.getFooting();
+            if(fvs != null)
             {
-                SingleValueSource fvs = frame.getFooting();
-                if(fvs != null)
-                {
-                    footing = fvs.getValue(rc);
-                    writer.write("<tr " + frameFtRowAttrs + "><td><font " + frameFtFontAttrs + "><b>" + footing + "</b></font></td></tr>");
-                }
+                String footing = fvs.getValue(rc);
+                writer.write("<tr " + frameFtRowAttrs + "><td><font " + frameFtFontAttrs + "><b>" + footing + "</b></font></td></tr>");
             }
             writer.write("</table>");
         }
@@ -268,12 +286,42 @@ public class HtmlReportSkin implements ReportSkin
         }
     }
 
+    private int getTableColumnsCount(ReportContext rc)
+    {
+        return (rc.getVisibleColsCount() * 2) +
+               (rowDecoratorPrependColsCount * 2) +
+               (rowDecoratorAppendColsCount * 2) +
+               + 1; // each column has "spacer" in between, first column as spacer before too
+    }
+
+    public void produceHeadingRowDecoratorPrepend(Writer writer, ReportContext rc) throws IOException
+    {
+        writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">");
+        writer.write("&nbsp;");
+        writer.write("</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+    }
+
+    public void produceHeadingRowDecoratorAppend(Writer writer, ReportContext rc) throws IOException
+    {
+        writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">");
+        writer.write("&nbsp;");
+        writer.write("</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+    }
+
+    public void produceDataRowDecoratorPrepend(Writer writer, ReportContext rc, int rowNum, Object[] rowData, boolean isOddRow) throws IOException
+    {
+    }
+
+    public void produceDataRowDecoratorAppend(Writer writer, ReportContext rc, int rowNum, Object[] rowData, boolean isOddRow) throws IOException
+    {
+    }
+
     public void produceHeadingRow(Writer writer, ReportContext rc, Object[] headings) throws IOException
     {
         ReportColumnsList columns = rc.getColumns();
         ReportContext.ColumnState[] states = rc.getStates();
         int dataColsCount = columns.size();
-        int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+        int tableColsCount = getTableColumnsCount(rc);
 
         Configuration appConfig = ConfigurationManagerFactory.getDefaultConfiguration(rc.getServletContext());
         String rowSepImgSrc = appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.row-sep-img-src", getRowSepImgSrc());
@@ -281,6 +329,10 @@ public class HtmlReportSkin implements ReportSkin
         String sortDescImgTag = " <img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
 
         writer.write("<tr " + dataHdRowAttrs + "><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+
+        if(rowDecoratorPrependColsCount > 0)
+            produceHeadingRowDecoratorPrepend(writer, rc);
+
         if(headings == null)
         {
             for(int i = 0; i < dataColsCount; i++)
@@ -329,6 +381,11 @@ public class HtmlReportSkin implements ReportSkin
                     writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + "></font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
             }
         }
+
+        if(rowDecoratorAppendColsCount > 0)
+            produceHeadingRowDecoratorAppend(writer, rc);
+
+        writer.write("</tr>");
         /*
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='2' width='100%'></td></tr>");
@@ -340,7 +397,7 @@ public class HtmlReportSkin implements ReportSkin
         ReportColumnsList columns = rc.getColumns();
         ReportContext.ColumnState[] states = rc.getStates();
         int dataColsCount = columns.size();
-        int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+        int tableColsCount = getTableColumnsCount(rc); // each column has "spacer" in between, first column has spacer before too
 
         if(!rs.next()) return;
 
@@ -350,6 +407,10 @@ public class HtmlReportSkin implements ReportSkin
         String sortDescImgTag = "<img src=\""+ appConfig.getTextValue(rc, com.netspective.sparx.Globals.SHARED_CONFIG_ITEMS_PREFIX + "report.sort-descending-img-src", getSortDescImgSrc()) + "\" border=0>";
 
         writer.write("<tr " + dataHdRowAttrs + "><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
+
+        if(rowDecoratorPrependColsCount > 0)
+            produceHeadingRowDecoratorPrepend(writer, rc);
+
         for(int i = 0; i < dataColsCount; i++)
         {
             ReportColumn rcd = columns.getColumn(i);
@@ -374,8 +435,14 @@ public class HtmlReportSkin implements ReportSkin
             else
                 writer.write("<td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;</font></td><td "+ dataHdCellAttrs +"><font " + dataHdFontAttrs + ">&nbsp;&nbsp;</font></td>");
         }
+
+        if(rowDecoratorAppendColsCount > 0)
+            produceHeadingRowDecoratorAppend(writer, rc);
+
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
             writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='2' width='100%'></td></tr>");
+        else
+            writer.write("</tr>");
     }
 
     /*
@@ -396,7 +463,7 @@ public class HtmlReportSkin implements ReportSkin
         boolean addRowSeps = flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS);
         int rowsWritten = 0;
         int dataColsCount = columns.size();
-        int tableColsCount = (rc.getVisibleColsCount() * 2) + 1;
+        int tableColsCount = getTableColumnsCount(rc);
 
         ResultSetScrollState scrollState = rc.getScrollState();
         boolean paging = scrollState != null;
@@ -419,6 +486,10 @@ public class HtmlReportSkin implements ReportSkin
             int rowNum = rs.getRow();
 
             writer.write("<tr "+ (isOddRow ? dataOddRowAttrs : dataEvenRowAttrs) +"><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
+
+            if(rowDecoratorPrependColsCount > 0)
+                produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
+
             for(int i = 0; i < dataColsCount; i++)
             {
 
@@ -445,13 +516,16 @@ public class HtmlReportSkin implements ReportSkin
                         (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='" + state.getUrl() + "' " + state.getUrlAnchorAttrs() + ">" + data + "</a>" : data) +
                         "</font>"+ dataTagsEnd +"</td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
 
-                //writer.write(MessageFormat.format(singleRow, rowData));
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
             }
-            writer.write("</tr>");
+
+            if(rowDecoratorAppendColsCount > 0)
+                produceDataRowDecoratorAppend(writer, rc, rowNum, rowData, isOddRow);
 
             if(addRowSeps)
                 writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='1' width='100%'></td></tr>");
+            else
+                writer.write("</tr>");
 
             rowsWritten++;
             if(paging && rc.endOfPage())
@@ -490,17 +564,23 @@ public class HtmlReportSkin implements ReportSkin
         boolean addRowSeps = flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS);
         int rowsWritten = 0;
         int dataColsCount = columns.size();
-        int tableColsCount = (rc.getVisibleColsCount() * 2) + 1;
+        int tableColsCount = getTableColumnsCount(rc);
 
         ResultSetScrollState scrollState = rc.getScrollState();
         boolean paging = scrollState != null;
+        boolean isOddRow = false;
 
         for(int row = startDataRow; row < data.length; row++)
         {
             Object[] rowData = data[row];
+            isOddRow = ! isOddRow;
             int rowNum = row - startDataRow;
 
-            writer.write("<tr><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
+            writer.write("<tr "+ (isOddRow ? dataOddRowAttrs : dataEvenRowAttrs) +"><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>");
+
+            if(rowDecoratorPrependColsCount > 0)
+                produceDataRowDecoratorPrepend(writer, rc, rowNum, rowData, isOddRow);
+
             for(int i = 0; i < dataColsCount; i++)
             {
                 ReportColumn column = columns.getColumn(i);
@@ -526,13 +606,16 @@ public class HtmlReportSkin implements ReportSkin
                         (state.flagIsSet(ReportColumn.COLFLAG_WRAPURL) ? "<a href='" + state.getUrl() + "'" + state.getUrlAnchorAttrs() + ">" + colData + "</a>" : colData) +
                         "</font>"+ dataTagsEnd +"</td><td><font " + dataFontAttrs + ">&nbsp;&nbsp;</td>";
 
-                //writer.write(MessageFormat.format(singleRow, rowData));
                 writer.write(defn.replaceOutputPatterns(rc, rowNum, rowData, singleRow));
             }
-            writer.write("</tr>");
+
+            if(rowDecoratorAppendColsCount > 0)
+                produceDataRowDecoratorAppend(writer, rc, rowNum, rowData, isOddRow);
 
             if(addRowSeps)
                 writer.write("</tr><tr><td colspan='" + tableColsCount + "'><img src='" + rowSepImgSrc + "' height='1' width='100%'></td></tr>");
+            else
+                writer.write("</tr>");
 
             rowsWritten++;
             if(paging && rc.endOfPage())
@@ -562,7 +645,7 @@ public class HtmlReportSkin implements ReportSkin
         ReportContext.ColumnState[] states = rc.getStates();
         ReportColumnsList columns = rc.getColumns();
         int dataColsCount = columns.size();
-        int tableColsCount = (rc.getVisibleColsCount() * 2) + 1; // each column has "spacer" in between, first column as spacer before too
+        int tableColsCount = getTableColumnsCount(rc);
 
         if(flagIsSet(HTMLFLAG_ADD_ROW_SEPARATORS))
         {

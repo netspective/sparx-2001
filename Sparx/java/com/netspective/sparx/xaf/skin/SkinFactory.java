@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: SkinFactory.java,v 1.3 2002-08-25 19:07:58 shahid.shah Exp $
+ * $Id: SkinFactory.java,v 1.4 2002-10-13 18:42:01 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.skin;
@@ -76,14 +76,22 @@ public class SkinFactory implements Factory
     {
         addReportSkin("report", new HtmlReportSkin(true));
         addReportSkin("report-compressed", new HtmlReportSkin(false));
+
         addReportSkin("component", new HtmlComponentSkin(true));
         addReportSkin("component-compressed", new HtmlComponentSkin(false));
+
         addReportSkin("detail", new HtmlSingleRowReportSkin(true, 1, true));
         addReportSkin("detail-compressed", new HtmlSingleRowReportSkin(false, 1, true));
         addReportSkin("detail-2col", new HtmlSingleRowReportSkin(true, 2, true));
         addReportSkin("detail-2col-compressed", new HtmlSingleRowReportSkin(false, 2, true));
         addReportSkin("data-only", new HtmlSingleRowReportNoCaptionSkin(true, 1, true));
         addReportSkin("data-only-compressed", new HtmlSingleRowReportNoCaptionSkin(false, 1, true));
+
+        addReportSkin("record-viewer", new RecordViewerReportSkin(true));
+        addReportSkin("record-viewer-compressed", new RecordViewerReportSkin(false));
+        addReportSkin("record-editor", new RecordEditorReportSkin(true));
+        addReportSkin("record-editor-compressed", new RecordEditorReportSkin(false));
+
         addReportSkin("text-csv", new TextReportSkin(".csv", ",", "\"", true));
         addReportSkin("text-tab", new TextReportSkin(".txt", "  ", null, true));
 
