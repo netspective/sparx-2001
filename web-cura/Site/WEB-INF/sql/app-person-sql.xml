@@ -27,6 +27,30 @@
 			and por.record_status_id = 1  /* active status only */
 			and por.rel_type = 0       /* member of organization */
 			and por.rel_org_id = org.org_id /* join to get org_name */
+            <params>
+                <param value="request:person_id"/>
+            </params>
+            <report heading="Organization Memberships">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                </banner>
+                <column heading="ID" align="center"/>
+                <column heading="Name" align="center"/>
+            </report>
+		</statement>
+
+		<statement name="active-org-memberships-name-id">
+			select org.org_name, org.org_id
+			from org, personorg_relationship por
+			where por.parent_id = ?
+			and por.record_status_id = 1  /* active status only */
+			and por.rel_type = 0       /* member of organization */
+			and por.rel_org_id = org.org_id /* join to get org_name */
+
+            <params>
+                <param value="request-attr:personId"/>
+            </params>
 		</statement>
 
         <statement name="contact-methods">
@@ -37,15 +61,65 @@
             select caption,id from contact_email_type
         </statement>
 
+        <statement name="contact-info">
+            select
+                method_name,
+                method_value
+            from person_contact
+            where
+               parent_id  = ?
+           <params>
+                <param value="request:person_id"/>
+            </params>
+			<report heading="Contact Methods">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
+                </banner>
+                <column heading="Method Name"/>
+                <column heading="Method Value"/>
+			</report>
+        </statement>
+        <statement name="address-by-id">
+            select
+                line1,
+                line2,
+                city,
+                state,
+                zip,
+                country
+            from
+                person_address
+            where
+                parent_id  = ?
+            <params>
+                <param value="request:person_id"/>
+            </params>
+			<report heading="Physical Address">
+				<banner>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
+                </banner>
+                <column heading="Street Address 1"/>
+                <column heading="Street Address 2"/>
+                <column heading="City"/>
+                <column heading="State"/>
+                <column heading="Zip"/>
+                <column heading="Contry"/>
+			</report>
 
+        </statement>
         <statement name="information">
             select
-                person_id as "ID",
-                complete_name as "Name",
-                ssn as "SSN",
-                date_of_birth as "Birth Date",
-                age as "Age",
-                marital_status as "Marital Status"
+                person_id ,
+                name_last ,
+                name_first,
+                name_middle,
+                ssn,
+                date_of_birth,
+                age,
+                gender,
+                marital_status
             from
                 person
             where
@@ -56,9 +130,18 @@
 			</params>
 			<report heading="Contact Overview">
 				<banner>
-                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,org.registration,edit&amp;org_id=${request:org_id}"/>
-                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,org.registration,delete&amp;org_id=${request:org_id}"/>
+                    <item caption="Edit" url="config-expr:index.jsp?cmd=dialog,person.registration,edit&amp;person_id=${request:person_id}"/>
+                    <item caption="Delete" url="config-expr:index.jsp?cmd=dialog,person.registration,delete&amp;person_id=${request:person_id}"/>
                 </banner>
+                <column heading="ID"/>
+                <column heading="Last Name"/>
+                <column heading="First Name"/>
+                <column heading="Middle Name"/>
+                <column heading="Social Security"/>
+                <column heading="Date of Birth"/>
+                <column heading="Age"/>
+                <column heading="Gender"/>
+                <column heading="Marital Status"/>
 			</report>
         </statement>
 

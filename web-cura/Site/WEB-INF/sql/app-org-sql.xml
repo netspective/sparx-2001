@@ -11,7 +11,17 @@
 		</statement>
 
         <statement name="name-id-list">
-            select org_name,org_id from org
+            select
+                org_name,
+                org_id
+            from
+                org, org_ownership
+            where
+                org.ownership = org_ownership.id(+) and
+                org.org_name in (${param-list:0})
+			<params>
+				<param values="request-attr:orgs"/>
+			</params>
         </statement>
 		<statement name="registration">
 			select
