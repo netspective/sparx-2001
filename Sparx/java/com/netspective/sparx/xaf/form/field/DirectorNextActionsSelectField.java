@@ -51,13 +51,14 @@
  */
 
 /**
- * $Id: DirectorNextActionsSelectField.java,v 1.4 2002-11-28 21:30:27 shahid.shah Exp $
+ * $Id: DirectorNextActionsSelectField.java,v 1.5 2003-01-22 23:03:41 roque.hernandez Exp $
  */
 
 package com.netspective.sparx.xaf.form.field;
 
 import com.netspective.sparx.util.value.SingleValueSource;
 import com.netspective.sparx.util.value.ValueSourceFactory;
+import com.netspective.sparx.util.value.ListValueSource;
 import com.netspective.sparx.xaf.form.DialogContext;
 import com.netspective.sparx.xaf.form.DialogField;
 import com.netspective.sparx.xaf.form.conditional.DialogFieldConditionalApplyFlag;
@@ -122,6 +123,20 @@ public class DirectorNextActionsSelectField extends SelectField
         int listSize = this.getListSource().getSelectChoices(dc).getValues().length;
         if (listSize == 1 && !displayOneItemOnly)
         {
+
+            //Need to set the value of the field so that the one (now selected) item in the list will be rendered
+            ListValueSource listSource = this.getListSource();
+            if (listSource == null) {
+                return;
+            }
+
+            SelectChoicesList choicesList = listSource.getSelectChoices(dc);
+            if(choicesList == null) {
+                return;
+            }
+
+            SelectChoice onlyChoice = (SelectChoice) choicesList.getIterator().next();
+            dc.setValue(this,onlyChoice.getValue());
             dc.setFlag(this.getQualifiedName(), DialogField.FLDFLAG_INPUT_HIDDEN);
         }
     }
