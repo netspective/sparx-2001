@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DialogManagerFactory.java,v 1.2 2002-09-08 02:08:11 shahid.shah Exp $
+ * $Id: DialogManagerFactory.java,v 1.3 2002-09-18 17:49:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -188,6 +188,7 @@ public class DialogManagerFactory implements Factory
         private String dialogName;
         private String dataCmd;
         private String skinName;
+        private String debugFlagsSpec;
 
         public DialogCommands(String cmdParams)
         {
@@ -197,7 +198,7 @@ public class DialogManagerFactory implements Factory
             if(st.hasMoreTokens())
             {
                 dataCmd = st.nextToken();
-                if(dataCmd.equals("-"))
+                if(dataCmd.length() == 0 || dataCmd.equals("-"))
                     dataCmd = null;
             }
             else
@@ -206,11 +207,20 @@ public class DialogManagerFactory implements Factory
             if(st.hasMoreTokens())
             {
                 skinName = st.nextToken();
-                if(skinName.equals("-"))
+                if(skinName.length() == 0 || skinName.equals("-"))
                     skinName = null;
             }
             else
                 skinName = null;
+
+            if(st.hasMoreTokens())
+            {
+                debugFlagsSpec = st.nextToken();
+                if(debugFlagsSpec.equals("-"))
+                    debugFlagsSpec = null;
+            }
+            else
+                debugFlagsSpec = null;
         }
 
         public String getDataCmd()
@@ -228,6 +238,11 @@ public class DialogManagerFactory implements Factory
             return skinName;
         }
 
+        public String getDebugFlagsSpec()
+        {
+            return debugFlagsSpec;
+        }
+
         public void setDataCmd(String dataCmd)
         {
             this.dataCmd = dataCmd;
@@ -243,6 +258,11 @@ public class DialogManagerFactory implements Factory
             this.skinName = skinName;
         }
 
+        public void setDebugFlagsSpec(String debugFlagsSpec)
+        {
+            this.debugFlagsSpec = debugFlagsSpec;
+        }
+
         public String generateCommand()
         {
             StringBuffer sb = new StringBuffer(dialogName);
@@ -252,6 +272,11 @@ public class DialogManagerFactory implements Factory
             {
                 sb.append(",");
                 sb.append(skinName);
+            }
+            if(debugFlagsSpec != null)
+            {
+                sb.append(",");
+                sb.append(debugFlagsSpec);
             }
             return sb.toString();
         }
@@ -286,16 +311,27 @@ public class DialogManagerFactory implements Factory
             }
 
             com.netspective.sparx.xaf.form.DialogContext dc = dialog.createContext(context, vc.getServlet(), (javax.servlet.http.HttpServletRequest) vc.getRequest(), (javax.servlet.http.HttpServletResponse) vc.getResponse(), skin);
+            if(debugFlagsSpec != null)
+                dc.setDebugFlags(debugFlagsSpec);
             dc.setRetainRequestParams(DIALOG_COMMAND_RETAIN_PARAMS);
             dialog.prepareContext(dc);
 
             if(dc.inExecuteMode())
             {
-                dialog.execute(out, dc);
-                if(! dc.executeStageHandled())
+                if(dc.debugFlagIsSet(Dialog.DLGDEBUGFLAG_SHOW_FIELD_DATA))
                 {
-                    out.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
                     out.write(dc.getDebugHtml());
+                    out.write(dialog.getLoopSeparator());
+                    dc.getSkin().renderHtml(out, dc);
+                }
+                else
+                {
+                    dialog.execute(out, dc);
+                    if(! dc.executeStageHandled())
+                    {
+                        out.write("Dialog '" + dialogName + "' did not handle the execute mode.<p>");
+                        out.write(dc.getDebugHtml());
+                    }
                 }
             }
             else

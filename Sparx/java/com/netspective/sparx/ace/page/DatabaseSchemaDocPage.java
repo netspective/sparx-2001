@@ -51,7 +51,7 @@
  */
  
 /**
- * $Id: DatabaseSchemaDocPage.java,v 1.2 2002-08-31 00:18:04 shahid.shah Exp $
+ * $Id: DatabaseSchemaDocPage.java,v 1.3 2002-09-18 17:49:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -92,7 +92,7 @@ public class DatabaseSchemaDocPage extends AceServletPage
 
     public final String getCaption(PageContext pc)
     {
-        return "Schema (XML)";
+        return "SchemaDoc (XML)";
     }
 
     public final String getHeading(PageContext pc)

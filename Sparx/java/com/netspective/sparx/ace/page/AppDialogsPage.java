@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: AppDialogsPage.java,v 1.2 2002-09-08 02:08:11 shahid.shah Exp $
+ * $Id: AppDialogsPage.java,v 1.3 2002-09-18 17:49:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.ace.page;
@@ -130,10 +130,11 @@ public class AppDialogsPage extends AceServletPage
             VirtualPath.FindResults path = pc.getActivePath();
 
             handleUnitTestPageBegin(pc, "Form (Dialog) Unit Test");
+            out.write("<h1>Form (Dialog) Unit Test: " + dcmd.getDialogName() + "</h1><p>");
             dcmd.handleDialog(pc);
             out.write("<p>");
             out.write("Try out additional options by using the following format:<br>");
-            out.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/dialogId,data-cmd,skin-name</code><p>");
+            out.write("<code>"+ path.getMatchedPath().getAbsolutePath() +"/test/dialogId,data-cmd,skin-name,debug-flags</code><p>");
 
             dcmd.setDataCmd("add");
             dcmd.setSkinName("standard");

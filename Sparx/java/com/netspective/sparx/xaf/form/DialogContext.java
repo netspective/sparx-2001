@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: DialogContext.java,v 1.15 2002-09-18 03:59:08 shahid.shah Exp $
+ * $Id: DialogContext.java,v 1.16 2002-09-18 17:49:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -324,6 +324,8 @@ public class DialogContext extends ServletValueContext
     private String originalReferer;
     private DatabaseContext dbContext;
     private boolean executeHandled;
+    private String debugFlagsStr;
+    private int debugFlags;
     private String dataCmdStr;
     private int dataCmd;
     private String[] retainReqParams;
@@ -398,15 +400,20 @@ public class DialogContext extends ServletValueContext
             dataCmdStr = (String) aRequest.getAttribute(Dialog.PARAMNAME_DATA_CMD_INITIAL);
             if(dataCmdStr == null)
                 dataCmdStr = aRequest.getParameter(Dialog.PARAMNAME_DATA_CMD_INITIAL);
+            debugFlagsStr = (String) aRequest.getAttribute(Dialog.PARAMNAME_DEBUG_FLAGS_INITIAL);
+            if(debugFlagsStr == null)
+                debugFlagsStr = aRequest.getParameter(Dialog.PARAMNAME_DEBUG_FLAGS_INITIAL);
         }
         else
         {
             originalReferer = aRequest.getParameter(dialog.getOriginalRefererParamName());
             transactionId = aRequest.getParameter(dialog.getTransactionIdParamName());
             dataCmdStr = aRequest.getParameter(dialog.getDataCmdParamName());
+            debugFlagsStr = aRequest.getParameter(dialog.getDebugFlagsParamName());
         }
 
         dataCmd = getDataCmdIdForCmdText(dataCmdStr);
+        debugFlags = getDebugFlagsForText(debugFlagsStr);
         createStateFields(dialog.getFields());
 
         DialogDirector director = dialog.getDirector();
@@ -418,6 +425,31 @@ public class DialogContext extends ServletValueContext
         }
 
         LogManager.recordAccess(aRequest, monitorLog, this.getClass().getName(), getLogId(), startTime);
+    }
+
+
+    /**
+     * Accept a single or multiple (pipe-separated) debug flags and return a bitmapped set of flags that
+     * represents the flags.
+     *
+     * @param debugFlagsText Pipe seperated string containing data commands
+     * @return int bitmapped debug flags value
+     */
+
+    static public int getDebugFlagsForText(String debugFlagsText)
+    {
+        int result = Dialog.DLGDEBUGFLAG_NONE;
+        if(debugFlagsText != null)
+        {
+            StringTokenizer st = new StringTokenizer(debugFlagsText, "|");
+            while(st.hasMoreTokens())
+            {
+                String dataCmdToken = st.nextToken().trim();
+                if(dataCmdToken.equals(Dialog.DLGDEBUGFLAGNAME_SHOW_DATA))
+                    result |= Dialog.DLGDEBUGFLAG_SHOW_FIELD_DATA;
+            }
+        }
+        return result;
     }
 
     /**
@@ -436,7 +468,7 @@ public class DialogContext extends ServletValueContext
             StringTokenizer st = new StringTokenizer(dataCmdText, ",");
             while(st.hasMoreTokens())
             {
-                String dataCmdToken = st.nextToken();
+                String dataCmdToken = st.nextToken().trim();
                 if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_ADD))
                     result |= DATA_CMD_ADD;
                 else if(dataCmdToken.equals(Dialog.PARAMVALUE_DATA_CMD_EDIT))
@@ -979,6 +1011,41 @@ public class DialogContext extends ServletValueContext
         return errorsCount;
     }
 
+    public boolean debugFlagIsSet(long flag)
+    {
+        return (debugFlags & flag) != 0;
+    }
+
+    /**
+     * Returns the current debug flags
+     *
+     * @return int data command
+     */
+    public int getDebugFlags()
+    {
+        return debugFlags;
+    }
+
+    /**
+     * Sets the current debug flags
+     *
+     * @return int data command
+     */
+    public void setDebugFlags(int flags)
+    {
+        debugFlags = flags;
+    }
+
+    /**
+     * Sets the current debug flags
+     *
+     * @return int data command
+     */
+    public void setDebugFlags(String flagsText)
+    {
+        setDebugFlags(getDebugFlagsForText(flagsText));
+    }
+
     /**
      * Returns the data command
      *
@@ -1123,6 +1190,9 @@ public class DialogContext extends ServletValueContext
 
         if(dataCmdStr != null)
             hiddens.append("<input type='hidden' name='" + dialog.getDataCmdParamName() + "' value='" + dataCmdStr + "'>\n");
+
+        if(debugFlagsStr != null)
+            hiddens.append("<input type='hidden' name='" + dialog.getDebugFlagsParamName() + "' value='" + debugFlagsStr + "'>\n");
 
         Set retainedParams = null;
         if(retainReqParams != null)

@@ -51,7 +51,7 @@
  */
 
 /**
- * $Id: Dialog.java,v 1.7 2002-09-07 21:56:15 shahid.shah Exp $
+ * $Id: Dialog.java,v 1.8 2002-09-18 17:49:38 shahid.shah Exp $
  */
 
 package com.netspective.sparx.xaf.form;
@@ -117,6 +117,15 @@ public class Dialog
     static public final int DLGFLAG_HIDE_HEADING_IN_EXEC_MODE = DLGFLAG_ENCTYPE_MULTIPART_FORMDATA * 2;
     static public final int DLGFLAG_CUSTOM_START = DLGFLAG_HIDE_HEADING_IN_EXEC_MODE * 2;
 
+    static public final int DLGDEBUGFLAG_NONE = 0;
+    /**
+     * If this debug flag is set, the execute mode will always be to dump the debug information and skip the execute
+     * portion of the dialog (hence showing only the input in a nicely formatted table).
+     */
+    static public final int DLGDEBUGFLAG_SHOW_FIELD_DATA = 1;
+
+    static public final String DLGDEBUGFLAGNAME_SHOW_DATA = "SHOW_DATA";
+
     /**
      * Request parameter which indicates whether or not the dialog should be automatically executed when it is being loaded
      */
@@ -135,6 +144,14 @@ public class Dialog
     static public final String PARAMNAME_TRANSACTIONID = ".transaction_id";
     static public final String PARAMNAME_RESETCONTEXT = ".reset_context";
 
+    /*
+	   the debug flags when first passed in (start of dialog, run seq == 1)
+	   is passed using the parameter "debug_flags" (INITIAL). When the dialog is
+	   in run sequence > 1 (after submit) the data command is passed in as a
+	   hidden "pass-thru" variable with the suffix PARAMNAME_DEBUG_FLAGS
+    */
+    static public final String PARAMNAME_DEBUG_FLAGS_INITIAL = "data_cmd";
+    static public final String PARAMNAME_DEBUG_FLAGS = ".data_cmd";
     /*
 	   the Data Command when first passed in (start of dialog, run seq == 1)
 	   is passed using the parameter "data_cmd" (INITIAL). When the dialog is
@@ -406,6 +423,11 @@ public class Dialog
     public final String getDataCmdParamName()
     {
         return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_DATA_CMD;
+    }
+
+    public final String getDebugFlagsParamName()
+    {
+        return PARAMNAME_DIALOGPREFIX + name + PARAMNAME_DEBUG_FLAGS;
     }
 
     public final Task getPopulateTasks()
@@ -883,7 +905,10 @@ public class Dialog
         processExecuteTasks(writer, dc);
 
         if(! dc.executeStageHandled())
-            writer.write("Need to add Dialog actions, provide listener, or override Dialog.execute(DialogContext)." + dc.getDebugHtml());
+        {
+            writer.write("Need to add Dialog actions or override Dialog.execute(DialogContext)." + dc.getDebugHtml());
+            dc.setExecuteStageHandled(true);
+        }
     }
 
     /**
