@@ -344,8 +344,9 @@ public class StatementManager extends XmlSource
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
         {
             Connection conn = rs.getStatement().getConnection();
-			rs.close();
-			conn.close();
+            rs.close();
+            if (conn.getAutoCommit() == true)
+			    conn.close();
         }
 		return ri;
 	}
@@ -358,8 +359,9 @@ public class StatementManager extends XmlSource
 		if(storeType != SingleValueSource.RESULTSET_STORETYPE_RESULTSET)
         {
             Connection conn = rs.getStatement().getConnection();
-			rs.close();
-			conn.close();
+            rs.close();
+            if (conn.getAutoCommit() == true)
+                conn.close();
         }
 		return ri;
 	}
@@ -570,8 +572,10 @@ public class StatementManager extends XmlSource
         rc.produceReport(writer, rs);
 
         Connection conn = rs.getStatement().getConnection();
-		rs.close();
-		conn.close();
+        rs.close();
+        if (conn.getAutoCommit() == true)
+            conn.close();
+
 	}
 
 	public void produceReportAndStoreResultSet(Writer writer, DatabaseContext dc, ValueContext vc, String dataSourceId, ReportSkin skin, String statementId, Object[] params, String reportId, SingleValueSource vs, int storeType) throws StatementNotFoundException, NamingException, SQLException, IOException
@@ -613,7 +617,9 @@ public class StatementManager extends XmlSource
         rc.produceReport(writer, data);
 
         Connection conn = rs.getStatement().getConnection();
-		rs.close();
-		conn.close();
+        rs.close();
+        if (conn.getAutoCommit() == true)
+            conn.close();
+
 	}
 }

@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.sql.*;
 import javax.naming.*;
+import javax.servlet.ServletRequest;
 
 import org.w3c.dom.*;
 
@@ -29,14 +30,23 @@ public class BasicDatabaseContext extends AbstractDatabaseContext
 			env = (Context) new InitialContext().lookup("java:comp/env");
 
 		dataSourceId = translateDataSourceId(vc, dataSourceId);
-		DataSource source = (DataSource) env.lookup(dataSourceId);
-        if(source == null)
-            throw new NamingException("Data source '" + dataSourceId + "' not found");
 
-		return source.getConnection();
+        // check to see if there is already a connection bound with the request
+        // meaning we're within a transaction. Reuse the connection if we are
+        // within a connection
+        ServletRequest request = vc.getRequest();
+        Connection conn = (Connection) request.getAttribute(dataSourceId);
+        if (conn == null)
+        {
+            DataSource source = (DataSource) env.lookup(dataSourceId);
+            if(source == null)
+                throw new NamingException("Data source '" + dataSourceId + "' not found");
+            conn = source.getConnection();
+        }
+		return conn;
 	}
 
-    public void createCatalog(Element parent) throws NamingException
+    public void createCatalog(ValueContext vc, Element parent) throws NamingException
     {
         Document doc = parent.getOwnerDocument();
 
