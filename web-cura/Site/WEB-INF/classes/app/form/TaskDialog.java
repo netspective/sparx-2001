@@ -15,12 +15,21 @@ import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.naming.NamingException;
 import java.util.Map;
 import java.math.BigDecimal;
 import java.io.Writer;
+import java.sql.SQLException;
 
 import dal.table.TaskTable;
+import dal.table.TaskPersonRelationTable;
+import dal.table.TaskTypeTable;
+import dal.table.TaskDependencyTable;
 import dal.domain.row.TaskRow;
+import dal.domain.row.TaskDependencyRow;
+import dal.domain.TaskPersonRelation;
+import dal.domain.TaskType;
+import dal.domain.rows.TaskDependencyRows;
 import dal.DataAccessLayer;
 import dialog.context.task.RegistrationContext;
 
@@ -42,6 +51,12 @@ public class TaskDialog extends Dialog
             String taskId = dc.getRequest().getParameter("task_id");
             dc.populateValuesFromStatement("task.information", new Object[] {new Long(taskId)});
         }
+        if (dc.deletingData())
+        {
+            String taskId = dc.getRequest().getParameter("task_id");
+            dc.populateValuesFromStatement("task.information", new Object[] {new Long(taskId)});
+        }
+
     }
 
     public void makeStateChanges(DialogContext dc, int stage)
@@ -55,7 +70,41 @@ public class TaskDialog extends Dialog
      */
     public boolean isValid(DialogContext dc)
     {
-        return super.isValid(dc);
+        boolean isValid = super.isValid(dc);
+
+        if (isValid)
+        {
+            if (dc.deletingData())
+            {
+                try
+                {
+                    ConnectionContext cc = dc.getConnectionContext();
+                    // check to see if there are tasks dependent on this task. If so, don't allow the deletion
+                    // until the relationship have been cleared
+                    TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
+                    TaskDependencyRows tdRows = tdTable.getTaskDependencyRowsByParentId(cc, new Long(dc.getRequest().getParameter("task_id")));
+                    if (tdRows != null && tdRows.size() != 0)
+                    {
+                        // there are tasks that are dependent on this task!
+                        StringBuffer errMsg = new StringBuffer("The following tasks are dependent on this Task. Remove those relationships before removing this task.<br><ul>");
+                        for (int i=0; i < tdRows.size(); i++)
+                        {
+                            errMsg.append("<li>ID: " + ((TaskDependencyRow) tdRows.get(i)).getDependentId() + "</li>");
+                        }
+                        errMsg.append("</ul>");
+                        dc.addErrorMessage(errMsg.toString());
+                        return false;
+                    }
+                    cc.returnConnection();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return isValid;
     }
 
     /**
@@ -67,23 +116,34 @@ public class TaskDialog extends Dialog
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
         // super.execute(dc);
-        if (dc.addingData())
+        try
         {
-            // dialog is in the add data command mode
-            this.processAddData(dc);
+            if (dc.addingData())
+            {
+                // dialog is in the add data command mode
+                this.processAddData(dc);
+            }
+            if (dc.editingData())
+            {
+                // dialog is in the edit data command mode
+                this.processEditData(dc);
+            }
+            if (dc.deletingData())
+            {
+                // dialog is in the edit data command mode
+                this.processDeleteData(dc);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
-
-        if (dc.editingData())
-        {
-            // dialog is in the edit data command mode
-            this.processEditData(dc);
-        }
         HttpServletRequest request = (HttpServletRequest)dc.getRequest();
         String url = "";
-        if (request.getAttribute("project_id") != null)
+        if (request.getParameter("project_id") != null)
         {
-            url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getAttribute("project_id");
+            url = request.getContextPath() + "/project/home.jsp?project_id=" + request.getParameter("project_id");
         }
         else
         {
@@ -100,37 +160,60 @@ public class TaskDialog extends Dialog
     }
 
     /**
+     * Delete the task
+     */
+    protected void processDeleteData(DialogContext dc) throws SQLException, NamingException
+    {
+        dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
+        ConnectionContext cc = dc.getConnectionContext();
+        cc.beginTransaction();
+
+        TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+        // retrieve the task row
+        TaskRow taskRow = taskTable.getTaskByTaskId(cc, rc.getTaskId());
+        if (taskRow != null)
+        {
+            // remove this task from the task dependency list
+            TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
+            //TaskDependencyRows tdRows = tdTable.getTaskDependencyRowsByDependentId(cc, rc.getTaskId());
+            tdTable.deleteTaskDependencyRowsUsingDependentId(cc, rc.getTaskId());
+
+
+            if (taskRow.getParentTaskId() != null)
+            {
+                // Delete all the sub tasks belonging to this task
+
+            }
+
+            // remove person/task relationships
+            TaskPersonRelationTable tpRelationTable = dal.DataAccessLayer.instance.getTaskPersonRelationTable();
+            tpRelationTable.deleteTaskPersonRelationRowsUsingParentId(cc, new Long(rc.getTaskIdRequestParam()));
+
+            // delete the task row
+            taskTable.delete(cc, taskRow);
+        }
+        cc.endTransaction();
+
+    }
+
+    /**
      * Process the new updated data
      */
-    protected void processEditData(DialogContext dc)
+    protected void processEditData(DialogContext dc) throws SQLException, NamingException
     {
-        try
-        {
-            String task_id = dc.getRequest().getParameter("task_id");
-            ConnectionContext cc =  ConnectionContext.getConnectionContext(DatabaseContextFactory.getSystemContext(),
-                dc.getServletContext().getInitParameter("default-data-source"), ConnectionContext.CONNCTXTYPE_TRANSACTION);
+        String task_id = dc.getRequest().getParameter("task_id");
+        ConnectionContext cc =  dc.getConnectionContext();
 
-            cc.beginTransaction();
-            dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
-            // update the Task table
-            TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
-            TaskRow taskRow = taskTable.getTaskByTaskId(cc, new Long(task_id));
-            if (rc.getTaskDescr() != null)
-                taskRow.setTaskDescr(rc.getTaskDescr());
-            taskRow.setPriorityId(new Integer(rc.getPriorityId()));
-            taskRow.setTaskStatus(new Integer(rc.getTaskStatus()));
-            //taskRow.setTaskResolution(new Integer(rc.getTaskResolution()));
-            //taskRow.setOwnerOrgId(new Long(rc.getOwnerOrgId()));
-            //taskRow.setOwnerPersonId(new Long());
-            taskTable.update(cc, taskRow);
+        cc.beginTransaction();
+        dialog.context.task.RegistrationContext rc = (RegistrationContext) dc;
+        // update the Task table
+        TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+        TaskRow taskRow = taskTable.getTaskByTaskId(cc, new Long(task_id));
+        taskRow.populateDataByNames(dc);
+        taskTable.update(cc, taskRow);
 
-            cc.endTransaction();
-            dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        cc.endTransaction();
+        dc.getRequest().setAttribute("task_id", taskRow.getTaskId());
     }
 
     /**
@@ -157,6 +240,21 @@ public class TaskDialog extends Dialog
             taskRow.populateDataByNames(rc);
 			// insert a row into the Task table
             taskTable.insert(cc, taskRow);
+
+
+            if (rc.getDependentTask() != null)
+            {
+                // include entries into the task dependency table
+                TaskDependencyTable tdTable = dal.DataAccessLayer.instance.getTaskDependencyTable();
+                TaskDependencyRow tdRow = tdTable.createTaskDependencyRow();
+                tdRow.setCrOrgId(rc.getCrOrgId());
+                tdRow.setCrPersonId(rc.getCrPersonId());
+                tdRow.setCrStampSqlExpr("sysdate");
+                tdRow.setParentId(rc.getDependentTaskInt());
+                tdRow.setDependentId( taskRow.getTaskId());
+                tdTable.insert(cc, tdRow);
+            }
+
             cc.endTransaction();
 
             if (rc.getOwnerProjectIdRequestParam() != null)

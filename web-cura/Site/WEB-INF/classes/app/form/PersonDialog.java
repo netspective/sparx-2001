@@ -47,7 +47,7 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
             return;
 
         // now do the populating using DialogContext methods
-        if (dc.editingData())
+        if (dc.editingData() || dc.deletingData())
         {
             String personId = dc.getRequest().getParameter("person_id");
             dc.populateValuesFromStatement("person.information", new Object[] {personId});
@@ -79,20 +79,41 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
         // if you call super.execute(dc) then you would execute the <execute-tasks> in the XML; leave it out
         // to override
         // super.execute(dc);
+        String person_id = "";
+        String person_name = "";
+        String url = "";
+        HttpServletRequest request = (HttpServletRequest)dc.getRequest();
+
         if (dc.addingData())
         {
             // dialog is in the add data command mode
-            this.processAddData(dc);
+            this.processAddAction(dc);
+            person_id = (String)request.getAttribute("person_id");
+            person_name = (String) request.getAttribute("person_name");
+            url = request.getContextPath() + "/contact/home.jsp?person_id=" +  person_id +
+                "&person_name=" + URLEncoder.encode(person_name);
+
         }
 
         if (dc.editingData())
         {
             // dialog is in the edit data command mode
-            this.processEditData(dc);
+            this.processEditAction(dc);
+            person_id = request.getParameter("person_id");
+            person_name = (String)request.getParameter("person_name");
+            url = request.getContextPath() + "/contact/home.jsp?person_id=" +  person_id +
+                "&person_name=" + URLEncoder.encode(person_name);
+
         }
-        HttpServletRequest request = (HttpServletRequest)dc.getRequest();
-        String url = request.getContextPath() + "/contact/home.jsp?person_id=" + request.getAttribute("person_id") +
-            "&person_name=" + URLEncoder.encode((String)request.getAttribute("person_name"));
+
+        if (dc.deletingData())
+        {
+            // dialog is in the delete data command mode
+            this.processDeleteAction(dc);
+            url = request.getContextPath() + "/contact/index.jsp?_d_exec=1";
+
+        }
+
         try
         {
             ((HttpServletResponse)dc.getResponse()).sendRedirect(url);
@@ -104,9 +125,36 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
     }
 
     /**
-     * Process the update data
+     * Process the delete action
      */
-	protected void processEditData(DialogContext dc)
+    protected void processDeleteAction(DialogContext dc)
+    {
+        try
+        {
+            dc.beginSqlTransaction();
+            StatementManager sm = dc.getStatementManager();
+            DatabaseContext dbContext = DatabaseContextFactory.getContext(dc.getRequest(), dc.getServletContext());
+
+            String whereExpr = "parent_id = ?";
+            dc.executeSqlRemove("personorg_relationship", null, null, whereExpr, "request:person_id");
+            dc.executeSqlRemove("person_address", null, null, whereExpr, "request:person_id");
+            dc.executeSqlRemove("person_contact", null, null, whereExpr, "request:person_id");
+
+            // create the WHERE clause for the delete SQL statement
+            whereExpr = "person_id = ?";
+            dc.executeSqlRemove("person", null, null, whereExpr, "request:person_id");
+            dc.endSqlTransaction();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Process the update action
+     */
+	protected void processEditAction(DialogContext dc)
 	{
 		try
 		{
@@ -157,7 +205,7 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
     /**
      * Process the new data
      */
-    protected void processAddData(DialogContext dc)
+    protected void processAddAction(DialogContext dc)
     {
         try
         {
@@ -231,7 +279,7 @@ public class PersonDialog   extends com.netspective.sparx.xaf.form.Dialog
             }
             // end transaction
             dc.endSqlTransaction();
-            dc.getRequest().setAttribute("person_id", person_id);
+            dc.getRequest().setAttribute("person_id", person_id.toString());
             dc.getRequest().setAttribute("person_name", fullName);
         }
         catch (TaskExecuteException tee)

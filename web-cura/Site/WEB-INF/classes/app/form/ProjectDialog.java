@@ -13,11 +13,14 @@ import com.netspective.sparx.xif.dal.ConnectionContext;
 import com.netspective.sparx.xif.db.DatabaseContextFactory;
 import dal.domain.Project;
 import dal.domain.rows.ProjectOrgRelationRows;
+import dal.domain.rows.TaskRows;
 import dal.domain.row.ProjectRow;
 import dal.domain.row.ProjectOrgRelationRow;
+import dal.domain.row.TaskRow;
 import dal.table.ProjectTable;
 import dal.table.RecordStatusTable;
 import dal.table.ProjectOrgRelationTable;
+import dal.table.TaskTable;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
@@ -126,6 +129,15 @@ public class ProjectDialog extends Dialog
 
             ProjectTable projectTable = dal.DataAccessLayer.instance.getProjectTable();
             ProjectRow projectRow = projectTable.getProjectByProjectId(cc, rc.getProjectId());
+
+            // remove all tasks assigned to this project
+            dal.table.TaskTable taskTable = dal.DataAccessLayer.instance.getTaskTable();
+            TaskRows taskRows = taskTable.getTaskRowsByOwnerProjectId(cc, rc.getProjectId());
+            if (taskRows != null && taskRows.size() > 0)
+            {
+                taskTable.deleteTaskRowsUsingOwnerProjectId(cc, projectRow.getProjectId());
+            }
+
             // delete the row in the project table
             projectTable.delete(cc, projectRow);
             cc.endTransaction();
