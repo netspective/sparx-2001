@@ -65,7 +65,7 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("       <br>");
 			out.println("       </td>");
 			out.println("       <td valign=\"middle\" align=\"center\">");
-			out.println("      <h1>The Sparx Collection</h1>");
+			out.println("      <h1>" + getHeading() + "</h1>");
 			out.println("       </td>");
 			out.println("     </tr>");
 			out.println("     <tr>");
@@ -73,15 +73,15 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("      <table width=\"100%\" border=\"0\" cellspacing=\"5\" cellpadding=\"2\">");
 			out.println("         <tbody>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\">Home</font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/home.jsp\">Home</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\">Add Books</font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/add.jsp?data_cmd=add\">Add Books</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("           <tr>");
-			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\">Search Books</font><br>");
+			out.println("             <td valign=\"middle\" bgcolor=\"#cc0000\" align=\"center\"><font color=\"#ffffff\"><a href=\"" + rootPath + "/search.jsp\">Search Books</a></font><br>");
 			out.println("             </td>");
 			out.println("           </tr>");
 			out.println("");
@@ -89,8 +89,8 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 			out.println("      </table>");
 			out.println("       <br>");
 			out.println("       </td>");
-			out.println("       <td valign=\"top\" bgcolor=\"#800000\"><br>");
-			out.println("         <font color=\"#ffffff\">");
+//			out.println("       <td valign=\"top\" bgcolor=\"#800000\"><br>");
+			out.println("       <td align=\"center\" valign=\"top\" bgcolor=\"white\"><br>");
 
         }
 		catch(Exception e)
@@ -111,7 +111,6 @@ public class PageTag extends com.netspective.sparx.xaf.taglib.PageTag
 		JspWriter out = pageContext.getOut();
 		try
 		{
-			out.println("      </font>");
 			out.println("   </td>");
 			out.println("     </tr>");
 			out.println("");
