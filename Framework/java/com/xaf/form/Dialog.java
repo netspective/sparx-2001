@@ -199,6 +199,18 @@ public class Dialog
 		String loop = elem.getAttribute("loop");
 		if(loop.equals("no"))
 			clearFlag(DLGFLAG_LOOP_DATA_ENTRY);
+        else if(loop.length() > 0)
+        {
+            setFlag(DLGFLAG_LOOP_DATA_ENTRY);
+            if(loop.equals("prepend")) // value can be (yes | append), prepend
+                this.setAppendAfterLoop(false);
+            else
+                this.setAppendAfterLoop(true);
+        }
+
+        String loopSep = elem.getAttribute("loop-sep");
+        if(loopSep.length() > 0)
+            loopSeparator = loopSep;
 
 		String hideHints = elem.getAttribute("hide-readonly-hints");
 		if(hideHints.equals("yes"))
